@@ -1,0 +1,95 @@
+@import "tailwindcss";
+
+/* Scoped dark variant: hanya aktif jika parent memiliki class .dark secara eksplisit */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* 
+ * YAPENDIK SCHOOL OS — SEMANTIC DESIGN TOKEN LAYER (v1.0)
+ * Aligned with DOC-UI-UX-DESIGN-FOUNDATION-v1.0
+ */
+@theme {
+  /* Semantic Surfaces */
+  --color-canvas: #f8fafc;
+  --color-surface: #ffffff;
+  --color-surface-subtle: #f8fafc;
+  --color-surface-muted: #f1f5f9;
+  --color-surface-inset: #0f172a;
+  
+  /* Semantic Typography Colors (WCAG AAA Contrast Baseline) */
+  --color-text-primary: #0f172a;
+  --color-text-secondary: #475569;
+  --color-text-muted: #94a3b8;
+  --color-text-inverse: #ffffff;
+  
+  /* Semantic Brand & Action Colors */
+  --color-brand-primary: #4f46e5;
+  --color-brand-primary-hover: #4338ca;
+  --color-brand-accent: #f59e0b;
+  --color-brand-accent-hover: #d97706;
+  
+  /* Semantic Status & Pedagogical Colors */
+  --color-status-success: #16a34a;
+  --color-status-warning: #f59e0b;
+  --color-status-danger: #e11d48;
+  --color-status-info: #0284c7;
+  --color-status-lppa: #9333ea;
+  
+  /* Semantic Radius Tokens */
+  --radius-xs: 4px;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+  --radius-pill: 9999px;
+
+  /* Font Families */
+  --font-sans: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+}
+
+/* 
+ * CANONICAL REUSABLE UTILITIES & ERGONOMICS
+ */
+@layer utilities {
+  /* Minimum tactile touch target (WCAG 2.5.5) */
+  .touch-target-min {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  /* Safe focus ring */
+  .focus-ring-safe {
+    outline: none;
+  }
+  .focus-ring-safe:focus-visible {
+    outline: 2px solid #6366f1;
+    outline-offset: 2px;
+  }
+}
+
+/*
+ * CANONICAL LPPA PRINT / PDF OUTPUT STYLES (FASE E3)
+ */
+@media print {
+  @page {
+    size: A4 portrait;
+    margin: 12mm 15mm 15mm 15mm;
+  }
+
+  body {
+    background: white !important;
+    color: black !important;
+    font-size: 11pt;
+  }
+
+  /* Hide app shells and banners */
+  header, footer, nav, aside, .print\:hidden {
+    display: none !important;
+  }
+
+  /* Page break avoidance for sections */
+  .break-inside-avoid {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+}

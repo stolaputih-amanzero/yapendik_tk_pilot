@@ -1,0 +1,6 @@
+{
+  "name": "Yapendik School OS — TK Pilot",
+  "description": "Enterprise school operating system foundation and TK pilot for early childhood education, teacher workflows, student observations, and contextual governance.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
