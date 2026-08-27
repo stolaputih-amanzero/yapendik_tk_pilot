@@ -111,8 +111,16 @@
   }
 }
 
+.scrollbar-stable { scrollbar-gutter: stable; }
+
+::-webkit-scrollbar { width: 14px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background-color: #cbd5e1; border-radius: 10px; border: 4px solid white; }
+
 /*
+ * ==============================================================================
  * CANONICAL LPPA PRINT / PDF OUTPUT STYLES (FASE E3)
+ * ==============================================================================
  */
 @media print {
   @page {
@@ -120,31 +128,128 @@
     margin: 12mm 15mm 15mm 15mm;
   }
 
+  /* Reset Root and Page Containers to allow multi-page document flow */
+  html, 
   body {
-    background: white !important;
-    color: black !important;
-    font-size: 11pt;
+    background: #ffffff !important;
+    color: #0f172a !important;
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    overflow: visible !important;
+    position: static !important;
+    display: block !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    border: none !important;
+    box-shadow: none !important;
+    width: 100% !important;
+    max-width: 100% !important;
   }
 
-  /* Hide app shells and banners */
-  header, footer, nav, aside, .print\:hidden {
+  /* Hide app chrome, sidebars, topbar, mobile bars, buttons */
+  header, 
+  footer, 
+  nav, 
+  aside, 
+  button,
+  .print\:hidden,
+  [data-testid="topbar"],
+  [data-testid="sidebar"],
+  [data-testid="mobile-omnibar"] {
     display: none !important;
   }
 
-  /* Page break avoidance for sections */
-  .break-inside-avoid {
-    break-inside: avoid;
-    page-break-inside: avoid;
+  /* When an LPPA print modal is open with portal, COMPLETELY hide #root */
+  body.has-print-modal > #root {
+    display: none !important;
+  }
+
+  /* When an LPPA print modal is open without portal, hide parent siblings */
+  body.has-print-modal > #root > div > *:not(.flex-1),
+  body.has-print-modal .flex-1 > *:not(main),
+  body.has-print-modal main > *:not(:has(.lppa-print-modal-root)),
+  body.has-print-modal .lppa-print-modal-root ~ *,
+  body.has-print-modal *:has(> .lppa-print-modal-root) > *:not(.lppa-print-modal-root) {
+    display: none !important;
+  }
+
+  /* Reset modal overlay to seamless print container */
+  .lppa-print-modal-root,
+  .lppa-modal-overlay,
+  #lppa-print-portal {
+    position: static !important;
+    inset: auto !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    background: #ffffff !important;
+    backdrop-filter: none !important;
+    display: block !important;
+    z-index: auto !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    height: auto !important;
+    max-height: none !important;
+    overflow: visible !important;
+  }
+
+  .lppa-modal-shell {
+    position: static !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    height: auto !important;
+    max-height: none !important;
+    border: none !important;
+    box-shadow: none !important;
+    background: #ffffff !important;
+    overflow: visible !important;
+    border-radius: 0 !important;
+    display: block !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  .lppa-modal-scroll {
+    overflow: visible !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    background: #ffffff !important;
+    display: block !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    height: auto !important;
+    max-height: none !important;
+  }
+
+  /* Document Sheet Styling for Print */
+  .lppa-print-sheet {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-height: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    border: none !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+    background: #ffffff !important;
+    color: #0f172a !important;
+    font-size: 10.5pt !important;
+    line-height: 1.5 !important;
+  }
+
+  /* Section page break rules */
+  .break-inside-avoid,
+  .lppa-section,
+  .lppa-kop,
+  .lppa-identity,
+  .lppa-signatures {
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+  }
+
+  /* Force exact color reproduction */
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
   }
 }
-
-.scrollbar-stable { scrollbar-gutter: stable; }
-
-
-
-
-
-::-webkit-scrollbar { width: 14px; }
-::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background-color: #cbd5e1; border-radius: 10px; border: 4px solid white; }
-

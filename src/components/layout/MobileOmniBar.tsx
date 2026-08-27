@@ -85,28 +85,28 @@ export const MobileOmniBar: React.FC<MobileOmniBarProps> = ({
 
   if (isSuperadminOrFoundation) {
     smartChips = [
-      { label: '📊 Statistik', tab: 'INSTITUTIONAL_HEALTH' },
-      { label: '🏛️ Kebijakan', tab: 'FOUNDATION_GOVERNANCE' },
-      { label: '⚙️ Pengaturan', tab: 'PROVISIONING' }
+      { label: 'Statistik', tab: 'INSTITUTIONAL_HEALTH' },
+      { label: 'Kebijakan', tab: 'FOUNDATION_GOVERNANCE' },
+      { label: 'Pengaturan', tab: 'PROVISIONING' }
     ];
   } else if (isHeadmaster) {
     smartChips = [
-      { label: '📊 Statistik', tab: 'INSTITUTIONAL_HEALTH' },
-      { label: '🏫 PPDB', tab: 'ADMISSIONS_DESK' },
-      { label: '📥 Standar', tab: 'HEADMASTER_ADOPTION' }
+      { label: 'Statistik', tab: 'INSTITUTIONAL_HEALTH' },
+      { label: 'Meja PPDB', tab: 'ADMISSIONS_DESK' },
+      { label: 'Standar Yayasan', tab: 'HEADMASTER_ADOPTION' }
     ];
   } else if (isGuardianOrApplicant) {
     smartChips = [
-      { label: '🌟 Jejak Ananda', tab: 'STUDENT_JOURNEY' },
-      { label: '📖 Pesan', tab: 'COMMUNICATION' },
-      { label: '📝 PPDB', tab: 'ADMISSIONS_PORTAL' }
+      { label: 'Buku Penghubung', tab: 'COMMUNICATION' },
+      { label: 'Portal PPDB', tab: 'ADMISSIONS_PORTAL' },
+      { label: 'Jejak Ananda', tab: 'STUDENT_JOURNEY' }
     ];
   } else {
     // Default: TEACHER
     smartChips = [
-      { label: '📝 Presensi', tab: 'ATTENDANCE' },
-      { label: '✨ Observasi', tab: 'OBSERVATIONS' },
-      { label: '📋 Kerja Harian', tab: 'DAILY_WORK' }
+      { label: 'Presensi', tab: 'ATTENDANCE' },
+      { label: 'Observasi', tab: 'OBSERVATIONS' },
+      { label: 'Kerja Harian', tab: 'DAILY_WORK' }
     ];
   }
 

@@ -37,7 +37,8 @@ import {
   Layers,
   AlertCircle,
   Award,
-  ShieldAlert
+  ShieldAlert,
+  X
 } from 'lucide-react';
 
 interface AcademicPeriodData {
@@ -226,37 +227,37 @@ export const AcademicLifecycleWorkspace: React.FC = () => {
   }
 
   return (
-    <div className="max-w-7xl mx-auto px-4 md:px-6 py-6 space-y-6 text-slate-900 font-sans">
+    <div className="space-y-6 text-slate-900 font-sans w-full" data-testid="academic-lifecycle-workspace">
       {/* Header Banner */}
-      <div className="bg-slate-50 border border-slate-200 rounded-2xl p-4 md:p-6 shadow-xs relative overflow-hidden">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 relative z-10">
+      <div className="bg-slate-50 border-b border-slate-200 md:rounded-2xl px-4 py-5 md:p-6 w-full text-slate-900 md:border md:shadow-sm">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
-            <div className="flex items-center space-x-2 text-slate-600 text-xs font-bold tracking-wider uppercase mb-1">
-              <Calendar className="w-4 h-4" />
-              <span>Stage 3.4 • Academic Lifecycle & Temporal Engine</span>
+            <div className="flex items-center space-x-1.5 text-emerald-600 text-[10px] sm:text-xs font-bold tracking-wider uppercase mb-1">
+              <Calendar className="w-3.5 h-3.5" />
+              <span>Standar Yayasan • Tahun Ajaran &amp; Semester</span>
             </div>
-            <h1 className="text-2xl font-bold text-slate-900 tracking-tight">
-              Tata Kelola Siklus Akademik & Semester
+            <h1 className="text-xl font-bold tracking-tight text-slate-900 flex items-center gap-2">
+              <span>Tata Kelola Tahun Ajaran &amp; Semester</span>
             </h1>
-            <p className="text-slate-500 text-sm mt-1">
-              {school?.name || 'TK Yapendik Menteng'} • NPSN: {school?.npsn || 'NPSN-20104567'}
+            <p className="hidden md:block text-slate-500 text-xs mt-1 max-w-2xl">
+              {school?.name || 'TK Yapendik Menteng'} • NPSN: {school?.npsn || '20104821'} • Rekonsiliasi rapor LPPA 100% dan pembekuan arsip resmi.
             </p>
           </div>
 
-          <div className="flex flex-col md:flex-row items-center gap-3 w-full md:w-auto mt-3 md:mt-0">
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 w-full md:w-auto">
             <button
               onClick={loadLifecycleData}
               disabled={refreshing}
-              className="w-full md:w-auto px-3.5 py-2 rounded-xl bg-white hover:bg-slate-100 text-slate-700 border border-slate-200 text-xs font-semibold flex justify-center items-center space-x-2 transition-all shadow-xs cursor-pointer"
+              className="px-3.5 py-2 rounded-xl bg-white hover:bg-slate-100 text-slate-700 border border-slate-200 text-xs font-semibold flex justify-center items-center space-x-2 transition-all shadow-2xs cursor-pointer"
             >
               <RefreshCw className={`w-3.5 h-3.5 ${refreshing ? 'animate-spin text-slate-600' : ''}`} />
-              <span>Muat Ulang</span>
+              <span>Segarkan Data</span>
             </button>
 
             {isAuthorizedActor && activePeriod?.lifecycle_status === 'CLOSED' && (
               <button
                 onClick={() => setShowInitModal(true)}
-                className="w-full md:w-auto px-4 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-semibold text-xs shadow-xs flex justify-center items-center space-x-2 transition-all cursor-pointer mt-3 md:mt-0"
+                className="px-4 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs shadow-xs flex justify-center items-center space-x-2 transition-all cursor-pointer"
               >
                 <PlusCircle className="w-4 h-4" />
                 <span>Buka Semester Baru</span>
@@ -264,11 +265,67 @@ export const AcademicLifecycleWorkspace: React.FC = () => {
             )}
           </div>
         </div>
+
+        {/* Sub-Tab Switcher for Headmaster & Superadmin */}
+        <div className="flex border-b border-slate-200 mt-6 gap-2 text-xs overflow-x-auto scrollbar-hide">
+          <button
+            onClick={() => setActiveSubTab('OVERVIEW')}
+            className={`flex items-center gap-2 pb-3 px-3 font-semibold transition-colors relative whitespace-nowrap cursor-pointer ${
+              activeSubTab === 'OVERVIEW'
+                ? 'text-slate-900 border-b-2 border-slate-900'
+                : 'text-slate-500 hover:text-slate-800'
+            }`}
+          >
+            <Calendar className="w-4 h-4" />
+            <span>Status &amp; Tata Kelola Semester</span>
+          </button>
+
+          <button
+            onClick={() => setActiveSubTab('LPPA_APPROVAL')}
+            className={`flex items-center gap-2 pb-3 px-3 font-semibold transition-colors relative whitespace-nowrap cursor-pointer ${
+              activeSubTab === 'LPPA_APPROVAL'
+                ? 'text-slate-900 border-b-2 border-slate-900'
+                : 'text-slate-500 hover:text-slate-800'
+            }`}
+          >
+            <ShieldCheck className="w-4 h-4" />
+            <span>Verifikasi &amp; Pengesahan LPPA</span>
+            {draftLppaCount > 0 && (
+              <span className="px-2 py-0.2 text-[10px] font-bold rounded-full bg-slate-100 text-slate-800 font-mono">
+                {draftLppaCount}
+              </span>
+            )}
+          </button>
+
+          <button
+            onClick={() => setActiveSubTab('HEATMAP')}
+            className={`flex items-center gap-2 pb-3 px-3 font-semibold transition-colors relative whitespace-nowrap cursor-pointer ${
+              activeSubTab === 'HEATMAP'
+                ? 'text-slate-900 border-b-2 border-slate-900'
+                : 'text-slate-500 hover:text-slate-800'
+            }`}
+          >
+            <BarChart3 className="w-4 h-4" />
+            <span>Distribusi Capaian Rombel</span>
+          </button>
+
+          <button
+            onClick={() => setActiveSubTab('ASSURANCE')}
+            className={`flex items-center gap-2 pb-3 px-3 font-semibold transition-colors relative whitespace-nowrap cursor-pointer ${
+              activeSubTab === 'ASSURANCE'
+                ? 'text-slate-900 border-b-2 border-slate-900'
+                : 'text-slate-500 hover:text-slate-800'
+            }`}
+          >
+            <Award className="w-4 h-4" />
+            <span>Asuransi Operasional &amp; Keselamatan</span>
+          </button>
+        </div>
       </div>
 
       {/* Feedback Banner */}
       {feedback && (
-        <div className={`p-4 rounded-xl border flex items-start space-x-3 animate-in fade-in slide-in-from-top-2 duration-200 ${
+        <div className={`p-4 rounded-2xl border flex items-start space-x-3 shadow-2xs ${
           feedback.type === 'success' 
             ? 'bg-emerald-50 border-emerald-200 text-emerald-800' 
             : 'bg-rose-50 border-rose-200 text-rose-800'
@@ -282,246 +339,159 @@ export const AcademicLifecycleWorkspace: React.FC = () => {
             <p className="font-semibold">{feedback.type === 'success' ? 'Operasi Sukses' : feedback.diagnostics?.title || 'Operasi Gagal'}</p>
             <p className="mt-0.5">{feedback.message}</p>
             {feedback.diagnostics?.actionSuggestion && (
-              <p className="mt-2 text-amber-900 font-medium bg-amber-50 p-2 rounded-lg border border-amber-200">
-                💡 Rekomendasi Tindakan: {feedback.diagnostics.actionSuggestion}
+              <p className="mt-2 text-amber-900 font-medium bg-amber-50 p-2.5 rounded-xl border border-amber-200">
+                Saran Tindakan: {feedback.diagnostics.actionSuggestion}
               </p>
             )}
           </div>
         </div>
       )}
-      {/* Sub-Tab Switcher for Headmaster & Superadmin */}
-      <div className="flex flex-wrap items-center gap-2 border-b border-slate-200 pb-2">
-        <button
-          onClick={() => setActiveSubTab('OVERVIEW')}
-          className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 cursor-pointer ${
-            activeSubTab === 'OVERVIEW'
-              ? 'bg-slate-900 text-white shadow-xs'
-              : 'bg-white text-slate-700 hover:bg-slate-50 border border-slate-200'
-          }`}
-        >
-          <Calendar className="w-4 h-4" />
-          <span>Status & Tata Kelola Semester</span>
-        </button>
 
-        <button
-          onClick={() => setActiveSubTab('LPPA_APPROVAL')}
-          className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 cursor-pointer ${
-            activeSubTab === 'LPPA_APPROVAL'
-              ? 'bg-slate-900 text-white shadow-xs'
-              : 'bg-white text-slate-700 hover:bg-slate-50 border border-slate-200'
-          }`}
-        >
-          <ShieldCheck className="w-4 h-4" />
-          <span>Gerbang Verifikasi & Pengesahan LPPA</span>
-          {draftLppaCount > 0 && (
-            <span className="px-2 py-0.5 text-[10px] font-bold rounded-full bg-slate-100 text-slate-800 border border-slate-200">
-              {draftLppaCount}
-            </span>
-          )}
-        </button>
-
-        <button
-          onClick={() => setActiveSubTab('HEATMAP')}
-          className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 cursor-pointer ${
-            activeSubTab === 'HEATMAP'
-              ? 'bg-slate-900 text-white shadow-xs'
-              : 'bg-white text-slate-700 hover:bg-slate-50 border border-slate-200'
-          }`}
-        >
-          <BarChart3 className="w-4 h-4" />
-          <span>Peta Kontinuitas & Kesiapan Rombel</span>
-        </button>
-
-        {/* Stage 4.4-D: Sub-Tab 4 - Headmaster Operational Assurance Hub */}
-        <button
-          onClick={() => setActiveSubTab('ASSURANCE')}
-          className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 cursor-pointer ${
-            activeSubTab === 'ASSURANCE'
-              ? 'bg-slate-900 text-white shadow-xs'
-              : 'bg-white text-slate-700 hover:bg-slate-50 border border-slate-200'
-          }`}
-        >
-          <ShieldAlert className="w-4 h-4" />
-          <span>Jaminan Operasional & Keselamatan</span>
-        </button>
-      </div>
-
-      {activeSubTab === 'LPPA_APPROVAL' ? (
+      {/* Tab 2: LPPA Approval Hub */}
+      {activeSubTab === 'LPPA_APPROVAL' && (
         <HeadmasterLppaApprovalHub onSuccessReconciliation={loadLifecycleData} />
-      ) : activeSubTab === 'HEATMAP' ? (
+      )}
+
+      {/* Tab 3: Heatmap Analytics View */}
+      {activeSubTab === 'HEATMAP' && (
         <ClassroomHeatmapView 
-          schoolId={activePeriod?.school_id || 'sch_tk_yapendik_01'} 
+          schoolId={activePeriod?.school_id || currentSchoolId} 
           classId={'cls_tk_a_menteng'} 
         />
-      ) : activeSubTab === 'ASSURANCE' ? (
+      )}
+
+      {/* Tab 4: Headmaster Assurance View */}
+      {activeSubTab === 'ASSURANCE' && (
         <HeadmasterAssuranceView
           schoolId={activePeriod?.school_id || currentSchoolId}
           headmasterPersonId={securityContext?.personId || 'per_hm_esther'}
           headmasterName={securityContext?.userEmail || 'Dra. Esther Nugroho, M.Pd'}
           role={securityContext?.role || 'HEADMASTER'}
         />
-      ) : (
+      )}
+
+      {/* Tab 1: Overview & Lifecycle Governance */}
+      {activeSubTab === 'OVERVIEW' && (
         <>
-          {/* Main Grid: Active Term & LPPA Reconciliation */}
+          {/* Active Period & Closure Gate Cards */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            {/* Card 1: Active Period Overview & State Machine */}
-            <div className="lg:col-span-1 bg-white border border-slate-200 rounded-2xl p-6 flex flex-col justify-between shadow-xs">
-              <div>
-                <div className="flex items-center justify-between mb-4">
-                  <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">Periode Berjalan</span>
-                  {activePeriod && (
-                    <span className={`px-2.5 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider flex items-center space-x-1.5 ${
-                      activePeriod.lifecycle_status === 'ACTIVE' 
-                        ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' 
-                        : activePeriod.lifecycle_status === 'CLOSED'
-                        ? 'bg-slate-100 text-slate-600 border border-slate-200'
-                        : 'bg-amber-50 text-amber-700 border border-amber-200'
-                    }`}>
-                      <span className={`w-1.5 h-1.5 rounded-full ${
-                        activePeriod.lifecycle_status === 'ACTIVE' ? 'bg-emerald-600' : 'bg-slate-400'
-                      }`}></span>
-                      <span>{activePeriod.lifecycle_status}</span>
-                    </span>
-                  )}
+            {/* Card 1: Active Period State Machine */}
+            <div className="lg:col-span-2 bg-white border border-slate-200 rounded-2xl p-5 sm:p-6 shadow-2xs space-y-4">
+              <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+                <div className="flex items-center space-x-2">
+                  <Clock className="w-4 h-4 text-slate-700" />
+                  <h2 className="text-sm font-bold text-slate-900">Status Periode Semester Aktif</h2>
                 </div>
-
-                <div className="space-y-4">
-                  <div>
-                    <h2 className="text-xl font-bold text-slate-900 tracking-tight">{activePeriod?.name || 'T.A. 2025/2026'}</h2>
-                    <p className="text-xs text-slate-500 font-semibold mt-0.5">Semester {activePeriod?.semester || 'GANJIL'}</p>
-                  </div>
-
-                  <div className="bg-slate-50 p-3.5 rounded-xl border border-slate-200 space-y-2 text-xs">
-                    <div className="flex justify-between">
-                      <span className="text-slate-500">Tanggal Mulai:</span>
-                      <span className="font-mono text-slate-900">{activePeriod?.start_date || '—'}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-slate-500">Tanggal Selesai:</span>
-                      <span className="font-mono text-slate-900">{activePeriod?.end_date || '—'}</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Action Button: Close Semester */}
-              <div className="pt-6 border-t border-slate-100 mt-4">
-                {activePeriod?.lifecycle_status === 'ACTIVE' || activePeriod?.lifecycle_status === 'CLOSING' ? (
-                  <button
-                    onClick={() => setShowCloseModal(true)}
-                    disabled={!isAuthorizedActor}
-                    className="w-full py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 disabled:opacity-50 text-white font-semibold text-xs shadow-xs flex items-center justify-center space-x-2 transition-all cursor-pointer"
-                  >
-                    <Lock className="w-3.5 h-3.5" />
-                    <span>Tutup Semester Akademik</span>
-                  </button>
-                ) : (
-                  <div className="text-center py-2 bg-slate-50 rounded-xl border border-slate-200 text-xs text-slate-500 font-medium">
-                    🔒 Semester Ini Telah Berstatus CLOSED
-                  </div>
+                {activePeriod && (
+                  <span className={`px-2.5 py-0.5 rounded-full text-xs font-mono font-bold uppercase border ${
+                    activePeriod.lifecycle_status === 'ACTIVE' 
+                      ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
+                      : 'bg-slate-100 text-slate-700 border-slate-200'
+                  }`}>
+                    {activePeriod.lifecycle_status === 'ACTIVE' ? 'SEMESTER BERJALAN' : activePeriod.lifecycle_status}
+                  </span>
                 )}
               </div>
+
+              {activePeriod ? (
+                <div className="space-y-4">
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                    <div className="p-3 bg-slate-50 border border-slate-100 rounded-xl">
+                      <span className="text-[10px] text-slate-500 block uppercase font-semibold">Tahun Ajaran</span>
+                      <span className="text-xs font-bold text-slate-900">{activePeriod.name}</span>
+                    </div>
+                    <div className="p-3 bg-slate-50 border border-slate-100 rounded-xl">
+                      <span className="text-[10px] text-slate-500 block uppercase font-semibold">Semester</span>
+                      <span className="text-xs font-bold text-slate-900">{activePeriod.semester}</span>
+                    </div>
+                    <div className="p-3 bg-slate-50 border border-slate-100 rounded-xl">
+                      <span className="text-[10px] text-slate-500 block uppercase font-semibold">Mulai</span>
+                      <span className="text-xs font-mono font-semibold text-slate-800">{activePeriod.start_date}</span>
+                    </div>
+                    <div className="p-3 bg-slate-50 border border-slate-100 rounded-xl">
+                      <span className="text-[10px] text-slate-500 block uppercase font-semibold">Selesai</span>
+                      <span className="text-xs font-mono font-semibold text-slate-800">{activePeriod.end_date}</span>
+                    </div>
+                  </div>
+
+                  <div className="p-4 bg-slate-50/70 border border-slate-200/80 rounded-xl space-y-2 text-xs">
+                    <div className="flex items-center space-x-1.5 text-slate-800 font-semibold">
+                      <Info className="w-4 h-4 text-slate-500" />
+                      <span>Jaminan Integritas Temporal:</span>
+                    </div>
+                    <p className="text-slate-600 leading-relaxed">
+                      Penutupan semester akan membekukan seluruh catatan pembelajaran, presensi, dan narasi LPPA menjadi arsip permanen yang tidak dapat diubah kembali.
+                    </p>
+                  </div>
+                </div>
+              ) : (
+                <div className="p-8 text-center bg-slate-50 border border-dashed border-slate-200 rounded-xl text-slate-400 text-xs">
+                  Tidak ada periode akademik aktif saat ini.
+                </div>
+              )}
             </div>
 
-            {/* Card 2: 100% LPPA Reconciliation Diagnostic Gate */}
-            <div className="lg:col-span-2 bg-white border border-slate-200 rounded-2xl p-6 flex flex-col justify-between shadow-xs">
-              <div>
-                <div className="flex items-center justify-between mb-4">
-                  <div>
-                    <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">Syarat Penutupan Semester</span>
-                    <h3 className="text-base font-bold text-slate-900 mt-0.5">Gerbang Rekonsiliasi Rapor LPPA (100% Rule)</h3>
+            {/* Card 2: Governed Reconciliation Gate */}
+            <div className="bg-white border border-slate-200 rounded-2xl p-5 sm:p-6 shadow-2xs space-y-4 flex flex-col justify-between">
+              <div className="space-y-3">
+                <div className="flex items-center space-x-2 border-b border-slate-100 pb-3">
+                  <ShieldCheck className="w-4 h-4 text-slate-700" />
+                  <h2 className="text-sm font-bold text-slate-900">Gerbang Rekonsiliasi Tutup Buku</h2>
+                </div>
+
+                <div className="space-y-2 text-xs">
+                  <div className="flex justify-between items-center p-2.5 bg-slate-50 rounded-xl border border-slate-100">
+                    <span className="text-slate-600">Total Siswa Aktif:</span>
+                    <span className="font-bold text-slate-900 font-mono">{enrolledCount} Anak</span>
                   </div>
-                  <span className={`px-3 py-1 rounded-full text-xs font-bold ${
-                    isReadyForClosure 
-                      ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' 
-                      : 'bg-amber-50 text-amber-700 border border-amber-200'
-                  }`}>
-                    {isReadyForClosure ? 'Siap Ditutup (100%)' : 'Belum Lengkap'}
+                  <div className="flex justify-between items-center p-2.5 bg-slate-50 rounded-xl border border-slate-100">
+                    <span className="text-slate-600">Rapor LPPA Disahkan:</span>
+                    <span className="font-bold text-emerald-700 font-mono">{approvedLppaCount} Rapor</span>
+                  </div>
+                  <div className="flex justify-between items-center p-2.5 bg-slate-50 rounded-xl border border-slate-100">
+                    <span className="text-slate-600">Rapor Masih Draf:</span>
+                    <span className={`font-bold font-mono ${draftLppaCount > 0 ? 'text-amber-600' : 'text-slate-400'}`}>
+                      {draftLppaCount} Draf
+                    </span>
+                  </div>
+                </div>
+
+                <div className={`p-3 rounded-xl border text-xs flex items-center space-x-2 ${
+                  isReadyForClosure 
+                    ? 'bg-emerald-50 border-emerald-200 text-emerald-800' 
+                    : 'bg-amber-50 border-amber-200 text-amber-800'
+                }`}>
+                  {isReadyForClosure ? <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" /> : <AlertCircle className="w-4 h-4 text-amber-600 shrink-0" />}
+                  <span className="font-semibold">
+                    {isReadyForClosure 
+                      ? 'Seluruh siswa telah memiliki rapor LPPA sah (100%).' 
+                      : 'Masih ada siswa yang belum memiliki rapor LPPA sah.'}
                   </span>
                 </div>
-
-                {/* Reconciliation Progress Meter */}
-                <div className="space-y-2 mb-6">
-                  <div className="flex justify-between text-xs font-medium">
-                    <span className="text-slate-500">Ketuntasan Persetujuan Rapor LPPA:</span>
-                    <span className="text-slate-900 font-bold">{reconciliationPct}% ({approvedLppaCount}/{enrolledCount} Siswa)</span>
-                  </div>
-                  <div className="w-full bg-slate-100 rounded-full h-3 p-0.5 border border-slate-200">
-                    <div 
-                      className={`h-full rounded-full transition-all duration-500 ${
-                        reconciliationPct === 100 
-                          ? 'bg-emerald-600' 
-                          : 'bg-amber-500'
-                      }`}
-                      style={{ width: `${reconciliationPct}%` }}
-                    ></div>
-                  </div>
-                </div>
-
-                {/* 3-Column Metrics Breakdown */}
-                <div className="grid grid-cols-3 gap-4 mb-6">
-                  <div className="bg-slate-50 p-4 rounded-xl border border-slate-200">
-                    <div className="flex items-center space-x-2 text-slate-500 text-xs mb-1">
-                      <Users className="w-3.5 h-3.5 text-slate-700" />
-                      <span>Siswa Aktif</span>
-                    </div>
-                    <div className="text-xl font-bold text-slate-900">{enrolledCount}</div>
-                    <div className="text-[10px] text-slate-500 mt-0.5">Penempatan aktif di rombel</div>
-                  </div>
-
-                  <div className="bg-slate-50 p-4 rounded-xl border border-slate-200">
-                    <div className="flex items-center space-x-2 text-slate-500 text-xs mb-1">
-                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
-                      <span>LPPA Disetujui</span>
-                    </div>
-                    <div className="text-xl font-bold text-emerald-600">{approvedLppaCount}</div>
-                    <div className="text-[10px] text-slate-500 mt-0.5">Status APPROVED / PUBLISHED</div>
-                  </div>
-
-                  <div className="bg-slate-50 p-4 rounded-xl border border-slate-200">
-                    <div className="flex items-center space-x-2 text-slate-500 text-xs mb-1">
-                      <FileText className="w-3.5 h-3.5 text-amber-500" />
-                      <span>LPPA DRAFT / Pending</span>
-                    </div>
-                    <div className={`text-xl font-bold ${draftLppaCount > 0 ? 'text-amber-600' : 'text-slate-400'}`}>
-                      {draftLppaCount}
-                    </div>
-                    <div className="text-[10px] text-slate-500 mt-0.5">Memerlukan review Kepala Sekolah</div>
-                  </div>
-                </div>
-
-                {/* Shortcut to Hub */}
-                <button
-                  onClick={() => setActiveSubTab('LPPA_APPROVAL')}
-                  className="w-full py-2.5 px-4 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold transition flex items-center justify-center gap-2 cursor-pointer shadow-xs mb-4"
-                >
-                  <ShieldCheck className="w-4 h-4" />
-                  <span>Buka Gerbang Verifikasi & Pengesahan LPPA ({draftLppaCount} Pending)</span>
-                  <ArrowRight className="w-4 h-4 ml-auto" />
-                </button>
-
-                {/* Option A Invariant Assurance Box */}
-                <div className="bg-slate-50 border border-slate-200 rounded-xl p-4 text-xs text-slate-700 space-y-1.5">
-                  <div className="flex items-center space-x-2 text-slate-900 font-semibold">
-                    <ShieldCheck className="w-4 h-4 text-slate-700" />
-                    <span>Jaminan Integritas Siklus (Prinsip Option A Stage 3)</span>
-                  </div>
-                  <p className="text-slate-600 leading-relaxed text-[11px]">
-                    Menutup semester akan membekukan operasi akademik harian (presensi, observasi, rapor LPPA) menjadi catatan historis *read-only*. Penempatan siswa di rombel **tetap utuh dan aktif** sampai dilakukan proses promosi rombel (*Cohort Promotion*) atau kelulusan (*Graduation*).
-                  </p>
-                </div>
               </div>
+
+              {/* Action Button */}
+              {activePeriod?.lifecycle_status === 'ACTIVE' && (
+                <button
+                  onClick={() => setShowCloseModal(true)}
+                  disabled={!isAuthorizedActor}
+                  className="w-full py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 disabled:opacity-50 text-white font-bold text-xs shadow-xs flex items-center justify-center space-x-2 transition-all cursor-pointer mt-4"
+                >
+                  <Lock className="w-3.5 h-3.5" />
+                  <span>Tutup Semester Secara Resmi</span>
+                </button>
+              )}
             </div>
           </div>
 
-          {/* Historical Terms Archive Ledger */}
-          <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-xs">
-            <div className="flex items-center justify-between mb-4">
+          {/* Historical Terms Ledger Table */}
+          <div className="bg-white border border-slate-200 rounded-2xl p-5 sm:p-6 shadow-2xs space-y-4">
+            <div className="flex items-center justify-between border-b border-slate-100 pb-3">
               <div className="flex items-center space-x-2">
                 <Archive className="w-4 h-4 text-slate-700" />
-                <h3 className="text-sm font-bold text-slate-900">Buku Catatan Riwayat Semester & Arsip Periode</h3>
+                <h3 className="text-sm font-bold text-slate-900">Buku Catatan Riwayat Semester &amp; Arsip Periode</h3>
               </div>
-              <span className="text-xs text-slate-500">Total {allPeriods.length} Periode Tercatat</span>
+              <span className="text-xs text-slate-500 font-medium">Total {allPeriods.length} Periode Tercatat</span>
             </div>
 
             <div className="overflow-x-auto">
@@ -542,12 +512,12 @@ export const AcademicLifecycleWorkspace: React.FC = () => {
                       <td className="py-3.5 px-4 text-slate-700 font-semibold">{p.semester}</td>
                       <td className="py-3.5 px-4 font-mono text-slate-600">{p.start_date} s.d. {p.end_date}</td>
                       <td className="py-3.5 px-4">
-                        <span className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase ${
+                        <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase border ${
                           p.lifecycle_status === 'ACTIVE' 
-                            ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' 
+                            ? 'bg-emerald-50 text-emerald-700 border-emerald-200' 
                             : 'bg-slate-100 text-slate-600 border border-slate-200'
                         }`}>
-                          {p.lifecycle_status}
+                          {p.lifecycle_status === 'ACTIVE' ? 'AKTIF' : 'DITUTUP'}
                         </span>
                       </td>
                       <td className="py-3.5 px-4 font-mono text-slate-500 text-[11px]">
@@ -565,10 +535,18 @@ export const AcademicLifecycleWorkspace: React.FC = () => {
       {/* Modal 1: Governed Semester Closure Confirmation */}
       {showCloseModal && activePeriod && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-xs animate-in fade-in duration-200">
-          <div className="bg-white border border-slate-200 rounded-2xl max-w-lg w-full p-6 shadow-2xl space-y-4 text-slate-900">
-            <div className="flex items-center space-x-3 text-slate-900 border-b border-slate-100 pb-3">
-              <Lock className="w-5 h-5 text-slate-700" />
-              <h3 className="text-base font-bold text-slate-900">Konfirmasi Penutupan Semester Akademik</h3>
+          <div className="bg-white border border-slate-200 rounded-2xl max-w-lg w-full p-5 sm:p-6 shadow-2xl space-y-4 text-slate-900">
+            <div className="flex items-center justify-between pb-3 border-b border-slate-100">
+              <div className="flex items-center space-x-2">
+                <Lock className="w-4 h-4 text-slate-700" />
+                <h3 className="text-base font-bold text-slate-900">Konfirmasi Penutupan Semester</h3>
+              </div>
+              <button
+                onClick={() => setShowCloseModal(false)}
+                className="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 flex items-center justify-center transition-colors cursor-pointer shrink-0"
+              >
+                <X className="w-4 h-4" />
+              </button>
             </div>
 
             <div className="text-xs text-slate-700 space-y-3">
@@ -582,7 +560,7 @@ export const AcademicLifecycleWorkspace: React.FC = () => {
                   <span className="font-bold text-slate-900">{enrolledCount} Siswa</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-slate-500">Rapor LPPA Disetujui:</span>
+                  <span className="text-slate-500">Rapor LPPA Disahkan:</span>
                   <span className="font-bold text-emerald-700">{approvedLppaCount} Rapor</span>
                 </div>
                 <div className="flex justify-between">
@@ -595,17 +573,17 @@ export const AcademicLifecycleWorkspace: React.FC = () => {
 
               {!isReadyForClosure && (
                 <div className="bg-rose-50 border border-rose-200 p-3 rounded-xl text-rose-700">
-                  ⚠️ Peringatan: Masih ada siswa tanpa rapor LPPA berstatus APPROVED. Eksekusi penutupan akan ditolak oleh PostgreSQL RPC.
+                  Peringatan: Masih ada siswa tanpa rapor LPPA berstatus disahkan.
                 </div>
               )}
             </div>
 
-            <div className="flex flex-col md:flex-row items-center justify-end gap-3 pt-3 border-t border-slate-100">
+            <div className="flex flex-col sm:flex-row items-center justify-end gap-2.5 pt-3 border-t border-slate-100">
               <button
                 type="button"
                 onClick={() => setShowCloseModal(false)}
                 disabled={isProcessing}
-                className="w-full md:w-auto px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold cursor-pointer"
+                className="w-full sm:w-auto px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold transition-colors cursor-pointer"
               >
                 Batal
               </button>
@@ -613,7 +591,7 @@ export const AcademicLifecycleWorkspace: React.FC = () => {
                 type="button"
                 onClick={handleCloseSemester}
                 disabled={isProcessing}
-                className="w-full md:w-auto mt-3 md:mt-0 px-4 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold flex justify-center items-center space-x-2 shadow-xs cursor-pointer"
+                className="w-full sm:w-auto px-4 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold flex justify-center items-center space-x-2 shadow-xs transition-colors cursor-pointer"
               >
                 {isProcessing ? <RefreshCw className="w-3.5 h-3.5 animate-spin" /> : <Lock className="w-3.5 h-3.5" />}
                 <span>Eksekusi Penutupan Semester</span>
@@ -626,31 +604,39 @@ export const AcademicLifecycleWorkspace: React.FC = () => {
       {/* Modal 2: Initialize Next Semester Wizard */}
       {showInitModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-xs animate-in fade-in duration-200">
-          <div className="bg-white border border-slate-200 rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-4 text-slate-900">
-            <div className="flex items-center space-x-3 text-slate-900 border-b border-slate-100 pb-3">
-              <PlusCircle className="w-5 h-5 text-slate-700" />
-              <h3 className="text-base font-bold text-slate-900">Inisialisasi & Buka Semester Baru</h3>
+          <div className="bg-white border border-slate-200 rounded-2xl max-w-md w-full p-5 sm:p-6 shadow-2xl space-y-4 text-slate-900">
+            <div className="flex items-center justify-between pb-3 border-b border-slate-100">
+              <div className="flex items-center space-x-2">
+                <PlusCircle className="w-4 h-4 text-slate-700" />
+                <h3 className="text-base font-bold text-slate-900">Inisialisasi Semester Baru</h3>
+              </div>
+              <button
+                onClick={() => setShowInitModal(false)}
+                className="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 flex items-center justify-center transition-colors cursor-pointer shrink-0"
+              >
+                <X className="w-4 h-4" />
+              </button>
             </div>
 
             <form onSubmit={handleInitializeNextSemester} className="space-y-3.5 text-xs">
               <div>
-                <label className="block text-slate-600 font-semibold mb-1">Nama Tahun Ajaran & Semester</label>
+                <label className="block text-slate-700 font-semibold mb-1">Nama Tahun Ajaran &amp; Semester</label>
                 <input
                   type="text"
                   required
-                  placeholder="Contoh: T.A. 2026/2027 Genap"
+                  placeholder="Contoh: TA 2026/2027 Genap"
                   value={nextName}
                   onChange={(e) => setNextName(e.target.value)}
-                  className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-900 focus:outline-none focus:border-slate-400"
+                  className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-slate-900 shadow-2xs"
                 />
               </div>
 
               <div>
-                <label className="block text-slate-600 font-semibold mb-1">Semester</label>
+                <label className="block text-slate-700 font-semibold mb-1">Semester</label>
                 <select
                   value={nextSemester}
                   onChange={(e) => setNextSemester(e.target.value as 'GANJIL' | 'GENAP')}
-                  className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-900 focus:outline-none focus:border-slate-400 flex justify-between items-center"
+                  className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-slate-900 shadow-2xs"
                 >
                   <option value="GANJIL">GANJIL</option>
                   <option value="GENAP">GENAP</option>
@@ -659,43 +645,43 @@ export const AcademicLifecycleWorkspace: React.FC = () => {
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-slate-600 font-semibold mb-1">Tanggal Mulai</label>
+                  <label className="block text-slate-700 font-semibold mb-1">Tanggal Mulai</label>
                   <input
                     type="date"
                     required
                     value={nextStartDate}
                     onChange={(e) => setNextStartDate(e.target.value)}
-                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-900 focus:outline-none focus:border-slate-400"
+                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-slate-900 shadow-2xs"
                   />
                 </div>
                 <div>
-                  <label className="block text-slate-600 font-semibold mb-1">Tanggal Selesai</label>
+                  <label className="block text-slate-700 font-semibold mb-1">Tanggal Selesai</label>
                   <input
                     type="date"
                     required
                     value={nextEndDate}
                     onChange={(e) => setNextEndDate(e.target.value)}
-                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-900 focus:outline-none focus:border-slate-400"
+                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-slate-900 shadow-2xs"
                   />
                 </div>
               </div>
 
-              <div className="flex flex-col md:flex-row items-center justify-end gap-3 pt-3 border-t border-slate-100 mt-4">
+              <div className="flex flex-col sm:flex-row items-center justify-end gap-2.5 pt-3 border-t border-slate-100">
                 <button
                   type="button"
                   onClick={() => setShowInitModal(false)}
                   disabled={isProcessing}
-                  className="w-full md:w-auto px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold cursor-pointer"
+                  className="w-full sm:w-auto px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold transition-colors cursor-pointer"
                 >
                   Batal
                 </button>
                 <button
                   type="submit"
                   disabled={isProcessing}
-                  className="w-full md:w-auto mt-3 md:mt-0 px-4 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold flex justify-center items-center space-x-2 cursor-pointer shadow-xs"
+                  className="w-full sm:w-auto px-4 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold flex justify-center items-center space-x-2 shadow-xs transition-colors cursor-pointer"
                 >
                   {isProcessing ? <RefreshCw className="w-3.5 h-3.5 animate-spin" /> : <PlusCircle className="w-3.5 h-3.5" />}
-                  <span>Buka Semester</span>
+                  <span>Aktifkan Semester Baru</span>
                 </button>
               </div>
             </form>

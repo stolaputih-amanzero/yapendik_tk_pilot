@@ -97,11 +97,11 @@ export const DocumentUploadZone: React.FC<DocumentUploadZoneProps> = ({
   };
 
   return (
-    <div className="w-full bg-white border border-slate-200 rounded-2xl p-6 md:p-8 shadow-sm" data-testid="document-upload-zone">
+    <div className="w-full bg-white border border-slate-200 rounded-2xl p-5 sm:p-6 md:p-8 shadow-sm" data-testid="document-upload-zone">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6 pb-4 border-b border-slate-100">
         <div>
-          <h3 className="text-lg font-bold text-slate-900 tracking-tight">Unggah Berkas Persyaratan PPDB</h3>
-          <p className="text-xs text-slate-500">Penyimpanan Terenkripsi Privat (Storage Bucket: admissions-documents)</p>
+          <h3 className="text-base sm:text-lg font-bold text-slate-900 tracking-tight">Unggah Berkas Persyaratan PPDB</h3>
+          <p className="text-xs text-slate-500">Penyimpanan Terenkripsi Resmi Yayasan Yapendik</p>
         </div>
         <div className="flex items-center gap-2">
           <span className="text-xs font-semibold px-3 py-1 bg-slate-100 text-slate-700 rounded-full border border-slate-200 flex items-center gap-1.5 shadow-2xs">
@@ -119,13 +119,13 @@ export const DocumentUploadZone: React.FC<DocumentUploadZoneProps> = ({
           return (
             <div 
               key={docDef.type}
-              className="p-5 rounded-xl bg-slate-50/70 border border-slate-200 hover:border-blue-300 transition-all flex flex-col justify-between shadow-2xs group"
+              className="p-5 rounded-xl bg-slate-50/70 border border-slate-200 hover:border-slate-300 transition-all flex flex-col justify-between shadow-2xs group"
               data-testid={`doc-card-${docDef.type}`}
             >
               <div>
                 <div className="flex items-start justify-between gap-2 mb-2">
-                  <div className="flex items-center gap-2">
-                    <div className="w-8 h-8 rounded-lg bg-blue-100 text-blue-700 flex items-center justify-center shrink-0">
+                  <div className="flex items-center gap-2.5">
+                    <div className="w-8 h-8 rounded-xl bg-slate-200/80 text-slate-800 flex items-center justify-center shrink-0">
                       <FileText className="w-4 h-4" />
                     </div>
                     <div>
@@ -140,9 +140,9 @@ export const DocumentUploadZone: React.FC<DocumentUploadZoneProps> = ({
                 <p className="text-xs text-slate-600 mb-4 pl-10 leading-relaxed">{docDef.description}</p>
               </div>
 
-              <div className="flex items-center justify-between pt-3 border-t border-slate-200">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 pt-3 border-t border-slate-200">
                 {uploadedDoc ? (
-                  <div className="text-xs font-medium text-slate-700 truncate max-w-[200px] flex items-center gap-1.5">
+                  <div className="text-xs font-medium text-slate-700 truncate max-w-[220px] flex items-center gap-1.5">
                     <Paperclip className="w-3.5 h-3.5 text-slate-500 shrink-0" />
                     <span className="truncate">{uploadedDoc.storage_file_path.split('/').pop()}</span>
                   </div>
@@ -154,12 +154,12 @@ export const DocumentUploadZone: React.FC<DocumentUploadZoneProps> = ({
                   type="button"
                   onClick={() => handleSimulatedUpload(docDef.type, `${docDef.type.toLowerCase()}_${applicantId}.jpg`)}
                   disabled={isCurrentlyUploading || uploadedDoc?.verification_status === 'VERIFIED_VALID'}
-                  className={`px-3.5 py-1.5 text-xs font-bold rounded-lg transition-all flex items-center gap-1.5 ${
+                  className={`w-full sm:w-auto px-4 py-2 text-xs font-bold rounded-xl transition-all flex justify-center items-center gap-1.5 cursor-pointer disabled:cursor-not-allowed ${
                     uploadedDoc?.verification_status === 'VERIFIED_VALID'
-                      ? 'bg-slate-200 text-slate-500 cursor-not-allowed'
+                      ? 'bg-slate-200 text-slate-500'
                       : isCurrentlyUploading
-                      ? 'bg-blue-400 text-white cursor-wait'
-                      : 'bg-blue-600 hover:bg-blue-700 text-white shadow-xs'
+                      ? 'bg-slate-400 text-white cursor-wait'
+                      : 'bg-slate-900 hover:bg-slate-800 text-white shadow-2xs'
                   }`}
                   data-testid={`upload-btn-${docDef.type}`}
                 >

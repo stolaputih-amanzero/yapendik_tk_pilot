@@ -40,6 +40,14 @@ const AppContent: React.FC = () => {
   const activeSchool = securityContext ? db.getSchoolById(securityContext.activeSchoolId) : null;
   const schools = db.getSchools();
 
+  React.useEffect(() => {
+    if (currentPersona?.role === 'GUARDIAN' || currentPersona?.role === 'APPLICANT_GUARDIAN' || currentPersona?.role === 'PARENT_BUDI') {
+      if (activeTab === 'TEACHER_HOME' || activeTab === 'DAILY_WORK' || activeTab === 'ATTENDANCE' || activeTab === 'INSTITUTIONAL_HEALTH') {
+        setActiveTab('COMMUNICATION');
+      }
+    }
+  }, [currentPersona?.role]);
+
   if (authState === 'LOADING') {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center bg-slate-50 text-slate-900">
