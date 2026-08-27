@@ -31,21 +31,13 @@ export const QuickCaptureFloatingButton: React.FC<Props> = ({ onClick, pendingDr
         type="button"
         onClick={onClick}
         aria-label="Rekam Momen Belajar"
-        className="group relative flex items-center gap-2 sm:gap-2.5 px-4 py-3 sm:px-5 sm:py-3.5 rounded-full bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs sm:text-sm shadow-floating hover:scale-105 active:scale-95 transition-all duration-200 cursor-pointer border border-slate-700/80"
+        className="group relative flex items-center justify-center w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-slate-900 hover:bg-slate-800 text-white shadow-floating hover:scale-105 active:scale-95 transition-all duration-200 cursor-pointer border border-slate-700/80"
       >
-        <div className="p-1 rounded-full bg-slate-800 text-amber-400 group-hover:rotate-12 transition-transform">
-          <Sparkles className="w-4 h-4 sm:w-5 sm:h-5 text-amber-400 fill-amber-400" />
-        </div>
-        <span className="tracking-tight font-bold whitespace-nowrap">Momen Belajar</span>
-        
-        {/* Hotkey hint pill */}
-        <span className="hidden sm:inline-block px-1.5 py-0.5 text-[10px] font-mono font-bold bg-slate-800 text-slate-300 rounded-md border border-slate-700">
-          Ctrl+K
-        </span>
+        <Sparkles className="w-6 h-6 sm:w-7 sm:h-7 text-amber-400 fill-amber-400 group-hover:rotate-12 transition-transform" />
 
         {/* Pending Draft Counter Badge */}
         {pendingDraftCount > 0 && (
-          <span className="absolute -top-1.5 -right-1.5 w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-rose-600 text-white text-[10px] sm:text-xs font-black flex items-center justify-center border-2 border-white shadow-md animate-bounce">
+          <span className="absolute top-0 right-0 w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-rose-600 text-white text-[10px] sm:text-xs font-black flex items-center justify-center border-2 border-slate-900 shadow-md animate-bounce">
             {pendingDraftCount}
           </span>
         )}
