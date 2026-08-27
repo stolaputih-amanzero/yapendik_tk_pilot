@@ -112,15 +112,15 @@ export const EvidenceCaptureSheet: React.FC<Props> = ({
         {/* Header */}
         <div className="px-5 sm:px-6 py-4 bg-slate-50 border-b border-slate-200 flex items-center justify-between">
           <div className="flex items-center gap-2.5">
-            <div className="p-2 rounded-xl bg-slate-100 text-slate-800 border border-slate-200">
+            <div className="p-2 rounded-xl bg-amber-50 text-amber-600 border border-amber-200/80 shadow-2xs">
               <Sparkles className="w-5 h-5 text-amber-500 fill-amber-500" />
             </div>
             <div>
-              <h3 className="text-base font-black text-slate-900">
-                Momen Cepat (Fast Capture)
+              <h3 className="text-base font-bold text-slate-900">
+                Rekam Momen Belajar
               </h3>
               <p className="text-xs text-slate-500 font-medium">
-                Tangkap seketika (&lt;15 dtk). Perkaya narasi saat sintesis siang.
+                Dokumentasikan interaksi dan karya ananda saat kegiatan main.
               </p>
             </div>
           </div>
@@ -137,8 +137,8 @@ export const EvidenceCaptureSheet: React.FC<Props> = ({
         <form onSubmit={handleSubmit} className="p-5 sm:p-6 overflow-y-auto space-y-5 flex-1">
           {/* 1. Pilih Ananda (Child Selector Chips) */}
           <div>
-            <label className="block text-xs font-extrabold text-slate-800 uppercase tracking-wider mb-2 flex items-center gap-1.5">
-              <Users className="w-3.5 h-3.5 text-slate-600" />
+            <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2 flex items-center gap-1.5">
+              <Users className="w-3.5 h-3.5 text-slate-500" />
               <span>Pilih Ananda ({selectedStudentIds.length} terpilih):</span>
             </label>
             <div className="flex flex-wrap gap-1.5 max-h-32 overflow-y-auto p-2 bg-slate-50 rounded-2xl border border-slate-200">
@@ -165,9 +165,9 @@ export const EvidenceCaptureSheet: React.FC<Props> = ({
 
           {/* 2. Media Bukti Visual (Photo/Audio) */}
           <div>
-            <label className="block text-xs font-extrabold text-slate-800 uppercase tracking-wider mb-2 flex items-center gap-1.5">
-              <Camera className="w-3.5 h-3.5 text-slate-600" />
-              <span>Foto / Bukti Visual Karya:</span>
+            <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2 flex items-center gap-1.5">
+              <Camera className="w-3.5 h-3.5 text-slate-500" />
+              <span>Foto / Bukti Karya:</span>
             </label>
             {mockPhotoUrl ? (
               <div className="relative rounded-2xl overflow-hidden border border-slate-200 group h-36 bg-slate-950">
@@ -194,11 +194,11 @@ export const EvidenceCaptureSheet: React.FC<Props> = ({
             )}
           </div>
 
-          {/* 3. Kurikulum Merdeka PAUD Quick Tags */}
+          {/* 3. Kurikulum Merdeka TK Quick Tags */}
           <div>
-            <label className="block text-xs font-extrabold text-slate-800 uppercase tracking-wider mb-2 flex items-center gap-1.5">
-              <Tag className="w-3.5 h-3.5 text-slate-600" />
-              <span>Tag Cepat Dimensi PAUD:</span>
+            <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2 flex items-center gap-1.5">
+              <Tag className="w-3.5 h-3.5 text-slate-500" />
+              <span>Fokus Perkembangan (TK):</span>
             </label>
             <div className="flex flex-wrap gap-1.5">
               {quickTagsList.map(tag => {
@@ -221,18 +221,18 @@ export const EvidenceCaptureSheet: React.FC<Props> = ({
             </div>
           </div>
 
-          {/* 4. Catatan Singkat Anecdot */}
+          {/* 4. Catatan Singkat Anekdot */}
           <div>
-            <label className="block text-xs font-extrabold text-slate-800 uppercase tracking-wider mb-1.5 flex items-center gap-1.5">
-              <FileText className="w-3.5 h-3.5 text-slate-600" />
-              <span>Kata Kunci / Catatan Singkat (Opsional):</span>
+            <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5 flex items-center gap-1.5">
+              <FileText className="w-3.5 h-3.5 text-slate-500" />
+              <span>Catatan Observasi (Opsional):</span>
             </label>
             <textarea
               rows={2}
-              placeholder="Contoh: Berhasil susun menara 12 balok mandiri tanpa jatuh..."
+              placeholder="Contoh: Berhasil menyusun menara 12 balok secara mandiri dengan seimbang..."
               value={noteText}
               onChange={e => setNoteText(e.target.value)}
-              className="w-full px-3.5 py-2.5 text-xs rounded-2xl bg-slate-50 border border-slate-200 focus:outline-none focus:border-slate-400 text-slate-900 placeholder:text-slate-400 font-medium"
+              className="w-full px-3.5 py-2.5 text-xs rounded-2xl bg-slate-50 border border-slate-200 focus:bg-white focus:outline-none focus:ring-2 focus:ring-slate-900 text-slate-900 placeholder:text-slate-400 font-medium shadow-2xs"
             />
           </div>
 
@@ -251,7 +251,7 @@ export const EvidenceCaptureSheet: React.FC<Props> = ({
               className="w-full sm:w-auto px-6 py-2.5 rounded-xl text-xs font-bold bg-slate-900 hover:bg-slate-800 text-white shadow-xs transition-all disabled:opacity-50 cursor-pointer flex justify-center items-center gap-2 order-1 sm:order-2"
             >
               <Sparkles className="w-4 h-4 text-amber-400 fill-amber-400" />
-              <span>{isSaving ? 'Menyimpan...' : 'Simpan Momen Cepat'}</span>
+              <span>{isSaving ? 'Menyimpan...' : 'Simpan Momen Belajar'}</span>
             </button>
           </div>
         </form>

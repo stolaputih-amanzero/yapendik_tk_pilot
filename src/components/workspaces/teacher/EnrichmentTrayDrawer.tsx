@@ -228,7 +228,7 @@ export const EnrichmentTrayDrawer: React.FC<Props> = ({
           {/* 5. Invariant C-11: Mutually Exclusive Privacy Selection */}
           <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
             <div className="font-extrabold text-slate-800 uppercase tracking-wider mb-1">
-              Distribusi & Privasi (Invariant C-11):
+              DISTRIBUSI & PRIVASI
             </div>
 
             <label className="flex items-start gap-2.5 p-2 rounded-xl hover:bg-slate-100 cursor-pointer">

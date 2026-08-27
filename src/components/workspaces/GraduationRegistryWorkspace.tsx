@@ -240,33 +240,49 @@ export const GraduationRegistryWorkspace: React.FC = () => {
   const selectedClassObj = tkbClasses.find(c => c.id === selectedClassId);
 
   return (
-    <div className="max-w-7xl mx-auto px-4 md:px-6 py-6 space-y-6 text-slate-900 font-sans">
+    <div className="w-full space-y-6 text-slate-900 font-sans">
       {/* Header Banner */}
-      <div className="bg-slate-50 border border-slate-200 rounded-2xl p-4 md:p-6 shadow-xs relative overflow-hidden">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 relative z-10">
-          <div>
-            <div className="flex items-center space-x-2 text-slate-600 text-xs font-bold tracking-wider uppercase mb-1">
-              <GraduationCap className="w-4 h-4" />
-              <span>Stage 3.4 • Graduation Registry & Terminal Lineage</span>
+      <div className="bg-slate-50 border-b border-slate-200 lg:rounded-2xl px-4 py-5 md:p-6 relative overflow-hidden lg:border lg:shadow-sm w-full">
+        <div className="flex flex-col md:flex-row md:items-start justify-between gap-4 relative z-10">
+          <div className="flex items-start justify-between gap-4 w-full md:w-auto">
+            <div>
+              <div className="flex items-center space-x-1.5 text-emerald-600 text-[10px] sm:text-xs font-bold tracking-wider uppercase mb-1">
+                <GraduationCap className="w-3.5 h-3.5" />
+                <span>Manajemen Kelulusan</span>
+              </div>
+              <h1 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">
+                Buku Registrasi Kelulusan Siswa (Tingkat Akhir)
+              </h1>
+              <p className="text-slate-500 text-xs sm:text-sm mt-0.5">
+                {school?.name || 'TK Yapendik'} • Penetapan kelulusan resmi, finalisasi rekam jejak, dan pencatatan buku induk alumni.
+              </p>
             </div>
-            <h1 className="text-2xl font-bold text-slate-900 tracking-tight">
-              Buku Registrasi Kelulusan Siswa (Tingkat Akhir)
-            </h1>
-            <p className="text-slate-500 text-sm mt-1">
-              {school?.name || 'TK Yapendik'} • Penetapan kelulusan resmi, finalisasi rekam jejak, dan pencatatan buku induk alumni.
-            </p>
+            <button
+              onClick={loadClassesAndAlumni}
+              disabled={loading}
+              className="flex md:hidden items-center justify-center p-2 rounded-lg bg-white hover:bg-slate-100 text-slate-700 border border-slate-200 text-xs font-medium transition-colors shadow-xs shrink-0 cursor-pointer"
+              title="Segarkan Data"
+            >
+              <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin text-emerald-600' : ''}`} />
+            </button>
           </div>
 
-          <button
-            onClick={loadClassesAndAlumni}
-            disabled={loading}
-            className="w-full md:w-auto mt-3 md:mt-0 px-3.5 py-2 rounded-xl bg-white hover:bg-slate-100 text-slate-700 border border-slate-200 text-xs font-semibold flex justify-center items-center space-x-2 transition-all shrink-0 shadow-xs"
-          >
-            <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin text-slate-600' : ''}`} />
-            <span>Segarkan Data</span>
-          </button>
+          <div className="flex flex-col md:flex-row items-stretch md:items-start gap-3 mt-4 md:mt-0 w-full md:w-auto">
+            <button
+              onClick={loadClassesAndAlumni}
+              disabled={loading}
+              className="hidden md:flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-lg bg-white hover:bg-slate-100 text-slate-700 border border-slate-200 text-xs font-medium transition-colors shadow-xs shrink-0 cursor-pointer"
+              title="Segarkan Data"
+            >
+              <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin text-emerald-600' : ''}`} />
+              <span>Segarkan Data</span>
+            </button>
+          </div>
         </div>
       </div>
+
+      {/* Main Content Area */}
+      <div className="px-4 lg:px-0 space-y-6">
 
       {/* Feedback Banner */}
       {feedback && (
@@ -534,6 +550,7 @@ export const GraduationRegistryWorkspace: React.FC = () => {
           </div>
         </div>
       )}
+      </div>
     </div>
   );
 };

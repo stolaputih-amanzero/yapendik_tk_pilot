@@ -37,7 +37,7 @@ export const ClassroomPulseBanner: React.FC<Props> = ({
   });
 
   return (
-    <div className="bg-white border-y md:border border-slate-200 md:rounded-2xl p-4 sm:p-5 text-slate-900 md:shadow-xs mb-5 -mx-4 md:mx-0">
+    <div className="bg-white border border-slate-200 rounded-2xl p-4 sm:p-5 text-slate-900 shadow-xs mb-5">
       <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
         {/* Left: Simplified Class Name & Date */}
         <div className="flex items-center gap-3">
@@ -61,10 +61,10 @@ export const ClassroomPulseBanner: React.FC<Props> = ({
           </div>
         </div>
 
-        {/* Right: Quick Pulse Stats & Action Buttons */}
+        {/* Right: Quick Pulse Stats & Action Buttons (Harmonized Grid / Inline) */}
         <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 w-full lg:w-auto">
           {/* Attendance Stat Chip */}
-          <div className="h-auto sm:h-10 bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2 sm:py-0 flex items-center justify-between sm:justify-start gap-2.5 sm:gap-3 text-slate-900 shrink-0">
+          <div className="h-10 bg-slate-50 border border-slate-200 rounded-xl px-3.5 flex items-center justify-between sm:justify-start gap-3 text-slate-900 shrink-0">
             <div className="text-left sm:text-right">
               <div className="text-[10px] text-slate-500 uppercase tracking-wider font-semibold leading-none">Kehadiran</div>
               <div className="text-xs sm:text-sm font-bold text-emerald-600 leading-tight mt-0.5">
@@ -82,33 +82,36 @@ export const ClassroomPulseBanner: React.FC<Props> = ({
             )}
           </div>
 
-          {/* Unread Parent Notes Chip */}
-          {pulse.unread_guardian_notes > 0 && (
-            <button
-              type="button"
-              onClick={onOpenGuardianNotices}
-              className="w-full sm:w-auto h-auto sm:h-10 py-2.5 sm:py-0 bg-slate-50 border border-slate-200 hover:bg-slate-100 active:scale-[0.98] transition-all rounded-xl px-3 flex justify-center items-center gap-2 text-slate-700 text-xs sm:text-sm font-semibold shadow-2xs cursor-pointer shrink-0"
-            >
-              <MessageSquare className="w-4 h-4 text-slate-600 shrink-0" />
-              <span>{pulse.unread_guardian_notes} Pesan Ortu</span>
-            </button>
-          )}
+          {/* Action Buttons Group (Side-by-side on mobile, inline on desktop) */}
+          <div className={`grid ${pulse.unread_guardian_notes > 0 && onOpenSafetyModal ? 'grid-cols-2' : 'grid-cols-1'} sm:flex items-center gap-2 w-full sm:w-auto`}>
+            {/* Unread Parent Notes Chip */}
+            {pulse.unread_guardian_notes > 0 && (
+              <button
+                type="button"
+                onClick={onOpenGuardianNotices}
+                className="h-10 bg-slate-50 border border-slate-200 hover:bg-slate-100 active:scale-[0.98] transition-all rounded-xl px-3 flex justify-center items-center gap-2 text-slate-700 text-xs sm:text-sm font-semibold shadow-2xs cursor-pointer truncate"
+              >
+                <MessageSquare className="w-4 h-4 text-slate-600 shrink-0" />
+                <span className="truncate">{pulse.unread_guardian_notes} Pesan Ortu</span>
+              </button>
+            )}
 
-          {/* Stage 4.4-C: Safety & Incident Fast Capture Button */}
-          {onOpenSafetyModal && (
-            <button
-              type="button"
-              onClick={onOpenSafetyModal}
-              className={`w-full sm:w-auto h-auto sm:h-10 py-2.5 sm:py-0 border active:scale-[0.98] transition-all rounded-xl px-3 flex justify-center items-center gap-2 text-xs sm:text-sm font-semibold shadow-2xs cursor-pointer shrink-0 ${
-                activeIncidentsCount > 0
-                  ? 'bg-rose-50 border-rose-200 text-rose-700 hover:bg-rose-100'
-                  : 'bg-slate-50 border-slate-200 hover:bg-slate-100 text-slate-700'
-              }`}
-            >
-              <ShieldAlert className="w-4 h-4 text-slate-600 shrink-0" />
-              <span>{activeIncidentsCount > 0 ? `${activeIncidentsCount} Insiden` : '🚨 Keselamatan'}</span>
-            </button>
-          )}
+            {/* Safety / Attention Button */}
+            {onOpenSafetyModal && (
+              <button
+                type="button"
+                onClick={onOpenSafetyModal}
+                className={`h-10 border active:scale-[0.98] transition-all rounded-xl px-3 flex justify-center items-center gap-2 text-xs sm:text-sm font-semibold shadow-2xs cursor-pointer truncate ${
+                  activeIncidentsCount > 0
+                    ? 'bg-rose-50 border-rose-200 text-rose-700 hover:bg-rose-100'
+                    : 'bg-slate-50 border-slate-200 hover:bg-slate-100 text-slate-700'
+                }`}
+              >
+                <HeartPulse className={`w-4 h-4 shrink-0 ${activeIncidentsCount > 0 ? 'text-rose-600' : 'text-rose-500'}`} />
+                <span className="truncate">{activeIncidentsCount > 0 ? `${activeIncidentsCount} Catatan Khusus` : 'Perhatian & Kesehatan'}</span>
+              </button>
+            )}
+          </div>
         </div>
       </div>
 

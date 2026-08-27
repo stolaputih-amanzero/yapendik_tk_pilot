@@ -30,19 +30,20 @@ export const ObservationFeed: React.FC<Props> = ({
 }) => {
   if (observations.length === 0) {
     return (
-      <div className="bg-white dark:bg-slate-900 border border-dashed border-slate-300 dark:border-slate-800 rounded-3xl p-10 text-center">
-        <div className="w-12 h-12 rounded-2xl bg-amber-500/10 border border-amber-500/20 text-amber-500 flex items-center justify-center mx-auto mb-3">
-          <Sparkles className="w-6 h-6" />
+      <div className="bg-white border border-dashed border-slate-200 rounded-3xl p-8 sm:p-10 text-center">
+        <div className="w-12 h-12 rounded-2xl bg-amber-50 border border-amber-200 text-amber-600 flex items-center justify-center mx-auto mb-3 shadow-2xs">
+          <Sparkles className="w-6 h-6 fill-amber-500 text-amber-500" />
         </div>
-        <h4 className="text-sm font-bold text-slate-800 dark:text-slate-200">Belum ada momen cepat hari ini</h4>
-        <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 max-w-md mx-auto">
-          Sentra main sedang aktif? Rekam interaksi dan karya anak dalam &lt;15 detik menggunakan tombol Momen Cepat.
+        <h4 className="text-sm font-bold text-slate-900">Belum ada momen belajar tercatat hari ini</h4>
+        <p className="text-xs text-slate-500 mt-1 max-w-md mx-auto">
+          Dokumentasikan interaksi, karya, atau celoteh ananda saat kegiatan bermain di sentra berlangsung.
         </p>
         <button
           onClick={onOpenQuickCapture}
-          className="mt-4 w-full sm:w-auto px-4 py-2.5 sm:py-2 rounded-xl text-xs font-bold bg-amber-500 text-slate-950 hover:bg-amber-400 shadow-md shadow-amber-500/20 transition cursor-pointer flex justify-center items-center mx-auto"
+          className="mt-4 w-full sm:w-auto px-4 py-2 rounded-xl text-xs font-bold bg-slate-900 text-white hover:bg-slate-800 shadow-xs transition cursor-pointer flex justify-center items-center mx-auto gap-1.5"
         >
-          + Rekam Momen Cepat Pertama
+          <Sparkles className="w-3.5 h-3.5 text-amber-400 fill-amber-400" />
+          <span>+ Rekam Momen Belajar Pertama</span>
         </button>
       </div>
     );

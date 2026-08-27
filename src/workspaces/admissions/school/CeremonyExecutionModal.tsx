@@ -77,7 +77,7 @@ export const CeremonyExecutionModal: React.FC<CeremonyExecutionModalProps> = ({
             Upacara Pengukuhan Status Siswa Resmi
           </h2>
           <p className="text-xs text-slate-500 max-w-lg mx-auto leading-relaxed">
-            Tindakan transaksional tunggal (ACID) untuk mempromosikan calon siswa dari tabel pementasan ke 4 tabel kanonikal sekolah.
+            Proses akhir untuk meresmikan pendaftar menjadi siswa aktif di sistem Yapendik OS.
           </p>
         </div>
 
@@ -179,7 +179,7 @@ export const CeremonyExecutionModal: React.FC<CeremonyExecutionModalProps> = ({
             data-testid="confirm-ceremony-btn"
             aria-disabled={!canConfirm}
           >
-            {executing ? 'Mengukuhkan Status Siswa...' : 'Konfirmasi Promosi Resmi (The Ceremony) 🎓'}
+            {executing ? 'Mengukuhkan Status Siswa...' : 'Konfirmasi Promosi Resmi  🎓'}
           </button>
         </div>
       </div>

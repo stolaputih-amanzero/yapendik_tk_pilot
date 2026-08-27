@@ -64,7 +64,7 @@ export const HeadmasterLppaApprovalHub: React.FC<Props> = ({
   const [selectedReport, setSelectedReport] = useState<LppaReportDocument | null>(null);
   const [previewReport, setPreviewReport] = useState<LppaReportDocument | null>(null);
   const [activeElementKey, setActiveElementKey] = useState<LppaElementKey>('LITERASI_STEAM');
-  const [approvalNotes, setApprovalNotes] = useState('Narasi komprehensif, selaras dengan capaian Kurikulum Merdeka PAUD.');
+  const [approvalNotes, setApprovalNotes] = useState('Narasi komprehensif, selaras dengan capaian Kurikulum Merdeka TK.');
   
   // Processing States
   const [isProcessing, setIsProcessing] = useState(false);

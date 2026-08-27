@@ -68,7 +68,7 @@ const AppContent: React.FC = () => {
       />
 
       {/* Main Content Column */}
-      <div className="flex-1 flex flex-col min-w-0 max-h-screen overflow-y-auto bg-white lg:bg-transparent relative">
+      <div className="flex-1 flex flex-col min-w-0 max-h-screen overflow-y-scroll bg-white lg:bg-transparent relative scrollbar-stable">
         {/* Global Top Bar (Header) */}
         <TopBar
           onOpenSupabaseModal={() => setIsSupabaseModalOpen(true)}
@@ -121,7 +121,7 @@ const AppContent: React.FC = () => {
 
         {/* Main Workspace Surface */}
         <main className="grow shrink-0 w-full max-w-7xl mx-auto p-0 lg:p-6 pb-[180px] lg:pb-8 bg-white lg:bg-transparent">
-          {activeTab === 'TEACHER_HOME' && <TeacherHomeShell />}
+          {activeTab === 'TEACHER_HOME' && <TeacherHomeShell onNavigateToCommunication={() => setActiveTab('COMMUNICATION')} />}
           {activeTab === 'DAILY_WORK' && <TeacherDailyWorkWorkspace />}
           {activeTab === 'OBSERVATIONS' && <ObservationWorkspace />}
           {activeTab === 'DEVELOPMENT' && <DevelopmentWorkspace />}
@@ -169,7 +169,7 @@ const AppContent: React.FC = () => {
               <span>Prinsip Konstitusi: Make It Simple • Keep It Future-Proof • Child-Centered</span>
             </div>
             <div className="font-mono text-[11px] text-slate-400">
-              Sprint 0 Foundation • Modul Monolitik TK Pilot
+              Yapendik GPIB
             </div>
           </div>
         </footer>

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { ProspectiveChildApplicant, AdmissionStatus } from '../../../types/admissionsTypes';
-import { Sparkles, Users, Filter, CheckCircle2, Clock, AlertCircle, FileCheck, Phone, User } from 'lucide-react';
+import { Sparkles, Users, Filter, CheckCircle2, Clock, AlertCircle, FileCheck, Phone, User, Info } from 'lucide-react';
 
 interface ApplicantReviewTableProps {
   schoolId: string;
@@ -65,42 +65,58 @@ export const ApplicantReviewTable: React.FC<ApplicantReviewTableProps> = ({
   };
 
   return (
-    <div className="w-full bg-white border border-slate-200 rounded-2xl p-4 sm:p-6 md:p-8 shadow-sm space-y-5" data-testid="applicant-review-table">
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-4 border-b border-slate-100">
-        <div>
-          <h2 className="text-xl font-bold text-slate-900 tracking-tight flex items-center gap-2">
-            <Users className="w-5 h-5 text-blue-600" />
-            Meja PPDB
-          </h2>
-          <p className="text-xs text-slate-500 mt-0.5">
-            Tabel Pementasan Calon Siswa (Staging Isolation / Invarian AP-06) • Unit: <strong className="text-slate-800 font-bold">{schoolDisplayName}</strong> ({schoolId})
-          </p>
-        </div>
+    <div className="w-full space-y-6" data-testid="applicant-review-table">
+      {/* Workspace Header Block (Amanaura Standard) */}
+      <div className="bg-slate-50 border-b border-slate-200 lg:rounded-2xl px-4 py-5 md:p-6 w-full text-slate-900 lg:border lg:shadow-sm">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-5">
+          <div>
+            <div className="flex items-center space-x-1.5 text-emerald-600 text-[10px] sm:text-xs font-bold tracking-wider uppercase mb-1">
+              <Users className="w-3.5 h-3.5" />
+              <span>Penerimaan Peserta Didik</span>
+            </div>
+            <h2 className="text-xl font-bold text-slate-900 tracking-tight flex items-center gap-2">
+              <span>Meja PPDB</span>
+              <div className="group relative flex items-center ml-1">
+                <Info className="w-4 h-4 text-slate-400 hover:text-slate-900 transition-colors cursor-help" />
+                <div className="absolute left-1/2 sm:left-auto sm:right-0 -translate-x-1/2 sm:translate-x-0 top-full mt-2 hidden group-hover:block w-64 p-2.5 bg-slate-900 text-white text-[11px] font-medium leading-relaxed rounded-xl shadow-xl z-50">
+                  <div className="absolute -top-1 left-1/2 sm:left-auto sm:right-2 -translate-x-1/2 sm:translate-x-0 w-2 h-2 bg-slate-900 rotate-45"></div>
+                  Otonomi Institusi: Data pendaftar ditampung terpisah sebelum diresmikan ke data induk.
+                </div>
+              </div>
+            </h2>
+            <p className="text-xs text-slate-500 mt-0.5">
+              Daftar Calon Siswa Baru • Unit: <strong className="text-slate-800 font-bold">{schoolDisplayName}</strong>
+            </p>
+          </div>
 
-        {/* Filter Pills */}
-        <div className="flex items-center space-x-1.5 overflow-x-auto pb-1 max-w-full">
-          {[
-            { id: 'ALL', label: 'Semua' },
-            { id: 'SUBMITTED', label: 'Berkas Masuk' },
-            { id: 'DOCUMENT_VERIFIED', label: 'Terverifikasi' },
-            { id: 'INTAKE_SCHEDULED', label: 'Intake' },
-            { id: 'TUITION_SETTLED', label: 'Siap Upacara' },
-            { id: 'ENROLLED_PROMOTED', label: 'Resmi Siswa' }
-          ].map((st) => (
-            <button
-              key={st.id}
-              onClick={() => setFilterStatus(st.id)}
-              className={`px-3 py-1.5 text-xs font-bold rounded-lg transition-all whitespace-nowrap shrink-0 cursor-pointer ${
-                filterStatus === st.id
-                  ? 'bg-blue-600 text-white shadow-xs'
-                  : 'bg-slate-100 text-slate-600 hover:text-slate-900 hover:bg-slate-200/70 border border-slate-200'
-              }`}
-            >
-              {st.label}
-            </button>
-          ))}
+          {/* Filter Pills */}
+          <div className="flex items-center space-x-1.5 overflow-x-auto pb-1 max-w-full">
+            {[
+              { id: 'ALL', label: 'Semua' },
+              { id: 'SUBMITTED', label: 'Berkas Masuk' },
+              { id: 'DOCUMENT_VERIFIED', label: 'Terverifikasi' },
+              { id: 'INTAKE_SCHEDULED', label: 'Intake' },
+              { id: 'TUITION_SETTLED', label: 'Siap Upacara' },
+              { id: 'ENROLLED_PROMOTED', label: 'Resmi Siswa' }
+            ].map((st) => (
+              <button
+                key={st.id}
+                onClick={() => setFilterStatus(st.id)}
+                className={`px-3 py-1.5 text-xs font-bold rounded-lg transition-all whitespace-nowrap shrink-0 border cursor-pointer ${
+                  filterStatus === st.id
+                    ? 'bg-slate-900 text-white border-slate-900 shadow-xs'
+                    : 'bg-white text-slate-600 border-slate-200 hover:text-slate-900 hover:bg-slate-100'
+                }`}
+              >
+                {st.label}
+              </button>
+            ))}
+          </div>
         </div>
       </div>
+
+      {/* Main Content Area */}
+      <div className="px-4 lg:px-0 space-y-4">
 
       {/* MOBILE STACKED LIST VIEW (Mobile-First Edge-to-Edge List) */}
       <div className="block md:hidden divide-y divide-slate-100 border border-slate-200 rounded-xl bg-white overflow-hidden shadow-2xs">
@@ -125,9 +141,9 @@ export const ApplicantReviewTable: React.FC<ApplicantReviewTableProps> = ({
                       {app.child_full_name}
                     </h3>
                     <div className="text-xs text-slate-500 mt-0.5 flex items-center gap-1.5">
-                      <span className="font-mono text-blue-700 font-bold truncate">{app.applicant_id}</span>
+                      <span className="text-slate-600 font-bold truncate">Tujuan: {app.target_class_level.replace('_', ' ')}</span>
                       <span>•</span>
-                      <span className="shrink-0">{app.target_class_level}</span>
+                      <span className="font-mono text-slate-400 shrink-0">#{app.applicant_id.slice(-6).toUpperCase()}</span>
                     </div>
                   </div>
                   <div className="shrink-0">
@@ -170,7 +186,7 @@ export const ApplicantReviewTable: React.FC<ApplicantReviewTableProps> = ({
                     data-testid={`ceremony-btn-${app.applicant_id}`}
                     aria-disabled={!canExecuteCeremony}
                   >
-                    {app.status === 'ENROLLED_PROMOTED' ? 'Telah Terdaftar' : 'The Ceremony 🎓'}
+                    {app.status === 'ENROLLED_PROMOTED' ? 'Telah Terdaftar' : 'Resmikan Siswa'}
                   </button>
                 </div>
               </div>
@@ -210,7 +226,7 @@ export const ApplicantReviewTable: React.FC<ApplicantReviewTableProps> = ({
                     data-testid={`applicant-row-${app.applicant_id}`}
                   >
                     <td className="p-3.5 font-mono text-xs">
-                      <span className="text-blue-700 font-bold block">{app.applicant_id}</span>
+                      <span className="text-slate-600 font-bold block">#{app.applicant_id.slice(-6).toUpperCase()}</span>
                       <span className="text-slate-400 text-[11px]">NIK: {app.child_nik}</span>
                     </td>
                     <td className="p-3.5">
@@ -218,8 +234,8 @@ export const ApplicantReviewTable: React.FC<ApplicantReviewTableProps> = ({
                       <span className="text-slate-500 text-[11px]">({app.child_gender === 'L' ? 'Laki-laki' : 'Perempuan'}, {app.child_birth_place})</span>
                     </td>
                     <td className="p-3.5">
-                      <span className="px-2 py-0.5 rounded font-mono font-bold bg-slate-100 text-slate-700 border border-slate-200">
-                        {app.target_class_level}
+                      <span className="px-2.5 py-1 rounded-lg font-bold bg-slate-100 text-slate-700 border border-slate-200 text-[11px]">
+                        {app.target_class_level.replace('_', ' ')}
                       </span>
                     </td>
                     <td className="p-3.5">
@@ -251,7 +267,7 @@ export const ApplicantReviewTable: React.FC<ApplicantReviewTableProps> = ({
                         data-testid={`ceremony-btn-${app.applicant_id}`}
                         aria-disabled={!canExecuteCeremony}
                       >
-                        {app.status === 'ENROLLED_PROMOTED' ? 'Telah Dipromosikan' : 'The Ceremony 🎓'}
+                        {app.status === 'ENROLLED_PROMOTED' ? 'Telah Dipromosikan' : 'Resmikan Siswa'}
                       </button>
                     </td>
                   </tr>
@@ -261,6 +277,7 @@ export const ApplicantReviewTable: React.FC<ApplicantReviewTableProps> = ({
           </tbody>
         </table>
       </div>
+    </div>
     </div>
   );
 };

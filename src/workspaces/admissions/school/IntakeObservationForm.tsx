@@ -81,16 +81,21 @@ export const IntakeObservationForm: React.FC<IntakeObservationFormProps> = ({
         <div className="flex items-center justify-between border-b border-slate-100 pb-4">
           <div>
             <div className="flex items-center space-x-2">
-              <span className="px-2.5 py-0.5 text-xs font-bold rounded-full bg-purple-100 text-purple-800 border border-purple-200">
-                Invarian AP-02: Karantina Asesmen Diagnostik Awal
+              <span className="px-2.5 py-0.5 text-[10px] uppercase tracking-wide font-bold rounded-full bg-slate-100 text-slate-600 border border-slate-200">
+                Tahap 2: Asesmen Diagnostik
               </span>
             </div>
             <h2 className="text-xl font-bold text-slate-900 tracking-tight mt-1">
               Instrumen Observasi Intake Calon Siswa
             </h2>
-            <p className="text-xs text-slate-500">
-              Calon Siswa: <strong className="text-slate-900">{applicant.child_full_name}</strong> (NIK: {applicant.child_nik})
-            </p>
+            <div className="flex flex-col gap-0.5 mt-2">
+              <span className="text-sm font-bold text-slate-900 leading-tight">
+                {applicant.child_full_name}
+              </span>
+              <span className="text-xs text-slate-500 font-mono">
+                NIK: {applicant.child_nik}
+              </span>
+            </div>
           </div>
           <button
             type="button"
@@ -200,13 +205,13 @@ export const IntakeObservationForm: React.FC<IntakeObservationFormProps> = ({
             )}
           </div>
 
-          <div className="flex items-center justify-between pt-4 border-t border-slate-100">
-            <div className="flex items-center space-x-2">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-4 border-t border-slate-100">
+            <div className="flex flex-col sm:flex-row sm:items-center gap-2">
               <span className="text-slate-600 font-medium">Rekomendasi Rombel:</span>
               <select
                 value={recommendedLevel}
                 onChange={(e) => setRecommendedLevel(e.target.value as ClassLevel)}
-                className="bg-white border border-slate-300 rounded-lg px-3 py-1.5 text-slate-900 font-bold shadow-2xs"
+                className="bg-white border border-slate-300 rounded-lg px-3 py-2 sm:py-1.5 text-slate-900 font-bold shadow-2xs w-full sm:w-auto"
               >
                 <option value="KB">Kelompok Bermain (KB)</option>
                 <option value="TK_A">TK A</option>
@@ -215,18 +220,18 @@ export const IntakeObservationForm: React.FC<IntakeObservationFormProps> = ({
               </select>
             </div>
 
-            <div className="flex items-center space-x-3">
+            <div className="flex flex-col-reverse sm:flex-row items-stretch sm:items-center gap-3">
               <button
                 type="button"
                 onClick={onClose}
-                className="px-4 py-2 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold transition-colors"
+                className="w-full sm:w-auto px-4 py-2.5 sm:py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold transition-colors"
               >
                 Batal
               </button>
               <button
                 type="submit"
                 disabled={saving}
-                className="px-5 py-2 rounded-lg bg-purple-600 hover:bg-purple-700 text-white font-bold shadow-xs transition-colors"
+                className="w-full sm:w-auto px-5 py-2.5 sm:py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold shadow-xs transition-colors"
                 data-testid="save-intake-btn"
               >
                 {saving ? 'Menyimpan...' : 'Simpan Observasi Intake'}

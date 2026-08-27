@@ -93,7 +93,7 @@ export const SchoolReviewWorkspace: React.FC = () => {
             <div className="bg-slate-50 px-5 py-4 md:p-3 border-0 md:border md:rounded md:border-slate-100">
               <span className="text-slate-500 font-medium block text-[10px] uppercase">Tahun Ajaran Aktif:</span>
               <span className="font-bold text-emerald-700">2026/2027 (Semester Ganjil)</span>
-              <div className="text-slate-500 mt-0.5">Status: Kurikulum Merdeka PAUD</div>
+              <div className="text-slate-500 mt-0.5">Status: Kurikulum Merdeka TK</div>
             </div>
           </div>
         </div>

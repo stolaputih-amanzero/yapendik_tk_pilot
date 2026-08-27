@@ -111,7 +111,7 @@ export const ApplicationStepper: React.FC<ApplicationStepperProps> = ({ currentS
     if (currentStatus === 'ENROLLED_PROMOTED') {
       return {
         title: 'Langkah 7 Selesai: Selamat! Ananda Telah Resmi Menjadi Siswa',
-        desc: 'Upacara penerimaan (The Ceremony) telah berhasil disahkan oleh Kepala Sekolah. Ananda telah terdaftar aktif pada rombel kelas dan siap memulai kegiatan belajar di Yapendik.',
+        desc: 'Upacara penerimaan  telah berhasil disahkan oleh Kepala Sekolah. Ananda telah terdaftar aktif pada rombel kelas dan siap memulai kegiatan belajar di Yapendik.',
         bg: 'bg-emerald-50 border-emerald-200 text-emerald-900',
         icon: <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
       };

@@ -146,6 +146,10 @@ Jika sebuah kontainer desktop memiliki beberapa seksi:
 3. **Zona 3 (Footer)**: `px-5 py-3 bg-slate-50/80 border-t border-slate-100` (Keterangan penutup / tombol ghost).
 * **Gunakan `divide-y divide-slate-100`** pada kontainer utama untuk membagi seksi secara presisi 1px edge-to-edge.
 
+### 🛡️ Hukum 4: Workspace Tab Padding Parity (Unifikasi Kontainer Tab)
+* Seluruh tab sub-halaman dalam satu workspace (seperti *Inbox* dan *Riwayat*) **wajib menggunakan wrapper padding yang identik**: `px-4 sm:px-5 md:px-0`.
+* Dilarang keras mencampur tata letak *fluid edge-to-edge* di satu tab dengan *rigid boxed card padding* di tab sebelahnya.
+
 ### 📏 Rumus Lengkungan Sudut (The Nested Radius Law)
 $$\text{Radius Dalam} = \text{Radius Luar} - \text{Padding}$$
 * Jika kotak luar `rounded-2xl` (16px) dengan `p-4` (16px), elemen dalam **wajib `rounded-lg` (8px)** atau `rounded-none`.
@@ -175,6 +179,9 @@ $$\text{Radius Dalam} = \text{Radius Luar} - \text{Padding}$$
 └──────────────────┴─────────────────────────────────┴───────────────────────────────────────────┘
 ```
 
+* **Law 6: The Clean Single-Icon Action Rule (Zero Emoji Clutter)**:
+  * Tombol aksi Amanaura hanya mengizinkan **tepat 1 ikon SVG Lucide** di sisi kiri label teks (proporsi `w-4 h-4` atau `w-3.5 h-3.5`).
+  * **Dilarang keras menyematkan emoji Unicode** (seperti ⚡, ✅, 🏆, 🌱) di dalam string teks tombol.
 * **Anti-Jiggle Hardware Debounce**: Seluruh tombol secara otomatis mengunci klik ganda selama **300ms** dan menampilkan indikator loading mikro tanpa mengubah lebar fisik tombol (*Zero Width Jiggle*).
 
 ---
@@ -193,10 +200,20 @@ $$\text{Radius Dalam} = \text{Radius Luar} - \text{Padding}$$
 1. **Judul Halaman / Seksi**: **Maksimal 2 Kata** (Max 16 Karakter).
    * *Contoh*: `"Beranda Kelas"`, `"Meja PPDB"`, `"Statistik Unit"`, `"Adopsi Kebijakan"`.
 2. **Sub-Judul**: **Maksimal 10 Kata** (1 Kalimat Manfaat) dan **disembunyikan di layar HP** (`hidden md:block`).
-3. **Teks Tombol**: **Maksimal 2 Kata** (Kata Kerja Aktif).
+3. **Teks Tombol**: **Maksimal 2-3 Kata** (Kata Kerja Aktif).
 4. **Kamus Kata Kerja Baku**:
-   * Simpan • Batal • Hapus • Ubah • Tambah [Objek] • Unduh [Format] • Masuk • Kirim.
+   * Simpan • Batal • Hapus • Ubah • Tambah [Objek] • Unduh [Format] • Masuk • Kirim • Rekomendasikan • Tetapkan.
 5. **Data Panjang Dinamis**: Wajib dilindungi dengan utility `truncate` (1 baris) atau `line-clamp-2` (2 baris).
+6. **Standar Kelembagaan TK & Kamus Pedagogis Anti-Jargon**:
+   * **Standar Nomenklatur Lembaga**: Seluruh unit wajib menggunakan istilah **`TK`** (*Kurikulum Merdeka TK*, *TK Yapendik*), dilarang melakukan generalisasi kata `PAUD`.
+   * **Pembersihan Jargon Developer ke Bahasa Pendidik**:
+     * `Fast Capture` $\rightarrow$ **`Rekam Momen Belajar`**
+     * `(One Child)` $\rightarrow$ **`Buka Rekam Jejak`**
+     * `(Otoritas Mutlak)` $\rightarrow$ **`Catatan & Arahan Guru Kelas`**
+     * `Non-Authoritative Proposal` $\rightarrow$ **`Rekomendasi Rencana Stimulasi Bermain`**
+     * `Scaffolding Strategy` $\rightarrow$ **`Pendampingan Guru (Scaffolding)`**
+     * `Prompt Kemitraan Rumah` $\rightarrow$ **`Saran untuk Orang Tua di Rumah`**
+     * *Dilarang keras*: Menampilkan durasi mekanis (`<15 dtk`) atau ID mentah database (`lppa_pub_baseline_...`, `PROPOSED`) di antarmuka guru.
 
 ---
 
@@ -254,12 +271,31 @@ $$\text{Radius Dalam} = \text{Radius Luar} - \text{Padding}$$
 
 ## 14. Modals, Sheets & Dialog Architecture
 
-* **Desktop (≥ 1024px)**: Modal dialog terpusat `max-w-lg` dengan `backdrop-blur-xs` dan listener tombol `ESC`.
-* **Mobile (< 1024px)**: Otomatis berubah menjadi **Bottom Sheet Drawer** dengan drag-handle tarik ke bawah.
-* **Susunan Tombol**:
-  * Desktop: Rata Kanan (`[ Batal (Soft) ] [ Simpan (Solid) ]`).
-  * Mobile: Tombol Simpan Full-Width di atas tombol Batal teks ghost.
-  * Dialog Bahaya: Fokus default keyboard otomatis diarahkan ke tombol **Batal** demi keamanan data.
+### 14.1 The Golden Envelope Standard (Dimensi Kanonikal)
+* **Desktop (≥ 1024px)**: Menggunakan ukuran kanonikal terkunci `w-full max-w-5xl h-[85vh]` dengan `backdrop-blur-xs` dan listener tombol `ESC`.
+* **Mobile (< 1024px)**: Otomatis berubah menjadi **Bottom Sheet Drawer** `w-full h-[90vh] rounded-t-3xl border-t border-slate-200`.
+* **Zero Layout Shift**: Tinggi modal terkunci stabil saat berpindah sub-tab untuk mengeliminasi lonjakan visual (*layout jiggle*).
+
+### 14.2 Pinned Action Anchor (Tombol Tutup Terkunci)
+* Tombol Tutup (`✕`) **wajib dikunci di pojok kanan atas** (`shrink-0 ml-2`) dengan z-index terproteksi, sehingga tidak pernah turun ke bawah atau menabrak teks judul pada layar sempit.
+
+### 14.3 The 2-Tier Header & Matching-Pill Context Ribbon
+Struktur tajuk modal wajib dipisahkan menjadi 2 tingkat teratur:
+* **Tier 1 (Header Identitas Utama)**:
+  * Ikon Avatar + *Eyebrow* tema (tanpa duplikasi ikon) + Judul Utama + Kapsul Nama Siswa + Kapsul NIS + Tombol `✕` Pinned.
+* **Tier 2 (Dedicated Context Ribbon)**:
+  * Pita pembatas terdedikasi (`bg-slate-50/60 border-b border-slate-100 py-2.5 px-4 sm:px-5`) memuat **dua kapsul serasi (*matching pills*)**:
+    * Kapsul Kiri: `[ 📅 TA 2026/2027 • GANJIL • Kurikulum Merdeka TK ]`
+    * Kapsul Kanan: `[ 📄 Draf Guru (Proposal) ]` / `[ 🏅 Kesiapan LPPA 100% ]`
+  * Responsif: Terjustifikasi (*space-between*) di Desktop dan bertingkat rapi (*stacked*) di Ponsel.
+
+### 14.4 Mobile Anti-Stack Fatigue & Segmented Fluid Bar
+* Di layar ponsel (`< md`), navigasi multi-dimensi/elemen wajib otomatis bertransformasi dari sidebar vertikal desktop menjadi **tab horizontal geser (*horizontal scrollable fluid pill bar*)** (`overflow-x-auto scrollbar-hide shrink-0`).
+
+### 14.5 Susunan Tombol Aksi
+* **Desktop**: Rata Kanan (`[ Batal (Soft) ] [ Simpan (Solid) ]`).
+* **Mobile**: Grid 2x2 atau tombol Aksi Utama Full-Width di atas tombol Batal teks ghost.
+* **Dialog Bahaya**: Fokus default keyboard otomatis diarahkan ke tombol **Batal** demi keamanan data.
 
 ---
 

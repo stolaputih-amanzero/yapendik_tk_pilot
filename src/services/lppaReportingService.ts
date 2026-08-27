@@ -619,7 +619,7 @@ export class LppaReportingService {
         total_effective_days: doc.attendance_summary.total_days
       },
       homeroom_teacher_reflection: doc.homeroom_teacher_reflection,
-      headmaster_approval_notes: 'Telah diverifikasi dan disahkan oleh Kepala Sekolah sesuai standar Kurikulum Merdeka PAUD.',
+      headmaster_approval_notes: 'Telah diverifikasi dan disahkan oleh Kepala Sekolah sesuai standar Kurikulum Merdeka TK.',
       signatures: {
         teacher: {
           name: teacherName,

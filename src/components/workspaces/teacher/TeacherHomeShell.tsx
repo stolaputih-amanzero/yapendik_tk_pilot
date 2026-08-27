@@ -48,10 +48,11 @@ import {
   Users, 
   Sparkles, 
   Home, 
-  Clock 
+  Clock,
+  RefreshCw 
 } from 'lucide-react';
 
-export const TeacherHomeShell: React.FC = () => {
+export const TeacherHomeShell: React.FC<{ onNavigateToCommunication?: () => void }> = ({ onNavigateToCommunication }) => {
   const { securityContext, currentPersona } = useSecurityContext();
 
   const [activeTab, setActiveTab] = useState<'TODAY' | 'LEARNING' | 'ROSTER'>('TODAY');
@@ -281,36 +282,76 @@ export const TeacherHomeShell: React.FC = () => {
   }
 
   return (
-    <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 sm:py-6 space-y-6 pb-24 lg:pb-0 bg-white lg:bg-transparent">
-      {/* Top Bar: Title & Wifi Status */}
-      <div className="flex items-center justify-between gap-3">
-        <h1 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">
-          Beranda Kelas
-        </h1>
-        <OfflineSyncStateIndicator />
+    <div className="w-full space-y-6 pb-24 lg:pb-0 text-slate-900 font-sans">
+      {/* Workspace Header Block (Amanaura Standard) */}
+      <div className="bg-slate-50 border-b border-slate-200 lg:rounded-2xl px-4 py-5 md:p-6 w-full text-slate-900 lg:border lg:shadow-sm">
+        <div className="flex items-start justify-between gap-4">
+          <div>
+            <div className="flex items-center space-x-1.5 text-emerald-600 text-[10px] sm:text-xs font-bold tracking-wider uppercase mb-1">
+              <Home className="w-3.5 h-3.5" />
+              <span>Ruang Guru</span>
+            </div>
+            <h1 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight flex items-center gap-2">
+              Beranda Kelas
+            </h1>
+            <p className="text-slate-500 text-xs sm:text-sm mt-0.5">
+              {aggregate.class_name} • Wali Kelas: {aggregate.teacher_name}
+            </p>
+          </div>
+
+          <div className="flex items-center gap-2 md:gap-3 shrink-0">
+            <OfflineSyncStateIndicator />
+            {/* Mobile Refresh */}
+            <button
+              onClick={loadData}
+              disabled={loading}
+              className="flex md:hidden items-center justify-center p-2 rounded-lg bg-white hover:bg-slate-100 text-slate-700 border border-slate-200 text-xs font-medium transition-colors shadow-xs shrink-0 cursor-pointer"
+              title="Segarkan Data"
+            >
+              <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin text-emerald-600' : ''}`} />
+            </button>
+            {/* Desktop Refresh */}
+            <button
+              onClick={loadData}
+              disabled={loading}
+              className="hidden md:flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-lg bg-white hover:bg-slate-100 text-slate-700 border border-slate-200 text-xs font-medium transition-colors shadow-xs shrink-0 cursor-pointer"
+              title="Segarkan Data"
+            >
+              <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin text-emerald-600' : ''}`} />
+              <span>Segarkan Data</span>
+            </button>
+          </div>
+        </div>
+
+        {/* Surface Tab Segmented Control */}
+        <div className="mt-5 sm:mt-6">
+          <SegmentedControl
+            options={[
+              { id: 'TODAY', label: 'Hari Ini', icon: CalendarDays },
+              { id: 'LEARNING', label: 'Belajar & Karya', icon: Puzzle },
+              { id: 'ROSTER', label: 'Siswa & Rapor', icon: Users }
+            ]}
+            value={activeTab}
+            onChange={(val) => setActiveTab(val as 'TODAY' | 'LEARNING' | 'ROSTER')}
+            size="sm"
+            className="w-full sm:w-auto"
+          />
+        </div>
       </div>
 
-      {/* Surface Tab Segmented Control */}
-      <div className="border-b border-slate-100 sm:border-slate-200 pb-3.5">
-        <SegmentedControl
-          options={[
-            { id: 'TODAY', label: 'Hari Ini', icon: CalendarDays },
-            { id: 'LEARNING', label: 'Belajar & Karya', icon: Puzzle },
-            { id: 'ROSTER', label: 'Siswa & Rapor', icon: Users }
-          ]}
-          value={activeTab}
-          onChange={(val) => setActiveTab(val as 'TODAY' | 'LEARNING' | 'ROSTER')}
-          size="sm"
-          className="w-full sm:w-auto"
-        />
-      </div>
+      {/* Main Content Area */}
+      <div className="px-4 lg:px-0 space-y-6">
 
       {/* Tier 1: Real-time Classroom Pulse Banner */}
       <ClassroomPulseBanner
         context={aggregate.context}
         pulse={aggregate.pulse}
         onFilterExceptionStudent={studentId => setPivotStudentId(studentId)}
-        onOpenGuardianNotices={() => setActiveTab('TODAY')}
+        onOpenGuardianNotices={() => {
+          if (onNavigateToCommunication) {
+            onNavigateToCommunication();
+          }
+        }}
         onOpenSafetyModal={() => setIsSafetyModalOpen(true)}
         activeIncidentsCount={activeIncidents.filter(i => i.status !== 'RESOLVED' && i.status !== 'AUDITED_CLOSED').length}
       />
@@ -461,6 +502,7 @@ export const TeacherHomeShell: React.FC = () => {
           onRefresh={() => loadData()}
         />
       )}
+      </div>
     </div>
   );
 };

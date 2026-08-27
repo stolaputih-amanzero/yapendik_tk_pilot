@@ -51,46 +51,40 @@ export const LppaPrintPreviewModal: React.FC<Props> = ({
   } = record;
 
   return (
-    <div className="fixed inset-0 z-[70] flex items-center justify-center p-2 sm:p-4 bg-slate-900/80 backdrop-blur-xs animate-in fade-in duration-200 print:p-0 print:bg-white print:static">
+    <div className="fixed inset-0 z-[70] flex items-end sm:items-center justify-center p-0 sm:p-4 bg-slate-900/40 backdrop-blur-xs animate-in fade-in duration-200 print:p-0 print:bg-white print:static">
       
       {/* Outer Shell */}
-      <div className="bg-slate-100 rounded-3xl border border-slate-300 shadow-2xl w-full max-w-5xl h-[95vh] flex flex-col overflow-hidden text-slate-900 print:h-auto print:border-none print:shadow-none print:rounded-none print:bg-white print:w-full print:max-w-none">
+      <div className="bg-slate-100 rounded-t-3xl sm:rounded-2xl border-t sm:border border-slate-200 shadow-2xl w-full max-w-5xl h-[90vh] sm:h-[85vh] flex flex-col overflow-hidden text-slate-900 print:h-auto print:border-none print:shadow-none print:rounded-none print:bg-white print:w-full print:max-w-none">
         
         {/* TOP BAR: Controls (Hidden on Print) */}
-        <div className="px-4 sm:px-6 py-4 border-b border-slate-300 bg-white flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4 shrink-0 print:hidden relative">
-          <button
-            onClick={onClose}
-            className="absolute top-4 right-4 p-1.5 rounded-xl text-slate-500 hover:text-slate-900 hover:bg-slate-200 transition cursor-pointer"
-          >
-            <X className="w-5 h-5" />
-          </button>
-
+        <div className="px-5 py-4 border-b border-slate-200 bg-white flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4 shrink-0 print:hidden relative">
           <div className="flex items-center gap-3 pr-8 sm:pr-0">
-            <div className="p-2 rounded-xl bg-indigo-600 text-white shadow-xs shrink-0">
-              <Award className="w-5 h-5" />
+            <div className="w-10 h-10 rounded-2xl bg-indigo-50 border border-indigo-100 flex items-center justify-center text-indigo-700 font-bold text-sm shrink-0">
+              <Printer className="w-5 h-5" />
             </div>
             <div>
-              <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2">
-                <h3 className="text-sm font-black text-slate-900 leading-tight">
-                  Pratinjau Cetak Rapor Resmi LPPA — {student.full_name}
-                </h3>
-                <span className="text-[11px] font-mono font-bold text-slate-600 bg-slate-100 px-2 py-0.5 rounded self-start sm:self-auto">
-                  No. {meta.official_report_number}
-                </span>
+              <div className="flex items-center space-x-1.5 text-indigo-600 text-[10px] sm:text-xs font-bold tracking-wider uppercase mb-0.5">
+                <span>Dokumen Resmi LPPA</span>
               </div>
-              <p className="text-[11px] text-slate-500 font-medium mt-0.5">
-                Proyeksi Kanonikal Dokumen Sah • Kurikulum Merdeka PAUD
-              </p>
+              <h3 className="text-base sm:text-lg font-bold text-slate-900 flex items-center gap-2 leading-tight">
+                Pratinjau Cetak Rapor — {record.student_name}
+              </h3>
             </div>
           </div>
 
-          <div className="flex items-center gap-2 mt-2 sm:mt-0 w-full sm:w-auto">
+          <div className="flex items-center gap-2">
             <button
               onClick={handlePrint}
-              className="w-full sm:w-auto px-4 py-2.5 sm:py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-black transition flex justify-center items-center gap-2 shadow-md shadow-indigo-600/20 cursor-pointer"
+              className="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs flex items-center gap-1.5 shadow-xs transition cursor-pointer"
             >
               <Printer className="w-4 h-4" />
-              <span>🖨️ Cetak / Unduh PDF</span>
+              <span>Cetak / Simpan PDF</span>
+            </button>
+            <button
+              onClick={onClose}
+              className="p-2 rounded-xl text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition cursor-pointer"
+            >
+              <X className="w-5 h-5" />
             </button>
           </div>
         </div>

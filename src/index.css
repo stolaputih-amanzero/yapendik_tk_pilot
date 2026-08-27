@@ -137,3 +137,14 @@
     page-break-inside: avoid;
   }
 }
+
+.scrollbar-stable { scrollbar-gutter: stable; }
+
+
+
+
+
+::-webkit-scrollbar { width: 14px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background-color: #cbd5e1; border-radius: 10px; border: 4px solid white; }
+

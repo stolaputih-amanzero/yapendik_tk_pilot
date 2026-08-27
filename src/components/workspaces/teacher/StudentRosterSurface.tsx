@@ -12,7 +12,8 @@ import {
   FolderOpen, 
   Sparkles, 
   ChevronRight, 
-  Camera
+  Camera,
+  Compass
 } from 'lucide-react';
 
 interface Props {
@@ -37,9 +38,9 @@ export const StudentRosterSurface: React.FC<Props> = ({
   );
 
   return (
-    <div className="space-y-5 animate-in fade-in duration-200">
+    <div className="space-y-6 md:space-y-8 animate-in fade-in duration-200">
       {/* Search & Header */}
-      <div className="bg-white md:rounded-2xl border-y md:border border-x-0 border-slate-200 p-4 sm:p-5 md:shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-4 -mx-4 md:mx-0 mb-2 md:mb-0">
+      <div className="bg-white rounded-2xl border border-slate-200 p-4 sm:p-5 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-2 flex-wrap">
             <h3 className="text-base sm:text-lg font-bold text-slate-900">Roster & Rekam Jejak Perkembangan Siswa</h3>
@@ -59,20 +60,20 @@ export const StudentRosterSurface: React.FC<Props> = ({
             value={searchQuery}
             onChange={e => setSearchQuery(e.target.value)}
             placeholder="Cari nama atau NIS..."
-            className="w-full pl-9 pr-4 py-2 text-xs font-medium rounded-xl bg-slate-50 border border-slate-200 focus:outline-none focus:ring-2 focus:ring-slate-900 focus:bg-white text-slate-900 placeholder:text-slate-400 transition-all"
+            className="w-full pl-9 pr-3 py-2 text-xs rounded-xl bg-slate-50 border border-slate-300 focus:outline-none focus:ring-2 focus:ring-slate-900 focus:bg-white text-slate-900 placeholder:text-slate-400 font-medium transition-all"
           />
         </div>
       </div>
 
       {/* Grid of Student Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-2 md:gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3 md:gap-4">
         {filtered.map(student => {
           const isLppaReady = student.lppa_ready_percentage >= 75;
 
           return (
             <div
               key={student.student_id}
-              className="bg-white md:rounded-2xl border-y md:border border-x-0 border-slate-200 p-4 sm:p-5 shadow-xs hover:border-slate-300 transition-all duration-150 flex flex-col justify-between gap-4 -mx-4 md:mx-0"
+              className="bg-white rounded-2xl border border-slate-200 p-4 sm:p-5 shadow-xs hover:border-slate-300 transition-all duration-150 flex flex-col justify-between gap-4"
             >
               <div>
                 {/* Header Profile */}
@@ -154,7 +155,8 @@ export const StudentRosterSurface: React.FC<Props> = ({
                   >
                     <div className="flex items-center justify-between w-full">
                       <div className="flex items-center gap-1.5">
-                        <span>🌱 Busur Kontinuitas & Rencana</span>
+                        <Compass className="w-3.5 h-3.5 text-indigo-600" />
+                        <span>Busur Kontinuitas & Rencana</span>
                       </div>
                       <ChevronRight className="w-3.5 h-3.5 opacity-50" />
                     </div>
@@ -170,7 +172,7 @@ export const StudentRosterSurface: React.FC<Props> = ({
                   <div className="flex items-center justify-between w-full">
                     <div className="flex items-center gap-1.5">
                       <FolderOpen className="w-3.5 h-3.5 text-slate-600" />
-                      <span>Buka Rekam Jejak (One Child)</span>
+                      <span>Buka Rekam Jejak</span>
                     </div>
                     <ChevronRight className="w-3.5 h-3.5 opacity-40" />
                   </div>

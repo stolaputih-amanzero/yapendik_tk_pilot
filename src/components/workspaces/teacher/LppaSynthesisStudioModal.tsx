@@ -82,6 +82,16 @@ const ELEMENT_CONFIG: Record<LppaElementKey, { title: string; icon: React.ReactN
   }
 };
 
+const getRatingBadgeClass = (rating?: string) => {
+  switch (rating) {
+    case 'BSB': return 'bg-purple-50 text-purple-700 border-purple-200';
+    case 'BSH': return 'bg-emerald-50 text-emerald-700 border-emerald-200';
+    case 'MB': return 'bg-sky-50 text-sky-700 border-sky-200';
+    case 'BB': return 'bg-amber-50 text-amber-800 border-amber-200';
+    default: return 'bg-slate-100 text-slate-700 border-slate-200';
+  }
+};
+
 export const LppaSynthesisStudioModal: React.FC<Props> = ({
   isOpen,
   onClose,
@@ -122,7 +132,6 @@ export const LppaSynthesisStudioModal: React.FC<Props> = ({
     setIsSynthesizing(true);
     setErrorMsg(null);
     try {
-      // 1. Check existing report first
       const reportId = `lppa_${schoolId}_${studentId}_${semester.toLowerCase()}`;
       const existing = await lppaReportingService.getLppaReport(reportId, schoolId);
 
@@ -133,7 +142,6 @@ export const LppaSynthesisStudioModal: React.FC<Props> = ({
         setHeadInput(String(existing.physical_growth.head_circumference_cm || '50.2'));
         setReflectionInput(existing.homeroom_teacher_reflection || '');
       } else {
-        // Auto-synthesize proposal from curated observations
         const synthesized = await lppaReportingService.synthesizeLppaDraft({
           school_id: schoolId,
           class_id: classId,
@@ -313,90 +321,135 @@ export const LppaSynthesisStudioModal: React.FC<Props> = ({
   const isReadOnly = report?.status === 'APPROVED' || report?.status === 'PUBLISHED';
 
   return (
-    <div className="fixed inset-0 z-[70] flex items-center justify-center p-3 sm:p-4 bg-slate-900/75 backdrop-blur-xs animate-in fade-in duration-200">
-      <div className="bg-white rounded-3xl border border-slate-200 shadow-2xl w-full max-w-5xl h-[92vh] flex flex-col overflow-hidden text-slate-900">
+    <div className="fixed inset-0 z-[70] flex items-end sm:items-center justify-center p-0 sm:p-4 bg-slate-900/40 backdrop-blur-xs animate-in fade-in duration-200">
+      <div className="bg-white rounded-t-3xl sm:rounded-2xl border-t sm:border border-slate-200 shadow-2xl w-full max-w-5xl h-[90vh] sm:h-[85vh] flex flex-col overflow-hidden text-slate-900">
         
-        {/* TOP BAR: Studio Header & Status Ribbon */}
-        <div className="px-4 sm:px-6 py-4 border-b border-slate-200 bg-slate-50/80 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4 shrink-0 relative">
-          <button
-            onClick={onClose}
-            className="absolute top-4 right-4 p-1.5 rounded-xl text-slate-500 hover:text-slate-900 hover:bg-slate-200 transition cursor-pointer"
-          >
-            <X className="w-5 h-5" />
-          </button>
-
-          <div className="flex items-center gap-3 pr-8 sm:pr-0">
-            <div className="p-2.5 rounded-2xl bg-purple-600 text-white shadow-md shadow-purple-600/20 shrink-0">
+        {/* TOP BAR: Studio Header (Clean & Compact) */}
+        <div className="px-4 sm:px-5 py-3 sm:py-3.5 border-b border-slate-100 bg-white flex items-center justify-between relative shrink-0">
+          <div className="flex items-center gap-3 pr-6 sm:pr-0 min-w-0">
+            <div className="w-10 h-10 rounded-2xl bg-purple-50 border border-purple-100 text-purple-700 flex items-center justify-center shrink-0">
               <Award className="w-5 h-5" />
             </div>
-            <div>
-              <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2">
-                <h3 className="text-base font-black text-slate-900 leading-tight">
-                  Studio Sintesis Rapor LPPA — {studentName}
-                </h3>
-                <span className="text-xs font-mono font-bold text-slate-600 bg-slate-200/80 px-2 py-0.5 rounded-lg self-start sm:self-auto">
+            <div className="min-w-0">
+              {/* Eyebrow (Clean without duplicate icon) */}
+              <div className="text-purple-600 text-[10px] sm:text-xs font-bold tracking-wider uppercase mb-0.5">
+                Sintesis & Penyusunan Rapor LPPA
+              </div>
+              
+              {/* Title + Student Badge + NIS */}
+              <h3 className="text-sm sm:text-base font-bold text-slate-900 flex items-center gap-1.5 flex-wrap leading-tight">
+                <span>Rapor Perkembangan Ananda</span>
+                <span className="text-xs font-medium px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-700 border border-slate-200">
+                  {studentName}
+                </span>
+                <span className="text-xs font-mono font-medium px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 border border-slate-200">
                   NIS {studentNis}
                 </span>
-              </div>
-              <p className="text-xs text-slate-600 font-medium mt-0.5">
-                {academicYearName} • Semester {semester} • Kurikulum Merdeka PAUD
-              </p>
+              </h3>
             </div>
           </div>
 
-          <div className="flex items-center gap-2 mt-2 sm:mt-0">
-            {/* Status Pill */}
-            <span className={`px-3 py-1.5 sm:py-1 text-xs font-black rounded-full border flex justify-center items-center gap-1.5 w-full sm:w-auto ${
+          <button
+            type="button"
+            onClick={onClose}
+            className="p-1.5 sm:p-2 rounded-xl text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition cursor-pointer shrink-0"
+          >
+            <X className="w-5 h-5" />
+          </button>
+        </div>
+
+        {/* CONTEXT & STATUS RIBBON (Amanaura Standard Matching Pill Strips) */}
+        <div className="px-4 sm:px-5 py-2.5 border-b border-slate-100 bg-slate-50/60 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 shrink-0">
+          {/* Badge 1: Academic & Curriculum Pill */}
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white border border-slate-200 text-[11px] font-medium text-slate-700 shadow-2xs">
+            <Calendar className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+            <span>TA {academicYearName.replace(/^Tahun Ajaran\s+/i, '')}</span>
+            <span className="text-slate-300">•</span>
+            <span>{semester}</span>
+            <span className="text-slate-300">•</span>
+            <span>Kurikulum Merdeka TK</span>
+          </div>
+
+          {/* Badge 2: Document Status Pill */}
+          <div className="flex items-center">
+            <span className={`px-3 py-1 text-[11px] font-semibold rounded-full border inline-flex items-center gap-1.5 shadow-2xs ${
               report?.status === 'APPROVED'
-                ? 'bg-emerald-100 text-emerald-900 border-emerald-300'
+                ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
                 : report?.status === 'READY_FOR_REVIEW'
-                ? 'bg-sky-100 text-sky-900 border-sky-300'
+                ? 'bg-sky-50 text-sky-700 border-sky-200'
                 : report?.status === 'PUBLISHED'
-                ? 'bg-purple-100 text-purple-900 border-purple-300'
-                : 'bg-amber-100 text-amber-900 border-amber-300'
+                ? 'bg-purple-50 text-purple-700 border-purple-200'
+                : 'bg-amber-50 text-amber-800 border-amber-200'
             }`}>
               {report?.status === 'APPROVED' ? (
                 <>
-                  <CheckCircle2 className="w-3.5 h-3.5" /> Disahkan Kepala Sekolah
+                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" /> <span>Disahkan KS</span>
                 </>
               ) : report?.status === 'READY_FOR_REVIEW' ? (
                 <>
-                  <Clock className="w-3.5 h-3.5" /> Menunggu Pengesahan KS
+                  <Clock className="w-3.5 h-3.5 text-sky-600" /> <span>Menunggu KS</span>
                 </>
               ) : report?.status === 'PUBLISHED' ? (
                 <>
-                  <ShieldCheck className="w-3.5 h-3.5" /> Diterbitkan ke Orang Tua
+                  <ShieldCheck className="w-3.5 h-3.5 text-purple-600" /> <span>Diterbitkan</span>
                 </>
               ) : (
                 <>
-                  <FileText className="w-3.5 h-3.5" /> Draf Guru (Proposal)
+                  <FileText className="w-3.5 h-3.5 text-amber-600" /> <span>Draf Guru (Proposal)</span>
                 </>
               )}
             </span>
           </div>
         </div>
 
+        {/* MOBILE SEGMENTED TABS (4 Elemen di Mobile — Anti Stack Fatigue) */}
+        <div className="md:hidden flex border-b border-slate-100 bg-slate-50/70 px-3 py-2 gap-1.5 overflow-x-auto scrollbar-hide shrink-0">
+          {(Object.keys(ELEMENT_CONFIG) as LppaElementKey[]).map(key => {
+            const cfg = ELEMENT_CONFIG[key];
+            const isActive = activeElementKey === key;
+            const elem = report?.elements[key];
+
+            return (
+              <button
+                key={key}
+                onClick={() => setActiveElementKey(key)}
+                className={`px-3 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-1.5 whitespace-nowrap shrink-0 ${
+                  isActive
+                    ? 'bg-white text-slate-900 shadow-xs border border-slate-200'
+                    : 'text-slate-500 hover:text-slate-900 hover:bg-slate-100/60'
+                }`}
+              >
+                {cfg.icon}
+                <span>{cfg.title.split(' ')[0]} {cfg.title.split(' ')[1] || ''}</span>
+                <span className={`px-1.5 py-0.2 text-[9px] font-bold rounded-full border ${getRatingBadgeClass(elem?.rating_summary)}`}>
+                  {elem?.rating_summary || 'BSH'}
+                </span>
+              </button>
+            );
+          })}
+        </div>
+
         {/* FEEDBACK BANNERS */}
         {saveSuccessMsg && (
-          <div className="bg-emerald-50 border-b border-emerald-200 px-6 py-2.5 text-xs text-emerald-900 font-bold flex items-center gap-2">
+          <div className="bg-emerald-50 border-b border-emerald-200 px-5 py-2 text-xs text-emerald-900 font-bold flex items-center gap-2 shrink-0">
             <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
             <span>{saveSuccessMsg}</span>
           </div>
         )}
         {errorMsg && (
-          <div className="bg-rose-50 border-b border-rose-200 px-6 py-2.5 text-xs text-rose-900 font-bold flex items-center gap-2">
+          <div className="bg-rose-50 border-b border-rose-200 px-5 py-2 text-xs text-rose-900 font-bold flex items-center gap-2 shrink-0">
             <AlertCircle className="w-4 h-4 text-rose-600 shrink-0" />
             <span>{errorMsg}</span>
           </div>
         )}
 
-        {/* MAIN STUDIO WORKSPACE (Dual-Pane) */}
+        {/* MAIN STUDIO WORKSPACE (Dual-Pane on Desktop, Tabbed on Mobile) */}
         <div className="flex-1 flex flex-col md:flex-row overflow-hidden">
           
-          {/* LEFT SIDEBAR: 4 Elements Navigation & Physical Stats */}
-          <div className="w-full md:w-80 border-r border-slate-200 bg-slate-50/50 p-4 flex flex-col justify-between overflow-y-auto shrink-0 space-y-4">
+          {/* DESKTOP LEFT SIDEBAR: 4 Elements Navigation & Physical Stats */}
+          <div className="hidden md:flex w-80 border-r border-slate-100 bg-slate-50/50 p-4 flex-col justify-between overflow-y-auto shrink-0 space-y-4">
             <div className="space-y-2">
-              <div className="text-[11px] font-black uppercase tracking-wider text-slate-500 px-2">
+              <div className="text-[11px] font-bold uppercase tracking-wider text-slate-500 px-1">
                 4 Elemen Capaian Pembelajaran
               </div>
 
@@ -412,29 +465,23 @@ export const LppaSynthesisStudioModal: React.FC<Props> = ({
                     onClick={() => setActiveElementKey(key)}
                     className={`w-full text-left p-3 rounded-2xl border transition-all cursor-pointer flex items-start gap-3 ${
                       isActive
-                        ? 'bg-white border-indigo-600 shadow-md ring-2 ring-indigo-500/20'
-                        : 'bg-white/80 border-slate-200 hover:border-slate-300 hover:bg-white'
+                        ? 'bg-white border-2 border-indigo-600 shadow-xs ring-2 ring-indigo-500/10'
+                        : 'bg-white border-slate-200 hover:border-slate-300 hover:bg-slate-50'
                     }`}
                   >
-                    <div className="p-2 rounded-xl bg-slate-100 shrink-0 mt-0.5">
+                    <div className="p-2 rounded-xl bg-slate-50 border border-slate-100 shrink-0 mt-0.5">
                       {cfg.icon}
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center justify-between gap-1">
-                        <h4 className="text-xs font-black text-slate-900 truncate">
+                        <h4 className="text-xs font-bold text-slate-900 truncate">
                           {cfg.title}
                         </h4>
-                        <span className={`px-1.5 py-0.5 text-[9px] font-black rounded ${
-                          elem?.rating_summary === 'BSB'
-                            ? 'bg-purple-100 text-purple-900 border border-purple-200'
-                            : elem?.rating_summary === 'BSH'
-                            ? 'bg-emerald-100 text-emerald-900 border border-emerald-200'
-                            : 'bg-amber-100 text-amber-900 border border-amber-200'
-                        }`}>
+                        <span className={`px-2 py-0.5 text-[10px] font-bold rounded-full border ${getRatingBadgeClass(elem?.rating_summary)}`}>
                           {elem?.rating_summary || 'BSH'}
                         </span>
                       </div>
-                      <p className="text-[11px] text-slate-600 truncate mt-0.5">
+                      <p className="text-[11px] text-slate-500 truncate mt-0.5">
                         {evidenceCount} bukti tersemat
                       </p>
                     </div>
@@ -444,40 +491,40 @@ export const LppaSynthesisStudioModal: React.FC<Props> = ({
             </div>
 
             {/* Physical Growth Card */}
-            <div className="bg-white p-3.5 rounded-2xl border border-slate-200 shadow-xs space-y-2.5">
-              <div className="flex items-center gap-2 text-xs font-black text-slate-900">
+            <div className="bg-white p-4 rounded-2xl border border-slate-200 shadow-xs space-y-2.5">
+              <div className="flex items-center gap-2 text-xs font-bold text-slate-900">
                 <Activity className="w-4 h-4 text-emerald-600" />
                 <span>Pertumbuhan Fisik</span>
               </div>
               <div className="grid grid-cols-3 gap-2">
                 <div>
-                  <label className="text-[10px] text-slate-600 font-bold block">Tinggi (cm)</label>
+                  <label className="text-[10px] text-slate-500 font-semibold block">Tinggi (cm)</label>
                   <input
                     type="number"
                     value={heightInput}
                     disabled={isReadOnly}
                     onChange={e => setHeightInput(e.target.value)}
-                    className="w-full text-xs font-bold p-1.5 rounded-lg bg-slate-50 border border-slate-300 text-slate-900"
+                    className="w-full text-xs font-bold p-1.5 rounded-lg bg-slate-50 border border-slate-200 text-slate-900 focus:bg-white focus:ring-1 focus:ring-slate-900"
                   />
                 </div>
                 <div>
-                  <label className="text-[10px] text-slate-600 font-bold block">Berat (kg)</label>
+                  <label className="text-[10px] text-slate-500 font-semibold block">Berat (kg)</label>
                   <input
                     type="number"
                     value={weightInput}
                     disabled={isReadOnly}
                     onChange={e => setWeightInput(e.target.value)}
-                    className="w-full text-xs font-bold p-1.5 rounded-lg bg-slate-50 border border-slate-300 text-slate-900"
+                    className="w-full text-xs font-bold p-1.5 rounded-lg bg-slate-50 border border-slate-200 text-slate-900 focus:bg-white focus:ring-1 focus:ring-slate-900"
                   />
                 </div>
                 <div>
-                  <label className="text-[10px] text-slate-600 font-bold block">Lingkar (cm)</label>
+                  <label className="text-[10px] text-slate-500 font-semibold block">Lingkar (cm)</label>
                   <input
                     type="number"
                     value={headInput}
                     disabled={isReadOnly}
                     onChange={e => setHeadInput(e.target.value)}
-                    className="w-full text-xs font-bold p-1.5 rounded-lg bg-slate-50 border border-slate-300 text-slate-900"
+                    className="w-full text-xs font-bold p-1.5 rounded-lg bg-slate-50 border border-slate-200 text-slate-900 focus:bg-white focus:ring-1 focus:ring-slate-900"
                   />
                 </div>
               </div>
@@ -485,7 +532,7 @@ export const LppaSynthesisStudioModal: React.FC<Props> = ({
           </div>
 
           {/* RIGHT WORKSPACE: Authoring & Evidence Studio */}
-          <div className="flex-1 p-6 overflow-y-auto space-y-6">
+          <div className="flex-1 p-4 sm:p-6 overflow-y-auto space-y-6">
             {currentElement && (
               <div className="space-y-6">
                 
@@ -506,17 +553,17 @@ export const LppaSynthesisStudioModal: React.FC<Props> = ({
                   </div>
 
                   {/* Rating Selector */}
-                  <div className="flex items-center gap-1.5">
-                    <span className="text-xs font-bold text-slate-700 mr-1">Rating:</span>
+                  <div className="flex items-center gap-1.5 self-start sm:self-auto">
+                    <span className="text-xs font-semibold text-slate-600 mr-1">Rating:</span>
                     {(['BB', 'MB', 'BSH', 'BSB'] as MilestoneRating[]).map(r => (
                       <button
                         key={r}
                         disabled={isReadOnly}
                         onClick={() => handleRatingChange(activeElementKey, r)}
-                        className={`px-2.5 py-1 text-xs font-black rounded-lg border transition cursor-pointer ${
+                        className={`px-3 py-1 text-xs font-bold rounded-lg border transition cursor-pointer ${
                           currentElement.rating_summary === r
-                            ? 'bg-indigo-600 text-white border-indigo-600 shadow-xs'
-                            : 'bg-white text-slate-700 border-slate-300 hover:bg-slate-100'
+                            ? 'bg-slate-900 text-white border-slate-900 shadow-xs'
+                            : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-100'
                         }`}
                       >
                         {r}
@@ -579,20 +626,20 @@ export const LppaSynthesisStudioModal: React.FC<Props> = ({
                 </div>
 
                 {/* Proposed Synthesis Banner */}
-                <div className="p-4 rounded-2xl bg-purple-50/80 border border-purple-200 space-y-2">
+                <div className="p-4 rounded-2xl bg-purple-50/60 border border-purple-100 space-y-2">
                   <div className="flex items-center justify-between text-xs">
-                    <span className="font-black text-purple-900 flex items-center gap-1.5">
-                      <Sparkles className="w-4 h-4 text-purple-600" /> Usulan Draf Narasi dari Engine:
+                    <span className="font-bold text-purple-900 flex items-center gap-1.5">
+                      <Sparkles className="w-4 h-4 text-purple-600" /> Rekomendasi Draf Narasi:
                     </span>
                     <button
                       onClick={() => handleNarrativeChange(activeElementKey, currentElement.proposed_narrative)}
                       disabled={isReadOnly}
-                      className="text-[11px] font-bold text-purple-700 hover:text-purple-900 underline flex items-center gap-1 cursor-pointer"
+                      className="text-[11px] font-semibold text-purple-700 hover:text-purple-900 underline flex items-center gap-1 cursor-pointer"
                     >
                       <RotateCcw className="w-3 h-3" /> Salin Usulan ke Editor
                     </button>
                   </div>
-                  <p className="text-xs text-purple-950/90 leading-relaxed italic bg-white/70 p-3 rounded-xl border border-purple-200/60 font-medium">
+                  <p className="text-xs text-purple-950 leading-relaxed italic bg-white p-3 rounded-xl border border-purple-100 font-medium">
                     "{currentElement.proposed_narrative}"
                   </p>
                 </div>
@@ -600,7 +647,7 @@ export const LppaSynthesisStudioModal: React.FC<Props> = ({
                 {/* Teacher Final Narrative Editor */}
                 <div className="space-y-2">
                   <div className="flex items-center justify-between">
-                    <label className="text-xs font-black text-slate-900 flex items-center gap-1.5">
+                    <label className="text-xs font-bold text-slate-900 flex items-center gap-1.5">
                       <FileText className="w-4 h-4 text-indigo-600" />
                       <span>Narasi Reflektif Akhir Guru (Akan Dicetak di Rapor)</span>
                     </label>
@@ -614,7 +661,7 @@ export const LppaSynthesisStudioModal: React.FC<Props> = ({
                     value={currentElement.teacher_final_narrative}
                     onChange={e => handleNarrativeChange(activeElementKey, e.target.value)}
                     placeholder="Tuliskan narasi perkembangan anak..."
-                    className="w-full p-3.5 text-xs font-medium rounded-2xl bg-white border border-slate-300 text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 leading-relaxed shadow-xs"
+                    className="w-full p-3.5 text-xs font-medium rounded-2xl bg-white border border-slate-300 text-slate-900 focus:outline-none focus:ring-2 focus:ring-slate-900 leading-relaxed shadow-xs"
                   />
                 </div>
 
@@ -628,13 +675,13 @@ export const LppaSynthesisStudioModal: React.FC<Props> = ({
                     disabled={isReadOnly}
                     value={currentElement.growth_recommendations}
                     onChange={e => handleGrowthRecChange(activeElementKey, e.target.value)}
-                    className="w-full p-2.5 text-xs font-medium rounded-xl bg-white border border-slate-300 text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                    className="w-full p-2.5 text-xs font-medium rounded-xl bg-white border border-slate-300 text-slate-900 focus:outline-none focus:ring-2 focus:ring-slate-900"
                   />
                 </div>
 
                 {/* Homeroom Reflection Section */}
                 <div className="pt-4 border-t border-slate-200 space-y-2">
-                  <label className="text-xs font-black text-slate-900">
+                  <label className="text-xs font-bold text-slate-900">
                     Pesan Reflektif & Peneguhan Guru Kelas untuk Orang Tua
                   </label>
                   <textarea
@@ -643,7 +690,7 @@ export const LppaSynthesisStudioModal: React.FC<Props> = ({
                     value={reflectionInput}
                     onChange={e => setReflectionInput(e.target.value)}
                     placeholder="Tuliskan apresiasi dan pesan hangat bagi ananda dan keluarga..."
-                    className="w-full p-3 text-xs font-medium rounded-xl bg-slate-50 border border-slate-300 text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                    className="w-full p-3 text-xs font-medium rounded-xl bg-slate-50 border border-slate-300 text-slate-900 focus:outline-none focus:ring-2 focus:ring-slate-900"
                   />
                 </div>
 
@@ -652,29 +699,31 @@ export const LppaSynthesisStudioModal: React.FC<Props> = ({
           </div>
         </div>
 
-        {/* BOTTOM ACTION BAR */}
-        <div className="px-4 sm:px-6 py-4 sm:py-3.5 border-t border-slate-200 bg-slate-50/90 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 shrink-0 pb-6 sm:pb-3.5">
+        {/* BOTTOM ACTION BAR (Clean Responsive Hierarchy) */}
+        <div className="px-4 sm:px-5 py-3 border-t border-slate-100 bg-white flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2.5 shrink-0">
+          {/* Secondary Action: Re-synthesize */}
           <button
             onClick={handleReSynthesize}
             disabled={isSynthesizing || isReadOnly}
-            className="w-full sm:w-auto px-3.5 py-2.5 sm:py-2 rounded-xl bg-purple-50 hover:bg-purple-100 text-purple-800 border border-purple-200 text-xs font-bold transition flex justify-center items-center gap-1.5 cursor-pointer disabled:opacity-50"
+            className="w-full sm:w-auto px-3.5 py-2 rounded-xl bg-purple-50 hover:bg-purple-100 text-purple-800 border border-purple-200 text-xs font-bold transition flex justify-center items-center gap-1.5 cursor-pointer disabled:opacity-50"
           >
-            <Sparkles className="w-4 h-4 text-purple-600" />
-            <span>{isSynthesizing ? 'Menyintesis...' : '⚡ Sintesis Ulang Draf'}</span>
+            <Sparkles className="w-3.5 h-3.5 text-purple-600" />
+            <span>{isSynthesizing ? 'Menyintesis...' : 'Segarkan Narasi Otomatis'}</span>
           </button>
 
-          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 w-full sm:w-auto mt-2 sm:mt-0">
+          {/* Action Button Group */}
+          <div className="grid grid-cols-2 sm:flex sm:items-center gap-2 w-full sm:w-auto">
             <button
               onClick={() => setShowPrintPreview(true)}
-              className="w-full sm:w-auto px-3.5 py-2.5 sm:py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold transition flex justify-center items-center gap-1.5 cursor-pointer border border-slate-300"
+              className="px-3 py-2 rounded-xl bg-white hover:bg-slate-50 text-slate-700 text-xs font-bold transition flex justify-center items-center gap-1.5 cursor-pointer border border-slate-200"
             >
-              <Printer className="w-4 h-4 text-indigo-600" />
-              <span>🖨️ Pratinjau Cetak / PDF</span>
+              <Printer className="w-3.5 h-3.5 text-slate-600" />
+              <span>Pratinjau PDF</span>
             </button>
 
             <button
               onClick={onClose}
-              className="w-full sm:w-auto px-4 py-2.5 sm:py-2 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-800 text-xs font-bold transition cursor-pointer order-last sm:order-none"
+              className="hidden sm:flex px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold transition cursor-pointer justify-center items-center"
             >
               Tutup
             </button>
@@ -684,19 +733,19 @@ export const LppaSynthesisStudioModal: React.FC<Props> = ({
                 <button
                   onClick={handleSaveDraft}
                   disabled={isSaving}
-                  className="w-full sm:w-auto px-4 py-2.5 sm:py-2 rounded-xl bg-slate-800 hover:bg-slate-900 text-white text-xs font-bold transition flex justify-center items-center gap-1.5 shadow-sm cursor-pointer disabled:opacity-50"
+                  className="px-3.5 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold transition flex justify-center items-center gap-1.5 shadow-xs cursor-pointer disabled:opacity-50"
                 >
-                  <Save className="w-4 h-4" />
-                  <span>{isSaving ? 'Menyimpan...' : '💾 Simpan Draf'}</span>
+                  <Save className="w-3.5 h-3.5" />
+                  <span>{isSaving ? 'Menyimpan...' : 'Simpan Draf'}</span>
                 </button>
 
                 <button
                   onClick={handleSubmitForReview}
-                  disabled={isSubmitting}
-                  className="w-full sm:w-auto px-4.5 py-2.5 sm:py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-black transition flex justify-center items-center gap-1.5 shadow-md shadow-indigo-600/20 cursor-pointer disabled:opacity-50"
+                  disabled={isSubmitting || report?.status === 'READY_FOR_REVIEW'}
+                  className="col-span-2 sm:col-span-1 px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold transition flex justify-center items-center gap-1.5 shadow-xs cursor-pointer disabled:opacity-50"
                 >
-                  <Send className="w-4 h-4" />
-                  <span>{isSubmitting ? 'Mengajukan...' : '📤 Ajukan ke Kepala Sekolah'}</span>
+                  <Send className="w-3.5 h-3.5" />
+                  <span>{isSubmitting ? 'Mengajukan...' : 'Ajukan ke KS'}</span>
                 </button>
               </>
             )}

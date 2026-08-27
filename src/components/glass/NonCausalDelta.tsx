@@ -35,34 +35,44 @@ export const NonCausalDelta: React.FC<NonCausalDeltaProps> = ({
       data-testid="non-causal-delta-card"
     >
       {/* 1. Metric Header & Delta Display */}
-      <div className="flex items-start justify-between">
-        <div>
-          <div className="text-xs text-slate-500 font-semibold uppercase tracking-wider flex items-center gap-1.5">
-            <Scale className="w-3.5 h-3.5 text-slate-400" />
-            <span>Dinamika Capaian Teramati</span>
+      <div className="flex flex-col gap-3">
+        <div className="flex items-center justify-between gap-2">
+          <div className="text-[10px] sm:text-[11px] text-slate-500 font-bold uppercase tracking-wider flex items-center gap-1.5">
+            <Scale className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+            <span className="truncate">Dinamika Capaian Teramati</span>
           </div>
-          <div className="flex items-baseline gap-2 mt-1">
-            <span className="text-xs font-mono text-slate-400">{`Baseline: ${baselineValue.toFixed(1)}${unit}`}</span>
-            <span className="text-slate-300">→</span>
-            <span className="text-sm font-mono font-bold text-slate-800">{`Pasca-Aksi: ${outcomeValue.toFixed(1)}${unit}`}</span>
+          
+          {/* Delta Badge */}
+          <div 
+            className={`inline-flex items-center gap-1 px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full text-[10px] sm:text-xs font-mono font-bold shrink-0 ${
+              isPositive
+                ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
+                : isNegative
+                ? 'bg-amber-50 text-amber-700 border border-amber-200'
+                : 'bg-slate-50 text-slate-600 border border-slate-200'
+            }`}
+            data-testid="delta-badge"
+          >
+            {isPositive && <TrendingUp className="w-3.5 h-3.5" />}
+            {isNegative && <TrendingDown className="w-3.5 h-3.5" />}
+            {!isPositive && !isNegative && <Minus className="w-3.5 h-3.5" />}
+            <span>{`Δ ${deltaString}${unit}`}</span>
           </div>
         </div>
 
-        {/* Delta Badge */}
-        <div 
-          className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-mono font-bold ${
-            isPositive
-              ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
-              : isNegative
-              ? 'bg-amber-50 text-amber-700 border border-amber-200'
-              : 'bg-slate-50 text-slate-600 border border-slate-200'
-          }`}
-          data-testid="delta-badge"
-        >
-          {isPositive && <TrendingUp className="w-3.5 h-3.5" />}
-          {isNegative && <TrendingDown className="w-3.5 h-3.5" />}
-          {!isPositive && !isNegative && <Minus className="w-3.5 h-3.5" />}
-          <span>{`Δ ${deltaString}${unit}`}</span>
+        {/* Numbers */}
+        <div className="flex items-center gap-2 sm:gap-4 bg-slate-50 p-2.5 sm:p-3 rounded-lg border border-slate-100">
+          <div className="flex-1">
+            <div className="text-[10px] font-medium text-slate-400 uppercase tracking-wide">Baseline</div>
+            <div className="text-sm sm:text-base font-mono font-bold text-slate-600">{baselineValue.toFixed(1)}{unit}</div>
+          </div>
+          <div className="text-slate-300 shrink-0 px-2">
+            <span className="text-lg">→</span>
+          </div>
+          <div className="flex-1 text-right">
+            <div className="text-[10px] font-medium text-slate-400 uppercase tracking-wide">Pasca-Aksi</div>
+            <div className="text-sm sm:text-base font-mono font-black text-slate-900">{outcomeValue.toFixed(1)}{unit}</div>
+          </div>
         </div>
       </div>
 
@@ -76,8 +86,8 @@ export const NonCausalDelta: React.FC<NonCausalDeltaProps> = ({
           {`"${qualitativeReflection}"`}
         </p>
         {evaluatedAt && (
-          <div className="text-[10px] text-slate-400 pt-1 font-mono text-right">
-            {`Dievaluasi: ${evaluatedAt}`}
+          <div className="text-[10px] text-slate-400 pt-1 text-right">
+            {`Dicatat pada: ${new Date(evaluatedAt).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' })}`}
           </div>
         )}
       </div>
@@ -88,8 +98,8 @@ export const NonCausalDelta: React.FC<NonCausalDeltaProps> = ({
         data-testid="ethical-footnote"
       >
         <Sparkles className="w-3 h-3 text-amber-500/70 shrink-0 mt-0.5" />
-        <span>
-          <strong>Asosiasi Empiris Teramati.</strong> Angka perubahan (Δ) mencerminkan dinamika observasi lapangan, bukan klaim hubungan sebab-akibat deterministik (Invarian H-02 &amp; FB-05).
+        <span className="max-w-prose text-justify">
+          <strong className="text-slate-500">Catatan Pengamatan:</strong> Angka kenaikan persentase ini adalah hasil pengamatan di lapangan, bukan bukti mutlak bahwa kebijakan tersebut adalah satu-satunya penyebab perubahan.
         </span>
       </div>
     </div>

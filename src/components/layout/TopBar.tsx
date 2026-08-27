@@ -52,7 +52,7 @@ export const TopBar: React.FC<TopBarProps> = ({
   const isSimulationEnabled = import.meta.env.VITE_ENABLE_SIMULATION === 'true';
 
   return (
-    <header className="bg-white/90 backdrop-blur-md border-b border-slate-200 text-slate-900 sticky top-0 z-40 px-4 lg:px-6 h-16 flex items-center justify-between shadow-xs min-w-0">
+    <header className="bg-white/90 backdrop-blur-md border-b border-slate-200 text-slate-900 sticky top-0 z-40 px-4 lg:px-6 h-16 flex items-center justify-between shadow-xs min-w-0 shrink-0">
       {/* ZONE 1: BRAND TITLE (Minimal on Mobile) */}
       <div className="flex items-center space-x-2.5 sm:space-x-3 shrink-0 min-w-0">
         <div className="w-8 h-8 rounded-lg bg-slate-100 border border-slate-200 flex items-center justify-center text-slate-800 shrink-0">
@@ -60,9 +60,6 @@ export const TopBar: React.FC<TopBarProps> = ({
         </div>
         <span className="font-bold tracking-tight text-slate-900 text-base sm:text-lg whitespace-nowrap truncate">
           Yapendik OS
-        </span>
-        <span className="hidden sm:inline-block text-[11px] font-mono px-2 py-0.5 rounded bg-slate-100 text-slate-600 border border-slate-200 whitespace-nowrap">
-          TK Pilot v1.0
         </span>
       </div>
 

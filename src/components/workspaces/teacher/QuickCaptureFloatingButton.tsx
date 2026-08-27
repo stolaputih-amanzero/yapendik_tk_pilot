@@ -30,13 +30,13 @@ export const QuickCaptureFloatingButton: React.FC<Props> = ({ onClick, pendingDr
       <button
         type="button"
         onClick={onClick}
-        aria-label="Rekam Momen Cepat"
+        aria-label="Rekam Momen Belajar"
         className="group relative flex items-center gap-2 sm:gap-2.5 px-4 py-3 sm:px-5 sm:py-3.5 rounded-full bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs sm:text-sm shadow-floating hover:scale-105 active:scale-95 transition-all duration-200 cursor-pointer border border-slate-700/80"
       >
         <div className="p-1 rounded-full bg-slate-800 text-amber-400 group-hover:rotate-12 transition-transform">
           <Sparkles className="w-4 h-4 sm:w-5 sm:h-5 text-amber-400 fill-amber-400" />
         </div>
-        <span className="tracking-tight font-extrabold whitespace-nowrap">Momen Cepat</span>
+        <span className="tracking-tight font-bold whitespace-nowrap">Momen Belajar</span>
         
         {/* Hotkey hint pill */}
         <span className="hidden sm:inline-block px-1.5 py-0.5 text-[10px] font-mono font-bold bg-slate-800 text-slate-300 rounded-md border border-slate-700">

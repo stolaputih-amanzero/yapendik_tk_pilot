@@ -244,7 +244,7 @@ export const DevelopmentWorkspace: React.FC = () => {
             Laporan Capaian Perkembangan Siswa (LPPA)
           </h1>
           <p className="text-xs text-slate-500 mt-1">
-            Sintesis data observasi harian menjadi rapor capaian komprehensif berstandar PAUD Kurikulum Merdeka.
+            Sintesis data observasi harian menjadi rapor capaian komprehensif berstandar TK Kurikulum Merdeka.
           </p>
         </div>
 
