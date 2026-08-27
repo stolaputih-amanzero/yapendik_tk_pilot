@@ -25,7 +25,7 @@ export const QuickCaptureFloatingButton: React.FC<Props> = ({ onClick, pendingDr
   }, [onClick]);
 
   return (
-    <div className="fixed bottom-28 right-4 lg:bottom-8 lg:right-8 z-[60] flex items-center gap-3 pointer-events-auto">
+    <div className="fixed bottom-36 right-4 lg:bottom-8 lg:right-8 z-[60] flex items-center gap-3 pointer-events-auto">
       {/* Floating Action Button */}
       <button
         type="button"
