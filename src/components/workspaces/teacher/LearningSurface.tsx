@@ -87,7 +87,7 @@ export const LearningSurface: React.FC<Props> = ({
   return (
     <div className="space-y-8 animate-in fade-in duration-200">
       {/* 1. Intentional Plan (RPPH & Sentra) */}
-      <section className="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm space-y-4">
+      <section className="bg-white border-y md:border border-x-0 border-slate-200 md:rounded-2xl p-4 md:p-5 md:shadow-sm space-y-4 -mx-4 md:mx-0">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-200">
           <div className="flex items-center gap-3">
             <div className="p-2.5 rounded-xl bg-indigo-50 text-indigo-700 border border-indigo-200">
@@ -113,7 +113,7 @@ export const LearningSurface: React.FC<Props> = ({
 
           <button
             onClick={() => setShowAddPlanModal(true)}
-            className="px-4 py-2 rounded-xl text-xs font-bold bg-indigo-50 hover:bg-indigo-100 text-indigo-800 border border-indigo-200 transition flex items-center gap-1.5 cursor-pointer self-start sm:self-auto shadow-sm"
+            className="w-full sm:w-auto px-4 py-2.5 sm:py-2 rounded-xl text-xs font-bold bg-indigo-50 hover:bg-indigo-100 text-indigo-800 border border-indigo-200 transition flex justify-center items-center gap-1.5 cursor-pointer shadow-sm"
           >
             <Plus className="w-4 h-4" />
             <span>Tambah Aktivitas Sentra</span>
@@ -216,19 +216,19 @@ export const LearningSurface: React.FC<Props> = ({
               placeholder="Contoh: Anak-anak sangat antusias menyusun jembatan balok, sebagian besar sudah memahami konsep keseimbangan..."
               className="w-full px-3.5 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700"
             />
-            <div className="flex items-center justify-end gap-2">
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-end gap-2 pt-2">
               <button
                 onClick={() => {
                   onToggleActivityComplete(reflectionModalActivity.id);
                   setReflectionModalActivity(null);
                 }}
-                className="px-3 py-1.5 font-bold text-slate-500"
+                className="w-full sm:w-auto px-3 py-2.5 sm:py-1.5 font-bold text-slate-500 order-2 sm:order-1"
               >
                 Lewati Refleksi
               </button>
               <button
                 onClick={handleSaveReflection}
-                className="px-4 py-1.5 rounded-xl font-bold bg-emerald-600 text-white"
+                className="w-full sm:w-auto px-4 py-2.5 sm:py-1.5 rounded-xl font-bold bg-emerald-600 text-white flex justify-center order-1 sm:order-2"
               >
                 Simpan & Tandai Selesai
               </button>
@@ -254,7 +254,7 @@ export const LearningSurface: React.FC<Props> = ({
                 />
               </div>
 
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
                   <label className="block font-bold text-slate-700 dark:text-slate-300 mb-1">Waktu Pelaksanaan</label>
                   <input
@@ -295,17 +295,17 @@ export const LearningSurface: React.FC<Props> = ({
                 />
               </div>
 
-              <div className="flex items-center justify-end gap-2 pt-2">
+              <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-end gap-2 pt-4 sm:pt-2">
                 <button
                   type="button"
                   onClick={() => setShowAddPlanModal(false)}
-                  className="px-4 py-2 font-bold text-slate-500"
+                  className="w-full sm:w-auto px-4 py-2.5 sm:py-2 font-bold text-slate-500 order-2 sm:order-1"
                 >
                   Batal
                 </button>
                 <button
                   type="submit"
-                  className="px-5 py-2 rounded-xl font-bold bg-indigo-600 text-white"
+                  className="w-full sm:w-auto px-5 py-2.5 sm:py-2 rounded-xl font-bold bg-indigo-600 text-white flex justify-center order-1 sm:order-2"
                 >
                   Simpan Rencana
                 </button>

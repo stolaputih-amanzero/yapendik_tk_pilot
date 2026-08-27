@@ -116,7 +116,7 @@ export const EnrichmentTrayDrawer: React.FC<Props> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-end bg-slate-950/60 backdrop-blur-xs animate-in fade-in duration-200">
+    <div className="fixed inset-0 z-[70] flex items-center justify-end bg-slate-950/60 backdrop-blur-xs animate-in fade-in duration-200">
       <div className="bg-white border-l border-slate-200 w-full max-w-lg h-full shadow-2xl flex flex-col animate-in slide-in-from-right duration-300">
         {/* Header */}
         <div className="p-5 border-b border-slate-200 flex items-center justify-between bg-slate-50">
@@ -186,13 +186,13 @@ export const EnrichmentTrayDrawer: React.FC<Props> = ({
             <label className="block font-extrabold text-slate-800 uppercase tracking-wider mb-2">
               Tingkat Capaian (Rating):
             </label>
-            <div className="grid grid-cols-4 gap-2">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
               {RATINGS.map(r => (
                 <button
                   type="button"
                   key={r.key}
                   onClick={() => setMilestoneRating(r.key)}
-                  className={`py-2 px-1 rounded-xl text-center transition cursor-pointer border ${
+                  className={`py-2.5 sm:py-2 px-1 rounded-xl text-center transition cursor-pointer border ${
                     milestoneRating === r.key
                       ? 'bg-indigo-600 text-white border-indigo-600 font-bold shadow-md shadow-indigo-600/30'
                       : 'bg-slate-50 border-slate-200 text-slate-800 hover:bg-slate-100 font-semibold'
@@ -269,18 +269,18 @@ export const EnrichmentTrayDrawer: React.FC<Props> = ({
           </div>
 
           {/* Action Buttons */}
-          <div className="pt-3 border-t border-slate-200 flex items-center justify-end gap-3">
+          <div className="pt-3 border-t border-slate-200 flex flex-col sm:flex-row items-stretch sm:items-center justify-end gap-3 pb-6 sm:pb-0">
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 rounded-xl font-bold text-slate-700 hover:bg-slate-100 transition cursor-pointer"
+              className="w-full sm:w-auto px-4 py-2.5 sm:py-2 rounded-xl font-bold text-slate-700 hover:bg-slate-100 transition cursor-pointer order-2 sm:order-1"
             >
               Tutup
             </button>
             <button
               type="submit"
               disabled={isSaving}
-              className="px-6 py-2.5 rounded-xl font-extrabold bg-indigo-600 hover:bg-indigo-500 text-white shadow-lg shadow-indigo-600/30 transition-all disabled:opacity-50 cursor-pointer flex items-center gap-2"
+              className="w-full sm:w-auto px-6 py-2.5 rounded-xl font-extrabold bg-indigo-600 hover:bg-indigo-500 text-white shadow-lg shadow-indigo-600/30 transition-all disabled:opacity-50 cursor-pointer flex justify-center items-center gap-2 order-1 sm:order-2"
             >
               <Check className="w-4 h-4" />
               <span>{isSaving ? 'Menyimpan...' : 'Simpan Pengayaan'}</span>

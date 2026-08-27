@@ -7,7 +7,7 @@ import React, { useState, useEffect } from 'react';
 import { db } from '../../db/database';
 import { useSecurityContext } from '../../auth/context';
 import { ClassRoom, StudentProfile, Person, GuardianRelationship } from '../../domain/types';
-import { Users, User, Heart, Shield, Phone, MapPin, Calendar, Activity } from 'lucide-react';
+import { Users, User, Heart, Shield, Phone, MapPin, Calendar, Activity, Info } from 'lucide-react';
 
 export const EnrollmentWorkspace: React.FC = () => {
   const { securityContext } = useSecurityContext();
@@ -48,11 +48,18 @@ export const EnrollmentWorkspace: React.FC = () => {
       <div className="bg-white border border-slate-200 rounded-lg p-4 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <h1 className="text-xl font-bold text-slate-900 flex items-center gap-2">
-            <Users className="w-5 h-5 text-indigo-600" />
-            Data Induk Siswa & Entitas Kanonikal (Canonical Identity)
+            <Users className="w-5 h-5 text-slate-900" />
+            Data Induk Siswa & Keluarga
+            <div className="group relative flex items-center ml-1">
+              <Info className="w-4 h-4 text-slate-400 hover:text-slate-900 transition-colors cursor-help" />
+              <div className="absolute left-1/2 -translate-x-1/2 top-full mt-2 hidden group-hover:block w-64 p-2.5 bg-slate-900 text-white text-[11px] font-medium leading-relaxed rounded-xl shadow-xl z-50">
+                <div className="absolute -top-1 left-1/2 -translate-x-1/2 w-2 h-2 bg-slate-900 rotate-45"></div>
+                Arsitektur Kanonikal: Data ini mengintegrasikan profil tunggal anak dengan akun orang tua sah (Person Entity Mapping).
+              </div>
+            </div>
           </h1>
           <p className="text-xs text-slate-500 mt-1">
-            Prinsip Konstitusi Yapendik: Satu entitas manusia (Person) dengan relasi peran kontekstual (Student, Guardian, Teacher).
+            Manajemen profil lengkap peserta didik, data rekam medis, dan informasi kontak orang tua/wali.
           </p>
         </div>
 

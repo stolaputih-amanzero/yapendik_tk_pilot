@@ -107,24 +107,25 @@ export const EvidenceCaptureSheet: React.FC<Props> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-sm animate-in fade-in duration-200">
+    <div className="fixed inset-0 z-[70] flex items-center justify-center p-3 sm:p-4 bg-slate-900/60 backdrop-blur-xs animate-in fade-in duration-200">
       <div className="bg-white border border-slate-200 rounded-3xl w-full max-w-xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
         {/* Header */}
-        <div className="px-6 py-4 bg-gradient-to-r from-amber-500/15 via-orange-500/10 to-amber-500/15 border-b border-slate-200 flex items-center justify-between">
+        <div className="px-5 sm:px-6 py-4 bg-slate-50 border-b border-slate-200 flex items-center justify-between">
           <div className="flex items-center gap-2.5">
-            <div className="p-2 rounded-xl bg-amber-500/20 text-amber-800 border border-amber-300/50">
-              <Sparkles className="w-5 h-5" />
+            <div className="p-2 rounded-xl bg-slate-100 text-slate-800 border border-slate-200">
+              <Sparkles className="w-5 h-5 text-amber-500 fill-amber-500" />
             </div>
             <div>
               <h3 className="text-base font-black text-slate-900">
                 Momen Cepat (Fast Capture)
               </h3>
-              <p className="text-xs text-slate-600 font-medium">
+              <p className="text-xs text-slate-500 font-medium">
                 Tangkap seketika (&lt;15 dtk). Perkaya narasi saat sintesis siang.
               </p>
             </div>
           </div>
           <button
+            type="button"
             onClick={onClose}
             className="p-2 rounded-xl text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition cursor-pointer"
           >
@@ -133,11 +134,11 @@ export const EvidenceCaptureSheet: React.FC<Props> = ({
         </div>
 
         {/* Form Body */}
-        <form onSubmit={handleSubmit} className="p-6 overflow-y-auto space-y-5 flex-1">
+        <form onSubmit={handleSubmit} className="p-5 sm:p-6 overflow-y-auto space-y-5 flex-1">
           {/* 1. Pilih Ananda (Child Selector Chips) */}
           <div>
             <label className="block text-xs font-extrabold text-slate-800 uppercase tracking-wider mb-2 flex items-center gap-1.5">
-              <Users className="w-3.5 h-3.5 text-indigo-600" />
+              <Users className="w-3.5 h-3.5 text-slate-600" />
               <span>Pilih Ananda ({selectedStudentIds.length} terpilih):</span>
             </label>
             <div className="flex flex-wrap gap-1.5 max-h-32 overflow-y-auto p-2 bg-slate-50 rounded-2xl border border-slate-200">
@@ -150,8 +151,8 @@ export const EvidenceCaptureSheet: React.FC<Props> = ({
                     onClick={() => toggleStudent(s.student_id)}
                     className={`px-3 py-1.5 rounded-xl text-xs font-bold transition cursor-pointer flex items-center gap-1.5 ${
                       isSelected
-                        ? 'bg-indigo-600 text-white shadow-sm shadow-indigo-600/30'
-                        : 'bg-white border border-slate-300 text-slate-800 hover:bg-slate-100'
+                        ? 'bg-slate-900 text-white shadow-xs'
+                        : 'bg-white border border-slate-200 text-slate-700 hover:bg-slate-100'
                     }`}
                   >
                     <span>{s.name}</span>
@@ -165,7 +166,7 @@ export const EvidenceCaptureSheet: React.FC<Props> = ({
           {/* 2. Media Bukti Visual (Photo/Audio) */}
           <div>
             <label className="block text-xs font-extrabold text-slate-800 uppercase tracking-wider mb-2 flex items-center gap-1.5">
-              <Camera className="w-3.5 h-3.5 text-amber-600" />
+              <Camera className="w-3.5 h-3.5 text-slate-600" />
               <span>Foto / Bukti Visual Karya:</span>
             </label>
             {mockPhotoUrl ? (
@@ -184,9 +185,9 @@ export const EvidenceCaptureSheet: React.FC<Props> = ({
                 <button
                   type="button"
                   onClick={handleSimulatePhoto}
-                  className="flex-1 py-3 px-4 rounded-2xl border-2 border-dashed border-amber-400 hover:border-amber-500 bg-amber-50 text-amber-900 text-xs font-bold transition flex items-center justify-center gap-2 cursor-pointer shadow-xs"
+                  className="flex-1 py-3 px-4 rounded-2xl border-2 border-dashed border-slate-300 hover:border-slate-400 bg-slate-50 text-slate-700 text-xs font-bold transition flex items-center justify-center gap-2 cursor-pointer shadow-xs"
                 >
-                  <Camera className="w-4 h-4 text-amber-700" />
+                  <Camera className="w-4 h-4 text-slate-600" />
                   <span>Ambil Foto Momen / Karya</span>
                 </button>
               </div>
@@ -196,7 +197,7 @@ export const EvidenceCaptureSheet: React.FC<Props> = ({
           {/* 3. Kurikulum Merdeka PAUD Quick Tags */}
           <div>
             <label className="block text-xs font-extrabold text-slate-800 uppercase tracking-wider mb-2 flex items-center gap-1.5">
-              <Tag className="w-3.5 h-3.5 text-teal-600" />
+              <Tag className="w-3.5 h-3.5 text-slate-600" />
               <span>Tag Cepat Dimensi PAUD:</span>
             </label>
             <div className="flex flex-wrap gap-1.5">
@@ -209,7 +210,7 @@ export const EvidenceCaptureSheet: React.FC<Props> = ({
                     onClick={() => toggleTag(tag.id)}
                     className={`px-3 py-1.5 rounded-xl text-xs font-bold transition cursor-pointer ${
                       isSelected
-                        ? 'bg-teal-700 text-white shadow-sm shadow-teal-700/30'
+                        ? 'bg-slate-900 text-white shadow-xs'
                         : 'bg-slate-100 text-slate-700 border border-slate-200 hover:bg-slate-200'
                     }`}
                   >
@@ -231,25 +232,25 @@ export const EvidenceCaptureSheet: React.FC<Props> = ({
               placeholder="Contoh: Berhasil susun menara 12 balok mandiri tanpa jatuh..."
               value={noteText}
               onChange={e => setNoteText(e.target.value)}
-              className="w-full px-3.5 py-2.5 text-xs rounded-2xl bg-slate-50 border border-slate-300 focus:outline-none focus:ring-2 focus:ring-amber-500 text-slate-900 placeholder:text-slate-500 font-medium"
+              className="w-full px-3.5 py-2.5 text-xs rounded-2xl bg-slate-50 border border-slate-200 focus:outline-none focus:border-slate-400 text-slate-900 placeholder:text-slate-400 font-medium"
             />
           </div>
 
           {/* Action Buttons */}
-          <div className="pt-3 flex items-center justify-end gap-3 border-t border-slate-200">
+          <div className="pt-3 flex flex-col sm:flex-row items-stretch sm:items-center justify-end gap-3 border-t border-slate-100 pb-6 sm:pb-0">
             <button
               type="button"
               onClick={onClose}
-              className="px-5 py-2.5 rounded-xl text-xs font-bold text-slate-700 hover:bg-slate-100 transition cursor-pointer"
+              className="w-full sm:w-auto px-5 py-2.5 rounded-xl text-xs font-semibold text-slate-700 hover:bg-slate-100 transition cursor-pointer order-2 sm:order-1"
             >
               Batal
             </button>
             <button
               type="submit"
               disabled={isSaving || selectedStudentIds.length === 0}
-              className="px-6 py-2.5 rounded-xl text-xs font-black bg-amber-500 hover:bg-amber-400 text-slate-950 shadow-md shadow-amber-500/30 transition-all disabled:opacity-50 cursor-pointer flex items-center gap-2"
+              className="w-full sm:w-auto px-6 py-2.5 rounded-xl text-xs font-bold bg-slate-900 hover:bg-slate-800 text-white shadow-xs transition-all disabled:opacity-50 cursor-pointer flex justify-center items-center gap-2 order-1 sm:order-2"
             >
-              <Sparkles className="w-4 h-4 text-slate-950 fill-slate-950" />
+              <Sparkles className="w-4 h-4 text-amber-400 fill-amber-400" />
               <span>{isSaving ? 'Menyimpan...' : 'Simpan Momen Cepat'}</span>
             </button>
           </div>

@@ -13,6 +13,7 @@ import {
   MilestoneRating, 
   ClassRoom 
 } from '../../domain/types';
+import { Button, AvatarChild, Badge } from '../ui';
 import { 
   Eye, 
   Plus, 
@@ -160,9 +161,9 @@ export const ObservationWorkspace: React.FC = () => {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 overflow-x-hidden w-full max-w-full">
       {/* Top Controls Bar */}
-      <div className="bg-white border border-slate-200 rounded-lg p-4 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div className="px-4 md:px-6 py-5 bg-white border-b border-slate-100 flex flex-col md:flex-row md:items-start gap-4 flex-wrap w-full">
         <div>
           <h1 className="text-xl font-bold text-slate-900 flex items-center gap-2">
             <Eye className="w-5 h-5 text-indigo-600" />
@@ -174,63 +175,66 @@ export const ObservationWorkspace: React.FC = () => {
         </div>
 
         {/* Filters */}
-        <div className="flex flex-wrap items-center gap-2.5">
-          <div className="flex items-center space-x-1.5 bg-slate-50 border border-slate-200 rounded-md px-2.5 py-1.5 text-xs">
-            <span className="text-slate-500 font-medium">Kelas:</span>
-            <select
-              value={selectedClassId}
-              onChange={(e) => setSelectedClassId(e.target.value)}
-              className="bg-transparent font-semibold text-slate-800 outline-none"
-            >
-              {classes.map(c => (
-                <option key={c.id} value={c.id}>{c.name}</option>
-              ))}
-            </select>
-          </div>
+        <div className="flex flex-col gap-4 w-full">
+          <div className="flex flex-col md:flex-row md:items-center gap-3 w-full">
+            <div className="flex items-center justify-between w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-700 text-xs">
+              <span className="text-slate-500 font-medium">Kelas:</span>
+              <select
+                value={selectedClassId}
+                onChange={(e) => setSelectedClassId(e.target.value)}
+                className="bg-transparent font-semibold text-slate-800 outline-none text-right flex-1 cursor-pointer"
+              >
+                {classes.map(c => (
+                  <option key={c.id} value={c.id}>{c.name}</option>
+                ))}
+              </select>
+            </div>
 
-          <div className="flex items-center space-x-1.5 bg-slate-50 border border-slate-200 rounded-md px-2.5 py-1.5 text-xs">
-            <span className="text-slate-500 font-medium">Siswa:</span>
-            <select
-              value={selectedStudentId}
-              onChange={(e) => setSelectedStudentId(e.target.value)}
-              className="bg-transparent font-medium text-slate-800 outline-none"
-            >
-              <option value="ALL">Semua Siswa</option>
-              {students.map(s => (
-                <option key={s.id} value={s.id}>{s.person?.fullName || s.nis || 'Siswa'}</option>
-              ))}
-            </select>
-          </div>
+            <div className="flex items-center justify-between w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-700 text-xs">
+              <span className="text-slate-500 font-medium">Siswa:</span>
+              <select
+                value={selectedStudentId}
+                onChange={(e) => setSelectedStudentId(e.target.value)}
+                className="bg-transparent font-medium text-slate-800 outline-none text-right flex-1 cursor-pointer"
+              >
+                <option value="ALL">Semua Siswa</option>
+                {students.map(s => (
+                  <option key={s.id} value={s.id}>{s.person?.fullName || s.nis || 'Siswa'}</option>
+                ))}
+              </select>
+            </div>
 
-          <div className="flex items-center space-x-1.5 bg-slate-50 border border-slate-200 rounded-md px-2.5 py-1.5 text-xs">
-            <span className="text-slate-500 font-medium">Domain:</span>
-            <select
-              value={selectedDomainFilter}
-              onChange={(e) => setSelectedDomainFilter(e.target.value)}
-              className="bg-transparent font-medium text-slate-800 outline-none"
-            >
-              <option value="ALL">Semua Domain</option>
-              {Object.keys(domainLabels).map(k => (
-                <option key={k} value={k}>{domainLabels[k as DevelopmentDomain].name}</option>
-              ))}
-            </select>
+            <div className="flex items-center justify-between w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-700 text-xs">
+              <span className="text-slate-500 font-medium">Domain:</span>
+              <select
+                value={selectedDomainFilter}
+                onChange={(e) => setSelectedDomainFilter(e.target.value)}
+                className="bg-transparent font-medium text-slate-800 outline-none text-right flex-1 cursor-pointer"
+              >
+                <option value="ALL">Semua Domain</option>
+                {Object.keys(domainLabels).map(k => (
+                  <option key={k} value={k}>{domainLabels[k as DevelopmentDomain].name}</option>
+                ))}
+              </select>
+            </div>
           </div>
 
           {canCreate && (
-            <button
+            <Button
+              variant="primary"
+              className="w-full md:w-auto mt-2 md:mt-0 shadow-sm"
               onClick={() => setShowAddModal(true)}
-              className="bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold px-3.5 py-2 rounded-md transition-colors flex items-center space-x-1.5 whitespace-nowrap shadow-sm"
+              leftIcon={<Plus className="w-4 h-4" />}
             >
-              <Plus className="w-3.5 h-3.5" />
-              <span>Catat Observasi Anekdot</span>
-            </button>
+              Catat Observasi
+            </Button>
           )}
         </div>
       </div>
 
       {/* Role Context notice */}
       {securityContext.role === 'GUARDIAN' && (
-        <div className="bg-emerald-50 border border-emerald-200 rounded-lg p-3 text-xs text-emerald-900 flex items-center justify-between">
+        <div className="mx-4 md:mx-6 bg-emerald-50 border border-emerald-200 rounded-lg p-3 text-xs text-emerald-900 flex items-center justify-between">
           <div>
             <span className="font-bold">Konteks Orang Tua / Wali:</span> Menampilkan catatan observasi untuk ananda yang berada di bawah pengampuan sah Anda.
           </div>
@@ -250,7 +254,7 @@ export const ObservationWorkspace: React.FC = () => {
           </p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="flex flex-col divide-y divide-slate-100 pb-[180px]">
           {visibleObservations.map(obs => {
             const student = db.getStudentById(obs.studentId);
             const observer = db.getPersonById(obs.observerPersonId);
@@ -258,43 +262,45 @@ export const ObservationWorkspace: React.FC = () => {
             const ratingInfo = ratingBadges[obs.milestoneRating];
 
             return (
-              <div key={obs.id} className="bg-white border border-slate-200 rounded-lg p-5 shadow-sm space-y-3">
-                {/* Header */}
-                <div className="flex items-start justify-between gap-2 pb-2 border-b border-slate-100">
-                  <div>
-                    <div className="flex items-center space-x-2">
-                      <span className="font-bold text-slate-900 text-sm">
-                        {student?.person.fullName || 'Siswa'}
-                      </span>
-                      <span className="text-slate-400 text-xs">({student?.nis})</span>
+              <div key={obs.id} className="px-4 md:px-6 py-5 hover:bg-slate-50/50 transition-colors">
+                <div className="space-y-3">
+                  {/* Header */}
+                  <div className="flex flex-col sm:flex-row sm:items-start gap-3 sm:justify-between w-full pb-2 border-b border-slate-100">
+                    <div className="flex items-start gap-3 min-w-0 w-full">
+                      <AvatarChild name={student?.person?.fullName || 'Siswa'} id={obs.studentId} size="md" showSymbol />
+                      <div className="flex-1 min-w-0 w-full">
+                        <div className="flex items-center space-x-2">
+                          <h3 className="font-bold text-slate-900 text-sm truncate">{student?.person?.fullName || 'Siswa'}</h3>
+                          <Badge variant="neutral">NIS {student?.nis}</Badge>
+                        </div>
+                        <div className="text-[11px] text-slate-400 mt-0.5 truncate">
+                          Diamati oleh: {observer?.fullName || 'Pendidik'} • {new Date(obs.observedAt).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' })}
+                        </div>
+                      </div>
                     </div>
-                    <div className="text-[11px] text-slate-400 mt-0.5">
-                      Diamati oleh: {observer?.fullName || 'Pendidik'} • {new Date(obs.observedAt).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' })}
-                    </div>
-                  </div>
 
-                  <div className="flex items-center space-x-1.5 shrink-0">
-                    <span 
-                      title={ratingInfo.full}
-                      className={`text-[10px] font-bold px-2 py-0.5 rounded border ${ratingInfo.color}`}
-                    >
-                      {ratingInfo.label} — {ratingInfo.full}
-                    </span>
+                    <div className="flex items-center space-x-1.5 shrink-0">
+                      <span 
+                        title={ratingInfo.full}
+                        className={`text-[10px] font-bold px-2 py-0.5 rounded-xl border ${ratingInfo.color}`}
+                      >
+                        {ratingInfo.label} — {ratingInfo.full}
+                      </span>
+                    </div>
                   </div>
-                </div>
 
                 {/* Domain Pill */}
                 <div className="flex items-center space-x-2">
-                  <span className={`text-[10px] font-semibold px-2 py-0.5 rounded border ${domainInfo.badge}`}>
+                  <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-xl border ${domainInfo.badge}`}>
                     {domainInfo.name}
                   </span>
                   {obs.isConfidentialToStaff && (
-                    <span className="text-[10px] px-1.5 py-0.5 rounded bg-slate-100 text-slate-600 border border-slate-200 flex items-center gap-1">
+                    <span className="text-[10px] px-1.5 py-0.5 rounded-xl bg-slate-100 text-slate-600 border border-slate-200 flex items-center gap-1">
                       <Lock className="w-2.5 h-2.5" /> Internal Guru
                     </span>
                   )}
                   {obs.sharedWithGuardian && (
-                    <span className="text-[10px] px-1.5 py-0.5 rounded bg-emerald-50 text-emerald-700 border border-emerald-200 flex items-center gap-1">
+                    <span className="text-[10px] px-1.5 py-0.5 rounded-xl bg-emerald-50 text-emerald-700 border border-emerald-200 flex items-center gap-1">
                       <Share2 className="w-2.5 h-2.5" /> Dibagikan ke Wali
                     </span>
                   )}
@@ -340,6 +346,7 @@ export const ObservationWorkspace: React.FC = () => {
                     </div>
                   )}
                 </div>
+                </div>
               </div>
             );
           })}
@@ -361,7 +368,7 @@ export const ObservationWorkspace: React.FC = () => {
                     value={formStudentId}
                     onChange={e => setFormStudentId(e.target.value)}
                     required
-                    className="w-full border border-slate-300 rounded px-2.5 py-1.5 focus:ring-1 focus:ring-slate-900 outline-none"
+                    className="w-full flex justify-between items-center border border-slate-300 rounded px-2.5 py-1.5 focus:ring-1 focus:ring-slate-900 outline-none"
                   >
                     {students.map(s => (
                       <option key={s.id} value={s.id}>{s.person?.fullName || 'Siswa'} ({s.nis || s.id})</option>
@@ -374,7 +381,7 @@ export const ObservationWorkspace: React.FC = () => {
                     value={formDomain}
                     onChange={e => setFormDomain(e.target.value as DevelopmentDomain)}
                     required
-                    className="w-full border border-slate-300 rounded px-2.5 py-1.5 focus:ring-1 focus:ring-slate-900 outline-none"
+                    className="w-full flex justify-between items-center border border-slate-300 rounded px-2.5 py-1.5 focus:ring-1 focus:ring-slate-900 outline-none"
                   >
                     {Object.keys(domainLabels).map(k => (
                       <option key={k} value={k}>{domainLabels[k as DevelopmentDomain].name}</option>
@@ -494,17 +501,17 @@ export const ObservationWorkspace: React.FC = () => {
                 </div>
               </div>
 
-              <div className="flex items-center justify-end space-x-2 pt-3 border-t border-slate-100">
+              <div className="flex flex-col md:flex-row items-center justify-end gap-3 pt-3 border-t border-slate-100">
                 <button
                   type="button"
                   onClick={() => setShowAddModal(false)}
-                  className="px-4 py-2 rounded border border-slate-300 text-slate-700 hover:bg-slate-50 font-medium"
+                  className="w-full md:w-auto px-4 py-2 rounded border border-slate-300 text-slate-700 hover:bg-slate-50 font-medium"
                 >
                   Batal
                 </button>
                 <button
                   type="submit"
-                  className="px-4 py-2 rounded bg-slate-900 text-white hover:bg-slate-800 font-semibold"
+                  className="w-full md:w-auto px-4 py-2 rounded bg-slate-900 text-white hover:bg-slate-800 font-semibold flex justify-center items-center"
                 >
                   Simpan Catatan Observasi
                 </button>

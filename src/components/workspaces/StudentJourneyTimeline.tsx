@@ -141,31 +141,30 @@ export const StudentJourneyTimeline: React.FC<{ initialStudentId?: string }> = (
   const selectedStudentMeta = studentsList.find(s => s.id === selectedStudentId);
 
   return (
-    <div className="max-w-7xl mx-auto p-6 space-y-6 text-slate-100 font-sans">
+    <div className="w-full max-w-7xl mx-auto px-4 md:px-6 py-6 space-y-6 text-slate-900 font-sans">
       {/* Header Banner */}
-      <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-96 h-96 bg-amber-500/5 rounded-full blur-3xl pointer-events-none"></div>
+      <div className="bg-slate-50 border-y md:border border-slate-200 md:rounded-2xl p-4 md:p-6 md:shadow-xs relative overflow-hidden -mx-4 md:mx-0">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 relative z-10">
           <div>
-            <div className="flex items-center space-x-2 text-amber-400 text-xs font-bold tracking-wider uppercase mb-1">
+            <div className="flex items-center space-x-2 text-slate-600 text-xs font-bold tracking-wider uppercase mb-1">
               <Compass className="w-4 h-4" />
               <span>Stage 3.4 • Child Longitudinal Continuity & Trajectory</span>
             </div>
-            <h1 className="text-2xl font-bold text-white tracking-tight">
+            <h1 className="text-2xl font-bold text-slate-900 tracking-tight">
               Linimasa & Kurva Rekam Jejak Perkembangan Anak
             </h1>
-            <p className="text-slate-400 text-sm mt-1">
+            <p className="text-slate-500 text-sm mt-1">
               Rekonstruksi perjalanan historis multi-tahun anak dari awal penempatan rombel hingga kelulusan resmi.
             </p>
           </div>
 
-          <div className="flex items-center space-x-3 shrink-0">
+          <div className="flex flex-col md:flex-row items-stretch md:items-center gap-3 shrink-0 w-full md:w-auto">
             {/* Student Selector (if not single guardian child) */}
             {studentsList.length > 1 && (
               <select
                 value={selectedStudentId}
                 onChange={(e) => setSelectedStudentId(e.target.value)}
-                className="bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-amber-500 font-medium"
+                className="w-full flex justify-between items-center bg-white border border-slate-300 rounded-xl px-3 py-2 text-xs text-slate-900 focus:outline-none focus:border-slate-400 font-medium shadow-xs"
               >
                 {studentsList.map(s => (
                   <option key={s.id} value={s.id}>{s.name} ({s.nis})</option>
@@ -176,9 +175,9 @@ export const StudentJourneyTimeline: React.FC<{ initialStudentId?: string }> = (
             <button
               onClick={loadTrajectory}
               disabled={refreshing}
-              className="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 text-xs font-semibold flex items-center space-x-2 transition-all"
+              className="w-full md:w-auto flex justify-center items-center space-x-2 px-3.5 py-2.5 md:py-2 rounded-xl bg-white hover:bg-slate-100 text-slate-700 border border-slate-200 text-xs font-semibold transition-all shadow-xs"
             >
-              <RefreshCw className={`w-3.5 h-3.5 ${refreshing ? 'animate-spin text-amber-400' : ''}`} />
+              <RefreshCw className={`w-3.5 h-3.5 ${refreshing ? 'animate-spin text-slate-600' : ''}`} />
               <span>Segarkan</span>
             </button>
           </div>
@@ -187,16 +186,11 @@ export const StudentJourneyTimeline: React.FC<{ initialStudentId?: string }> = (
 
       {/* Error / Privacy Boundary Warning */}
       {errorFeedback && (
-        <div className="p-4 rounded-xl border bg-rose-950/40 border-rose-500/40 text-rose-300 flex items-start space-x-3 text-xs animate-in fade-in">
-          <Lock className="w-5 h-5 flex-shrink-0 mt-0.5 text-rose-400" />
-          <div className="flex-1">
-            <p className="font-semibold">{errorFeedback.title}</p>
-            <p className="mt-0.5 opacity-90">{errorFeedback.message}</p>
-            {errorFeedback.actionSuggestion && (
-              <p className="mt-2 text-amber-300 font-medium bg-amber-950/40 p-2 rounded-lg border border-amber-500/20">
-                💡 Rekomendasi: {errorFeedback.actionSuggestion}
-              </p>
-            )}
+        <div className="p-4 rounded-xl border bg-rose-50 border-rose-200 text-rose-700 flex items-start space-x-3 text-xs animate-in fade-in">
+          <AlertTriangle className="w-5 h-5 flex-shrink-0 mt-0.5 text-rose-600" />
+          <div>
+            <p className="font-semibold text-rose-900">{errorFeedback.title}</p>
+            <p className="mt-0.5">{errorFeedback.message}</p>
           </div>
         </div>
       )}
@@ -205,45 +199,45 @@ export const StudentJourneyTimeline: React.FC<{ initialStudentId?: string }> = (
       {trajectory && (
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
           {/* Left Column: Student Identity Profile Card (4 Cols) */}
-          <div className="lg:col-span-4 bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-lg space-y-6">
-            <div className="flex items-center space-x-3 border-b border-slate-800 pb-4">
-              <div className="w-12 h-12 rounded-2xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400 font-bold text-lg">
+          <div className="lg:col-span-4 bg-white border-y md:border border-slate-200 md:rounded-2xl p-4 md:p-6 md:shadow-xs space-y-6 -mx-4 md:mx-0">
+            <div className="flex items-center space-x-3 border-b border-slate-100 pb-4">
+              <div className="w-12 h-12 rounded-2xl bg-slate-100 border border-slate-200 flex items-center justify-center text-slate-700 font-bold text-lg">
                 <Baby className="w-6 h-6" />
               </div>
               <div>
-                <h3 className="text-base font-bold text-white tracking-tight">{selectedStudentMeta?.name || 'Profil Siswa'}</h3>
-                <p className="text-xs text-slate-400 font-mono">NIS: {trajectory.nis || '—'}</p>
+                <h3 className="text-base font-bold text-slate-900 tracking-tight">{selectedStudentMeta?.name || 'Profil Siswa'}</h3>
+                <p className="text-xs text-slate-500 font-mono">NIS: {trajectory.nis || '—'}</p>
               </div>
             </div>
 
             <div className="space-y-3 text-xs">
-              <div className="bg-slate-950 p-3.5 rounded-xl border border-slate-800 space-y-2">
-                <div className="flex justify-between text-slate-400">
+              <div className="bg-slate-50 p-3.5 rounded-xl border border-slate-200 space-y-2">
+                <div className="flex justify-between text-slate-600">
                   <span>Status Lembaga:</span>
                   <span className={`font-bold px-2 py-0.5 rounded text-[10px] uppercase ${
                     trajectory.current_status === 'GRADUATED' 
-                      ? 'bg-purple-500/10 text-purple-400 border border-purple-500/30' 
-                      : 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/30'
+                      ? 'bg-purple-50 text-purple-700 border border-purple-200' 
+                      : 'bg-emerald-50 text-emerald-700 border border-emerald-200'
                   }`}>
                     {trajectory.current_status}
                   </span>
                 </div>
-                <div className="flex justify-between text-slate-400">
+                <div className="flex justify-between text-slate-600">
                   <span>Total Periode Penempatan:</span>
-                  <span className="font-bold text-white">{trajectory.placement_lineage.length} Semester</span>
+                  <span className="font-bold text-slate-900">{trajectory.placement_lineage.length} Semester</span>
                 </div>
-                <div className="flex justify-between text-slate-400">
+                <div className="flex justify-between text-slate-600">
                   <span>Laporan LPPA Terbit:</span>
-                  <span className="font-bold text-amber-400">{trajectory.lppa_history.length} Laporan</span>
+                  <span className="font-bold text-slate-900">{trajectory.lppa_history.length} Laporan</span>
                 </div>
               </div>
 
-              <div className="bg-slate-950/80 p-3.5 rounded-xl border border-slate-800 text-slate-400 text-[11px] space-y-1.5">
-                <div className="flex items-center space-x-1.5 text-amber-400 font-semibold">
+              <div className="bg-slate-50 p-3.5 rounded-xl border border-slate-200 text-slate-600 text-[11px] space-y-1.5">
+                <div className="flex items-center space-x-1.5 text-emerald-700 font-semibold">
                   <ShieldCheck className="w-3.5 h-3.5" />
                   <span>Jaminan Privasi Keluarga (C-11)</span>
                 </div>
-                <p className="leading-relaxed">
+                <p className="leading-relaxed text-slate-500">
                   Rekam jejak longitudinal anak dilindungi secara kriptografis dan hanya dapat diakses oleh Orang Tua/Wali Sah terdaftar serta staf pendidik berwenang.
                 </p>
               </div>
@@ -251,77 +245,78 @@ export const StudentJourneyTimeline: React.FC<{ initialStudentId?: string }> = (
           </div>
 
           {/* Right Column: Chronological Placement Lineage & LPPA Timeline (8 Cols) */}
-          <div className="lg:col-span-8 bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-lg space-y-6">
-            <div className="border-b border-slate-800 pb-3 flex items-center justify-between">
+          <div className="lg:col-span-8 bg-white border-y md:border border-slate-200 md:rounded-2xl p-4 md:p-6 md:shadow-xs space-y-6 -mx-4 md:mx-0">
+            <div className="border-b border-slate-100 pb-3 flex items-center justify-between">
               <div>
-                <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Kurva Linimasa</span>
-                <h3 className="text-base font-bold text-white mt-0.5">Riwayat Penempatan & Rapor Perkembangan</h3>
+                <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Kurva Linimasa</span>
+                <h3 className="text-base font-bold text-slate-900 mt-0.5">Riwayat Penempatan & Rapor Perkembangan</h3>
               </div>
-              <span className="text-xs text-amber-400 font-mono bg-amber-500/10 px-2.5 py-1 rounded-lg border border-amber-500/20">
-                Kronologis Kanonikal
+              <span className="text-xs text-slate-700 font-mono bg-slate-100 px-2.5 py-1 rounded-lg border border-slate-200">
+                Riwayat Akademik Resmi
               </span>
             </div>
 
             {/* Stage 4.3-D: Home-School Growth Bridge (Guardian Collaborative Reflection) */}
             {homePlans.length > 0 && (
-              <div className="bg-indigo-950/40 border border-indigo-500/40 rounded-2xl p-5 space-y-4 shadow-lg">
-                <div className="flex items-center justify-between border-b border-indigo-500/20 pb-3">
+              <div className="bg-slate-50 border-y md:border border-slate-200 md:rounded-2xl p-4 md:p-5 space-y-4 md:shadow-xs -mx-4 md:mx-0">
+                <div className="flex items-center justify-between border-b border-slate-200 pb-3">
                   <div className="flex items-center gap-2.5">
-                    <div className="p-2 rounded-xl bg-indigo-600 text-white shadow-md shadow-indigo-600/30">
+                    <div className="p-2 rounded-xl bg-slate-900 text-white shadow-sm">
                       <HeartHandshake className="w-4 h-4" />
                     </div>
                     <div>
-                      <h4 className="text-sm font-bold text-white">Kemitraan Tumbuh Kembang di Rumah</h4>
-                      <p className="text-xs text-indigo-300 font-medium mt-0.5">
+                      <h4 className="text-sm font-bold text-slate-900">Kemitraan Tumbuh Kembang di Rumah</h4>
+                      <p className="text-xs text-slate-500 font-medium mt-0.5">
                         Saran stimulasi bermain bersama keluarga dari Guru Kelas
                       </p>
                     </div>
                   </div>
-                  <span className="text-[10px] font-bold px-2.5 py-1 rounded-lg bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
+                  <span className="text-[10px] font-bold px-2.5 py-1 rounded-lg bg-slate-200 text-slate-700 border border-slate-300">
                     Kolaborasi Non-Authoritative
                   </span>
                 </div>
 
-                {homePlans.map(plan => {
-                  const isAck = plan.home_school_extension?.parent_acknowledgment_status === 'ACKNOWLEDGED';
-                  return (
-                    <div key={plan.plan_id} className="bg-slate-950/80 p-4 rounded-xl border border-indigo-500/30 space-y-3">
+                <div className="flex flex-col divide-y divide-slate-100 md:divide-none md:space-y-4 -mx-4 md:mx-0">
+                  {homePlans.map(plan => {
+                    const isAck = plan.home_school_extension?.parent_acknowledgment_status === 'ACKNOWLEDGED';
+                    return (
+                      <div key={plan.plan_id} className="bg-white px-4 py-4 md:p-4 border-0 md:border md:rounded-xl md:border-slate-200 space-y-3">
                       <div>
-                        <span className="text-[10px] font-bold text-indigo-400 uppercase tracking-wider">
+                        <span className="text-[10px] font-bold text-slate-600 uppercase tracking-wider">
                           Saran Stimulasi dari Ibu Guru ({plan.target_element_key.replace('_', ' ')}):
                         </span>
-                        <p className="text-xs text-white font-medium mt-1 leading-relaxed">
+                        <p className="text-xs text-slate-800 font-medium mt-1 leading-relaxed">
                           "{plan.home_school_extension?.home_activity_prompt}"
                         </p>
                       </div>
 
                       {isAck ? (
-                        <div className="bg-emerald-950/40 p-3 rounded-lg border border-emerald-500/30 space-y-1">
-                          <div className="flex items-center gap-1.5 text-xs font-bold text-emerald-400">
+                        <div className="bg-emerald-50 p-3 rounded-lg border border-emerald-200 space-y-1">
+                          <div className="flex items-center gap-1.5 text-xs font-bold text-emerald-700">
                             <CheckCircle2 className="w-3.5 h-3.5" />
                             <span>Terkonfirmasi oleh Orang Tua ({new Date(plan.home_school_extension?.parent_acknowledged_at || '').toLocaleDateString('id-ID')})</span>
                           </div>
-                          <p className="text-xs text-emerald-200 italic">
+                          <p className="text-xs text-emerald-800 italic">
                             "{plan.home_school_extension?.parent_reflection_notes}"
                           </p>
                         </div>
                       ) : (
-                        <div className="space-y-2 pt-1 border-t border-slate-800">
-                          <label className="text-[11px] font-medium text-slate-300">
+                        <div className="space-y-2 pt-1 border-t border-slate-100">
+                          <label className="text-[11px] font-medium text-slate-700">
                             Catatan Respon / Refleksi Keluarga:
                           </label>
-                          <div className="flex items-center gap-2">
+                          <div className="flex flex-col md:flex-row items-stretch md:items-center gap-2">
                             <input
                               type="text"
                               value={reflectionInput[plan.plan_id] || ''}
                               onChange={e => setReflectionInput({ ...reflectionInput, [plan.plan_id]: e.target.value })}
                               placeholder="Ceritakan aktivitas bermain bersama anak di rumah..."
-                              className="flex-1 px-3 py-2 text-xs rounded-lg bg-slate-900 border border-slate-700 text-white placeholder:text-slate-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                              className="flex-1 px-3 py-2 text-xs rounded-lg bg-slate-50 border border-slate-200 text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-slate-400"
                             />
                             <button
                               onClick={() => handleSendHomeReflection(plan.plan_id)}
                               disabled={isSubmitting || !reflectionInput[plan.plan_id]}
-                              className="px-3.5 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 text-white text-xs font-bold transition flex items-center gap-1.5 cursor-pointer shrink-0 shadow-sm"
+                              className="w-full md:w-auto flex justify-center items-center px-3.5 py-2.5 md:py-2 rounded-lg bg-slate-900 hover:bg-slate-800 disabled:opacity-50 text-white text-xs font-bold transition gap-1.5 cursor-pointer shrink-0 shadow-xs"
                             >
                               <Send className="w-3.5 h-3.5" />
                               <span>Kirim</span>
@@ -329,18 +324,15 @@ export const StudentJourneyTimeline: React.FC<{ initialStudentId?: string }> = (
                           </div>
                         </div>
                       )}
-
-                      <p className="text-[10px] text-slate-500 italic">
-                        💡 Catatan: Refleksi keluarga memperkaya pemahaman guru di sekolah tanpa memutasi rapor kanonikal.
-                      </p>
                     </div>
                   );
                 })}
+                </div>
               </div>
             )}
 
             {/* Vertical Milestones Timeline */}
-            <div className="relative pl-6 space-y-8 before:absolute before:left-2.5 before:top-3 before:bottom-3 before:w-0.5 before:bg-slate-800">
+            <div className="relative pl-6 space-y-8 before:absolute before:left-2.5 before:top-3 before:bottom-3 before:w-0.5 before:bg-slate-200">
               {trajectory.placement_lineage.map((plc, idx) => {
                 const matchedLppa = trajectory.lppa_history.find(
                   l => l.academic_year_id === plc.academic_year_id && l.semester === plc.semester
@@ -349,35 +341,35 @@ export const StudentJourneyTimeline: React.FC<{ initialStudentId?: string }> = (
                 return (
                   <div key={plc.placement_id} className="relative group">
                     {/* Node Dot */}
-                    <div className={`absolute -left-6 top-1 w-5 h-5 rounded-full border-2 bg-slate-950 flex items-center justify-center ${
+                    <div className={`absolute -left-6 top-1 w-5 h-5 rounded-full border-2 bg-white flex items-center justify-center ${
                       plc.placement_status === 'COMPLETED'
-                        ? 'border-purple-500 text-purple-400 shadow-md shadow-purple-500/20'
+                        ? 'border-purple-600 text-purple-600'
                         : plc.placement_status === 'ACTIVE'
-                        ? 'border-emerald-500 text-emerald-400 shadow-md shadow-emerald-500/20'
-                        : 'border-blue-500 text-blue-400'
+                        ? 'border-emerald-600 text-emerald-600'
+                        : 'border-slate-400 text-slate-500'
                     }`}>
                       <div className={`w-1.5 h-1.5 rounded-full ${
-                        plc.placement_status === 'COMPLETED' ? 'bg-purple-400' : plc.placement_status === 'ACTIVE' ? 'bg-emerald-400' : 'bg-blue-400'
+                        plc.placement_status === 'COMPLETED' ? 'bg-purple-600' : plc.placement_status === 'ACTIVE' ? 'bg-emerald-600' : 'bg-slate-400'
                       }`}></div>
                     </div>
 
                     {/* Milestone Card */}
-                    <div className="bg-slate-950 border border-slate-800 rounded-xl p-4 space-y-3 transition-all group-hover:border-slate-700">
-                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-800/80 pb-2.5">
+                    <div className="bg-slate-50/50 border border-slate-200 rounded-xl p-4 space-y-3 transition-all group-hover:border-slate-300">
+                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-200 pb-2.5">
                         <div>
                           <div className="flex items-center space-x-2">
-                            <span className="text-sm font-bold text-white">{plc.academic_year_name} ({plc.semester})</span>
+                            <span className="text-sm font-bold text-slate-900">{plc.academic_year_name} ({plc.semester})</span>
                             <span className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase ${
                               plc.placement_status === 'COMPLETED'
-                                ? 'bg-purple-500/10 text-purple-400 border border-purple-500/30'
+                                ? 'bg-purple-50 text-purple-700 border border-purple-200'
                                 : plc.placement_status === 'ACTIVE'
-                                ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/30'
-                                : 'bg-blue-500/10 text-blue-400 border border-blue-500/30'
+                                ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
+                                : 'bg-slate-100 text-slate-700 border border-slate-200'
                             }`}>
                               {plc.placement_status}
                             </span>
                           </div>
-                          <p className="text-xs text-amber-400 font-semibold mt-0.5">{plc.class_name}</p>
+                          <p className="text-xs text-slate-600 font-semibold mt-0.5">{plc.class_name}</p>
                         </div>
 
                         <div className="text-[11px] font-mono text-slate-500">
@@ -387,38 +379,38 @@ export const StudentJourneyTimeline: React.FC<{ initialStudentId?: string }> = (
 
                       {/* Promotion or Exit Remarks */}
                       {plc.promotion_remarks && (
-                        <p className="text-xs text-slate-300 bg-slate-900/60 p-2 rounded-lg border border-slate-800">
+                        <p className="text-xs text-slate-700 bg-white p-2 rounded-lg border border-slate-200">
                           📝 {plc.promotion_remarks}
                         </p>
                       )}
 
                       {/* LPPA Report Section for this period */}
                       {matchedLppa ? (
-                        <div className="p-3.5 bg-slate-900/80 rounded-xl border border-slate-800 space-y-2.5 text-xs">
+                        <div className="p-3.5 bg-white rounded-xl border border-slate-200 space-y-2.5 text-xs">
                           <div className="flex items-center justify-between">
-                            <div className="flex items-center space-x-2 text-purple-400 font-semibold">
-                              <BookOpen className="w-3.5 h-3.5" />
+                            <div className="flex items-center space-x-2 text-slate-800 font-semibold">
+                              <BookOpen className="w-3.5 h-3.5 text-indigo-600" />
                               <span>Laporan Capaian Perkembangan Anak (LPPA)</span>
                             </div>
-                            <span className={`px-2.5 py-0.5 rounded text-[10px] font-black uppercase border ${
+                            <span className={`px-2.5 py-0.5 rounded text-[10px] font-bold uppercase border ${
                               matchedLppa.status === 'PUBLISHED'
-                                ? 'bg-purple-500/20 text-purple-300 border-purple-500/40'
-                                : 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30'
+                                ? 'bg-purple-50 text-purple-700 border-purple-200'
+                                : 'bg-emerald-50 text-emerald-700 border-emerald-200'
                             }`}>
                               {matchedLppa.status}
                             </span>
                           </div>
 
                           {matchedLppa.homeroom_feedback && (
-                            <p className="text-slate-300 text-[11px] italic bg-slate-950/60 p-2.5 rounded-lg border border-slate-800">
+                            <p className="text-slate-700 text-[11px] italic bg-slate-50 p-2.5 rounded-lg border border-slate-200">
                               "{matchedLppa.homeroom_feedback}"
                             </p>
                           )}
 
-                          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pt-1 border-t border-slate-800/80">
+                          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pt-1 border-t border-slate-100">
                             {matchedLppa.headmaster_approval_date ? (
-                              <div className="flex items-center space-x-1.5 text-[10px] text-slate-400 font-mono">
-                                <CheckCircle2 className="w-3 h-3 text-emerald-400" />
+                              <div className="flex items-center space-x-1.5 text-[10px] text-slate-500 font-mono">
+                                <CheckCircle2 className="w-3 h-3 text-emerald-600" />
                                 <span>Disahkan Kepala Sekolah • {new Date(matchedLppa.headmaster_approval_date).toLocaleDateString('id-ID')}</span>
                               </div>
                             ) : <div></div>}
@@ -438,7 +430,7 @@ export const StudentJourneyTimeline: React.FC<{ initialStudentId?: string }> = (
                                   setPreviewRecord(canonical);
                                 }
                               }}
-                              className="px-3 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white text-[11px] font-bold transition flex items-center justify-center gap-1.5 shadow-sm cursor-pointer ml-auto"
+                              className="w-full md:w-auto mt-2 md:mt-0 px-3 py-2 md:py-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 text-white text-[11px] font-bold transition flex items-center justify-center gap-1.5 shadow-xs cursor-pointer md:ml-auto"
                             >
                               <Printer className="w-3.5 h-3.5" />
                               <span>🖨️ Buka Rapor Resmi (PDF)</span>

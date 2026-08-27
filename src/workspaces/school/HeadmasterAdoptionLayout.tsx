@@ -164,22 +164,22 @@ export const HeadmasterAdoptionLayout: React.FC = () => {
   };
 
   return (
-    <div className="space-y-6" data-testid="headmaster-adoption-hub">
+    <div className="space-y-6 md:space-y-6 w-full" data-testid="headmaster-adoption-hub">
       {/* Workspace Header */}
-      <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 text-white shadow-xl">
+      <div className="bg-slate-50 border-b border-slate-200 md:rounded-2xl px-4 py-5 md:p-6 w-full text-slate-900 md:border md:shadow-sm">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
-            <div className="flex items-center space-x-2 text-emerald-400 text-xs font-mono mb-1">
+            <div className="flex items-center space-x-2 text-emerald-600 text-xs font-mono mb-1">
               <Building2 className="w-4 h-4" />
-              <span>TK YAPENDIK PILOT • SCHOOL ADOPTION HUB</span>
+              <span>Kebijakan Yayasan</span>
             </div>
-            <h1 className="text-xl font-bold tracking-tight text-white flex items-center gap-2">
-              <span>Pusat Adopsi Kebijakan &amp; Refleksi Lapangan</span>
-              <span className="text-xs px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 font-mono font-normal">
+            <h1 className="text-xl font-bold tracking-tight text-slate-900 flex items-center gap-2">
+              <span>Adopsi Kebijakan</span>
+              <span className="hidden md:inline-flex text-xs px-2 py-0.5 rounded bg-emerald-100 text-emerald-700 border border-emerald-200 font-mono font-normal">
                 School Autonomy (FB-03)
               </span>
             </h1>
-            <p className="text-slate-400 text-xs mt-1 max-w-2xl">
+            <p className="hidden md:block text-slate-500 text-xs mt-1 max-w-2xl">
               Ruang kerja Kepala Sekolah untuk menerima dukungan Yayasan, mencatat penyesuaian lokal, dan merekam refleksi kualitatif dampak pembelajaran.
             </p>
           </div>
@@ -188,34 +188,34 @@ export const HeadmasterAdoptionLayout: React.FC = () => {
             <button
               onClick={refreshData}
               disabled={isLoading}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-xs font-medium transition-colors"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white hover:bg-slate-100 text-slate-700 border border-slate-200 text-xs font-medium transition-colors shadow-xs shrink-0"
             >
               <RefreshCw className={`w-3.5 h-3.5 ${isLoading ? 'animate-spin' : ''}`} />
-              <span>Refresh Inbox</span>
+              <span className="hidden sm:inline">Refresh Inbox</span>
             </button>
 
-            <div className="bg-slate-950 border border-slate-800 px-3 py-1.5 rounded-lg text-right">
+            <div className="hidden md:block bg-slate-50 border border-slate-200 px-3 py-1.5 rounded-lg text-right shadow-xs">
               <div className="text-[10px] text-slate-500 font-mono">UNIT SEKOLAH</div>
-              <div className="text-xs font-bold text-emerald-300 font-mono">{schoolId}</div>
+              <div className="text-xs font-bold text-emerald-700 font-mono">{schoolId}</div>
             </div>
           </div>
         </div>
 
         {/* Navigation Tabs */}
-        <div className="flex border-b border-slate-800 mt-6 gap-2 text-xs">
+        <div className="flex border-b border-slate-200 mt-6 gap-2 text-xs">
           <button
             onClick={() => setActiveView('INBOX')}
             className={`flex items-center gap-2 pb-3 px-3 font-semibold transition-colors relative ${
               activeView === 'INBOX'
-                ? 'text-emerald-400 border-b-2 border-emerald-400'
-                : 'text-slate-400 hover:text-slate-200'
+                ? 'text-emerald-600 border-b-2 border-emerald-600'
+                : 'text-slate-500 hover:text-slate-800'
             }`}
             data-testid="tab-inbox"
           >
             <Inbox className="w-4 h-4" />
-            <span>Aksi &amp; Dukungan Masuk</span>
+            <span>Inbox</span>
             {actions.length > 0 && (
-              <span className="px-1.5 py-0.2 rounded-full bg-slate-800 text-[10px] text-emerald-300 font-mono">
+              <span className="px-1.5 py-0.2 rounded-full bg-emerald-100 text-[10px] text-emerald-700 font-mono">
                 {actions.length}
               </span>
             )}
@@ -225,15 +225,15 @@ export const HeadmasterAdoptionLayout: React.FC = () => {
             onClick={() => setActiveView('RESPONSES')}
             className={`flex items-center gap-2 pb-3 px-3 font-semibold transition-colors relative ${
               activeView === 'RESPONSES'
-                ? 'text-emerald-400 border-b-2 border-emerald-400'
-                : 'text-slate-400 hover:text-slate-200'
+                ? 'text-emerald-600 border-b-2 border-emerald-600'
+                : 'text-slate-500 hover:text-slate-800'
             }`}
             data-testid="tab-responses"
           >
             <CheckCircle2 className="w-4 h-4" />
-            <span>Riwayat Respons &amp; Evaluasi Unit</span>
+            <span>Riwayat</span>
             {adoptions.length > 0 && (
-              <span className="px-1.5 py-0.2 rounded-full bg-slate-800 text-[10px] text-emerald-300 font-mono">
+              <span className="px-1.5 py-0.2 rounded-full bg-emerald-100 text-[10px] text-emerald-700 font-mono">
                 {adoptions.length}
               </span>
             )}
@@ -266,26 +266,28 @@ export const HeadmasterAdoptionLayout: React.FC = () => {
                 return (
                   <div
                     key={act.action_id}
-                    className={`bg-white border rounded-xl p-5 space-y-3 transition-all ${
-                      isSelected ? 'border-emerald-500 ring-2 ring-emerald-500/20' : 'border-slate-200 hover:border-slate-300'
+                    className={`bg-white md:border md:rounded-xl border-b border-slate-100 p-4 md:p-5 space-y-2 transition-all w-full overflow-hidden ${
+                      isSelected ? 'border-emerald-500 ring-2 ring-emerald-500/20' : 'md:border-slate-200 md:hover:border-slate-300'
                     }`}
                   >
-                    <div className="flex items-start justify-between">
-                      <CanonicalAnchor
-                        actionId={act.action_id}
-                        status={act.action_type === 'SUPPORT_INITIATIVE' ? act.support_payload?.support_lifecycle_status || 'DEPLOYED' : act.directive_payload?.directive_lifecycle_status || 'DEPLOYED'}
-                        isClosedLoop={!!existingAdoption}
-                        actionTitle={act.title}
-                      />
+                    <div className="flex items-start justify-between gap-3 overflow-hidden">
+                      <div className="truncate overflow-hidden min-w-0 flex-1">
+                        <CanonicalAnchor
+                          actionId={act.action_id}
+                          status={act.action_type === 'SUPPORT_INITIATIVE' ? act.support_payload?.support_lifecycle_status || 'DEPLOYED' : act.directive_payload?.directive_lifecycle_status || 'DEPLOYED'}
+                          isClosedLoop={!!existingAdoption}
+                          actionTitle={act.title}
+                        />
+                      </div>
 
                       {existingAdoption ? (
-                        <span className="px-2 py-0.5 rounded bg-emerald-50 text-emerald-700 border border-emerald-200 text-[10px] font-bold font-mono">
-                          {`DIADOPSI (${existingAdoption.adoption_status})`}
+                        <span className="px-2 py-0.5 rounded bg-emerald-50 text-emerald-700 border border-emerald-200 text-[10px] font-bold font-mono shrink-0">
+                          {`DIADOPSI`}
                         </span>
                       ) : (
                         <button
                           onClick={() => setSelectedAction(act)}
-                          className="px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold transition-colors shadow-xs"
+                          className="px-3 py-1.5 rounded-lg border border-emerald-600 text-emerald-700 md:bg-emerald-600 md:text-white md:border-none md:shadow-xs text-[10px] md:text-xs font-bold transition-colors shrink-0"
                         >
                           Respons Aksi
                         </button>
@@ -316,7 +318,7 @@ export const HeadmasterAdoptionLayout: React.FC = () => {
             {/* Adoption Recording Panel */}
             <div className="lg:col-span-1">
               {selectedAction ? (
-                <form onSubmit={handleRecordAdoption} className="bg-white border border-slate-200 rounded-xl p-5 space-y-4 shadow-xs">
+                <form onSubmit={handleRecordAdoption} className="bg-white md:border md:border-slate-200 md:rounded-xl p-4 md:p-5 space-y-4 md:shadow-xs w-full pb-32 md:pb-5">
                   <div className="border-b border-slate-100 pb-3">
                     <span className="text-[10px] font-mono text-emerald-700 font-semibold uppercase">Form Respons Unit</span>
                     <h3 className="font-bold text-slate-900 text-sm">{selectedAction.title}</h3>
@@ -359,18 +361,18 @@ export const HeadmasterAdoptionLayout: React.FC = () => {
                     />
                   </div>
 
-                  <div className="flex gap-2 pt-2">
+                  <div className="flex gap-2 pt-2 md:relative md:bottom-auto fixed bottom-32 left-4 right-4 z-40 shadow-[0_-4px_16px_rgba(0,0,0,0.1)] md:shadow-none p-3 md:p-0 bg-white md:bg-transparent rounded-2xl md:rounded-none border border-slate-200 md:border-none">
                     <button
                       type="submit"
                       disabled={isSubmitting}
-                      className="flex-1 py-2 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-lg text-xs transition-colors shadow-xs"
+                      className="flex-1 py-2.5 md:py-2 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-xl md:rounded-lg text-xs transition-colors shadow-xs"
                     >
                       {isSubmitting ? 'Menyimpan...' : 'Kirim Respons Resmi'}
                     </button>
                     <button
                       type="button"
                       onClick={() => setSelectedAction(null)}
-                      className="px-3 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-xs"
+                      className="px-4 md:px-3 py-2.5 md:py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl md:rounded-lg text-xs font-bold"
                     >
                       Batal
                     </button>

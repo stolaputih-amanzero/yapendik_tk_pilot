@@ -40,6 +40,7 @@ import { OfflineSyncStateIndicator } from './OfflineSyncStateIndicator';
 import { TodaySurface } from './TodaySurface';
 import { LearningSurface } from './LearningSurface';
 import { StudentRosterSurface } from './StudentRosterSurface';
+import { SegmentedControl } from '../../ui';
 
 import { 
   CalendarDays, 
@@ -256,12 +257,12 @@ export const TeacherHomeShell: React.FC = () => {
 
   if (currentPersona?.role === 'GUARDIAN') {
     return (
-      <div className="bg-white border border-slate-200 rounded-3xl p-8 text-center max-w-lg mx-auto mt-8 shadow-sm">
-        <div className="w-14 h-14 bg-sky-100 text-sky-700 rounded-2xl flex items-center justify-center mx-auto mb-4 font-bold">
-          <Sparkles className="w-7 h-7" />
+      <div className="bg-white border border-slate-200 rounded-2xl p-6 sm:p-8 text-center max-w-lg mx-auto mt-6 shadow-xs">
+        <div className="w-12 h-12 bg-sky-50 text-sky-700 border border-sky-200 rounded-2xl flex items-center justify-center mx-auto mb-4 font-bold">
+          <Sparkles className="w-6 h-6" />
         </div>
-        <h3 className="text-lg font-black text-slate-900">Portal Wali Murid</h3>
-        <p className="text-xs text-slate-600 font-medium mt-2 leading-relaxed">
+        <h3 className="text-base sm:text-lg font-bold text-slate-900">Portal Wali Murid</h3>
+        <p className="text-xs text-slate-500 font-medium mt-2 leading-relaxed">
           Selamat datang, <strong>{currentPersona.name}</strong>. Ruang Guru dikhususkan untuk pendidik TK. Anda dapat memantau capaian dan komunikasi perkembangan ananda melalui tab <strong>Jejak Ananda</strong> atau <strong>Buku Penghubung</strong>.
         </p>
       </div>
@@ -272,70 +273,36 @@ export const TeacherHomeShell: React.FC = () => {
     return (
       <div className="min-h-[80vh] flex items-center justify-center p-8 text-slate-500">
         <div className="flex flex-col items-center gap-3">
-          <div className="w-10 h-10 border-4 border-indigo-600 border-t-transparent rounded-full animate-spin" />
-          <span className="text-sm font-semibold">Menyiapkan Ruang Guru (Teacher Home)...</span>
+          <div className="w-10 h-10 border-4 border-slate-900 border-t-transparent rounded-full animate-spin" />
+          <span className="text-sm font-semibold text-slate-700">Menyiapkan Ruang Guru (Teacher Home)...</span>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6 pb-28">
-      {/* Top Bar: Surface Switcher & Offline Status */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-200 pb-4">
-        <div>
-          <div className="flex items-center gap-2 text-xs font-extrabold text-indigo-700 uppercase tracking-wider">
-            <Home className="w-4 h-4 text-indigo-600" />
-            <span>Ruang Kerja Pendidik PAUD</span>
-          </div>
-          <h1 className="text-2xl font-black text-slate-900 tracking-tight mt-0.5">
-            Teacher Home
-          </h1>
-        </div>
+    <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 sm:py-6 space-y-6 pb-24 lg:pb-0 bg-white lg:bg-transparent">
+      {/* Top Bar: Title & Wifi Status */}
+      <div className="flex items-center justify-between gap-3">
+        <h1 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">
+          Beranda Kelas
+        </h1>
+        <OfflineSyncStateIndicator />
+      </div>
 
-        {/* Surface Tab Buttons */}
-        <div className="flex flex-wrap items-center gap-2">
-          <div className="flex items-center p-1 rounded-2xl bg-slate-200/80 border border-slate-300 shadow-inner">
-            <button
-              onClick={() => setActiveTab('TODAY')}
-              className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 cursor-pointer ${
-                activeTab === 'TODAY'
-                  ? 'bg-indigo-600 text-white shadow-md shadow-indigo-600/20'
-                  : 'text-slate-700 hover:text-slate-900 hover:bg-slate-300/50'
-              }`}
-            >
-              <CalendarDays className="w-4 h-4" />
-              <span>Hari Ini</span>
-            </button>
-
-            <button
-              onClick={() => setActiveTab('LEARNING')}
-              className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 cursor-pointer ${
-                activeTab === 'LEARNING'
-                  ? 'bg-indigo-600 text-white shadow-md shadow-indigo-600/20'
-                  : 'text-slate-700 hover:text-slate-900 hover:bg-slate-300/50'
-              }`}
-            >
-              <Puzzle className="w-4 h-4" />
-              <span>Belajar & Karya</span>
-            </button>
-
-            <button
-              onClick={() => setActiveTab('ROSTER')}
-              className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 cursor-pointer ${
-                activeTab === 'ROSTER'
-                  ? 'bg-indigo-600 text-white shadow-md shadow-indigo-600/20'
-                  : 'text-slate-700 hover:text-slate-900 hover:bg-slate-300/50'
-              }`}
-            >
-              <Users className="w-4 h-4" />
-              <span>Siswa & Rapor</span>
-            </button>
-          </div>
-
-          {/* Offline Sync State Indicator */}
-          <OfflineSyncStateIndicator />
-        </div>
+      {/* Surface Tab Segmented Control */}
+      <div className="border-b border-slate-100 sm:border-slate-200 pb-3.5">
+        <SegmentedControl
+          options={[
+            { id: 'TODAY', label: 'Hari Ini', icon: CalendarDays },
+            { id: 'LEARNING', label: 'Belajar & Karya', icon: Puzzle },
+            { id: 'ROSTER', label: 'Siswa & Rapor', icon: Users }
+          ]}
+          value={activeTab}
+          onChange={(val) => setActiveTab(val as 'TODAY' | 'LEARNING' | 'ROSTER')}
+          size="sm"
+          className="w-full sm:w-auto"
+        />
       </div>
 
       {/* Tier 1: Real-time Classroom Pulse Banner */}

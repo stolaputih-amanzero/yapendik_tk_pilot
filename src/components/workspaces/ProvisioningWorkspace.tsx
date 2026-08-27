@@ -276,9 +276,9 @@ export const ProvisioningWorkspace: React.FC<{ onNavigateToOperations?: () => vo
   const currentSchoolStudents = currentSchool ? db.getStudents(currentSchool.id) : [];
 
   return (
-    <div className="space-y-6 text-slate-900 font-sans">
+    <div className="px-4 md:px-6 py-6 space-y-6 text-slate-900 font-sans">
       {/* HEADER SECTION */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white border border-slate-200 p-5 rounded-xl shadow-xs">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white border-y md:border border-slate-200 p-4 md:p-5 md:rounded-xl md:shadow-xs -mx-4 md:mx-0">
         <div>
           <div className="flex items-center space-x-3">
             <div className="p-2.5 rounded-lg bg-amber-50 border border-amber-200 text-amber-700">
@@ -295,11 +295,11 @@ export const ProvisioningWorkspace: React.FC<{ onNavigateToOperations?: () => vo
           </div>
         </div>
 
-        <div className="flex items-center space-x-3">
+        <div className="flex flex-col md:flex-row items-stretch md:items-center gap-3 w-full md:w-auto">
           {isSuperadmin && (
             <button
               onClick={() => setShowCreateSchoolModal(true)}
-              className="flex items-center space-x-2 px-3.5 py-2 bg-amber-500 hover:bg-amber-400 text-slate-950 rounded-lg text-xs font-bold transition-all shadow-xs cursor-pointer"
+              className="w-full md:w-auto flex justify-center items-center space-x-2 px-3.5 py-2 bg-amber-500 hover:bg-amber-400 text-slate-950 rounded-lg text-xs font-bold transition-all shadow-xs cursor-pointer"
             >
               <PlusCircle className="w-4 h-4" />
               <span>Dirikan Unit Sekolah Baru</span>
@@ -307,7 +307,7 @@ export const ProvisioningWorkspace: React.FC<{ onNavigateToOperations?: () => vo
           )}
 
           {/* Unit Selector */}
-          <div className="flex items-center bg-slate-50 border border-slate-200 rounded-lg px-3 py-1.5 shadow-2xs">
+          <div className="w-full md:w-auto flex justify-between items-center bg-slate-50 border border-slate-200 rounded-lg px-3 py-1.5 shadow-2xs">
             <span className="text-xs font-semibold text-slate-500 mr-2">Unit:</span>
             <select
               value={currentSchool?.id || selectedSchoolId}
@@ -436,7 +436,7 @@ export const ProvisioningWorkspace: React.FC<{ onNavigateToOperations?: () => vo
                 {onNavigateToOperations && (
                   <button
                     onClick={onNavigateToOperations}
-                    className="flex items-center space-x-2 px-4 py-2 bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-xs rounded-lg transition-all shadow-xs shrink-0 cursor-pointer"
+                    className="w-full md:w-auto flex justify-center items-center space-x-2 px-4 py-2.5 md:py-2 bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-xs rounded-lg transition-all shadow-xs shrink-0 cursor-pointer"
                   >
                     <span>Masuk ke Operasional Harian Sekolah</span>
                     <ArrowRight className="w-4 h-4" />
@@ -459,9 +459,9 @@ export const ProvisioningWorkspace: React.FC<{ onNavigateToOperations?: () => vo
           </div>
 
           {/* 6 GATES GRID */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="flex flex-col md:grid md:grid-cols-2 lg:grid-cols-3 divide-y divide-slate-100 md:divide-none gap-0 md:gap-4 -mx-4 md:mx-0">
             {/* Gate 1 */}
-            <div className={`p-4 rounded-xl border bg-white shadow-2xs transition-all hover:shadow-xs ${currentReadiness.gates.gate1_legalActive ? 'border-emerald-300 ring-1 ring-emerald-500/10' : 'border-slate-200'}`}>
+            <div className={`px-4 py-5 md:p-4 md:rounded-xl border-b md:border bg-white md:shadow-2xs transition-all hover:shadow-xs ${currentReadiness.gates.gate1_legalActive ? 'md:border-emerald-300 md:ring-1 md:ring-emerald-500/10' : 'md:border-slate-200'}`}>
               <div className="flex items-center justify-between mb-1.5">
                 <span className="text-xs font-bold text-slate-900">Gate 1: Status Hukum Legal</span>
                 {currentReadiness.gates.gate1_legalActive ? <CheckCircle2 className="w-4 h-4 text-emerald-600" /> : <XCircle className="w-4 h-4 text-rose-500" />}
@@ -475,7 +475,7 @@ export const ProvisioningWorkspace: React.FC<{ onNavigateToOperations?: () => vo
             </div>
 
             {/* Gate 2 */}
-            <div className={`p-4 rounded-xl border bg-white shadow-2xs transition-all hover:shadow-xs ${currentReadiness.gates.gate2_academicYear ? 'border-emerald-300 ring-1 ring-emerald-500/10' : 'border-slate-200'}`}>
+            <div className={`px-4 py-5 md:p-4 md:rounded-xl border-b md:border bg-white md:shadow-2xs transition-all hover:shadow-xs ${currentReadiness.gates.gate2_academicYear ? 'md:border-emerald-300 md:ring-1 md:ring-emerald-500/10' : 'md:border-slate-200'}`}>
               <div className="flex items-center justify-between mb-1.5">
                 <span className="text-xs font-bold text-slate-900">Gate 2: Tahun Akademik</span>
                 {currentReadiness.gates.gate2_academicYear ? <CheckCircle2 className="w-4 h-4 text-emerald-600" /> : <XCircle className="w-4 h-4 text-rose-500" />}
@@ -491,7 +491,7 @@ export const ProvisioningWorkspace: React.FC<{ onNavigateToOperations?: () => vo
             </div>
 
             {/* Gate 3 */}
-            <div className={`p-4 rounded-xl border bg-white shadow-2xs transition-all hover:shadow-xs ${currentReadiness.gates.gate3_academicPeriod ? 'border-emerald-300 ring-1 ring-emerald-500/10' : 'border-slate-200'}`}>
+            <div className={`px-4 py-5 md:p-4 md:rounded-xl border-b md:border bg-white md:shadow-2xs transition-all hover:shadow-xs ${currentReadiness.gates.gate3_academicPeriod ? 'md:border-emerald-300 md:ring-1 md:ring-emerald-500/10' : 'md:border-slate-200'}`}>
               <div className="flex items-center justify-between mb-1.5">
                 <span className="text-xs font-bold text-slate-900">Gate 3: Periode/Semester</span>
                 {currentReadiness.gates.gate3_academicPeriod ? <CheckCircle2 className="w-4 h-4 text-emerald-600" /> : <XCircle className="w-4 h-4 text-rose-500" />}
@@ -507,7 +507,7 @@ export const ProvisioningWorkspace: React.FC<{ onNavigateToOperations?: () => vo
             </div>
 
             {/* Gate 4 */}
-            <div className={`p-4 rounded-xl border bg-white shadow-2xs transition-all hover:shadow-xs ${currentReadiness.gates.gate4_headmaster ? 'border-emerald-300 ring-1 ring-emerald-500/10' : 'border-slate-200'}`}>
+            <div className={`px-4 py-5 md:p-4 md:rounded-xl border-b md:border bg-white md:shadow-2xs transition-all hover:shadow-xs ${currentReadiness.gates.gate4_headmaster ? 'md:border-emerald-300 md:ring-1 md:ring-emerald-500/10' : 'md:border-slate-200'}`}>
               <div className="flex items-center justify-between mb-1.5">
                 <span className="text-xs font-bold text-slate-900">Gate 4: Kepala Sekolah</span>
                 {currentReadiness.gates.gate4_headmaster ? <CheckCircle2 className="w-4 h-4 text-emerald-600" /> : <XCircle className="w-4 h-4 text-rose-500" />}
@@ -523,7 +523,7 @@ export const ProvisioningWorkspace: React.FC<{ onNavigateToOperations?: () => vo
             </div>
 
             {/* Gate 5 */}
-            <div className={`p-4 rounded-xl border bg-white shadow-2xs transition-all hover:shadow-xs ${currentReadiness.gates.gate5_staffedClassroom ? 'border-emerald-300 ring-1 ring-emerald-500/10' : 'border-slate-200'}`}>
+            <div className={`px-4 py-5 md:p-4 md:rounded-xl border-b md:border bg-white md:shadow-2xs transition-all hover:shadow-xs ${currentReadiness.gates.gate5_staffedClassroom ? 'md:border-emerald-300 md:ring-1 md:ring-emerald-500/10' : 'md:border-slate-200'}`}>
               <div className="flex items-center justify-between mb-1.5">
                 <span className="text-xs font-bold text-slate-900">Gate 5: Rombel & Guru</span>
                 {currentReadiness.gates.gate5_staffedClassroom ? <CheckCircle2 className="w-4 h-4 text-emerald-600" /> : <XCircle className="w-4 h-4 text-rose-500" />}
@@ -539,7 +539,7 @@ export const ProvisioningWorkspace: React.FC<{ onNavigateToOperations?: () => vo
             </div>
 
             {/* Gate 6 */}
-            <div className={`p-4 rounded-xl border bg-white shadow-2xs transition-all hover:shadow-xs ${currentReadiness.gates.gate6_placedStudents ? 'border-emerald-300 ring-1 ring-emerald-500/10' : 'border-slate-200'}`}>
+            <div className={`px-4 py-5 md:p-4 md:rounded-xl border-b md:border bg-white md:shadow-2xs transition-all hover:shadow-xs ${currentReadiness.gates.gate6_placedStudents ? 'md:border-emerald-300 md:ring-1 md:ring-emerald-500/10' : 'md:border-slate-200'}`}>
               <div className="flex items-center justify-between mb-1.5">
                 <span className="text-xs font-bold text-slate-900">Gate 6: Penempatan Siswa</span>
                 {currentReadiness.gates.gate6_placedStudents ? <CheckCircle2 className="w-4 h-4 text-emerald-600" /> : <XCircle className="w-4 h-4 text-rose-500" />}
@@ -556,10 +556,10 @@ export const ProvisioningWorkspace: React.FC<{ onNavigateToOperations?: () => vo
           </div>
 
           {/* ACTION BUTTONS */}
-          <div className="flex flex-wrap gap-3 pt-2">
+          <div className="flex flex-col md:flex-row gap-3 pt-4 md:pt-2 w-full md:w-auto">
             <button
               onClick={() => setShowCreateClassModal(true)}
-              className="flex items-center space-x-2 px-4 py-2.5 bg-white hover:bg-slate-50 border border-slate-300 text-slate-800 rounded-lg text-xs font-bold transition-all shadow-xs cursor-pointer"
+              className="w-full md:w-auto flex justify-center items-center space-x-2 px-4 py-3 md:py-2.5 bg-white hover:bg-slate-50 border border-slate-300 text-slate-800 rounded-lg text-xs font-bold transition-all shadow-xs cursor-pointer"
             >
               <PlusCircle className="w-4 h-4 text-amber-600" />
               <span>Tambah Rombel & Wali Kelas</span>
@@ -567,7 +567,7 @@ export const ProvisioningWorkspace: React.FC<{ onNavigateToOperations?: () => vo
 
             <button
               onClick={() => setShowAdmitStudentModal(true)}
-              className="flex items-center space-x-2 px-4 py-2.5 bg-white hover:bg-slate-50 border border-slate-300 text-slate-800 rounded-lg text-xs font-bold transition-all shadow-xs cursor-pointer"
+              className="w-full md:w-auto flex justify-center items-center space-x-2 px-4 py-3 md:py-2.5 bg-white hover:bg-slate-50 border border-slate-300 text-slate-800 rounded-lg text-xs font-bold transition-all shadow-xs cursor-pointer"
             >
               <Users className="w-4 h-4 text-amber-600" />
               <span>Admisi & Penempatan Siswa</span>
@@ -638,12 +638,12 @@ export const ProvisioningWorkspace: React.FC<{ onNavigateToOperations?: () => vo
 
       {/* TAB 3: CLASSROOM SETUP */}
       {activeTab === 'CLASSROOM_SETUP' && currentSchool && (
-        <div className="bg-white border border-slate-200 rounded-xl p-6 shadow-xs space-y-4">
-          <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+        <div className="bg-white border-y md:border border-slate-200 md:rounded-xl p-4 md:p-6 md:shadow-xs space-y-4 -mx-4 md:mx-0">
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 border-b border-slate-100 pb-3">
             <h3 className="text-sm font-bold text-slate-900">Daftar Rombongan Belajar (Rombel) Aktif</h3>
             <button
               onClick={() => setShowCreateClassModal(true)}
-              className="flex items-center space-x-1.5 px-3 py-1.5 bg-amber-500 hover:bg-amber-400 text-slate-950 rounded-lg text-xs font-bold shadow-2xs cursor-pointer"
+              className="w-full md:w-auto flex justify-center items-center space-x-1.5 px-3 py-2 md:py-1.5 bg-amber-500 hover:bg-amber-400 text-slate-950 rounded-lg text-xs font-bold shadow-2xs cursor-pointer"
             >
               <PlusCircle className="w-4 h-4" />
               <span>Tambah Rombel</span>
@@ -675,12 +675,12 @@ export const ProvisioningWorkspace: React.FC<{ onNavigateToOperations?: () => vo
 
       {/* TAB 4: STUDENT ADMISSION */}
       {activeTab === 'STUDENT_ADMISSION' && currentSchool && (
-        <div className="bg-white border border-slate-200 rounded-xl p-6 shadow-xs space-y-4">
-          <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+        <div className="bg-white border-y md:border border-slate-200 md:rounded-xl p-4 md:p-6 md:shadow-xs space-y-4 -mx-4 md:mx-0">
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 border-b border-slate-100 pb-3">
             <h3 className="text-sm font-bold text-slate-900">Daftar Siswa Terdaftar & Penempatan Rombel</h3>
             <button
               onClick={() => setShowAdmitStudentModal(true)}
-              className="flex items-center space-x-1.5 px-3 py-1.5 bg-amber-500 hover:bg-amber-400 text-slate-950 rounded-lg text-xs font-bold shadow-2xs cursor-pointer"
+              className="w-full md:w-auto flex justify-center items-center space-x-1.5 px-3 py-2 md:py-1.5 bg-amber-500 hover:bg-amber-400 text-slate-950 rounded-lg text-xs font-bold shadow-2xs cursor-pointer"
             >
               <PlusCircle className="w-4 h-4" />
               <span>Admisi Siswa Baru</span>
@@ -800,17 +800,17 @@ export const ProvisioningWorkspace: React.FC<{ onNavigateToOperations?: () => vo
                 />
               </div>
 
-              <div className="flex justify-end space-x-2 pt-3 border-t border-slate-200">
+              <div className="flex flex-col md:flex-row justify-end gap-3 pt-3 border-t border-slate-200">
                 <button
                   type="button"
                   onClick={() => setShowCreateSchoolModal(false)}
-                  className="px-4 py-2 bg-slate-100 text-slate-700 font-medium rounded-lg hover:bg-slate-200 border border-slate-200 cursor-pointer"
+                  className="w-full md:w-auto px-4 py-2 bg-slate-100 text-slate-700 font-bold rounded-lg hover:bg-slate-200 border border-slate-200 cursor-pointer text-center"
                 >
                   Batal
                 </button>
                 <button
                   type="submit"
-                  className="px-4 py-2 bg-amber-500 text-slate-950 font-bold rounded-lg hover:bg-amber-400 shadow-xs cursor-pointer"
+                  className="w-full md:w-auto flex justify-center items-center px-4 py-2 bg-amber-500 text-slate-950 font-bold rounded-lg hover:bg-amber-400 shadow-xs cursor-pointer"
                 >
                   Dirikan Sekolah
                 </button>
@@ -844,7 +844,7 @@ export const ProvisioningWorkspace: React.FC<{ onNavigateToOperations?: () => vo
                   <select
                     value={newClassAgeGroup}
                     onChange={e => setNewClassAgeGroup(e.target.value)}
-                    className="w-full bg-slate-50 border border-slate-300 rounded-lg px-3 py-2 text-slate-900 focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500"
+                    className="w-full flex justify-between items-center bg-slate-50 border border-slate-300 rounded-lg px-3 py-2 text-slate-900 focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500"
                   >
                     <option value="TK_A_4_5">4-5 Tahun (TK A)</option>
                     <option value="TK_B_5_6">5-6 Tahun (TK B)</option>
@@ -876,17 +876,17 @@ export const ProvisioningWorkspace: React.FC<{ onNavigateToOperations?: () => vo
                 />
               </div>
 
-              <div className="flex justify-end space-x-2 pt-3 border-t border-slate-200">
+              <div className="flex flex-col md:flex-row justify-end gap-3 pt-3 border-t border-slate-200">
                 <button
                   type="button"
                   onClick={() => setShowCreateClassModal(false)}
-                  className="px-4 py-2 bg-slate-100 text-slate-700 font-medium rounded-lg hover:bg-slate-200 border border-slate-200 cursor-pointer"
+                  className="w-full md:w-auto px-4 py-2 bg-slate-100 text-slate-700 font-bold rounded-lg hover:bg-slate-200 border border-slate-200 cursor-pointer text-center"
                 >
                   Batal
                 </button>
                 <button
                   type="submit"
-                  className="px-4 py-2 bg-amber-500 text-slate-950 font-bold rounded-lg hover:bg-amber-400 shadow-xs cursor-pointer"
+                  className="w-full md:w-auto flex justify-center items-center px-4 py-2 bg-amber-500 text-slate-950 font-bold rounded-lg hover:bg-amber-400 shadow-xs cursor-pointer"
                 >
                   Bentuk Rombel
                 </button>
@@ -932,7 +932,7 @@ export const ProvisioningWorkspace: React.FC<{ onNavigateToOperations?: () => vo
                     <select
                       value={childGender}
                       onChange={e => setChildGender(e.target.value as any)}
-                      className="w-full bg-white border border-slate-300 rounded-lg px-3 py-2 text-slate-900 focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500"
+                      className="w-full flex justify-between items-center bg-white border border-slate-300 rounded-lg px-3 py-2 text-slate-900 focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500"
                     >
                       <option value="MALE">Laki-Laki</option>
                       <option value="FEMALE">Perempuan</option>
@@ -957,7 +957,7 @@ export const ProvisioningWorkspace: React.FC<{ onNavigateToOperations?: () => vo
                       value={targetClassId}
                       onChange={e => setTargetClassId(e.target.value)}
                       required
-                      className="w-full bg-white border border-slate-300 rounded-lg px-3 py-2 text-slate-900 focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500"
+                      className="w-full flex justify-between items-center bg-white border border-slate-300 rounded-lg px-3 py-2 text-slate-900 focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500"
                     >
                       <option value="">Pilih Rombel...</option>
                       {currentSchoolClasses.map(c => (
@@ -999,7 +999,7 @@ export const ProvisioningWorkspace: React.FC<{ onNavigateToOperations?: () => vo
                     <select
                       value={guardianRelation}
                       onChange={e => setGuardianRelation(e.target.value as any)}
-                      className="w-full bg-white border border-slate-300 rounded-lg px-3 py-2 text-slate-900 focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500"
+                      className="w-full flex justify-between items-center bg-white border border-slate-300 rounded-lg px-3 py-2 text-slate-900 focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500"
                     >
                       <option value="FATHER">Ayah Kandung</option>
                       <option value="MOTHER">Ibu Kandung</option>
@@ -1009,17 +1009,17 @@ export const ProvisioningWorkspace: React.FC<{ onNavigateToOperations?: () => vo
                 </div>
               </div>
 
-              <div className="flex justify-end space-x-2 pt-3 border-t border-slate-200">
+              <div className="flex flex-col md:flex-row justify-end gap-3 pt-3 border-t border-slate-200">
                 <button
                   type="button"
                   onClick={() => setShowAdmitStudentModal(false)}
-                  className="px-4 py-2 bg-slate-100 text-slate-700 font-medium rounded-lg hover:bg-slate-200 border border-slate-200 cursor-pointer"
+                  className="w-full md:w-auto px-4 py-2 bg-slate-100 text-slate-700 font-bold rounded-lg hover:bg-slate-200 border border-slate-200 cursor-pointer text-center"
                 >
                   Batal
                 </button>
                 <button
                   type="submit"
-                  className="px-4 py-2 bg-amber-500 text-slate-950 font-bold rounded-lg hover:bg-amber-400 shadow-xs cursor-pointer"
+                  className="w-full md:w-auto flex justify-center items-center px-4 py-2 bg-amber-500 text-slate-950 font-bold rounded-lg hover:bg-amber-400 shadow-xs cursor-pointer"
                 >
                   Admisikan Siswa
                 </button>

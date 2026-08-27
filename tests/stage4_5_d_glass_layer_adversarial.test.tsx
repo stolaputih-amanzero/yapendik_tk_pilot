@@ -264,8 +264,8 @@ async function runAdversarialTests() {
     );
 
     assert.ok(html.includes('School Autonomy (FB-03)'), 'Must render school autonomy badge');
-    assert.ok(html.includes('Pusat Adopsi Kebijakan'), 'Must render adoption hub title');
-    assert.ok(html.includes('Aksi &amp; Dukungan Masuk') || html.includes('Aksi & Dukungan Masuk'), 'Must render incoming inbox tab');
+    assert.ok(html.includes('Adopsi Kebijakan'), 'Must render adoption hub title');
+    assert.ok(html.includes('Inbox'), 'Must render incoming inbox tab');
   });
 
   // ------------------------------------------------------------------------------

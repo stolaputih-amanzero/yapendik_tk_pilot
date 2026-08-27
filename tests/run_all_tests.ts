@@ -54,8 +54,11 @@ try {
   console.log('\n▶️ [15/16] Running Stage 6 Admissions Backend Contracts Suite (Suites 26-28)...');
   execSync('npx tsx tests/stage6_admissions_contracts.test.ts', { stdio: 'inherit' });
 
-  console.log('\n▶️ [16/16] Running Stage 6 Admissions Glass Layer Adversarial UI Suite (Suite 29)...');
+  console.log('\n▶️ [16/17] Running Stage 6 Admissions Glass Layer Adversarial UI Suite (Suite 29)...');
   execSync('npx tsx tests/stage6_admissions_ui_contracts.test.tsx', { stdio: 'inherit' });
+
+  console.log('\n▶️ [17/17] Running Amanaura Design System v1.0 Primitives Suite (Suite 30)...');
+  execSync('npx tsx tests/amanaura_primitives.test.tsx', { stdio: 'inherit' });
 
   console.log('\n════════════════════════════════════════════════════════════════');
   console.log('🎉 ALL INTEGRATION & SECURITY TEST SUITES COMPLETED SUCCESSFULLY');

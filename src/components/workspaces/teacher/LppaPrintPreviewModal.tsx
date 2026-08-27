@@ -51,46 +51,46 @@ export const LppaPrintPreviewModal: React.FC<Props> = ({
   } = record;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-slate-900/80 backdrop-blur-xs animate-in fade-in duration-200 print:p-0 print:bg-white print:static">
+    <div className="fixed inset-0 z-[70] flex items-center justify-center p-2 sm:p-4 bg-slate-900/80 backdrop-blur-xs animate-in fade-in duration-200 print:p-0 print:bg-white print:static">
       
       {/* Outer Shell */}
       <div className="bg-slate-100 rounded-3xl border border-slate-300 shadow-2xl w-full max-w-5xl h-[95vh] flex flex-col overflow-hidden text-slate-900 print:h-auto print:border-none print:shadow-none print:rounded-none print:bg-white print:w-full print:max-w-none">
         
         {/* TOP BAR: Controls (Hidden on Print) */}
-        <div className="px-6 py-3.5 border-b border-slate-300 bg-white flex items-center justify-between gap-4 shrink-0 print:hidden">
-          <div className="flex items-center gap-3">
-            <div className="p-2 rounded-xl bg-indigo-600 text-white shadow-xs">
+        <div className="px-4 sm:px-6 py-4 border-b border-slate-300 bg-white flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4 shrink-0 print:hidden relative">
+          <button
+            onClick={onClose}
+            className="absolute top-4 right-4 p-1.5 rounded-xl text-slate-500 hover:text-slate-900 hover:bg-slate-200 transition cursor-pointer"
+          >
+            <X className="w-5 h-5" />
+          </button>
+
+          <div className="flex items-center gap-3 pr-8 sm:pr-0">
+            <div className="p-2 rounded-xl bg-indigo-600 text-white shadow-xs shrink-0">
               <Award className="w-5 h-5" />
             </div>
             <div>
-              <div className="flex items-center gap-2">
-                <h3 className="text-sm font-black text-slate-900">
+              <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2">
+                <h3 className="text-sm font-black text-slate-900 leading-tight">
                   Pratinjau Cetak Rapor Resmi LPPA — {student.full_name}
                 </h3>
-                <span className="text-[11px] font-mono font-bold text-slate-600 bg-slate-100 px-2 py-0.5 rounded">
+                <span className="text-[11px] font-mono font-bold text-slate-600 bg-slate-100 px-2 py-0.5 rounded self-start sm:self-auto">
                   No. {meta.official_report_number}
                 </span>
               </div>
-              <p className="text-[11px] text-slate-500 font-medium">
+              <p className="text-[11px] text-slate-500 font-medium mt-0.5">
                 Proyeksi Kanonikal Dokumen Sah • Kurikulum Merdeka PAUD
               </p>
             </div>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 mt-2 sm:mt-0 w-full sm:w-auto">
             <button
               onClick={handlePrint}
-              className="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-black transition flex items-center gap-2 shadow-md shadow-indigo-600/20 cursor-pointer"
+              className="w-full sm:w-auto px-4 py-2.5 sm:py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-black transition flex justify-center items-center gap-2 shadow-md shadow-indigo-600/20 cursor-pointer"
             >
               <Printer className="w-4 h-4" />
               <span>🖨️ Cetak / Unduh PDF</span>
-            </button>
-
-            <button
-              onClick={onClose}
-              className="p-2 rounded-xl text-slate-500 hover:text-slate-900 hover:bg-slate-200 transition cursor-pointer"
-            >
-              <X className="w-5 h-5" />
             </button>
           </div>
         </div>
@@ -122,7 +122,7 @@ export const LppaPrintPreviewModal: React.FC<Props> = ({
             </div>
 
             {/* STUDENT IDENTITY GRID */}
-            <div className="bg-slate-50 p-4 rounded-xl border border-slate-300 grid grid-cols-2 gap-y-2 gap-x-6 text-xs">
+            <div className="bg-slate-50 p-4 rounded-xl border border-slate-300 grid grid-cols-1 sm:grid-cols-2 gap-y-2 gap-x-6 text-xs">
               <div className="flex">
                 <span className="w-28 text-slate-600 font-bold shrink-0">Nama Lengkap</span>
                 <span className="text-slate-900 font-black">: {student.full_name}</span>
@@ -248,7 +248,7 @@ export const LppaPrintPreviewModal: React.FC<Props> = ({
             </div>
 
             {/* SECTION 5 & 6: PERTUMBUHAN FISIK & REKAPITULASI PRESENSI */}
-            <div className="grid grid-cols-2 gap-4 border-b border-slate-200 pb-4 text-xs">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 border-b border-slate-200 pb-4 text-xs">
               {/* Pertumbuhan Fisik */}
               <div className="bg-slate-50 p-3.5 rounded-xl border border-slate-200 space-y-1.5">
                 <div className="font-black text-slate-900 flex items-center gap-1.5 pb-1 border-b border-slate-200">
@@ -319,7 +319,7 @@ export const LppaPrintPreviewModal: React.FC<Props> = ({
 
             {/* SECTION 8: SIGNATURES & OFFICIAL SEAL */}
             <div className="pt-6 space-y-8">
-              <div className="grid grid-cols-2 gap-8 text-center text-xs">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 text-center text-xs">
                 <div>
                   <div className="text-slate-600 font-medium">Mengetahui,</div>
                   <div className="text-slate-900 font-bold">Orang Tua / Wali Murid</div>
@@ -358,7 +358,7 @@ export const LppaPrintPreviewModal: React.FC<Props> = ({
               </div>
 
               {/* FOOTER METADATA & QR CHECKSUM */}
-              <div className="pt-6 border-t border-slate-200 flex items-center justify-between text-[10px] text-slate-500 font-mono">
+              <div className="pt-6 border-t border-slate-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 text-[10px] text-slate-500 font-mono">
                 <div>
                   <div>Dokumen Resmi: {meta.official_report_number}</div>
                   <div>Checksum SHA-256: {meta.canonical_checksum_sha256.slice(0, 24)}...</div>

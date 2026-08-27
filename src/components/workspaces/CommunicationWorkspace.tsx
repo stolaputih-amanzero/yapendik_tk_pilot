@@ -111,9 +111,9 @@ export const CommunicationWorkspace: React.FC = () => {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="px-4 md:px-6 py-6 space-y-6">
       {/* Header */}
-      <div className="bg-white border border-slate-200 rounded-lg p-4 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div className="bg-white border-y md:border border-slate-200 md:rounded-lg p-4 md:shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4 -mx-4 md:mx-0">
         <div>
           <h1 className="text-xl font-bold text-slate-900 flex items-center gap-2">
             <MessageSquare className="w-5 h-5 text-blue-600" />
@@ -124,8 +124,8 @@ export const CommunicationWorkspace: React.FC = () => {
           </p>
         </div>
 
-        <div className="flex flex-wrap items-center gap-3">
-          <div className="flex items-center space-x-2 bg-slate-50 border border-slate-200 rounded-md px-3 py-1.5 text-xs">
+        <div className="flex flex-col md:flex-row items-stretch md:items-center gap-3 w-full md:w-auto">
+          <div className="w-full flex justify-between items-center space-x-2 bg-slate-50 border border-slate-200 rounded-md px-3 py-1.5 text-xs">
             <span className="text-slate-500 font-medium">Kelas:</span>
             <select
               value={selectedClassId}
@@ -141,7 +141,7 @@ export const CommunicationWorkspace: React.FC = () => {
           {canCreate && (
             <button
               onClick={() => setShowAddModal(true)}
-              className="bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold px-3.5 py-2 rounded-md transition-colors flex items-center space-x-1.5 whitespace-nowrap shadow-sm"
+              className="w-full md:w-auto mt-3 md:mt-0 bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold px-3.5 py-2 rounded-md transition-colors flex justify-center items-center space-x-1.5 whitespace-nowrap shadow-sm"
             >
               <Plus className="w-3.5 h-3.5" />
               <span>Tulis Catatan / Pengumuman</span>
@@ -160,14 +160,14 @@ export const CommunicationWorkspace: React.FC = () => {
           </p>
         </div>
       ) : (
-        <div className="space-y-4">
+        <div className="flex flex-col divide-y divide-slate-100 md:divide-none md:space-y-4 -mx-4 md:mx-0">
           {visibleNotices.map(notice => {
             const author = db.getPersonById(notice.authorPersonId);
             const student = notice.studentId ? db.getStudentById(notice.studentId) : null;
             const isGuardianOfThisChild = student && securityContext.guardianChildrenPersonIds.includes(student.personId);
 
             return (
-              <div key={notice.id} className="bg-white border border-slate-200 rounded-lg p-5 shadow-sm space-y-3">
+              <div key={notice.id} className="bg-white px-4 py-5 md:p-5 md:border md:border-slate-200 md:rounded-lg md:shadow-sm space-y-3 transition-colors hover:bg-slate-50">
                 <div className="flex items-start justify-between gap-3 pb-3 border-b border-slate-100">
                   <div>
                     <div className="flex items-center space-x-2 mb-1">
@@ -227,7 +227,7 @@ export const CommunicationWorkspace: React.FC = () => {
                         setAckNotice(notice);
                         setGuardianReply('');
                       }}
-                      className="bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold px-3.5 py-1.5 rounded transition-colors flex items-center space-x-1.5 shadow-xs"
+                      className="w-full md:w-auto mt-3 md:mt-0 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold px-3.5 py-2 rounded transition-colors flex justify-center items-center space-x-1.5 shadow-xs"
                     >
                       <CheckCircle className="w-3.5 h-3.5" />
                       <span>Konfirmasi Terima & Beri Respon</span>
@@ -254,7 +254,7 @@ export const CommunicationWorkspace: React.FC = () => {
                   <select
                     value={noticeType}
                     onChange={e => setNoticeType(e.target.value)}
-                    className="w-full border border-slate-300 rounded px-2.5 py-1.5 outline-none focus:ring-1 focus:ring-slate-900"
+                    className="w-full flex justify-between items-center border border-slate-300 rounded px-2.5 py-1.5 outline-none focus:ring-1 focus:ring-slate-900"
                   >
                     <option value="DAILY_SUMMARY">Catatan Harian Anak</option>
                     <option value="CLASS_ANNOUNCEMENT">Pengumuman Seluruh Kelas</option>
@@ -268,7 +268,7 @@ export const CommunicationWorkspace: React.FC = () => {
                     <select
                       value={targetStudentId}
                       onChange={e => setTargetStudentId(e.target.value)}
-                      className="w-full border border-slate-300 rounded px-2.5 py-1.5 outline-none focus:ring-1 focus:ring-slate-900"
+                      className="w-full flex justify-between items-center border border-slate-300 rounded px-2.5 py-1.5 outline-none focus:ring-1 focus:ring-slate-900"
                     >
                       {students.map(s => (
                         <option key={s.id} value={s.id}>{s.person?.fullName || s.nis || 'Siswa'}</option>
@@ -315,17 +315,17 @@ export const CommunicationWorkspace: React.FC = () => {
                 </label>
               </div>
 
-              <div className="flex items-center justify-end space-x-2 pt-3 border-t border-slate-100">
+              <div className="flex flex-col md:flex-row items-center justify-end gap-3 pt-3 border-t border-slate-100">
                 <button
                   type="button"
                   onClick={() => setShowAddModal(false)}
-                  className="px-4 py-2 rounded border border-slate-300 text-slate-700 font-medium"
+                  className="w-full md:w-auto px-4 py-2 rounded border border-slate-300 text-slate-700 font-medium"
                 >
                   Batal
                 </button>
                 <button
                   type="submit"
-                  className="px-4 py-2 rounded bg-slate-900 text-white font-semibold hover:bg-slate-800"
+                  className="w-full md:w-auto px-4 py-2 rounded bg-slate-900 text-white font-semibold hover:bg-slate-800"
                 >
                   Kirim Pesan
                 </button>
@@ -357,18 +357,18 @@ export const CommunicationWorkspace: React.FC = () => {
                 className="w-full border border-slate-300 rounded p-2 outline-none focus:ring-1 focus:ring-slate-900"
               />
             </div>
-            <div className="flex items-center justify-end space-x-2 mt-4 pt-3 border-t border-slate-100">
+            <div className="flex flex-col md:flex-row items-center justify-end gap-3 mt-4 pt-3 border-t border-slate-100">
               <button
                 type="button"
                 onClick={() => setAckNotice(null)}
-                className="px-3 py-1.5 rounded border border-slate-300 text-slate-700 font-medium"
+                className="w-full md:w-auto px-4 py-2 rounded border border-slate-300 text-slate-700 font-medium"
               >
                 Tutup
               </button>
               <button
                 type="button"
                 onClick={handleSaveAck}
-                className="px-4 py-1.5 rounded bg-emerald-600 text-white font-semibold hover:bg-emerald-700"
+                className="w-full md:w-auto px-4 py-2 rounded bg-emerald-600 text-white font-semibold hover:bg-emerald-700"
               >
                 Kirim Konfirmasi
               </button>

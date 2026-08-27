@@ -40,7 +40,7 @@ export const ObservationFeed: React.FC<Props> = ({
         </p>
         <button
           onClick={onOpenQuickCapture}
-          className="mt-4 px-4 py-2 rounded-xl text-xs font-bold bg-amber-500 text-slate-950 hover:bg-amber-400 shadow-md shadow-amber-500/20 transition cursor-pointer"
+          className="mt-4 w-full sm:w-auto px-4 py-2.5 sm:py-2 rounded-xl text-xs font-bold bg-amber-500 text-slate-950 hover:bg-amber-400 shadow-md shadow-amber-500/20 transition cursor-pointer flex justify-center items-center mx-auto"
         >
           + Rekam Momen Cepat Pertama
         </button>
@@ -143,8 +143,8 @@ export const ObservationFeed: React.FC<Props> = ({
               </div>
 
               {/* Bottom Footer: Privacy State & Enrich Button */}
-              <div className="pt-2 border-t border-slate-100 flex items-center justify-between gap-2">
-                <div className="flex items-center gap-2">
+              <div className="pt-3 sm:pt-2 border-t border-slate-100 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
+                <div className="flex items-center gap-2 mb-1 sm:mb-0">
                   {obs.is_staff_confidential ? (
                     <span className="text-[11px] text-amber-800 flex items-center gap-1 font-bold">
                       <Lock className="w-3 h-3" /> Khusus Pendidik
@@ -158,7 +158,7 @@ export const ObservationFeed: React.FC<Props> = ({
 
                 <button
                   onClick={() => onOpenEnrichment(obs)}
-                  className="px-3 py-1.5 rounded-xl text-xs font-bold bg-indigo-50 hover:bg-indigo-100 text-indigo-800 border border-indigo-200 transition flex items-center gap-1.5 cursor-pointer shadow-xs"
+                  className="w-full sm:w-auto px-3 py-2.5 sm:py-1.5 rounded-xl text-xs font-bold bg-indigo-50 hover:bg-indigo-100 text-indigo-800 border border-indigo-200 transition flex justify-center items-center gap-1.5 cursor-pointer shadow-xs"
                 >
                   <FileEdit className="w-3.5 h-3.5 text-indigo-600" />
                   <span>{isDraft ? 'Perkaya Narasi' : 'Edit Narasi'}</span>

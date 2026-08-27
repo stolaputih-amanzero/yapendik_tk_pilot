@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { ProspectiveChildApplicant, AdmissionStatus } from '../../../types/admissionsTypes';
-import { Sparkles, Users, Filter, CheckCircle2, Clock, AlertCircle, FileCheck } from 'lucide-react';
+import { Sparkles, Users, Filter, CheckCircle2, Clock, AlertCircle, FileCheck, Phone, User } from 'lucide-react';
 
 interface ApplicantReviewTableProps {
   schoolId: string;
@@ -65,12 +65,12 @@ export const ApplicantReviewTable: React.FC<ApplicantReviewTableProps> = ({
   };
 
   return (
-    <div className="w-full bg-white border border-slate-200 rounded-2xl p-6 md:p-8 shadow-sm space-y-5" data-testid="applicant-review-table">
+    <div className="w-full bg-white border border-slate-200 rounded-2xl p-4 sm:p-6 md:p-8 shadow-sm space-y-5" data-testid="applicant-review-table">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-4 border-b border-slate-100">
         <div>
           <h2 className="text-xl font-bold text-slate-900 tracking-tight flex items-center gap-2">
             <Users className="w-5 h-5 text-blue-600" />
-            Meja Kerja Penerimaan Siswa Baru (PPDB)
+            Meja PPDB
           </h2>
           <p className="text-xs text-slate-500 mt-0.5">
             Tabel Pementasan Calon Siswa (Staging Isolation / Invarian AP-06) • Unit: <strong className="text-slate-800 font-bold">{schoolDisplayName}</strong> ({schoolId})
@@ -78,7 +78,7 @@ export const ApplicantReviewTable: React.FC<ApplicantReviewTableProps> = ({
         </div>
 
         {/* Filter Pills */}
-        <div className="flex items-center space-x-1.5 overflow-x-auto pb-1">
+        <div className="flex items-center space-x-1.5 overflow-x-auto pb-1 max-w-full">
           {[
             { id: 'ALL', label: 'Semua' },
             { id: 'SUBMITTED', label: 'Berkas Masuk' },
@@ -90,7 +90,7 @@ export const ApplicantReviewTable: React.FC<ApplicantReviewTableProps> = ({
             <button
               key={st.id}
               onClick={() => setFilterStatus(st.id)}
-              className={`px-3 py-1.5 text-xs font-bold rounded-lg transition-all ${
+              className={`px-3 py-1.5 text-xs font-bold rounded-lg transition-all whitespace-nowrap shrink-0 cursor-pointer ${
                 filterStatus === st.id
                   ? 'bg-blue-600 text-white shadow-xs'
                   : 'bg-slate-100 text-slate-600 hover:text-slate-900 hover:bg-slate-200/70 border border-slate-200'
@@ -102,8 +102,85 @@ export const ApplicantReviewTable: React.FC<ApplicantReviewTableProps> = ({
         </div>
       </div>
 
-      {/* Table */}
-      <div className="overflow-x-auto border border-slate-200 rounded-xl shadow-2xs">
+      {/* MOBILE STACKED LIST VIEW (Mobile-First Edge-to-Edge List) */}
+      <div className="block md:hidden divide-y divide-slate-100 border border-slate-200 rounded-xl bg-white overflow-hidden shadow-2xs">
+        {filtered.length === 0 ? (
+          <div className="p-8 text-center text-slate-400 text-xs italic">
+            Tidak ada calon siswa pada kategori status ini.
+          </div>
+        ) : (
+          filtered.map((app) => {
+            const canExecuteCeremony = app.status === 'TUITION_SETTLED';
+
+            return (
+              <div 
+                key={app.applicant_id}
+                className="p-4 flex flex-col gap-2.5 hover:bg-slate-50/80 transition-colors"
+                data-testid={`applicant-row-${app.applicant_id}`}
+              >
+                {/* Row 1: Name & Status Badge */}
+                <div className="flex items-start justify-between gap-2">
+                  <div className="truncate w-full max-w-[200px]">
+                    <h3 className="text-sm font-bold text-slate-900 leading-tight truncate">
+                      {app.child_full_name}
+                    </h3>
+                    <div className="text-xs text-slate-500 mt-0.5 flex items-center gap-1.5">
+                      <span className="font-mono text-blue-700 font-bold truncate">{app.applicant_id}</span>
+                      <span>•</span>
+                      <span className="shrink-0">{app.target_class_level}</span>
+                    </div>
+                  </div>
+                  <div className="shrink-0">
+                    {getStatusBadge(app.status)}
+                  </div>
+                </div>
+
+                {/* Row 2: Details */}
+                <div className="text-xs text-slate-500 bg-slate-50 p-2 rounded-lg flex flex-col gap-1 border border-slate-100">
+                  <div className="flex items-center justify-between gap-2">
+                    <span className="truncate w-full max-w-[200px]">NIK Anak: <strong className="font-mono text-slate-700">{app.child_nik}</strong></span>
+                    <span>{app.child_gender === 'L' ? 'Laki-laki' : 'Perempuan'}</span>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span>Wali: <strong className="text-slate-800">{app.guardian_full_name}</strong></span>
+                    <span className="font-mono">{app.guardian_phone_number}</span>
+                  </div>
+                </div>
+
+                {/* Action Buttons */}
+                <div className="flex items-center gap-2 mt-3">
+                  <button
+                    type="button"
+                    onClick={() => onOpenIntakeModal(app)}
+                    className="px-3 py-1.5 text-xs font-semibold text-slate-700 bg-slate-100 rounded-lg hover:bg-slate-200 transition-colors cursor-pointer"
+                    data-testid={`intake-btn-${app.applicant_id}`}
+                  >
+                    Observasi Intake
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => onOpenCeremonyModal(app)}
+                    disabled={!canExecuteCeremony}
+                    className={`px-3 py-1.5 text-xs font-semibold rounded-lg transition-all ${
+                      canExecuteCeremony
+                        ? 'text-emerald-700 bg-emerald-50 hover:bg-emerald-100 cursor-pointer'
+                        : 'text-slate-400 bg-slate-50 cursor-not-allowed border border-slate-200'
+                    }`}
+                    data-testid={`ceremony-btn-${app.applicant_id}`}
+                    aria-disabled={!canExecuteCeremony}
+                  >
+                    {app.status === 'ENROLLED_PROMOTED' ? 'Telah Terdaftar' : 'The Ceremony 🎓'}
+                  </button>
+                </div>
+              </div>
+            );
+          })
+        )}
+      </div>
+
+      {/* DESKTOP TABLE VIEW */}
+      <div className="hidden md:block overflow-x-auto border border-slate-200 rounded-xl shadow-2xs">
         <table className="w-full text-left text-xs">
           <thead className="bg-slate-50 text-slate-600 border-b border-slate-200 uppercase tracking-wider font-bold">
             <tr>
@@ -156,7 +233,7 @@ export const ApplicantReviewTable: React.FC<ApplicantReviewTableProps> = ({
                       <button
                         type="button"
                         onClick={() => onOpenIntakeModal(app)}
-                        className="px-3 py-1.5 text-xs font-semibold rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-800 border border-slate-300 transition-colors shadow-2xs"
+                        className="px-3 py-1.5 text-xs font-semibold rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-800 border border-slate-300 transition-colors shadow-2xs cursor-pointer"
                         data-testid={`intake-btn-${app.applicant_id}`}
                       >
                         Observasi Intake
@@ -168,7 +245,7 @@ export const ApplicantReviewTable: React.FC<ApplicantReviewTableProps> = ({
                         disabled={!canExecuteCeremony}
                         className={`px-3.5 py-1.5 text-xs font-bold rounded-lg transition-all ${
                           canExecuteCeremony
-                            ? 'bg-emerald-600 hover:bg-emerald-700 text-white shadow-xs'
+                            ? 'bg-emerald-600 hover:bg-emerald-700 text-white shadow-xs cursor-pointer'
                             : 'bg-slate-100 text-slate-400 cursor-not-allowed border border-slate-200'
                         }`}
                         data-testid={`ceremony-btn-${app.applicant_id}`}

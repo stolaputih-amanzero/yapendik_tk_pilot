@@ -169,33 +169,34 @@ export const SafetyIncidentModal: React.FC<Props> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm animate-fadeIn">
+    <div className="fixed inset-0 z-[70] flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm animate-fadeIn">
       <div className="bg-slate-900 border border-slate-700/80 rounded-2xl w-full max-w-2xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
         {/* Header */}
-        <div className="p-5 border-b border-slate-800 bg-slate-950/50 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="p-2.5 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-400">
+        <div className="p-4 sm:p-5 border-b border-slate-800 bg-slate-950/50 flex flex-col sm:flex-row items-stretch sm:items-center justify-between relative">
+          <button
+            onClick={onClose}
+            className="absolute top-4 right-4 p-2 rounded-lg hover:bg-slate-800 text-slate-400 hover:text-white transition cursor-pointer"
+          >
+            <X className="w-5 h-5" />
+          </button>
+          
+          <div className="flex items-center gap-3 pr-8 sm:pr-0">
+            <div className="p-2.5 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-400 shrink-0">
               <ShieldAlert className="w-5 h-5" />
             </div>
             <div>
-              <h3 className="text-base font-bold text-white flex items-center gap-2">
+              <h3 className="text-base font-bold text-white flex items-center gap-2 leading-tight">
                 Pusat Keselamatan & Respon Rombel ({className})
               </h3>
-              <p className="text-xs text-slate-400">
+              <p className="text-xs text-slate-400 mt-0.5">
                 Pencatatan deterministik & penanganan aktif pengecualian kelas
               </p>
             </div>
           </div>
-          <button
-            onClick={onClose}
-            className="p-2 rounded-lg hover:bg-slate-800 text-slate-400 hover:text-white transition cursor-pointer"
-          >
-            <X className="w-5 h-5" />
-          </button>
         </div>
 
         {/* Sub-Tabs */}
-        <div className="flex border-b border-slate-800 bg-slate-900/60 px-5 pt-3 gap-2">
+        <div className="flex border-b border-slate-800 bg-slate-900/60 px-5 pt-3 gap-2 overflow-x-auto scrollbar-hide">
           <button
             onClick={() => setActiveTab('SIGNALS')}
             className={`px-4 py-2 text-xs font-bold rounded-t-lg transition flex items-center gap-1.5 cursor-pointer ${
@@ -293,18 +294,18 @@ export const SafetyIncidentModal: React.FC<Props> = ({
                         <label className="text-[11px] font-medium text-slate-400">
                           Catatan Tindakan Pendidik (Wajib diisi - Invariant No Silent State):
                         </label>
-                        <div className="flex items-center gap-2">
+                        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
                           <input
                             type="text"
                             value={ackActions[sig.signal_id] || ''}
                             onChange={e => setAckActions({ ...ackActions, [sig.signal_id]: e.target.value })}
                             placeholder="Contoh: Ananda telah diberi minum hangat di UKS..."
-                            className="flex-1 px-3 py-1.5 text-xs rounded-lg bg-slate-900 border border-slate-700 text-white focus:outline-none focus:ring-1 focus:ring-amber-500"
+                            className="w-full sm:flex-1 px-3 py-2 sm:py-1.5 text-xs rounded-lg bg-slate-900 border border-slate-700 text-white focus:outline-none focus:ring-1 focus:ring-amber-500"
                           />
                           <button
                             onClick={() => handleAcknowledgeSignal(sig.signal_id)}
                             disabled={isSubmitting || !ackActions[sig.signal_id]}
-                            className="px-3 py-1.5 rounded-lg bg-amber-600 hover:bg-amber-700 disabled:opacity-50 text-slate-950 text-xs font-bold transition flex items-center gap-1.5 cursor-pointer shrink-0 shadow-sm"
+                            className="w-full sm:w-auto px-3 py-2.5 sm:py-1.5 rounded-lg bg-amber-600 hover:bg-amber-700 disabled:opacity-50 text-slate-950 text-xs font-bold transition flex justify-center items-center gap-1.5 cursor-pointer shrink-0 shadow-sm"
                           >
                             <Send className="w-3 h-3" />
                             <span>Konfirmasi</span>
@@ -392,18 +393,18 @@ export const SafetyIncidentModal: React.FC<Props> = ({
                 />
               </div>
 
-              <div className="pt-2 flex justify-end gap-2">
+              <div className="pt-2 flex flex-col sm:flex-row items-stretch sm:items-center justify-end gap-2 pb-2 sm:pb-0">
                 <button
                   type="button"
                   onClick={onClose}
-                  className="px-4 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold transition cursor-pointer"
+                  className="w-full sm:w-auto px-4 py-2.5 sm:py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold transition cursor-pointer order-2 sm:order-1"
                 >
                   Batal
                 </button>
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="px-4 py-2 rounded-lg bg-rose-600 hover:bg-rose-700 disabled:opacity-50 text-white text-xs font-bold transition flex items-center gap-1.5 cursor-pointer shadow-md"
+                  className="w-full sm:w-auto px-4 py-2.5 sm:py-2 rounded-lg bg-rose-600 hover:bg-rose-700 disabled:opacity-50 text-white text-xs font-bold transition flex justify-center items-center gap-1.5 cursor-pointer shadow-md order-1 sm:order-2"
                 >
                   <ShieldAlert className="w-3.5 h-3.5" />
                   <span>{isSubmitting ? 'Menyimpan...' : 'Simpan Laporan Insiden'}</span>
@@ -468,17 +469,17 @@ export const SafetyIncidentModal: React.FC<Props> = ({
                               placeholder="Tindakan penyelesaian & kondisi akhir ananda..."
                               className="w-full px-3 py-1.5 text-xs rounded-lg bg-slate-900 border border-slate-700 text-white focus:outline-none focus:ring-1 focus:ring-emerald-500"
                             />
-                            <div className="flex justify-end gap-2">
+                            <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-end gap-2">
                               <button
                                 onClick={() => setResolvingIncidentId(null)}
-                                className="px-3 py-1 text-xs rounded bg-slate-800 text-slate-300"
+                                className="w-full sm:w-auto px-3 py-2.5 sm:py-1 text-xs rounded bg-slate-800 text-slate-300 order-2 sm:order-1 font-bold sm:font-normal"
                               >
                                 Batal
                               </button>
                               <button
                                 onClick={() => handleResolveIncident(inc.incident_id)}
                                 disabled={isSubmitting}
-                                className="px-3 py-1 text-xs font-bold rounded bg-emerald-600 hover:bg-emerald-700 text-white"
+                                className="w-full sm:w-auto px-3 py-2.5 sm:py-1 text-xs font-bold rounded bg-emerald-600 hover:bg-emerald-700 text-white order-1 sm:order-2 flex justify-center"
                               >
                                 Selesaikan Insiden
                               </button>

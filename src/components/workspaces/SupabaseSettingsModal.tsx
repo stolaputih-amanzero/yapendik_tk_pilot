@@ -129,7 +129,7 @@ export const SupabaseSettingsModal: React.FC<SupabaseSettingsModalProps> = ({ is
             </div>
           )}
 
-          <div className="flex items-center justify-between pt-3 border-t border-slate-100">
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 pt-4 border-t border-slate-100">
             {isSuperAdmin ? (
               <button
                 type="button"
@@ -138,24 +138,24 @@ export const SupabaseSettingsModal: React.FC<SupabaseSettingsModalProps> = ({ is
                   setAnonKey('');
                   saveSupabaseConfig('', '');
                 }}
-                className="text-slate-500 hover:text-red-600 font-medium"
+                className="w-full md:w-auto text-slate-500 hover:text-red-600 font-medium text-center py-2 md:py-0"
               >
                 Reset ke Mode Standar
               </button>
             ) : <div />}
 
-            <div className="flex items-center space-x-2">
+            <div className="flex flex-col md:flex-row md:items-center gap-2 w-full md:w-auto">
               <button
                 type="button"
                 onClick={onClose}
-                className="px-3.5 py-1.5 rounded border border-slate-300 text-slate-700 font-medium"
+                className="w-full md:w-auto px-3.5 py-2 md:py-1.5 rounded border border-slate-300 text-slate-700 font-medium text-center"
               >
                 Tutup
               </button>
               {isSuperAdmin && (
                 <button
                   type="submit"
-                  className="px-4 py-1.5 rounded bg-slate-900 text-white font-semibold hover:bg-slate-800"
+                  className="w-full md:w-auto px-4 py-2 md:py-1.5 rounded bg-slate-900 text-white font-semibold hover:bg-slate-800 text-center"
                 >
                   Simpan Konfigurasi
                 </button>

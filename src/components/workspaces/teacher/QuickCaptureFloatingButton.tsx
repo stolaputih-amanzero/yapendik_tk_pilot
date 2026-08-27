@@ -25,25 +25,27 @@ export const QuickCaptureFloatingButton: React.FC<Props> = ({ onClick, pendingDr
   }, [onClick]);
 
   return (
-    <div className="fixed bottom-6 right-6 z-40 flex items-center gap-3">
+    <div className="fixed bottom-28 right-4 lg:bottom-8 lg:right-8 z-[60] flex items-center gap-3 pointer-events-auto">
       {/* Floating Action Button */}
       <button
+        type="button"
         onClick={onClick}
-        className="group relative flex items-center gap-2.5 px-5 py-3.5 rounded-full bg-gradient-to-r from-amber-500 via-orange-500 to-amber-600 hover:from-amber-400 hover:to-orange-500 text-slate-950 font-bold text-sm shadow-2xl shadow-amber-500/40 hover:shadow-amber-500/60 hover:scale-105 active:scale-95 transition-all duration-200 cursor-pointer border border-amber-300/40"
+        aria-label="Rekam Momen Cepat"
+        className="group relative flex items-center gap-2 sm:gap-2.5 px-4 py-3 sm:px-5 sm:py-3.5 rounded-full bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs sm:text-sm shadow-floating hover:scale-105 active:scale-95 transition-all duration-200 cursor-pointer border border-slate-700/80"
       >
-        <div className="p-1 rounded-full bg-slate-950/15 group-hover:rotate-12 transition-transform">
-          <Sparkles className="w-5 h-5 text-slate-950 fill-slate-950" />
+        <div className="p-1 rounded-full bg-slate-800 text-amber-400 group-hover:rotate-12 transition-transform">
+          <Sparkles className="w-4 h-4 sm:w-5 sm:h-5 text-amber-400 fill-amber-400" />
         </div>
-        <span className="tracking-tight font-extrabold">Momen Cepat</span>
+        <span className="tracking-tight font-extrabold whitespace-nowrap">Momen Cepat</span>
         
         {/* Hotkey hint pill */}
-        <span className="hidden sm:inline-block px-1.5 py-0.5 text-[10px] font-mono font-bold bg-slate-950/20 text-slate-950 rounded-md">
+        <span className="hidden sm:inline-block px-1.5 py-0.5 text-[10px] font-mono font-bold bg-slate-800 text-slate-300 rounded-md border border-slate-700">
           Ctrl+K
         </span>
 
         {/* Pending Draft Counter Badge */}
         {pendingDraftCount > 0 && (
-          <span className="absolute -top-1.5 -right-1.5 w-6 h-6 rounded-full bg-rose-600 text-white text-xs font-black flex items-center justify-center border-2 border-white dark:border-slate-900 shadow-md animate-bounce">
+          <span className="absolute -top-1.5 -right-1.5 w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-rose-600 text-white text-[10px] sm:text-xs font-black flex items-center justify-center border-2 border-white shadow-md animate-bounce">
             {pendingDraftCount}
           </span>
         )}

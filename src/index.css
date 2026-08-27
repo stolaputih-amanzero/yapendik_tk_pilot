@@ -45,12 +45,45 @@
   /* Font Families */
   --font-sans: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+
+  /* Amanaura Multi-Layer Ambient Shadows */
+  --shadow-ambient: 0 1px 2px rgba(15, 23, 42, 0.04), 0 4px 12px rgba(15, 23, 42, 0.03);
+  --shadow-floating: 0 4px 6px -1px rgba(15, 23, 42, 0.05), 0 12px 24px -4px rgba(15, 23, 42, 0.08);
+  --shadow-luminescent: 0 0 0 1.5px #0F172A, 0 0 20px -4px rgba(245, 158, 11, 0.18);
+}
+
+/* Keyframes for Amanaura Breath (4s Resting Human Pulse) */
+@keyframes amanaura-pulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.4;
+    transform: scale(0.92);
+  }
 }
 
 /* 
  * CANONICAL REUSABLE UTILITIES & ERGONOMICS
  */
 @layer utilities {
+  /* Amanaura Breath Animation */
+  .animate-amanaura-breath {
+    animation: amanaura-pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+
+  /* Explicit Shadow Utilities */
+  .shadow-ambient {
+    box-shadow: var(--shadow-ambient, 0 1px 2px rgba(15, 23, 42, 0.04), 0 4px 12px rgba(15, 23, 42, 0.03));
+  }
+  .shadow-floating {
+    box-shadow: var(--shadow-floating, 0 4px 6px -1px rgba(15, 23, 42, 0.05), 0 12px 24px -4px rgba(15, 23, 42, 0.08));
+  }
+  .shadow-luminescent {
+    box-shadow: var(--shadow-luminescent, 0 0 0 1.5px #0F172A, 0 0 20px -4px rgba(245, 158, 11, 0.18));
+  }
+
   /* Minimum tactile touch target (WCAG 2.5.5) */
   .touch-target-min {
     min-height: 44px;
@@ -64,6 +97,17 @@
   .focus-ring-safe:focus-visible {
     outline: 2px solid #6366f1;
     outline-offset: 2px;
+  }
+
+  /* Scrollbar suppression utilities */
+  .no-scrollbar::-webkit-scrollbar,
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar,
+  .hide-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
   }
 }
 

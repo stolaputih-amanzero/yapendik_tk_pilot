@@ -191,21 +191,28 @@ export const ChildContinuityModal: React.FC<Props> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-900/80 backdrop-blur-xs animate-in fade-in duration-200">
+    <div className="fixed inset-0 z-[70] flex items-center justify-center p-3 sm:p-4 bg-slate-900/80 backdrop-blur-xs animate-in fade-in duration-200">
       <div className="bg-white rounded-3xl border border-slate-200 shadow-2xl w-full max-w-5xl h-[90vh] flex flex-col overflow-hidden text-slate-900">
         
         {/* HEADER BAR */}
-        <div className="px-6 py-4 border-b border-slate-200 bg-slate-50 flex items-center justify-between gap-4 shrink-0">
-          <div className="flex items-center gap-3">
-            <div className="p-2.5 rounded-2xl bg-indigo-600 text-white shadow-md shadow-indigo-600/20">
+        <div className="px-4 sm:px-6 py-4 border-b border-slate-200 bg-slate-50 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4 shrink-0 relative">
+          <button
+            onClick={onClose}
+            className="absolute top-4 right-4 p-2 rounded-xl text-slate-500 hover:text-slate-900 hover:bg-slate-200 transition cursor-pointer"
+          >
+            <X className="w-5 h-5" />
+          </button>
+
+          <div className="flex items-center gap-3 pr-8 sm:pr-0">
+            <div className="p-2.5 rounded-2xl bg-indigo-600 text-white shadow-md shadow-indigo-600/20 shrink-0">
               <Compass className="w-5 h-5" />
             </div>
             <div>
-              <div className="flex items-center gap-2">
-                <h3 className="text-base font-black text-slate-900">
+              <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2">
+                <h3 className="text-base font-black text-slate-900 leading-tight">
                   Busur Kontinuitas Perkembangan & Rencana Stimulasi
                 </h3>
-                <span className="text-xs font-black px-2.5 py-0.5 rounded-lg bg-indigo-100 text-indigo-900 border border-indigo-200">
+                <span className="text-[10px] sm:text-xs font-black px-2.5 py-0.5 rounded-lg bg-indigo-100 text-indigo-900 border border-indigo-200 self-start sm:self-auto">
                   {profile?.student_name || 'Peserta Didik'}
                 </span>
               </div>
@@ -215,7 +222,7 @@ export const ChildContinuityModal: React.FC<Props> = ({
             </div>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center justify-center gap-2 w-full sm:w-auto">
             {/* View Switcher Tabs */}
             <div className="flex p-1 bg-slate-200/80 rounded-xl">
               <button
@@ -242,13 +249,6 @@ export const ChildContinuityModal: React.FC<Props> = ({
                 <span>Rencana Stimulasi</span>
               </button>
             </div>
-
-            <button
-              onClick={onClose}
-              className="p-2 rounded-xl text-slate-500 hover:text-slate-900 hover:bg-slate-200 transition cursor-pointer"
-            >
-              <X className="w-5 h-5" />
-            </button>
           </div>
         </div>
 
@@ -277,7 +277,7 @@ export const ChildContinuityModal: React.FC<Props> = ({
             <div className="space-y-6">
               
               {/* Historical Context Notice (Read-Only Seal) */}
-              <div className="bg-purple-50/70 p-4 rounded-2xl border border-purple-200 flex items-center justify-between gap-4">
+              <div className="bg-purple-50/70 p-4 rounded-2xl border border-purple-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                 <div className="flex items-center gap-3">
                   <ShieldCheck className="w-5 h-5 text-purple-700 shrink-0" />
                   <div>
@@ -331,7 +331,7 @@ export const ChildContinuityModal: React.FC<Props> = ({
               {profile.developmental_trajectories[activeElementKey] && (
                 <div className="bg-white rounded-3xl border border-slate-200 p-6 shadow-sm space-y-6">
                   
-                  <div className="flex items-center justify-between border-b border-slate-100 pb-4">
+                  <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 border-b border-slate-100 pb-4">
                     <div>
                       <span className="text-[10px] font-black uppercase tracking-wider text-slate-500">
                         Lintasan Perkembangan Lintas Semester
@@ -405,7 +405,7 @@ export const ChildContinuityModal: React.FC<Props> = ({
             <div className="space-y-6">
               
               {/* Header Action Bar */}
-              <div className="flex items-center justify-between">
+              <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
                 <div>
                   <h4 className="text-sm font-black text-slate-900">
                     Rencana Stimulasi Pembelajaran Terarah Guru
@@ -418,7 +418,7 @@ export const ChildContinuityModal: React.FC<Props> = ({
                 <button
                   onClick={handleGenerateProposal}
                   disabled={isProcessing}
-                  className="px-4 py-2 rounded-xl bg-purple-600 hover:bg-purple-700 text-white text-xs font-black transition flex items-center gap-1.5 shadow-md shadow-purple-600/20 cursor-pointer disabled:opacity-50"
+                  className="w-full sm:w-auto px-4 py-2.5 sm:py-2 rounded-xl bg-purple-600 hover:bg-purple-700 text-white text-xs font-black transition flex justify-center items-center gap-1.5 shadow-md shadow-purple-600/20 cursor-pointer disabled:opacity-50"
                 >
                   <Sparkles className="w-4 h-4 text-purple-200" />
                   <span>⚡ Usulkan Rencana Stimulasi Sentra</span>
@@ -537,12 +537,12 @@ export const ChildContinuityModal: React.FC<Props> = ({
                   </div>
 
                   {/* Actions Bar */}
-                  <div className="flex items-center justify-end gap-3 pt-4 border-t border-slate-100">
+                  <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-end gap-3 pt-4 border-t border-slate-100">
                     {selectedPlan.status === 'PROPOSED' && (
                       <button
                         onClick={handleConfirmDecision}
                         disabled={isProcessing}
-                        className="px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-black transition flex items-center gap-1.5 shadow-md shadow-indigo-600/20 cursor-pointer disabled:opacity-50"
+                        className="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-black transition flex justify-center items-center gap-1.5 shadow-md shadow-indigo-600/20 cursor-pointer disabled:opacity-50"
                       >
                         <CheckCheck className="w-4 h-4" />
                         <span>✅ Tetapkan Keputusan & Aktifkan Rencana</span>
@@ -553,7 +553,7 @@ export const ChildContinuityModal: React.FC<Props> = ({
                       <button
                         onClick={handleCompletePlan}
                         disabled={isProcessing}
-                        className="px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-black transition flex items-center gap-1.5 shadow-md shadow-emerald-600/20 cursor-pointer disabled:opacity-50"
+                        className="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-black transition flex justify-center items-center gap-1.5 shadow-md shadow-emerald-600/20 cursor-pointer disabled:opacity-50"
                       >
                         <CheckCircle2 className="w-4 h-4" />
                         <span>🏁 Selesaikan Rencana dengan Bukti Baru</span>

@@ -71,7 +71,7 @@ export const AuthorizationTestingWorkspace: React.FC = () => {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="px-4 md:px-6 py-6 space-y-6">
       {/* Header */}
       <div className="bg-white border border-slate-200 rounded-lg p-5 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
@@ -90,7 +90,7 @@ export const AuthorizationTestingWorkspace: React.FC = () => {
 
         <button
           onClick={handleRunAllTests}
-          className="bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold px-4 py-2 rounded-md transition-colors flex items-center space-x-2 shrink-0 shadow-sm"
+          className="w-full md:w-auto mt-3 md:mt-0 bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold px-4 py-2 rounded-md transition-colors flex items-center justify-center space-x-2 shrink-0 shadow-sm"
         >
           <RefreshCw className="w-3.5 h-3.5" />
           <span>Jalankan Seluruh Uji Otorisasi</span>
@@ -295,10 +295,10 @@ export const AuthorizationTestingWorkspace: React.FC = () => {
           </label>
         </div>
 
-        <div className="flex items-center justify-between pt-2">
+        <div className="flex flex-col md:flex-row md:items-center justify-between pt-2 gap-3">
           <button
             onClick={handleRunSimulator}
-            className="bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold px-4 py-2 rounded transition-colors flex items-center space-x-1.5 shadow-sm"
+            className="w-full md:w-auto mt-3 md:mt-0 bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold px-4 py-2 rounded transition-colors flex items-center justify-center space-x-1.5 shadow-sm"
           >
             <Play className="w-3.5 h-3.5" />
             <span>Evaluasi Kebijakan Otorisasi</span>

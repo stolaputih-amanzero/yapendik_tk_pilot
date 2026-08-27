@@ -235,9 +235,9 @@ export const DevelopmentWorkspace: React.FC = () => {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="px-4 md:px-6 py-6 space-y-6">
       {/* Control Bar */}
-      <div className="bg-white border border-slate-200 rounded-lg p-4 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div className="bg-white border-y md:border border-slate-200 md:rounded-lg p-4 md:shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4 -mx-4 md:mx-0">
         <div>
           <h1 className="text-xl font-bold text-slate-900 flex items-center gap-2">
             <TrendingUp className="w-5 h-5 text-emerald-600" />
@@ -248,8 +248,8 @@ export const DevelopmentWorkspace: React.FC = () => {
           </p>
         </div>
 
-        <div className="flex flex-wrap items-center gap-3">
-          <div className="flex items-center space-x-2 bg-slate-50 border border-slate-200 rounded-md px-3 py-1.5 text-xs">
+        <div className="flex flex-col md:flex-row items-stretch md:items-center gap-3 w-full md:w-auto">
+          <div className="w-full flex justify-between items-center space-x-2 bg-slate-50 border border-slate-200 rounded-md px-3 py-1.5 text-xs">
             <span className="text-slate-500 font-medium">Kelas:</span>
             <select
               value={selectedClassId}
@@ -262,7 +262,7 @@ export const DevelopmentWorkspace: React.FC = () => {
             </select>
           </div>
 
-          <div className="flex items-center space-x-2 bg-slate-50 border border-slate-200 rounded-md px-3 py-1.5 text-xs">
+          <div className="w-full flex justify-between items-center space-x-2 bg-slate-50 border border-slate-200 rounded-md px-3 py-1.5 text-xs">
             <span className="text-slate-500 font-medium">Siswa:</span>
             <select
               value={selectedStudentId}
@@ -304,30 +304,30 @@ export const DevelopmentWorkspace: React.FC = () => {
               </div>
 
               {/* Status Badge & Actions (V2.1.5 RPC State Machine) */}
-              <div className="flex flex-wrap items-center gap-2">
+              <div className="flex flex-col md:flex-row md:flex-wrap items-stretch md:items-center gap-2 w-full md:w-auto mt-4 md:mt-0">
                 {currentStatus === 'PUBLISHED' && (
-                  <div className="flex items-center space-x-1.5 px-3 py-1.5 rounded-full bg-purple-900/80 border border-purple-400 text-purple-200 text-xs font-semibold">
+                  <div className="w-full md:w-auto justify-center flex items-center space-x-1.5 px-3 py-1.5 rounded-full bg-purple-900/80 border border-purple-400 text-purple-200 text-xs font-semibold">
                     <Lock className="w-3.5 h-3.5" />
                     <span>Resmi Dipublikasikan (Terkunci)</span>
                   </div>
                 )}
 
                 {currentStatus === 'APPROVED' && (
-                  <div className="flex items-center space-x-1.5 px-3 py-1.5 rounded-full bg-emerald-900/80 border border-emerald-500 text-emerald-300 text-xs font-semibold">
+                  <div className="w-full md:w-auto justify-center flex items-center space-x-1.5 px-3 py-1.5 rounded-full bg-emerald-900/80 border border-emerald-500 text-emerald-300 text-xs font-semibold">
                     <ShieldCheck className="w-3.5 h-3.5" />
                     <span>Disahkan Kepala Sekolah</span>
                   </div>
                 )}
 
                 {currentStatus === 'READY_FOR_REVIEW' && (
-                  <div className="flex items-center space-x-1.5 px-3 py-1.5 rounded-full bg-amber-900/80 border border-amber-500 text-amber-300 text-xs font-semibold">
+                  <div className="w-full md:w-auto justify-center flex items-center space-x-1.5 px-3 py-1.5 rounded-full bg-amber-900/80 border border-amber-500 text-amber-300 text-xs font-semibold">
                     <Clock className="w-3.5 h-3.5" />
                     <span>Draf Menunggu Pengesahan</span>
                   </div>
                 )}
 
                 {currentStatus === 'DRAFT' && (
-                  <div className="flex items-center space-x-1.5 px-3 py-1.5 rounded-full bg-slate-800 border border-slate-600 text-slate-300 text-xs font-semibold">
+                  <div className="w-full md:w-auto justify-center flex items-center space-x-1.5 px-3 py-1.5 rounded-full bg-slate-800 border border-slate-600 text-slate-300 text-xs font-semibold">
                     <FileText className="w-3.5 h-3.5" />
                     <span>Draf Awal Guru</span>
                   </div>
@@ -339,14 +339,14 @@ export const DevelopmentWorkspace: React.FC = () => {
                     <button
                       onClick={handleSaveDraft}
                       disabled={isProcessing}
-                      className="bg-slate-800 hover:bg-slate-700 text-white text-xs font-semibold px-3 py-1.5 rounded transition-colors shadow-sm"
+                      className="w-full md:w-auto mt-2 md:mt-0 flex justify-center bg-slate-800 hover:bg-slate-700 text-white text-xs font-semibold px-3 py-2 rounded transition-colors shadow-sm"
                     >
                       Simpan Draf LPPA
                     </button>
                     <button
                       onClick={handleSubmitForReview}
                       disabled={isProcessing}
-                      className="bg-amber-600 hover:bg-amber-500 text-white text-xs font-bold px-3.5 py-1.5 rounded transition-colors flex items-center space-x-1.5 shadow-sm"
+                      className="w-full md:w-auto mt-2 md:mt-0 flex justify-center bg-amber-600 hover:bg-amber-500 text-white text-xs font-bold px-3.5 py-2 rounded transition-colors items-center space-x-1.5 shadow-sm"
                     >
                       <Send className="w-3.5 h-3.5" />
                       <span>Ajukan ke Kepala Sekolah</span>
@@ -358,7 +358,7 @@ export const DevelopmentWorkspace: React.FC = () => {
                   <button
                     onClick={handleApproveReport}
                     disabled={isProcessing}
-                    className="bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold px-4 py-2 rounded transition-colors flex items-center space-x-1.5 shadow-sm"
+                    className="w-full md:w-auto mt-2 md:mt-0 flex justify-center bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold px-4 py-2 rounded transition-colors items-center space-x-1.5 shadow-sm"
                   >
                     <CheckCircle2 className="w-4 h-4" />
                     <span>Sahkan Laporan LPPA</span>
@@ -369,7 +369,7 @@ export const DevelopmentWorkspace: React.FC = () => {
                   <button
                     onClick={handlePublishReport}
                     disabled={isProcessing}
-                    className="bg-purple-600 hover:bg-purple-500 text-white text-xs font-bold px-4 py-2 rounded transition-colors flex items-center space-x-1.5 shadow-sm"
+                    className="w-full md:w-auto mt-2 md:mt-0 flex justify-center bg-purple-600 hover:bg-purple-500 text-white text-xs font-bold px-4 py-2 rounded transition-colors items-center space-x-1.5 shadow-sm"
                   >
                     <Lock className="w-4 h-4" />
                     <span>Publikasikan ke Wali Murid</span>
@@ -392,16 +392,16 @@ export const DevelopmentWorkspace: React.FC = () => {
           </div>
 
           {/* Domain Review Grid */}
-          <div className="p-6 space-y-6">
+          <div className="p-4 md:p-6 space-y-6">
             <h3 className="text-sm font-bold text-slate-900 uppercase tracking-wide border-b border-slate-200 pb-2">
               Sintesis Capaian 6 Domain Perkembangan Anak
             </h3>
 
-            <div className="space-y-4">
+            <div className="flex flex-col divide-y divide-slate-100 md:divide-none md:space-y-4 -mx-4 md:mx-0">
               {domains.map(dom => {
                 const { count, domainObs, dominantRating } = getDomainStats(dom.key);
                 return (
-                  <div key={dom.key} className="border border-slate-200 rounded-lg p-4 bg-white">
+                  <div key={dom.key} className="bg-white px-4 py-5 md:p-4 md:border md:border-slate-200 md:rounded-lg">
                     <div className="flex items-start justify-between gap-3 mb-2">
                       <div>
                         <h4 className="font-bold text-slate-900 text-sm">{dom.title}</h4>

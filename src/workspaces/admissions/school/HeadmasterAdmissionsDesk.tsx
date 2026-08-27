@@ -54,7 +54,7 @@ export const HeadmasterAdmissionsDesk: React.FC<HeadmasterAdmissionsDeskProps> =
   };
 
   return (
-    <div className="space-y-6 max-w-7xl mx-auto p-4 md:p-6" data-testid="headmaster-admissions-desk">
+    <div className="space-y-6 max-w-7xl w-full mx-auto" data-testid="headmaster-admissions-desk">
       {/* Success Notification */}
       {ceremonySuccessResult && (
         <div className="p-6 rounded-2xl bg-emerald-50 border border-emerald-300 text-emerald-950 shadow-sm flex items-start justify-between">

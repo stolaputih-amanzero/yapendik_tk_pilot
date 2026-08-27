@@ -313,21 +313,28 @@ export const LppaSynthesisStudioModal: React.FC<Props> = ({
   const isReadOnly = report?.status === 'APPROVED' || report?.status === 'PUBLISHED';
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-900/75 backdrop-blur-xs animate-in fade-in duration-200">
+    <div className="fixed inset-0 z-[70] flex items-center justify-center p-3 sm:p-4 bg-slate-900/75 backdrop-blur-xs animate-in fade-in duration-200">
       <div className="bg-white rounded-3xl border border-slate-200 shadow-2xl w-full max-w-5xl h-[92vh] flex flex-col overflow-hidden text-slate-900">
         
         {/* TOP BAR: Studio Header & Status Ribbon */}
-        <div className="px-6 py-4 border-b border-slate-200 bg-slate-50/80 flex items-center justify-between gap-4 shrink-0">
-          <div className="flex items-center gap-3">
-            <div className="p-2.5 rounded-2xl bg-purple-600 text-white shadow-md shadow-purple-600/20">
+        <div className="px-4 sm:px-6 py-4 border-b border-slate-200 bg-slate-50/80 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4 shrink-0 relative">
+          <button
+            onClick={onClose}
+            className="absolute top-4 right-4 p-1.5 rounded-xl text-slate-500 hover:text-slate-900 hover:bg-slate-200 transition cursor-pointer"
+          >
+            <X className="w-5 h-5" />
+          </button>
+
+          <div className="flex items-center gap-3 pr-8 sm:pr-0">
+            <div className="p-2.5 rounded-2xl bg-purple-600 text-white shadow-md shadow-purple-600/20 shrink-0">
               <Award className="w-5 h-5" />
             </div>
             <div>
-              <div className="flex items-center gap-2">
-                <h3 className="text-base font-black text-slate-900">
+              <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2">
+                <h3 className="text-base font-black text-slate-900 leading-tight">
                   Studio Sintesis Rapor LPPA — {studentName}
                 </h3>
-                <span className="text-xs font-mono font-bold text-slate-600 bg-slate-200/80 px-2 py-0.5 rounded-lg">
+                <span className="text-xs font-mono font-bold text-slate-600 bg-slate-200/80 px-2 py-0.5 rounded-lg self-start sm:self-auto">
                   NIS {studentNis}
                 </span>
               </div>
@@ -337,9 +344,9 @@ export const LppaSynthesisStudioModal: React.FC<Props> = ({
             </div>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 mt-2 sm:mt-0">
             {/* Status Pill */}
-            <span className={`px-3 py-1 text-xs font-black rounded-full border flex items-center gap-1.5 ${
+            <span className={`px-3 py-1.5 sm:py-1 text-xs font-black rounded-full border flex justify-center items-center gap-1.5 w-full sm:w-auto ${
               report?.status === 'APPROVED'
                 ? 'bg-emerald-100 text-emerald-900 border-emerald-300'
                 : report?.status === 'READY_FOR_REVIEW'
@@ -366,13 +373,6 @@ export const LppaSynthesisStudioModal: React.FC<Props> = ({
                 </>
               )}
             </span>
-
-            <button
-              onClick={onClose}
-              className="p-2 rounded-xl text-slate-500 hover:text-slate-900 hover:bg-slate-200 transition cursor-pointer"
-            >
-              <X className="w-5 h-5" />
-            </button>
           </div>
         </div>
 
@@ -653,20 +653,20 @@ export const LppaSynthesisStudioModal: React.FC<Props> = ({
         </div>
 
         {/* BOTTOM ACTION BAR */}
-        <div className="px-6 py-3.5 border-t border-slate-200 bg-slate-50/90 flex items-center justify-between gap-3 shrink-0">
+        <div className="px-4 sm:px-6 py-4 sm:py-3.5 border-t border-slate-200 bg-slate-50/90 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 shrink-0 pb-6 sm:pb-3.5">
           <button
             onClick={handleReSynthesize}
             disabled={isSynthesizing || isReadOnly}
-            className="px-3.5 py-2 rounded-xl bg-purple-50 hover:bg-purple-100 text-purple-800 border border-purple-200 text-xs font-bold transition flex items-center gap-1.5 cursor-pointer disabled:opacity-50"
+            className="w-full sm:w-auto px-3.5 py-2.5 sm:py-2 rounded-xl bg-purple-50 hover:bg-purple-100 text-purple-800 border border-purple-200 text-xs font-bold transition flex justify-center items-center gap-1.5 cursor-pointer disabled:opacity-50"
           >
             <Sparkles className="w-4 h-4 text-purple-600" />
             <span>{isSynthesizing ? 'Menyintesis...' : '⚡ Sintesis Ulang Draf'}</span>
           </button>
 
-          <div className="flex items-center gap-2">
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 w-full sm:w-auto mt-2 sm:mt-0">
             <button
               onClick={() => setShowPrintPreview(true)}
-              className="px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold transition flex items-center gap-1.5 cursor-pointer border border-slate-300"
+              className="w-full sm:w-auto px-3.5 py-2.5 sm:py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold transition flex justify-center items-center gap-1.5 cursor-pointer border border-slate-300"
             >
               <Printer className="w-4 h-4 text-indigo-600" />
               <span>🖨️ Pratinjau Cetak / PDF</span>
@@ -674,7 +674,7 @@ export const LppaSynthesisStudioModal: React.FC<Props> = ({
 
             <button
               onClick={onClose}
-              className="px-4 py-2 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-800 text-xs font-bold transition cursor-pointer"
+              className="w-full sm:w-auto px-4 py-2.5 sm:py-2 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-800 text-xs font-bold transition cursor-pointer order-last sm:order-none"
             >
               Tutup
             </button>
@@ -684,7 +684,7 @@ export const LppaSynthesisStudioModal: React.FC<Props> = ({
                 <button
                   onClick={handleSaveDraft}
                   disabled={isSaving}
-                  className="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-900 text-white text-xs font-bold transition flex items-center gap-1.5 shadow-sm cursor-pointer disabled:opacity-50"
+                  className="w-full sm:w-auto px-4 py-2.5 sm:py-2 rounded-xl bg-slate-800 hover:bg-slate-900 text-white text-xs font-bold transition flex justify-center items-center gap-1.5 shadow-sm cursor-pointer disabled:opacity-50"
                 >
                   <Save className="w-4 h-4" />
                   <span>{isSaving ? 'Menyimpan...' : '💾 Simpan Draf'}</span>
@@ -693,7 +693,7 @@ export const LppaSynthesisStudioModal: React.FC<Props> = ({
                 <button
                   onClick={handleSubmitForReview}
                   disabled={isSubmitting}
-                  className="px-4.5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-black transition flex items-center gap-1.5 shadow-md shadow-indigo-600/20 cursor-pointer disabled:opacity-50"
+                  className="w-full sm:w-auto px-4.5 py-2.5 sm:py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-black transition flex justify-center items-center gap-1.5 shadow-md shadow-indigo-600/20 cursor-pointer disabled:opacity-50"
                 >
                   <Send className="w-4 h-4" />
                   <span>{isSubmitting ? 'Mengajukan...' : '📤 Ajukan ke Kepala Sekolah'}</span>

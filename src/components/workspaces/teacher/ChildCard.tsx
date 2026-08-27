@@ -1,20 +1,18 @@
 /**
  * Yapendik School OS — Stage 4.1 Child Card (CC-04)
- * Tactile, touch-optimized attendance card with 1-tap toggle and health exception inputs
+ * Tactile, touch-optimized attendance card with Amanaura Design System v1.0
  */
 
 import React, { useState } from 'react';
 import { StudentRosterItem, ArrivalMood } from '../../../types/teacherDailyTypes';
 import { AttendanceStatus } from '../../../domain/types';
+import { AvatarChild, Button, Badge } from '../../ui';
 import { 
   Check, 
   AlertCircle, 
   Clock, 
   XCircle, 
   Thermometer, 
-  Smile, 
-  Meh, 
-  Frown, 
   FolderOpen,
   Sparkles
 } from 'lucide-react';
@@ -73,69 +71,75 @@ export const ChildCard: React.FC<Props> = ({
   );
 
   return (
-    <div className={`relative rounded-2xl border transition-all duration-200 p-4 shadow-sm ${
+    <div className={`relative flex flex-col h-full rounded-2xl border transition-all duration-200 p-4 shadow-xs ${
       status === 'HADIR'
-        ? 'bg-emerald-50/70 border-emerald-300 shadow-emerald-500/5'
+        ? 'bg-emerald-50/40 border-emerald-300'
         : status === 'SAKIT'
-        ? 'bg-amber-50/80 border-amber-300'
+        ? 'bg-amber-50/50 border-amber-300'
         : status === 'IZIN'
-        ? 'bg-sky-50/70 border-sky-300'
+        ? 'bg-sky-50/40 border-sky-300'
         : status === 'ALPA'
-        ? 'bg-rose-50/70 border-rose-300'
-        : 'bg-white border-slate-200 hover:border-indigo-300 hover:shadow-md'
+        ? 'bg-rose-50/40 border-rose-300'
+        : 'bg-white border-slate-200 hover:border-slate-300 hover:shadow-xs'
     }`}>
       {/* Header: Child Avatar, Name, NIS & Pivot Button */}
       <div className="flex items-start justify-between gap-2 mb-3">
-        <div className="flex items-center gap-3">
-          <div className={`w-11 h-11 rounded-2xl flex items-center justify-center font-bold text-sm shadow-sm ${
-            student.gender === 'FEMALE'
-              ? 'bg-rose-100 text-rose-800 border border-rose-200'
-              : 'bg-indigo-100 text-indigo-800 border border-indigo-200'
-          }`}>
-            {student.name.slice(0, 2).toUpperCase()}
-          </div>
-          <div>
-            <h4 className="text-sm font-black text-slate-900 leading-tight">
+        <div className="flex items-center gap-3 min-w-0 flex-1">
+          <AvatarChild
+            name={student.name}
+            id={student.student_id}
+            size="md"
+            showSymbol
+          />
+          <div className="min-w-0 flex-1">
+            <h4 className="text-sm font-bold text-slate-900 leading-tight truncate">
               {student.name}
             </h4>
-            <div className="flex items-center gap-2 mt-0.5">
-              <span className="text-[11px] text-slate-600 font-mono font-semibold">NIS {student.nis}</span>
+            <div className="flex items-center gap-2 mt-0.5 flex-wrap">
+              <span className="text-[11px] text-slate-500 font-mono font-semibold">NIS {student.nis}</span>
               {hasRealAllergy && (
-                <span className="px-1.5 py-0.5 text-[10px] font-extrabold rounded bg-amber-100 text-amber-900 border border-amber-300">
-                  ⚠️ {student.allergies}
-                </span>
+                <Badge variant="warning" dot className="max-w-[130px]" title={student.allergies}>
+                  {student.allergies}
+                </Badge>
               )}
             </div>
           </div>
         </div>
 
         {/* Action icons */}
-        <div className="flex items-center gap-1">
-          <button
+        <div className="flex items-center gap-1 shrink-0">
+          <Button
+            variant="icon"
+            size="sm"
             onClick={onQuickCaptureForChild}
             title="Momen Cepat untuk Ananda ini"
-            className="p-1.5 rounded-lg bg-amber-100 hover:bg-amber-200 text-amber-800 transition cursor-pointer border border-amber-300/60"
+            aria-label="Momen Cepat"
+            className="p-1.5 rounded-lg bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-200"
           >
-            <Sparkles className="w-4 h-4" />
-          </button>
-          <button
+            <Sparkles className="w-4 h-4 text-amber-600 fill-amber-600" />
+          </Button>
+          <Button
+            variant="icon"
+            size="sm"
             onClick={onOpenChildPivot}
             title="Buka Rekam Jejak / One Child Pivot"
-            className="p-1.5 rounded-lg bg-slate-100 hover:bg-indigo-100 text-slate-700 hover:text-indigo-800 transition cursor-pointer border border-slate-200"
+            aria-label="Rekam Jejak"
+            className="p-1.5 rounded-lg bg-slate-50 hover:bg-slate-100 text-slate-700 border border-slate-200"
           >
             <FolderOpen className="w-4 h-4" />
-          </button>
+          </Button>
         </div>
       </div>
 
       {/* 1-Tap Attendance State Selector */}
-      <div className="grid grid-cols-4 gap-1.5 mb-3">
+      <div className="grid grid-cols-2 gap-2 mb-3">
         <button
+          type="button"
           onClick={() => onStatusChange('HADIR')}
-          className={`py-2 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1 cursor-pointer ${
+          className={`py-2 rounded-xl text-xs font-bold transition-all duration-150 flex items-center justify-center gap-1 cursor-pointer active:scale-[0.97] ${
             status === 'HADIR'
-              ? 'bg-emerald-600 text-white shadow-md shadow-emerald-600/30'
-              : 'bg-slate-100 text-slate-700 hover:bg-emerald-100 hover:text-emerald-800 border border-slate-200'
+              ? 'bg-emerald-600 text-white shadow-xs'
+              : 'bg-slate-50 text-slate-700 hover:bg-emerald-50 hover:text-emerald-800 border border-slate-200'
           }`}
         >
           <Check className="w-3.5 h-3.5" />
@@ -143,14 +147,15 @@ export const ChildCard: React.FC<Props> = ({
         </button>
 
         <button
+          type="button"
           onClick={() => {
             onStatusChange('SAKIT');
             setShowDetailDrawer(true);
           }}
-          className={`py-2 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1 cursor-pointer ${
+          className={`py-2 rounded-xl text-xs font-bold transition-all duration-150 flex items-center justify-center gap-1 cursor-pointer active:scale-[0.97] ${
             status === 'SAKIT'
-              ? 'bg-amber-600 text-white shadow-md shadow-amber-600/30'
-              : 'bg-slate-100 text-slate-700 hover:bg-amber-100 hover:text-amber-800 border border-slate-200'
+              ? 'bg-amber-600 text-white shadow-xs'
+              : 'bg-slate-50 text-slate-700 hover:bg-amber-50 hover:text-amber-800 border border-slate-200'
           }`}
         >
           <AlertCircle className="w-3.5 h-3.5" />
@@ -158,11 +163,12 @@ export const ChildCard: React.FC<Props> = ({
         </button>
 
         <button
+          type="button"
           onClick={() => onStatusChange('IZIN')}
-          className={`py-2 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1 cursor-pointer ${
+          className={`py-2 rounded-xl text-xs font-bold transition-all duration-150 flex items-center justify-center gap-1 cursor-pointer active:scale-[0.97] ${
             status === 'IZIN'
-              ? 'bg-sky-600 text-white shadow-md shadow-sky-600/30'
-              : 'bg-slate-100 text-slate-700 hover:bg-sky-100 hover:text-sky-800 border border-slate-200'
+              ? 'bg-sky-600 text-white shadow-xs'
+              : 'bg-slate-50 text-slate-700 hover:bg-sky-50 hover:text-sky-800 border border-slate-200'
           }`}
         >
           <Clock className="w-3.5 h-3.5" />
@@ -170,11 +176,12 @@ export const ChildCard: React.FC<Props> = ({
         </button>
 
         <button
+          type="button"
           onClick={() => onStatusChange('ALPA')}
-          className={`py-2 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1 cursor-pointer ${
+          className={`py-2 rounded-xl text-xs font-bold transition-all duration-150 flex items-center justify-center gap-1 cursor-pointer active:scale-[0.97] ${
             status === 'ALPA'
-              ? 'bg-rose-600 text-white shadow-md shadow-rose-600/30'
-              : 'bg-slate-100 text-slate-700 hover:bg-rose-100 hover:text-rose-800 border border-slate-200'
+              ? 'bg-rose-600 text-white shadow-xs'
+              : 'bg-slate-50 text-slate-700 hover:bg-rose-50 hover:text-rose-800 border border-slate-200'
           }`}
         >
           <XCircle className="w-3.5 h-3.5" />
@@ -183,19 +190,21 @@ export const ChildCard: React.FC<Props> = ({
       </div>
 
       {/* Mood Selector (Quick 1-tap emojis) */}
-      <div className="flex items-center justify-between gap-1 pt-2 border-t border-slate-200/70 dark:border-slate-800/80">
-        <span className="text-[11px] text-slate-500 dark:text-slate-400 font-medium">Mood Datang:</span>
-        <div className="flex items-center gap-1">
-          {MOODS.map(m => {
-            const isSelected = student.today_mood === m.key;
+      <div className="flex flex-col mt-auto justify-between gap-3 pt-3 border-t border-slate-100">
+        <div className="flex items-center justify-between sm:justify-start gap-2 w-full sm:w-auto">
+          <span className="text-[11px] text-slate-500 font-medium">Mood Datang:</span>
+          <div className="flex items-center gap-1">
+            {MOODS.map(m => {
+              const isSelected = student.today_mood === m.key;
             return (
               <button
                 key={m.key}
+                type="button"
                 onClick={() => onMoodChange(m.key)}
                 title={m.label}
-                className={`p-1.5 rounded-lg text-sm transition-transform cursor-pointer ${
+                className={`p-1.5 rounded-lg text-sm transition-all duration-150 cursor-pointer active:scale-[0.95] ${
                   isSelected
-                    ? 'bg-indigo-600/15 dark:bg-indigo-400/20 scale-125 border border-indigo-400/40'
+                    ? 'bg-indigo-50 scale-125 border border-indigo-200 shadow-2xs'
                     : 'opacity-60 hover:opacity-100 hover:scale-110'
                 }`}
               >
@@ -203,30 +212,52 @@ export const ChildCard: React.FC<Props> = ({
               </button>
             );
           })}
+          </div>
         </div>
 
-        {/* Temperature Quick Input Toggle */}
-        <button
-          onClick={() => setShowDetailDrawer(!showDetailDrawer)}
-          className={`px-2 py-1 rounded-lg text-[11px] font-semibold flex items-center gap-1 transition cursor-pointer ${
-            student.today_temperature && student.today_temperature > 37.5
-              ? 'bg-rose-500/20 text-rose-600 dark:text-rose-400 border border-rose-500/30 font-bold'
-              : student.today_temperature
-              ? 'bg-emerald-500/15 text-emerald-700 dark:text-emerald-300'
-              : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400'
-          }`}
-        >
-          <Thermometer className="w-3 h-3" />
-          <span>{student.today_temperature ? `${student.today_temperature}°C` : 'Suhu'}</span>
-        </button>
+        {/* Temperature Quick Input */}
+        <div className="flex items-center gap-1.5 w-full sm:w-auto mt-2 sm:mt-0">
+          <div className="relative flex items-center shrink-0 flex-1 sm:flex-none">
+            <Thermometer className="absolute left-2.5 w-3.5 h-3.5 text-slate-400" />
+            <input
+              type="number"
+              step="0.1"
+              min="34"
+              max="42"
+              value={tempInput}
+              onChange={e => setTempInput(e.target.value)}
+              onBlur={handleTempBlur}
+              placeholder="Suhu °C"
+              className={`w-full sm:w-[90px] pl-7 pr-2 py-1.5 sm:py-1 rounded-lg text-xs font-semibold border focus:outline-none focus:ring-2 focus:ring-slate-900 transition-colors ${
+                student.today_temperature && student.today_temperature > 37.5
+                  ? 'bg-rose-50 border-rose-300 text-rose-900 focus:border-rose-500'
+                  : student.today_temperature
+                  ? 'bg-emerald-50 border-emerald-300 text-emerald-900 focus:border-emerald-500'
+                  : 'bg-white border-slate-200 text-slate-900'
+              }`}
+            />
+          </div>
+          <button
+            type="button"
+            onClick={() => setShowDetailDrawer(!showDetailDrawer)}
+            title="Tambah Catatan Kondisi"
+            className={`p-1.5 rounded-lg border transition-colors shrink-0 ${
+              student.today_arrival_note
+                ? 'bg-indigo-50 border-indigo-200 text-indigo-700'
+                : 'bg-slate-50 border-slate-200 text-slate-500 hover:bg-slate-100'
+            }`}
+          >
+            <AlertCircle className="w-3.5 h-3.5" />
+          </button>
+        </div>
       </div>
 
       {/* Expanded Health & Arrival Detail Drawer */}
       {showDetailDrawer && (
-        <div className="mt-3 pt-3 border-t border-slate-200 dark:border-slate-800 space-y-2 bg-slate-50 dark:bg-slate-950/50 p-2.5 rounded-xl animate-in fade-in duration-150">
+        <div className="mt-3 pt-3 border-t border-slate-100 space-y-2 bg-slate-50 p-2.5 rounded-xl animate-in fade-in duration-150">
           <div className="flex items-center gap-2">
-            <label className="text-xs text-slate-600 dark:text-slate-400 font-medium whitespace-nowrap flex items-center gap-1">
-              <Thermometer className="w-3.5 h-3.5" /> Suhu (°C):
+            <label className="text-xs text-slate-700 font-bold whitespace-nowrap flex items-center gap-1">
+              <Thermometer className="w-3.5 h-3.5 text-slate-500" /> Suhu (°C):
             </label>
             <input
               type="number"
@@ -237,7 +268,7 @@ export const ChildCard: React.FC<Props> = ({
               value={tempInput}
               onChange={e => setTempInput(e.target.value)}
               onBlur={handleTempBlur}
-              className="w-20 px-2 py-1 text-xs font-semibold rounded-lg bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+              className="w-20 px-2 py-1 text-xs font-semibold rounded-lg bg-white border border-slate-300 focus:outline-none focus:ring-1 focus:ring-slate-900 text-slate-900"
             />
           </div>
 
@@ -248,7 +279,7 @@ export const ChildCard: React.FC<Props> = ({
               value={noteInput}
               onChange={e => setNoteInput(e.target.value)}
               onBlur={handleNoteBlur}
-              className="w-full px-2.5 py-1 text-xs rounded-lg bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+              className="w-full px-2.5 py-1 text-xs rounded-lg bg-white border border-slate-300 focus:outline-none focus:ring-1 focus:ring-slate-900 text-slate-900 placeholder:text-slate-400 font-medium"
             />
           </div>
         </div>

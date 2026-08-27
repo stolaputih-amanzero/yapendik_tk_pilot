@@ -59,50 +59,53 @@ export const ChildContextPivotModal: React.FC<Props> = ({
   if (!studentId) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-sm animate-in fade-in duration-200">
+    <div className="fixed inset-0 z-[70] flex items-center justify-center p-3 sm:p-4 bg-slate-900/60 backdrop-blur-xs animate-in fade-in duration-200">
       <div className="bg-white border border-slate-200 rounded-3xl w-full max-w-2xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
         {/* Header: Child Summary */}
-        <div className="p-5 bg-gradient-to-r from-indigo-950 via-slate-900 to-indigo-950 text-white border-b border-indigo-900/50 flex items-center justify-between">
-          <div className="flex items-center gap-3.5">
-            <div className="w-12 h-12 rounded-2xl bg-indigo-500/20 border border-indigo-400/30 flex items-center justify-center text-indigo-200 text-base font-bold shadow-inner">
+        <div className="p-4 sm:p-5 bg-slate-50 text-slate-900 border-b border-slate-200 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4 relative">
+          <button
+            type="button"
+            onClick={onClose}
+            className="absolute top-4 right-4 p-1.5 rounded-xl text-slate-400 hover:text-slate-700 hover:bg-slate-200 transition cursor-pointer"
+          >
+            <X className="w-5 h-5" />
+          </button>
+
+          <div className="flex items-center gap-3.5 pr-8 sm:pr-0">
+            <div className="w-12 h-12 rounded-2xl bg-slate-200 border border-slate-300 flex items-center justify-center text-slate-800 text-base font-bold shadow-2xs shrink-0">
               {childData?.student.name.slice(0, 2).toUpperCase() || 'AN'}
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <h3 className="text-base font-bold text-white">
+                <h3 className="text-base font-bold text-slate-900">
                   {childData?.student.name || 'Memuat...'}
                 </h3>
-                <span className="px-2 py-0.5 text-[11px] font-mono rounded-md bg-indigo-500/30 text-indigo-200">
+                <span className="px-2 py-0.5 text-[11px] font-mono rounded-md bg-slate-200 text-slate-700">
                   NIS {childData?.student.nis}
                 </span>
               </div>
-              <p className="text-xs text-slate-300 mt-0.5 flex items-center gap-2">
+              <p className="text-xs text-slate-500 mt-0.5 flex flex-wrap items-center gap-1.5">
                 <span>{childData?.evidence_portfolio.length || 0} Bukti Karya Semester</span>
-                <span>•</span>
-                <span>LPPA Kesiapan: <strong className="text-emerald-400 font-bold">{childData?.student.lppa_ready_percentage}%</strong></span>
+                <span className="hidden sm:inline">•</span>
+                <span>LPPA Kesiapan: <strong className="text-emerald-700 font-bold">{childData?.student.lppa_ready_percentage}%</strong></span>
               </p>
             </div>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 mt-2 sm:mt-0 w-full sm:w-auto">
             <button
+              type="button"
               onClick={() => onOpenQuickCaptureForChild(studentId)}
-              className="px-3 py-1.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs flex items-center gap-1.5 shadow-md transition cursor-pointer"
+              className="w-full sm:w-auto px-3 py-2.5 sm:py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs flex justify-center items-center gap-1.5 shadow-xs transition cursor-pointer"
             >
-              <Sparkles className="w-3.5 h-3.5" />
+              <Sparkles className="w-3.5 h-3.5 text-amber-400 fill-amber-400" />
               <span>+ Momen Ananda</span>
-            </button>
-            <button
-              onClick={onClose}
-              className="p-1.5 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 transition cursor-pointer"
-            >
-              <X className="w-5 h-5" />
             </button>
           </div>
         </div>
 
         {/* Tab Navigation */}
-        <div className="flex items-center gap-2 px-6 pt-3 border-b border-slate-200 bg-slate-50 text-xs font-bold">
+        <div className="flex items-center gap-4 px-4 sm:px-6 pt-3 border-b border-slate-200 bg-slate-50 text-xs font-bold overflow-x-auto whitespace-nowrap">
           <button
             onClick={() => setActiveTab('EVIDENCE')}
             className={`pb-3 px-2 border-b-2 transition cursor-pointer flex items-center gap-1.5 ${
@@ -191,7 +194,7 @@ export const ChildContextPivotModal: React.FC<Props> = ({
             <div className="space-y-2">
               {childData?.attendance_history && childData.attendance_history.length > 0 ? (
                 childData.attendance_history.map((att, idx) => (
-                  <div key={idx} className="p-3 rounded-xl border border-slate-200 flex items-center justify-between bg-white shadow-xs">
+                  <div key={idx} className="p-3 rounded-xl border border-slate-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 bg-white shadow-xs">
                     <div>
                       <div className="font-bold text-slate-900">{att.date}</div>
                       {att.notes && <div className="text-slate-600 text-[11px] font-medium">{att.notes}</div>}
@@ -233,7 +236,7 @@ export const ChildContextPivotModal: React.FC<Props> = ({
               </div>
 
               <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200">
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <div className="text-slate-600 text-[11px] font-semibold">Golongan Darah</div>
                     <div className="text-base font-black text-slate-900">

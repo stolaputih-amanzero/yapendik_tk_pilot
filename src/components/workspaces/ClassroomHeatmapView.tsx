@@ -66,10 +66,10 @@ export const ClassroomHeatmapView: React.FC<Props> = ({ schoolId, classId }) => 
   ];
 
   return (
-    <div className="space-y-6 animate-in fade-in duration-200">
+    <div className="px-4 md:px-6 py-6 space-y-6 animate-in fade-in duration-200">
       
       {/* HEADER CARD */}
-      <div className="bg-white rounded-3xl border border-slate-200 p-6 shadow-xs flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+      <div className="bg-white border-y md:border md:border-slate-200 md:rounded-3xl p-4 md:p-6 md:shadow-xs flex flex-col lg:flex-row lg:items-center justify-between gap-6 -mx-4 md:mx-0">
         <div className="flex items-start gap-4">
           <div className="p-3 rounded-2xl bg-indigo-600 text-white shadow-md shadow-indigo-600/20">
             <BarChart3 className="w-7 h-7" />
@@ -103,7 +103,7 @@ export const ClassroomHeatmapView: React.FC<Props> = ({ schoolId, classId }) => 
       </div>
 
       {/* 4 ELEMENTS DISTRIBUTION GRID */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="flex flex-col md:grid md:grid-cols-2 divide-y divide-slate-100 md:divide-none gap-0 md:gap-4 -mx-4 md:mx-0">
         {elementKeys.map(k => {
           const item = heatmap.element_distribution[k];
           if (!item) return null;
@@ -114,7 +114,7 @@ export const ClassroomHeatmapView: React.FC<Props> = ({ schoolId, classId }) => 
           const bsbPct = Math.round((item.bsb_count / total) * 100);
 
           return (
-            <div key={k} className="bg-white rounded-3xl border border-slate-200 p-5 shadow-xs space-y-4">
+            <div key={k} className="bg-white p-4 md:p-5 md:rounded-3xl md:border md:border-slate-200 md:shadow-xs space-y-4">
               <div className="flex items-center justify-between border-b border-slate-100 pb-3">
                 <h4 className="text-xs font-black text-slate-900 uppercase">
                   {item.element_title}

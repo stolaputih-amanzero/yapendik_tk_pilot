@@ -95,20 +95,20 @@ export const FoundationLayout: React.FC<FoundationLayoutProps> = ({ initialView 
     <ForbiddenActionGate>
       <div className="space-y-6" data-testid="foundation-governance-console">
         {/* Workspace Header */}
-        <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 text-white shadow-xl">
+        <div className="bg-slate-50 border-b border-slate-200 md:rounded-2xl px-4 py-5 md:p-6 w-full text-slate-900 md:border md:shadow-sm">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div>
-              <div className="flex items-center space-x-2 text-amber-400 text-xs font-mono mb-1">
+              <div className="flex items-center space-x-2 text-slate-600 text-xs font-mono mb-1">
                 <Building2 className="w-4 h-4" />
                 <span>YAYASAN PENDIDIKAN GPIB • INSTITUTIONAL STEWARDSHIP</span>
               </div>
-              <h1 className="text-xl font-bold tracking-tight text-white flex items-center gap-2">
+              <h1 className="text-xl font-bold tracking-tight text-slate-900 flex items-center gap-2">
                 <span>Konsol Tata Kelola Kelembagaan Multi-Unit</span>
-                <span className="text-xs px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30 font-mono font-normal">
+                <span className="text-xs px-2 py-0.5 rounded bg-slate-200 text-slate-700 border border-slate-300 font-mono font-normal">
                   The Glass Layer
                 </span>
               </h1>
-              <p className="text-slate-400 text-xs mt-1 max-w-2xl">
+              <p className="text-slate-500 text-xs mt-1 max-w-2xl">
                 Proyeksi telemetri multi-sekolah, buku besar aksi intervensi etis, dan pemantauan siklus tertutup <em>(Closed-Loop Stewardship)</em>.
               </p>
             </div>
@@ -117,27 +117,27 @@ export const FoundationLayout: React.FC<FoundationLayoutProps> = ({ initialView 
               <button
                 onClick={refreshData}
                 disabled={isLoading}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-xs font-medium transition-colors"
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white hover:bg-slate-100 text-slate-700 border border-slate-200 text-xs font-medium transition-colors shadow-xs"
               >
                 <RefreshCw className={`w-3.5 h-3.5 ${isLoading ? 'animate-spin' : ''}`} />
                 <span>Refresh Proyeksi</span>
               </button>
 
-              <div className="bg-slate-950 border border-slate-800 px-3 py-1.5 rounded-lg text-right">
+              <div className="bg-white border border-slate-200 px-3 py-1.5 rounded-lg text-right shadow-xs">
                 <div className="text-[10px] text-slate-500 font-mono">ROLE OVERSIGHT</div>
-                <div className="text-xs font-bold text-amber-300">{currentPersona?.role || 'YAPENDIK_SUPERADMIN'}</div>
+                <div className="text-xs font-bold text-slate-900">{currentPersona?.role || 'YAPENDIK_SUPERADMIN'}</div>
               </div>
             </div>
           </div>
 
           {/* Navigation Tabs */}
-          <div className="flex border-b border-slate-800 mt-6 gap-2 text-xs">
+          <div className="flex border-b border-slate-200 mt-6 gap-2 text-xs">
             <button
               onClick={() => setActiveView('PROJECTIONS')}
               className={`flex items-center gap-2 pb-3 px-3 font-semibold transition-colors relative ${
                 activeView === 'PROJECTIONS'
-                  ? 'text-amber-400 border-b-2 border-amber-400'
-                  : 'text-slate-400 hover:text-slate-200'
+                  ? 'text-slate-900 border-b-2 border-slate-900'
+                  : 'text-slate-500 hover:text-slate-800'
               }`}
               data-testid="tab-projections"
             >
@@ -149,8 +149,8 @@ export const FoundationLayout: React.FC<FoundationLayoutProps> = ({ initialView 
               onClick={() => setActiveView('INSIGHTS')}
               className={`flex items-center gap-2 pb-3 px-3 font-semibold transition-colors relative ${
                 activeView === 'INSIGHTS'
-                  ? 'text-amber-400 border-b-2 border-amber-400'
-                  : 'text-slate-400 hover:text-slate-200'
+                  ? 'text-slate-900 border-b-2 border-slate-900'
+                  : 'text-slate-500 hover:text-slate-800'
               }`}
               data-testid="tab-insights"
             >
@@ -162,15 +162,15 @@ export const FoundationLayout: React.FC<FoundationLayoutProps> = ({ initialView 
               onClick={() => setActiveView('ACTIONS')}
               className={`flex items-center gap-2 pb-3 px-3 font-semibold transition-colors relative ${
                 activeView === 'ACTIONS'
-                  ? 'text-amber-400 border-b-2 border-amber-400'
-                  : 'text-slate-400 hover:text-slate-200'
+                  ? 'text-slate-900 border-b-2 border-slate-900'
+                  : 'text-slate-500 hover:text-slate-800'
               }`}
               data-testid="tab-actions"
             >
               <FileText className="w-4 h-4" />
               <span>Action Ledger &amp; Closed-Loop</span>
               {actions.length > 0 && (
-                <span className="px-1.5 py-0.2 rounded-full bg-slate-800 text-[10px] text-amber-300 font-mono">
+                <span className="px-1.5 py-0.2 rounded-full bg-slate-200 text-[10px] text-slate-700 font-mono">
                   {actions.length}
                 </span>
               )}
