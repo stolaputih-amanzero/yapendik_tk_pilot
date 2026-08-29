@@ -50,7 +50,7 @@ export const ClassroomHeatmapView: React.FC<Props> = ({ schoolId, classId }) => 
 
   if (loading) {
     return (
-      <div className="bg-white rounded-3xl border border-slate-200 p-8 text-center text-xs text-slate-500 font-bold">
+      <div className="bg-surface rounded-3xl border border-line p-8 text-center text-xs text-ink-soft font-bold">
         Memproyeksikan peta kesiapan perkembangan rombel...
       </div>
     );
@@ -66,44 +66,44 @@ export const ClassroomHeatmapView: React.FC<Props> = ({ schoolId, classId }) => 
   ];
 
   return (
-    <div className="px-4 md:px-6 py-6 space-y-6 animate-in fade-in duration-200">
+    <div className="px-4 medium:px-6 py-6 space-y-6 animate-in fade-in duration-200">
       
       {/* HEADER CARD */}
-      <div className="bg-white border-y md:border md:border-slate-200 md:rounded-3xl p-4 md:p-6 md:shadow-xs flex flex-col lg:flex-row lg:items-center justify-between gap-6 -mx-4 md:mx-0">
+      <div className="bg-surface border-y medium:border medium:border-line medium:rounded-3xl p-4 medium:p-6 medium:shadow-hairline flex flex-col expanded:flex-row expanded:items-center justify-between gap-6 -mx-4 expanded:mx-0">
         <div className="flex items-start gap-4">
-          <div className="p-3 rounded-2xl bg-indigo-600 text-white shadow-md shadow-indigo-600/20">
+          <div className="p-3 rounded-card bg-indigo-600 text-on-brand shadow-ambient shadow-indigo-600/20">
             <BarChart3 className="w-7 h-7" />
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <h3 className="text-lg font-black text-slate-900">
+              <h3 className="text-lg font-black text-ink">
                 Peta Kesiapan & Kontinuitas Perkembangan Rombel
               </h3>
-              <span className="px-2.5 py-0.5 text-xs font-black rounded-lg bg-indigo-100 text-indigo-900 border border-indigo-200">
+              <span className="px-2 py-1 text-xs font-black rounded-lg bg-indigo-100 text-lppa-deep border border-lppa-line">
                 {heatmap.class_name}
               </span>
             </div>
-            <p className="text-xs text-slate-600 font-medium mt-1">
+            <p className="text-xs text-ink-soft font-medium mt-1">
               {heatmap.academic_year_id} • Semester {heatmap.semester} • Supervisi Akademik Kepala Sekolah & Yayasan
             </p>
           </div>
         </div>
 
         <div className="flex items-center gap-3">
-          <div className="bg-slate-50 px-4 py-2.5 rounded-2xl border border-slate-200 text-center">
-            <div className="text-[10px] font-bold text-slate-500">Total Siswa</div>
-            <div className="text-sm font-black text-slate-900">{heatmap.total_students_count} Anak</div>
+          <div className="bg-surface-subtle px-4 py-2 rounded-card border border-line text-center">
+            <div className="text-[10px] font-bold text-ink-soft">Total Siswa</div>
+            <div className="text-sm font-black text-ink">{heatmap.total_students_count} Anak</div>
           </div>
 
-          <div className="bg-emerald-50 px-4 py-2.5 rounded-2xl border border-emerald-200 text-center">
-            <div className="text-[10px] font-bold text-emerald-700">Rencana Aktif</div>
-            <div className="text-sm font-black text-emerald-950">{heatmap.active_plans_count} Rencana</div>
+          <div className="bg-success-tint px-4 py-2 rounded-card border border-success-line text-center">
+            <div className="text-[10px] font-bold text-success-deep">Rencana Aktif</div>
+            <div className="text-sm font-black text-success-deep">{heatmap.active_plans_count} Rencana</div>
           </div>
         </div>
       </div>
 
       {/* 4 ELEMENTS DISTRIBUTION GRID */}
-      <div className="flex flex-col md:grid md:grid-cols-2 divide-y divide-slate-100 md:divide-none gap-0 md:gap-4 -mx-4 md:mx-0">
+      <div className="flex flex-col expanded:grid medium:grid-cols-2 divide-y divide-line-soft expanded:divide-none gap-0 medium:gap-4 -mx-4 expanded:mx-0">
         {elementKeys.map(k => {
           const item = heatmap.element_distribution[k];
           if (!item) return null;
@@ -114,12 +114,12 @@ export const ClassroomHeatmapView: React.FC<Props> = ({ schoolId, classId }) => 
           const bsbPct = Math.round((item.bsb_count / total) * 100);
 
           return (
-            <div key={k} className="bg-white p-4 md:p-5 md:rounded-3xl md:border md:border-slate-200 md:shadow-xs space-y-4">
-              <div className="flex items-center justify-between border-b border-slate-100 pb-3">
-                <h4 className="text-xs font-black text-slate-900 uppercase">
+            <div key={k} className="bg-surface p-4 medium:p-4 medium:rounded-3xl medium:border medium:border-line medium:shadow-hairline space-y-4">
+              <div className="flex items-center justify-between border-b border-line-soft pb-3">
+                <h4 className="text-xs font-black text-ink uppercase tracking-wider">
                   {item.element_title}
                 </h4>
-                <span className="text-[10px] font-bold text-slate-500 bg-slate-100 px-2 py-0.5 rounded">
+                <span className="text-[10px] font-bold text-ink-soft bg-surface-subtle px-2 py-1 rounded">
                   {total} Siswa Terpetakan
                 </span>
               </div>
@@ -127,33 +127,33 @@ export const ClassroomHeatmapView: React.FC<Props> = ({ schoolId, classId }) => 
               {/* Multi-tier Progress Distribution Bar */}
               <div className="space-y-1.5">
                 <div className="flex justify-between text-[11px] font-black">
-                  <span className="text-amber-800">MB: {item.mb_count} ({mbPct}%)</span>
-                  <span className="text-purple-800">BSH: {item.bsh_count} ({bshPct}%)</span>
-                  <span className="text-emerald-800">BSB: {item.bsb_count} ({bsbPct}%)</span>
+                  <span className="text-warning-deep">MB: {item.mb_count} ({mbPct}%)</span>
+                  <span className="text-lppa-deep">BSH: {item.bsh_count} ({bshPct}%)</span>
+                  <span className="text-success-deep">BSB: {item.bsb_count} ({bsbPct}%)</span>
                 </div>
                 
-                <div className="w-full h-3 rounded-full bg-slate-100 flex overflow-hidden border border-slate-200">
-                  <div style={{ width: `${mbPct}%` }} className="bg-amber-400 h-full" title={`Mulai Berkembang: ${mbPct}%`} />
-                  <div style={{ width: `${bshPct}%` }} className="bg-purple-500 h-full" title={`Berkembang Sesuai Harapan: ${bshPct}%`} />
-                  <div style={{ width: `${bsbPct}%` }} className="bg-emerald-500 h-full" title={`Berkembang Sangat Baik: ${bsbPct}%`} />
+                <div className="w-full h-3 rounded-full bg-surface-subtle flex overflow-hidden border border-line">
+                  <div style={{ width: `${mbPct}%` }} className="bg-warning h-full transition-[width] duration-300" title={`Mulai Berkembang: ${mbPct}%`} />
+                  <div style={{ width: `${bshPct}%` }} className="bg-lppa h-full transition-[width] duration-300" title={`Berkembang Sesuai Harapan: ${bshPct}%`} />
+                  <div style={{ width: `${bsbPct}%` }} className="bg-success h-full transition-[width] duration-300" title={`Berkembang Sangat Baik: ${bsbPct}%`} />
                 </div>
               </div>
 
               {/* Priority Play Centers & Themes */}
-              <div className="bg-slate-50 p-3.5 rounded-2xl border border-slate-200 space-y-2 text-xs">
-                <div className="text-[11px] font-bold text-slate-700 flex items-center gap-1">
-                  <Lightbulb className="w-3.5 h-3.5 text-indigo-600" />
+              <div className="bg-surface-subtle p-3 rounded-card border border-line space-y-2 text-xs">
+                <div className="text-[11px] font-bold text-ink-soft flex items-center gap-1">
+                  <Lightbulb className="w-4 h-4 text-lppa" />
                   <span>Prioritas Sentra Bermain Rombel:</span>
                 </div>
-                <div className="flex flex-wrap gap-1.5">
+                <div className="flex flex-wrap gap-2">
                   {item.priority_stimulation_centers.map((cnt: string, idx: number) => (
-                    <span key={idx} className="px-2 py-0.5 text-[10px] font-black rounded-lg bg-indigo-50 text-indigo-900 border border-indigo-200">
+                    <span key={idx} className="px-2 py-1 text-[10px] font-black rounded-lg bg-lppa-tint text-lppa-deep border border-lppa-line">
                       {cnt.replace('SENTRA_', '')}
                     </span>
                   ))}
                 </div>
 
-                <div className="text-[11px] text-slate-600 pt-1">
+                <div className="text-[11px] text-ink-soft pt-1">
                   <strong>Tema Pertumbuhan: </strong> {item.common_growth_themes.join(', ')}
                 </div>
               </div>

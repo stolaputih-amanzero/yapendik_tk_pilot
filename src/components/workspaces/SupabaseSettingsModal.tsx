@@ -50,40 +50,40 @@ export const SupabaseSettingsModal: React.FC<SupabaseSettingsModalProps> = ({ is
   };
 
   return (
-    <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4 z-50">
-      <div className="bg-white rounded-xl shadow-2xl border border-slate-200 max-w-lg w-full p-6 text-xs relative">
+    <div className="fixed inset-0 bg-brand/60 backdrop-blur-xs flex items-center justify-center p-4 z-50">
+      <div className="bg-surface rounded-field shadow-floating border border-line max-w-lg w-full p-6 text-xs relative">
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 text-slate-400 hover:text-slate-600 p-1"
+          className="absolute top-4 right-4 text-ink-faint hover-only:text-ink-soft p-1"
         >
           <X className="w-4 h-4" />
         </button>
 
         <div className="flex items-center space-x-2.5 mb-2">
-          <Database className="w-5 h-5 text-emerald-600" />
-          <h2 className="text-base font-bold text-slate-900">
+          <Database className="w-5 h-5 text-success" />
+          <h2 className="text-base font-bold text-ink">
             Integrasi Cloud Database (Supabase / Postgres)
           </h2>
         </div>
 
-        <p className="text-slate-500 mb-4 leading-relaxed">
+        <p className="text-ink-soft mb-4 leading-relaxed">
           Yapendik School OS dirancang dengan arsitektur <i>Online-First</i> dan repositori adaptif terisolasi.
         </p>
 
         {/* Current status banner */}
         <div className={`p-3 rounded-lg border mb-4 flex items-start space-x-2.5 ${
           currentConfig.isConnected 
-            ? 'bg-emerald-50 border-emerald-200 text-emerald-900' 
-            : 'bg-slate-50 border-slate-200 text-slate-700'
+            ? 'bg-success-tint border-success-line text-success-deep' 
+            : 'bg-surface-subtle border-line text-ink-soft'
         }`}>
           {currentConfig.isConnected ? (
-            <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
+            <CheckCircle2 className="w-4 h-4 text-success shrink-0 mt-0.5" />
           ) : (
-            <Database className="w-4 h-4 text-slate-500 shrink-0 mt-0.5" />
+            <Database className="w-4 h-4 text-ink-soft shrink-0 mt-0.5" />
           )}
           <div>
             <div className="font-bold">Status: {currentConfig.statusMessage}</div>
-            <div className="text-[11px] text-slate-500 mt-0.5">
+            <div className="text-[11px] text-ink-soft mt-0.5">
               {currentConfig.isConnected 
                 ? 'Semua operasi CRUD langsung terhubung ke tabel Supabase ber-RLS V2.1.5.' 
                 : 'Penyimpanan lokal terpartisi aktif.'}
@@ -92,44 +92,44 @@ export const SupabaseSettingsModal: React.FC<SupabaseSettingsModalProps> = ({ is
         </div>
 
         {!isSuperAdmin && (
-          <div className="mb-4 p-3 bg-amber-50 border border-amber-200 rounded-lg text-amber-800 flex items-start space-x-2">
-            <Lock className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
+          <div className="mb-4 p-3 bg-warning-tint border border-warning-line rounded-lg text-warning-deep flex items-start space-x-2">
+            <Lock className="w-4 h-4 text-brass shrink-0 mt-0.5" />
             <span>Konfigurasi routing database cloud dikunci oleh tata kelola institusi. Hanya Superadmin Yayasan yang dapat memodifikasi endpoint.</span>
           </div>
         )}
 
         <form onSubmit={handleSave} className="space-y-3.5">
           <div>
-            <label className="block font-semibold text-slate-700 mb-1">Supabase Project URL</label>
+            <label className="block font-semibold text-ink-soft mb-1">Supabase Project URL</label>
             <input
               type="text"
               placeholder="https://xyzcompany.supabase.co"
               value={url}
               disabled={!isSuperAdmin}
               onChange={e => setUrl(e.target.value)}
-              className="w-full border border-slate-300 rounded px-2.5 py-1.5 outline-none font-mono text-xs focus:ring-1 focus:ring-slate-900 disabled:bg-slate-100 disabled:text-slate-500"
+              className="w-full border border-line rounded px-2 py-1 outline-none font-mono text-xs focus:ring-1 focus:ring-brass/30 disabled:bg-surface-subtle disabled:text-ink-soft whitespace-nowrap"
             />
           </div>
 
           <div>
-            <label className="block font-semibold text-slate-700 mb-1">Supabase Anon Key</label>
+            <label className="block font-semibold text-ink-soft mb-1">Supabase Anon Key</label>
             <input
               type="password"
               placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
               value={anonKey}
               disabled={!isSuperAdmin}
               onChange={e => setAnonKey(e.target.value)}
-              className="w-full border border-slate-300 rounded px-2.5 py-1.5 outline-none font-mono text-xs focus:ring-1 focus:ring-slate-900 disabled:bg-slate-100 disabled:text-slate-500"
+              className="w-full border border-line rounded px-2 py-1 outline-none font-mono text-xs focus:ring-1 focus:ring-brass/30 disabled:bg-surface-subtle disabled:text-ink-soft whitespace-nowrap"
             />
           </div>
 
           {message && (
-            <div className="p-2.5 rounded text-xs bg-emerald-50 text-emerald-800 border border-emerald-200 font-semibold">
+            <div className="p-2 rounded text-xs bg-success-tint text-success-deep border border-success-line font-semibold">
               {message.text}
             </div>
           )}
 
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 pt-4 border-t border-slate-100">
+          <div className="flex flex-col medium:flex-row medium:items-center justify-between gap-3 pt-4 border-t border-line-soft">
             {isSuperAdmin ? (
               <button
                 type="button"
@@ -138,24 +138,24 @@ export const SupabaseSettingsModal: React.FC<SupabaseSettingsModalProps> = ({ is
                   setAnonKey('');
                   saveSupabaseConfig('', '');
                 }}
-                className="w-full md:w-auto text-slate-500 hover:text-red-600 font-medium text-center py-2 md:py-0"
+                className="w-full medium:w-auto text-ink-soft hover-only:text-danger font-medium text-center py-2 medium:py-0"
               >
                 Reset ke Mode Standar
               </button>
             ) : <div />}
 
-            <div className="flex flex-col md:flex-row md:items-center gap-2 w-full md:w-auto">
+            <div className="flex flex-col medium:flex-row medium:items-center gap-2 w-full medium:w-auto">
               <button
                 type="button"
                 onClick={onClose}
-                className="w-full md:w-auto px-3.5 py-2 md:py-1.5 rounded border border-slate-300 text-slate-700 font-medium text-center"
+                className="w-full medium:w-auto px-3 py-2 medium:py-1 rounded border border-line text-ink-soft font-medium text-center"
               >
                 Tutup
               </button>
               {isSuperAdmin && (
                 <button
                   type="submit"
-                  className="w-full md:w-auto px-4 py-2 md:py-1.5 rounded bg-slate-900 text-white font-semibold hover:bg-slate-800 text-center"
+                  className="w-full medium:w-auto px-4 py-2 medium:py-1 rounded bg-brand text-on-brand font-semibold hover-only:bg-surface-inset text-center"
                 >
                   Simpan Konfigurasi
                 </button>

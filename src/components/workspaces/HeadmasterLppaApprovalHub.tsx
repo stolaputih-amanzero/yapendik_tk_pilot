@@ -16,6 +16,7 @@ import { db } from '../../db/database';
 import { lppaReportingService } from '../../services/lppaReportingService';
 import { LppaReportDocument, LppaReportStatus, LppaElementKey } from '../../types/lppaReportingTypes';
 import { LppaPrintPreviewModal } from './teacher/LppaPrintPreviewModal';
+import { ProgressBar } from '../ui';
 import { 
   ShieldCheck, 
   CheckCircle2, 
@@ -276,25 +277,25 @@ export const HeadmasterLppaApprovalHub: React.FC<Props> = ({
   const readyToPublishCount = reports.filter(r => r.status === 'APPROVED').length;
 
   return (
-    <div className="px-4 md:px-6 py-6 space-y-6 animate-in fade-in duration-200">
+    <div className="px-4 medium:px-6 py-6 space-y-6 animate-in fade-in duration-200 pb-[132px] expanded:pb-8">
       
       {/* HEADER & RECONCILIATION PULSE */}
-      <div className="bg-white border-y md:border md:border-slate-200 md:rounded-3xl p-4 md:p-6 md:shadow-sm -mx-4 md:mx-0">
-        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+      <div className="bg-surface border-y medium:border medium:border-line medium:rounded-3xl p-4 medium:p-6 medium:shadow-hairline -mx-4 expanded:mx-0">
+        <div className="flex flex-col expanded:flex-row expanded:items-center justify-between gap-6">
           <div className="flex items-start gap-4">
-            <div className="p-3 rounded-2xl bg-indigo-600 text-white shadow-md shadow-indigo-600/20">
+            <div className="p-3 rounded-card bg-indigo-600 text-on-brand shadow-ambient shadow-indigo-600/20">
               <ShieldCheck className="w-7 h-7" />
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <h2 className="text-lg font-black text-slate-900">
+                <h2 className="text-lg font-black text-ink">
                   Gerbang Verifikasi & Pengesahan Rapor LPPA
                 </h2>
-                <span className="px-2 py-0.5 text-xs font-black rounded-lg bg-indigo-100 text-indigo-900 border border-indigo-200">
+                <span className="px-2 py-1 text-xs font-black rounded-lg bg-indigo-100 text-lppa-deep border border-lppa-line">
                   Kepala Sekolah
                 </span>
               </div>
-              <p className="text-xs text-slate-600 font-medium mt-1">
+              <p className="text-xs text-ink-soft font-medium mt-1">
                 {activeAy?.name} • Semester {activeAy?.semester} • Syarat Mutlak Penutupan Semester (Stage 3 Option A)
               </p>
             </div>
@@ -306,7 +307,7 @@ export const HeadmasterLppaApprovalHub: React.FC<Props> = ({
               <button
                 onClick={handleBatchApproveReady}
                 disabled={isProcessing}
-                className="w-full md:w-auto mt-3 md:mt-0 px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-black transition flex items-center justify-center gap-2 shadow-md shadow-emerald-600/20 cursor-pointer disabled:opacity-50"
+                className="w-full medium:w-auto mt-3 medium:mt-0 px-4 py-2 rounded-field bg-success hover-only:bg-emerald-700 text-on-brand text-xs font-black transition flex items-center justify-center gap-2 shadow-ambient shadow-emerald-600/20 cursor-pointer disabled:opacity-50"
               >
                 <CheckCheck className="w-4 h-4" />
                 <span>Sahkan Semua yang Siap ({readyCount} Rapor)</span>
@@ -317,47 +318,44 @@ export const HeadmasterLppaApprovalHub: React.FC<Props> = ({
               <button
                 onClick={handleBatchPublishApproved}
                 disabled={isProcessing}
-                className="w-full md:w-auto mt-3 md:mt-0 px-4 py-2.5 rounded-xl bg-purple-600 hover:bg-purple-700 text-white text-xs font-black transition flex items-center justify-center gap-2 shadow-md shadow-purple-600/20 cursor-pointer disabled:opacity-50"
+                className="w-full medium:w-auto mt-3 medium:mt-0 px-4 py-2 rounded-field bg-purple-600 hover-only:bg-purple-700 text-on-brand text-xs font-black transition flex items-center justify-center gap-2 shadow-ambient shadow-purple-600/20 cursor-pointer disabled:opacity-50"
               >
                 <Sparkles className="w-4 h-4" />
-                <span>📢 Publikasikan Semua Disahkan ({readyToPublishCount})</span>
+                <span>Publikasikan Semua Disahkan ({readyToPublishCount})</span>
               </button>
             )}
           </div>
         </div>
 
         {/* 100% Reconciliation Progress Bar */}
-        <div className="mt-6 pt-6 border-t border-slate-200 grid grid-cols-1 md:grid-cols-4 gap-4 items-center">
-          <div className="md:col-span-3 space-y-2">
+        <div className="mt-6 pt-6 border-t border-line grid grid-cols-1 medium:grid-cols-4 gap-4 items-center">
+          <div className="expanded:col-span-3 space-y-2">
             <div className="flex items-center justify-between text-xs">
-              <span className="text-slate-700 font-bold flex items-center gap-1.5">
-                <Award className="w-4 h-4 text-purple-600" />
+              <span className="text-ink-soft font-bold flex items-center gap-2">
+                <Award className="w-4 h-4 text-lppa" />
                 <span>Kesiapan Pengesahan Rapor Rombel:</span>
-                <strong className="text-slate-900 font-black">{approvedCount} dari {totalReports} Siswa Disahkan</strong>
+                <strong className="text-ink font-black">{approvedCount} dari {totalReports} Siswa Disahkan</strong>
               </span>
-              <span className={`font-black ${isOptionAReady ? 'text-emerald-700' : 'text-purple-700'}`}>
+              <span className={`font-black ${isOptionAReady ? 'text-success-deep' : 'text-lppa-deep'}`}>
                 {approvalPercentage}%
               </span>
             </div>
-            <div className="w-full h-3 rounded-full bg-slate-200 overflow-hidden">
-              <div
-                className={`h-full rounded-full transition-all duration-500 ${
-                  isOptionAReady ? 'bg-emerald-500' : 'bg-indigo-600'
-                }`}
-                style={{ width: `${approvalPercentage}%` }}
-              />
-            </div>
-            <div className="flex items-center justify-between text-[11px] text-slate-500">
+            <ProgressBar
+              value={approvalPercentage}
+              variant={isOptionAReady ? 'success' : 'lppa'}
+              trackClassName="h-3"
+            />
+            <div className="flex items-center justify-between text-[11px] text-ink-soft">
               <span>{readyCount} siap ditinjau • {draftCount} masih draf guru</span>
-              <span className={`font-bold ${isOptionAReady ? 'text-emerald-700' : 'text-amber-700'}`}>
-                {isOptionAReady ? '✅ Syarat Tutup Semester Terpenuhi (100%)' : '⏳ Belum Siap Tutup Semester'}
+              <span className={`font-bold ${isOptionAReady ? 'text-success-deep' : 'text-warning-deep'}`}>
+                {isOptionAReady ? 'Syarat Tutup Semester Terpenuhi (100%)' : 'Belum Siap Tutup Semester'}
               </span>
             </div>
           </div>
 
-          <div className="bg-slate-50 p-3.5 rounded-2xl border border-slate-200 text-center">
-            <div className="text-[11px] text-slate-600 font-bold">Status Rapor</div>
-            <div className="text-sm font-black text-slate-900 mt-0.5">
+          <div className="bg-surface-subtle p-3 rounded-card border border-line text-center">
+            <div className="text-[11px] text-ink-soft font-bold">Status Rapor</div>
+            <div className="text-sm font-black text-ink mt-0.5">
               {isOptionAReady ? 'Semua Disahkan' : `${totalReports - approvedCount} Belum Disahkan`}
             </div>
           </div>
@@ -366,82 +364,82 @@ export const HeadmasterLppaApprovalHub: React.FC<Props> = ({
 
       {/* FEEDBACK BANNERS */}
       {feedback && (
-        <div className={`p-4 rounded-2xl border text-xs font-bold flex items-center gap-2 ${
+        <div className={`p-4 rounded-card border text-xs font-bold flex items-center gap-2 ${
           feedback.type === 'success' 
-            ? 'bg-emerald-50 border-emerald-300 text-emerald-900' 
-            : 'bg-rose-50 border-rose-300 text-rose-900'
+            ? 'bg-success-tint border-success-line text-success-deep' 
+            : 'bg-danger-tint border-danger-line text-danger-deep'
         }`}>
           {feedback.type === 'success' ? (
-            <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+            <CheckCircle2 className="w-4 h-4 text-success shrink-0" />
           ) : (
-            <AlertCircle className="w-4 h-4 text-rose-600 shrink-0" />
+            <AlertCircle className="w-4 h-4 text-danger shrink-0" />
           )}
           <span>{feedback.message}</span>
         </div>
       )}
 
       {/* CONTROLS: Filter & Search */}
-      <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 bg-white p-4 rounded-2xl border border-slate-200 shadow-xs">
-        <div className="flex items-center gap-1.5 overflow-x-auto pb-1 sm:pb-0">
+      <div className="flex flex-col medium:flex-row items-stretch medium:items-center justify-between gap-3 bg-surface p-4 rounded-card border border-line shadow-hairline">
+        <div className="flex items-center gap-2 overflow-x-auto pb-1 medium:pb-0 [mask-image:linear-gradient(to_right,transparent_0,black_16px,black_calc(100%-16px),transparent_100%)]">
           <button
             onClick={() => setStatusFilter('ALL')}
-            className={`px-3 py-1.5 text-xs font-bold rounded-xl border transition cursor-pointer ${
+            className={`px-3 py-1 text-xs font-bold rounded-field border transition cursor-pointer ${
               statusFilter === 'ALL'
-                ? 'bg-slate-900 text-white border-slate-900'
-                : 'bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100'
+                ? 'bg-brand text-on-brand border-brand'
+                : 'bg-surface-subtle text-ink-soft border-line hover-only:bg-surface-subtle'
             }`}
           >
             Semua ({totalReports})
           </button>
           <button
             onClick={() => setStatusFilter('READY_FOR_REVIEW')}
-            className={`px-3 py-1.5 text-xs font-bold rounded-xl border transition cursor-pointer flex items-center gap-1 ${
+            className={`px-3 py-1 text-xs font-bold rounded-field border transition cursor-pointer flex items-center gap-1 ${
               statusFilter === 'READY_FOR_REVIEW'
-                ? 'bg-sky-600 text-white border-sky-600'
-                : 'bg-sky-50 text-sky-800 border-sky-200 hover:bg-sky-100'
+                ? 'bg-info text-on-brand border-sky-600'
+                : 'bg-info-tint text-info-deep border-info-line hover-only:bg-info-tint'
             }`}
           >
-            <Clock className="w-3.5 h-3.5" />
+            <Clock className="w-4 h-4" />
             <span>Siap Ditinjau ({readyCount})</span>
           </button>
           <button
             onClick={() => setStatusFilter('APPROVED')}
-            className={`px-3 py-1.5 text-xs font-bold rounded-xl border transition cursor-pointer flex items-center gap-1 ${
+            className={`px-3 py-1 text-xs font-bold rounded-field border transition cursor-pointer flex items-center gap-1 ${
               statusFilter === 'APPROVED'
-                ? 'bg-emerald-600 text-white border-emerald-600'
-                : 'bg-emerald-50 text-emerald-800 border-emerald-200 hover:bg-emerald-100'
+                ? 'bg-success text-on-brand border-emerald-600'
+                : 'bg-success-tint text-success-deep border-success-line hover-only:bg-success-tint'
             }`}
           >
-            <CheckCircle2 className="w-3.5 h-3.5" />
+            <CheckCircle2 className="w-4 h-4" />
             <span>Disahkan ({approvedCount})</span>
           </button>
           <button
             onClick={() => setStatusFilter('DRAFT')}
-            className={`px-3 py-1.5 text-xs font-bold rounded-xl border transition cursor-pointer flex items-center gap-1 ${
+            className={`px-3 py-1 text-xs font-bold rounded-field border transition cursor-pointer flex items-center gap-1 ${
               statusFilter === 'DRAFT'
-                ? 'bg-amber-600 text-white border-amber-600'
-                : 'bg-amber-50 text-amber-800 border-amber-200 hover:bg-amber-100'
+                ? 'bg-warning text-on-brand border-amber-600'
+                : 'bg-warning-tint text-warning-deep border-warning-line hover-only:bg-warning-tint'
             }`}
           >
-            <FileText className="w-3.5 h-3.5" />
+            <FileText className="w-4 h-4" />
             <span>Draf ({draftCount})</span>
           </button>
         </div>
 
         <div className="relative max-w-xs">
-          <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+          <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-ink-faint" />
           <input
             type="text"
             placeholder="Cari nama atau NIS..."
             value={searchQuery}
             onChange={e => setSearchQuery(e.target.value)}
-            className="pl-9 pr-3 py-1.5 text-xs rounded-xl bg-slate-50 border border-slate-300 text-slate-900 font-medium placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-900"
+            className="pl-9 pr-3 py-1 text-xs rounded-field bg-surface-subtle border border-line text-ink font-medium placeholder:text-ink-soft focus:outline-none focus:ring-2 focus:ring-brass/30"
           />
         </div>
       </div>
 
       {/* REPORTS LIST / CARDS */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 medium:grid-cols-2 expanded:grid-cols-3 gap-4">
         {filteredReports.map(doc => {
           const isApproved = doc.status === 'APPROVED' || doc.status === 'PUBLISHED';
           const isReady = doc.status === 'READY_FOR_REVIEW';
@@ -449,80 +447,80 @@ export const HeadmasterLppaApprovalHub: React.FC<Props> = ({
           return (
             <div
               key={doc.id}
-              className={`p-5 rounded-2xl border transition-all flex flex-col justify-between shadow-2xs ${
+              className={`p-4 rounded-card border transition-all flex flex-col justify-between shadow-hairline ${
                 isApproved 
-                  ? 'border-emerald-200 bg-emerald-50/20' 
+                  ? 'border-success-line bg-success-tint/20' 
                   : isReady
-                  ? 'border-sky-300 ring-2 ring-sky-500/10 bg-white'
-                  : 'border-slate-200 bg-white'
+                  ? 'border-sky-300 ring-2 ring-sky-500/10 bg-surface'
+                  : 'border-line bg-surface'
               }`}
             >
               <div>
                 {/* Header: Student Name & Status */}
                 <div className="flex items-start justify-between gap-2 mb-3">
                   <div>
-                    <h4 className="text-sm font-bold text-slate-900 leading-tight">
+                    <h4 className="text-sm font-bold text-ink leading-tight">
                       {doc.student_name}
                     </h4>
                     <div className="flex items-center gap-2 mt-0.5">
-                      <span className="text-[11px] text-slate-600 font-mono font-semibold">NIS {doc.student_nis}</span>
-                      <span className="text-[10px] text-slate-500">• {doc.class_id ? 'Kelompok A' : 'TK'}</span>
+                      <span className="text-[11px] text-ink-soft font-mono font-semibold whitespace-nowrap">NIS {doc.student_nis}</span>
+                      <span className="text-[10px] text-ink-soft">• {doc.class_id ? 'Kelompok A' : 'TK'}</span>
                     </div>
                   </div>
 
-                  <span className={`px-2.5 py-0.5 text-[10px] font-bold rounded-full border ${
+                  <span className={`px-2 py-1 text-[10px] font-bold rounded-full border ${
                     isApproved
-                      ? 'bg-emerald-50 text-emerald-800 border-emerald-200'
+                      ? 'bg-success-tint text-success-deep border-success-line'
                       : isReady
-                      ? 'bg-sky-50 text-sky-800 border-sky-200'
-                      : 'bg-amber-50 text-amber-800 border-amber-200'
+                      ? 'bg-info-tint text-info-deep border-info-line'
+                      : 'bg-warning-tint text-warning-deep border-warning-line'
                   }`}>
                     {isApproved ? 'Disahkan' : isReady ? 'Siap Ditinjau' : 'Draf Guru'}
                   </span>
                 </div>
 
                 {/* Elements Rating Breakdown Chips */}
-                <div className="bg-slate-50 p-3 rounded-xl border border-slate-200 space-y-1.5 mb-4">
-                  <div className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">
+                <div className="bg-surface-subtle p-3 rounded-field border border-line space-y-1.5 mb-4">
+                  <div className="text-[10px] font-bold text-ink-soft uppercase tracking-wider">
                     Ringkasan Capaian:
                   </div>
-                  <div className="grid grid-cols-2 gap-1.5 text-[11px]">
-                    <div className="flex items-center justify-between bg-white px-2.5 py-1 rounded-lg border border-slate-200">
-                      <span className="text-slate-700 truncate mr-1">NABP:</span>
-                      <span className="font-bold text-slate-900 font-mono">{doc.elements.NILAI_AGAMA_BUDI_PEKERTI.rating_summary}</span>
+                  <div className="grid grid-cols-2 gap-2 text-[11px]">
+                    <div className="flex items-center justify-between bg-surface px-2 py-1 rounded-lg border border-line">
+                      <span className="text-ink-soft truncate mr-1">NABP:</span>
+                      <span className="font-bold text-ink font-mono">{doc.elements.NILAI_AGAMA_BUDI_PEKERTI.rating_summary}</span>
                     </div>
-                    <div className="flex items-center justify-between bg-white px-2.5 py-1 rounded-lg border border-slate-200">
-                      <span className="text-slate-700 truncate mr-1">Jati Diri:</span>
-                      <span className="font-bold text-slate-900 font-mono">{doc.elements.JATI_DIRI.rating_summary}</span>
+                    <div className="flex items-center justify-between bg-surface px-2 py-1 rounded-lg border border-line">
+                      <span className="text-ink-soft truncate mr-1">Jati Diri:</span>
+                      <span className="font-bold text-ink font-mono">{doc.elements.JATI_DIRI.rating_summary}</span>
                     </div>
-                    <div className="flex items-center justify-between bg-white px-2.5 py-1 rounded-lg border border-slate-200">
-                      <span className="text-slate-700 truncate mr-1">STEAM:</span>
-                      <span className="font-bold text-slate-900 font-mono">{doc.elements.LITERASI_STEAM.rating_summary}</span>
+                    <div className="flex items-center justify-between bg-surface px-2 py-1 rounded-lg border border-line">
+                      <span className="text-ink-soft truncate mr-1">STEAM:</span>
+                      <span className="font-bold text-ink font-mono">{doc.elements.LITERASI_STEAM.rating_summary}</span>
                     </div>
-                    <div className="flex items-center justify-between bg-white px-2.5 py-1 rounded-lg border border-slate-200">
-                      <span className="text-slate-700 truncate mr-1">P5:</span>
-                      <span className="font-bold text-slate-900 font-mono">{doc.elements.PROJEK_P5.rating_summary}</span>
+                    <div className="flex items-center justify-between bg-surface px-2 py-1 rounded-lg border border-line">
+                      <span className="text-ink-soft truncate mr-1">P5:</span>
+                      <span className="font-bold text-ink font-mono">{doc.elements.PROJEK_P5.rating_summary}</span>
                     </div>
                   </div>
                 </div>
               </div>
 
               {/* Action Buttons */}
-              <div className="space-y-1.5 pt-3 border-t border-slate-100">
-                <div className="grid grid-cols-2 gap-1.5">
+              <div className="space-y-1.5 pt-3 border-t border-line-soft">
+                <div className="grid grid-cols-2 gap-2">
                   <button
                     onClick={() => setSelectedReport(doc)}
-                    className="py-2 px-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 border border-slate-200 text-xs font-bold transition flex items-center justify-center gap-1 cursor-pointer"
+                    className="py-2 px-2 rounded-field bg-surface-subtle hover-only:bg-line-soft text-ink border border-line text-xs font-bold transition flex items-center justify-center gap-1 cursor-pointer"
                   >
-                    <Eye className="w-3.5 h-3.5 text-slate-700" />
+                    <Eye className="w-4 h-4 text-ink-soft" />
                     <span>Tinjau Narasi</span>
                   </button>
 
                   <button
                     onClick={() => setPreviewReport(doc)}
-                    className="py-2 px-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 border border-slate-200 text-xs font-bold transition flex items-center justify-center gap-1 cursor-pointer"
+                    className="py-2 px-2 rounded-field bg-surface-subtle hover-only:bg-line-soft text-ink border border-line text-xs font-bold transition flex items-center justify-center gap-1 cursor-pointer"
                   >
-                    <Printer className="w-3.5 h-3.5 text-slate-600" />
+                    <Printer className="w-4 h-4 text-ink-soft" />
                     <span>Pratinjau PDF</span>
                   </button>
                 </div>
@@ -531,9 +529,9 @@ export const HeadmasterLppaApprovalHub: React.FC<Props> = ({
                   <button
                     onClick={() => handleApproveSingle(doc)}
                     disabled={isProcessing}
-                    className="w-full py-2.5 px-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer shadow-xs disabled:opacity-50"
+                    className="w-full py-2 px-3 rounded-field bg-brand hover-only:bg-surface-inset text-on-brand text-xs font-bold transition flex items-center justify-center gap-2 cursor-pointer shadow-hairline disabled:opacity-50"
                   >
-                    <CheckCircle2 className="w-3.5 h-3.5" />
+                    <CheckCircle2 className="w-4 h-4" />
                     <span>Sahkan Rapor (Kepala Sekolah)</span>
                   </button>
                 )}
@@ -542,16 +540,16 @@ export const HeadmasterLppaApprovalHub: React.FC<Props> = ({
                   <button
                     onClick={() => handlePublishSingle(doc)}
                     disabled={isProcessing}
-                    className="w-full py-2.5 px-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer shadow-xs disabled:opacity-50"
+                    className="w-full py-2 px-3 rounded-field bg-brand hover-only:bg-surface-inset text-on-brand text-xs font-bold transition flex items-center justify-center gap-2 cursor-pointer shadow-hairline disabled:opacity-50"
                   >
-                    <Sparkles className="w-3.5 h-3.5" />
+                    <Sparkles className="w-4 h-4" />
                     <span>Publikasikan ke Orang Tua</span>
                   </button>
                 )}
 
                 {doc.status === 'PUBLISHED' && (
-                  <div className="text-center py-2 bg-emerald-50 text-emerald-800 border border-emerald-200 rounded-xl text-[11px] font-bold flex items-center justify-center gap-1">
-                    <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
+                  <div className="text-center py-2 bg-success-tint text-success-deep border border-success-line rounded-field text-[11px] font-bold flex items-center justify-center gap-1">
+                    <ShieldCheck className="w-4 h-4 text-success" />
                     <span>Terbit Resmi di Portal Orang Tua</span>
                   </div>
                 )}
@@ -563,20 +561,20 @@ export const HeadmasterLppaApprovalHub: React.FC<Props> = ({
 
       {/* DEEP REVIEW & APPROVAL MODAL */}
       {selectedReport && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-900/40 backdrop-blur-xs animate-in fade-in duration-200">
-          <div className="bg-white rounded-2xl border border-slate-200 shadow-2xl w-full max-w-4xl max-h-[90vh] flex flex-col overflow-hidden text-slate-900">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-3 medium:p-4 bg-brand/40 backdrop-blur-xs animate-in fade-in duration-200">
+          <div className="bg-surface rounded-card border border-line shadow-floating w-full max-w-4xl max-h-[90vh] flex flex-col overflow-hidden text-ink">
             
             {/* Modal Header */}
-            <div className="px-6 py-4 border-b border-slate-100 bg-slate-50 flex items-center justify-between gap-4 shrink-0">
+            <div className="px-6 py-4 border-b border-line-soft bg-surface-subtle flex items-center justify-between gap-4 shrink-0">
               <div className="flex items-center gap-3">
-                <div className="p-2 rounded-xl bg-slate-900 text-white shadow-xs">
+                <div className="p-2 rounded-field bg-brand text-on-brand shadow-hairline">
                   <ShieldCheck className="w-5 h-5" />
                 </div>
                 <div>
-                  <h3 className="text-base font-bold text-slate-900">
+                  <h3 className="text-base font-bold text-ink">
                     Penelaahan Rapor LPPA • {selectedReport.student_name}
                   </h3>
-                  <p className="text-xs text-slate-500 font-medium">
+                  <p className="text-xs text-ink-soft font-medium">
                     NIS {selectedReport.student_nis} • Status: {selectedReport.status}
                   </p>
                 </div>
@@ -584,7 +582,7 @@ export const HeadmasterLppaApprovalHub: React.FC<Props> = ({
 
               <button
                 onClick={() => setSelectedReport(null)}
-                className="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 flex items-center justify-center transition-colors cursor-pointer shrink-0"
+                className="w-8 h-8 rounded-full bg-surface-subtle hover-only:bg-line-soft text-ink-soft flex items-center justify-center transition-colors cursor-pointer shrink-0"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -594,19 +592,19 @@ export const HeadmasterLppaApprovalHub: React.FC<Props> = ({
             <div className="flex-1 p-6 overflow-y-auto space-y-6">
               
               {/* Element Navigation Tabs */}
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+              <div className="grid grid-cols-2 medium:grid-cols-4 gap-2">
                 {(['NILAI_AGAMA_BUDI_PEKERTI', 'JATI_DIRI', 'LITERASI_STEAM', 'PROJEK_P5'] as LppaElementKey[]).map(k => (
                   <button
                     key={k}
                     onClick={() => setActiveElementKey(k)}
-                    className={`p-2.5 text-left rounded-xl border text-xs font-bold transition cursor-pointer ${
+                    className={`p-2 text-left rounded-field border text-xs font-bold transition cursor-pointer ${
                       activeElementKey === k
-                        ? 'bg-indigo-600 text-white border-indigo-600 shadow-sm'
-                        : 'bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100'
+                        ? 'bg-indigo-600 text-on-brand border-indigo-600 shadow-hairline'
+                        : 'bg-surface-subtle text-ink-soft border-line hover-only:bg-surface-subtle'
                     }`}
                   >
                     <div className="truncate">{selectedReport.elements[k].element_title}</div>
-                    <div className={`text-[10px] font-black mt-0.5 ${activeElementKey === k ? 'text-indigo-200' : 'text-purple-700'}`}>
+                    <div className={`text-[10px] font-black mt-0.5 ${activeElementKey === k ? 'text-indigo-200' : 'text-lppa-deep'}`}>
                       Rating: {selectedReport.elements[k].rating_summary}
                     </div>
                   </button>
@@ -614,32 +612,32 @@ export const HeadmasterLppaApprovalHub: React.FC<Props> = ({
               </div>
 
               {/* Active Element Narrative & Citations */}
-              <div className="bg-slate-50 p-5 rounded-2xl border border-slate-200 space-y-4">
+              <div className="bg-surface-subtle p-4 rounded-card border border-line space-y-4">
                 <div>
-                  <h4 className="text-xs font-black uppercase tracking-wider text-slate-600 mb-1">
+                  <h4 className="text-xs font-black uppercase tracking-wider text-ink-soft mb-1">
                     Narasi Reflektif Akhir Guru:
                   </h4>
-                  <p className="text-xs text-slate-900 leading-relaxed font-medium bg-white p-3.5 rounded-xl border border-slate-200">
+                  <p className="text-xs text-ink leading-relaxed font-medium bg-surface p-3 rounded-field border border-line">
                     "{selectedReport.elements[activeElementKey].teacher_final_narrative}"
                   </p>
                 </div>
 
                 <div>
-                  <h4 className="text-xs font-black uppercase tracking-wider text-slate-600 mb-1">
+                  <h4 className="text-xs font-black uppercase tracking-wider text-ink-soft mb-1">
                     Rekomendasi Stimulasi Lanjutan:
                   </h4>
-                  <p className="text-xs text-slate-800 italic bg-white p-2.5 rounded-xl border border-slate-200">
+                  <p className="text-xs text-ink italic bg-surface p-2 rounded-field border border-line">
                     {selectedReport.elements[activeElementKey].growth_recommendations || 'Pendampingan berkelanjutan.'}
                   </p>
                 </div>
               </div>
 
               {/* Homeroom Reflection */}
-              <div className="bg-purple-50 p-4 rounded-2xl border border-purple-200 space-y-1">
-                <div className="text-xs font-black text-purple-900">
+              <div className="bg-lppa-tint p-4 rounded-card border border-lppa-line space-y-1">
+                <div className="text-xs font-black text-lppa-deep">
                   Refleksi Guru Kelas untuk Orang Tua:
                 </div>
-                <p className="text-xs text-purple-950 font-medium italic">
+                <p className="text-xs text-lppa-deep font-medium italic">
                   "{selectedReport.homeroom_teacher_reflection}"
                 </p>
               </div>
@@ -647,25 +645,25 @@ export const HeadmasterLppaApprovalHub: React.FC<Props> = ({
               {/* Headmaster Approval Note Input */}
               {isAuthorized && selectedReport.status !== 'APPROVED' && selectedReport.status !== 'PUBLISHED' && (
                 <div className="space-y-1.5">
-                  <label className="text-xs font-bold text-slate-900">
+                  <label className="text-xs font-bold text-ink">
                     Catatan Pengesahan Kepala Sekolah:
                   </label>
                   <input
                     type="text"
                     value={approvalNotes}
                     onChange={e => setApprovalNotes(e.target.value)}
-                    className="w-full p-2.5 text-xs font-medium rounded-xl bg-slate-50 border border-slate-300 text-slate-900"
+                    className="w-full p-2 text-xs font-medium rounded-field bg-surface-subtle border border-line text-ink"
                   />
                 </div>
               )}
             </div>
 
             {/* Modal Actions */}
-            <div className="px-6 py-4 border-t border-slate-200 bg-slate-50 flex flex-col md:flex-row items-center justify-end md:justify-between gap-3 shrink-0">
-              <div className="flex flex-col md:flex-row items-center gap-2 w-full md:w-auto">
+            <div className="px-6 py-4 border-t border-line bg-surface-subtle flex flex-col medium:flex-row items-center justify-end medium:justify-between gap-3 shrink-0">
+              <div className="flex flex-col medium:flex-row items-center gap-2 w-full medium:w-auto">
                 <button
                   onClick={() => setSelectedReport(null)}
-                  className="w-full md:w-auto px-4 py-2 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-800 text-xs font-bold transition cursor-pointer"
+                  className="w-full medium:w-auto px-4 py-2 rounded-field bg-line-soft hover-only:bg-line-strong text-ink text-xs font-bold transition cursor-pointer"
                 >
                   Tutup
                 </button>
@@ -674,9 +672,9 @@ export const HeadmasterLppaApprovalHub: React.FC<Props> = ({
                   onClick={() => {
                     setPreviewReport(selectedReport);
                   }}
-                  className="w-full md:w-auto px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold transition flex justify-center items-center gap-1.5 cursor-pointer border border-slate-300"
+                  className="w-full medium:w-auto px-4 py-2 rounded-field bg-surface-subtle hover-only:bg-line-soft text-ink text-xs font-bold transition flex justify-center items-center gap-2 cursor-pointer border border-line"
                 >
-                  <Printer className="w-3.5 h-3.5 text-indigo-600" />
+                  <Printer className="w-4 h-4 text-lppa" />
                   <span>Pratinjau PDF</span>
                 </button>
               </div>
@@ -685,7 +683,7 @@ export const HeadmasterLppaApprovalHub: React.FC<Props> = ({
                 <button
                   onClick={() => handleApproveSingle(selectedReport)}
                   disabled={isProcessing}
-                  className="w-full md:w-auto mt-3 md:mt-0 px-5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-black transition flex justify-center items-center gap-1.5 shadow-md shadow-emerald-600/20 cursor-pointer disabled:opacity-50"
+                  className="w-full medium:w-auto mt-3 medium:mt-0 px-5 py-2 rounded-field bg-success hover-only:bg-emerald-700 text-on-brand text-xs font-black transition flex justify-center items-center gap-2 shadow-ambient shadow-emerald-600/20 cursor-pointer disabled:opacity-50"
                 >
                   <CheckCircle2 className="w-4 h-4" />
                   <span>Sahkan & Beri Cap Persetujuan</span>
@@ -696,10 +694,10 @@ export const HeadmasterLppaApprovalHub: React.FC<Props> = ({
                 <button
                   onClick={() => handlePublishSingle(selectedReport)}
                   disabled={isProcessing}
-                  className="w-full md:w-auto mt-3 md:mt-0 px-5 py-2 rounded-xl bg-purple-600 hover:bg-purple-700 text-white text-xs font-black transition flex justify-center items-center gap-1.5 shadow-md shadow-purple-600/20 cursor-pointer disabled:opacity-50"
+                  className="w-full medium:w-auto mt-3 medium:mt-0 px-5 py-2 rounded-field bg-purple-600 hover-only:bg-purple-700 text-on-brand text-xs font-black transition flex justify-center items-center gap-2 shadow-ambient shadow-purple-600/20 cursor-pointer disabled:opacity-50"
                 >
                   <Sparkles className="w-4 h-4" />
-                  <span>📢 Publikasikan ke Orang Tua</span>
+                  <span>Publikasikan ke Orang Tua</span>
                 </button>
               )}
             </div>

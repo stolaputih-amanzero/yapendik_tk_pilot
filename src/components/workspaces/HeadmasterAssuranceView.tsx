@@ -1,3 +1,4 @@
+import { SelectSheet } from '../ui';
 /**
  * Yapendik School OS — Stage 4.4-D Headmaster Operational Assurance View (Sub-Tab 4)
  * 
@@ -90,7 +91,7 @@ export const HeadmasterAssuranceView: React.FC<Props> = ({
 
   if (loading || !data) {
     return (
-      <div className="py-16 text-center text-slate-500">
+      <div className="py-16 text-center text-ink-soft pb-[132px] expanded:pb-8">
         <div className="w-8 h-8 border-4 border-indigo-600 border-t-transparent rounded-full animate-spin mx-auto mb-3" />
         <p className="text-xs font-semibold">Memuat Jaminan Operasional & Keselamatan Sekolah...</p>
       </div>
@@ -171,136 +172,136 @@ export const HeadmasterAssuranceView: React.FC<Props> = ({
   };
 
   return (
-    <div className="px-4 md:px-6 py-6 space-y-6 animate-fadeIn pb-12 text-slate-900">
+    <div className="px-4 medium:px-6 py-6 space-y-6 animate-fadeIn pb-12 text-ink">
       {/* Header Context */}
-      <div className="bg-slate-50 border-y md:border md:border-slate-200 md:rounded-2xl p-4 md:p-6 text-slate-900 md:shadow-xs flex flex-col md:flex-row md:items-center md:justify-between gap-4 -mx-4 md:mx-0">
+      <div className="bg-surface-subtle border-y medium:border medium:border-line medium:rounded-card p-4 medium:p-6 text-ink medium:shadow-hairline flex flex-col medium:flex-row medium:items-center medium:justify-between gap-4 -mx-4 expanded:mx-0">
         <div>
-          <div className="flex items-center gap-2 text-xs font-bold text-slate-600 uppercase tracking-wider">
-            <ShieldAlert className="w-4 h-4 text-slate-700" />
+          <div className="flex items-center gap-2 text-xs font-bold text-ink-soft uppercase tracking-wider">
+            <ShieldAlert className="w-4 h-4 text-ink-soft" />
             <span>Konsol Resolusi & Jaminan Operasional</span>
           </div>
-          <h2 className="text-xl font-bold tracking-tight text-slate-900 mt-1">
+          <h2 className="text-xl font-bold tracking-tight text-ink mt-1">
             {school_context.school_name}
           </h2>
-          <p className="text-xs text-slate-500 mt-0.5">
+          <p className="text-xs text-ink-soft mt-0.5">
             Tahun Ajaran: {school_context.academic_year_name} ({school_context.semester}) • Kepala Sekolah: {school_context.headmaster_name}
           </p>
         </div>
 
         <div className="flex items-center gap-3">
           <div className="text-right">
-            <div className="text-[10px] text-slate-500 uppercase font-semibold">Skor Integritas Operasional</div>
-            <div className="text-xl font-black text-emerald-600">
+            <div className="text-[10px] text-ink-soft uppercase tracking-wider font-semibold">Skor Integritas Operasional</div>
+            <div className="text-xl font-black text-success">
               {today_assurance.operational_integrity_pct}%
             </div>
           </div>
-          <div className="p-3 bg-emerald-50 border border-emerald-200 rounded-xl text-emerald-600">
+          <div className="p-3 bg-success-tint border border-success-line rounded-field text-success-deep">
             <ShieldCheck className="w-6 h-6" />
           </div>
         </div>
       </div>
 
       {/* PANEL 1: TODAY'S OPERATIONAL ASSURANCE (4 Metrics) */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 expanded:grid-cols-4 gap-4">
         {/* Metric 1: Kehadiran */}
-        <div className="bg-white border border-slate-200 p-4 rounded-xl space-y-1 shadow-xs">
-          <div className="flex items-center justify-between text-slate-500 text-xs font-semibold">
+        <div className="bg-surface border border-line p-4 rounded-field space-y-1 shadow-hairline">
+          <div className="flex items-center justify-between text-ink-soft text-xs font-semibold">
             <span>Kehadiran Hari Ini</span>
-            <Users className="w-4 h-4 text-slate-600" />
+            <Users className="w-4 h-4 text-ink-soft" />
           </div>
-          <div className="text-2xl font-black text-slate-900">
+          <div className="text-2xl font-black text-ink">
             {today_assurance.attendance.attendance_rate_pct}%
           </div>
-          <p className="text-[11px] text-slate-500">
+          <p className="text-[11px] text-ink-soft">
             {today_assurance.attendance.present_count} dari {today_assurance.attendance.total_students} peserta didik
           </p>
         </div>
 
         {/* Metric 2: Rekonsiliasi Kepulangan (Handover) */}
-        <div className="bg-white border border-slate-200 p-4 rounded-xl space-y-1 shadow-xs">
-          <div className="flex items-center justify-between text-slate-500 text-xs font-semibold">
+        <div className="bg-surface border border-line p-4 rounded-field space-y-1 shadow-hairline">
+          <div className="flex items-center justify-between text-ink-soft text-xs font-semibold">
             <span>Rekonsiliasi Kepulangan</span>
-            <UserCheck className="w-4 h-4 text-emerald-600" />
+            <UserCheck className="w-4 h-4 text-success" />
           </div>
-          <div className="text-2xl font-black text-emerald-600">
+          <div className="text-2xl font-black text-success">
             {today_assurance.handover.handover_rate_pct}%
           </div>
-          <p className="text-[11px] text-slate-500">
+          <p className="text-[11px] text-ink-soft">
             {today_assurance.handover.reconciled_count} anak ({today_assurance.handover.standard_handover_count} reguler, {today_assurance.handover.alternate_pickup_count} kuasa)
           </p>
         </div>
 
         {/* Metric 3: Sinyal Pengecualian Aktif */}
-        <div className="bg-white border border-slate-200 p-4 rounded-xl space-y-1 shadow-xs">
-          <div className="flex items-center justify-between text-slate-500 text-xs font-semibold">
+        <div className="bg-surface border border-line p-4 rounded-field space-y-1 shadow-hairline">
+          <div className="flex items-center justify-between text-ink-soft text-xs font-semibold">
             <span>Sinyal Pengecualian</span>
-            <AlertTriangle className="w-4 h-4 text-amber-500" />
+            <AlertTriangle className="w-4 h-4 text-brass" />
           </div>
-          <div className="text-2xl font-black text-amber-600">
+          <div className="text-2xl font-black text-brass">
             {today_assurance.active_exceptions_count}
           </div>
-          <p className="text-[11px] text-slate-500">
+          <p className="text-[11px] text-ink-soft">
             Peringatan suhu / absensi belum ditutup
           </p>
         </div>
 
         {/* Metric 4: Insiden Terbuka */}
-        <div className="bg-white border border-slate-200 p-4 rounded-xl space-y-1 shadow-xs">
-          <div className="flex items-center justify-between text-slate-500 text-xs font-semibold">
+        <div className="bg-surface border border-line p-4 rounded-field space-y-1 shadow-hairline">
+          <div className="flex items-center justify-between text-ink-soft text-xs font-semibold">
             <span>Insiden Terbuka</span>
-            <Activity className="w-4 h-4 text-rose-500" />
+            <Activity className="w-4 h-4 text-danger" />
           </div>
-          <div className="text-2xl font-black text-rose-600">
+          <div className="text-2xl font-black text-danger">
             {today_assurance.open_incidents_count}
           </div>
-          <p className="text-[11px] text-slate-500">
+          <p className="text-[11px] text-ink-soft">
             Menunggu triage atau penyelesaian
           </p>
         </div>
       </div>
 
       {/* PANEL 2: NEEDS ATTENTION (Actionable Queue) */}
-      <div className="bg-white border border-slate-200 rounded-2xl p-5 space-y-3 shadow-xs">
-        <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+      <div className="bg-surface border border-line rounded-card p-4 space-y-3 shadow-hairline">
+        <div className="flex items-center justify-between border-b border-line-soft pb-3">
           <div className="flex items-center gap-2">
-            <AlertTriangle className="w-4 h-4 text-amber-500" />
-            <h3 className="text-sm font-bold text-slate-900 uppercase tracking-wider">
+            <AlertTriangle className="w-4 h-4 text-brass" />
+            <h3 className="text-sm font-bold text-ink uppercase tracking-wider">
               Antrean Perhatian & Tindakan Kepala Sekolah ({needs_attention_queue.length})
             </h3>
           </div>
-          <span className="text-[10px] text-slate-500 font-mono">
+          <span className="text-[10px] text-ink-soft font-mono whitespace-nowrap">
             SEE → TRIAGE → ACT → VERIFY → CLOSE
           </span>
         </div>
 
         {needs_attention_queue.length === 0 ? (
-          <div className="py-6 text-center text-slate-400">
-            <CheckCircle2 className="w-8 h-8 mx-auto mb-1.5 text-emerald-500/60" />
-            <p className="text-xs font-medium text-slate-500">Semua sinyal dan insiden hari ini telah ditangani.</p>
+          <div className="py-6 text-center text-ink-faint">
+            <CheckCircle2 className="w-8 h-8 mx-auto mb-1.5 text-success/60" />
+            <p className="text-xs font-medium text-ink-soft">Semua sinyal dan insiden hari ini telah ditangani.</p>
           </div>
         ) : (
-          <div className="flex flex-col divide-y divide-slate-100 md:divide-none md:space-y-2 -mx-5 md:mx-0">
+          <div className="flex flex-col divide-y divide-line-soft expanded:divide-none medium:space-y-2 -mx-5 expanded:mx-0">
             {needs_attention_queue.map(item => (
               <div
                 key={item.id}
-                className="bg-slate-50 px-5 py-4 md:p-3.5 md:rounded-xl md:border md:border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3"
+                className="bg-surface-subtle px-5 py-4 medium:p-3 medium:rounded-field medium:border medium:border-line flex flex-col medium:flex-row medium:items-center justify-between gap-3"
               >
                 <div className="space-y-1">
                   <div className="flex items-center gap-2">
-                    <span className={`text-[10px] font-bold px-2 py-0.5 rounded ${
+                    <span className={`text-[10px] font-bold px-2 py-1 rounded ${
                       item.item_type === 'INCIDENT_TRIAGE'
-                        ? 'bg-rose-50 text-rose-700 border border-rose-200'
-                        : 'bg-amber-50 text-amber-700 border border-amber-200'
+                        ? 'bg-danger-tint text-danger-deep border border-danger-line'
+                        : 'bg-warning-tint text-warning-deep border border-warning-line'
                     }`}>
-                      {item.item_type === 'INCIDENT_TRIAGE' ? '🚨 PERLU TRIAGE' : '⚠️ PANTAUAN'}
+                      {item.item_type === 'INCIDENT_TRIAGE' ? 'PERLU TRIAGE' : 'PANTAUAN'}
                     </span>
-                    <span className="text-xs font-bold text-slate-900">{item.title}</span>
-                    <span className="text-xs text-slate-500">• {item.classroom_name}</span>
+                    <span className="text-xs font-bold text-ink">{item.title}</span>
+                    <span className="text-xs text-ink-soft">• {item.classroom_name}</span>
                   </div>
-                  <p className="text-xs text-slate-700 font-medium">
-                    <strong className="text-slate-900">Tindakan:</strong> {item.action_required}
+                  <p className="text-xs text-ink-soft font-medium">
+                    <strong className="text-ink">Tindakan:</strong> {item.action_required}
                   </p>
-                  <p className="text-[10px] text-slate-500">
+                  <p className="text-[10px] text-ink-soft">
                     Dilaporkan oleh: {item.reported_by} ({new Date(item.reported_at).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })})
                   </p>
                 </div>
@@ -311,10 +312,10 @@ export const HeadmasterAssuranceView: React.FC<Props> = ({
                       const inc = incident_pipeline.find(i => i.incident_id === item.id);
                       if (inc) setSelectedIncidentForTriage(inc);
                     }}
-                    className="w-full md:w-auto mt-2 md:mt-0 px-3.5 py-2 md:py-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold transition flex justify-center items-center gap-1.5 cursor-pointer shrink-0 shadow-xs"
+                    className="w-full medium:w-auto mt-2 medium:mt-0 px-3 py-2 medium:py-1 rounded-lg bg-brand hover-only:bg-surface-inset text-on-brand text-xs font-bold transition flex justify-center items-center gap-2 cursor-pointer shrink-0 shadow-hairline"
                   >
-                    <span>⚡ Lakukan Triage</span>
-                    <ArrowRight className="w-3.5 h-3.5" />
+                    <span>Lakukan Triage</span>
+                    <ArrowRight className="w-4 h-4" />
                   </button>
                 )}
               </div>
@@ -324,25 +325,25 @@ export const HeadmasterAssuranceView: React.FC<Props> = ({
       </div>
 
       {/* PANEL 3: INCIDENT LIFECYCLE MANAGEMENT */}
-      <div className="bg-white border border-slate-200 rounded-2xl p-5 space-y-4 shadow-xs">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-3">
+      <div className="bg-surface border border-line rounded-card p-4 space-y-4 shadow-hairline">
+        <div className="flex flex-col medium:flex-row medium:items-center justify-between gap-3 border-b border-line-soft pb-3">
           <div className="flex items-center gap-2">
-            <Activity className="w-4 h-4 text-slate-700" />
-            <h3 className="text-sm font-bold text-slate-900 uppercase tracking-wider">
+            <Activity className="w-4 h-4 text-ink-soft" />
+            <h3 className="text-sm font-bold text-ink uppercase tracking-wider">
               Manajemen Siklus Hidup Insiden Sekolah
             </h3>
           </div>
 
           {/* Filters */}
-          <div className="flex items-center gap-1.5 bg-slate-50 p-1 rounded-xl border border-slate-200">
+          <div className="flex items-center gap-2 bg-surface-subtle p-1 rounded-field border border-line">
             {(['ALL', 'DETECTED', 'TRIAGED', 'RESOLVED', 'AUDITED_CLOSED'] as const).map(f => (
               <button
                 key={f}
                 onClick={() => setIncidentFilter(f)}
-                className={`px-2.5 py-1 text-[11px] font-bold rounded-lg transition cursor-pointer ${
+                className={`px-2 py-1 text-[11px] font-bold rounded-lg transition cursor-pointer ${
                   incidentFilter === f
-                    ? 'bg-slate-900 text-white shadow-xs'
-                    : 'text-slate-600 hover:text-slate-900'
+                    ? 'bg-brand text-on-brand shadow-hairline'
+                    : 'text-ink-soft hover-only:text-ink'
                 }`}
               >
                 {f === 'ALL' ? 'Semua' : f}
@@ -352,59 +353,59 @@ export const HeadmasterAssuranceView: React.FC<Props> = ({
         </div>
 
         {filteredIncidents.length === 0 ? (
-          <div className="py-8 text-center text-slate-400 text-xs font-medium">
+          <div className="py-8 text-center text-ink-faint text-xs font-medium">
             Tidak ada insiden dengan filter status '{incidentFilter}'.
           </div>
         ) : (
-          <div className="flex flex-col divide-y divide-slate-100 md:divide-none md:space-y-3 -mx-5 md:mx-0">
+          <div className="flex flex-col divide-y divide-line-soft expanded:divide-none medium:space-y-3 -mx-5 expanded:mx-0">
             {filteredIncidents.map(inc => (
               <div
                 key={inc.incident_id}
-                className="bg-slate-50 px-5 py-4 md:p-4 md:rounded-xl md:border md:border-slate-200 space-y-3"
+                className="bg-surface-subtle px-5 py-4 medium:p-4 medium:rounded-field medium:border medium:border-line space-y-3"
               >
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <span className="text-xs font-bold text-slate-900">{inc.title}</span>
-                    <span className="text-xs text-slate-600">({inc.class_name})</span>
-                    <span className={`text-[10px] font-bold px-2 py-0.5 rounded ${
+                    <span className="text-xs font-bold text-ink">{inc.title}</span>
+                    <span className="text-xs text-ink-soft">({inc.class_name})</span>
+                    <span className={`text-[10px] font-bold px-2 py-1 rounded ${
                       inc.status === 'AUDITED_CLOSED'
-                        ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
+                        ? 'bg-success-tint text-success-deep border border-success-line'
                         : inc.status === 'RESOLVED'
-                        ? 'bg-sky-50 text-sky-700 border border-sky-200'
-                        : 'bg-rose-50 text-rose-700 border border-rose-200'
+                        ? 'bg-info-tint text-info-deep border border-info-line'
+                        : 'bg-danger-tint text-danger-deep border border-danger-line'
                     }`}>
                       {inc.status}
                     </span>
                   </div>
-                  <span className="text-[10px] text-slate-500 flex items-center gap-1">
+                  <span className="text-[10px] text-ink-soft flex items-center gap-1">
                     <Clock className="w-3 h-3" />
                     {new Date(inc.detected_at).toLocaleDateString('id-ID')} {new Date(inc.detected_at).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })}
                   </span>
                 </div>
 
-                <p className="text-xs text-slate-700 font-medium leading-relaxed">
+                <p className="text-xs text-ink-soft font-medium leading-relaxed">
                   {inc.factual_chronology}
                 </p>
 
                 {/* Audit Trail Timeline */}
-                <div className="bg-white p-2.5 rounded-lg border border-slate-200 text-[11px] space-y-1">
-                  <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">
+                <div className="bg-surface p-2 rounded-lg border border-line text-[11px] space-y-1">
+                  <span className="text-[10px] font-bold text-ink-soft uppercase tracking-wider block">
                     Jejak Transisi Status ({inc.state_transitions.length} Langkah):
                   </span>
                   {inc.state_transitions.map((t, idx) => (
-                    <div key={idx} className="flex items-center gap-2 text-slate-700">
-                      <span className="text-emerald-600 font-bold">[{t.to_status}]</span>
+                    <div key={idx} className="flex items-center gap-2 text-ink-soft">
+                      <span className="text-success font-bold">[{t.to_status}]</span>
                       <span>{t.action_summary}</span>
-                      <span className="text-slate-500 text-[10px]">({t.transitioned_by_name} - {new Date(t.transition_timestamp).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })})</span>
+                      <span className="text-ink-soft text-[10px]">({t.transitioned_by_name} - {new Date(t.transition_timestamp).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })})</span>
                     </div>
                   ))}
                 </div>
 
                 {/* Actions */}
-                <div className="flex flex-col md:flex-row md:items-center justify-end md:justify-between pt-2 border-t border-slate-200 gap-3">
-                  <div className="text-[10px] text-slate-500">
+                <div className="flex flex-col medium:flex-row medium:items-center justify-end medium:justify-between pt-2 border-t border-line gap-3">
+                  <div className="text-[10px] text-ink-soft">
                     {inc.parent_notified ? (
-                      <span className="text-emerald-600 font-semibold flex items-center gap-1">
+                      <span className="text-success font-semibold flex items-center gap-1">
                         <PhoneCall className="w-3 h-3" /> Orang tua telah dihubungi ({inc.parent_contacted_name})
                       </span>
                     ) : (
@@ -412,21 +413,21 @@ export const HeadmasterAssuranceView: React.FC<Props> = ({
                     )}
                   </div>
 
-                  <div className="flex flex-col md:flex-row items-center gap-2 w-full md:w-auto">
+                  <div className="flex flex-col medium:flex-row items-center gap-2 w-full medium:w-auto">
                     {inc.status === 'DETECTED' && (
                       <button
                         onClick={() => setSelectedIncidentForTriage(inc)}
-                        className="w-full md:w-auto px-3 py-2 md:py-1 text-xs font-bold rounded-lg bg-slate-900 hover:bg-slate-800 text-white cursor-pointer shadow-xs flex justify-center items-center"
+                        className="w-full medium:w-auto px-3 py-2 medium:py-1 text-xs font-bold rounded-lg bg-brand hover-only:bg-surface-inset text-on-brand cursor-pointer shadow-hairline flex justify-center items-center"
                       >
-                        ⚡ Triage
+                        Triage
                       </button>
                     )}
                     {inc.status === 'RESOLVED' && (
                       <button
                         onClick={() => setSelectedIncidentForAudit(inc)}
-                        className="w-full md:w-auto px-3 py-2 md:py-1 text-xs font-bold rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white flex justify-center items-center gap-1 cursor-pointer shadow-xs"
+                        className="w-full medium:w-auto px-3 py-2 medium:py-1 text-xs font-bold rounded-lg bg-success hover-only:bg-emerald-700 text-on-brand flex justify-center items-center gap-1 cursor-pointer shadow-hairline"
                       >
-                        <FileCheck2 className="w-3.5 h-3.5" />
+                        <FileCheck2 className="w-4 h-4" />
                         <span>Audit & Tutup Kasus</span>
                       </button>
                     )}
@@ -439,53 +440,45 @@ export const HeadmasterAssuranceView: React.FC<Props> = ({
       </div>
 
       {/* PANEL 4: AUDIT & HANDOVER RECONCILIATION INTEGRITY */}
-      <div className="bg-slate-50 border border-slate-200 rounded-2xl p-5 text-slate-900 flex flex-col md:flex-row md:items-center md:justify-between gap-4 shadow-xs">
+      <div className="bg-surface-subtle border border-line rounded-card p-4 text-ink flex flex-col medium:flex-row medium:items-center medium:justify-between gap-4 shadow-hairline">
         <div className="space-y-1">
-          <h4 className="text-sm font-bold flex items-center gap-2 text-slate-900">
-            <ShieldCheck className="w-4 h-4 text-emerald-600" />
+          <h4 className="text-sm font-bold flex items-center gap-2 text-ink">
+            <ShieldCheck className="w-4 h-4 text-success" />
             <span>Kesiapan Audit & Integritas Penutupan Semester (Option A Gate)</span>
           </h4>
-          <p className="text-xs text-slate-500">
+          <p className="text-xs text-ink-soft">
             Rekonsiliasi kepulangan 100% tuntas • Insiden darurat kritis terbuka: {audit_readiness.open_critical_incidents_count}
           </p>
         </div>
-        <span className="text-xs font-bold px-3 py-1.5 rounded-xl bg-emerald-50 text-emerald-700 border border-emerald-200">
+        <span className="text-xs font-bold px-3 py-1 rounded-field bg-success-tint text-success-deep border border-success-line">
           {audit_readiness.semester_close_ready ? '🟢 SIAP AUDIT SEMESTER' : '🟡 MENUNGGU PENYELESAIAN'}
         </span>
       </div>
 
       {/* MODAL 1: TRIAGE INCIDENT */}
       {selectedIncidentForTriage && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-xs">
-          <div className="bg-white border border-slate-200 rounded-2xl w-full max-w-lg shadow-2xl p-5 space-y-4 text-slate-900">
-            <div className="flex items-center justify-between border-b border-slate-100 pb-3">
-              <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
-                <ShieldAlert className="w-4 h-4 text-rose-600" />
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-brand/40 backdrop-blur-xs">
+          <div className="bg-surface border border-line rounded-card w-full max-w-lg shadow-floating p-4 space-y-4 text-ink">
+            <div className="flex items-center justify-between border-b border-line-soft pb-3">
+              <h3 className="text-sm font-bold text-ink flex items-center gap-2">
+                <ShieldAlert className="w-4 h-4 text-danger" />
                 <span>Otorisasi Triage Insiden ({selectedIncidentForTriage.title})</span>
               </h3>
-              <button onClick={() => setSelectedIncidentForTriage(null)} className="text-slate-400 hover:text-slate-600 cursor-pointer">
+              <button onClick={() => setSelectedIncidentForTriage(null)} className="text-ink-faint hover-only:text-ink-soft cursor-pointer">
                 <X className="w-4 h-4" />
               </button>
             </div>
 
             <form onSubmit={handleExecuteTriage} className="space-y-3">
               <div>
-                <label className="block text-xs font-semibold text-slate-700 mb-1">
+                <label className="block text-xs font-semibold text-ink-soft mb-1">
                   Tetapkan Tingkat Keparahan
                 </label>
-                <select
-                  value={triageSeverity}
-                  onChange={e => setTriageSeverity(e.target.value as IncidentSeverityLevel)}
-                  className="w-full flex justify-between items-center px-3 py-2 text-xs rounded-lg bg-slate-50 border border-slate-200 text-slate-900 focus:outline-none focus:border-slate-400"
-                >
-                  <option value="MINOR_RESOLVABLE">Ringan (Dapat diselesaikan oleh Guru Kelas)</option>
-                  <option value="MODERATE_SUPERVISED">Sedang (Perlu Perawatan Khusus / Dijemput Awal)</option>
-                  <option value="CRITICAL_URGENT">Kritis / Darurat (Rujukan Medis Segera)</option>
-                </select>
+                <SelectSheet value={triageSeverity}   options={[{ value: "MINOR_RESOLVABLE", label: "Ringan (Dapat diselesaikan oleh Guru Kelas)" }, { value: "MODERATE_SUPERVISED", label: "Sedang (Perlu Perawatan Khusus / Dijemput Awal)" }, { value: "CRITICAL_URGENT", label: "Kritis / Darurat (Rujukan Medis Segera)" }]} />
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-700 mb-1">
+                <label className="block text-xs font-semibold text-ink-soft mb-1">
                   Instruksi Tindakan Penanganan Kepala Sekolah
                 </label>
                 <textarea
@@ -493,17 +486,17 @@ export const HeadmasterAssuranceView: React.FC<Props> = ({
                   onChange={e => setTriageAction(e.target.value)}
                   rows={2}
                   placeholder="Contoh: Bersihkan luka dengan antiseptik di UKS, hubungi ayah untuk penjemputan..."
-                  className="w-full px-3 py-2 text-xs rounded-lg bg-slate-50 border border-slate-200 text-slate-900 focus:outline-none focus:border-slate-400"
+                  className="w-full px-3 py-2 text-xs rounded-lg bg-surface-subtle border border-line text-ink focus:outline-none focus:border-line-strong"
                 />
               </div>
 
-              <div className="bg-slate-50 p-3 rounded-lg border border-slate-200 space-y-2">
-                <label className="flex items-center gap-2 text-xs font-semibold text-slate-700 cursor-pointer">
+              <div className="bg-surface-subtle p-3 rounded-lg border border-line space-y-2">
+                <label className="flex items-center gap-2 text-xs font-semibold text-ink-soft cursor-pointer">
                   <input
                     type="checkbox"
                     checked={notifyParent}
                     onChange={e => setNotifyParent(e.target.checked)}
-                    className="rounded border-slate-300 text-slate-900"
+                    className="rounded border-line text-ink"
                   />
                   <span>Tandai Telah Menghubungi Orang Tua / Wali</span>
                 </label>
@@ -513,23 +506,23 @@ export const HeadmasterAssuranceView: React.FC<Props> = ({
                     value={parentContactName}
                     onChange={e => setParentContactName(e.target.value)}
                     placeholder="Nama orang tua yang dihubungi..."
-                    className="w-full px-3 py-1.5 text-xs rounded-lg bg-white border border-slate-200 text-slate-900"
+                    className="w-full px-3 py-1 text-xs rounded-lg bg-surface border border-line text-ink"
                   />
                 )}
               </div>
 
-              <div className="flex flex-col md:flex-row justify-end gap-3 pt-3 border-t border-slate-100">
+              <div className="flex flex-col medium:flex-row justify-end gap-3 pt-3 border-t border-line-soft">
                 <button
                   type="button"
                   onClick={() => setSelectedIncidentForTriage(null)}
-                  className="w-full md:w-auto px-4 py-2 text-xs rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 cursor-pointer font-bold"
+                  className="w-full medium:w-auto px-4 py-2 text-xs rounded-lg bg-surface-subtle hover-only:bg-line-soft text-ink-soft cursor-pointer font-bold"
                 >
                   Batal
                 </button>
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="w-full md:w-auto px-4 py-2 text-xs font-bold rounded-lg bg-slate-900 hover:bg-slate-800 text-white cursor-pointer shadow-xs flex justify-center items-center"
+                  className="w-full medium:w-auto px-4 py-2 text-xs font-bold rounded-lg bg-brand hover-only:bg-surface-inset text-on-brand cursor-pointer shadow-hairline flex justify-center items-center"
                 >
                   {isSubmitting ? 'Menyimpan...' : 'Simpan Keputusan Triage'}
                 </button>
@@ -541,25 +534,25 @@ export const HeadmasterAssuranceView: React.FC<Props> = ({
 
       {/* MODAL 2: AUDIT CLOSE INCIDENT */}
       {selectedIncidentForAudit && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-xs">
-          <div className="bg-white border border-slate-200 rounded-2xl w-full max-w-lg shadow-2xl p-5 space-y-4 text-slate-900">
-            <div className="flex items-center justify-between border-b border-slate-100 pb-3">
-              <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
-                <FileCheck2 className="w-4 h-4 text-emerald-600" />
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-brand/40 backdrop-blur-xs">
+          <div className="bg-surface border border-line rounded-card w-full max-w-lg shadow-floating p-4 space-y-4 text-ink">
+            <div className="flex items-center justify-between border-b border-line-soft pb-3">
+              <h3 className="text-sm font-bold text-ink flex items-center gap-2">
+                <FileCheck2 className="w-4 h-4 text-success" />
                 <span>Audit & Penutupan Kasus Permanen</span>
               </h3>
-              <button onClick={() => setSelectedIncidentForAudit(null)} className="text-slate-400 hover:text-slate-600 cursor-pointer">
+              <button onClick={() => setSelectedIncidentForAudit(null)} className="text-ink-faint hover-only:text-ink-soft cursor-pointer">
                 <X className="w-4 h-4" />
               </button>
             </div>
 
             <form onSubmit={handleExecuteAuditClose} className="space-y-3">
-              <p className="text-xs text-slate-600">
-                Insiden: <strong className="text-slate-900">{selectedIncidentForAudit.title}</strong> ({selectedIncidentForAudit.class_name})
+              <p className="text-xs text-ink-soft">
+                Insiden: <strong className="text-ink">{selectedIncidentForAudit.title}</strong> ({selectedIncidentForAudit.class_name})
               </p>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-700 mb-1">
+                <label className="block text-xs font-semibold text-ink-soft mb-1">
                   Catatan Verifikasi Temuan Audit Kepala Sekolah
                 </label>
                 <textarea
@@ -567,22 +560,22 @@ export const HeadmasterAssuranceView: React.FC<Props> = ({
                   onChange={e => setAuditFindings(e.target.value)}
                   rows={3}
                   placeholder="Verifikasi kondisi anak telah pulih, tidak ada komplain keluarga, SOP P3K telah dievaluasi..."
-                  className="w-full px-3 py-2 text-xs rounded-lg bg-slate-50 border border-slate-200 text-slate-900 focus:outline-none focus:border-slate-400"
+                  className="w-full px-3 py-2 text-xs rounded-lg bg-surface-subtle border border-line text-ink focus:outline-none focus:border-line-strong"
                 />
               </div>
 
-              <div className="flex flex-col md:flex-row justify-end gap-3 pt-3 border-t border-slate-100">
+              <div className="flex flex-col medium:flex-row justify-end gap-3 pt-3 border-t border-line-soft">
                 <button
                   type="button"
                   onClick={() => setSelectedIncidentForAudit(null)}
-                  className="w-full md:w-auto px-4 py-2 text-xs rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 cursor-pointer font-bold"
+                  className="w-full medium:w-auto px-4 py-2 text-xs rounded-lg bg-surface-subtle hover-only:bg-line-soft text-ink-soft cursor-pointer font-bold"
                 >
                   Batal
                 </button>
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="w-full md:w-auto px-4 py-2 text-xs font-bold rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white cursor-pointer shadow-xs flex justify-center items-center"
+                  className="w-full medium:w-auto px-4 py-2 text-xs font-bold rounded-lg bg-success hover-only:bg-emerald-700 text-on-brand cursor-pointer shadow-hairline flex justify-center items-center"
                 >
                   {isSubmitting ? 'Menutup...' : 'Tutup Kasus Permanen'}
                 </button>

@@ -7,6 +7,7 @@
 import React from 'react';
 import { ClassroomPulseData, ActiveTeacherContext } from '../../../types/teacherDailyTypes';
 import { AlertTriangle, MessageSquare, CheckCircle2, HeartPulse, ShieldAlert } from 'lucide-react';
+import { Button, Badge } from '../../ui';
 
 interface Props {
   context: ActiveTeacherContext;
@@ -37,81 +38,237 @@ export const ClassroomPulseBanner: React.FC<Props> = ({
   });
 
   return (
-    <div className="bg-white border border-slate-200 rounded-2xl p-4 sm:p-5 text-slate-900 shadow-xs mb-5">
-      <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
-        {/* Left: Simplified Class Name & Date */}
-        <div className="flex items-center gap-3">
-          <div className="p-2.5 sm:p-3 bg-emerald-50 border border-emerald-200 rounded-xl flex items-center justify-center text-emerald-600 shrink-0">
-            <HeartPulse className="w-5 h-5 sm:w-6 sm:h-6" />
+    <div className="bg-surface border border-line rounded-card p-4 medium:p-4 text-ink shadow-hairline mb-5">
+      {/* ═══ EXPANDED / LARGE (≥ 840px): 1 Single Row ═══ */}
+      <div className="hidden expanded:flex expanded:items-center expanded:justify-between gap-4">
+        {/* Left: Class Name & Date */}
+        <div className="flex items-center gap-3 shrink-0">
+          <div className="p-3 bg-surface-subtle border border-line rounded-control flex items-center justify-center text-brass shrink-0">
+            <HeartPulse className="w-6 h-6" />
           </div>
-          <div className="min-w-0 flex-1">
+          <div>
             <div className="flex items-center gap-2 flex-wrap">
-              <h2 className="text-base sm:text-lg font-bold tracking-tight text-slate-900 truncate">
+              <h2 className="text-lg font-display font-bold tracking-tight text-ink whitespace-nowrap">
                 {context.class_name}
               </h2>
               {context.is_semester_closed && (
-                <span className="px-2 py-0.5 text-[10px] font-bold rounded-full bg-rose-50 border border-rose-200 text-rose-700">
+                <Badge variant="danger" dot>
                   SEMESTER DITUTUP
-                </span>
+                </Badge>
               )}
             </div>
-            <p className="text-xs text-slate-500 font-medium mt-0.5">
+            <p className="text-xs text-ink-soft font-medium mt-0.5">
               {formattedDate}
             </p>
           </div>
         </div>
 
-        {/* Right: Quick Pulse Stats & Action Buttons (Harmonized Grid / Inline) */}
-        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 w-full lg:w-auto">
+        {/* Right: Attendance Chip & Action Buttons */}
+        <div className="flex flex-wrap items-center justify-end gap-2">
           {/* Attendance Stat Chip */}
-          <div className="h-10 bg-slate-50 border border-slate-200 rounded-xl px-3.5 flex items-center justify-between sm:justify-start gap-3 text-slate-900 shrink-0">
-            <div className="text-left sm:text-right">
-              <div className="text-[10px] text-slate-500 uppercase tracking-wider font-semibold leading-none">Kehadiran</div>
-              <div className="text-xs sm:text-sm font-bold text-emerald-600 leading-tight mt-0.5">
-                {pulse.present_count}/{pulse.total_students} <span className="text-[10px] text-slate-500 font-normal">({attendanceRate}%)</span>
+          <div className="h-10 bg-surface-subtle border border-line rounded-field px-3 flex items-center gap-3 text-ink shrink-0">
+            <div className="text-right">
+              <div className="text-[10px] text-ink-soft uppercase tracking-wider font-semibold leading-none">Kehadiran</div>
+              <div className="text-sm font-bold text-success leading-tight mt-0.5 font-mono whitespace-nowrap">
+                {pulse.present_count}/{pulse.total_students} <span className="text-[10px] text-ink-soft font-normal">({attendanceRate}%)</span>
               </div>
             </div>
             {pulse.unaccounted_count > 0 ? (
-              <span className="px-2 py-0.5 text-[10px] font-semibold rounded-lg bg-amber-50 text-amber-700 border border-amber-200 shrink-0">
+              <Badge variant="warning">
                 {pulse.unaccounted_count} Belum
-              </span>
+              </Badge>
             ) : (
-              <span className="px-2 py-0.5 text-[10px] font-semibold rounded-lg bg-emerald-50 text-emerald-700 border border-emerald-200 flex items-center gap-1 shrink-0">
-                <CheckCircle2 className="w-3 h-3 text-emerald-600" /> 100%
+              <Badge variant="success">
+                100%
+              </Badge>
+            )}
+          </div>
+
+          {/* Action Buttons Group */}
+          {pulse.unread_guardian_notes > 0 && (
+            <Button
+              variant="secondary"
+              size="sm"
+              onClick={onOpenGuardianNotices}
+              leftIcon={<MessageSquare className="w-4 h-4 text-ink-soft shrink-0" />}
+              className="h-10 text-sm font-semibold rounded-field cursor-pointer whitespace-nowrap"
+            >
+              <span>{pulse.unread_guardian_notes} Pesan Ortu</span>
+            </Button>
+          )}
+
+          {onOpenSafetyModal && (
+            <Button
+              variant={activeIncidentsCount > 0 ? 'danger' : 'secondary'}
+              size="sm"
+              onClick={onOpenSafetyModal}
+              leftIcon={<HeartPulse className="w-4 h-4 text-danger shrink-0" />}
+              className="h-10 text-sm font-semibold rounded-field cursor-pointer whitespace-nowrap"
+            >
+              <span>
+                {activeIncidentsCount > 0 ? (
+                  `${activeIncidentsCount} Catatan Khusus`
+                ) : (
+                  'Perhatian & Kesehatan'
+                )}
               </span>
-            )}
+            </Button>
+          )}
+        </div>
+      </div>
+
+      {/* ═══ MEDIUM (600px – 839px): 2-Tier Balanced Stacking ═══ */}
+      <div className="hidden medium:flex expanded:hidden flex-col gap-3">
+        {/* Tier 1: Identity & Attendance in 1 Row */}
+        <div className="flex items-center justify-between gap-3">
+          <div className="flex items-center gap-3 min-w-0">
+            <div className="p-2 bg-surface-subtle border border-line rounded-control flex items-center justify-center text-brass shrink-0">
+              <HeartPulse className="w-5 h-5" />
+            </div>
+            <div className="min-w-0">
+              <div className="flex items-center gap-2 flex-wrap">
+                <h2 className="text-base font-display font-bold tracking-tight text-ink whitespace-nowrap">
+                  {context.class_name}
+                </h2>
+                {context.is_semester_closed && (
+                  <Badge variant="danger" dot>
+                    SEMESTER DITUTUP
+                  </Badge>
+                )}
+              </div>
+              <p className="text-xs text-ink-soft font-medium mt-0.5">
+                {formattedDate}
+              </p>
+            </div>
           </div>
 
-          {/* Action Buttons Group (Side-by-side on mobile, inline on desktop) */}
-          <div className={`grid ${pulse.unread_guardian_notes > 0 && onOpenSafetyModal ? 'grid-cols-2' : 'grid-cols-1'} sm:flex items-center gap-2 w-full sm:w-auto`}>
-            {/* Unread Parent Notes Chip */}
-            {pulse.unread_guardian_notes > 0 && (
-              <button
-                type="button"
-                onClick={onOpenGuardianNotices}
-                className="h-10 bg-slate-50 border border-slate-200 hover:bg-slate-100 active:scale-[0.98] transition-all rounded-xl px-3 flex justify-center items-center gap-2 text-slate-700 text-xs sm:text-sm font-semibold shadow-2xs cursor-pointer truncate"
-              >
-                <MessageSquare className="w-4 h-4 text-slate-600 shrink-0" />
-                <span className="truncate">{pulse.unread_guardian_notes} Pesan Ortu</span>
-              </button>
-            )}
-
-            {/* Safety / Attention Button */}
-            {onOpenSafetyModal && (
-              <button
-                type="button"
-                onClick={onOpenSafetyModal}
-                className={`h-10 border active:scale-[0.98] transition-all rounded-xl px-3 flex justify-center items-center gap-2 text-xs sm:text-sm font-semibold shadow-2xs cursor-pointer truncate ${
-                  activeIncidentsCount > 0
-                    ? 'bg-rose-50 border-rose-200 text-rose-700 hover:bg-rose-100'
-                    : 'bg-slate-50 border-slate-200 hover:bg-slate-100 text-slate-700'
-                }`}
-              >
-                <HeartPulse className={`w-4 h-4 shrink-0 ${activeIncidentsCount > 0 ? 'text-rose-600' : 'text-rose-500'}`} />
-                <span className="truncate">{activeIncidentsCount > 0 ? `${activeIncidentsCount} Catatan Khusus` : 'Perhatian & Kesehatan'}</span>
-              </button>
+          <div className="h-10 bg-surface-subtle border border-line rounded-field px-3 flex items-center gap-2 text-ink shrink-0">
+            <div className="text-right">
+              <div className="text-[10px] text-ink-soft uppercase tracking-wider font-semibold leading-none">Kehadiran</div>
+              <div className="text-xs font-bold text-success leading-tight mt-0.5 font-mono whitespace-nowrap">
+                {pulse.present_count}/{pulse.total_students} <span className="text-[10px] text-ink-soft font-normal">({attendanceRate}%)</span>
+              </div>
+            </div>
+            {pulse.unaccounted_count > 0 ? (
+              <Badge variant="warning">
+                {pulse.unaccounted_count} Belum
+              </Badge>
+            ) : (
+              <Badge variant="success">
+                100%
+              </Badge>
             )}
           </div>
+        </div>
+
+        {/* Tier 2: Action Buttons Full-Wrap */}
+        <div className="flex flex-wrap items-center gap-2 pt-1 border-t border-line-soft">
+          {pulse.unread_guardian_notes > 0 && (
+            <Button
+              variant="secondary"
+              size="sm"
+              onClick={onOpenGuardianNotices}
+              leftIcon={<MessageSquare className="w-4 h-4 text-ink-soft shrink-0" />}
+              className="h-9 text-xs font-semibold rounded-field cursor-pointer whitespace-nowrap"
+            >
+              <span>{pulse.unread_guardian_notes} Pesan Ortu</span>
+            </Button>
+          )}
+
+          {onOpenSafetyModal && (
+            <Button
+              variant={activeIncidentsCount > 0 ? 'danger' : 'secondary'}
+              size="sm"
+              onClick={onOpenSafetyModal}
+              leftIcon={<HeartPulse className="w-4 h-4 text-danger shrink-0" />}
+              className="h-9 text-xs font-semibold rounded-field cursor-pointer whitespace-nowrap"
+            >
+              <span>
+                {activeIncidentsCount > 0 ? (
+                  `${activeIncidentsCount} Catatan Khusus`
+                ) : (
+                  'Perhatian & Kesehatan'
+                )}
+              </span>
+            </Button>
+          )}
+        </div>
+      </div>
+
+      {/* ═══ COMPACT (< 600px): Clean 3-Tier Vertical Flow ═══ */}
+      <div className="flex medium:hidden flex-col gap-3">
+        {/* Tier 1: Identity */}
+        <div className="flex items-center gap-3">
+          <div className="p-2 bg-surface-subtle border border-line rounded-control flex items-center justify-center text-brass shrink-0">
+            <HeartPulse className="w-5 h-5" />
+          </div>
+          <div>
+            <div className="flex items-center gap-2 flex-wrap">
+              <h2 className="text-base font-display font-bold tracking-tight text-ink leading-tight">
+                {context.class_name}
+              </h2>
+              {context.is_semester_closed && (
+                <Badge variant="danger" dot>
+                  SEMESTER DITUTUP
+                </Badge>
+              )}
+            </div>
+            <p className="text-xs text-ink-soft font-medium mt-0.5">
+              {formattedDate}
+            </p>
+          </div>
+        </div>
+
+        {/* Tier 2: Full-Width Attendance Chip */}
+        <div className="h-10 bg-surface-subtle border border-line rounded-field px-3 flex items-center justify-between text-ink w-full">
+          <div>
+            <div className="text-[10px] text-ink-soft uppercase tracking-wider font-semibold leading-none">Kehadiran Hari Ini</div>
+            <div className="text-xs font-bold text-success leading-tight mt-0.5 font-mono whitespace-nowrap">
+              {pulse.present_count}/{pulse.total_students} <span className="text-[10px] text-ink-soft font-normal">({attendanceRate}%)</span>
+            </div>
+          </div>
+          {pulse.unaccounted_count > 0 ? (
+            <Badge variant="warning">
+              {pulse.unaccounted_count} Belum
+            </Badge>
+          ) : (
+            <Badge variant="success">
+              100%
+            </Badge>
+          )}
+        </div>
+
+        {/* Tier 3: Full-Width Action Buttons (Grid) */}
+        <div className="grid grid-cols-1 gap-2 w-full pt-1">
+          {pulse.unread_guardian_notes > 0 && (
+            <Button
+              variant="secondary"
+              size="sm"
+              onClick={onOpenGuardianNotices}
+              leftIcon={<MessageSquare className="w-4 h-4 text-ink-soft shrink-0" />}
+              className="h-10 text-xs font-semibold rounded-field w-full justify-center"
+            >
+              <span>{pulse.unread_guardian_notes} Pesan Ortu</span>
+            </Button>
+          )}
+
+          {onOpenSafetyModal && (
+            <Button
+              variant={activeIncidentsCount > 0 ? 'danger' : 'secondary'}
+              size="sm"
+              onClick={onOpenSafetyModal}
+              leftIcon={<HeartPulse className="w-4 h-4 text-danger shrink-0" />}
+              className="h-10 text-xs font-semibold rounded-field w-full justify-center"
+            >
+              <span>
+                {activeIncidentsCount > 0 ? (
+                  `${activeIncidentsCount} Catatan Khusus`
+                ) : (
+                  'Perhatian & Kesehatan'
+                )}
+              </span>
+            </Button>
+          )}
         </div>
       </div>
 
@@ -123,23 +280,24 @@ export const ClassroomPulseBanner: React.FC<Props> = ({
         if (validAlerts.length === 0) return null;
 
         return (
-          <div className="mt-3.5 pt-3 border-t border-slate-100 flex flex-col sm:flex-row sm:items-start gap-2">
-            <span className="text-[11px] sm:text-xs font-bold uppercase tracking-wider text-slate-700 flex items-center gap-1.5 shrink-0 sm:pt-2">
-              <AlertTriangle className="w-3.5 h-3.5 shrink-0 text-amber-500" /> Perhatian Pagi:
+          <div className="mt-3.5 pt-3 border-t border-line-soft flex flex-col medium:flex-row medium:items-start gap-2">
+            <span className="text-[11px] medium:text-xs font-bold uppercase tracking-wider text-ink-soft flex items-center gap-2 shrink-0 medium:pt-2">
+              <AlertTriangle className="w-4 h-4 shrink-0 text-brass" /> Perhatian Pagi:
             </span>
-            <div className="flex flex-col sm:flex-row sm:flex-wrap gap-1.5 w-full">
+            <div className="flex flex-col medium:flex-row medium:flex-wrap gap-2 w-full">
               {validAlerts.map((alert, idx) => (
                 <button
                   key={`${alert.student_id}_${idx}`}
                   type="button"
                   onClick={() => onFilterExceptionStudent && onFilterExceptionStudent(alert.student_id)}
-                  className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-1.5 px-3 py-2 rounded-xl text-xs bg-amber-50 border border-amber-200 text-amber-900 text-left hover:bg-amber-100 active:scale-[0.99] transition cursor-pointer w-full sm:w-auto"
+                  className="flex flex-col medium:flex-row medium:items-center gap-1 medium:gap-2 px-3 py-2 rounded-field text-xs bg-warning-tint border border-warning-line text-warning-deep text-left hover-only:bg-warning-tint active:scale-[0.99] transition cursor-pointer w-full medium:w-auto"
                 >
-                  <div className="flex items-center gap-1.5">
-                    <strong className="text-amber-950 font-bold">{alert.student_name}:</strong>
-                    {alert.temperature && <span className="text-rose-600 font-bold">({alert.temperature}°C)</span>}
+                  <div className="flex items-center flex-wrap">
+                    <strong className="text-warning-deep font-bold">{alert.student_name}</strong>
+                    <span className="text-warning-deep mx-1">—</span>
+                    {alert.temperature && <span className="text-danger font-bold mr-1 font-mono whitespace-nowrap">({alert.temperature}°C)</span>}
+                    <span className="text-warning-deep leading-snug">{alert.note?.replace(/^alergi:\s*/i, '')}</span>
                   </div>
-                  <span className="text-amber-900 leading-snug">{alert.note}</span>
                 </button>
               ))}
             </div>

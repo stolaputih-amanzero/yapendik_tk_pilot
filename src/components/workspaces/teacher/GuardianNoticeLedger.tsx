@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { GuardianNoticeItem } from '../../../types/teacherDailyTypes';
+import { SelectSheet, Button, Badge, AutoResizeTextarea } from '../../ui';
 import { 
   MessageSquare, 
   CheckCircle2, 
@@ -8,8 +9,8 @@ import {
   AlertTriangle, 
   Send, 
   Plus, 
-  User,
-  X
+  User, 
+  X 
 } from 'lucide-react';
 
 interface Props {
@@ -57,45 +58,47 @@ export const GuardianNoticeLedger: React.FC<Props> = ({
   return (
     <div className="space-y-4">
       {/* Header & Controls */}
-      <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4 bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-2xl bg-slate-900 text-white flex items-center justify-center font-bold text-sm shrink-0 shadow-xs">
+      <div className="flex flex-col gap-3 bg-surface p-4 rounded-card border border-line shadow-hairline mb-4">
+        {/* Baris 1: Identitas */}
+        <div className="flex items-center gap-3 shrink-0">
+          <div className="w-10 h-10 rounded-control bg-brand text-on-brand flex items-center justify-center font-bold text-sm shrink-0 shadow-hairline">
             <MessageSquare className="w-5 h-5" />
           </div>
-          <div>
-            <h3 className="text-base font-bold text-slate-900 tracking-tight">
-              Buku Penghubung & Catatan Wali Murid
+          <div className="min-w-0 flex-1">
+            <h3 className="text-base font-display font-bold text-ink tracking-tight leading-snug">
+              Buku Penghubung
             </h3>
-            <p className="text-xs text-slate-500 font-medium">
-              Komunikasi harian terarah dan terstruktur antara guru kelas dan orang tua
+            <p className="text-xs text-ink-soft font-medium mt-0.5 leading-snug">
+              Kemitraan Guru & Orang Tua
             </p>
           </div>
         </div>
 
-        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 w-full sm:w-auto mt-2 sm:mt-0">
-          <button
+        {/* Baris 3: Tombol aksi */}
+        <div className="flex flex-col gap-2 w-full shrink-0 mt-1 medium:mt-0">
+          <Button
+            variant={filterUnack ? 'primary' : 'secondary'}
+            size="sm"
             onClick={() => setFilterUnack(!filterUnack)}
-            className={`w-full sm:w-auto px-4 py-2.5 rounded-xl text-xs font-bold transition flex justify-center items-center cursor-pointer ${
-              filterUnack
-                ? 'bg-slate-900 text-white shadow-2xs'
-                : 'bg-slate-100 text-slate-800 border border-slate-200 hover:bg-slate-200'
-            }`}
+            className="w-full text-xs font-bold justify-center rounded-field"
           >
-            {filterUnack ? 'Menampilkan Belum Dibalas' : 'Semua Pesan'}
-          </button>
+            {filterUnack ? 'Belum Dibalas' : 'Semua Pesan'}
+          </Button>
 
-          <button
+          <Button
+            variant="primary"
+            size="sm"
             onClick={() => setShowNewNoticeModal(true)}
-            className="w-full sm:w-auto px-4 py-2.5 rounded-xl text-xs font-bold bg-slate-900 text-white hover:bg-slate-800 transition shadow-2xs flex justify-center items-center gap-1.5 cursor-pointer"
+            leftIcon={<Plus className="w-4 h-4 shrink-0" />}
+            className="w-full text-xs font-bold justify-center rounded-field"
           >
-            <Plus className="w-4 h-4" />
-            <span>Kirim Pengumuman / Catatan</span>
-          </button>
+            Kirim Pengumuman
+          </Button>
         </div>
       </div>
 
       {/* Notices List */}
-      <div className="flex flex-col divide-y divide-slate-100 bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-2xs">
+      <div className="flex flex-col divide-y divide-line-soft bg-surface border border-line rounded-card overflow-hidden shadow-hairline">
         {filtered.length > 0 ? (
           filtered.map(n => {
             const isAck = Boolean(n.acknowledged_at);
@@ -104,100 +107,110 @@ export const GuardianNoticeLedger: React.FC<Props> = ({
             return (
               <div
                 key={n.id}
-                className={`p-5 transition space-y-3 ${
+                className={`p-4 transition space-y-3 ${
                   !isAck
-                    ? 'bg-amber-50/20 hover:bg-amber-50/40'
-                    : 'bg-white hover:bg-slate-50/50'
+                    ? 'bg-warning-tint/20 hover-only:bg-warning-tint/40'
+                    : 'bg-surface hover-only:bg-surface-subtle/50'
                 }`}
               >
-                <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3 pb-3 border-b border-slate-100">
+                <div className="flex flex-col medium:flex-row medium:items-start justify-between gap-3 pb-3 border-b border-line-soft">
                   <div className="space-y-1">
                     <div className="flex flex-wrap items-center gap-2">
-                      <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold ${
-                        n.type === 'HEALTH_ALERT' ? 'bg-rose-100 text-rose-800 border border-rose-200' :
-                        n.type === 'DAILY_SUMMARY' ? 'bg-slate-900 text-white' :
-                        'bg-slate-100 text-slate-800 border border-slate-200'
-                      }`}>
-                        {n.type.replace(/_/g, ' ')}
-                      </span>
+                      <Badge
+                        variant={
+                          n.type === 'HEALTH_ALERT' ? 'danger' :
+                          n.type === 'DAILY_SUMMARY' ? 'brand' : 'neutral'
+                        }
+                      >
+                        {n.type === 'HEALTH_ALERT' ? 'Peringatan Kesehatan' :
+                         n.type === 'DAILY_SUMMARY' ? 'Ringkasan Harian' :
+                         n.type === 'CLASS_ANNOUNCEMENT' ? 'Pengumuman Kelas' :
+                         n.type === 'DIRECT_NOTE' ? 'Catatan Personal' :
+                         n.type.replace(/_/g, ' ')}
+                      </Badge>
                       {n.student_name && (
-                        <span className="text-xs font-bold text-slate-900 bg-slate-100 px-2.5 py-0.5 rounded-md border border-slate-200">
+                        <span className="text-xs font-bold text-ink bg-surface-subtle px-2 py-1 rounded-pill border border-line">
                           Untuk: Ananda {n.student_name}
                         </span>
                       )}
                     </div>
-                    <h4 className="text-base font-bold text-slate-900 leading-snug pt-0.5">{n.title}</h4>
-                    <div className="text-[11px] text-slate-500 font-medium">
-                      Pengirim: <strong className="text-slate-800">{n.author_name}</strong>
+                    <h4 className="text-base font-bold text-ink leading-snug pt-0.5">{n.title}</h4>
+                    <div className="text-[11px] text-ink-soft font-medium">
+                      Pengirim: <strong className="text-ink">{n.author_name}</strong>
                     </div>
                   </div>
 
                   <div>
                     {isAck ? (
-                      <span className="text-xs font-bold text-emerald-800 bg-emerald-50 border border-emerald-200 px-3 py-1 rounded-full flex items-center gap-1 shadow-2xs">
-                        <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" /> Dikonfirmasi
+                      <span className="text-xs font-bold text-success-deep bg-success-tint border border-success-line px-3 py-1 rounded-pill flex items-center gap-1 shadow-hairline">
+                        <CheckCircle2 className="w-4 h-4 text-success" /> Dikonfirmasi
                       </span>
                     ) : (
-                      <span className="text-xs font-bold text-amber-900 bg-amber-50 border border-amber-200 px-3 py-1 rounded-full flex items-center gap-1 shadow-2xs">
-                        <Clock className="w-3.5 h-3.5 text-amber-600" /> Perlu Tanggapan
+                      <span className="text-xs font-bold text-warning-deep bg-warning-tint border border-warning-line px-3 py-1 rounded-pill flex items-center gap-1 shadow-hairline">
+                        <Clock className="w-4 h-4 text-brass" /> Perlu Tanggapan
                       </span>
                     )}
                   </div>
                 </div>
 
-                <p className="text-xs sm:text-sm text-slate-800 leading-relaxed bg-slate-50/70 p-4 rounded-xl border border-slate-200 font-normal">
+                <p className="text-xs medium:text-sm text-ink leading-relaxed bg-surface-subtle/70 p-4 rounded-field border border-line font-normal">
                   {n.content}
                 </p>
 
                 {/* Guardian or Teacher reply thread if present */}
                 {n.guardian_reply && (
-                  <div className="p-3.5 rounded-xl bg-emerald-50/50 border border-emerald-200 text-xs space-y-1">
-                    <span className="font-bold text-emerald-950 flex items-center gap-1">
-                      <Reply className="w-3.5 h-3.5 text-emerald-600" /> Balasan:
+                  <div className="p-3 rounded-field bg-success-tint/50 border border-success-line text-xs space-y-1">
+                    <span className="font-bold text-success-deep flex items-center gap-1">
+                      <Reply className="w-4 h-4 text-success" /> Balasan:
                     </span>
-                    <p className="text-slate-800 italic">{n.guardian_reply}</p>
+                    <p className="text-ink italic">{n.guardian_reply}</p>
                   </div>
                 )}
 
                 {/* Reply Form */}
                 {isReplying ? (
-                  <div className="pt-3 border-t border-slate-200 space-y-2.5">
-                    <textarea
-                      rows={2}
+                  <div className="pt-3 border-t border-line space-y-2.5">
+                    <AutoResizeTextarea
                       value={replyText}
-                      onChange={e => setReplyText(e.target.value)}
+                      onChange={setReplyText}
                       placeholder="Tuliskan balasan untuk orang tua..."
-                      className="w-full px-3 py-2 text-xs rounded-xl bg-white border border-slate-300 focus:outline-none focus:ring-1 focus:ring-slate-900 font-medium"
+                      minRows={2}
                     />
-                    <div className="flex flex-col sm:flex-row items-center justify-end gap-2">
-                      <button
+                    <div className="flex flex-col medium:flex-row items-center justify-end gap-2">
+                      <Button
+                        variant="ghost"
+                        size="sm"
                         onClick={() => setReplyingNoticeId(null)}
-                        className="w-full sm:w-auto px-4 py-2 text-xs font-bold text-slate-600 hover:bg-slate-100 rounded-xl cursor-pointer"
+                        className="w-full medium:w-auto text-xs font-bold text-ink-soft rounded-field"
                       >
                         Batal
-                      </button>
-                      <button
+                      </Button>
+                      <Button
+                        variant="primary"
+                        size="sm"
                         onClick={() => handleReplySubmit(n.id)}
-                        className="w-full sm:w-auto px-4 py-2 rounded-xl text-xs font-bold bg-slate-900 text-white hover:bg-slate-800 flex justify-center items-center gap-1.5 shadow-2xs cursor-pointer"
+                        leftIcon={<Send className="w-4 h-4" />}
+                        className="w-full medium:w-auto rounded-field"
                       >
-                        <Send className="w-3.5 h-3.5" />
-                        <span>Kirim Balasan & Tandai Selesai</span>
-                      </button>
+                        Kirim Balasan
+                      </Button>
                     </div>
                   </div>
                 ) : (
                   !isAck && (
-                    <div className="pt-2 border-t border-slate-100 flex justify-end">
-                      <button
+                    <div className="pt-2 border-t border-line-soft flex justify-end">
+                      <Button
+                        variant="primary"
+                        size="sm"
                         onClick={() => {
                           setReplyingNoticeId(n.id);
                           setReplyText('');
                         }}
-                        className="w-full sm:w-auto px-4 py-2 rounded-xl text-xs font-bold bg-slate-900 text-white hover:bg-slate-800 flex justify-center items-center gap-1.5 shadow-2xs cursor-pointer"
+                        leftIcon={<Reply className="w-4 h-4 text-success" />}
+                        className="w-full medium:w-auto rounded-field"
                       >
-                        <Reply className="w-3.5 h-3.5 text-emerald-400" />
-                        <span>Tanggapi Pesan</span>
-                      </button>
+                        Tanggapi Pesan
+                      </Button>
                     </div>
                   )
                 )}
@@ -205,7 +218,7 @@ export const GuardianNoticeLedger: React.FC<Props> = ({
             );
           })
         ) : (
-          <div className="p-8 text-center text-slate-500 text-xs bg-slate-50">
+          <div className="p-8 text-center text-ink-soft text-xs bg-surface-subtle">
             Tidak ada pesan penghubung yang sesuai kriteria.
           </div>
         )}
@@ -213,79 +226,82 @@ export const GuardianNoticeLedger: React.FC<Props> = ({
 
       {/* Modal: New Notice */}
       {showNewNoticeModal && (
-        <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 bg-slate-900/40 backdrop-blur-xs animate-in fade-in duration-200">
-          <div className="bg-white rounded-t-3xl sm:rounded-2xl border-t sm:border border-slate-200 shadow-2xl max-w-md w-full overflow-hidden text-slate-900">
+        <div className="fixed inset-0 z-50 flex items-end medium:items-center justify-center p-0 medium:p-4 bg-brand/40 backdrop-blur-xs animate-in fade-in duration-200">
+          <div className="bg-surface rounded-t-card medium:rounded-card border-t medium:border border-line shadow-floating max-w-md w-full overflow-hidden text-ink">
             {/* Modal Header */}
-            <div className="px-5 py-4 border-b border-slate-200 flex items-center justify-between bg-white shrink-0">
-              <div className="flex items-center gap-2.5">
-                <div className="w-8 h-8 rounded-xl bg-slate-900 text-white flex items-center justify-center font-bold text-xs">
+            <div className="px-5 py-4 border-b border-line flex items-center justify-between bg-surface shrink-0">
+              <div className="flex items-center gap-2">
+                <div className="w-8 h-8 rounded-control bg-brand text-on-brand flex items-center justify-center font-bold text-xs">
                   <MessageSquare className="w-4 h-4" />
                 </div>
                 <div>
-                  <h3 className="text-sm font-bold text-slate-900">Kirim Pesan Buku Penghubung</h3>
-                  <p className="text-[11px] text-slate-500">Komunikasi Resmi Guru Kelas & Orang Tua</p>
+                  <h3 className="text-sm font-bold text-ink">Kirim Pesan Buku Penghubung</h3>
+                  <p className="text-[11px] text-ink-soft">Komunikasi Resmi Guru Kelas & Orang Tua</p>
                 </div>
               </div>
               <button
                 onClick={() => setShowNewNoticeModal(false)}
-                className="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 flex items-center justify-center transition-colors cursor-pointer shrink-0 ml-2"
+                className="w-8 h-8 rounded-pill bg-surface-subtle hover-only:bg-line-soft text-ink-soft flex items-center justify-center transition-colors cursor-pointer shrink-0 ml-2"
               >
                 <X className="w-4 h-4" />
               </button>
             </div>
 
-            <form onSubmit={handleCreateNotice} className="p-5 sm:p-6 space-y-4 text-xs">
+            <form onSubmit={handleCreateNotice} className="p-4 medium:p-6 space-y-4 text-xs">
               <div>
-                <label className="block font-bold text-slate-700 mb-1">Tipe Pesan</label>
-                <select
+                <label className="block font-bold text-ink-soft mb-1">Tipe Pesan</label>
+                <SelectSheet
                   value={type}
-                  onChange={e => setType(e.target.value as any)}
-                  className="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 font-medium text-slate-900 outline-none focus:ring-1 focus:ring-slate-900 cursor-pointer"
-                >
-                  <option value="DAILY_SUMMARY">Ringkasan Harian Kelas</option>
-                  <option value="HEALTH_ALERT">Pemberitahuan Kesehatan</option>
-                  <option value="CLASS_ANNOUNCEMENT">Pengumuman Rombel</option>
-                  <option value="DIRECT_NOTE">Catatan Personal</option>
-                </select>
+                  onChange={(val) => setType(val as any)}
+                  options={[
+                    { value: "DAILY_SUMMARY", label: "Ringkasan Harian Kelas" },
+                    { value: "HEALTH_ALERT", label: "Pemberitahuan Kesehatan" },
+                    { value: "CLASS_ANNOUNCEMENT", label: "Pengumuman Rombel" },
+                    { value: "DIRECT_NOTE", label: "Catatan Personal" }
+                  ]}
+                />
               </div>
 
               <div>
-                <label className="block font-bold text-slate-700 mb-1">Judul Pesan</label>
+                <label className="block font-bold text-ink-soft mb-1">Judul Pesan</label>
                 <input
                   type="text"
                   placeholder="Contoh: Info Pembawaan Bahan Daur Ulang Besok"
                   value={title}
                   onChange={e => setTitle(e.target.value)}
-                  className="w-full bg-white border border-slate-300 rounded-xl px-3 py-2 font-medium text-slate-900 outline-none focus:ring-1 focus:ring-slate-900"
+                  className="w-full bg-surface border border-line rounded-field px-3 py-2 font-medium text-ink outline-none focus:ring-1 focus:ring-brass/30"
                 />
               </div>
 
               <div>
-                <label className="block font-bold text-slate-700 mb-1">Isi Pesan</label>
+                <label className="block font-bold text-ink-soft mb-1">Isi Pesan</label>
                 <textarea
                   rows={3}
                   placeholder="Tuliskan pesan lengkap untuk wali murid..."
                   value={content}
                   onChange={e => setContent(e.target.value)}
-                  className="w-full bg-white border border-slate-300 rounded-xl px-3 py-2 font-medium text-slate-900 outline-none focus:ring-1 focus:ring-slate-900"
+                  className="w-full bg-surface border border-line rounded-field px-3 py-2 font-medium text-ink outline-none focus:ring-1 focus:ring-brass/30"
                 />
               </div>
 
-              <div className="flex flex-col sm:flex-row items-center justify-end gap-2.5 pt-2 border-t border-slate-100">
-                <button
-                  type="button"
+              <div className="flex flex-col medium:flex-row items-center justify-end gap-2 pt-2 border-t border-line-soft">
+                <Button
+                  variant="secondary"
+                  size="sm"
                   onClick={() => setShowNewNoticeModal(false)}
-                  className="w-full sm:w-auto px-4 py-2.5 rounded-xl border border-slate-200 text-slate-700 font-bold hover:bg-slate-50 cursor-pointer"
+                  className="w-full medium:w-auto rounded-field"
                 >
                   Batal
-                </button>
-                <button
+                </Button>
+                <Button
+                  variant="primary"
+                  size="sm"
                   type="submit"
-                  className="w-full sm:w-auto px-5 py-2.5 rounded-xl font-bold bg-slate-900 text-white hover:bg-slate-800 shadow-xs cursor-pointer flex justify-center items-center gap-1.5"
+                  leftIcon={<Send className="w-4 h-4" />}
+                  className="w-full medium:w-auto rounded-field"
                 >
-                  <Send className="w-3.5 h-3.5" />
-                  <span>Kirim Pesan</span>
-                </button>
+                  Kirim Pesan
+                </Button>
               </div>
             </form>
           </div>

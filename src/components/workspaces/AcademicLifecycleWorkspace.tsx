@@ -1,3 +1,4 @@
+import { SelectSheet } from '../ui';
 /**
  * Yapendik School OS — Stage 3.4-B: Academic Lifecycle Workspace
  * 
@@ -219,45 +220,45 @@ export const AcademicLifecycleWorkspace: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="p-8 flex flex-col items-center justify-center min-h-[400px] text-slate-400">
-        <RefreshCw className="w-8 h-8 animate-spin text-amber-500 mb-3" />
+      <div className="p-8 flex flex-col items-center justify-center min-h-[400px] text-ink-faint pb-[132px] expanded:pb-8">
+        <RefreshCw className="w-8 h-8 animate-spin text-brass mb-3" />
         <p className="text-sm font-medium">Memuat Status Siklus Akademik & Rekonsiliasi...</p>
       </div>
     );
   }
 
   return (
-    <div className="space-y-6 text-slate-900 font-sans w-full" data-testid="academic-lifecycle-workspace">
+    <div className="space-y-6 text-ink font-sans w-full" data-testid="academic-lifecycle-workspace">
       {/* Header Banner */}
-      <div className="bg-slate-50 border-b border-slate-200 md:rounded-2xl px-4 py-5 md:p-6 w-full text-slate-900 md:border md:shadow-sm">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div className="bg-surface-subtle border-b border-line medium:rounded-card px-4 py-5 medium:p-6 w-full text-ink medium:border medium:shadow-hairline">
+        <div className="flex flex-col medium:flex-row medium:items-center justify-between gap-4">
           <div>
-            <div className="flex items-center space-x-1.5 text-emerald-600 text-[10px] sm:text-xs font-bold tracking-wider uppercase mb-1">
-              <Calendar className="w-3.5 h-3.5" />
+            <div className="flex items-center space-x-1.5 text-success text-[10px] medium:text-xs font-bold uppercase tracking-wider mb-1">
+              <Calendar className="w-4 h-4" />
               <span>Standar Yayasan • Tahun Ajaran &amp; Semester</span>
             </div>
-            <h1 className="text-xl font-bold tracking-tight text-slate-900 flex items-center gap-2">
+            <h1 className="text-xl font-bold tracking-tight text-ink flex items-center gap-2">
               <span>Tata Kelola Tahun Ajaran &amp; Semester</span>
             </h1>
-            <p className="hidden md:block text-slate-500 text-xs mt-1 max-w-2xl">
+            <p className="hidden expanded:block text-ink-soft text-xs mt-1 max-w-2xl">
               {school?.name || 'TK Yapendik Menteng'} • NPSN: {school?.npsn || '20104821'} • Rekonsiliasi rapor LPPA 100% dan pembekuan arsip resmi.
             </p>
           </div>
 
-          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 w-full md:w-auto">
+          <div className="flex flex-col medium:flex-row items-stretch medium:items-center gap-2 w-full medium:w-auto">
             <button
               onClick={loadLifecycleData}
               disabled={refreshing}
-              className="px-3.5 py-2 rounded-xl bg-white hover:bg-slate-100 text-slate-700 border border-slate-200 text-xs font-semibold flex justify-center items-center space-x-2 transition-all shadow-2xs cursor-pointer"
+              className="px-3 py-2 rounded-field bg-surface hover-only:bg-surface-subtle text-ink-soft border border-line text-xs font-semibold flex justify-center items-center space-x-2 transition-all shadow-hairline cursor-pointer"
             >
-              <RefreshCw className={`w-3.5 h-3.5 ${refreshing ? 'animate-spin text-slate-600' : ''}`} />
+              <RefreshCw className={`w-4 h-4 ${refreshing ? 'animate-spin text-ink-soft' : ''}`} />
               <span>Segarkan Data</span>
             </button>
 
             {isAuthorizedActor && activePeriod?.lifecycle_status === 'CLOSED' && (
               <button
                 onClick={() => setShowInitModal(true)}
-                className="px-4 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs shadow-xs flex justify-center items-center space-x-2 transition-all cursor-pointer"
+                className="px-4 py-2 rounded-field bg-brand hover-only:bg-surface-inset text-on-brand font-bold text-xs shadow-hairline flex justify-center items-center space-x-2 transition-all cursor-pointer"
               >
                 <PlusCircle className="w-4 h-4" />
                 <span>Buka Semester Baru</span>
@@ -267,13 +268,13 @@ export const AcademicLifecycleWorkspace: React.FC = () => {
         </div>
 
         {/* Sub-Tab Switcher for Headmaster & Superadmin */}
-        <div className="flex border-b border-slate-200 mt-6 gap-2 text-xs overflow-x-auto scrollbar-hide">
+        <div className="flex border-b border-line mt-6 gap-2 text-xs overflow-x-auto scrollbar-hide [mask-image:linear-gradient(to_right,transparent_0,black_16px,black_calc(100%-16px),transparent_100%)]">
           <button
             onClick={() => setActiveSubTab('OVERVIEW')}
             className={`flex items-center gap-2 pb-3 px-3 font-semibold transition-colors relative whitespace-nowrap cursor-pointer ${
               activeSubTab === 'OVERVIEW'
-                ? 'text-slate-900 border-b-2 border-slate-900'
-                : 'text-slate-500 hover:text-slate-800'
+                ? 'text-ink border-b-2 border-brand'
+                : 'text-ink-soft hover-only:text-ink'
             }`}
           >
             <Calendar className="w-4 h-4" />
@@ -284,14 +285,14 @@ export const AcademicLifecycleWorkspace: React.FC = () => {
             onClick={() => setActiveSubTab('LPPA_APPROVAL')}
             className={`flex items-center gap-2 pb-3 px-3 font-semibold transition-colors relative whitespace-nowrap cursor-pointer ${
               activeSubTab === 'LPPA_APPROVAL'
-                ? 'text-slate-900 border-b-2 border-slate-900'
-                : 'text-slate-500 hover:text-slate-800'
+                ? 'text-ink border-b-2 border-brand'
+                : 'text-ink-soft hover-only:text-ink'
             }`}
           >
             <ShieldCheck className="w-4 h-4" />
             <span>Verifikasi &amp; Pengesahan LPPA</span>
             {draftLppaCount > 0 && (
-              <span className="px-2 py-0.2 text-[10px] font-bold rounded-full bg-slate-100 text-slate-800 font-mono">
+              <span className="px-2 py-0 text-[10px] font-bold rounded-full bg-surface-subtle text-ink font-mono whitespace-nowrap">
                 {draftLppaCount}
               </span>
             )}
@@ -301,8 +302,8 @@ export const AcademicLifecycleWorkspace: React.FC = () => {
             onClick={() => setActiveSubTab('HEATMAP')}
             className={`flex items-center gap-2 pb-3 px-3 font-semibold transition-colors relative whitespace-nowrap cursor-pointer ${
               activeSubTab === 'HEATMAP'
-                ? 'text-slate-900 border-b-2 border-slate-900'
-                : 'text-slate-500 hover:text-slate-800'
+                ? 'text-ink border-b-2 border-brand'
+                : 'text-ink-soft hover-only:text-ink'
             }`}
           >
             <BarChart3 className="w-4 h-4" />
@@ -313,8 +314,8 @@ export const AcademicLifecycleWorkspace: React.FC = () => {
             onClick={() => setActiveSubTab('ASSURANCE')}
             className={`flex items-center gap-2 pb-3 px-3 font-semibold transition-colors relative whitespace-nowrap cursor-pointer ${
               activeSubTab === 'ASSURANCE'
-                ? 'text-slate-900 border-b-2 border-slate-900'
-                : 'text-slate-500 hover:text-slate-800'
+                ? 'text-ink border-b-2 border-brand'
+                : 'text-ink-soft hover-only:text-ink'
             }`}
           >
             <Award className="w-4 h-4" />
@@ -325,21 +326,21 @@ export const AcademicLifecycleWorkspace: React.FC = () => {
 
       {/* Feedback Banner */}
       {feedback && (
-        <div className={`p-4 rounded-2xl border flex items-start space-x-3 shadow-2xs ${
+        <div className={`p-4 rounded-card border flex items-start space-x-3 shadow-hairline ${
           feedback.type === 'success' 
-            ? 'bg-emerald-50 border-emerald-200 text-emerald-800' 
-            : 'bg-rose-50 border-rose-200 text-rose-800'
+            ? 'bg-success-tint border-success-line text-success-deep' 
+            : 'bg-danger-tint border-danger-line text-danger-deep'
         }`}>
           {feedback.type === 'success' ? (
-            <CheckCircle2 className="w-5 h-5 flex-shrink-0 mt-0.5 text-emerald-600" />
+            <CheckCircle2 className="w-5 h-5 flex-shrink-0 mt-0.5 text-success" />
           ) : (
-            <AlertTriangle className="w-5 h-5 flex-shrink-0 mt-0.5 text-rose-600" />
+            <AlertTriangle className="w-5 h-5 flex-shrink-0 mt-0.5 text-danger" />
           )}
           <div className="flex-1 text-xs">
             <p className="font-semibold">{feedback.type === 'success' ? 'Operasi Sukses' : feedback.diagnostics?.title || 'Operasi Gagal'}</p>
             <p className="mt-0.5">{feedback.message}</p>
             {feedback.diagnostics?.actionSuggestion && (
-              <p className="mt-2 text-amber-900 font-medium bg-amber-50 p-2.5 rounded-xl border border-amber-200">
+              <p className="mt-2 text-warning-deep font-medium bg-warning-tint p-2 rounded-field border border-warning-line">
                 Saran Tindakan: {feedback.diagnostics.actionSuggestion}
               </p>
             )}
@@ -374,19 +375,19 @@ export const AcademicLifecycleWorkspace: React.FC = () => {
       {activeSubTab === 'OVERVIEW' && (
         <>
           {/* Active Period & Closure Gate Cards */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 expanded:grid-cols-3 gap-6">
             {/* Card 1: Active Period State Machine */}
-            <div className="lg:col-span-2 bg-white border border-slate-200 rounded-2xl p-5 sm:p-6 shadow-2xs space-y-4">
-              <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+            <div className="expanded:col-span-2 bg-surface border border-line rounded-card p-4 medium:p-6 shadow-hairline space-y-4">
+              <div className="flex items-center justify-between border-b border-line-soft pb-3">
                 <div className="flex items-center space-x-2">
-                  <Clock className="w-4 h-4 text-slate-700" />
-                  <h2 className="text-sm font-bold text-slate-900">Status Periode Semester Aktif</h2>
+                  <Clock className="w-4 h-4 text-ink-soft" />
+                  <h2 className="text-sm font-bold text-ink">Status Periode Semester Aktif</h2>
                 </div>
                 {activePeriod && (
-                  <span className={`px-2.5 py-0.5 rounded-full text-xs font-mono font-bold uppercase border ${
+                  <span className={`px-2 py-1 rounded-full text-xs font-mono font-bold uppercase tracking-wider border ${
                     activePeriod.lifecycle_status === 'ACTIVE' 
-                      ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
-                      : 'bg-slate-100 text-slate-700 border-slate-200'
+                      ? 'bg-success-tint text-success-deep border-success-line'
+                      : 'bg-surface-subtle text-ink-soft border-line'
                   }`}>
                     {activePeriod.lifecycle_status === 'ACTIVE' ? 'SEMESTER BERJALAN' : activePeriod.lifecycle_status}
                   </span>
@@ -395,73 +396,73 @@ export const AcademicLifecycleWorkspace: React.FC = () => {
 
               {activePeriod ? (
                 <div className="space-y-4">
-                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                    <div className="p-3 bg-slate-50 border border-slate-100 rounded-xl">
-                      <span className="text-[10px] text-slate-500 block uppercase font-semibold">Tahun Ajaran</span>
-                      <span className="text-xs font-bold text-slate-900">{activePeriod.name}</span>
+                  <div className="grid grid-cols-2 medium:grid-cols-4 gap-3">
+                    <div className="p-3 bg-surface-subtle border border-line-soft rounded-field">
+                      <span className="text-[10px] text-ink-soft block uppercase tracking-wider font-semibold">Tahun Ajaran</span>
+                      <span className="text-xs font-bold text-ink">{activePeriod.name}</span>
                     </div>
-                    <div className="p-3 bg-slate-50 border border-slate-100 rounded-xl">
-                      <span className="text-[10px] text-slate-500 block uppercase font-semibold">Semester</span>
-                      <span className="text-xs font-bold text-slate-900">{activePeriod.semester}</span>
+                    <div className="p-3 bg-surface-subtle border border-line-soft rounded-field">
+                      <span className="text-[10px] text-ink-soft block uppercase tracking-wider font-semibold">Semester</span>
+                      <span className="text-xs font-bold text-ink">{activePeriod.semester}</span>
                     </div>
-                    <div className="p-3 bg-slate-50 border border-slate-100 rounded-xl">
-                      <span className="text-[10px] text-slate-500 block uppercase font-semibold">Mulai</span>
-                      <span className="text-xs font-mono font-semibold text-slate-800">{activePeriod.start_date}</span>
+                    <div className="p-3 bg-surface-subtle border border-line-soft rounded-field">
+                      <span className="text-[10px] text-ink-soft block uppercase tracking-wider font-semibold">Mulai</span>
+                      <span className="text-xs font-mono font-semibold text-ink whitespace-nowrap">{activePeriod.start_date}</span>
                     </div>
-                    <div className="p-3 bg-slate-50 border border-slate-100 rounded-xl">
-                      <span className="text-[10px] text-slate-500 block uppercase font-semibold">Selesai</span>
-                      <span className="text-xs font-mono font-semibold text-slate-800">{activePeriod.end_date}</span>
+                    <div className="p-3 bg-surface-subtle border border-line-soft rounded-field">
+                      <span className="text-[10px] text-ink-soft block uppercase tracking-wider font-semibold">Selesai</span>
+                      <span className="text-xs font-mono font-semibold text-ink whitespace-nowrap">{activePeriod.end_date}</span>
                     </div>
                   </div>
 
-                  <div className="p-4 bg-slate-50/70 border border-slate-200/80 rounded-xl space-y-2 text-xs">
-                    <div className="flex items-center space-x-1.5 text-slate-800 font-semibold">
-                      <Info className="w-4 h-4 text-slate-500" />
+                  <div className="p-4 bg-surface-subtle/70 border border-line/80 rounded-field space-y-2 text-xs">
+                    <div className="flex items-center space-x-1.5 text-ink font-semibold">
+                      <Info className="w-4 h-4 text-ink-soft" />
                       <span>Jaminan Integritas Temporal:</span>
                     </div>
-                    <p className="text-slate-600 leading-relaxed">
+                    <p className="text-ink-soft leading-relaxed">
                       Penutupan semester akan membekukan seluruh catatan pembelajaran, presensi, dan narasi LPPA menjadi arsip permanen yang tidak dapat diubah kembali.
                     </p>
                   </div>
                 </div>
               ) : (
-                <div className="p-8 text-center bg-slate-50 border border-dashed border-slate-200 rounded-xl text-slate-400 text-xs">
+                <div className="p-8 text-center bg-surface-subtle border border-dashed border-line rounded-field text-ink-faint text-xs">
                   Tidak ada periode akademik aktif saat ini.
                 </div>
               )}
             </div>
 
             {/* Card 2: Governed Reconciliation Gate */}
-            <div className="bg-white border border-slate-200 rounded-2xl p-5 sm:p-6 shadow-2xs space-y-4 flex flex-col justify-between">
+            <div className="bg-surface border border-line rounded-card p-4 medium:p-6 shadow-hairline space-y-4 flex flex-col justify-between">
               <div className="space-y-3">
-                <div className="flex items-center space-x-2 border-b border-slate-100 pb-3">
-                  <ShieldCheck className="w-4 h-4 text-slate-700" />
-                  <h2 className="text-sm font-bold text-slate-900">Gerbang Rekonsiliasi Tutup Buku</h2>
+                <div className="flex items-center space-x-2 border-b border-line-soft pb-3">
+                  <ShieldCheck className="w-4 h-4 text-ink-soft" />
+                  <h2 className="text-sm font-bold text-ink">Gerbang Rekonsiliasi Tutup Buku</h2>
                 </div>
 
                 <div className="space-y-2 text-xs">
-                  <div className="flex justify-between items-center p-2.5 bg-slate-50 rounded-xl border border-slate-100">
-                    <span className="text-slate-600">Total Siswa Aktif:</span>
-                    <span className="font-bold text-slate-900 font-mono">{enrolledCount} Anak</span>
+                  <div className="flex justify-between items-center p-2 bg-surface-subtle rounded-field border border-line-soft">
+                    <span className="text-ink-soft">Total Siswa Aktif:</span>
+                    <span className="font-bold text-ink font-mono">{enrolledCount} Anak</span>
                   </div>
-                  <div className="flex justify-between items-center p-2.5 bg-slate-50 rounded-xl border border-slate-100">
-                    <span className="text-slate-600">Rapor LPPA Disahkan:</span>
-                    <span className="font-bold text-emerald-700 font-mono">{approvedLppaCount} Rapor</span>
+                  <div className="flex justify-between items-center p-2 bg-surface-subtle rounded-field border border-line-soft">
+                    <span className="text-ink-soft">Rapor LPPA Disahkan:</span>
+                    <span className="font-bold text-success-deep font-mono">{approvedLppaCount} Rapor</span>
                   </div>
-                  <div className="flex justify-between items-center p-2.5 bg-slate-50 rounded-xl border border-slate-100">
-                    <span className="text-slate-600">Rapor Masih Draf:</span>
-                    <span className={`font-bold font-mono ${draftLppaCount > 0 ? 'text-amber-600' : 'text-slate-400'}`}>
+                  <div className="flex justify-between items-center p-2 bg-surface-subtle rounded-field border border-line-soft">
+                    <span className="text-ink-soft">Rapor Masih Draf:</span>
+                    <span className={`font-bold font-mono ${draftLppaCount > 0 ? 'text-brass' : 'text-ink-faint'}`}>
                       {draftLppaCount} Draf
                     </span>
                   </div>
                 </div>
 
-                <div className={`p-3 rounded-xl border text-xs flex items-center space-x-2 ${
+                <div className={`p-3 rounded-field border text-xs flex items-center space-x-2 ${
                   isReadyForClosure 
-                    ? 'bg-emerald-50 border-emerald-200 text-emerald-800' 
-                    : 'bg-amber-50 border-amber-200 text-amber-800'
+                    ? 'bg-success-tint border-success-line text-success-deep' 
+                    : 'bg-warning-tint border-warning-line text-warning-deep'
                 }`}>
-                  {isReadyForClosure ? <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" /> : <AlertCircle className="w-4 h-4 text-amber-600 shrink-0" />}
+                  {isReadyForClosure ? <CheckCircle2 className="w-4 h-4 text-success shrink-0" /> : <AlertCircle className="w-4 h-4 text-brass shrink-0" />}
                   <span className="font-semibold">
                     {isReadyForClosure 
                       ? 'Seluruh siswa telah memiliki rapor LPPA sah (100%).' 
@@ -475,9 +476,9 @@ export const AcademicLifecycleWorkspace: React.FC = () => {
                 <button
                   onClick={() => setShowCloseModal(true)}
                   disabled={!isAuthorizedActor}
-                  className="w-full py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 disabled:opacity-50 text-white font-bold text-xs shadow-xs flex items-center justify-center space-x-2 transition-all cursor-pointer mt-4"
+                  className="w-full py-2 rounded-field bg-brand hover-only:bg-surface-inset disabled:opacity-50 text-on-brand font-bold text-xs shadow-hairline flex items-center justify-center space-x-2 transition-all cursor-pointer mt-4"
                 >
-                  <Lock className="w-3.5 h-3.5" />
+                  <Lock className="w-4 h-4" />
                   <span>Tutup Semester Secara Resmi</span>
                 </button>
               )}
@@ -485,18 +486,18 @@ export const AcademicLifecycleWorkspace: React.FC = () => {
           </div>
 
           {/* Historical Terms Ledger Table */}
-          <div className="bg-white border border-slate-200 rounded-2xl p-5 sm:p-6 shadow-2xs space-y-4">
-            <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+          <div className="bg-surface border border-line rounded-card p-4 medium:p-6 shadow-hairline space-y-4">
+            <div className="flex items-center justify-between border-b border-line-soft pb-3">
               <div className="flex items-center space-x-2">
-                <Archive className="w-4 h-4 text-slate-700" />
-                <h3 className="text-sm font-bold text-slate-900">Buku Catatan Riwayat Semester &amp; Arsip Periode</h3>
+                <Archive className="w-4 h-4 text-ink-soft" />
+                <h3 className="text-sm font-bold text-ink">Buku Catatan Riwayat Semester &amp; Arsip Periode</h3>
               </div>
-              <span className="text-xs text-slate-500 font-medium">Total {allPeriods.length} Periode Tercatat</span>
+              <span className="text-xs text-ink-soft font-medium">Total {allPeriods.length} Periode Tercatat</span>
             </div>
 
-            <div className="overflow-x-auto">
+            <div className="overflow-x-auto [mask-image:linear-gradient(to_right,transparent_0,black_16px,black_calc(100%-16px),transparent_100%)]">
               <table className="w-full text-left text-xs">
-                <thead className="bg-slate-50 text-slate-600 uppercase tracking-wider font-semibold border-b border-slate-200">
+                <thead className="bg-surface-subtle text-ink-soft uppercase tracking-wider font-semibold border-b border-line">
                   <tr>
                     <th className="py-3 px-4">Tahun Ajaran</th>
                     <th className="py-3 px-4">Semester</th>
@@ -505,22 +506,22 @@ export const AcademicLifecycleWorkspace: React.FC = () => {
                     <th className="py-3 px-4">Waktu Penutupan</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-100 font-medium">
+                <tbody className="divide-y divide-line-soft font-medium">
                   {allPeriods.map((p) => (
-                    <tr key={p.id} className="hover:bg-slate-50 transition-colors">
-                      <td className="py-3.5 px-4 font-bold text-slate-900">{p.name}</td>
-                      <td className="py-3.5 px-4 text-slate-700 font-semibold">{p.semester}</td>
-                      <td className="py-3.5 px-4 font-mono text-slate-600">{p.start_date} s.d. {p.end_date}</td>
-                      <td className="py-3.5 px-4">
-                        <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase border ${
+                    <tr key={p.id} className="hover-only:bg-surface-subtle transition-colors">
+                      <td className="py-3 px-4 font-bold text-ink">{p.name}</td>
+                      <td className="py-3 px-4 text-ink-soft font-semibold">{p.semester}</td>
+                      <td className="py-3 px-4 font-mono text-ink-soft">{p.start_date} s.d. {p.end_date}</td>
+                      <td className="py-3 px-4">
+                        <span className={`px-2 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider border ${
                           p.lifecycle_status === 'ACTIVE' 
-                            ? 'bg-emerald-50 text-emerald-700 border-emerald-200' 
-                            : 'bg-slate-100 text-slate-600 border border-slate-200'
+                            ? 'bg-success-tint text-success-deep border-success-line' 
+                            : 'bg-surface-subtle text-ink-soft border border-line'
                         }`}>
                           {p.lifecycle_status === 'ACTIVE' ? 'AKTIF' : 'DITUTUP'}
                         </span>
                       </td>
-                      <td className="py-3.5 px-4 font-mono text-slate-500 text-[11px]">
+                      <td className="py-3 px-4 font-mono text-ink-soft text-[11px] whitespace-nowrap">
                         {p.closed_at ? new Date(p.closed_at).toLocaleString('id-ID') : '—'}
                       </td>
                     </tr>
@@ -534,56 +535,56 @@ export const AcademicLifecycleWorkspace: React.FC = () => {
 
       {/* Modal 1: Governed Semester Closure Confirmation */}
       {showCloseModal && activePeriod && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-xs animate-in fade-in duration-200">
-          <div className="bg-white border border-slate-200 rounded-2xl max-w-lg w-full p-5 sm:p-6 shadow-2xl space-y-4 text-slate-900">
-            <div className="flex items-center justify-between pb-3 border-b border-slate-100">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-brand/40 backdrop-blur-xs animate-in fade-in duration-200">
+          <div className="bg-surface border border-line rounded-card max-w-lg w-full p-4 medium:p-6 shadow-floating space-y-4 text-ink">
+            <div className="flex items-center justify-between pb-3 border-b border-line-soft">
               <div className="flex items-center space-x-2">
-                <Lock className="w-4 h-4 text-slate-700" />
-                <h3 className="text-base font-bold text-slate-900">Konfirmasi Penutupan Semester</h3>
+                <Lock className="w-4 h-4 text-ink-soft" />
+                <h3 className="text-base font-bold text-ink">Konfirmasi Penutupan Semester</h3>
               </div>
               <button
                 onClick={() => setShowCloseModal(false)}
-                className="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 flex items-center justify-center transition-colors cursor-pointer shrink-0"
+                className="w-8 h-8 rounded-full bg-surface-subtle hover-only:bg-line-soft text-ink-soft flex items-center justify-center transition-colors cursor-pointer shrink-0"
               >
                 <X className="w-4 h-4" />
               </button>
             </div>
 
-            <div className="text-xs text-slate-700 space-y-3">
+            <div className="text-xs text-ink-soft space-y-3">
               <p>
                 Anda akan menutup secara permanen semester <strong>{activePeriod.name} ({activePeriod.semester})</strong> untuk unit sekolah <strong>{school?.name}</strong>.
               </p>
 
-              <div className="bg-slate-50 p-3.5 rounded-xl border border-slate-200 space-y-2">
+              <div className="bg-surface-subtle p-3 rounded-field border border-line space-y-2">
                 <div className="flex justify-between">
-                  <span className="text-slate-500">Total Siswa Aktif:</span>
-                  <span className="font-bold text-slate-900">{enrolledCount} Siswa</span>
+                  <span className="text-ink-soft">Total Siswa Aktif:</span>
+                  <span className="font-bold text-ink">{enrolledCount} Siswa</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-slate-500">Rapor LPPA Disahkan:</span>
-                  <span className="font-bold text-emerald-700">{approvedLppaCount} Rapor</span>
+                  <span className="text-ink-soft">Rapor LPPA Disahkan:</span>
+                  <span className="font-bold text-success-deep">{approvedLppaCount} Rapor</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-slate-500">Status Rekonsiliasi:</span>
-                  <span className={isReadyForClosure ? 'text-emerald-700 font-bold' : 'text-amber-700 font-bold'}>
+                  <span className="text-ink-soft">Status Rekonsiliasi:</span>
+                  <span className={isReadyForClosure ? 'text-success-deep font-bold' : 'text-warning-deep font-bold'}>
                     {isReadyForClosure ? 'Lolos Prasyarat (100%)' : 'Belum Memenuhi Syarat'}
                   </span>
                 </div>
               </div>
 
               {!isReadyForClosure && (
-                <div className="bg-rose-50 border border-rose-200 p-3 rounded-xl text-rose-700">
+                <div className="bg-danger-tint border border-danger-line p-3 rounded-field text-danger-deep">
                   Peringatan: Masih ada siswa tanpa rapor LPPA berstatus disahkan.
                 </div>
               )}
             </div>
 
-            <div className="flex flex-col sm:flex-row items-center justify-end gap-2.5 pt-3 border-t border-slate-100">
+            <div className="flex flex-col medium:flex-row items-center justify-end gap-2 pt-3 border-t border-line-soft">
               <button
                 type="button"
                 onClick={() => setShowCloseModal(false)}
                 disabled={isProcessing}
-                className="w-full sm:w-auto px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold transition-colors cursor-pointer"
+                className="w-full medium:w-auto px-4 py-2 rounded-field bg-surface-subtle hover-only:bg-line-soft text-ink-soft text-xs font-bold transition-colors cursor-pointer"
               >
                 Batal
               </button>
@@ -591,9 +592,9 @@ export const AcademicLifecycleWorkspace: React.FC = () => {
                 type="button"
                 onClick={handleCloseSemester}
                 disabled={isProcessing}
-                className="w-full sm:w-auto px-4 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold flex justify-center items-center space-x-2 shadow-xs transition-colors cursor-pointer"
+                className="w-full medium:w-auto px-4 py-2 rounded-field bg-brand hover-only:bg-surface-inset text-on-brand text-xs font-bold flex justify-center items-center space-x-2 shadow-hairline transition-colors cursor-pointer"
               >
-                {isProcessing ? <RefreshCw className="w-3.5 h-3.5 animate-spin" /> : <Lock className="w-3.5 h-3.5" />}
+                {isProcessing ? <RefreshCw className="w-4 h-4 animate-spin" /> : <Lock className="w-4 h-4" />}
                 <span>Eksekusi Penutupan Semester</span>
               </button>
             </div>
@@ -603,16 +604,16 @@ export const AcademicLifecycleWorkspace: React.FC = () => {
 
       {/* Modal 2: Initialize Next Semester Wizard */}
       {showInitModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-xs animate-in fade-in duration-200">
-          <div className="bg-white border border-slate-200 rounded-2xl max-w-md w-full p-5 sm:p-6 shadow-2xl space-y-4 text-slate-900">
-            <div className="flex items-center justify-between pb-3 border-b border-slate-100">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-brand/40 backdrop-blur-xs animate-in fade-in duration-200">
+          <div className="bg-surface border border-line rounded-card max-w-md w-full p-4 medium:p-6 shadow-floating space-y-4 text-ink">
+            <div className="flex items-center justify-between pb-3 border-b border-line-soft">
               <div className="flex items-center space-x-2">
-                <PlusCircle className="w-4 h-4 text-slate-700" />
-                <h3 className="text-base font-bold text-slate-900">Inisialisasi Semester Baru</h3>
+                <PlusCircle className="w-4 h-4 text-ink-soft" />
+                <h3 className="text-base font-bold text-ink">Inisialisasi Semester Baru</h3>
               </div>
               <button
                 onClick={() => setShowInitModal(false)}
-                className="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 flex items-center justify-center transition-colors cursor-pointer shrink-0"
+                className="w-8 h-8 rounded-full bg-surface-subtle hover-only:bg-line-soft text-ink-soft flex items-center justify-center transition-colors cursor-pointer shrink-0"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -620,67 +621,60 @@ export const AcademicLifecycleWorkspace: React.FC = () => {
 
             <form onSubmit={handleInitializeNextSemester} className="space-y-3.5 text-xs">
               <div>
-                <label className="block text-slate-700 font-semibold mb-1">Nama Tahun Ajaran &amp; Semester</label>
+                <label className="block text-ink-soft font-semibold mb-1">Nama Tahun Ajaran &amp; Semester</label>
                 <input
                   type="text"
                   required
                   placeholder="Contoh: TA 2026/2027 Genap"
                   value={nextName}
                   onChange={(e) => setNextName(e.target.value)}
-                  className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-slate-900 shadow-2xs"
+                  className="w-full bg-surface-subtle border border-line rounded-field px-3 py-2 text-ink focus:bg-surface focus:outline-none focus:ring-2 focus:ring-brass/30 shadow-hairline"
                 />
               </div>
 
               <div>
-                <label className="block text-slate-700 font-semibold mb-1">Semester</label>
-                <select
-                  value={nextSemester}
-                  onChange={(e) => setNextSemester(e.target.value as 'GANJIL' | 'GENAP')}
-                  className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-slate-900 shadow-2xs"
-                >
-                  <option value="GANJIL">GANJIL</option>
-                  <option value="GENAP">GENAP</option>
-                </select>
+                <label className="block text-ink-soft font-semibold mb-1">Semester</label>
+                <SelectSheet value={nextSemester}   options={[{ value: "GANJIL", label: "GANJIL" }, { value: "GENAP", label: "GENAP" }]} />
               </div>
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-slate-700 font-semibold mb-1">Tanggal Mulai</label>
+                  <label className="block text-ink-soft font-semibold mb-1">Tanggal Mulai</label>
                   <input
                     type="date"
                     required
                     value={nextStartDate}
                     onChange={(e) => setNextStartDate(e.target.value)}
-                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-slate-900 shadow-2xs"
+                    className="w-full bg-surface-subtle border border-line rounded-field px-3 py-2 text-ink focus:bg-surface focus:outline-none focus:ring-2 focus:ring-brass/30 shadow-hairline"
                   />
                 </div>
                 <div>
-                  <label className="block text-slate-700 font-semibold mb-1">Tanggal Selesai</label>
+                  <label className="block text-ink-soft font-semibold mb-1">Tanggal Selesai</label>
                   <input
                     type="date"
                     required
                     value={nextEndDate}
                     onChange={(e) => setNextEndDate(e.target.value)}
-                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-slate-900 shadow-2xs"
+                    className="w-full bg-surface-subtle border border-line rounded-field px-3 py-2 text-ink focus:bg-surface focus:outline-none focus:ring-2 focus:ring-brass/30 shadow-hairline"
                   />
                 </div>
               </div>
 
-              <div className="flex flex-col sm:flex-row items-center justify-end gap-2.5 pt-3 border-t border-slate-100">
+              <div className="flex flex-col medium:flex-row items-center justify-end gap-2 pt-3 border-t border-line-soft">
                 <button
                   type="button"
                   onClick={() => setShowInitModal(false)}
                   disabled={isProcessing}
-                  className="w-full sm:w-auto px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold transition-colors cursor-pointer"
+                  className="w-full medium:w-auto px-4 py-2 rounded-field bg-surface-subtle hover-only:bg-line-soft text-ink-soft font-bold transition-colors cursor-pointer"
                 >
                   Batal
                 </button>
                 <button
                   type="submit"
                   disabled={isProcessing}
-                  className="w-full sm:w-auto px-4 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold flex justify-center items-center space-x-2 shadow-xs transition-colors cursor-pointer"
+                  className="w-full medium:w-auto px-4 py-2 rounded-field bg-brand hover-only:bg-surface-inset text-on-brand font-bold flex justify-center items-center space-x-2 shadow-hairline transition-colors cursor-pointer"
                 >
-                  {isProcessing ? <RefreshCw className="w-3.5 h-3.5 animate-spin" /> : <PlusCircle className="w-3.5 h-3.5" />}
+                  {isProcessing ? <RefreshCw className="w-4 h-4 animate-spin" /> : <PlusCircle className="w-4 h-4" />}
                   <span>Aktifkan Semester Baru</span>
                 </button>
               </div>

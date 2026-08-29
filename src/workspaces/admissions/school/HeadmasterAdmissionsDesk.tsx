@@ -57,22 +57,22 @@ export const HeadmasterAdmissionsDesk: React.FC<HeadmasterAdmissionsDeskProps> =
     <div className="space-y-6 max-w-7xl w-full mx-auto" data-testid="headmaster-admissions-desk">
       {/* Success Notification */}
       {ceremonySuccessResult && (
-        <div className="p-6 rounded-2xl bg-emerald-50 border border-emerald-300 text-emerald-950 shadow-sm flex items-start justify-between">
+        <div className="p-6 rounded-card bg-success-tint border border-success-line text-success-deep shadow-hairline flex items-start justify-between">
           <div className="flex items-start space-x-4">
-            <span className="text-3xl">🎉</span>
+            <span className="text-3xl"></span>
             <div>
-              <h3 className="text-lg font-black text-emerald-950">Upacara Penerimaan Siswa Baru Berhasil Diresmikan!</h3>
-              <p className="text-xs text-emerald-900 mt-1 leading-relaxed">
-                Calon siswa telah resmi dipromosikan ke status hukum murid aktif (ID Siswa: <strong className="font-mono bg-emerald-100 px-2 py-0.5 rounded text-emerald-950">{ceremonySuccessResult.promoted_student_id}</strong>) pada rombel <strong className="font-mono bg-emerald-100 px-2 py-0.5 rounded text-emerald-950">{ceremonySuccessResult.placed_class_id}</strong>.
+              <h3 className="text-lg font-black text-success-deep">Upacara Penerimaan Siswa Baru Berhasil Diresmikan!</h3>
+              <p className="text-xs text-success-deep mt-1 leading-relaxed">
+                Calon siswa telah resmi dipromosikan ke status hukum murid aktif (ID Siswa: <strong className="font-mono bg-success-tint px-2 py-1 rounded text-success-deep">{ceremonySuccessResult.promoted_student_id}</strong>) pada rombel <strong className="font-mono bg-success-tint px-2 py-1 rounded text-success-deep">{ceremonySuccessResult.placed_class_id}</strong>.
               </p>
             </div>
           </div>
           <button 
             type="button" 
             onClick={() => setCeremonySuccessResult(null)}
-            className="text-emerald-700 hover:text-emerald-950 text-sm font-bold p-1"
+            className="text-success-deep hover-only:text-success-deep text-sm font-bold p-1"
           >
-            ✕
+            x
           </button>
         </div>
       )}

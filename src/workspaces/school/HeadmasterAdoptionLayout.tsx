@@ -1,3 +1,4 @@
+import { SelectSheet } from '../../components/ui';
 /**
  * Yapendik School OS — The Glass Layer
  * Headmaster Adoption Hub Layout (`/school/adoption/*`)
@@ -165,26 +166,26 @@ export const HeadmasterAdoptionLayout: React.FC = () => {
   };
 
   return (
-    <div className="space-y-6 md:space-y-6 w-full" data-testid="headmaster-adoption-hub">
+    <div className="space-y-6 medium:space-y-6 w-full pb-[132px] expanded:pb-8" data-testid="headmaster-adoption-hub">
       {/* Workspace Header */}
-      <div className="bg-slate-50 border-b border-slate-200 md:rounded-2xl px-4 py-5 md:p-6 w-full text-slate-900 md:border md:shadow-sm">
+      <div className="bg-surface-subtle border-b border-line medium:rounded-card px-4 py-5 medium:p-6 w-full text-ink medium:border medium:shadow-hairline">
         <div className="flex items-start justify-between gap-4">
           <div>
-            <div className="flex items-center space-x-1.5 text-emerald-600 text-[10px] sm:text-xs font-bold tracking-wider uppercase mb-1">
-              <Building2 className="w-3.5 h-3.5" />
+            <div className="flex items-center space-x-1.5 text-success text-[10px] medium:text-xs font-bold uppercase tracking-wider mb-1">
+              <Building2 className="w-4 h-4" />
               <span>Standar Yayasan</span>
             </div>
-            <h1 className="text-xl font-bold tracking-tight text-slate-900 flex items-center gap-2 flex-wrap">
+            <h1 className="text-xl font-bold tracking-tight text-ink flex items-center gap-2 flex-wrap">
               <span>Adopsi Kebijakan</span>
               <div className="group relative flex items-center ml-1">
-                <ShieldCheck className="w-4 h-4 text-emerald-600/70 hover:text-emerald-700 transition-colors cursor-help" />
-                <div className="absolute left-1/2 sm:left-auto sm:right-0 -translate-x-1/2 sm:translate-x-0 top-full mt-2 hidden group-hover:block w-64 p-2.5 bg-slate-900 text-white text-[11px] font-medium leading-relaxed rounded-xl shadow-xl z-50">
-                  <div className="absolute -top-1 left-1/2 sm:left-auto sm:right-2 -translate-x-1/2 sm:translate-x-0 w-2 h-2 bg-slate-900 rotate-45"></div>
+                <ShieldCheck className="w-4 h-4 text-success/70 hover-only:text-success-deep transition-colors cursor-help" />
+                <div className="absolute left-1/2 medium:left-auto medium:right-0 -translate-x-1/2 medium:translate-x-0 top-full mt-2 hidden group-hover:block w-64 p-2 bg-brand text-on-brand text-[11px] font-medium leading-relaxed rounded-field shadow-floating z-50">
+                  <div className="absolute -top-1 left-1/2 medium:left-auto medium:right-2 -translate-x-1/2 medium:translate-x-0 w-2 h-2 bg-brand rotate-45"></div>
                   Otonomi Sekolah (FB-03): Kepala Sekolah memiliki hak untuk memodifikasi atau menunda kebijakan Yayasan sesuai konteks lokal.
                 </div>
               </div>
             </h1>
-            <p className="hidden md:block text-slate-500 text-xs mt-1 max-w-2xl">
+            <p className="hidden expanded:block text-ink-soft text-xs mt-1 max-w-2xl">
               Ruang kerja Kepala Sekolah untuk menerima dukungan Yayasan, mencatat penyesuaian lokal, dan merekam refleksi kualitatif dampak pembelajaran.
             </p>
           </div>
@@ -192,29 +193,29 @@ export const HeadmasterAdoptionLayout: React.FC = () => {
           <button
             onClick={refreshData}
             disabled={isLoading}
-            className="flex items-center justify-center gap-1.5 p-2 sm:px-3 sm:py-1.5 rounded-lg bg-white hover:bg-slate-100 text-slate-700 border border-slate-200 text-xs font-medium transition-colors shadow-xs shrink-0 cursor-pointer"
+            className="flex items-center justify-center gap-2 p-2 medium:px-3 medium:py-1 rounded-lg bg-surface hover-only:bg-surface-subtle text-ink-soft border border-line text-xs font-medium transition-colors shadow-hairline shrink-0 cursor-pointer"
             title="Segarkan Data"
           >
-            <RefreshCw className={`w-4 h-4 sm:w-3.5 sm:h-3.5 ${isLoading ? 'animate-spin' : ''}`} />
-            <span className="hidden sm:inline">Segarkan Data</span>
+            <RefreshCw className={`w-4 h-4 medium:w-3.5 medium:h-3.5 ${isLoading ? 'animate-spin' : ''}`} />
+            <span className="hidden medium:inline">Segarkan Data</span>
           </button>
         </div>
 
         {/* Navigation Tabs */}
-        <div className="flex border-b border-slate-200 mt-6 gap-2 text-xs">
+        <div className="flex border-b border-line mt-6 gap-2 text-xs">
           <button
             onClick={() => setActiveView('INBOX')}
             className={`flex items-center gap-2 pb-3 px-3 font-semibold transition-colors relative cursor-pointer ${
               activeView === 'INBOX'
-                ? 'text-slate-900 border-b-2 border-slate-900'
-                : 'text-slate-500 hover:text-slate-800'
+                ? 'text-ink border-b-2 border-brand'
+                : 'text-ink-soft hover-only:text-ink'
             }`}
             data-testid="tab-inbox"
           >
             <Inbox className="w-4 h-4" />
             <span>Inbox</span>
             {actions.length > 0 && (
-              <span className="px-1.5 py-0.2 rounded-full bg-slate-100 text-[10px] text-slate-700 font-mono">
+              <span className="px-1 py-0 rounded-full bg-surface-subtle text-[10px] text-ink-soft font-mono whitespace-nowrap">
                 {actions.length}
               </span>
             )}
@@ -224,15 +225,15 @@ export const HeadmasterAdoptionLayout: React.FC = () => {
             onClick={() => setActiveView('RESPONSES')}
             className={`flex items-center gap-2 pb-3 px-3 font-semibold transition-colors relative cursor-pointer ${
               activeView === 'RESPONSES'
-                ? 'text-slate-900 border-b-2 border-slate-900'
-                : 'text-slate-500 hover:text-slate-800'
+                ? 'text-ink border-b-2 border-brand'
+                : 'text-ink-soft hover-only:text-ink'
             }`}
             data-testid="tab-responses"
           >
             <CheckCircle2 className="w-4 h-4" />
             <span>Riwayat</span>
             {adoptions.length > 0 && (
-              <span className="px-1.5 py-0.2 rounded-full bg-slate-100 text-[10px] text-slate-700 font-mono">
+              <span className="px-1 py-0 rounded-full bg-surface-subtle text-[10px] text-ink-soft font-mono whitespace-nowrap">
                 {adoptions.length}
               </span>
             )}
@@ -241,12 +242,12 @@ export const HeadmasterAdoptionLayout: React.FC = () => {
       </div>
 
       {successMessage && (
-        <div className="p-4 bg-emerald-50 border border-emerald-200 rounded-xl text-emerald-800 text-xs font-medium flex items-center justify-between">
+        <div className="p-4 bg-success-tint border border-success-line rounded-field text-success-deep text-xs font-medium flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+            <CheckCircle2 className="w-4 h-4 text-success" />
             <span>{successMessage}</span>
           </div>
-          <button onClick={() => setSuccessMessage(null)} className="text-emerald-600 hover:underline">
+          <button onClick={() => setSuccessMessage(null)} className="text-success hover-only:underline">
             Tutup
           </button>
         </div>
@@ -254,10 +255,10 @@ export const HeadmasterAdoptionLayout: React.FC = () => {
 
       {/* VIEW 1: INCOMING ACTIONS INBOX */}
       {activeView === 'INBOX' && (
-        <div className="space-y-6 px-4 sm:px-5 md:px-0" data-testid="school-inbox-view">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="space-y-6 px-4 medium:px-5 medium:px-0" data-testid="school-inbox-view">
+          <div className="grid grid-cols-1 expanded:grid-cols-3 gap-6">
             {/* List of Incoming Actions */}
-            <div className="lg:col-span-2 space-y-4">
+            <div className="expanded:col-span-2 space-y-4">
               {actions.map((act) => {
                 const isSelected = selectedAction?.action_id === act.action_id;
                 const canAdopt = true; // Logic assumed
@@ -265,12 +266,12 @@ export const HeadmasterAdoptionLayout: React.FC = () => {
                 return (
                   <div
                     key={act.action_id}
-                    className={`bg-white border rounded-2xl p-4 sm:p-5 space-y-3.5 shadow-2xs transition-all ${
-                      isSelected ? 'border-slate-900 ring-2 ring-slate-900/10' : 'border-slate-200'
+                    className={`bg-surface border rounded-card p-4 medium:p-4 space-y-3.5 shadow-hairline transition-all ${
+                      isSelected ? 'border-brand ring-2 ring-brass/30' : 'border-line'
                     }`}
                   >
-                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-2">
-                      <div className="overflow-x-auto min-w-0 w-full sm:w-auto pb-1 -mb-1 scrollbar-hide">
+                    <div className="flex flex-col medium:flex-row medium:items-center justify-between gap-3 medium:gap-2">
+                      <div className="overflow-x-auto min-w-0 w-full medium:w-auto pb-1 -mb-1 scrollbar-hide [mask-image:linear-gradient(to_right,transparent_0,black_16px,black_calc(100%-16px),transparent_100%)]">
                         <CanonicalAnchor
                           actionId={act.action_id}
                           status={act.action_type === 'SUPPORT_INITIATIVE' ? act.support_payload?.support_lifecycle_status || 'DEPLOYED' : act.directive_payload?.directive_lifecycle_status || 'DEPLOYED'}
@@ -286,20 +287,20 @@ export const HeadmasterAdoptionLayout: React.FC = () => {
                             setAdaptationNotes('');
                             setQualitativeReflection('');
                           }}
-                          className="px-3.5 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white shadow-xs text-xs font-bold transition-colors shrink-0 w-fit cursor-pointer"
+                          className="px-3 py-1 rounded-field bg-brand hover-only:bg-surface-inset text-on-brand shadow-hairline text-xs font-bold transition-colors shrink-0 w-fit cursor-pointer"
                         >
                           Respons Aksi
                         </button>
                       )}
                     </div>
 
-                    <p className="text-xs text-slate-700 leading-relaxed font-medium">
+                    <p className="text-xs text-ink-soft leading-relaxed font-medium">
                       {act.policy_intent || act.title}
                     </p>
 
                     {act.support_payload && (
-                      <div className="bg-slate-50 border border-slate-100 rounded-xl p-3 text-xs text-slate-600 space-y-1">
-                        <div className="font-semibold text-slate-800 text-[11px]">Rincian Fasilitasi Yayasan:</div>
+                      <div className="bg-surface-subtle border border-line-soft rounded-field p-3 text-xs text-ink-soft space-y-1">
+                        <div className="font-semibold text-ink text-[11px]">Rincian Fasilitasi Yayasan:</div>
                         <p>{act.support_payload.resource_allocation_details}</p>
                       </div>
                     )}
@@ -308,52 +309,44 @@ export const HeadmasterAdoptionLayout: React.FC = () => {
               })}
 
               {actions.length === 0 && (
-                <div className="p-8 text-center bg-white border border-slate-200 rounded-2xl text-slate-400 text-xs shadow-2xs">
+                <div className="p-8 text-center bg-surface border border-line rounded-card text-ink-faint text-xs shadow-hairline">
                   Tidak ada aksi atau dukungan aktif yang ditujukan ke unit ini.
                 </div>
               )}
             </div>
 
             {/* Adoption Recording Panel */}
-            <div className="lg:col-span-1">
+            <div className="expanded:col-span-1">
               {selectedAction ? (
-                <form onSubmit={handleRecordAdoption} className="bg-white border border-slate-200 rounded-2xl p-4 sm:p-5 space-y-4 shadow-2xs w-full pb-32 md:pb-5">
-                  <div className="border-b border-slate-100 pb-3">
-                    <span className="text-[10px] font-mono text-emerald-700 font-semibold uppercase">Form Respons Unit</span>
-                    <h3 className="font-bold text-slate-900 text-sm">{selectedAction.title}</h3>
+                <form onSubmit={handleRecordAdoption} className="bg-surface border border-line rounded-card p-4 medium:p-4 space-y-4 shadow-hairline w-full pb-32 medium:pb-5">
+                  <div className="border-b border-line-soft pb-3">
+                    <span className="text-[10px] font-mono text-success-deep font-semibold uppercase tracking-wider whitespace-nowrap">Form Respons Unit</span>
+                    <h3 className="font-bold text-ink text-sm">{selectedAction.title}</h3>
                   </div>
 
                   <div>
-                    <label className="block text-xs font-semibold text-slate-700 mb-1">Status Keputusan Adopsi</label>
-                    <select
-                      value={adoptionDecision}
-                      onChange={e => setAdoptionDecision(e.target.value as any)}
-                      className="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-xs text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-slate-900 shadow-2xs"
-                    >
-                      <option value="ACCEPTED">Diterima Sesuai Rancangan</option>
-                      <option value="MODIFIED_LOCALLY">Disesuaikan dengan Konteks TK</option>
-                      <option value="DEFERRED">Ditunda (Untuk Semester Depan)</option>
-                    </select>
+                    <label className="block text-xs font-semibold text-ink-soft mb-1">Status Keputusan Adopsi</label>
+                    <SelectSheet value={adoptionDecision} onChange={(val) => setAdoptionDecision(val as any)} options={[{ value: "ACCEPTED", label: "Diterima Sesuai Rancangan" }, { value: "MODIFIED_LOCALLY", label: "Disesuaikan dengan Konteks TK" }, { value: "DEFERRED", label: "Ditunda (Untuk Semester Depan)" }]} />
                   </div>
 
                   <div>
-                    <label className="block text-xs font-semibold text-slate-700 mb-1">Catatan Penyesuaian Lokal (Opsional)</label>
+                    <label className="block text-xs font-semibold text-ink-soft mb-1">Catatan Penyesuaian Lokal (Opsional)</label>
                     <textarea
                       rows={2}
                       placeholder="Jelaskan bagaimana dukungan ini diintegrasikan ke jadwal sentra..."
                       value={adaptationNotes}
                       onChange={e => setAdaptationNotes(e.target.value)}
-                      className="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-xs text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-slate-900 shadow-2xs"
+                      className="w-full bg-surface-subtle border border-line rounded-field p-2 text-xs text-ink focus:bg-surface focus:outline-none focus:ring-2 focus:ring-brass/30 shadow-hairline"
                     />
                   </div>
 
-                  <div className="pt-3 border-t border-slate-100 space-y-2">
-                    <label className="flex items-center gap-1.5 text-xs font-semibold text-slate-700">
+                  <div className="pt-3 border-t border-line-soft space-y-2">
+                    <label className="flex items-center gap-2 text-xs font-semibold text-ink-soft">
                       <span>Refleksi Kualitatif Lapangan</span>
                       <div className="group relative flex items-center">
-                        <ShieldCheck className="w-3.5 h-3.5 text-slate-400 hover:text-slate-600 cursor-help" />
-                        <div className="absolute left-1/2 -translate-x-1/2 bottom-full mb-2 hidden group-hover:block w-56 p-2 bg-slate-900 text-white text-[10px] font-medium leading-relaxed rounded-lg shadow-xl z-50">
-                          <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-2 h-2 bg-slate-900 rotate-45"></div>
+                        <ShieldCheck className="w-4 h-4 text-ink-faint hover-only:text-ink-soft cursor-help" />
+                        <div className="absolute left-1/2 -translate-x-1/2 bottom-full mb-2 hidden group-hover:block w-56 p-2 bg-brand text-on-brand text-[10px] font-medium leading-relaxed rounded-lg shadow-floating z-50">
+                          <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-2 h-2 bg-brand rotate-45"></div>
                           Invarian H-02: Memastikan setiap angka perubahan selalu didampingi oleh refleksi kualitatif dari pendidik (human-in-the-loop).
                         </div>
                       </div>
@@ -363,32 +356,32 @@ export const HeadmasterAdoptionLayout: React.FC = () => {
                       placeholder="Pengamatan kualitatif pendidik terhadap interaksi dan perkembangan anak..."
                       value={qualitativeReflection}
                       onChange={e => setQualitativeReflection(e.target.value)}
-                      className="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-xs text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-slate-900 shadow-2xs"
+                      className="w-full bg-surface-subtle border border-line rounded-field p-2 text-xs text-ink focus:bg-surface focus:outline-none focus:ring-2 focus:ring-brass/30 shadow-hairline"
                     />
                   </div>
 
-                  <div className="flex gap-2 pt-2 md:relative md:bottom-auto fixed bottom-32 left-4 right-4 z-40 shadow-[0_-4px_16px_rgba(0,0,0,0.1)] md:shadow-none p-3 md:p-0 bg-white md:bg-transparent rounded-2xl md:rounded-none border border-slate-200 md:border-none">
+                  <div className="flex gap-2 pt-2 expanded:relative expanded:bottom-auto fixed bottom-32 left-4 right-4 z-40 shadow-[0_-4px_16px_rgba(0,0,0,0.1)] medium:shadow-none p-3 medium:p-0 bg-surface expanded:bg-transparent rounded-card medium:rounded-none border border-line medium:border-none">
                     <button
                       type="submit"
                       disabled={isSubmitting}
-                      className="flex-1 py-2.5 md:py-2 bg-slate-900 hover:bg-slate-800 text-white font-bold rounded-xl md:rounded-lg text-xs transition-colors shadow-xs cursor-pointer"
+                      className="flex-1 py-2 medium:py-2 bg-brand hover-only:bg-surface-inset text-on-brand font-bold rounded-field medium:rounded-lg text-xs transition-colors shadow-hairline cursor-pointer"
                     >
                       {isSubmitting ? 'Menyimpan...' : 'Kirim Respons Resmi'}
                     </button>
                     <button
                       type="button"
                       onClick={() => setSelectedAction(null)}
-                      className="px-4 md:px-3 py-2.5 md:py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl md:rounded-lg text-xs font-bold cursor-pointer"
+                      className="px-4 medium:px-3 py-2 medium:py-2 bg-surface-subtle hover-only:bg-line-soft text-ink-soft rounded-field medium:rounded-lg text-xs font-bold cursor-pointer"
                     >
                       Batal
                     </button>
                   </div>
                 </form>
               ) : (
-                <div className="p-6 bg-slate-50 border border-slate-200 rounded-2xl text-center text-xs text-slate-500 space-y-2 shadow-2xs">
-                  <Sparkles className="w-6 h-6 text-slate-400 mx-auto" />
-                  <div className="font-semibold text-slate-800">Pilih Aksi Dari Inbox</div>
-                  <p className="text-slate-500 text-[11px]">
+                <div className="p-6 bg-surface-subtle border border-line rounded-card text-center text-xs text-ink-soft space-y-2 shadow-hairline">
+                  <Sparkles className="w-6 h-6 text-ink-faint mx-auto" />
+                  <div className="font-semibold text-ink">Pilih Aksi Dari Inbox</div>
+                  <p className="text-ink-soft text-[11px]">
                     Klik tombol "Respons Aksi" pada salah satu inisiatif Yayasan untuk mencatat adopsi dan refleksi lapangan.
                   </p>
                 </div>
@@ -400,10 +393,10 @@ export const HeadmasterAdoptionLayout: React.FC = () => {
 
       {/* VIEW 2: UNIT ADOPTION & OUTCOME RESPONSES */}
       {activeView === 'RESPONSES' && (
-        <div className="space-y-4 px-4 sm:px-5 md:px-0" data-testid="school-responses-view">
+        <div className="space-y-4 px-4 medium:px-5 medium:px-0" data-testid="school-responses-view">
           <div className="flex items-center justify-between pb-1">
-            <h2 className="text-sm sm:text-base font-bold text-slate-900">Riwayat Adopsi &amp; Refleksi Lapangan Unit</h2>
-            <span className="text-xs text-slate-500 font-medium">{adoptions.length} Catatan Tersimpan</span>
+            <h2 className="text-sm medium:text-base font-bold text-ink">Riwayat Adopsi &amp; Refleksi Lapangan Unit</h2>
+            <span className="text-xs text-ink-soft font-medium">{adoptions.length} Catatan Tersimpan</span>
           </div>
 
           <div className="space-y-4">
@@ -416,70 +409,70 @@ export const HeadmasterAdoptionLayout: React.FC = () => {
               })();
 
               return (
-                <div key={ad.response_id} className="bg-white border border-slate-200 rounded-2xl p-4 sm:p-5 space-y-3.5 shadow-2xs">
-                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-2">
-                    <div className="overflow-x-auto min-w-0 w-full sm:w-auto pb-1 -mb-1 scrollbar-hide">
+                <div key={ad.response_id} className="bg-surface border border-line rounded-card p-4 medium:p-4 space-y-3.5 shadow-hairline">
+                  <div className="flex flex-col medium:flex-row medium:items-center justify-between gap-3 medium:gap-2">
+                    <div className="overflow-x-auto min-w-0 w-full medium:w-auto pb-1 -mb-1 scrollbar-hide [mask-image:linear-gradient(to_right,transparent_0,black_16px,black_calc(100%-16px),transparent_100%)]">
                       <CanonicalAnchor
                         actionId={ad.action_id}
                         status={ad.adoption_status}
                         isClosedLoop={matchingOutcomes.length > 0}
                       />
                     </div>
-                    <span className="text-[11px] text-slate-400 shrink-0">
+                    <span className="text-[11px] text-ink-faint shrink-0">
                       Dicatat: {formattedDate}
                     </span>
                   </div>
 
                   {ad.local_context_adaptation_notes && (
-                    <div className="text-xs text-slate-700 bg-slate-50 border border-slate-100 rounded-xl p-3">
-                      <strong className="font-semibold text-slate-900">Catatan Adaptasi:</strong> {ad.local_context_adaptation_notes}
+                    <div className="text-xs text-ink-soft bg-surface-subtle border border-line-soft rounded-field p-3">
+                      <strong className="font-semibold text-ink">Catatan Adaptasi:</strong> {ad.local_context_adaptation_notes}
                     </div>
                   )}
 
                   {matchingOutcomes.map((out) => (
-                    <div key={out.outcome_id} className="p-4 bg-slate-50/70 border border-slate-200/80 rounded-xl space-y-3 text-xs">
+                    <div key={out.outcome_id} className="p-4 bg-surface-subtle/70 border border-line/80 rounded-field space-y-3 text-xs">
                       <div className="flex items-center justify-between">
-                        <div className="font-bold text-slate-800 flex items-center gap-1.5 uppercase text-[11px] tracking-wider">
-                          <Scale className="w-3.5 h-3.5 text-slate-500" />
+                        <div className="font-bold text-ink flex items-center gap-2 uppercase text-[11px] tracking-wider">
+                          <Scale className="w-4 h-4 text-ink-soft" />
                           <span>Dinamika Capaian Teramati</span>
                         </div>
                         {out.measurements?.computed_delta?.percentage_change_pct !== undefined && (
-                          <span className="px-2 py-0.5 rounded-full text-[11px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
+                          <span className="px-2 py-1 rounded-full text-[11px] font-bold bg-success-tint text-success-deep border border-success-line">
                             ↗ Δ +{out.measurements.computed_delta.percentage_change_pct.toFixed(1)}%
                           </span>
                         )}
                       </div>
 
                       {out.measurements?.baseline_measurement?.metric_value !== undefined && out.measurements?.evaluation_measurement?.metric_value !== undefined && (
-                        <div className="grid grid-cols-2 gap-4 p-3 bg-white border border-slate-200/70 rounded-xl text-center shadow-2xs">
+                        <div className="grid grid-cols-2 gap-4 p-3 bg-surface border border-line/70 rounded-field text-center shadow-hairline">
                           <div>
-                            <span className="text-[10px] text-slate-400 uppercase font-bold block">Baseline</span>
-                            <span className="font-bold text-slate-900 text-sm">{out.measurements.baseline_measurement.metric_value.toFixed(1)}%</span>
+                            <span className="text-[10px] text-ink-faint uppercase tracking-wider font-bold block">Baseline</span>
+                            <span className="font-bold text-ink text-sm">{out.measurements.baseline_measurement.metric_value.toFixed(1)}%</span>
                           </div>
                           <div>
-                            <span className="text-[10px] text-slate-400 uppercase font-bold block">Pasca-Aksi</span>
-                            <span className="font-bold text-slate-900 text-sm">{out.measurements.evaluation_measurement.metric_value.toFixed(1)}%</span>
+                            <span className="text-[10px] text-ink-faint uppercase tracking-wider font-bold block">Pasca-Aksi</span>
+                            <span className="font-bold text-ink text-sm">{out.measurements.evaluation_measurement.metric_value.toFixed(1)}%</span>
                           </div>
                         </div>
                       )}
 
                       {out.human_reflective_interpretation && (
-                        <div className="p-3 bg-white border-l-2 border-l-amber-500 border border-slate-200/70 rounded-xl space-y-1 shadow-2xs">
-                          <div className="text-[10px] font-bold text-slate-700 flex items-center gap-1">
-                            <Quote className="w-3 h-3 text-amber-600" />
+                        <div className="p-3 bg-surface border-l-2 border-l-amber-500 border border-line/70 rounded-field space-y-1 shadow-hairline">
+                          <div className="text-[10px] font-bold text-ink-soft flex items-center gap-1">
+                            <Quote className="w-3 h-3 text-brass" />
                             <span>Refleksi Kualitatif Pendidik / Kepala Sekolah:</span>
                           </div>
-                          <p className="text-slate-800 italic font-medium leading-relaxed">
+                          <p className="text-ink italic font-medium leading-relaxed">
                             "{out.human_reflective_interpretation}"
                           </p>
-                          <div className="text-[10px] text-slate-400 text-right">
+                          <div className="text-[10px] text-ink-faint text-right">
                             Dicatat pada: {new Date(out.recorded_at).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}
                           </div>
                         </div>
                       )}
 
-                      <div className="flex items-start gap-1.5 text-[10px] text-slate-500 leading-normal pt-1">
-                        <Sparkles className="w-3.5 h-3.5 text-amber-500 shrink-0 mt-0.5" />
+                      <div className="flex items-start gap-2 text-[10px] text-ink-soft leading-normal pt-1">
+                        <Sparkles className="w-4 h-4 text-brass shrink-0 mt-0.5" />
                         <span>
                           <strong>Catatan Pengamatan:</strong> Angka kenaikan persentase ini adalah hasil pengamatan di lapangan, bukan bukti mutlak bahwa kebijakan tersebut adalah satu-satunya penyebab perubahan.
                         </span>
@@ -491,7 +484,7 @@ export const HeadmasterAdoptionLayout: React.FC = () => {
             })}
 
             {adoptions.length === 0 && (
-              <div className="p-8 text-center bg-white border border-slate-200 rounded-2xl text-slate-400 text-xs shadow-2xs">
+              <div className="p-8 text-center bg-surface border border-line rounded-card text-ink-faint text-xs shadow-hairline">
                 Belum ada respons atau refleksi adopsi yang dicatat oleh unit sekolah ini.
               </div>
             )}

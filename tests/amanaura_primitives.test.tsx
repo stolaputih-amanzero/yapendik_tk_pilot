@@ -55,17 +55,17 @@ async function runAmanauraPrimitivesTests() {
   // Test 1: Button Primitive
   runCheck('Suite 30 [BUTTON LAWS]: Renders 5 variants with tactile classes & loading state', () => {
     const primaryHtml = renderToString(<Button variant="primary">Simpan</Button>);
-    assert.ok(primaryHtml.includes('bg-slate-900'), 'Primary button must use bg-slate-900');
+    assert.ok(primaryHtml.includes('bg-brand') || primaryHtml.includes('bg-slate-900'), 'Primary button must use bg-brand or bg-slate-900');
     assert.ok(primaryHtml.includes('Simpan'), 'Primary button must render children');
 
     const secondaryHtml = renderToString(<Button variant="secondary">Batal</Button>);
-    assert.ok(secondaryHtml.includes('bg-slate-100'), 'Secondary button must use bg-slate-100');
+    assert.ok(secondaryHtml.includes('bg-surface-subtle') || secondaryHtml.includes('bg-slate-100'), 'Secondary button must use bg-surface-subtle or bg-slate-100');
 
     const ghostHtml = renderToString(<Button variant="ghost">Ubah</Button>);
     assert.ok(ghostHtml.includes('bg-transparent'), 'Ghost button must use bg-transparent');
 
     const dangerHtml = renderToString(<Button variant="danger">Hapus</Button>);
-    assert.ok(dangerHtml.includes('bg-rose-50'), 'Danger button must use bg-rose-50');
+    assert.ok(dangerHtml.includes('bg-danger-tint') || dangerHtml.includes('bg-rose-50'), 'Danger button must use danger tint');
 
     const loadingHtml = renderToString(<Button isLoading>Memuat</Button>);
     assert.ok(loadingHtml.includes('animate-spin'), 'Loading button must render spinner without jiggle');
@@ -75,15 +75,15 @@ async function runAmanauraPrimitivesTests() {
   runCheck('Suite 30 [STATUS DOT CAPSULE]: Renders semantic color tokens and monospace font', () => {
     const successHtml = renderToString(<Badge variant="success" dot pulse>HADIR</Badge>);
     assert.ok(successHtml.includes('font-mono'), 'Badge must enforce font-mono typography');
-    assert.ok(successHtml.includes('bg-emerald-50'), 'Success badge must use emerald bg');
+    assert.ok(successHtml.includes('bg-success-tint') || successHtml.includes('bg-emerald-50'), 'Success badge must use success token');
     assert.ok(successHtml.includes('animate-ping'), 'Pulse badge must render pulse ping halo');
     assert.ok(successHtml.includes('HADIR'), 'Badge must render label');
 
     const warningHtml = renderToString(<Badge variant="warning">ALERGI</Badge>);
-    assert.ok(warningHtml.includes('bg-amber-50'), 'Warning badge must use amber token');
+    assert.ok(warningHtml.includes('bg-warning-tint') || warningHtml.includes('bg-amber-50'), 'Warning badge must use warning token');
 
     const lppaHtml = renderToString(<Badge variant="lppa">RAPOR</Badge>);
-    assert.ok(lppaHtml.includes('bg-purple-50'), 'LPPA badge must use purple token');
+    assert.ok(lppaHtml.includes('bg-lppa-tint') || lppaHtml.includes('bg-purple-50'), 'LPPA badge must use lppa token');
   });
 
   console.log('\n--- MODULE 2: Structural & Selection Primitives (ListItem & SegmentedControl) ---');
@@ -98,7 +98,7 @@ async function runAmanauraPrimitivesTests() {
         showChevron
       />
     );
-    assert.ok(listHtml.includes('border-b border-slate-100'), 'ListItem must enforce 1px border-b');
+    assert.ok(listHtml.includes('border-b border-line-soft') || listHtml.includes('border-b border-slate-100'), 'ListItem must enforce 1px border-b');
     assert.ok(listHtml.includes('truncate'), 'ListItem title/subtitle must enforce truncate');
     assert.ok(listHtml.includes('Budi Pratama'), 'ListItem must render title');
     assert.ok(listHtml.includes('NIS 202601001'), 'ListItem must render subtitle');
@@ -114,8 +114,8 @@ async function runAmanauraPrimitivesTests() {
     const controlHtml = renderToString(
       <SegmentedControl options={options} value="TODAY" onChange={() => {}} />
     );
-    assert.ok(controlHtml.includes('bg-slate-100'), 'SegmentedControl container must use bg-slate-100');
-    assert.ok(controlHtml.includes('bg-white text-slate-900'), 'Active segment must use solid white card highlight');
+    assert.ok(controlHtml.includes('bg-surface-subtle') || controlHtml.includes('bg-slate-100'), 'SegmentedControl container must use subtle bg');
+    assert.ok(controlHtml.includes('bg-surface text-ink') || controlHtml.includes('bg-white text-slate-900'), 'Active segment must use surface card highlight');
     assert.ok(controlHtml.includes('Hari Ini'), 'SegmentedControl must render option labels');
   });
 
@@ -134,7 +134,7 @@ async function runAmanauraPrimitivesTests() {
         <p>Konten dialog verifikasi</p>
       </AdaptiveDialog>
     );
-    assert.ok(dialogHtml.includes('lg:hidden'), 'AdaptiveDialog must render mobile drag handle with lg:hidden');
+    assert.ok(dialogHtml.includes('expanded:hidden') || dialogHtml.includes('lg:hidden'), 'AdaptiveDialog must render mobile drag handle with expanded:hidden');
     assert.ok(dialogHtml.includes('Konfirmasi Tindakan'), 'AdaptiveDialog must render title');
     assert.ok(dialogHtml.includes('Konten dialog verifikasi'), 'AdaptiveDialog must render child body');
   });

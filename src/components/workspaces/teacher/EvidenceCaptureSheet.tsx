@@ -107,19 +107,19 @@ export const EvidenceCaptureSheet: React.FC<Props> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-[70] flex items-center justify-center p-3 sm:p-4 bg-slate-900/60 backdrop-blur-xs animate-in fade-in duration-200">
-      <div className="bg-white border border-slate-200 rounded-3xl w-full max-w-xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
+    <div className="fixed inset-0 z-70 flex items-center justify-center p-3 medium:p-4 bg-brand/60 backdrop-blur-xs animate-in fade-in duration-200">
+      <div className="bg-surface border border-line rounded-3xl w-full max-w-xl shadow-floating overflow-hidden flex flex-col max-h-[90vh]">
         {/* Header */}
-        <div className="px-5 sm:px-6 py-4 bg-slate-50 border-b border-slate-200 flex items-center justify-between">
-          <div className="flex items-center gap-2.5">
-            <div className="p-2 rounded-xl bg-amber-50 text-amber-600 border border-amber-200/80 shadow-2xs">
-              <Sparkles className="w-5 h-5 text-amber-500 fill-amber-500" />
+        <div className="px-5 medium:px-6 py-4 bg-surface-subtle border-b border-line flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <div className="p-2 rounded-field bg-warning-tint text-brass border border-warning-line/80 shadow-hairline">
+              <Sparkles className="w-5 h-5 text-brass fill-brass" />
             </div>
             <div>
-              <h3 className="text-base font-bold text-slate-900">
+              <h3 className="text-base font-bold text-ink">
                 Rekam Momen Belajar
               </h3>
-              <p className="text-xs text-slate-500 font-medium">
+              <p className="text-xs text-ink-soft font-medium">
                 Dokumentasikan interaksi dan karya ananda saat kegiatan main.
               </p>
             </div>
@@ -127,21 +127,21 @@ export const EvidenceCaptureSheet: React.FC<Props> = ({
           <button
             type="button"
             onClick={onClose}
-            className="p-2 rounded-xl text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition cursor-pointer"
+            className="p-2 rounded-field text-ink-faint hover-only:text-ink-soft hover-only:bg-surface-subtle transition cursor-pointer"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
         {/* Form Body */}
-        <form onSubmit={handleSubmit} className="p-5 sm:p-6 overflow-y-auto space-y-5 flex-1">
+        <form onSubmit={handleSubmit} className="p-4 medium:p-6 overflow-y-auto space-y-5 flex-1">
           {/* 1. Pilih Ananda (Child Selector Chips) */}
           <div>
-            <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2 flex items-center gap-1.5">
-              <Users className="w-3.5 h-3.5 text-slate-500" />
+            <label className="block text-xs font-bold text-ink-soft uppercase tracking-wider mb-2 flex items-center gap-2">
+              <Users className="w-4 h-4 text-ink-soft" />
               <span>Pilih Ananda ({selectedStudentIds.length} terpilih):</span>
             </label>
-            <div className="flex flex-wrap gap-1.5 max-h-32 overflow-y-auto p-2 bg-slate-50 rounded-2xl border border-slate-200">
+            <div className="flex flex-wrap gap-2 max-h-32 overflow-y-auto p-2 bg-surface-subtle rounded-card border border-line">
               {roster.map(s => {
                 const isSelected = selectedStudentIds.includes(s.student_id);
                 return (
@@ -149,10 +149,10 @@ export const EvidenceCaptureSheet: React.FC<Props> = ({
                     type="button"
                     key={s.student_id}
                     onClick={() => toggleStudent(s.student_id)}
-                    className={`px-3 py-1.5 rounded-xl text-xs font-bold transition cursor-pointer flex items-center gap-1.5 ${
+                    className={`px-3 py-1 rounded-field text-xs font-bold transition cursor-pointer flex items-center gap-2 ${
                       isSelected
-                        ? 'bg-slate-900 text-white shadow-xs'
-                        : 'bg-white border border-slate-200 text-slate-700 hover:bg-slate-100'
+                        ? 'bg-brand text-on-brand shadow-hairline'
+                        : 'bg-surface border border-line text-ink-soft hover-only:bg-surface-subtle'
                     }`}
                   >
                     <span>{s.name}</span>
@@ -165,17 +165,17 @@ export const EvidenceCaptureSheet: React.FC<Props> = ({
 
           {/* 2. Media Bukti Visual (Photo/Audio) */}
           <div>
-            <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2 flex items-center gap-1.5">
-              <Camera className="w-3.5 h-3.5 text-slate-500" />
+            <label className="block text-xs font-bold text-ink-soft uppercase tracking-wider mb-2 flex items-center gap-2">
+              <Camera className="w-4 h-4 text-ink-soft" />
               <span>Foto / Bukti Karya:</span>
             </label>
             {mockPhotoUrl ? (
-              <div className="relative rounded-2xl overflow-hidden border border-slate-200 group h-36 bg-slate-950">
+              <div className="relative rounded-card overflow-hidden border border-line group h-36 bg-surface-inset">
                 <img src={mockPhotoUrl} alt="Captured Moment" className="w-full h-full object-cover" />
                 <button
                   type="button"
                   onClick={() => setMockPhotoUrl(undefined)}
-                  className="absolute top-2 right-2 p-1.5 rounded-lg bg-slate-900/80 text-rose-400 hover:bg-rose-600 hover:text-white transition cursor-pointer"
+                  className="absolute top-2 right-2 p-2 rounded-lg bg-brand/80 text-danger-deep hover-only:bg-danger hover-only:text-on-brand transition cursor-pointer"
                 >
                   <X className="w-4 h-4" />
                 </button>
@@ -185,9 +185,9 @@ export const EvidenceCaptureSheet: React.FC<Props> = ({
                 <button
                   type="button"
                   onClick={handleSimulatePhoto}
-                  className="flex-1 py-3 px-4 rounded-2xl border-2 border-dashed border-slate-300 hover:border-slate-400 bg-slate-50 text-slate-700 text-xs font-bold transition flex items-center justify-center gap-2 cursor-pointer shadow-xs"
+                  className="flex-1 py-3 px-4 rounded-card border-2 border-dashed border-line hover-only:border-line-strong bg-surface-subtle text-ink-soft text-xs font-bold transition flex items-center justify-center gap-2 cursor-pointer shadow-hairline"
                 >
-                  <Camera className="w-4 h-4 text-slate-600" />
+                  <Camera className="w-4 h-4 text-ink-soft" />
                   <span>Ambil Foto Momen / Karya</span>
                 </button>
               </div>
@@ -196,11 +196,11 @@ export const EvidenceCaptureSheet: React.FC<Props> = ({
 
           {/* 3. Kurikulum Merdeka TK Quick Tags */}
           <div>
-            <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2 flex items-center gap-1.5">
-              <Tag className="w-3.5 h-3.5 text-slate-500" />
+            <label className="block text-xs font-bold text-ink-soft uppercase tracking-wider mb-2 flex items-center gap-2">
+              <Tag className="w-4 h-4 text-ink-soft" />
               <span>Fokus Perkembangan (TK):</span>
             </label>
-            <div className="flex flex-wrap gap-1.5">
+            <div className="flex flex-wrap gap-2">
               {quickTagsList.map(tag => {
                 const isSelected = selectedTags.includes(tag.id);
                 return (
@@ -208,10 +208,10 @@ export const EvidenceCaptureSheet: React.FC<Props> = ({
                     type="button"
                     key={tag.id}
                     onClick={() => toggleTag(tag.id)}
-                    className={`px-3 py-1.5 rounded-xl text-xs font-bold transition cursor-pointer ${
+                    className={`px-3 py-1 rounded-field text-xs font-bold transition cursor-pointer ${
                       isSelected
-                        ? 'bg-slate-900 text-white shadow-xs'
-                        : 'bg-slate-100 text-slate-700 border border-slate-200 hover:bg-slate-200'
+                        ? 'bg-brand text-on-brand shadow-hairline'
+                        : 'bg-surface-subtle text-ink-soft border border-line hover-only:bg-line-soft'
                     }`}
                   >
                     {tag.label}
@@ -223,8 +223,8 @@ export const EvidenceCaptureSheet: React.FC<Props> = ({
 
           {/* 4. Catatan Singkat Anekdot */}
           <div>
-            <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5 flex items-center gap-1.5">
-              <FileText className="w-3.5 h-3.5 text-slate-500" />
+            <label className="block text-xs font-bold text-ink-soft uppercase tracking-wider mb-1.5 flex items-center gap-2">
+              <FileText className="w-4 h-4 text-ink-soft" />
               <span>Catatan Observasi (Opsional):</span>
             </label>
             <textarea
@@ -232,25 +232,25 @@ export const EvidenceCaptureSheet: React.FC<Props> = ({
               placeholder="Contoh: Berhasil menyusun menara 12 balok secara mandiri dengan seimbang..."
               value={noteText}
               onChange={e => setNoteText(e.target.value)}
-              className="w-full px-3.5 py-2.5 text-xs rounded-2xl bg-slate-50 border border-slate-200 focus:bg-white focus:outline-none focus:ring-2 focus:ring-slate-900 text-slate-900 placeholder:text-slate-400 font-medium shadow-2xs"
+              className="w-full px-3 py-2 text-xs rounded-card bg-surface-subtle border border-line focus:bg-surface focus:outline-none focus:ring-2 focus:ring-brass/30 text-ink placeholder:text-ink-faint font-medium shadow-hairline"
             />
           </div>
 
           {/* Action Buttons */}
-          <div className="pt-3 flex flex-col sm:flex-row items-stretch sm:items-center justify-end gap-3 border-t border-slate-100 pb-6 sm:pb-0">
+          <div className="pt-3 flex flex-col medium:flex-row items-stretch medium:items-center justify-end gap-3 border-t border-line-soft pb-6 medium:pb-0">
             <button
               type="button"
               onClick={onClose}
-              className="w-full sm:w-auto px-5 py-2.5 rounded-xl text-xs font-semibold text-slate-700 hover:bg-slate-100 transition cursor-pointer order-2 sm:order-1"
+              className="w-full medium:w-auto px-5 py-2 rounded-field text-xs font-semibold text-ink-soft hover-only:bg-surface-subtle transition cursor-pointer order-2 medium:order-1"
             >
               Batal
             </button>
             <button
               type="submit"
               disabled={isSaving || selectedStudentIds.length === 0}
-              className="w-full sm:w-auto px-6 py-2.5 rounded-xl text-xs font-bold bg-slate-900 hover:bg-slate-800 text-white shadow-xs transition-all disabled:opacity-50 cursor-pointer flex justify-center items-center gap-2 order-1 sm:order-2"
+              className="w-full medium:w-auto px-6 py-2 rounded-field text-xs font-bold bg-brand hover-only:bg-surface-inset text-on-brand shadow-hairline transition-all disabled:opacity-50 cursor-pointer flex justify-center items-center gap-2 order-1 medium:order-2"
             >
-              <Sparkles className="w-4 h-4 text-amber-400 fill-amber-400" />
+              <Sparkles className="w-4 h-4 text-brass fill-brass" />
               <span>{isSaving ? 'Menyimpan...' : 'Simpan Momen Belajar'}</span>
             </button>
           </div>

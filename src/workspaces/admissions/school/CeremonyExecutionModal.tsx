@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { ProspectiveChildApplicant, EnrollmentCeremonyResult } from '../../../types/admissionsTypes';
 import { admissionsService } from '../../../services/admissionsService';
+import { SelectSheet, Input } from '../../../components/ui';
 import { GraduationCap, ShieldCheck, AlertTriangle, CheckCircle2, X } from 'lucide-react';
 
 interface CeremonyExecutionModalProps {
@@ -55,43 +56,43 @@ export const CeremonyExecutionModal: React.FC<CeremonyExecutionModalProps> = ({
     : applicant.target_school_id;
 
   return (
-    <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto" data-testid="ceremony-execution-modal">
-      <div className="w-full max-w-2xl bg-white border border-slate-200 rounded-3xl shadow-2xl p-6 md:p-8 space-y-6">
+    <div className="fixed inset-0 z-50 bg-brand/60 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto" data-testid="ceremony-execution-modal">
+      <div className="w-full max-w-2xl bg-surface border border-line rounded-3xl shadow-floating p-6 medium:p-8 space-y-6">
         {/* Header */}
-        <div className="text-center space-y-2 border-b border-slate-100 pb-6 relative">
+        <div className="text-center space-y-2 border-b border-line-soft pb-6 relative">
           <button
             type="button"
             onClick={onClose}
-            className="absolute top-0 right-0 p-2 text-slate-400 hover:text-slate-700 rounded-lg hover:bg-slate-100 transition-colors"
+            className="absolute top-0 right-0 p-2 text-ink-faint hover-only:text-ink-soft rounded-lg hover-only:bg-surface-subtle transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
 
-          <div className="w-16 h-16 rounded-2xl bg-emerald-100 text-emerald-700 border border-emerald-200 flex items-center justify-center text-3xl mx-auto shadow-sm">
-            🎓
+          <div className="w-16 h-16 rounded-card bg-success-tint text-success-deep border border-success-line flex items-center justify-center text-3xl mx-auto shadow-hairline">
+            
           </div>
-          <span className="px-3 py-1 text-xs font-mono font-bold rounded-full bg-emerald-100 text-emerald-800 border border-emerald-300 inline-block">
+          <span className="px-3 py-1 text-xs font-mono font-bold rounded-full bg-success-tint text-success-deep border border-success-line inline-block whitespace-nowrap">
             ADR-05: The Enrollment Ceremony (Otoritas Penuh Kepala Sekolah)
           </span>
-          <h2 className="text-2xl font-black text-slate-900 tracking-tight">
+          <h2 className="text-2xl font-black text-ink tracking-tight">
             Upacara Pengukuhan Status Siswa Resmi
           </h2>
-          <p className="text-xs text-slate-500 max-w-lg mx-auto leading-relaxed">
+          <p className="text-xs text-ink-soft max-w-lg mx-auto leading-relaxed">
             Proses akhir untuk meresmikan pendaftar menjadi siswa aktif di sistem Yapendik OS.
           </p>
         </div>
 
         {errorMsg && (
-          <div className="p-4 rounded-xl bg-rose-50 border border-rose-200 text-rose-800 text-xs flex items-center space-x-3">
-            <AlertTriangle className="w-5 h-5 text-rose-600 shrink-0" />
+          <div className="p-4 rounded-field bg-danger-tint border border-danger-line text-danger-deep text-xs flex items-center space-x-3">
+            <AlertTriangle className="w-5 h-5 text-danger shrink-0" />
             <span>{errorMsg}</span>
           </div>
         )}
 
         {!isStatusSettled && (
-          <div className="p-4 rounded-xl bg-amber-50 border border-amber-200 text-amber-900 text-xs space-y-1">
-            <strong className="flex items-center gap-1.5 text-amber-900">
-              <AlertTriangle className="w-4 h-4 text-amber-600 shrink-0" />
+          <div className="p-4 rounded-field bg-warning-tint border border-warning-line text-warning-deep text-xs space-y-1">
+            <strong className="flex items-center gap-2 text-warning-deep">
+              <AlertTriangle className="w-4 h-4 text-brass shrink-0" />
               Syarat Upacara Belum Terpenuhi:
             </strong>
             <p className="pl-5 leading-relaxed">
@@ -102,67 +103,56 @@ export const CeremonyExecutionModal: React.FC<CeremonyExecutionModalProps> = ({
         )}
 
         {/* Details Grid */}
-        <div className="grid grid-cols-2 gap-4 p-4 rounded-2xl bg-slate-50 border border-slate-200 text-xs">
+        <div className="grid grid-cols-2 gap-4 p-4 rounded-card bg-surface-subtle border border-line text-xs">
           <div>
-            <span className="text-slate-500 block mb-0.5 font-medium">Nama Lengkap Anak</span>
-            <strong className="text-slate-900 text-sm font-black">{applicant.child_full_name}</strong>
+            <span className="text-ink-soft block mb-0.5 font-medium">Nama Lengkap Anak</span>
+            <strong className="text-ink text-sm font-black">{applicant.child_full_name}</strong>
           </div>
           <div>
-            <span className="text-slate-500 block mb-0.5 font-medium">NIK Calon Siswa</span>
-            <span className="text-slate-800 font-mono font-bold">{applicant.child_nik}</span>
+            <span className="text-ink-soft block mb-0.5 font-medium">NIK Calon Siswa</span>
+            <span className="text-ink font-mono font-bold">{applicant.child_nik}</span>
           </div>
           <div>
-            <span className="text-slate-500 block mb-0.5 font-medium">Wali / Orang Tua</span>
-            <span className="text-slate-800 font-bold">{applicant.guardian_full_name} ({applicant.guardian_relationship_type})</span>
+            <span className="text-ink-soft block mb-0.5 font-medium">Wali / Orang Tua</span>
+            <span className="text-ink font-bold">{applicant.guardian_full_name} ({applicant.guardian_relationship_type})</span>
           </div>
           <div>
-            <span className="text-slate-500 block mb-0.5 font-medium">Unit Sekolah Penyelenggara</span>
-            <span className="text-blue-700 font-bold">{schoolDisplayName}</span>
+            <span className="text-ink-soft block mb-0.5 font-medium">Unit Sekolah Penyelenggara</span>
+            <span className="text-info-deep font-bold">{schoolDisplayName}</span>
           </div>
         </div>
 
         {/* Inputs */}
         <div className="space-y-4 text-xs">
-          <div>
-            <label className="block text-slate-800 font-bold mb-1">
-              Penempatan Rombel Kanonikal (student_placement_records)
-            </label>
-            <select
-              value={targetClassId}
-              onChange={(e) => setTargetClassId(e.target.value)}
-              className="w-full bg-white border border-slate-300 rounded-xl p-3 text-slate-900 font-bold text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none shadow-2xs"
-            >
-              <option value="cls_tk_a1">TK A-1 (Menteng Mawar)</option>
-              <option value="cls_tk_a2">TK A-2 (Menteng Melati)</option>
-              <option value="cls_tk_b1">TK B-1 (Menteng Anggrek)</option>
-              <option value="cls_kb_1">KB Ceria 1</option>
-            </select>
-          </div>
+          <SelectSheet
+            label="Penempatan Rombel Kanonikal (student_placement_records)"
+            value={targetClassId}
+            onChange={setTargetClassId}
+            options={[
+              { value: 'cls_tk_a1', label: 'TK A-1 (Menteng Mawar)' },
+              { value: 'cls_tk_a2', label: 'TK A-2 (Menteng Melati)' },
+              { value: 'cls_tk_b1', label: 'TK B-1 (Menteng Anggrek)' },
+              { value: 'cls_kb_1', label: 'KB Ceria 1' },
+            ]}
+          />
 
-          <div>
-            <label className="block text-slate-800 font-bold mb-1">
-              Konfirmasi Otoritas: Ketik Ulang Nama Lengkap Calon Siswa
-            </label>
-            <input
-              type="text"
-              value={confirmChildName}
-              onChange={(e) => setConfirmChildName(e.target.value)}
-              placeholder={applicant.child_full_name}
-              className="w-full bg-white border border-slate-300 rounded-xl p-3 text-slate-900 font-bold text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none shadow-2xs"
-              data-testid="confirm-child-name-input"
-            />
-            <p className="text-xs text-slate-500 mt-1">
-              Mencegah kekeliruan pengukuhan identitas hukum anak.
-            </p>
-          </div>
+          <Input
+            label="Konfirmasi Otoritas: Ketik Ulang Nama Lengkap Calon Siswa"
+            type="text"
+            value={confirmChildName}
+            onChange={(e) => setConfirmChildName(e.target.value)}
+            placeholder={applicant.child_full_name}
+            hint="Mencegah kekeliruan pengukuhan identitas hukum anak."
+            data-testid="confirm-child-name-input"
+          />
         </div>
 
         {/* Actions */}
-        <div className="flex items-center justify-between pt-4 border-t border-slate-100">
+        <div className="flex items-center justify-between pt-4 border-t border-line-soft">
           <button
             type="button"
             onClick={onClose}
-            className="px-5 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs transition-colors"
+            className="px-5 py-2 rounded-field bg-surface-subtle hover-only:bg-line-soft text-ink-soft font-bold text-xs transition-colors"
           >
             Batal
           </button>
@@ -171,15 +161,15 @@ export const CeremonyExecutionModal: React.FC<CeremonyExecutionModalProps> = ({
             type="button"
             onClick={handleExecuteCeremony}
             disabled={!canConfirm}
-            className={`px-6 py-2.5 rounded-xl text-xs font-black transition-all ${
+            className={`px-6 py-2 rounded-field text-xs font-black transition-all ${
               canConfirm
-                ? 'bg-emerald-600 hover:bg-emerald-700 text-white shadow-md shadow-emerald-600/20'
-                : 'bg-slate-100 text-slate-400 cursor-not-allowed border border-slate-200'
+                ? 'bg-success hover-only:bg-emerald-700 text-on-brand shadow-ambient shadow-emerald-600/20'
+                : 'bg-surface-subtle text-ink-faint cursor-not-allowed border border-line'
             }`}
             data-testid="confirm-ceremony-btn"
             aria-disabled={!canConfirm}
           >
-            {executing ? 'Mengukuhkan Status Siswa...' : 'Konfirmasi Promosi Resmi  🎓'}
+            {executing ? 'Mengukuhkan Status Siswa...' : 'Konfirmasi Promosi Resmi  '}
           </button>
         </div>
       </div>

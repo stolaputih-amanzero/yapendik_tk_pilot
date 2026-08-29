@@ -1,5 +1,6 @@
 import React from 'react';
 import { AdmissionStatus } from '../../../types/admissionsTypes';
+import { ProgressBar } from '../../../components/ui';
 import { CheckCircle2, Clock, Info, AlertTriangle, Sparkles, Check } from 'lucide-react';
 
 interface ApplicationStepperProps {
@@ -104,46 +105,46 @@ export const ApplicationStepper: React.FC<ApplicationStepperProps> = ({ currentS
       return {
         title: 'Langkah 6 Selesai: Biaya Pendidikan Telah Lunas!',
         desc: 'Pembayaran uang pangkal dan formulir telah diverifikasi oleh bendahara sekolah. Berkas kini berada di Meja Kepala Sekolah untuk pengesahan pengukuhan siswa resmi.',
-        bg: 'bg-slate-50 border-slate-200 text-slate-900',
-        icon: <Sparkles className="w-5 h-5 text-amber-500 shrink-0 mt-0.5" />
+        bg: 'bg-surface-subtle border-line text-ink',
+        icon: <Sparkles className="w-5 h-5 text-brass shrink-0 mt-0.5" />
       };
     }
     if (currentStatus === 'ENROLLED_PROMOTED') {
       return {
         title: 'Langkah 7 Selesai: Selamat! Ananda Telah Resmi Menjadi Siswa',
         desc: 'Penerimaan telah berhasil disahkan oleh Kepala Sekolah. Ananda telah terdaftar aktif pada rombel kelas dan siap memulai kegiatan belajar di TK Yapendik.',
-        bg: 'bg-emerald-50 border-emerald-200 text-emerald-950',
-        icon: <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
+        bg: 'bg-success-tint border-success-line text-success-deep',
+        icon: <CheckCircle2 className="w-5 h-5 text-success shrink-0 mt-0.5" />
       };
     }
     return {
       title: `Tahap Saat Ini: ${getStatusHumanLabel(currentStatus)}`,
       desc: 'Proses pendaftaran sedang berlangsung dan ditangani secara berkala oleh panitia PPDB unit.',
-      bg: 'bg-slate-50 border-slate-200 text-slate-800',
-      icon: <Clock className="w-5 h-5 text-slate-600 shrink-0 mt-0.5" />
+      bg: 'bg-surface-subtle border-line text-ink',
+      icon: <Clock className="w-5 h-5 text-ink-soft shrink-0 mt-0.5" />
     };
   };
 
   const callout = getActiveCallout();
 
   return (
-    <div className="w-full bg-white border border-slate-200 rounded-2xl p-5 sm:p-6 md:p-8 shadow-sm" data-testid="application-stepper">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6 pb-4 border-b border-slate-100">
+    <div className="w-full bg-surface border border-line rounded-card p-4 medium:p-6 medium:p-8 shadow-hairline" data-testid="application-stepper">
+      <div className="flex flex-col medium:flex-row medium:items-center justify-between gap-3 mb-6 pb-4 border-b border-line-soft">
         <div>
-          <h3 className="text-base sm:text-lg font-bold text-slate-900 tracking-tight">Tahapan Alur Pendaftaran (PPDB)</h3>
-          <p className="text-xs text-slate-500">Siklus Pendaftaran Resmi Peserta Didik Baru Unit TK</p>
+          <h3 className="text-base medium:text-lg font-bold text-ink tracking-tight">Tahapan Alur Pendaftaran (PPDB)</h3>
+          <p className="text-xs text-ink-soft">Siklus Pendaftaran Resmi Peserta Didik Baru Unit TK</p>
         </div>
         <div className="flex items-center gap-2">
-          <span className="text-xs text-slate-500 font-medium">Status Saat Ini:</span>
+          <span className="text-xs text-ink-soft font-medium">Status Saat Ini:</span>
           <span 
             className={`px-3 py-1 text-xs font-bold rounded-full border ${
               currentStatus === 'ENROLLED_PROMOTED'
-                ? 'bg-emerald-100 text-emerald-800 border-emerald-300'
+                ? 'bg-success-tint text-success-deep border-success-line'
                 : currentStatus === 'TUITION_SETTLED'
-                ? 'bg-slate-900 text-white border-slate-900'
+                ? 'bg-brand text-on-brand border-brand'
                 : isCancelledElsewhere || isWithdrawn || isNotAdmitted
-                ? 'bg-rose-100 text-rose-800 border-rose-300'
-                : 'bg-amber-100 text-amber-900 border-amber-300'
+                ? 'bg-danger-tint text-danger-deep border-danger-line'
+                : 'bg-warning-tint text-warning-deep border-warning-line'
             }`}
             data-testid="current-status-badge"
           >
@@ -153,8 +154,8 @@ export const ApplicationStepper: React.FC<ApplicationStepperProps> = ({ currentS
       </div>
 
       {isCancelledElsewhere && (
-        <div className="mb-6 p-4 rounded-xl bg-amber-50 border border-amber-200 text-amber-900 text-xs flex items-start space-x-3">
-          <Info className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" />
+        <div className="mb-6 p-4 rounded-field bg-warning-tint border border-warning-line text-warning-deep text-xs flex items-start space-x-3">
+          <Info className="w-5 h-5 text-brass shrink-0 mt-0.5" />
           <span>
             <strong>Pemberitahuan Mutasi Antar-Unit:</strong> Calon siswa telah resmi terdaftar dan diterima di unit TK Yapendik lain. Aplikasi pada unit ini otomatis ditutup secara terhormat.
           </span>
@@ -162,8 +163,8 @@ export const ApplicationStepper: React.FC<ApplicationStepperProps> = ({ currentS
       )}
 
       {isNotAdmitted && (
-        <div className="mb-6 p-4 rounded-xl bg-rose-50 border border-rose-200 text-rose-900 text-xs flex items-start space-x-3">
-          <AlertTriangle className="w-5 h-5 text-rose-600 shrink-0 mt-0.5" />
+        <div className="mb-6 p-4 rounded-field bg-danger-tint border border-danger-line text-danger-deep text-xs flex items-start space-x-3">
+          <AlertTriangle className="w-5 h-5 text-danger shrink-0 mt-0.5" />
           <span>
             <strong>Informasi:</strong> Pendaftaran belum dapat diterima pada periode ini karena keterbatasan daya tampung rombel.
           </span>
@@ -173,13 +174,15 @@ export const ApplicationStepper: React.FC<ApplicationStepperProps> = ({ currentS
       {/* Stepper Progress Bar */}
       <div className="relative mb-6">
         {/* Background connector line */}
-        <div className="hidden md:block absolute top-5 left-8 right-8 h-1 bg-slate-100 rounded-full" />
-        <div 
-          className="hidden md:block absolute top-5 left-8 h-1 bg-slate-900 rounded-full transition-all duration-500" 
-          style={{ width: currentIndex >= 0 ? `${(currentIndex / (STEP_DEFINITIONS.length - 1)) * 100}%` : '0%' }}
-        />
+        <div className="hidden expanded:block absolute top-5 left-8 right-8 z-0">
+          <ProgressBar 
+            value={currentIndex >= 0 ? (currentIndex / (STEP_DEFINITIONS.length - 1)) * 100 : 0} 
+            variant="brass" 
+            trackClassName="h-1" 
+          />
+        </div>
 
-        <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-7 gap-2.5 relative z-10">
+        <div className="grid grid-cols-2 medium:grid-cols-4 medium:grid-cols-7 gap-2 relative z-10">
           {STEP_DEFINITIONS.map((step, idx) => {
             const isCompleted = currentIndex > idx || currentStatus === 'ENROLLED_PROMOTED';
             const isCurrent = currentIndex === idx && currentStatus !== 'ENROLLED_PROMOTED';
@@ -187,32 +190,32 @@ export const ApplicationStepper: React.FC<ApplicationStepperProps> = ({ currentS
             return (
               <div 
                 key={step.id} 
-                className={`flex flex-col items-center text-center p-2 rounded-xl transition-all ${
+                className={`flex flex-col items-center text-center p-2 rounded-field transition-all ${
                   isCurrent 
-                    ? 'bg-slate-50 border border-slate-300 shadow-2xs' 
+                    ? 'bg-surface-subtle border border-line shadow-hairline' 
                     : isCompleted
-                    ? 'bg-slate-50/50'
+                    ? 'bg-surface-subtle/50'
                     : 'bg-transparent'
                 }`}
               >
                 <div 
                   className={`w-9 h-9 rounded-full flex items-center justify-center font-bold text-xs mb-1.5 transition-all ${
                     isCompleted
-                      ? 'bg-emerald-600 text-white shadow-2xs ring-2 ring-emerald-100'
+                      ? 'bg-success text-on-brand shadow-hairline ring-2 ring-emerald-100'
                       : isCurrent
-                      ? 'bg-slate-900 text-white ring-2 ring-slate-200 font-extrabold shadow-2xs'
-                      : 'bg-slate-100 text-slate-500 border border-slate-200'
+                      ? 'bg-brand text-on-brand ring-2 ring-brass font-extrabold shadow-hairline'
+                      : 'bg-surface-subtle text-ink-soft border border-line'
                   }`}
                   data-testid={`step-indicator-${idx + 1}`}
                 >
                   {isCompleted ? <Check className="w-4 h-4 stroke-[2.5]" /> : idx + 1}
                 </div>
                 <span className={`text-[11px] font-bold leading-tight mb-0.5 ${
-                  isCurrent ? 'text-slate-950 font-black' : isCompleted ? 'text-slate-800' : 'text-slate-400'
+                  isCurrent ? 'text-ink font-black' : isCompleted ? 'text-ink' : 'text-ink-faint'
                 }`}>
                   {step.label}
                 </span>
-                <span className="text-[10px] text-slate-500 leading-snug hidden lg:block">
+                <span className="text-[10px] text-ink-soft leading-snug hidden expanded:block">
                   {step.sublabel}
                 </span>
               </div>
@@ -222,10 +225,10 @@ export const ApplicationStepper: React.FC<ApplicationStepperProps> = ({ currentS
       </div>
 
       {/* Explanatory Callout Banner */}
-      <div className={`p-4 rounded-xl border flex items-start gap-3.5 shadow-2xs ${callout.bg}`}>
+      <div className={`p-4 rounded-field border flex items-start gap-3 shadow-hairline ${callout.bg}`}>
         {callout.icon}
         <div>
-          <h4 className="text-xs sm:text-sm font-bold">{callout.title}</h4>
+          <h4 className="text-xs medium:text-sm font-bold">{callout.title}</h4>
           <p className="text-xs mt-0.5 leading-relaxed opacity-90">{callout.desc}</p>
         </div>
       </div>

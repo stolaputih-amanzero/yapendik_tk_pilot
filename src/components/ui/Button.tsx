@@ -19,18 +19,18 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
 }
 
 const variantStyles: Record<ButtonVariant, string> = {
-  primary: 'bg-slate-900 text-white hover:bg-slate-800 font-bold shadow-xs active:bg-slate-950 disabled:bg-slate-800/60',
-  secondary: 'bg-slate-100 text-slate-800 hover:bg-slate-200 border border-slate-200 font-semibold active:bg-slate-300 disabled:opacity-50',
-  ghost: 'bg-transparent text-slate-600 hover:bg-slate-100 hover:text-slate-900 font-medium active:bg-slate-200/70 disabled:opacity-50',
-  danger: 'bg-rose-50 text-rose-700 hover:bg-rose-100 border border-rose-200 font-semibold active:bg-rose-200 disabled:opacity-50',
-  icon: 'p-2 rounded-xl text-slate-500 hover:bg-slate-100 hover:text-slate-800 active:bg-slate-200 disabled:opacity-50'
+  primary: 'bg-brand text-on-brand hover-only:opacity-90 font-bold shadow-hairline active:opacity-95 disabled:opacity-50',
+  secondary: 'bg-surface-subtle text-ink hover-only:bg-surface-subtle/80 border border-line font-semibold active:bg-surface-subtle/90 disabled:opacity-50',
+  ghost: 'bg-transparent text-ink-soft hover-only:bg-surface-subtle hover-only:text-ink font-medium active:bg-surface-subtle/80 disabled:opacity-50',
+  danger: 'bg-danger-tint text-danger-deep hover-only:bg-danger-tint/80 border border-danger-line font-semibold active:bg-danger-tint/90 disabled:opacity-50',
+  icon: 'p-2 rounded-field text-ink-soft hover-only:bg-surface-subtle hover-only:text-ink active:bg-surface-subtle/80 disabled:opacity-50'
 };
 
 const sizeStyles: Record<ButtonSize, string> = {
-  sm: 'px-3 py-1.5 text-xs rounded-lg gap-1.5',
-  md: 'px-4 py-2 text-xs md:text-sm rounded-xl gap-2 min-h-[38px]',
-  lg: 'px-5 py-2.5 text-sm md:text-base rounded-2xl gap-2.5 min-h-[44px]',
-  icon: 'p-2 rounded-xl w-9 h-9 flex items-center justify-center shrink-0'
+  sm: 'px-3 py-1 text-xs rounded-field gap-2',
+  md: 'px-4 py-2 text-xs medium:text-sm rounded-field gap-2 min-h-[38px]',
+  lg: 'px-5 py-2 text-sm medium:text-base rounded-field gap-2 min-h-[44px]',
+  icon: 'p-2 rounded-field w-9 h-9 flex items-center justify-center shrink-0'
 };
 
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(({
@@ -72,7 +72,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(({
       className={`
         inline-flex items-center justify-center select-none
         transition-all duration-150 active:scale-[0.98]
-        focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-900 focus-visible:ring-offset-2
+        focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brass/30 focus-visible:ring-offset-2
         cursor-pointer disabled:cursor-not-allowed disabled:active:scale-100
         ${variantStyles[variant]}
         ${isIconButton ? sizeStyles.icon : sizeStyles[size]}

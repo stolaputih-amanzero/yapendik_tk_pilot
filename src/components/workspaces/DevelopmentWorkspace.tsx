@@ -1,3 +1,4 @@
+import { SelectSheet } from '../ui';
 /**
  * Yapendik School OS — Domain 03: Student Development & LPPA (Laporan Capaian Perkembangan Anak)
  * Production-Hardened: Connected to V2.1.5 RPC State Machine (Draft -> Review -> Approve -> Publish)
@@ -235,100 +236,88 @@ export const DevelopmentWorkspace: React.FC = () => {
   };
 
   return (
-    <div className="px-4 md:px-6 py-6 space-y-6">
+    <div className="px-4 medium:px-6 py-6 space-y-6 pb-[132px] expanded:pb-8">
       {/* Control Bar */}
-      <div className="bg-white border-y md:border border-slate-200 md:rounded-lg p-4 md:shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4 -mx-4 md:mx-0">
+      <div className="bg-surface border-y medium:border border-line medium:rounded-lg p-4 medium:shadow-hairline flex flex-col medium:flex-row medium:items-center justify-between gap-4 -mx-4 expanded:mx-0">
         <div>
-          <h1 className="text-xl font-bold text-slate-900 flex items-center gap-2">
-            <TrendingUp className="w-5 h-5 text-emerald-600" />
+          <h1 className="text-xl font-bold text-ink flex items-center gap-2">
+            <TrendingUp className="w-5 h-5 text-success" />
             Laporan Capaian Perkembangan Siswa (LPPA)
           </h1>
-          <p className="text-xs text-slate-500 mt-1">
+          <p className="text-xs text-ink-soft mt-1">
             Sintesis data observasi harian menjadi rapor capaian komprehensif berstandar TK Kurikulum Merdeka.
           </p>
         </div>
 
-        <div className="flex flex-col md:flex-row items-stretch md:items-center gap-3 w-full md:w-auto">
-          <div className="w-full flex justify-between items-center space-x-2 bg-slate-50 border border-slate-200 rounded-md px-3 py-1.5 text-xs">
-            <span className="text-slate-500 font-medium">Kelas:</span>
-            <select
-              value={selectedClassId}
-              onChange={(e) => setSelectedClassId(e.target.value)}
-              className="bg-transparent font-semibold text-slate-800 outline-none"
-            >
-              {classes.map(c => (
-                <option key={c.id} value={c.id}>{c.name}</option>
-              ))}
-            </select>
+        <div className="flex flex-col medium:flex-row items-stretch medium:items-center gap-3 w-full medium:w-auto">
+          <div className="w-full flex justify-between items-center space-x-2 bg-surface-subtle border border-line rounded-md px-3 py-1 text-xs">
+            <span className="text-ink-soft font-medium">Kelas:</span>
+            <SelectSheet value={selectedClassId}   options={classes.map(c => ({ value: c.id, label: c.name }))} />
           </div>
 
-          <div className="w-full flex justify-between items-center space-x-2 bg-slate-50 border border-slate-200 rounded-md px-3 py-1.5 text-xs">
-            <span className="text-slate-500 font-medium">Siswa:</span>
-            <select
-              value={selectedStudentId}
-              onChange={(e) => setSelectedStudentId(e.target.value)}
-              className="bg-transparent font-bold text-slate-900 outline-none"
-            >
-              {students.map(s => (
-                <option key={s.id} value={s.id}>{s.person?.fullName || 'Siswa'} ({s.nis || s.id})</option>
-              ))}
-            </select>
+          <div className="w-full flex justify-between items-center space-x-2 bg-surface-subtle border border-line rounded-md px-3 py-1 text-xs">
+            <span className="text-ink-soft font-medium">Siswa:</span>
+            <SelectSheet
+    value={selectedStudentId}
+    onChange={setSelectedStudentId}
+    options={students.map(s => ({ value: s.id, label: `${s.person?.fullName || 'Siswa'} (${s.nis || s.id})` }))}
+  />
           </div>
         </div>
       </div>
 
       {feedbackMessage && (
         <div className={`p-3 rounded-lg text-xs font-semibold border ${
-          feedbackMessage.type === 'success' ? 'bg-emerald-50 text-emerald-800 border-emerald-200' : 'bg-red-50 text-red-800 border-red-200'
+          feedbackMessage.type === 'success' ? 'bg-success-tint text-success-deep border-success-line' : 'bg-red-50 text-danger-deep border-red-200'
         }`}>
           {feedbackMessage.text}
         </div>
       )}
 
       {selectedStudent && (
-        <div className="bg-white border border-slate-200 rounded-lg shadow-sm overflow-hidden">
+        <div className="bg-surface border border-line rounded-lg shadow-hairline overflow-hidden">
           {/* Document Header */}
-          <div className="bg-slate-900 text-white p-6">
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div className="bg-brand text-on-brand p-6">
+            <div className="flex flex-col medium:flex-row medium:items-center justify-between gap-4">
               <div>
-                <div className="text-xs font-mono text-amber-400 uppercase tracking-widest mb-1">
+                <div className="text-xs font-mono text-brass uppercase tracking-wider tracking-widest mb-1 whitespace-nowrap">
                   YAPENDIK SCHOOL OS — DOKUMEN RESMI LPPA
                 </div>
                 <h2 className="text-2xl font-bold">{selectedStudent.person.fullName}</h2>
-                <div className="text-xs text-slate-300 mt-1 flex flex-wrap gap-x-4 gap-y-1">
-                  <span>NISN: <b className="text-white">{selectedStudent.nisn || '-'}</b></span>
-                  <span>NIS: <b className="text-white">{selectedStudent.nis}</b></span>
-                  <span>Gol. Darah: <b className="text-white">{selectedStudent.bloodType || '-'}</b></span>
-                  <span>Tahun Ajaran: <b className="text-white">2026/2027 (Ganjil)</b></span>
+                <div className="text-xs text-ink-faint mt-1 flex flex-wrap gap-x-4 gap-y-1">
+                  <span>NISN: <b className="text-on-brand">{selectedStudent.nisn || '-'}</b></span>
+                  <span>NIS: <b className="text-on-brand">{selectedStudent.nis}</b></span>
+                  <span>Gol. Darah: <b className="text-on-brand">{selectedStudent.bloodType || '-'}</b></span>
+                  <span>Tahun Ajaran: <b className="text-on-brand">2026/2027 (Ganjil)</b></span>
                 </div>
               </div>
 
               {/* Status Badge & Actions (V2.1.5 RPC State Machine) */}
-              <div className="flex flex-col md:flex-row md:flex-wrap items-stretch md:items-center gap-2 w-full md:w-auto mt-4 md:mt-0">
+              <div className="flex flex-col medium:flex-row expanded:flex-wrap items-stretch medium:items-center gap-2 w-full medium:w-auto mt-4 medium:mt-0">
                 {currentStatus === 'PUBLISHED' && (
-                  <div className="w-full md:w-auto justify-center flex items-center space-x-1.5 px-3 py-1.5 rounded-full bg-purple-900/80 border border-purple-400 text-purple-200 text-xs font-semibold">
-                    <Lock className="w-3.5 h-3.5" />
+                  <div className="w-full medium:w-auto justify-center flex items-center space-x-1.5 px-3 py-1 rounded-full bg-purple-900/80 border border-purple-400 text-purple-200 text-xs font-semibold">
+                    <Lock className="w-4 h-4" />
                     <span>Resmi Dipublikasikan (Terkunci)</span>
                   </div>
                 )}
 
                 {currentStatus === 'APPROVED' && (
-                  <div className="w-full md:w-auto justify-center flex items-center space-x-1.5 px-3 py-1.5 rounded-full bg-emerald-900/80 border border-emerald-500 text-emerald-300 text-xs font-semibold">
-                    <ShieldCheck className="w-3.5 h-3.5" />
+                  <div className="w-full medium:w-auto justify-center flex items-center space-x-1.5 px-3 py-1 rounded-full bg-success-tint border border-success-line text-success-deep text-xs font-semibold">
+                    <ShieldCheck className="w-4 h-4" />
                     <span>Disahkan Kepala Sekolah</span>
                   </div>
                 )}
 
                 {currentStatus === 'READY_FOR_REVIEW' && (
-                  <div className="w-full md:w-auto justify-center flex items-center space-x-1.5 px-3 py-1.5 rounded-full bg-amber-900/80 border border-amber-500 text-amber-300 text-xs font-semibold">
-                    <Clock className="w-3.5 h-3.5" />
+                  <div className="w-full medium:w-auto justify-center flex items-center space-x-1.5 px-3 py-1 rounded-full bg-warning-tint border border-warning-line text-warning-deep text-xs font-semibold">
+                    <Clock className="w-4 h-4" />
                     <span>Draf Menunggu Pengesahan</span>
                   </div>
                 )}
 
                 {currentStatus === 'DRAFT' && (
-                  <div className="w-full md:w-auto justify-center flex items-center space-x-1.5 px-3 py-1.5 rounded-full bg-slate-800 border border-slate-600 text-slate-300 text-xs font-semibold">
-                    <FileText className="w-3.5 h-3.5" />
+                  <div className="w-full medium:w-auto justify-center flex items-center space-x-1.5 px-3 py-1 rounded-full bg-surface-inset border border-line-strong text-ink-faint text-xs font-semibold">
+                    <FileText className="w-4 h-4" />
                     <span>Draf Awal Guru</span>
                   </div>
                 )}
@@ -339,16 +328,16 @@ export const DevelopmentWorkspace: React.FC = () => {
                     <button
                       onClick={handleSaveDraft}
                       disabled={isProcessing}
-                      className="w-full md:w-auto mt-2 md:mt-0 flex justify-center bg-slate-800 hover:bg-slate-700 text-white text-xs font-semibold px-3 py-2 rounded transition-colors shadow-sm"
+                      className="w-full medium:w-auto mt-2 medium:mt-0 flex justify-center bg-surface-inset hover-only:bg-surface-inset text-on-brand text-xs font-semibold px-3 py-2 rounded transition-colors shadow-hairline"
                     >
                       Simpan Draf LPPA
                     </button>
                     <button
                       onClick={handleSubmitForReview}
                       disabled={isProcessing}
-                      className="w-full md:w-auto mt-2 md:mt-0 flex justify-center bg-amber-600 hover:bg-amber-500 text-white text-xs font-bold px-3.5 py-2 rounded transition-colors items-center space-x-1.5 shadow-sm"
+                      className="w-full medium:w-auto mt-2 medium:mt-0 flex justify-center bg-warning hover-only:bg-warning text-on-brand text-xs font-bold px-3 py-2 rounded transition-colors items-center space-x-1.5 shadow-hairline"
                     >
-                      <Send className="w-3.5 h-3.5" />
+                      <Send className="w-4 h-4" />
                       <span>Ajukan ke Kepala Sekolah</span>
                     </button>
                   </>
@@ -358,7 +347,7 @@ export const DevelopmentWorkspace: React.FC = () => {
                   <button
                     onClick={handleApproveReport}
                     disabled={isProcessing}
-                    className="w-full md:w-auto mt-2 md:mt-0 flex justify-center bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold px-4 py-2 rounded transition-colors items-center space-x-1.5 shadow-sm"
+                    className="w-full medium:w-auto mt-2 medium:mt-0 flex justify-center bg-success hover-only:bg-success text-on-brand text-xs font-bold px-4 py-2 rounded transition-colors items-center space-x-1.5 shadow-hairline"
                   >
                     <CheckCircle2 className="w-4 h-4" />
                     <span>Sahkan Laporan LPPA</span>
@@ -369,7 +358,7 @@ export const DevelopmentWorkspace: React.FC = () => {
                   <button
                     onClick={handlePublishReport}
                     disabled={isProcessing}
-                    className="w-full md:w-auto mt-2 md:mt-0 flex justify-center bg-purple-600 hover:bg-purple-500 text-white text-xs font-bold px-4 py-2 rounded transition-colors items-center space-x-1.5 shadow-sm"
+                    className="w-full medium:w-auto mt-2 medium:mt-0 flex justify-center bg-purple-600 hover-only:bg-purple-500 text-on-brand text-xs font-bold px-4 py-2 rounded transition-colors items-center space-x-1.5 shadow-hairline"
                   >
                     <Lock className="w-4 h-4" />
                     <span>Publikasikan ke Wali Murid</span>
@@ -380,51 +369,51 @@ export const DevelopmentWorkspace: React.FC = () => {
           </div>
 
           {/* Child Medical & Psychological Notes */}
-          <div className="bg-slate-50 border-b border-slate-200 p-4 text-xs text-slate-700 grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="bg-surface-subtle border-b border-line p-4 text-xs text-ink-soft grid grid-cols-1 medium:grid-cols-2 gap-4">
             <div>
-              <span className="font-semibold text-slate-900 block mb-0.5">Catatan Alergi & Medis:</span>
-              <p className="text-slate-600">{selectedStudent.allergies || 'Tidak ada catatan alergi khusus.'}</p>
+              <span className="font-semibold text-ink block mb-0.5">Catatan Alergi & Medis:</span>
+              <p className="text-ink-soft">{selectedStudent.allergies || 'Tidak ada catatan alergi khusus.'}</p>
             </div>
             <div>
-              <span className="font-semibold text-slate-900 block mb-0.5">Karakteristik & Dukungan Belajar:</span>
-              <p className="text-slate-600">{selectedStudent.specialNeedsNotes || 'Menunjukkan kemandirian belajar yang stabil.'}</p>
+              <span className="font-semibold text-ink block mb-0.5">Karakteristik & Dukungan Belajar:</span>
+              <p className="text-ink-soft">{selectedStudent.specialNeedsNotes || 'Menunjukkan kemandirian belajar yang stabil.'}</p>
             </div>
           </div>
 
           {/* Domain Review Grid */}
-          <div className="p-4 md:p-6 space-y-6">
-            <h3 className="text-sm font-bold text-slate-900 uppercase tracking-wide border-b border-slate-200 pb-2">
+          <div className="p-4 medium:p-6 space-y-6">
+            <h3 className="text-sm font-bold text-ink uppercase tracking-wider tracking-wide border-b border-line pb-2">
               Sintesis Capaian 6 Domain Perkembangan Anak
             </h3>
 
-            <div className="flex flex-col divide-y divide-slate-100 md:divide-none md:space-y-4 -mx-4 md:mx-0">
+            <div className="flex flex-col divide-y divide-line-soft expanded:divide-none medium:space-y-4 -mx-4 expanded:mx-0">
               {domains.map(dom => {
                 const { count, domainObs, dominantRating } = getDomainStats(dom.key);
                 return (
-                  <div key={dom.key} className="bg-white px-4 py-5 md:p-4 md:border md:border-slate-200 md:rounded-lg">
+                  <div key={dom.key} className="bg-surface px-4 py-5 medium:p-4 medium:border medium:border-line medium:rounded-lg">
                     <div className="flex items-start justify-between gap-3 mb-2">
                       <div>
-                        <h4 className="font-bold text-slate-900 text-sm">{dom.title}</h4>
-                        <p className="text-xs text-slate-500">{dom.description}</p>
+                        <h4 className="font-bold text-ink text-sm">{dom.title}</h4>
+                        <p className="text-xs text-ink-soft">{dom.description}</p>
                       </div>
                       <div className="text-right shrink-0">
-                        <span className="text-[11px] font-bold px-2.5 py-1 rounded bg-slate-900 text-white">
+                        <span className="text-[11px] font-bold px-2 py-1 rounded bg-brand text-on-brand">
                           Capaian: {dominantRating}
                         </span>
-                        <div className="text-[10px] text-slate-400 mt-1">
+                        <div className="text-[10px] text-ink-faint mt-1">
                           {count} Catatan Bukti
                         </div>
                       </div>
                     </div>
 
                     {domainObs.length > 0 ? (
-                      <div className="mt-3 bg-slate-50 rounded-md p-3 border border-slate-100 space-y-2 text-xs">
-                        <span className="font-semibold text-slate-800 text-[11px] block">
+                      <div className="mt-3 bg-surface-subtle rounded-md p-3 border border-line-soft space-y-2 text-xs">
+                        <span className="font-semibold text-ink text-[11px] block">
                           Bukti Peristiwa Terpilih:
                         </span>
                         {domainObs.map(obs => (
-                          <div key={obs.id} className="pl-2 border-l-2 border-slate-300 text-slate-700">
-                            <span className="font-medium text-slate-900">
+                          <div key={obs.id} className="pl-2 border-l-2 border-line text-ink-soft">
+                            <span className="font-medium text-ink">
                               [{obs.milestoneRating}] {new Date(obs.observedAt).toLocaleDateString('id-ID')}:
                             </span>{' '}
                             "{obs.anecdoteDescription}"
@@ -432,7 +421,7 @@ export const DevelopmentWorkspace: React.FC = () => {
                         ))}
                       </div>
                     ) : (
-                      <p className="text-xs text-slate-400 italic mt-2">
+                      <p className="text-xs text-ink-faint italic mt-2">
                         Belum ada catatan observasi spesifik pada domain ini untuk siswa terpilih.
                       </p>
                     )}
@@ -442,11 +431,11 @@ export const DevelopmentWorkspace: React.FC = () => {
             </div>
 
             {/* Teacher Homeroom Narrative */}
-            <div className="mt-6 p-4 rounded-lg bg-amber-50/50 border border-amber-200">
-              <span className="font-bold text-slate-900 text-xs uppercase tracking-wide block mb-1">
+            <div className="mt-6 p-4 rounded-lg bg-warning-tint/50 border border-warning-line">
+              <span className="font-bold text-ink text-xs uppercase tracking-wider tracking-wide block mb-1">
                 Catatan Wali Kelas & Rekomendasi Stimulasi di Rumah:
               </span>
-              <p className="text-xs text-slate-800 leading-relaxed">
+              <p className="text-xs text-ink leading-relaxed">
                 {currentReport?.homeroomFeedback || `Ananda ${selectedStudent.person.fullName} menunjukkan perkembangan sosial-emosional dan kognitif yang sangat pesat. Mampu mengekspresikan ide dengan santun dan menunjukkan empati tinggi saat kegiatan bersama teman. Disarankan orang tua di rumah terus membiasakan bercerita sebelum tidur serta memberikan stimulasi kegiatan motorik halus seperti menyusun origami dan puzzle.`}
               </p>
             </div>

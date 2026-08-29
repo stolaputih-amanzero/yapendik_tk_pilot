@@ -51,9 +51,9 @@ export const AutoResizeTextarea = forwardRef<HTMLTextAreaElement, AutoResizeText
       value={value}
       defaultValue={defaultValue}
       className={`
-        w-full rounded-2xl bg-slate-50 border border-slate-200 p-3.5
-        text-xs md:text-sm text-slate-900 placeholder:text-slate-400
-        focus:outline-none focus:border-slate-400 focus:bg-white
+        w-full rounded-card bg-surface-subtle border border-line p-3
+        text-xs medium:text-sm text-ink placeholder:text-ink-faint
+        focus:outline-none focus:border-line-strong focus:bg-surface
         transition-colors duration-150 resize-none overflow-hidden font-medium
         ${className}
       `.trim().replace(/\s+/g, ' ')}

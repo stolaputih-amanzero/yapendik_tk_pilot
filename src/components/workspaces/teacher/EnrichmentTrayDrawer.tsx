@@ -1,3 +1,4 @@
+import { SelectSheet } from '../../ui';
 /**
  * Yapendik School OS — Stage 4.1 Enrichment Tray Drawer (CC-10)
  * Slide-over drawer for Phase 8 pedagogical narrative enrichment & LPPA curation
@@ -116,26 +117,26 @@ export const EnrichmentTrayDrawer: React.FC<Props> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-[70] flex items-center justify-end bg-slate-950/60 backdrop-blur-xs animate-in fade-in duration-200">
-      <div className="bg-white border-l border-slate-200 w-full max-w-lg h-full shadow-2xl flex flex-col animate-in slide-in-from-right duration-300">
+    <div className="fixed inset-0 z-70 flex items-center justify-end bg-brand/60 backdrop-blur-xs animate-in fade-in duration-200">
+      <div className="bg-surface border-l border-line w-full max-w-lg h-full shadow-floating flex flex-col animate-in slide-in-from-right duration-300">
         {/* Header */}
-        <div className="p-5 border-b border-slate-200 flex items-center justify-between bg-slate-50">
-          <div className="flex items-center gap-2.5">
-            <div className="p-2 rounded-xl bg-indigo-50 text-indigo-700 border border-indigo-200">
+        <div className="p-4 border-b border-line flex items-center justify-between bg-surface-subtle">
+          <div className="flex items-center gap-2">
+            <div className="p-2 rounded-field bg-lppa-tint text-lppa-deep border border-lppa-line">
               <Sparkles className="w-5 h-5" />
             </div>
             <div>
-              <h3 className="text-sm font-black text-slate-900">
+              <h3 className="text-sm font-black text-ink">
                 Laci Pengayaan Refleksi & Bukti LPPA
               </h3>
-              <p className="text-xs text-slate-600 font-medium">
-                Siswa: <strong className="text-slate-900 font-bold">{observation.target_student_names.join(', ')}</strong>
+              <p className="text-xs text-ink-soft font-medium">
+                Siswa: <strong className="text-ink font-bold">{observation.target_student_names.join(', ')}</strong>
               </p>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="p-2 rounded-xl text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition cursor-pointer"
+            className="p-2 rounded-field text-ink-faint hover-only:text-ink-soft hover-only:bg-surface-subtle transition cursor-pointer"
           >
             <X className="w-5 h-5" />
           </button>
@@ -145,15 +146,15 @@ export const EnrichmentTrayDrawer: React.FC<Props> = ({
         <form onSubmit={handleSubmit} className="p-6 overflow-y-auto space-y-5 flex-1 text-xs">
           {/* Media preview if present */}
           {observation.media_url && (
-            <div className="rounded-2xl overflow-hidden h-36 bg-slate-950 border border-slate-200">
+            <div className="rounded-card overflow-hidden h-36 bg-surface-inset border border-line">
               <img src={observation.media_url} alt="Evidence" className="w-full h-full object-cover" />
             </div>
           )}
 
           {/* 1. Narasi Refleksi Pedagogis */}
           <div>
-            <label className="block font-extrabold text-slate-800 uppercase tracking-wider mb-1.5 flex items-center gap-1.5">
-              <BookOpen className="w-3.5 h-3.5 text-indigo-600" />
+            <label className="block font-extrabold text-ink uppercase tracking-wider mb-1.5 flex items-center gap-2">
+              <BookOpen className="w-4 h-4 text-lppa" />
               <span>Narasi Deskripsi & Refleksi Pedagogis:</span>
             </label>
             <textarea
@@ -161,41 +162,33 @@ export const EnrichmentTrayDrawer: React.FC<Props> = ({
               value={narrative}
               onChange={e => setNarrative(e.target.value)}
               placeholder="Jelaskan proses belajar, capaian anak, dan tindak lanjut pendidik..."
-              className="w-full px-3.5 py-2.5 rounded-2xl bg-slate-50 border border-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-slate-900 placeholder:text-slate-500 font-medium leading-relaxed"
+              className="w-full px-3 py-2 rounded-card bg-surface-subtle border border-line focus:outline-none focus:ring-2 focus:ring-indigo-500 text-ink placeholder:text-ink-soft font-medium leading-relaxed"
             />
           </div>
 
           {/* 2. Dimensi Capaian Kurikulum */}
           <div>
-            <label className="block font-extrabold text-slate-800 uppercase tracking-wider mb-1.5">
+            <label className="block font-extrabold text-ink uppercase tracking-wider mb-1.5">
               Dimensi Capaian Pembelajaran:
             </label>
-            <select
-              value={domain}
-              onChange={e => setDomain(e.target.value as DevelopmentDomain)}
-              className="w-full px-3.5 py-2 rounded-xl bg-slate-50 border border-slate-300 font-medium text-slate-900"
-            >
-              {DOMAINS.map(d => (
-                <option key={d.key} value={d.key}>{d.label}</option>
-              ))}
-            </select>
+            <SelectSheet value={domain} onChange={(val) => setDomain(val as any)} options={DOMAINS.map(d => ({ value: d.key, label: d.label }))} />
           </div>
 
           {/* 3. Penilaian Milestone PAUD */}
           <div>
-            <label className="block font-extrabold text-slate-800 uppercase tracking-wider mb-2">
+            <label className="block font-extrabold text-ink uppercase tracking-wider mb-2">
               Tingkat Capaian (Rating):
             </label>
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+            <div className="grid grid-cols-2 medium:grid-cols-4 gap-2">
               {RATINGS.map(r => (
                 <button
                   type="button"
                   key={r.key}
                   onClick={() => setMilestoneRating(r.key)}
-                  className={`py-2.5 sm:py-2 px-1 rounded-xl text-center transition cursor-pointer border ${
+                  className={`py-2 medium:py-2 px-1 rounded-field text-center transition cursor-pointer border ${
                     milestoneRating === r.key
-                      ? 'bg-indigo-600 text-white border-indigo-600 font-bold shadow-md shadow-indigo-600/30'
-                      : 'bg-slate-50 border-slate-200 text-slate-800 hover:bg-slate-100 font-semibold'
+                      ? 'bg-indigo-600 text-on-brand border-indigo-600 font-bold shadow-ambient shadow-indigo-600/30'
+                      : 'bg-surface-subtle border-line text-ink hover-only:bg-surface-subtle font-semibold'
                   }`}
                 >
                   <div className="text-xs font-bold">{r.label}</div>
@@ -206,19 +199,19 @@ export const EnrichmentTrayDrawer: React.FC<Props> = ({
           </div>
 
           {/* 4. LPPA Evidence Flag */}
-          <div className="p-3.5 rounded-2xl bg-purple-50 border border-purple-200">
-            <label className="flex items-center gap-2.5 cursor-pointer">
+          <div className="p-3 rounded-card bg-lppa-tint border border-lppa-line">
+            <label className="flex items-center gap-2 cursor-pointer">
               <input
                 type="checkbox"
                 checked={isLppaEvidence}
                 onChange={e => setIsLppaEvidence(e.target.checked)}
-                className="w-4 h-4 rounded text-purple-600 focus:ring-purple-500"
+                className="w-4 h-4 rounded text-lppa focus:ring-brass"
               />
               <div>
-                <span className="font-bold text-purple-950 flex items-center gap-1.5">
-                  <Award className="w-4 h-4 text-purple-600" /> Tetapkan Sebagai Bukti LPPA (Rapor)
+                <span className="font-bold text-lppa-deep flex items-center gap-2">
+                  <Award className="w-4 h-4 text-lppa" /> Tetapkan Sebagai Bukti LPPA (Rapor)
                 </span>
-                <p className="text-[11px] text-purple-800 mt-0.5 font-medium">
+                <p className="text-[11px] text-lppa-deep mt-0.5 font-medium">
                   Momen ini akan otomatis menjadi materi sintesis portofolio rapor akhir semester.
                 </p>
               </div>
@@ -226,12 +219,12 @@ export const EnrichmentTrayDrawer: React.FC<Props> = ({
           </div>
 
           {/* 5. Invariant C-11: Mutually Exclusive Privacy Selection */}
-          <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
-            <div className="font-extrabold text-slate-800 uppercase tracking-wider mb-1">
+          <div className="p-3 rounded-card bg-surface-subtle border border-line space-y-2">
+            <div className="font-extrabold text-ink uppercase tracking-wider mb-1">
               DISTRIBUSI & PRIVASI
             </div>
 
-            <label className="flex items-start gap-2.5 p-2 rounded-xl hover:bg-slate-100 cursor-pointer">
+            <label className="flex items-start gap-2 p-2 rounded-field hover-only:bg-surface-subtle cursor-pointer">
               <input
                 type="radio"
                 name="privacyChoice"
@@ -241,27 +234,27 @@ export const EnrichmentTrayDrawer: React.FC<Props> = ({
               />
               <div>
                 <span className="font-bold text-teal-800 flex items-center gap-1">
-                  <Share2 className="w-3.5 h-3.5 text-teal-700" /> Bagikan ke Orang Tua (Buku Penghubung)
+                  <Share2 className="w-4 h-4 text-teal-700" /> Bagikan ke Orang Tua (Buku Penghubung)
                 </span>
-                <p className="text-[10px] text-slate-600 font-medium">
+                <p className="text-[10px] text-ink-soft font-medium">
                   Orang tua dapat melihat karya & apresiasi ananda di portal wali murid.
                 </p>
               </div>
             </label>
 
-            <label className="flex items-start gap-2.5 p-2 rounded-xl hover:bg-slate-100 cursor-pointer">
+            <label className="flex items-start gap-2 p-2 rounded-field hover-only:bg-surface-subtle cursor-pointer">
               <input
                 type="radio"
                 name="privacyChoice"
                 checked={privacyChoice === 'CONFIDENTIAL'}
                 onChange={() => setPrivacyChoice('CONFIDENTIAL')}
-                className="mt-0.5 text-amber-600 focus:ring-amber-500"
+                className="mt-0.5 text-brass focus:ring-amber-500"
               />
               <div>
-                <span className="font-bold text-amber-900 flex items-center gap-1">
-                  <Lock className="w-3.5 h-3.5 text-amber-700" /> Khusus Pendidik / Catatan Sensitif (Rahasia)
+                <span className="font-bold text-warning-deep flex items-center gap-1">
+                  <Lock className="w-4 h-4 text-warning-deep" /> Khusus Pendidik / Catatan Sensitif (Rahasia)
                 </span>
-                <p className="text-[10px] text-slate-600 font-medium">
+                <p className="text-[10px] text-ink-soft font-medium">
                   Hanya dapat dilihat oleh dewan guru dan kepala sekolah (tidak bocor ke orang tua).
                 </p>
               </div>
@@ -269,18 +262,18 @@ export const EnrichmentTrayDrawer: React.FC<Props> = ({
           </div>
 
           {/* Action Buttons */}
-          <div className="pt-3 border-t border-slate-200 flex flex-col sm:flex-row items-stretch sm:items-center justify-end gap-3 pb-6 sm:pb-0">
+          <div className="pt-3 border-t border-line flex flex-col medium:flex-row items-stretch medium:items-center justify-end gap-3 pb-6 medium:pb-0">
             <button
               type="button"
               onClick={onClose}
-              className="w-full sm:w-auto px-4 py-2.5 sm:py-2 rounded-xl font-bold text-slate-700 hover:bg-slate-100 transition cursor-pointer order-2 sm:order-1"
+              className="w-full medium:w-auto px-4 py-2 medium:py-2 rounded-field font-bold text-ink-soft hover-only:bg-surface-subtle transition cursor-pointer order-2 medium:order-1"
             >
               Tutup
             </button>
             <button
               type="submit"
               disabled={isSaving}
-              className="w-full sm:w-auto px-6 py-2.5 rounded-xl font-extrabold bg-indigo-600 hover:bg-indigo-500 text-white shadow-lg shadow-indigo-600/30 transition-all disabled:opacity-50 cursor-pointer flex justify-center items-center gap-2 order-1 sm:order-2"
+              className="w-full medium:w-auto px-6 py-2 rounded-field font-extrabold bg-indigo-600 hover-only:bg-indigo-500 text-on-brand shadow-ambient shadow-indigo-600/30 transition-all disabled:opacity-50 cursor-pointer flex justify-center items-center gap-2 order-1 medium:order-2"
             >
               <Check className="w-4 h-4" />
               <span>{isSaving ? 'Menyimpan...' : 'Simpan Pengayaan'}</span>

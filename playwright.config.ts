@@ -28,5 +28,12 @@ export default defineConfig({
       },
     }
   ],
+  webServer: {
+    command: 'pnpm dev',
+    url: 'http://localhost:3000',
+    reuseExistingServer: true,
+    timeout: 120000
+  },
   outputDir: 'tests/evidence/gate-06/raw-artifacts'
 });
+

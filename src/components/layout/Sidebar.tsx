@@ -34,6 +34,8 @@ interface SidebarProps {
   activeTab: WorkspaceTab;
   onSelectTab: (tab: WorkspaceTab) => void;
   className?: string;
+  isCollapsed?: boolean;
+  onToggleCollapse?: () => void;
 }
 
 interface NavItem {
@@ -51,7 +53,9 @@ interface NavGroup {
 export const Sidebar: React.FC<SidebarProps> = ({
   activeTab,
   onSelectTab,
-  className = ''
+  className = '',
+  isCollapsed = false,
+  onToggleCollapse
 }) => {
   const { currentPersona, securityContext } = useSecurityContext();
 
@@ -177,74 +181,197 @@ export const Sidebar: React.FC<SidebarProps> = ({
   }
 
   return (
-    <aside className={`w-64 bg-white border-r border-slate-200 h-screen sticky top-0 hidden lg:flex flex-col justify-between text-slate-900 z-30 shrink-0 min-w-0 ${className}`}>
-      {/* Top Header branding section in sidebar */}
-      <div className="p-4 border-b border-slate-100 flex items-center space-x-3 min-w-0">
-        <div className="w-9 h-9 rounded-xl bg-slate-100 border border-slate-200 flex items-center justify-center text-slate-800 shrink-0">
-          <Building2 className="w-5 h-5" />
-        </div>
-        <div className="min-w-0 flex-1">
-          <h2 className="font-bold text-sm tracking-tight text-slate-900 truncate">Yapendik OS</h2>
-          <p className="text-[10px] text-slate-500 font-mono tracking-wider truncate uppercase">
-            {role.replace('_', ' ')}
-          </p>
-        </div>
+    <aside
+      aria-label="Sidebar Navigasi"
+      className={`bg-surface border-r border-line h-[100dvh] sticky top-0 hidden expanded:flex flex-col justify-between text-ink z-30 shrink-0 transition-[width] duration-300 ease-in-out select-none ${
+        isCollapsed ? 'w-[72px]' : 'w-64'
+      } ${className}`}
+    >
+      {/* Top Header branding section in sidebar (Clickable Collapse/Expand Toggle) */}
+      <div className={`border-b border-line-soft flex items-center min-w-0 transition-all ${
+        isCollapsed ? 'p-3 justify-center' : 'p-4'
+      }`}>
+        <button
+          type="button"
+          onClick={onToggleCollapse}
+          title={isCollapsed ? 'Buka Menu Sidebar' : 'Ciutkan Menu Sidebar'}
+          aria-label={isCollapsed ? 'Buka Menu Sidebar' : 'Ciutkan Menu Sidebar'}
+          className={`flex items-center text-left min-w-0 group cursor-pointer rounded-field transition-colors ${
+            isCollapsed ? 'justify-center p-1' : 'w-full space-x-3 p-2 -m-1 hover-only:bg-surface-subtle'
+          }`}
+        >
+          <div
+            className="w-9 h-9 rounded-field bg-surface-subtle border border-line flex items-center justify-center text-ink shrink-0 shadow-hairline group-hover-only:bg-surface-subtle/80 group-hover-only:border-line-strong transition-all"
+          >
+            <Building2 className="w-5 h-5 text-brass" />
+          </div>
+          {!isCollapsed && (
+            <div className="min-w-0 flex-1">
+              <h2 className="font-bold text-sm tracking-tight text-ink truncate group-hover-only:text-ink transition-colors font-display">
+                Yapendik OS
+              </h2>
+              <p className="text-[10px] text-ink-soft font-mono tracking-wider truncate uppercase font-semibold whitespace-nowrap">
+                {role.replace('_', ' ')}
+              </p>
+            </div>
+          )}
+        </button>
       </div>
 
       {/* Main Grouped Navigation Surface */}
-      <nav className="flex-1 overflow-y-auto px-3 py-4 space-y-6 scrollbar-thin scrollbar-thumb-slate-200 min-w-0">
+      <nav className={`flex-1 overflow-y-auto overflow-x-hidden py-3 space-y-4 scrollbar-thin scrollbar-thumb-line-soft min-w-0 ${
+        isCollapsed ? 'px-2' : 'px-3'
+      }`}>
         {navGroups.map((group, groupIdx) => (
           <div key={groupIdx} className="space-y-1 min-w-0">
-            <div className="text-[10px] text-slate-400 font-bold uppercase tracking-wider px-3 mb-1.5 select-none truncate">
-              {group.title}
-            </div>
+            {isCollapsed ? (
+              groupIdx > 0 && <div className="w-7 h-px bg-line-soft mx-auto my-2" />
+            ) : (
+              <div className="text-[10px] text-ink-faint font-bold uppercase tracking-wider px-3 mb-1.5 select-none truncate">
+                {group.title}
+              </div>
+            )}
             {group.items.map((item) => {
               const Icon = item.icon;
               const isActive = activeTab === item.tab;
 
               return (
-                <button
-                  key={item.tab}
-                  type="button"
-                  onClick={() => onSelectTab(item.tab)}
-                  className={`w-full flex items-center space-x-2.5 px-3 py-2 rounded-xl text-xs font-medium transition-all duration-150 cursor-pointer min-w-0 ${
-                    isActive
-                      ? 'bg-slate-900 text-white font-semibold shadow-xs'
-                      : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100 border border-transparent'
-                  }`}
-                >
-                  <Icon className={`w-4 h-4 shrink-0 transition-colors ${isActive ? 'text-white' : 'text-slate-400'}`} />
-                  <span className="truncate flex-1 text-left line-clamp-1">{item.label}</span>
-                  {item.badge && (
-                    <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-slate-100 text-slate-600 border border-slate-200 shrink-0">
-                      {item.badge}
-                    </span>
+                <div key={item.tab} className="relative group min-w-0">
+                  <button
+                    type="button"
+                    onClick={() => onSelectTab(item.tab)}
+                    aria-label={item.label}
+                    className={`w-full flex items-center rounded-field text-xs font-medium transition-all duration-150 cursor-pointer min-w-0 relative overflow-hidden ${
+                      isCollapsed
+                        ? 'justify-center h-10 w-10 mx-auto'
+                        : 'space-x-2.5 px-3 py-2 text-left'
+                    } ${
+                      isActive
+                        ? 'bg-brand text-on-brand font-semibold shadow-hairline'
+                        : 'text-ink-soft hover-only:text-ink hover-only:bg-surface-subtle border border-transparent'
+                    }`}
+                  >
+                    {isActive && (
+                      <div className="absolute left-0 top-0 bottom-0 w-1 bg-brass motif-poleng opacity-80" />
+                    )}
+                    <Icon className={`w-4 h-4 shrink-0 transition-colors ${isActive ? 'text-on-brand' : 'text-ink-faint group-hover-only:text-ink'}`} />
+                    {!isCollapsed && (
+                      <>
+                        <span className="truncate flex-1 text-left line-clamp-1">{item.label}</span>
+                        {item.badge && (
+                          <span className="text-[9px] font-mono px-1 py-1 rounded bg-surface-subtle text-ink-soft border border-line shrink-0 whitespace-nowrap">
+                            {item.badge}
+                          </span>
+                        )}
+                      </>
+                    )}
+                  </button>
+
+                  {/* Sleek Tooltip for Collapsed Mode */}
+                  {isCollapsed && (
+                    <div className="pointer-events-none absolute left-full top-1/2 -translate-y-1/2 ml-3.5 z-50 hidden group-hover:flex items-center">
+                      <div className="bg-surface-inset text-on-brand text-xs font-medium px-2 py-1 rounded-lg shadow-floating whitespace-nowrap flex items-center space-x-1.5 border border-line-strong animate-in fade-in zoom-in-95 duration-150">
+                        <span>{item.label}</span>
+                        {item.badge && (
+                          <span className="text-[9px] font-mono px-1 py-0 rounded bg-brand text-brass border border-line-strong whitespace-nowrap">
+                            {item.badge}
+                          </span>
+                        )}
+                      </div>
+                    </div>
                   )}
-                </button>
+                </div>
               );
             })}
           </div>
         ))}
       </nav>
 
-      {/* Bottom Action / Test Suite Button (Available for all roles) */}
-      <div className="p-3 border-t border-slate-100 bg-slate-50 min-w-0">
-        <button
-          type="button"
-          onClick={() => onSelectTab('TESTS')}
-          className={`w-full flex items-center space-x-2.5 px-3 py-2.5 rounded-xl text-xs font-semibold transition-all duration-150 cursor-pointer min-w-0 ${
-            activeTab === 'TESTS'
-              ? 'bg-slate-900 text-white shadow-xs font-bold'
-              : 'text-slate-600 hover:text-slate-900 hover:bg-white border border-slate-200'
-          }`}
-        >
-          <FlaskConical className="w-4 h-4 shrink-0 text-slate-500" />
-          <span className="truncate flex-1 text-left line-clamp-1">Uji Otorisasi</span>
-          <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-slate-200 text-slate-700 border border-slate-300 shrink-0">
-            TESTS
-          </span>
-        </button>
+      {/* Bottom Actions */}
+      <div className={`border-t border-line-soft bg-surface-subtle/80 min-w-0 transition-all space-y-1.5 ${
+        isCollapsed ? 'p-2' : 'p-3'
+      }`}>
+        {/* Living Contract Button */}
+        <div className="relative group min-w-0">
+          <button
+            type="button"
+            onClick={() => onSelectTab('PERCONTOHAN')}
+            aria-label="Living Contract ✦"
+            className={`w-full flex items-center rounded-field text-xs font-semibold transition-all duration-150 cursor-pointer min-w-0 ${
+              isCollapsed
+                ? 'justify-center h-10 w-10 mx-auto'
+                : 'space-x-2.5 px-3 py-2 text-left'
+            } ${
+              activeTab === 'PERCONTOHAN'
+                ? 'bg-brand text-on-brand shadow-hairline font-bold'
+                : 'text-ink-soft hover-only:text-ink hover-only:bg-surface border border-line'
+            }`}
+          >
+            <Sparkles className="w-4 h-4 shrink-0 text-brass" />
+            {!isCollapsed && (
+              <>
+                <span className="truncate flex-1 text-left line-clamp-1">Living Contract</span>
+                <span className="text-[9px] font-mono px-1 py-1 rounded bg-surface-inset text-on-brand border border-line-strong shrink-0 whitespace-nowrap">
+                  ✦ ADS
+                </span>
+              </>
+            )}
+          </button>
+
+          {/* Tooltip in collapsed mode */}
+          {isCollapsed && (
+            <div className="pointer-events-none absolute left-full top-1/2 -translate-y-1/2 ml-3.5 z-50 hidden group-hover:flex items-center">
+              <div className="bg-surface-inset text-on-brand text-xs font-medium px-2 py-1 rounded-lg shadow-floating whitespace-nowrap flex items-center space-x-1.5 border border-line-strong">
+                <span>Living Contract</span>
+                <span className="text-[9px] font-mono px-1 py-0 rounded bg-surface-inset text-on-brand border border-line-strong whitespace-nowrap">
+                  ADS
+                </span>
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* Test Suite Button */}
+        <div className="relative group min-w-0">
+          <button
+            type="button"
+            onClick={() => onSelectTab('TESTS')}
+            aria-label="Uji Otorisasi (TESTS)"
+            className={`w-full flex items-center rounded-field text-xs font-semibold transition-all duration-150 cursor-pointer min-w-0 ${
+              isCollapsed
+                ? 'justify-center h-10 w-10 mx-auto'
+                : 'space-x-2.5 px-3 py-2 text-left'
+            } ${
+              activeTab === 'TESTS'
+                ? 'bg-brand text-on-brand shadow-hairline font-bold'
+                : 'text-ink-soft hover-only:text-ink hover-only:bg-surface border border-line'
+            }`}
+          >
+            <FlaskConical className={`w-4 h-4 shrink-0 ${activeTab === 'TESTS' ? 'text-brass' : 'text-ink-faint'}`} />
+            {!isCollapsed && (
+              <>
+                <span className="truncate flex-1 text-left line-clamp-1">Uji Otorisasi</span>
+                <span className="text-[9px] font-mono px-1 py-1 rounded bg-line-soft text-ink-soft border border-line-strong shrink-0 whitespace-nowrap">
+                  TESTS
+                </span>
+              </>
+            )}
+          </button>
+
+          {/* Tooltip in collapsed mode */}
+          {isCollapsed && (
+            <div className="pointer-events-none absolute left-full top-1/2 -translate-y-1/2 ml-3.5 z-50 hidden group-hover:flex items-center">
+              <div className="bg-surface-inset text-on-brand text-xs font-medium px-2 py-1 rounded-lg shadow-floating whitespace-nowrap flex items-center space-x-1.5 border border-line-strong">
+                <span>Uji Otorisasi</span>
+                <span className="text-[9px] font-mono px-1 py-0 rounded bg-brand text-brass border border-line-strong whitespace-nowrap">
+                  TESTS
+                </span>
+              </div>
+            </div>
+          )}
+        </div>
       </div>
     </aside>
   );
 };
+

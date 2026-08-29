@@ -68,32 +68,31 @@ export const AttendanceGrid: React.FC<Props> = ({
     }));
     onUpdateBatch(updates);
   };
-
   const unaccountedCount = roster.filter(s => !s.today_status).length;
 
   return (
     <div className="space-y-4">
       {/* Top Toolbar: Search, Filters & Bulk Actions */}
-      <div className="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-3 bg-white p-4 md:p-3.5 border-y md:border border-slate-200 md:rounded-2xl shadow-xs -mx-4 md:mx-0">
+      <div className="flex flex-col expanded:flex-row items-stretch expanded:items-center justify-between gap-3 bg-surface p-4 medium:p-3 border-y medium:border border-line medium:rounded-card shadow-hairline -mx-4 expanded:mx-0">
         {/* Search Bar */}
         <div className="relative flex-1 max-w-sm">
-          <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
+          <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-ink-faint" />
           <input
             type="text"
             placeholder="Cari nama ananda / NIS..."
             value={searchQuery}
             onChange={e => setSearchQuery(e.target.value)}
-            className="w-full pl-9 pr-3 py-2 text-xs rounded-xl bg-slate-50 border border-slate-300 focus:outline-none focus:ring-2 focus:ring-slate-900 focus:bg-white text-slate-900 placeholder:text-slate-400 font-medium transition-all"
+            className="w-full pl-9 pr-3 py-2 text-xs rounded-field bg-surface-subtle border border-line focus:outline-none focus:ring-2 focus:ring-brass/30 focus:bg-surface text-ink placeholder:text-ink-faint font-medium transition-all"
           />
         </div>
 
         {/* Filter Chips */}
-        <div className="flex items-center gap-1.5 overflow-x-auto pb-1 sm:pb-0">
+        <div className="flex items-center gap-2 overflow-x-auto pb-1 medium:pb-0 scrollbar-hide min-w-0">
           <Button
             variant={statusFilter === 'ALL' ? 'primary' : 'secondary'}
             size="sm"
             onClick={() => setStatusFilter('ALL')}
-            className="rounded-xl"
+            className="rounded-field"
           >
             Semua ({roster.length})
           </Button>
@@ -104,14 +103,12 @@ export const AttendanceGrid: React.FC<Props> = ({
             onClick={() => setStatusFilter('UNACCOUNTED')}
             rightIcon={
               unaccountedCount > 0 ? (
-                <span className={`w-4 h-4 rounded-full text-[10px] flex items-center justify-center font-bold ${
-                  statusFilter === 'UNACCOUNTED' ? 'bg-amber-400 text-slate-950' : 'bg-amber-500 text-white'
-                }`}>
+                <span className="w-4 h-4 rounded-pill text-[10px] flex items-center justify-center font-bold bg-warning text-on-brand">
                   {unaccountedCount}
                 </span>
               ) : undefined
             }
-            className="rounded-xl"
+            className="rounded-field"
           >
             Belum Diisi
           </Button>
@@ -120,28 +117,30 @@ export const AttendanceGrid: React.FC<Props> = ({
             variant={statusFilter === 'ATTENTION' ? 'danger' : 'secondary'}
             size="sm"
             onClick={() => setStatusFilter('ATTENTION')}
-            leftIcon={<AlertTriangle className="w-3.5 h-3.5 text-amber-600" />}
-            className="rounded-xl"
+            leftIcon={<AlertTriangle className="w-4 h-4 text-brass" />}
+            className="rounded-field"
           >
             Perhatian
           </Button>
         </div>
 
         {/* Quick Bulk Action Button */}
-        <Button
-          variant="primary"
-          size="sm"
-          onClick={handleMarkAllPresent}
-          leftIcon={<CheckCheck className="w-4 h-4" />}
-          className="w-full lg:w-auto rounded-xl whitespace-nowrap shadow-xs flex justify-center"
-        >
-          Tandai Semua Hadir
-        </Button>
+        <div className="shrink-0 flex items-center">
+          <Button
+            variant="primary"
+            size="sm"
+            onClick={handleMarkAllPresent}
+            leftIcon={<CheckCheck className="w-4 h-4" />}
+            className="w-full expanded:w-auto text-xs font-semibold rounded-field cursor-pointer"
+          >
+            Tandai Semua Hadir
+          </Button>
+        </div>
       </div>
 
       {/* Children Cards Grid (1 to 16 cards) */}
       {filteredStudents.length > 0 ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+        <div className="grid gap-4 [grid-template-columns:repeat(auto-fit,minmax(320px,1fr))]">
           {filteredStudents.map((student) => (
             <ChildCard
               key={student.student_id}
@@ -156,10 +155,10 @@ export const AttendanceGrid: React.FC<Props> = ({
           ))}
         </div>
       ) : (
-        <div className="bg-white border border-dashed border-slate-300 rounded-2xl p-10 text-center">
-          <Users className="w-10 h-10 text-slate-400 mx-auto mb-2 opacity-60" />
-          <h4 className="text-sm font-bold text-slate-700">Tidak ada ananda yang sesuai filter</h4>
-          <p className="text-xs text-slate-500 mt-1">Coba sesuaikan kata kunci pencarian atau ganti filter chip.</p>
+        <div className="bg-surface border border-dashed border-line rounded-card p-10 text-center">
+          <Users className="w-10 h-10 text-ink-faint mx-auto mb-2 opacity-60" />
+          <h4 className="text-sm font-bold text-ink-soft">Tidak ada ananda yang sesuai filter</h4>
+          <p className="text-xs text-ink-soft mt-1">Coba sesuaikan kata kunci pencarian atau ganti filter chip.</p>
         </div>
       )}
     </div>

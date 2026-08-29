@@ -26,19 +26,19 @@ export const CanonicalAnchor: React.FC<CanonicalAnchorProps> = ({
   const getStatusBadge = () => {
     switch (status.toUpperCase()) {
       case 'DRAFT':
-        return 'bg-slate-100 text-slate-600 border-slate-200';
+        return 'bg-surface-subtle text-ink-soft border-line';
       case 'APPROVED':
-        return 'bg-blue-50 text-blue-700 border-blue-200';
+        return 'bg-info-tint text-info-deep border-info-line';
       case 'DEPLOYED':
-        return 'bg-indigo-50 text-indigo-700 border-indigo-200';
+        return 'bg-lppa-tint text-lppa-deep border-lppa-line';
       case 'ADOPTED':
-        return 'bg-purple-50 text-purple-700 border-purple-200';
+        return 'bg-lppa-tint text-lppa-deep border-lppa-line';
       case 'MEASURED':
         return 'bg-teal-50 text-teal-700 border-teal-200';
       case 'COMPLETED':
-        return 'bg-emerald-50 text-emerald-700 border-emerald-300';
+        return 'bg-success-tint text-success-deep border-success-line';
       default:
-        return 'bg-slate-100 text-slate-600 border-slate-200';
+        return 'bg-surface-subtle text-ink-soft border-line';
     }
   };
 
@@ -62,35 +62,35 @@ export const CanonicalAnchor: React.FC<CanonicalAnchorProps> = ({
 
   return (
     <div 
-      className={`inline-flex items-center gap-2 px-2.5 py-1.5 rounded-xl border bg-slate-50/90 text-xs whitespace-nowrap ${
-        isClosedLoop ? 'border-emerald-300 bg-emerald-50/40 shadow-xs ring-1 ring-emerald-400/30' : 'border-slate-200'
+      className={`inline-flex items-center gap-2 px-2 py-1 rounded-field border bg-surface-subtle/90 text-xs whitespace-nowrap ${
+        isClosedLoop ? 'border-success-line bg-success-tint/40 shadow-hairline ring-1 ring-emerald-400/30' : 'border-line'
       } ${className}`}
       data-testid="canonical-anchor-badge"
     >
       {/* Anchor Icon */}
-      <Anchor className={`w-3.5 h-3.5 shrink-0 ${isClosedLoop ? 'text-emerald-600' : 'text-slate-500'}`} />
+      <Anchor className={`w-4 h-4 shrink-0 ${isClosedLoop ? 'text-success' : 'text-ink-soft'}`} />
 
       {/* Action ID (Formatted) */}
-      <span className="font-mono font-semibold text-slate-800 text-[11px] tracking-tight shrink-0" title={actionId}>
+      <span className="font-mono font-semibold text-ink text-[11px] tracking-tight shrink-0 whitespace-nowrap" title={actionId}>
         {formatActionId(actionId)}
       </span>
 
       {/* Action Title (if present) */}
       {actionTitle && (
-        <span className="text-slate-600 truncate max-w-[140px] hidden sm:inline shrink-0">
+        <span className="text-ink-soft truncate max-w-[140px] hidden medium:inline shrink-0">
           • {actionTitle}
         </span>
       )}
 
       {/* Status Pill */}
-      <span className={`px-1.5 py-0.5 rounded text-[10px] font-bold tracking-wider uppercase border shrink-0 ${getStatusBadge()}`}>
+      <span className={`px-1 py-1 rounded text-[10px] font-bold uppercase tracking-wider border shrink-0 ${getStatusBadge()}`}>
         {getHumanReadableStatus(status)}
       </span>
 
       {/* Closed-Loop Seal */}
       {isClosedLoop && (
         <span 
-          className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full bg-emerald-600 text-white text-[10px] font-bold tracking-tight shadow-xs shrink-0"
+          className="inline-flex items-center gap-1 px-1 py-1 rounded-full bg-success text-on-brand text-[10px] font-bold tracking-tight shadow-hairline shrink-0"
           title="Bukti Refleksi Kualitatif Terekam (Closed-Loop Empirical Base)"
         >
           <ShieldCheck className="w-3 h-3 shrink-0" />

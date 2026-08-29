@@ -1,0 +1,443 @@
+{
+  "_meta": {
+    "form_version": "2.0",
+    "generated_at": "2026-08-28T12:29:20.757Z",
+    "purpose": "Yapendik OS Genesis Data — TK Yapendik Maranatha Jakarta",
+    "total_students": 17
+  },
+  "school": {
+    "name": "Yapendik TK Maranatha Jakarta",
+    "npsn": "69820291",
+    "address": "JL. BALADEWA NO. 32, TANAH TINGGI JAKARTA PUSAT",
+    "academic_year": "2026/2027",
+    "semester": "GANJIL"
+  },
+  "superadmin": {
+    "name": "SHIRLEY A.T.WAKKARY",
+    "email": "shirleyumbas@gmail.com",
+    "phone": "081281310123",
+    "nik": "3171035906670007",
+    "gender": "P",
+    "birth_date": "1967-06-19",
+    "role": "SUPERADMIN"
+  },
+  "headmaster": {
+    "name": "SHERYL Y N UMBAS, S.IKOM, M.PD",
+    "email": "sherylumbas9@gmail.com",
+    "phone": "081219748487",
+    "nik": "3171034909940005",
+    "gender": "P",
+    "birth_date": "1994-09-09",
+    "role": "HEADMASTER"
+  },
+  "teachers": [
+    {
+      "name": "CHARLOTHA JOVANNCA BLANDINNA R",
+      "email": "ratmalajovannca@gmail.com",
+      "phone": "081385868377",
+      "nik": "3172025108050013",
+      "assigned_class": "TK_A",
+      "role": "ASST_TEACHER"
+    },
+    {
+      "name": "ERNA BOYKELA R",
+      "email": "yapendikmaranathajkt@gmail.com",
+      "phone": "081218641392",
+      "nik": "3172025811680008",
+      "assigned_class": "TK_A",
+      "role": "TEACHER"
+    },
+    {
+      "name": "EVI TANIA",
+      "email": "taniaevi101@gmail.com",
+      "phone": "089536851668",
+      "nik": "3171054311980001",
+      "assigned_class": "TK_B",
+      "role": "ASST_TEACHER"
+    }
+  ],
+  "students": {
+    "class_a": [
+      {
+        "child": {
+          "full_name": "JEQUALINE ARABELLA MASPAITELLA",
+          "nickname": "MILLEN",
+          "gender": "P",
+          "birth_place": "DEPOK",
+          "birth_date": "2021-07-02",
+          "nik": "3276054207210001",
+          "religion": "KRISTEN_PROTESTAN",
+          "address": "JL LAUT HALMAHERA I BLOK N/12 KEL ABADIJAYA KEC SUKMAJAYA KOTA DEPOK JAWA BARAT 16417"
+        },
+        "guardian": {
+          "father_name": "MICHAEL MASPAITELLA",
+          "mother_name": "JULEN PATRICIA",
+          "primary_guardian_type": "IBU",
+          "guardian_gender": "P",
+          "wali_name": null,
+          "guardian_nik": "3171044609930002",
+          "guardian_phone": "081296970087",
+          "guardian_email": "yapendikmaranathajkt01@gmail.com"
+        }
+      },
+      {
+        "child": {
+          "full_name": "CARISSA ELEANOR NAPITUPULU",
+          "nickname": "CARISSA",
+          "gender": "P",
+          "birth_place": "JAKARTA",
+          "birth_date": "2021-04-28",
+          "nik": "3171088804210002",
+          "religion": "KRISTEN_PROTESTAN",
+          "address": "KP RAWA SELATAN I NO 45 RT 011/005 KEL GALUR KEC JOHAR BARU JAKARTA PUSAT 10530"
+        },
+        "guardian": {
+          "father_name": "DULPRI",
+          "mother_name": "HERNI TIURMA",
+          "primary_guardian_type": "IBU",
+          "guardian_gender": "P",
+          "wali_name": null,
+          "guardian_nik": "3275027012920009",
+          "guardian_phone": "081294212158",
+          "guardian_email": "yapendikmaranathajkt01@gmail.com"
+        }
+      },
+      {
+        "child": {
+          "full_name": "RAINER ALDEV NATASHA SUMUAL",
+          "nickname": "RAINER",
+          "gender": "L",
+          "birth_place": "JAKARTA",
+          "birth_date": "2021-11-17",
+          "nik": "3171081711210005",
+          "religion": "KRISTEN_PROTESTAN",
+          "address": "JL TANAH TINGGI SAWAH RT 015/008 KEL TANAH TINGGI KEC JOHAR BARU JAKARTA PUSAT 10540"
+        },
+        "guardian": {
+          "father_name": "ALFREDO DIEGO OKTAVIO",
+          "mother_name": "DEVIA PERMATA SARI",
+          "primary_guardian_type": "IBU",
+          "guardian_gender": "P",
+          "wali_name": null,
+          "guardian_nik": "3171086710990005",
+          "guardian_phone": "089633240559",
+          "guardian_email": "yapendikmaranathajkt01@gmail.com"
+        }
+      },
+      {
+        "child": {
+          "full_name": "BRIELLA FALERIE HALKA HULU",
+          "nickname": "FALEN",
+          "gender": "P",
+          "birth_place": "JAKARTA",
+          "birth_date": "2022-02-06",
+          "nik": "1214344602220001",
+          "religion": "KRISTEN_PROTESTAN",
+          "address": "JL TANAH TINGGI 2 NO 16 RT 07/002 KEL TANAH TINGGI KEC JOHAR BARU JAKARTA PUSAT"
+        },
+        "guardian": {
+          "father_name": "HASAMUDA HULU",
+          "mother_name": "SENIMAWATI ZEGA",
+          "primary_guardian_type": "IBU",
+          "guardian_gender": "P",
+          "wali_name": null,
+          "guardian_nik": "1204144710970002",
+          "guardian_phone": "085261401671",
+          "guardian_email": "yapendikmaranathajkt01@gmail.com"
+        }
+      },
+      {
+        "child": {
+          "full_name": "ADRIAN MAHVERT PUTRA",
+          "nickname": "ADRIAN",
+          "gender": "L",
+          "birth_place": "JAKARTA",
+          "birth_date": "2023-01-07",
+          "nik": "3171051103210003",
+          "religion": "KRISTEN_PROTESTAN",
+          "address": "JL CEMPAKA PUTIH BARAT RT 03/010 KEL CEMPAKA PUTIH BARAT KEC CEMPAKA PUTIH JAKARTA PUSAT"
+        },
+        "guardian": {
+          "father_name": "CATUR PUTRANTO",
+          "mother_name": "SALAMAH",
+          "primary_guardian_type": "IBU",
+          "guardian_gender": "P",
+          "wali_name": null,
+          "guardian_nik": "3305114507940004",
+          "guardian_phone": "083111687805",
+          "guardian_email": "yapendikmaranathajkt01@gmail.com"
+        }
+      },
+      {
+        "child": {
+          "full_name": "ADHINATA RAJENDRA",
+          "nickname": "ADHI",
+          "gender": "L",
+          "birth_place": "JAKARTA",
+          "birth_date": "2021-09-15",
+          "nik": "3171041509210004",
+          "religion": "KRISTEN_PROTESTAN",
+          "address": "JL CULAN NO 1 KEL KRAMAT KEC SENEN JAKARTA PUSAT"
+        },
+        "guardian": {
+          "father_name": "HERLUIN KARYADI PRAPTO U",
+          "mother_name": "NANCY FERAWATI",
+          "primary_guardian_type": "IBU",
+          "guardian_gender": "P",
+          "wali_name": null,
+          "guardian_nik": "3171046711790002",
+          "guardian_phone": "085892291422",
+          "guardian_email": "yapendikmaranathajkt01@gmail.com"
+        }
+      },
+      {
+        "child": {
+          "full_name": "LIORA OLIWIIA HUTAGAOL",
+          "nickname": "LIORA",
+          "gender": "P",
+          "birth_place": "Jakarta",
+          "birth_date": "2021-12-30",
+          "nik": "3175027012210002",
+          "religion": "KRISTEN_PROTESTAN",
+          "address": "JL. PULOMAS BARAT DAYA R5 KAYU PUTIH PULO GADUNG, JAKARTA TIMUR"
+        },
+        "guardian": {
+          "father_name": "DAVID ARDY MARULITUA HUTAGAOL",
+          "mother_name": "RANI RIDAHYANTA SINAGA",
+          "primary_guardian_type": "IBU",
+          "guardian_gender": "P",
+          "wali_name": null,
+          "guardian_nik": "1208016308890001",
+          "guardian_phone": "08118167854",
+          "guardian_email": "yapendikmaranathajkt01@gmail.com"
+        }
+      },
+      {
+        "child": {
+          "full_name": "ZIONATHAN ELEAZAR PUTRA",
+          "nickname": "ZIO",
+          "gender": "L",
+          "birth_place": "JAKARTA",
+          "birth_date": "2021-04-18",
+          "nik": "3175021804210005",
+          "religion": "KRISTEN_PROTESTAN",
+          "address": "JL. BATU BIDURI BULAN NO. 52 KAYU PUTIH PULOGADUNG, JAKARTA TIMUR"
+        },
+        "guardian": {
+          "father_name": "GEORGE ALEXANDRE PUTRA",
+          "mother_name": "PENTA ROMLA FRYLAN",
+          "primary_guardian_type": "IBU",
+          "guardian_gender": "P",
+          "wali_name": null,
+          "guardian_nik": "2171105802900002",
+          "guardian_phone": "085284560857",
+          "guardian_email": "yapendikmaranathajkt01@gmail.com"
+        }
+      },
+      {
+        "child": {
+          "full_name": "THEODOR BRIANMBICAR BANCIN",
+          "nickname": "BRIAN",
+          "gender": "L",
+          "birth_place": "MEDAN",
+          "birth_date": "2021-11-20",
+          "nik": "3175092011210006",
+          "religion": "KRISTEN_PROTESTAN",
+          "address": "JALAN SEDERHANA NO. 5 PANJI DABUTAR SITINJO, SUMATERA UTARA"
+        },
+        "guardian": {
+          "father_name": "FAVOR ADELAIDE BANCIN",
+          "mother_name": "MULIATHY BRIANY",
+          "primary_guardian_type": "IBU",
+          "guardian_gender": "P",
+          "wali_name": null,
+          "guardian_nik": "6204065404850004",
+          "guardian_phone": "081350350144",
+          "guardian_email": "yapendikmaranathajkt01@gmail.com"
+        }
+      }
+    ],
+    "class_b": [
+      {
+        "child": {
+          "full_name": "ADELINE MIKAYLA HAREFA",
+          "nickname": "KAYLA",
+          "gender": "P",
+          "birth_place": "JAKARTA",
+          "birth_date": "2022-02-22",
+          "nik": "3171086202220006",
+          "religion": "KRISTEN_PROTESTAN",
+          "address": "JL. RAWA SELATAN I TOWN HOUSE ONASIS B-10 NO. 37, GALUR JOHAR BARU, JAKARTA PUSAT"
+        },
+        "guardian": {
+          "father_name": "ANDI NOVA HAREFA",
+          "mother_name": "MUTIARA ZEGA",
+          "primary_guardian_type": "IBU",
+          "guardian_gender": "P",
+          "wali_name": null,
+          "guardian_nik": "1204024604890002",
+          "guardian_phone": "081394642219",
+          "guardian_email": "yapendikmaranathajkt01@gmail.com"
+        }
+      },
+      {
+        "child": {
+          "full_name": "DOMINIC JOVAN",
+          "nickname": "DOMINIC",
+          "gender": "L",
+          "birth_place": "JAKARTA",
+          "birth_date": "2020-10-28",
+          "nik": "3171032810200001",
+          "religion": "KRISTEN_PROTESTAN",
+          "address": "JL. HARAPAN MULIA II NO. 5, HARAPAN MULIA KEMAYORAN, JAKARTA PUSAT"
+        },
+        "guardian": {
+          "father_name": "HENKY SANTOSO",
+          "mother_name": "FRINY",
+          "primary_guardian_type": "IBU",
+          "guardian_gender": "P",
+          "wali_name": null,
+          "guardian_nik": "3171034202790004",
+          "guardian_phone": "081288525181",
+          "guardian_email": "yapendikmaranathajkt01@gmail.com"
+        }
+      },
+      {
+        "child": {
+          "full_name": "LYRA HENNESSY SUPUSEPA",
+          "nickname": "LYRA",
+          "gender": "P",
+          "birth_place": "JAKARTA",
+          "birth_date": "2021-08-15",
+          "nik": "3171085508210001",
+          "religion": "KRISTEN_PROTESTAN",
+          "address": "JL. KR PULO GUNDUL K.207, TANAH TINGGI JOHAR BARU, JAKARTA PUSAT"
+        },
+        "guardian": {
+          "father_name": "BRAM KEVIN SUPUSEPA",
+          "mother_name": "LILLYANTI FENI POSUMAH",
+          "primary_guardian_type": "IBU",
+          "guardian_gender": "P",
+          "wali_name": null,
+          "guardian_nik": "3175017001950004",
+          "guardian_phone": "082128900375",
+          "guardian_email": "yapendikmaranathajkt01@gmail.com"
+        }
+      },
+      {
+        "child": {
+          "full_name": "LEVIN BENEDICT NEDEZ SITUMORANG",
+          "nickname": "LEVIN",
+          "gender": "L",
+          "birth_place": "JAKARTA",
+          "birth_date": "2020-11-22",
+          "nik": "3171052211200002",
+          "religion": "KRISTEN_PROTESTAN",
+          "address": "KP. JAWA RAWASARI CEMPAKA PUTIH, JAKARTA PUSAT"
+        },
+        "guardian": {
+          "father_name": "VERON NEDEZ SITUMORANG",
+          "mother_name": "HENNY RAYA SITINDAON",
+          "primary_guardian_type": "IBU",
+          "guardian_gender": "P",
+          "wali_name": null,
+          "guardian_nik": "3171054810810007",
+          "guardian_phone": "08158351971",
+          "guardian_email": "yapendikmaranathajkt01@gmail.com"
+        }
+      },
+      {
+        "child": {
+          "full_name": "ADRIEL",
+          "nickname": "ADRIEL",
+          "gender": "L",
+          "birth_place": "JAKARTA",
+          "birth_date": "2020-10-27",
+          "nik": "3175042710200006",
+          "religion": "KRISTEN_PROTESTAN",
+          "address": "JL. CEMPAKA PUTIH UTARA BLOK O NO. 112, CEMPAKA BARU KEMAYORAN JAKARTA PUSAT"
+        },
+        "guardian": {
+          "father_name": "ANDRI SYAWALI",
+          "mother_name": "BILIEF SENNIAR ZEBUA",
+          "primary_guardian_type": "IBU",
+          "guardian_gender": "P",
+          "wali_name": null,
+          "guardian_nik": "1204106401960001",
+          "guardian_phone": "085311302763",
+          "guardian_email": "yapendikmaranathajkt01@gmail.com"
+        }
+      },
+      {
+        "child": {
+          "full_name": "ZANE ELEANOR SIMANGUNSONG",
+          "nickname": "ZANE",
+          "gender": "L",
+          "birth_place": "JAKARTA",
+          "birth_date": "2020-09-09",
+          "nik": "3171080909200005",
+          "religion": "KRISTEN_PROTESTAN",
+          "address": "JL. RAWA TENGAH NO. 8, GALUR JOHAR BARU, JAKARTA PUSAT"
+        },
+        "guardian": {
+          "father_name": "REMON",
+          "mother_name": "YANTI MARTHALENA SIAGIAN",
+          "primary_guardian_type": "IBU",
+          "guardian_gender": "P",
+          "wali_name": null,
+          "guardian_nik": "1212047003920003",
+          "guardian_phone": "081293181442",
+          "guardian_email": "yapendikmaranathajkt01@gmail.com"
+        }
+      },
+      {
+        "child": {
+          "full_name": "CLEA SERAPHINA DESELLA",
+          "nickname": "CLEA",
+          "gender": "L",
+          "birth_place": "JAKARTA",
+          "birth_date": "2020-12-02",
+          "nik": "3171084212200002",
+          "religion": "KRISTEN_PROTESTAN",
+          "address": "JL. KP RAWA SAWAH JOHAR BARU, JAKARTA PUSAT"
+        },
+        "guardian": {
+          "father_name": "DENIS",
+          "mother_name": "MARSHELLA NOVITA",
+          "primary_guardian_type": "IBU",
+          "guardian_gender": "P",
+          "wali_name": null,
+          "guardian_nik": "3171085911910001",
+          "guardian_phone": "087888316350",
+          "guardian_email": "yapendikmaranathajkt01@gmail.com"
+        }
+      },
+      {
+        "child": {
+          "full_name": "SHAWN ELNATHAN DOLOKSARIBU",
+          "nickname": "NATHAN",
+          "gender": "L",
+          "birth_place": "JAKARTA",
+          "birth_date": "2021-04-17",
+          "nik": "3171081704210004",
+          "religion": "KRISTEN_PROTESTAN",
+          "address": "JL. GALUR SELATAN NO. 20, GALUR JOHAR BARU JAKARTA PUSAT"
+        },
+        "guardian": {
+          "father_name": "HENGKI PRIANDO HALOMOAN ADI CHANDRA",
+          "mother_name": "NOVITA SARI BR GINTING",
+          "primary_guardian_type": "IBU",
+          "guardian_gender": "P",
+          "wali_name": null,
+          "guardian_nik": "1207055011910001",
+          "guardian_phone": "087889569850",
+          "guardian_email": "yapendikmaranathajkt01@gmail.com"
+        }
+      }
+    ]
+  },
+  "password_policy": {
+    "default_password": "tkm2026#",
+    "note": "Password sementara. Wajib diganti saat login pertama."
+  }
+}

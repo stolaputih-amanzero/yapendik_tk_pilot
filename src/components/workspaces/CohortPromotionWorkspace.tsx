@@ -31,6 +31,7 @@ import {
   Info,
   X
 } from 'lucide-react';
+import { ProgressBar, SelectSheet } from '../ui';
 
 interface StudentPlacementItem {
   student_id: string;
@@ -254,30 +255,30 @@ export const CohortPromotionWorkspace: React.FC = () => {
   const targetAyObj = academicYears.find(y => y.id === targetAyId);
 
   return (
-    <div className="space-y-6 text-slate-900 font-sans w-full" data-testid="cohort-promotion-workspace">
+    <div className="space-y-6 text-ink font-sans w-full pb-[132px] expanded:pb-8" data-testid="cohort-promotion-workspace">
       {/* Header Banner */}
-      <div className="bg-slate-50 border-b border-slate-200 md:rounded-2xl px-4 py-5 md:p-6 w-full text-slate-900 md:border md:shadow-sm">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div className="bg-surface-subtle border-b border-line medium:rounded-card px-4 py-5 medium:p-6 w-full text-ink medium:border medium:shadow-hairline">
+        <div className="flex flex-col medium:flex-row medium:items-center justify-between gap-4">
           <div>
-            <div className="flex items-center space-x-1.5 text-emerald-600 text-[10px] sm:text-xs font-bold tracking-wider uppercase mb-1">
-              <Layers className="w-3.5 h-3.5" />
+            <div className="flex items-center space-x-1.5 text-success text-[10px] medium:text-xs font-bold uppercase tracking-wider mb-1">
+              <Layers className="w-4 h-4" />
               <span>Standar Yayasan • Kenaikan Kelas</span>
             </div>
-            <h1 className="text-xl font-bold tracking-tight text-slate-900 flex items-center gap-2">
+            <h1 className="text-xl font-bold tracking-tight text-ink flex items-center gap-2">
               <span>Promosi Rombongan Belajar (Kenaikan Kelas)</span>
             </h1>
-            <p className="hidden md:block text-slate-500 text-xs mt-1 max-w-2xl">
+            <p className="hidden expanded:block text-ink-soft text-xs mt-1 max-w-2xl">
               {school?.name || 'TK Yapendik'} • Mutasi penempatan siswa antar-rombel dan antar-semester secara terkelola.
             </p>
           </div>
 
-          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 w-full md:w-auto">
+          <div className="flex flex-col medium:flex-row items-stretch medium:items-center gap-2 w-full medium:w-auto">
             <button
               onClick={loadClassesAndPeriods}
               disabled={loading}
-              className="px-3.5 py-2 rounded-xl bg-white hover:bg-slate-100 text-slate-700 border border-slate-200 text-xs font-semibold flex justify-center items-center space-x-2 transition-all shadow-2xs cursor-pointer"
+              className="px-3 py-2 rounded-field bg-surface hover-only:bg-surface-subtle text-ink-soft border border-line text-xs font-semibold flex justify-center items-center space-x-2 transition-all shadow-hairline cursor-pointer"
             >
-              <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin text-slate-600' : ''}`} />
+              <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin text-ink-soft' : ''}`} />
               <span>Segarkan Data</span>
             </button>
           </div>
@@ -286,21 +287,21 @@ export const CohortPromotionWorkspace: React.FC = () => {
 
       {/* Feedback Banner */}
       {feedback && (
-        <div className={`p-4 rounded-2xl border flex items-start space-x-3 shadow-2xs ${
+        <div className={`p-4 rounded-card border flex items-start space-x-3 shadow-hairline ${
           feedback.type === 'success' 
-            ? 'bg-emerald-50 border-emerald-200 text-emerald-800' 
-            : 'bg-rose-50 border-rose-200 text-rose-800'
+            ? 'bg-success-tint border-success-line text-success-deep' 
+            : 'bg-danger-tint border-danger-line text-danger-deep'
         }`}>
           {feedback.type === 'success' ? (
-            <CheckCircle2 className="w-5 h-5 flex-shrink-0 mt-0.5 text-emerald-600" />
+            <CheckCircle2 className="w-5 h-5 flex-shrink-0 mt-0.5 text-success" />
           ) : (
-            <AlertTriangle className="w-5 h-5 flex-shrink-0 mt-0.5 text-rose-600" />
+            <AlertTriangle className="w-5 h-5 flex-shrink-0 mt-0.5 text-danger" />
           )}
           <div className="flex-1 text-xs">
             <p className="font-semibold">{feedback.type === 'success' ? 'Promosi Berhasil' : feedback.diagnostics?.title || 'Promosi Ditolak'}</p>
             <p className="mt-0.5">{feedback.message}</p>
             {feedback.diagnostics?.actionSuggestion && (
-              <p className="mt-2 text-amber-900 font-medium bg-amber-50 p-2.5 rounded-xl border border-amber-200">
+              <p className="mt-2 text-warning-deep font-medium bg-warning-tint p-2 rounded-field border border-warning-line">
                 Saran Tindakan: {feedback.diagnostics.actionSuggestion}
               </p>
             )}
@@ -309,52 +310,46 @@ export const CohortPromotionWorkspace: React.FC = () => {
       )}
 
       {/* Main Grid: Source Rombel on Left, Target & Preview on Right */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+      <div className="grid grid-cols-1 expanded:grid-cols-12 gap-6">
         {/* Left Column: Source Class & Student Selector (7 Cols) */}
-        <div className="lg:col-span-7 bg-white border border-slate-200 rounded-2xl p-5 sm:p-6 shadow-2xs flex flex-col justify-between space-y-4">
+        <div className="expanded:col-span-7 bg-surface border border-line rounded-card p-4 medium:p-6 shadow-hairline flex flex-col justify-between space-y-4">
           <div className="space-y-4">
-            <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+            <div className="flex items-center justify-between border-b border-line-soft pb-3">
               <div>
-                <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Langkah 1: Rombel Asal</span>
-                <h3 className="text-sm font-bold text-slate-900 mt-0.5">Daftar Siswa Kelas Asal</h3>
+                <span className="text-[10px] font-bold text-ink-soft uppercase tracking-wider">Langkah 1: Rombel Asal</span>
+                <h3 className="text-sm font-bold text-ink mt-0.5">Daftar Siswa Kelas Asal</h3>
               </div>
-              <span className="text-xs text-slate-700 font-bold bg-slate-100 px-2.5 py-0.5 rounded-full border border-slate-200">
+              <span className="text-xs text-ink-soft font-bold bg-surface-subtle px-2 py-1 rounded-full border border-line">
                 {selectedStudentIds.length} Siswa Terpilih
               </span>
             </div>
 
             {/* Source Class Dropdown */}
             <div>
-              <label className="block text-xs font-semibold text-slate-700 mb-1">Pilih Rombel Asal:</label>
-              <select
-                value={sourceClassId}
-                onChange={(e) => setSourceClassId(e.target.value)}
-                className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2 text-xs text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-slate-900 shadow-2xs font-medium"
-              >
-                {classes.map(c => (
-                  <option key={c.id} value={c.id}>
-                    {c.name} ({c.age_group === 'TK_A_4_5' ? '4-5 Tahun' : '5-6 Tahun'}) • Kapasitas: {c.capacity} anak
-                  </option>
-                ))}
-              </select>
+              <label className="block text-xs font-semibold text-ink-soft mb-1">Pilih Rombel Asal:</label>
+              <SelectSheet
+    value={sourceClassId}
+    onChange={setSourceClassId}
+    options={classes.map(c => ({ value: c.id, label: `${c.name} (${c.age_group === 'TK_A_4_5' ? '4-5 Tahun' : '5-6 Tahun'}) • Kapasitas: ${c.capacity} anak` }))}
+  />
             </div>
 
             {/* Student Table */}
-            <div className="border border-slate-200 rounded-xl overflow-hidden bg-white shadow-2xs">
-              <div className="p-3 bg-slate-50 border-b border-slate-200 flex items-center justify-between text-xs">
-                <label className="flex items-center space-x-2 text-slate-700 font-semibold cursor-pointer">
+            <div className="border border-line rounded-field overflow-hidden bg-surface shadow-hairline">
+              <div className="p-3 bg-surface-subtle border-b border-line flex items-center justify-between text-xs">
+                <label className="flex items-center space-x-2 text-ink-soft font-semibold cursor-pointer">
                   <input
                     type="checkbox"
                     checked={studentsInSource.length > 0 && selectedStudentIds.length === studentsInSource.length}
                     onChange={(e) => handleSelectAll(e.target.checked)}
-                    className="rounded border-slate-300 text-slate-900 focus:ring-0 w-4 h-4 bg-white cursor-pointer"
+                    className="rounded border-line text-ink focus:ring-0 w-4 h-4 bg-surface cursor-pointer"
                   />
                   <span>Pilih Semua Siswa ({studentsInSource.length})</span>
                 </label>
-                <span className="text-[10px] text-slate-500 font-mono font-semibold">Status: AKTIF</span>
+                <span className="text-[10px] text-ink-soft font-mono font-semibold whitespace-nowrap">Status: AKTIF</span>
               </div>
 
-              <div className="max-h-80 overflow-y-auto divide-y divide-slate-100">
+              <div className="max-h-80 overflow-y-auto divide-y divide-line-soft">
                 {studentsInSource.length > 0 ? (
                   studentsInSource.map(student => {
                     const isSelected = selectedStudentIds.includes(student.student_id);
@@ -362,8 +357,8 @@ export const CohortPromotionWorkspace: React.FC = () => {
                       <div
                         key={student.student_id}
                         onClick={() => handleToggleStudent(student.student_id)}
-                        className={`p-3 flex items-center justify-between text-xs hover:bg-slate-50/80 cursor-pointer transition-colors ${
-                          isSelected ? 'bg-slate-50' : ''
+                        className={`p-3 flex items-center justify-between text-xs hover-only:bg-surface-subtle/80 cursor-pointer transition-colors ${
+                          isSelected ? 'bg-surface-subtle' : ''
                         }`}
                       >
                         <div className="flex items-center space-x-3">
@@ -371,19 +366,19 @@ export const CohortPromotionWorkspace: React.FC = () => {
                             type="checkbox"
                             checked={isSelected}
                             onChange={() => {}} // Handled by parent div
-                            className="rounded border-slate-300 text-slate-900 focus:ring-0 w-4 h-4 bg-white"
+                            className="rounded border-line text-ink focus:ring-0 w-4 h-4 bg-surface"
                           />
                           <div>
-                            <p className="font-bold text-slate-900">{student.full_name}</p>
-                            <p className="text-[11px] text-slate-500 font-mono">NIS: {student.nis || '—'} • Gender: {student.gender === 'MALE' ? 'Laki-Laki' : 'Perempuan'}</p>
+                            <p className="font-bold text-ink">{student.full_name}</p>
+                            <p className="text-[11px] text-ink-soft font-mono whitespace-nowrap">NIS: {student.nis || '—'} • Gender: {student.gender === 'MALE' ? 'Laki-Laki' : 'Perempuan'}</p>
                           </div>
                         </div>
-                        <span className="text-[11px] font-mono text-slate-500">Masuk: {student.entry_date}</span>
+                        <span className="text-[11px] font-mono text-ink-soft whitespace-nowrap">Masuk: {student.entry_date}</span>
                       </div>
                     );
                   })
                 ) : (
-                  <div className="p-8 text-center text-slate-400 text-xs">
+                  <div className="p-8 text-center text-ink-faint text-xs">
                     Tidak ada siswa dengan penempatan aktif di kelas ini.
                   </div>
                 )}
@@ -393,92 +388,69 @@ export const CohortPromotionWorkspace: React.FC = () => {
         </div>
 
         {/* Right Column: Target Class & Capacity Preview (5 Cols) */}
-        <div className="lg:col-span-5 bg-white border border-slate-200 rounded-2xl p-5 sm:p-6 shadow-2xs flex flex-col justify-between space-y-6">
+        <div className="expanded:col-span-5 bg-surface border border-line rounded-card p-4 medium:p-6 shadow-hairline flex flex-col justify-between space-y-6">
           <div className="space-y-4">
-            <div className="border-b border-slate-100 pb-3">
-              <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Langkah 2: Tentukan Tujuan</span>
-              <h3 className="text-sm font-bold text-slate-900 mt-0.5">Rombel &amp; Semester Tujuan</h3>
+            <div className="border-b border-line-soft pb-3">
+              <span className="text-[10px] font-bold text-ink-soft uppercase tracking-wider">Langkah 2: Tentukan Tujuan</span>
+              <h3 className="text-sm font-bold text-ink mt-0.5">Rombel &amp; Semester Tujuan</h3>
             </div>
 
             {/* Target Academic Year */}
             <div>
-              <label className="block text-xs font-semibold text-slate-700 mb-1">Tahun Ajaran / Semester Tujuan:</label>
-              <select
-                value={targetAyId}
-                onChange={(e) => setTargetAyId(e.target.value)}
-                className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2 text-xs text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-slate-900 shadow-2xs font-medium"
-              >
-                {academicYears.map(y => (
-                  <option key={y.id} value={y.id}>
-                    {y.name} ({y.semester}) • {y.lifecycle_status === 'ACTIVE' ? 'Aktif' : y.lifecycle_status}
-                  </option>
-                ))}
-              </select>
+              <label className="block text-xs font-semibold text-ink-soft mb-1">Tahun Ajaran / Semester Tujuan:</label>
+              <SelectSheet value={targetAyId}   options={academicYears.map(y => ({ value: y.id, label: `${y.name} (${y.semester})` }))} />
             </div>
 
             {/* Target Classroom */}
             <div>
-              <label className="block text-xs font-semibold text-slate-700 mb-1">Pilih Kelas Tujuan:</label>
-              <select
-                value={targetClassId}
-                onChange={(e) => setTargetClassId(e.target.value)}
-                className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2 text-xs text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-slate-900 shadow-2xs font-medium"
-              >
-                <option value="">-- Pilih Kelas Tujuan --</option>
-                {classes
-                  .filter(c => c.id !== sourceClassId)
-                  .map(c => (
-                    <option key={c.id} value={c.id}>
-                      {c.name} ({c.age_group === 'TK_A_4_5' ? '4-5 Tahun' : '5-6 Tahun'}) • Kapasitas: {c.capacity} anak
-                    </option>
-                  ))}
-              </select>
+              <label className="block text-xs font-semibold text-ink-soft mb-1">Pilih Kelas Tujuan:</label>
+              <SelectSheet
+    value={targetClassId}
+    onChange={setTargetClassId}
+    options={[
+      { value: "", label: "-- Pilih Kelas Tujuan --" },
+      ...classes.map(c => ({ value: c.id, label: `${c.name} (${c.age_group === 'TK_A_4_5' ? '4-5 Tahun' : '5-6 Tahun'}) • Kapasitas: ${c.capacity} anak` }))
+    ]}
+  />
             </div>
 
             {/* Real-Time Capacity Preview Card */}
             {targetClassId && (
-              <div className="bg-slate-50 border border-slate-200 rounded-xl p-4 space-y-3">
+              <div className="bg-surface-subtle border border-line rounded-field p-4 space-y-3">
                 <div className="flex items-center justify-between text-xs">
-                  <span className="text-slate-600 font-semibold">Simulasi Kapasitas Kelas Tujuan:</span>
-                  <span className={`font-bold font-mono ${isCapacityExceeded ? 'text-rose-600' : 'text-emerald-600'}`}>
+                  <span className="text-ink-soft font-semibold">Simulasi Kapasitas Kelas Tujuan:</span>
+                  <span className={`font-bold font-mono ${isCapacityExceeded ? 'text-danger' : 'text-success'}`}>
                     {projectedOccupancy} / {targetCapacity} Siswa
                   </span>
                 </div>
 
                 {/* Progress Bar */}
-                <div className="w-full bg-slate-200 rounded-full h-2.5 p-0.5 overflow-hidden">
-                  <div 
-                    className={`h-full rounded-full transition-all duration-300 ${
-                      isCapacityExceeded 
-                        ? 'bg-rose-500' 
-                        : projectedOccupancy === targetCapacity 
-                        ? 'bg-amber-500' 
-                        : 'bg-slate-900'
-                    }`}
-                    style={{ width: `${Math.min(100, Math.round((projectedOccupancy / (targetCapacity || 1)) * 100))}%` }}
-                  ></div>
-                </div>
+                <ProgressBar
+                  value={Math.min(100, Math.round((projectedOccupancy / (targetCapacity || 1)) * 100))}
+                  variant={isCapacityExceeded ? 'danger' : projectedOccupancy === targetCapacity ? 'warning' : 'brass'}
+                  trackClassName="h-2"
+                />
 
-                <div className="grid grid-cols-3 gap-2 text-[11px] text-center pt-2 border-t border-slate-200">
-                  <div className="bg-white p-2 rounded-lg border border-slate-200">
-                    <p className="text-slate-500 text-[10px]">Terisi Saat Ini</p>
-                    <p className="font-bold text-slate-900 font-mono">{targetOccupancy}</p>
+                <div className="grid grid-cols-3 gap-2 text-[11px] text-center pt-2 border-t border-line">
+                  <div className="bg-surface p-2 rounded-lg border border-line">
+                    <p className="text-ink-soft text-[10px]">Terisi Saat Ini</p>
+                    <p className="font-bold text-ink font-mono">{targetOccupancy}</p>
                   </div>
-                  <div className="bg-white p-2 rounded-lg border border-slate-200">
-                    <p className="text-slate-500 text-[10px]">Akan Ditambah</p>
-                    <p className="font-bold text-slate-900 font-mono">+{selectedStudentIds.length}</p>
+                  <div className="bg-surface p-2 rounded-lg border border-line">
+                    <p className="text-ink-soft text-[10px]">Akan Ditambah</p>
+                    <p className="font-bold text-ink font-mono">+{selectedStudentIds.length}</p>
                   </div>
-                  <div className="bg-white p-2 rounded-lg border border-slate-200">
-                    <p className="text-slate-500 text-[10px]">Sisa Kursi</p>
-                    <p className={`font-bold font-mono ${isCapacityExceeded ? 'text-rose-600' : 'text-emerald-600'}`}>
+                  <div className="bg-surface p-2 rounded-lg border border-line">
+                    <p className="text-ink-soft text-[10px]">Sisa Kursi</p>
+                    <p className={`font-bold font-mono ${isCapacityExceeded ? 'text-danger' : 'text-success'}`}>
                       {Math.max(0, targetCapacity - projectedOccupancy)}
                     </p>
                   </div>
                 </div>
 
                 {isCapacityExceeded && (
-                  <div className="bg-rose-50 border border-rose-200 p-2.5 rounded-xl text-rose-700 text-[11px] flex items-center space-x-2">
-                    <AlertTriangle className="w-4 h-4 flex-shrink-0 text-rose-600" />
+                  <div className="bg-danger-tint border border-danger-line p-2 rounded-field text-danger-deep text-[11px] flex items-center space-x-2">
+                    <AlertTriangle className="w-4 h-4 flex-shrink-0 text-danger" />
                     <span>Kapasitas ruang kelas terlampaui. Kurangi jumlah siswa yang dipilih.</span>
                   </div>
                 )}
@@ -487,11 +459,11 @@ export const CohortPromotionWorkspace: React.FC = () => {
           </div>
 
           {/* Action Trigger Button */}
-          <div className="pt-4 border-t border-slate-100">
+          <div className="pt-4 border-t border-line-soft">
             <button
               onClick={() => setShowConfirmModal(true)}
               disabled={!isAuthorizedActor || selectedStudentIds.length === 0 || !targetClassId || isCapacityExceeded}
-              className="w-full py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 disabled:opacity-40 text-white font-bold text-xs shadow-xs flex items-center justify-center space-x-2 transition-all cursor-pointer"
+              className="w-full py-2 rounded-field bg-brand hover-only:bg-surface-inset disabled:opacity-40 text-on-brand font-bold text-xs shadow-hairline flex items-center justify-center space-x-2 transition-all cursor-pointer"
             >
               <ArrowRight className="w-4 h-4" />
               <span>Eksekusi Promosi ({selectedStudentIds.length} Siswa)</span>
@@ -502,56 +474,56 @@ export const CohortPromotionWorkspace: React.FC = () => {
 
       {/* Confirmation Modal */}
       {showConfirmModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-xs animate-in fade-in duration-200">
-          <div className="bg-white border border-slate-200 rounded-2xl max-w-lg w-full p-5 sm:p-6 shadow-2xl space-y-4 text-slate-900">
-            <div className="flex items-center justify-between pb-3 border-b border-slate-100">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-brand/40 backdrop-blur-xs animate-in fade-in duration-200">
+          <div className="bg-surface border border-line rounded-card max-w-lg w-full p-4 medium:p-6 shadow-floating space-y-4 text-ink">
+            <div className="flex items-center justify-between pb-3 border-b border-line-soft">
               <div className="flex items-center space-x-2">
-                <ShieldCheck className="w-4 h-4 text-slate-700" />
-                <h3 className="text-base font-bold text-slate-900">Konfirmasi Promosi Kenaikan Kelas</h3>
+                <ShieldCheck className="w-4 h-4 text-ink-soft" />
+                <h3 className="text-base font-bold text-ink">Konfirmasi Promosi Kenaikan Kelas</h3>
               </div>
               <button
                 onClick={() => setShowConfirmModal(false)}
-                className="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 flex items-center justify-center transition-colors cursor-pointer shrink-0"
+                className="w-8 h-8 rounded-full bg-surface-subtle hover-only:bg-line-soft text-ink-soft flex items-center justify-center transition-colors cursor-pointer shrink-0"
               >
                 <X className="w-4 h-4" />
               </button>
             </div>
 
-            <div className="text-xs text-slate-700 space-y-3">
+            <div className="text-xs text-ink-soft space-y-3">
               <p>
                 Anda akan mempromosikan <strong>{selectedStudentIds.length} siswa</strong> dari <strong>{sourceClassObj?.name}</strong> ke <strong>{targetClassObj?.name}</strong> pada periode <strong>{targetAyObj?.name} ({targetAyObj?.semester})</strong>.
               </p>
 
-              <div className="bg-slate-50 p-3.5 rounded-xl border border-slate-200 space-y-2 text-[11px]">
-                <div className="flex justify-between text-slate-600">
+              <div className="bg-surface-subtle p-3 rounded-field border border-line space-y-2 text-[11px]">
+                <div className="flex justify-between text-ink-soft">
                   <span>Rombel Asal:</span>
-                  <span className="font-bold text-slate-900">{sourceClassObj?.name}</span>
+                  <span className="font-bold text-ink">{sourceClassObj?.name}</span>
                 </div>
-                <div className="flex justify-between text-slate-600">
+                <div className="flex justify-between text-ink-soft">
                   <span>Rombel Tujuan:</span>
-                  <span className="font-bold text-slate-900">{targetClassObj?.name}</span>
+                  <span className="font-bold text-ink">{targetClassObj?.name}</span>
                 </div>
-                <div className="flex justify-between text-slate-600">
+                <div className="flex justify-between text-ink-soft">
                   <span>Jumlah Siswa:</span>
-                  <span className="font-bold text-slate-900">{selectedStudentIds.length} Siswa</span>
+                  <span className="font-bold text-ink">{selectedStudentIds.length} Siswa</span>
                 </div>
-                <div className="flex justify-between text-slate-600">
+                <div className="flex justify-between text-ink-soft">
                   <span>Status Penempatan Baru:</span>
-                  <span className="font-bold text-emerald-700">AKTIF (Rombel Tujuan)</span>
+                  <span className="font-bold text-success-deep">AKTIF (Rombel Tujuan)</span>
                 </div>
               </div>
 
-              <div className="bg-slate-50 p-3 rounded-xl border border-slate-200 text-slate-600 text-[11px]">
+              <div className="bg-surface-subtle p-3 rounded-field border border-line text-ink-soft text-[11px]">
                 Integritas data terjamin: Penempatan lama ditandai <code>PROMOTED</code>, penempatan baru dibuat sebagai <code>ACTIVE</code>.
               </div>
             </div>
 
-            <div className="flex flex-col sm:flex-row items-center justify-end gap-2.5 pt-3 border-t border-slate-100">
+            <div className="flex flex-col medium:flex-row items-center justify-end gap-2 pt-3 border-t border-line-soft">
               <button
                 type="button"
                 onClick={() => setShowConfirmModal(false)}
                 disabled={isProcessing}
-                className="w-full sm:w-auto px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold transition-colors cursor-pointer"
+                className="w-full medium:w-auto px-4 py-2 rounded-field bg-surface-subtle hover-only:bg-line-soft text-ink-soft text-xs font-bold transition-colors cursor-pointer"
               >
                 Batal
               </button>
@@ -559,9 +531,9 @@ export const CohortPromotionWorkspace: React.FC = () => {
                 type="button"
                 onClick={handleExecutePromotion}
                 disabled={isProcessing}
-                className="w-full sm:w-auto px-4 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold flex justify-center items-center space-x-2 cursor-pointer shadow-xs transition-colors"
+                className="w-full medium:w-auto px-4 py-2 rounded-field bg-brand hover-only:bg-surface-inset text-on-brand text-xs font-bold flex justify-center items-center space-x-2 cursor-pointer shadow-hairline transition-colors"
               >
-                {isProcessing ? <RefreshCw className="w-3.5 h-3.5 animate-spin" /> : <ArrowRight className="w-3.5 h-3.5" />}
+                {isProcessing ? <RefreshCw className="w-4 h-4 animate-spin" /> : <ArrowRight className="w-4 h-4" />}
                 <span>Konfirmasi Promosi</span>
               </button>
             </div>

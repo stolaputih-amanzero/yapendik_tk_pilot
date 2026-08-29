@@ -1,3 +1,4 @@
+import { SelectSheet } from '../../ui';
 /**
  * Yapendik School OS — Stage 4.4-C Safety Incident & Signal Resolution Modal
  * 
@@ -190,30 +191,30 @@ export const SafetyIncidentModal: React.FC<Props> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-[70] flex items-end sm:items-center justify-center p-0 sm:p-4 bg-slate-900/40 backdrop-blur-xs animate-fadeIn">
-      <div className="bg-white rounded-t-3xl sm:rounded-2xl border-t sm:border border-slate-200 w-full max-w-2xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh] sm:max-h-[85vh]">
+    <div className="fixed inset-0 z-70 flex items-end medium:items-center justify-center p-0 medium:p-4 bg-brand/40 backdrop-blur-xs animate-fadeIn">
+      <div className="bg-surface rounded-t-3xl medium:rounded-card border-t medium:border border-line w-full max-w-2xl shadow-floating overflow-hidden flex flex-col max-h-[90vh] medium:max-h-[85vh]">
         {/* Header (Amanaura Standard Eyebrow + Title + Badge) */}
-        <div className="px-5 py-4 border-b border-slate-100 bg-white flex items-start justify-between relative">
-          <div className="flex items-start gap-3.5 pr-8 sm:pr-0">
-            <div className="w-10 h-10 rounded-2xl bg-rose-50 border border-rose-100 text-rose-600 flex items-center justify-center shrink-0 mt-0.5">
+        <div className="px-5 py-4 border-b border-line-soft bg-surface flex items-start justify-between relative">
+          <div className="flex items-start gap-3 pr-8 medium:pr-0">
+            <div className="w-10 h-10 rounded-card bg-danger-tint border border-rose-100 text-danger-deep flex items-center justify-center shrink-0 mt-0.5">
               <HeartPulse className="w-5 h-5" />
             </div>
             <div>
               {/* Eyebrow */}
-              <div className="flex items-center space-x-1.5 text-rose-600 text-[10px] sm:text-xs font-bold tracking-wider uppercase mb-0.5">
+              <div className="flex items-center space-x-1.5 text-danger text-[10px] medium:text-xs font-bold uppercase tracking-wider mb-0.5">
                 <span>Perhatian & Kesehatan Ananda</span>
               </div>
               
               {/* Title & Class Badge */}
-              <h3 className="text-base sm:text-lg font-bold text-slate-900 flex items-center gap-2 flex-wrap leading-tight">
+              <h3 className="text-base medium:text-lg font-bold text-ink flex items-center gap-2 flex-wrap leading-tight">
                 <span>Perhatian Khusus Hari Ini</span>
-                <span className="text-xs font-medium px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-600 border border-slate-200">
+                <span className="text-xs font-medium px-2 py-1 rounded-full bg-surface-subtle text-ink-soft border border-line">
                   {className}
                 </span>
               </h3>
               
               {/* Subtitle */}
-              <p className="text-xs text-slate-500 mt-1">
+              <p className="text-xs text-ink-soft mt-1">
                 Pantau kondisi kehadiran, riwayat alergi, dan catatan penanganan harian anak.
               </p>
             </div>
@@ -221,45 +222,45 @@ export const SafetyIncidentModal: React.FC<Props> = ({
           
           <button
             onClick={onClose}
-            className="p-2 rounded-xl text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition cursor-pointer self-start"
+            className="p-2 rounded-field text-ink-faint hover-only:text-ink-soft hover-only:bg-surface-subtle transition cursor-pointer self-start"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
         {/* Sub-Tabs (Fluid Pill Bar) */}
-        <div className="flex border-b border-slate-100 bg-slate-50/60 px-4 py-2.5 gap-2 overflow-x-auto scrollbar-hide">
+        <div className="flex border-b border-line-soft bg-surface-subtle/60 px-4 py-2 gap-2 overflow-x-auto scrollbar-hide min-w-0">
           <button
             onClick={() => setActiveTab('SIGNALS')}
-            className={`px-3 py-1.5 text-xs font-bold rounded-lg transition flex items-center gap-1.5 cursor-pointer whitespace-nowrap shrink-0 ${
+            className={`px-3 py-1 text-xs font-bold rounded-lg transition flex items-center gap-2 cursor-pointer whitespace-nowrap shrink-0 ${
               activeTab === 'SIGNALS'
-                ? 'bg-white text-slate-900 shadow-xs border border-slate-200/80'
-                : 'text-slate-500 hover:text-slate-900 hover:bg-slate-100/60'
+                ? 'bg-surface text-ink shadow-hairline border border-line/80'
+                : 'text-ink-soft hover-only:text-ink hover-only:bg-surface-subtle/60'
             }`}
           >
-            <AlertTriangle className="w-3.5 h-3.5 text-amber-500" />
+            <AlertTriangle className="w-4 h-4 text-brass" />
             <span>Perhatian Aktif ({activeSignals.filter(s => !s.is_acknowledged).length})</span>
           </button>
           <button
             onClick={() => setActiveTab('REPORT_INCIDENT')}
-            className={`px-3 py-1.5 text-xs font-bold rounded-lg transition flex items-center gap-1.5 cursor-pointer whitespace-nowrap shrink-0 ${
+            className={`px-3 py-1 text-xs font-bold rounded-lg transition flex items-center gap-2 cursor-pointer whitespace-nowrap shrink-0 ${
               activeTab === 'REPORT_INCIDENT'
-                ? 'bg-white text-slate-900 shadow-xs border border-slate-200/80'
-                : 'text-slate-500 hover:text-slate-900 hover:bg-slate-100/60'
+                ? 'bg-surface text-ink shadow-hairline border border-line/80'
+                : 'text-ink-soft hover-only:text-ink hover-only:bg-surface-subtle/60'
             }`}
           >
-            <Plus className="w-3.5 h-3.5 text-rose-500" />
+            <Plus className="w-4 h-4 text-danger" />
             <span>Catat Kejadian Khusus</span>
           </button>
           <button
             onClick={() => setActiveTab('ACTIVE_INCIDENTS')}
-            className={`px-3 py-1.5 text-xs font-bold rounded-lg transition flex items-center gap-1.5 cursor-pointer whitespace-nowrap shrink-0 ${
+            className={`px-3 py-1 text-xs font-bold rounded-lg transition flex items-center gap-2 cursor-pointer whitespace-nowrap shrink-0 ${
               activeTab === 'ACTIVE_INCIDENTS'
-                ? 'bg-white text-slate-900 shadow-xs border border-slate-200/80'
-                : 'text-slate-500 hover:text-slate-900 hover:bg-slate-100/60'
+                ? 'bg-surface text-ink shadow-hairline border border-line/80'
+                : 'text-ink-soft hover-only:text-ink hover-only:bg-surface-subtle/60'
             }`}
           >
-            <Activity className="w-3.5 h-3.5 text-sky-500" />
+            <Activity className="w-4 h-4 text-sky-500" />
             <span>Riwayat Catatan ({activeIncidents.length})</span>
           </button>
         </div>
@@ -267,7 +268,7 @@ export const SafetyIncidentModal: React.FC<Props> = ({
         {/* Modal Body / Fluid List View */}
         <div className="overflow-y-auto flex-1">
           {errorMsg && (
-            <div className="m-4 p-3 rounded-xl bg-rose-50 border border-rose-200 text-rose-700 text-xs font-medium">
+            <div className="m-4 p-3 rounded-field bg-danger-tint border border-danger-line text-danger-deep text-xs font-medium">
               {errorMsg}
             </div>
           )}
@@ -276,56 +277,56 @@ export const SafetyIncidentModal: React.FC<Props> = ({
           {activeTab === 'SIGNALS' && (
             <div>
               {activeSignals.length === 0 ? (
-                <div className="text-center py-12 text-slate-400">
-                  <CheckCircle2 className="w-10 h-10 mx-auto mb-2 text-emerald-500/30" />
-                  <p className="text-sm font-semibold text-slate-700">Tidak ada sinyal pengecualian aktif</p>
-                  <p className="text-xs text-slate-500 mt-1">Seluruh kondisi rombel beroperasi normal.</p>
+                <div className="text-center py-12 text-ink-faint">
+                  <CheckCircle2 className="w-10 h-10 mx-auto mb-2 text-success/30" />
+                  <p className="text-sm font-semibold text-ink-soft">Tidak ada sinyal pengecualian aktif</p>
+                  <p className="text-xs text-ink-soft mt-1">Seluruh kondisi rombel beroperasi normal.</p>
                 </div>
               ) : (
-                <div className="divide-y divide-slate-100">
+                <div className="divide-y divide-line-soft">
                   {activeSignals.map(sig => (
                     <div
                       key={sig.signal_id}
-                      className={`p-4 sm:p-5 space-y-3 transition-colors ${
-                        sig.is_acknowledged ? 'bg-slate-50/60 opacity-60' : 'hover:bg-slate-50/40'
+                      className={`p-4 medium:p-4 space-y-3 transition-colors ${
+                        sig.is_acknowledged ? 'bg-surface-subtle/60 opacity-60' : 'hover-only:bg-surface-subtle/40'
                       }`}
                     >
                       {/* Row 1: Header Meta */}
                       <div className="flex items-center justify-between gap-2">
                         <div className="flex items-center gap-2 min-w-0">
-                          <span className="text-xs font-bold text-slate-900 uppercase tracking-wide truncate">
+                          <span className="text-xs font-bold text-ink uppercase tracking-wider tracking-wide truncate">
                             {getCategoryLabel(sig.category)}
                           </span>
-                          <span className="text-slate-300 text-xs">•</span>
-                          <span className="text-xs font-semibold text-slate-600 truncate">{sig.student_name}</span>
+                          <span className="text-ink-faint text-xs">•</span>
+                          <span className="text-xs font-semibold text-ink-soft truncate">{sig.student_name}</span>
                         </div>
-                        <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full shrink-0 ${
+                        <span className={`text-[10px] font-bold px-2 py-1 rounded-full shrink-0 ${
                           sig.advisory_recommendation.escalation_priority === 'HIGH'
-                            ? 'bg-rose-50 text-rose-700 border border-rose-200'
-                            : 'bg-amber-50 text-amber-800 border border-amber-200'
+                            ? 'bg-danger-tint text-danger-deep border border-danger-line'
+                            : 'bg-warning-tint text-warning-deep border border-warning-line'
                         }`}>
                           Prioritas: {getPriorityLabel(sig.advisory_recommendation.escalation_priority)}
                         </span>
                       </div>
 
                       {/* Row 2: Trigger Reason */}
-                      <p className="text-xs text-slate-600 leading-relaxed font-medium">
+                      <p className="text-xs text-ink-soft leading-relaxed font-medium">
                         {sig.deterministic_trigger_reason}
                       </p>
 
                       {/* Row 3: SOP Recommendation */}
-                      <div className="flex items-start gap-2 text-[11px] text-slate-600 bg-amber-50/50 p-2.5 rounded-xl border border-amber-100/60">
-                        <Lightbulb className="w-3.5 h-3.5 text-amber-500 shrink-0 mt-0.5" />
+                      <div className="flex items-start gap-2 text-[11px] text-ink-soft bg-warning-tint/50 p-2 rounded-field border border-amber-100/60">
+                        <Lightbulb className="w-4 h-4 text-brass shrink-0 mt-0.5" />
                         <div>
-                          <strong className="text-amber-900 font-semibold">SOP:</strong>{' '}
+                          <strong className="text-warning-deep font-semibold">SOP:</strong>{' '}
                           {sig.advisory_recommendation.recommended_action}
                         </div>
                       </div>
 
                       {/* Row 4: Action / Input */}
                       {sig.is_acknowledged ? (
-                        <div className="flex items-center gap-1.5 text-xs text-emerald-600 font-bold pt-1">
-                          <CheckCircle2 className="w-3.5 h-3.5" />
+                        <div className="flex items-center gap-2 text-xs text-success font-bold pt-1">
+                          <CheckCircle2 className="w-4 h-4" />
                           <span>Sinyal telah direspons oleh pendidik</span>
                         </div>
                       ) : (
@@ -335,15 +336,15 @@ export const SafetyIncidentModal: React.FC<Props> = ({
                             value={ackActions[sig.signal_id] || ''}
                             onChange={e => setAckActions({ ...ackActions, [sig.signal_id]: e.target.value })}
                             placeholder="Catatan tindakan penanganan (wajib diisi)..."
-                            className="flex-1 px-3 py-2 text-xs rounded-xl bg-slate-50 border border-slate-200 focus:bg-white focus:outline-none focus:ring-2 focus:ring-slate-900 text-slate-900 placeholder:text-slate-400 transition"
+                            className="flex-1 px-3 py-2 text-xs rounded-field bg-surface-subtle border border-line focus:bg-surface focus:outline-none focus:ring-2 focus:ring-brass/30 text-ink placeholder:text-ink-faint transition"
                           />
                           <button
                             onClick={() => handleAcknowledgeSignal(sig.signal_id)}
                             disabled={isSubmitting || !ackActions[sig.signal_id]}
-                            className="px-3.5 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 disabled:opacity-40 text-white text-xs font-bold transition flex items-center gap-1.5 shrink-0 shadow-xs cursor-pointer"
+                            className="px-3 py-2 rounded-field bg-brand hover-only:bg-surface-inset disabled:opacity-40 text-on-brand text-xs font-bold transition flex items-center gap-2 shrink-0 shadow-hairline cursor-pointer"
                           >
                             <Send className="w-3 h-3" />
-                            <span className="hidden sm:inline">Konfirmasi</span>
+                            <span className="hidden medium:inline">Konfirmasi</span>
                           </button>
                         </div>
                       )}
@@ -356,41 +357,40 @@ export const SafetyIncidentModal: React.FC<Props> = ({
 
           {/* TAB 2: REPORT INCIDENT (Clean Form) */}
           {activeTab === 'REPORT_INCIDENT' && (
-            <form onSubmit={handleReportIncident} className="p-5 sm:p-6 space-y-4">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <form onSubmit={handleReportIncident} className="p-4 medium:p-6 space-y-4">
+              <div className="grid grid-cols-1 medium:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-semibold text-slate-700 mb-1.5">
+                  <label className="block text-xs font-semibold text-ink-soft mb-1.5">
                     Peserta Didik Terdampak
                   </label>
-                  <select
-                    value={targetStudentId}
-                    onChange={e => setTargetStudentId(e.target.value)}
-                    className="w-full px-3 py-2 text-xs rounded-xl bg-slate-50 border border-slate-200 text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-slate-900 transition"
-                  >
-                    {students.map(s => (
-                      <option key={s.id} value={s.id}>{s.name}</option>
-                    ))}
-                  </select>
+                  <SelectSheet
+    value={targetStudentId}
+    onChange={setTargetStudentId}
+    options={[
+      { value: "", label: "Pilih Ananda Terkait..." },
+      ...students.map(s => ({ value: s.id, label: s.name }))
+    ]}
+  />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-slate-700 mb-1.5">
+                  <label className="block text-xs font-semibold text-ink-soft mb-1.5">
                     Tingkat Keparahan Insiden
                   </label>
-                  <select
-                    value={severity}
-                    onChange={e => setSeverity(e.target.value as IncidentSeverityLevel)}
-                    className="w-full px-3 py-2 text-xs rounded-xl bg-slate-50 border border-slate-200 text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-slate-900 transition"
-                  >
-                    <option value="MINOR_RESOLVABLE">Ringan (Terkendali oleh Guru Kelas)</option>
-                    <option value="MODERATE_SUPERVISED">Sedang (Perlu Triage Kepala Sekolah & Penjemputan)</option>
-                    <option value="CRITICAL_URGENT">Kritis / Darurat (Perlu Penanganan Cepat)</option>
-                  </select>
+                  <SelectSheet
+    value={severity}
+    onChange={(val) => setSeverity(val as any)}
+    options={[
+      { value: "MINOR_RESOLVABLE", label: "Ringan (Terkendali oleh Guru Kelas)" },
+      { value: "MODERATE_SUPERVISED", label: "Sedang (Perlu Triage Kepala Sekolah & Penjemputan)" },
+      { value: "CRITICAL_URGENT", label: "Kritis / Darurat (Perlu Penanganan Cepat)" }
+    ]}
+  />
                 </div>
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-700 mb-1.5">
+                <label className="block text-xs font-semibold text-ink-soft mb-1.5">
                   Judul Singkat Insiden
                 </label>
                 <input
@@ -398,12 +398,12 @@ export const SafetyIncidentModal: React.FC<Props> = ({
                   value={title}
                   onChange={e => setTitle(e.target.value)}
                   placeholder="Contoh: Lutut lecet terbentur meja sentra balok"
-                  className="w-full px-3 py-2 text-xs rounded-xl bg-slate-50 border border-slate-200 text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-slate-900 transition"
+                  className="w-full px-3 py-2 text-xs rounded-field bg-surface-subtle border border-line text-ink focus:bg-surface focus:outline-none focus:ring-2 focus:ring-brass/30 transition"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-700 mb-1.5">
+                <label className="block text-xs font-semibold text-ink-soft mb-1.5">
                   Lokasi di Lingkungan Sekolah
                 </label>
                 <input
@@ -411,12 +411,12 @@ export const SafetyIncidentModal: React.FC<Props> = ({
                   value={location}
                   onChange={e => setLocation(e.target.value)}
                   placeholder="Contoh: Sentra Balok Kelas TK A"
-                  className="w-full px-3 py-2 text-xs rounded-xl bg-slate-50 border border-slate-200 text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-slate-900 transition"
+                  className="w-full px-3 py-2 text-xs rounded-field bg-surface-subtle border border-line text-ink focus:bg-surface focus:outline-none focus:ring-2 focus:ring-brass/30 transition"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-700 mb-1.5">
+                <label className="block text-xs font-semibold text-ink-soft mb-1.5">
                   Fakta Kronologi Insiden (Objektif & Faktual)
                 </label>
                 <textarea
@@ -424,24 +424,24 @@ export const SafetyIncidentModal: React.FC<Props> = ({
                   onChange={e => setChronology(e.target.value)}
                   rows={3}
                   placeholder="Ceritakan kejadian faktual secara singkat, tindakan P3K awal yang telah dilakukan..."
-                  className="w-full px-3 py-2 text-xs rounded-xl bg-slate-50 border border-slate-200 text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-slate-900 transition"
+                  className="w-full px-3 py-2 text-xs rounded-field bg-surface-subtle border border-line text-ink focus:bg-surface focus:outline-none focus:ring-2 focus:ring-brass/30 transition"
                 />
               </div>
 
-              <div className="pt-2 flex flex-col sm:flex-row items-stretch sm:items-center justify-end gap-2">
+              <div className="pt-2 flex flex-col medium:flex-row items-stretch medium:items-center justify-end gap-2">
                 <button
                   type="button"
                   onClick={onClose}
-                  className="w-full sm:w-auto px-4 py-2.5 sm:py-2 rounded-xl bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 text-xs font-bold transition cursor-pointer order-2 sm:order-1"
+                  className="w-full medium:w-auto px-4 py-2 medium:py-2 rounded-field bg-surface border border-line hover-only:bg-surface-subtle text-ink-soft text-xs font-bold transition cursor-pointer order-2 medium:order-1"
                 >
                   Batal
                 </button>
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="w-full sm:w-auto px-4 py-2.5 sm:py-2 rounded-xl bg-rose-600 hover:bg-rose-700 disabled:opacity-50 text-white text-xs font-bold transition flex justify-center items-center gap-1.5 cursor-pointer shadow-xs order-1 sm:order-2"
+                  className="w-full medium:w-auto px-4 py-2 medium:py-2 rounded-field bg-danger hover-only:opacity-90 disabled:opacity-50 text-on-brand text-xs font-bold transition flex justify-center items-center gap-2 cursor-pointer shadow-hairline order-1 medium:order-2"
                 >
-                  <ShieldAlert className="w-3.5 h-3.5" />
+                  <ShieldAlert className="w-4 h-4" />
                   <span>{isSubmitting ? 'Menyimpan...' : 'Simpan Laporan Insiden'}</span>
                 </button>
               </div>
@@ -452,45 +452,45 @@ export const SafetyIncidentModal: React.FC<Props> = ({
           {activeTab === 'ACTIVE_INCIDENTS' && (
             <div>
               {activeIncidents.length === 0 ? (
-                <div className="text-center py-12 text-slate-400">
-                  <CheckCircle2 className="w-10 h-10 mx-auto mb-2 text-emerald-500/30" />
-                  <p className="text-sm font-semibold text-slate-700">Tidak ada rekor insiden terbuka</p>
-                  <p className="text-xs text-slate-500 mt-1">Seluruh kondisi rombel aman.</p>
+                <div className="text-center py-12 text-ink-faint">
+                  <CheckCircle2 className="w-10 h-10 mx-auto mb-2 text-success/30" />
+                  <p className="text-sm font-semibold text-ink-soft">Tidak ada rekor insiden terbuka</p>
+                  <p className="text-xs text-ink-soft mt-1">Seluruh kondisi rombel aman.</p>
                 </div>
               ) : (
-                <div className="divide-y divide-slate-100">
+                <div className="divide-y divide-line-soft">
                   {activeIncidents.map(inc => (
                     <div
                       key={inc.incident_id}
-                      className="p-4 sm:p-5 space-y-2.5 hover:bg-slate-50/40 transition-colors"
+                      className="p-4 medium:p-4 space-y-2.5 hover-only:bg-surface-subtle/40 transition-colors"
                     >
                       <div className="flex items-center justify-between gap-2">
                         <div className="flex items-center gap-2">
-                          <span className="text-xs font-bold text-slate-900">{inc.title}</span>
-                          <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
+                          <span className="text-xs font-bold text-ink">{inc.title}</span>
+                          <span className={`text-[10px] font-bold px-2 py-1 rounded-full ${
                             inc.status === 'RESOLVED' || inc.status === 'AUDITED_CLOSED'
-                              ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
-                              : 'bg-rose-50 text-rose-700 border border-rose-200'
+                              ? 'bg-success-tint text-success-deep border border-success-line'
+                              : 'bg-danger-tint text-danger-deep border border-danger-line'
                           }`}>
                             {inc.status}
                           </span>
                         </div>
-                        <span className="text-[10px] text-slate-400 flex items-center gap-1">
+                        <span className="text-[10px] text-ink-faint flex items-center gap-1">
                           <Clock className="w-3 h-3" />
                           {new Date(inc.detected_at).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })}
                         </span>
                       </div>
 
-                      <p className="text-xs text-slate-600 font-medium leading-relaxed">
+                      <p className="text-xs text-ink-soft font-medium leading-relaxed">
                         {inc.factual_chronology}
                       </p>
 
-                      <div className="flex items-center gap-4 text-[11px] text-slate-500">
+                      <div className="flex items-center gap-4 text-[11px] text-ink-soft">
                         <span className="flex items-center gap-1">
-                          <MapPin className="w-3 h-3 text-slate-400" /> {inc.location_in_school}
+                          <MapPin className="w-3 h-3 text-ink-faint" /> {inc.location_in_school}
                         </span>
                         <span className="flex items-center gap-1">
-                          <User className="w-3 h-3 text-slate-400" /> {inc.affected_student_names.join(', ')}
+                          <User className="w-3 h-3 text-ink-faint" /> {inc.affected_student_names.join(', ')}
                         </span>
                       </div>
 
@@ -504,19 +504,19 @@ export const SafetyIncidentModal: React.FC<Props> = ({
                                 value={resolutionNote}
                                 onChange={e => setResolutionNote(e.target.value)}
                                 placeholder="Tindakan penyelesaian dan kondisi akhir ananda..."
-                                className="w-full px-3 py-2 text-xs rounded-xl bg-slate-50 border border-slate-200 text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-600 transition"
+                                className="w-full px-3 py-2 text-xs rounded-field bg-surface-subtle border border-line text-ink focus:bg-surface focus:outline-none focus:ring-2 focus:ring-emerald-600 transition"
                               />
                               <div className="flex items-center justify-end gap-2">
                                 <button
                                   onClick={() => setResolvingIncidentId(null)}
-                                  className="px-3 py-1.5 text-xs font-semibold rounded-lg text-slate-600 hover:bg-slate-100 transition"
+                                  className="px-3 py-1 text-xs font-semibold rounded-lg text-ink-soft hover-only:bg-surface-subtle transition"
                                 >
                                   Batal
                                 </button>
                                 <button
                                   onClick={() => handleResolveIncident(inc.incident_id)}
                                   disabled={isSubmitting}
-                                  className="px-3 py-1.5 text-xs font-bold rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white transition shadow-xs"
+                                  className="px-3 py-1 text-xs font-bold rounded-lg bg-success hover-only:opacity-90 text-on-brand transition shadow-hairline"
                                 >
                                   Selesaikan Insiden
                                 </button>
@@ -525,9 +525,9 @@ export const SafetyIncidentModal: React.FC<Props> = ({
                           ) : (
                             <button
                               onClick={() => setResolvingIncidentId(inc.incident_id)}
-                              className="text-xs text-emerald-600 hover:text-emerald-700 font-bold flex items-center gap-1 cursor-pointer"
+                              className="text-xs text-success hover-only:text-success-deep font-bold flex items-center gap-1 cursor-pointer"
                             >
-                              <CheckCircle2 className="w-3.5 h-3.5" />
+                              <CheckCircle2 className="w-4 h-4" />
                               <span>Tandai Selesai / Ditangani</span>
                             </button>
                           )}
@@ -535,7 +535,7 @@ export const SafetyIncidentModal: React.FC<Props> = ({
                       )}
 
                       {inc.resolution_summary && (
-                        <div className="bg-emerald-50/60 p-2.5 rounded-xl border border-emerald-100 text-xs text-emerald-900">
+                        <div className="bg-success-tint/60 p-2 rounded-field border border-emerald-100 text-xs text-success-deep">
                           <strong>Penyelesaian ({inc.resolved_by_name}):</strong> {inc.resolution_summary}
                         </div>
                       )}

@@ -1,3 +1,4 @@
+import { SelectSheet } from '../ui';
 /**
  * Yapendik School OS — Authorization & Security Testing Suite
  * Validates Contextual Authorization (USER + ROLE + SCHOOL CONTEXT + RELATIONSHIP + ACTION + RESOURCE)
@@ -71,117 +72,117 @@ export const AuthorizationTestingWorkspace: React.FC = () => {
   };
 
   return (
-    <div className="px-4 md:px-6 py-6 space-y-6">
+    <div className="px-4 medium:px-6 py-6 space-y-6">
       {/* Header */}
-      <div className="bg-white border border-slate-200 rounded-lg p-5 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div className="bg-surface border border-line rounded-lg p-4 shadow-hairline flex flex-col medium:flex-row medium:items-center justify-between gap-4">
         <div>
-          <div className="flex items-center space-x-2 text-xs font-mono text-emerald-700 uppercase tracking-wide mb-1">
-            <Lock className="w-3.5 h-3.5" />
+          <div className="flex items-center space-x-2 text-xs font-mono text-success-deep uppercase tracking-wider tracking-wide mb-1 whitespace-nowrap">
+            <Lock className="w-4 h-4" />
             <span>Constitutional Security Gate — Contextual Policy Engine</span>
           </div>
-          <h1 className="text-xl font-bold text-slate-900 flex items-center gap-2">
-            <ShieldCheck className="w-5 h-5 text-emerald-600" />
+          <h1 className="text-xl font-bold text-ink flex items-center gap-2">
+            <ShieldCheck className="w-5 h-5 text-success" />
             Automated Negative & Positive Authorization Testing
           </h1>
-          <p className="text-xs text-slate-500 mt-1">
+          <p className="text-xs text-ink-soft mt-1">
             Verifikasi ketat batas multi-sekolah, proteksi data anak (PII), hak wali murid, dan pencegahan eskalasi wewenang.
           </p>
         </div>
 
         <button
           onClick={handleRunAllTests}
-          className="w-full md:w-auto mt-3 md:mt-0 bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold px-4 py-2 rounded-md transition-colors flex items-center justify-center space-x-2 shrink-0 shadow-sm"
+          className="w-full medium:w-auto mt-3 medium:mt-0 bg-brand hover-only:bg-surface-inset text-on-brand text-xs font-semibold px-4 py-2 rounded-md transition-colors flex items-center justify-center space-x-2 shrink-0 shadow-hairline"
         >
-          <RefreshCw className="w-3.5 h-3.5" />
+          <RefreshCw className="w-4 h-4" />
           <span>Jalankan Seluruh Uji Otorisasi</span>
         </button>
       </div>
 
       {/* Test Suite Summary Banner */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div className="bg-white border border-slate-200 rounded-lg p-4 shadow-sm flex items-center justify-between">
+      <div className="grid grid-cols-1 medium:grid-cols-3 gap-4">
+        <div className="bg-surface border border-line rounded-lg p-4 shadow-hairline flex items-center justify-between">
           <div>
-            <div className="text-xs font-medium text-slate-500">Total Skenario Uji</div>
-            <div className="text-2xl font-black text-slate-900 mt-0.5">{suiteResults.total} Kasus</div>
+            <div className="text-xs font-medium text-ink-soft">Total Skenario Uji</div>
+            <div className="text-2xl font-black text-ink mt-0.5">{suiteResults.total} Kasus</div>
           </div>
-          <div className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center font-mono font-bold text-slate-700">
+          <div className="w-10 h-10 rounded-full bg-surface-subtle flex items-center justify-center font-mono font-bold text-ink-soft whitespace-nowrap">
             {suiteResults.total}
           </div>
         </div>
 
-        <div className="bg-white border border-emerald-200 rounded-lg p-4 shadow-sm flex items-center justify-between bg-emerald-50/20">
+        <div className="bg-surface border border-success-line rounded-lg p-4 shadow-hairline flex items-center justify-between bg-success-tint/20">
           <div>
-            <div className="text-xs font-medium text-emerald-800">Lolos Uji (Verified)</div>
-            <div className="text-2xl font-black text-emerald-700 mt-0.5">{suiteResults.passed} Lolos</div>
+            <div className="text-xs font-medium text-success-deep">Lolos Uji (Verified)</div>
+            <div className="text-2xl font-black text-success-deep mt-0.5">{suiteResults.passed} Lolos</div>
           </div>
-          <CheckCircle2 className="w-8 h-8 text-emerald-600" />
+          <CheckCircle2 className="w-8 h-8 text-success" />
         </div>
 
-        <div className="bg-white border border-slate-200 rounded-lg p-4 shadow-sm flex items-center justify-between">
+        <div className="bg-surface border border-line rounded-lg p-4 shadow-hairline flex items-center justify-between">
           <div>
-            <div className="text-xs font-medium text-slate-500">Gagal / Regresi</div>
-            <div className={`text-2xl font-black mt-0.5 ${suiteResults.failed > 0 ? 'text-red-600' : 'text-slate-400'}`}>
+            <div className="text-xs font-medium text-ink-soft">Gagal / Regresi</div>
+            <div className={`text-2xl font-black mt-0.5 ${suiteResults.failed > 0 ? 'text-danger' : 'text-ink-faint'}`}>
               {suiteResults.failed} Gagal
             </div>
           </div>
           {suiteResults.failed > 0 ? (
-            <XCircle className="w-8 h-8 text-red-600" />
+            <XCircle className="w-8 h-8 text-danger" />
           ) : (
-            <ShieldCheck className="w-8 h-8 text-emerald-600" />
+            <ShieldCheck className="w-8 h-8 text-success" />
           )}
         </div>
       </div>
 
       {/* Automated Tests Table */}
-      <div className="bg-white border border-slate-200 rounded-lg shadow-sm overflow-hidden">
-        <div className="p-4 border-b border-slate-100 bg-slate-50 flex items-center justify-between">
-          <h2 className="font-bold text-slate-900 text-xs uppercase tracking-wide">
+      <div className="bg-surface border border-line rounded-lg shadow-hairline overflow-hidden">
+        <div className="p-4 border-b border-line-soft bg-surface-subtle flex items-center justify-between">
+          <h2 className="font-bold text-ink text-xs uppercase tracking-wider tracking-wide">
             Daftar Eksekusi Uji Otorisasi Kontekstual
           </h2>
-          <span className="text-[11px] font-mono text-slate-500">
+          <span className="text-[11px] font-mono text-ink-soft whitespace-nowrap">
             Engine: PolicyEvaluator v1.0
           </span>
         </div>
 
-        <div className="divide-y divide-slate-100">
+        <div className="divide-y divide-line-soft">
           {suiteResults.results.map(t => {
             const isNegative = t.category.startsWith('NEGATIVE');
             return (
-              <div key={t.id} className="p-4 hover:bg-slate-50/60 transition-colors space-y-2">
-                <div className="flex flex-col md:flex-row md:items-center justify-between gap-2">
+              <div key={t.id} className="p-4 hover-only:bg-surface-subtle/60 transition-colors space-y-2">
+                <div className="flex flex-col medium:flex-row medium:items-center justify-between gap-2">
                   <div className="flex items-center space-x-2.5">
                     {t.passed ? (
-                      <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+                      <CheckCircle2 className="w-4 h-4 text-success shrink-0" />
                     ) : (
-                      <XCircle className="w-4 h-4 text-red-600 shrink-0" />
+                      <XCircle className="w-4 h-4 text-danger shrink-0" />
                     )}
-                    <span className="font-bold text-slate-900 text-xs">{t.name}</span>
-                    <span className={`text-[10px] font-mono font-semibold px-2 py-0.5 rounded border ${
-                      isNegative ? 'bg-rose-50 text-rose-800 border-rose-200' : 'bg-blue-50 text-blue-800 border-blue-200'
+                    <span className="font-bold text-ink text-xs">{t.name}</span>
+                    <span className={`text-[10px] font-mono font-semibold px-2 py-1 rounded border ${
+                      isNegative ? 'bg-danger-tint text-danger-deep border-danger-line' : 'bg-info-tint text-info-deep border-info-line'
                     }`}>
                       {t.category}
                     </span>
                   </div>
 
                   <div className="flex items-center space-x-2 shrink-0">
-                    <span className="text-[11px] font-mono text-slate-500">
-                      Ekspektasi: <b className={t.expected === 'ALLOW' ? 'text-emerald-700' : 'text-rose-700'}>{t.expected}</b>
+                    <span className="text-[11px] font-mono text-ink-soft whitespace-nowrap">
+                      Ekspektasi: <b className={t.expected === 'ALLOW' ? 'text-success-deep' : 'text-danger-deep'}>{t.expected}</b>
                     </span>
-                    <span className="text-[11px] font-mono text-slate-500">→</span>
-                    <span className={`text-[11px] font-mono font-bold px-2 py-0.5 rounded ${
-                      t.actual === 'ALLOW' ? 'bg-emerald-100 text-emerald-800' : 'bg-rose-100 text-rose-800'
+                    <span className="text-[11px] font-mono text-ink-soft whitespace-nowrap">→</span>
+                    <span className={`text-[11px] font-mono font-bold px-2 py-1 rounded ${
+                      t.actual === 'ALLOW' ? 'bg-success-tint text-success-deep' : 'bg-danger-tint text-danger-deep'
                     }`}>
                       Hasil: {t.actual}
                     </span>
                   </div>
                 </div>
 
-                <div className="text-xs text-slate-600 pl-6 space-y-1">
+                <div className="text-xs text-ink-soft pl-6 space-y-1">
                   <div>
-                    <span className="font-medium text-slate-800">Skenario:</span> {t.scenario}
+                    <span className="font-medium text-ink">Skenario:</span> {t.scenario}
                   </div>
-                  <div className="text-[11px] text-slate-500 font-mono">
-                    <span className="font-medium text-slate-700">Kode Evaluasi:</span> [{t.code}] {t.reason}
+                  <div className="text-[11px] text-ink-soft font-mono whitespace-nowrap">
+                    <span className="font-medium text-ink-soft">Kode Evaluasi:</span> [{t.code}] {t.reason}
                   </div>
                 </div>
               </div>
@@ -191,94 +192,43 @@ export const AuthorizationTestingWorkspace: React.FC = () => {
       </div>
 
       {/* Interactive Simulator Card */}
-      <div className="bg-white border border-slate-200 rounded-lg p-5 shadow-sm space-y-4">
-        <div className="flex items-center space-x-2 border-b border-slate-100 pb-3">
-          <Sliders className="w-4 h-4 text-slate-700" />
-          <h2 className="font-bold text-slate-900 text-sm">
+      <div className="bg-surface border border-line rounded-lg p-4 shadow-hairline space-y-4">
+        <div className="flex items-center space-x-2 border-b border-line-soft pb-3">
+          <Sliders className="w-4 h-4 text-ink-soft" />
+          <h2 className="font-bold text-ink text-sm">
             Simulator Uji Otorisasi Interaktif (Live Policy Matrix)
           </h2>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+        <div className="grid grid-cols-1 medium:grid-cols-3 gap-4 text-xs">
           <div>
-            <label className="block font-semibold text-slate-700 mb-1">Peran Pengguna (Role):</label>
-            <select
-              value={simRole}
-              onChange={e => setSimRole(e.target.value as Role)}
-              className="w-full border border-slate-300 rounded px-2.5 py-1.5 outline-none font-medium"
-            >
-              <option value="TEACHER">TEACHER (Pendidik)</option>
-              <option value="HEADMASTER">HEADMASTER (Kepala Sekolah)</option>
-              <option value="GUARDIAN">GUARDIAN (Orang Tua / Wali)</option>
-              <option value="STAFF">STAFF (Tenaga Kependidikan)</option>
-              <option value="YAPENDIK_SUPERADMIN">YAPENDIK_SUPERADMIN (Yayasan)</option>
-            </select>
+            <label className="block font-semibold text-ink-soft mb-1">Peran Pengguna (Role):</label>
+            <SelectSheet value={simRole}   options={[{ value: "TEACHER", label: "TEACHER (Pendidik)" }, { value: "HEADMASTER", label: "HEADMASTER (Kepala Sekolah)" }, { value: "GUARDIAN", label: "GUARDIAN (Orang Tua / Wali)" }, { value: "STAFF", label: "STAFF (Tenaga Kependidikan)" }, { value: "YAPENDIK_SUPERADMIN", label: "YAPENDIK_SUPERADMIN (Yayasan)" }]} />
           </div>
 
           <div>
-            <label className="block font-semibold text-slate-700 mb-1">Asal Sekolah Pengguna:</label>
-            <select
-              value={simUserSchool}
-              onChange={e => setSimUserSchool(e.target.value)}
-              className="w-full border border-slate-300 rounded px-2.5 py-1.5 outline-none font-medium"
-            >
-              <option value="sch_tk_yapendik_01">TK Yapendik 01 Menteng</option>
-              <option value="sch_tk_yapendik_02">TK Yapendik 02 Kebayoran</option>
-            </select>
+            <label className="block font-semibold text-ink-soft mb-1">Asal Sekolah Pengguna:</label>
+            <SelectSheet value={simUserSchool}   options={[{ value: "sch_tk_yapendik_01", label: "TK Yapendik 01 Menteng" }, { value: "sch_tk_yapendik_02", label: "TK Yapendik 02 Kebayoran" }]} />
           </div>
 
           <div>
-            <label className="block font-semibold text-slate-700 mb-1">Sekolah Target Sumber Daya:</label>
-            <select
-              value={simTargetSchool}
-              onChange={e => setSimTargetSchool(e.target.value)}
-              className="w-full border border-slate-300 rounded px-2.5 py-1.5 outline-none font-medium"
-            >
-              <option value="sch_tk_yapendik_01">TK Yapendik 01 Menteng</option>
-              <option value="sch_tk_yapendik_02">TK Yapendik 02 Kebayoran</option>
-            </select>
+            <label className="block font-semibold text-ink-soft mb-1">Sekolah Target Sumber Daya:</label>
+            <SelectSheet value={simTargetSchool}   options={[{ value: "sch_tk_yapendik_01", label: "TK Yapendik 01 Menteng" }, { value: "sch_tk_yapendik_02", label: "TK Yapendik 02 Kebayoran" }]} />
           </div>
 
           <div>
-            <label className="block font-semibold text-slate-700 mb-1">Jenis Aksi (Action):</label>
-            <select
-              value={simAction}
-              onChange={e => setSimAction(e.target.value as ActionType)}
-              className="w-full border border-slate-300 rounded px-2.5 py-1.5 outline-none font-medium"
-            >
-              <option value="VIEW">VIEW (Melihat)</option>
-              <option value="CREATE">CREATE (Membuat / Mencatat)</option>
-              <option value="EDIT">EDIT (Mengubah)</option>
-              <option value="DELETE">DELETE (Menghapus)</option>
-              <option value="APPROVE">APPROVE (Mengesahkan LPPA)</option>
-            </select>
+            <label className="block font-semibold text-ink-soft mb-1">Jenis Aksi (Action):</label>
+            <SelectSheet value={simAction}   options={[{ value: "VIEW", label: "VIEW (Melihat)" }, { value: "CREATE", label: "CREATE (Membuat / Mencatat)" }, { value: "EDIT", label: "EDIT (Mengubah)" }, { value: "DELETE", label: "DELETE (Menghapus)" }, { value: "APPROVE", label: "APPROVE (Mengesahkan LPPA)" }]} />
           </div>
 
           <div>
-            <label className="block font-semibold text-slate-700 mb-1">Target Sumber Daya (Resource):</label>
-            <select
-              value={simResource}
-              onChange={e => setSimResource(e.target.value as ResourceType)}
-              className="w-full border border-slate-300 rounded px-2.5 py-1.5 outline-none font-medium"
-            >
-              <option value="STUDENT_OBSERVATION">STUDENT_OBSERVATION (Catatan Anekdot)</option>
-              <option value="STUDENT_DEVELOPMENT">STUDENT_DEVELOPMENT (Rapor LPPA)</option>
-              <option value="TEACHER_DAILY_WORK">TEACHER_DAILY_WORK (Rencana Kegiatan)</option>
-              <option value="ATTENDANCE_REGISTER">ATTENDANCE_REGISTER (Presensi Siswa)</option>
-              <option value="AUDIT_LOG">AUDIT_LOG (Log Tata Kelola)</option>
-            </select>
+            <label className="block font-semibold text-ink-soft mb-1">Target Sumber Daya (Resource):</label>
+            <SelectSheet value={simResource}   options={[{ value: "STUDENT_OBSERVATION", label: "STUDENT_OBSERVATION (Catatan Anekdot)" }, { value: "STUDENT_DEVELOPMENT", label: "STUDENT_DEVELOPMENT (Rapor LPPA)" }, { value: "TEACHER_DAILY_WORK", label: "TEACHER_DAILY_WORK (Rencana Kegiatan)" }, { value: "ATTENDANCE_REGISTER", label: "ATTENDANCE_REGISTER (Presensi Siswa)" }, { value: "AUDIT_LOG", label: "AUDIT_LOG (Log Tata Kelola)" }]} />
           </div>
 
           <div>
-            <label className="block font-semibold text-slate-700 mb-1">Target Siswa (Bila Ada):</label>
-            <select
-              value={simTargetPersonId}
-              onChange={e => setSimTargetPersonId(e.target.value)}
-              className="w-full border border-slate-300 rounded px-2.5 py-1.5 outline-none font-medium"
-            >
-              <option value="per_child_kenzo">Kenzo Pratama (Anak dari Wali Sim)</option>
-              <option value="per_child_alina">Alina Putri (Bukan Anak Wali Sim)</option>
-            </select>
+            <label className="block font-semibold text-ink-soft mb-1">Target Siswa (Bila Ada):</label>
+            <SelectSheet value={simTargetPersonId}   options={[{ value: "per_child_kenzo", label: "Kenzo Pratama (Anak dari Wali Sim)" }, { value: "per_child_alina", label: "Alina Putri (Bukan Anak Wali Sim)" }]} />
           </div>
         </div>
 
@@ -288,32 +238,32 @@ export const AuthorizationTestingWorkspace: React.FC = () => {
             id="simConfidential"
             checked={simIsConfidential}
             onChange={e => setSimIsConfidential(e.target.checked)}
-            className="rounded text-slate-900"
+            className="rounded text-ink"
           />
-          <label htmlFor="simConfidential" className="text-xs text-slate-700 font-medium">
+          <label htmlFor="simConfidential" className="text-xs text-ink-soft font-medium">
             Tandai data ini sebagai Rahasia Internal Guru (isConfidential = true)
           </label>
         </div>
 
-        <div className="flex flex-col md:flex-row md:items-center justify-between pt-2 gap-3">
+        <div className="flex flex-col medium:flex-row medium:items-center justify-between pt-2 gap-3">
           <button
             onClick={handleRunSimulator}
-            className="w-full md:w-auto mt-3 md:mt-0 bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold px-4 py-2 rounded transition-colors flex items-center justify-center space-x-1.5 shadow-sm"
+            className="w-full medium:w-auto mt-3 medium:mt-0 bg-brand hover-only:bg-surface-inset text-on-brand text-xs font-semibold px-4 py-2 rounded transition-colors flex items-center justify-center space-x-1.5 shadow-hairline"
           >
-            <Play className="w-3.5 h-3.5" />
+            <Play className="w-4 h-4" />
             <span>Evaluasi Kebijakan Otorisasi</span>
           </button>
 
           {simResult && (
-            <div className={`p-2.5 rounded-md border text-xs flex items-center space-x-2 ${
+            <div className={`p-2 rounded-md border text-xs flex items-center space-x-2 ${
               simResult.granted 
-                ? 'bg-emerald-50 border-emerald-300 text-emerald-900' 
-                : 'bg-rose-50 border-rose-300 text-rose-900'
+                ? 'bg-success-tint border-success-line text-success-deep' 
+                : 'bg-danger-tint border-danger-line text-danger-deep'
             }`}>
               {simResult.granted ? (
-                <ShieldCheck className="w-4 h-4 text-emerald-600 shrink-0" />
+                <ShieldCheck className="w-4 h-4 text-success shrink-0" />
               ) : (
-                <ShieldAlert className="w-4 h-4 text-rose-600 shrink-0" />
+                <ShieldAlert className="w-4 h-4 text-danger shrink-0" />
               )}
               <div>
                 <span className="font-bold">{simResult.granted ? 'IZIN DIBERIKAN (ALLOW)' : 'IZIN DITOLAK (DENY)'}:</span>{' '}

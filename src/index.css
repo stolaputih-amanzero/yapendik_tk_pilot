@@ -1,55 +1,83 @@
+@import "@fontsource/plus-jakarta-sans/400.css";
+@import "@fontsource/plus-jakarta-sans/500.css";
+@import "@fontsource/plus-jakarta-sans/600.css";
+@import "@fontsource/plus-jakarta-sans/700.css";
+@import "@fontsource/plus-jakarta-sans/800.css";
+@import "@fontsource/jetbrains-mono/400.css";
+@import "@fontsource/jetbrains-mono/700.css";
+
 @import "tailwindcss";
 
 /* Scoped dark variant: hanya aktif jika parent memiliki class .dark secara eksplisit */
 @custom-variant dark (&:where(.dark, .dark *));
+@custom-variant hover-only (@media (hover: hover));
 
-/* 
- * YAPENDIK SCHOOL OS — SEMANTIC DESIGN TOKEN LAYER (v1.0)
- * Aligned with DOC-UI-UX-DESIGN-FOUNDATION-v1.0
- */
-@theme {
-  /* Semantic Surfaces */
-  --color-canvas: #f8fafc;
-  --color-surface: #ffffff;
-  --color-surface-subtle: #f8fafc;
-  --color-surface-muted: #f1f5f9;
-  --color-surface-inset: #0f172a;
-  
-  /* Semantic Typography Colors (WCAG AAA Contrast Baseline) */
-  --color-text-primary: #0f172a;
-  --color-text-secondary: #475569;
-  --color-text-muted: #94a3b8;
-  --color-text-inverse: #ffffff;
-  
-  /* Semantic Brand & Action Colors */
-  --color-brand-primary: #4f46e5;
-  --color-brand-primary-hover: #4338ca;
-  --color-brand-accent: #f59e0b;
-  --color-brand-accent-hover: #d97706;
-  
-  /* Semantic Status & Pedagogical Colors */
-  --color-status-success: #16a34a;
-  --color-status-warning: #f59e0b;
-  --color-status-danger: #e11d48;
-  --color-status-info: #0284c7;
-  --color-status-lppa: #9333ea;
-  
-  /* Semantic Radius Tokens */
-  --radius-xs: 4px;
-  --radius-sm: 8px;
-  --radius-md: 12px;
-  --radius-lg: 16px;
-  --radius-xl: 24px;
-  --radius-pill: 9999px;
+/* ═══ RUNTIME THEME VARIABLES (switch via .dark) ═══ */
+:root {
+  --p-canvas:#F7F4ED; --p-surface:#FDFCF9; --p-surface-subtle:#EFE9DC; --p-surface-inset:#211E1A;
+  --p-ink:#211E1A; --p-ink-soft:#5C554A; --p-ink-faint:#9B9284;
+  --p-line:#E6DECD; --p-line-soft:#EEE8DA; --p-line-strong:#CFC5AE;
+  --p-brand:#211E1A; --p-on-brand:#F7F4ED; --p-brass:#A8874C; --p-brass-soft:#C9B183; --p-brick:#9C4A3C;
+  --p-success:#4B7656; --p-success-deep:#3B5C44; --p-success-tint:#EBF0EA; --p-success-line:#C9D6C6;
+  --p-warning:#8F6420; --p-warning-deep:#8A5A1D; --p-warning-tint:#F4EBDD; --p-warning-line:#E0CBA8;
+  --p-danger:#A03B33;  --p-danger-deep:#7E2D26;  --p-danger-tint:#F4E7E4;  --p-danger-line:#DFBDB7;
+  --p-info:#3E6E8E;    --p-info-deep:#2E5470;    --p-info-tint:#E8EEF2;    --p-info-line:#C2D3DD;
+  --p-lppa:#7A4E7E;    --p-lppa-deep:#5C3A60;    --p-lppa-tint:#F0E9F0;    --p-lppa-line:#D8C6D9;
+  --p-jj-tk:#C96F4A; --p-jj-sd:#4E7A5A; --p-jj-smp:#3E6E8E; --p-jj-sma:#7A4E7E;
+}
+.dark { /* NIGHT TEMPLE */
+  --p-canvas:#16130F; --p-surface:#201C16; --p-surface-subtle:#2A241C; --p-surface-inset:#F7F4ED;
+  --p-ink:#F2EBDD; --p-ink-soft:#CFC5B4; --p-ink-faint:#8F867A;
+  --p-line:#3A3227; --p-line-soft:#2E2820; --p-line-strong:#55493A;
+  --p-brand:#C9A45C; --p-on-brand:#16130F; --p-brass:#C9A45C; --p-brass-soft:#8A6F3F; --p-brick:#C97C6B;
+  --p-success:#8FB79B; --p-success-deep:#B7D2B4; --p-success-tint:#232B22; --p-success-line:#3B4A3A;
+  --p-warning:#D9A85F; --p-warning-deep:#E7C088; --p-warning-tint:#2E2618; --p-warning-line:#4A3D24;
+  --p-danger:#D08578;  --p-danger-deep:#E3AC9F;  --p-danger-tint:#2E1F1C;  --p-danger-line:#4A312C;
+  --p-info:#8FB4CC;    --p-info-deep:#B4CFE0;    --p-info-tint:#1F2830;    --p-info-line:#314351;
+  --p-lppa:#B795BB;    --p-lppa-deep:#D2B8D4;    --p-lppa-tint:#291F2A;    --p-lppa-line:#433345;
+  --p-jj-tk:#E0906B; --p-jj-sd:#8FB79B; --p-jj-smp:#8FB4CC; --p-jj-sma:#B795BB;
+}
 
-  /* Font Families */
-  --font-sans: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+/* ═══ AMANAURA v3.0 — PADMA MODERN (Tailwind v4) ═══ */
+@theme inline {
+  --color-canvas:var(--p-canvas); --color-surface:var(--p-surface);
+  --color-surface-subtle:var(--p-surface-subtle); --color-surface-inset:var(--p-surface-inset);
+  --color-ink:var(--p-ink); --color-ink-soft:var(--p-ink-soft); --color-ink-faint:var(--p-ink-faint);
+  --color-line:var(--p-line); --color-line-soft:var(--p-line-soft); --color-line-strong:var(--p-line-strong);
+  --color-brand:var(--p-brand); --color-on-brand:var(--p-on-brand);
+  --color-brass:var(--p-brass); --color-brass-soft:var(--p-brass-soft); --color-brick:var(--p-brick);
+  --color-success:var(--p-success); --color-success-deep:var(--p-success-deep);
+  --color-success-tint:var(--p-success-tint); --color-success-line:var(--p-success-line);
+  --color-warning:var(--p-warning); --color-warning-deep:var(--p-warning-deep);
+  --color-warning-tint:var(--p-warning-tint); --color-warning-line:var(--p-warning-line);
+  --color-danger:var(--p-danger); --color-danger-deep:var(--p-danger-deep);
+  --color-danger-tint:var(--p-danger-tint); --color-danger-line:var(--p-danger-line);
+  --color-info:var(--p-info); --color-info-deep:var(--p-info-deep);
+  --color-info-tint:var(--p-info-tint); --color-info-line:var(--p-info-line);
+  --color-lppa:var(--p-lppa); --color-lppa-deep:var(--p-lppa-deep);
+  --color-lppa-tint:var(--p-lppa-tint); --color-lppa-line:var(--p-lppa-line);
+  --color-jj-tk:var(--p-jj-tk); --color-jj-sd:var(--p-jj-sd); --color-jj-smp:var(--p-jj-smp); --color-jj-sma:var(--p-jj-sma);
 
-  /* Amanaura Multi-Layer Ambient Shadows */
-  --shadow-ambient: 0 1px 2px rgba(15, 23, 42, 0.04), 0 4px 12px rgba(15, 23, 42, 0.03);
-  --shadow-floating: 0 4px 6px -1px rgba(15, 23, 42, 0.05), 0 12px 24px -4px rgba(15, 23, 42, 0.08);
-  --shadow-luminescent: 0 0 0 1.5px #0F172A, 0 0 20px -4px rgba(245, 158, 11, 0.18);
+  /* Tipografi: kelahiran Indonesia + mono presisi */
+  --font-display:"Plus Jakarta Sans","Inter",system-ui,sans-serif;
+  --font-sans:"Plus Jakarta Sans","Inter",system-ui,sans-serif;
+  --font-mono:"JetBrains Mono",ui-monospace,monospace;
+
+  /* Elevasi: hairline, bukan bayangan tebal (anti-heavy) */
+  --shadow-hairline:0 1px 0 rgba(33,30,26,.05);
+  --shadow-ambient:0 1px 2px rgba(33,30,26,.04),0 4px 12px rgba(33,30,26,.03);
+  --shadow-floating:0 4px 6px -1px rgba(33,30,26,.05),0 16px 32px -8px rgba(33,30,26,.10);
+  --shadow-luminescent:0 0 0 1.5px var(--p-ink),0 0 20px -4px rgba(168,135,76,.28);
+
+  /* Radius Kanonikal (Doktrin §3.6) */
+  --radius-card:16px; --radius-field:12px; --radius-control:8px; --radius-pill:9999px;
+
+  /* MD3 Window Size Class Breakpoints */
+  --breakpoint-compact: 0px;
+  --breakpoint-medium: 600px;
+  --breakpoint-expanded: 840px;
+  --breakpoint-large: 1200px;
+  --breakpoint-extra-large: 1600px;
 }
 
 /* Keyframes for Amanaura Breath (4s Resting Human Pulse) */
@@ -68,20 +96,33 @@
  * CANONICAL REUSABLE UTILITIES & ERGONOMICS
  */
 @layer utilities {
+  /* Motif Nusantara (≤4% opacity — kultural-sekuler) */
+  .motif-poleng { 
+    background-image: conic-gradient(var(--p-ink) 25%, transparent 0 50%, var(--p-ink) 0 75%, transparent 0);
+    background-size: 8px 8px; 
+    opacity: .04; 
+  }
+  .hairline-b { 
+    border-bottom: 1px solid var(--p-line); 
+  }
+
   /* Amanaura Breath Animation */
   .animate-amanaura-breath {
     animation: amanaura-pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
   }
 
   /* Explicit Shadow Utilities */
+  .shadow-hairline {
+    box-shadow: var(--shadow-hairline, 0 1px 0 rgba(33,30,26,.05));
+  }
   .shadow-ambient {
-    box-shadow: var(--shadow-ambient, 0 1px 2px rgba(15, 23, 42, 0.04), 0 4px 12px rgba(15, 23, 42, 0.03));
+    box-shadow: var(--shadow-ambient, 0 1px 2px rgba(33,30,26,.04), 0 4px 12px rgba(33,30,26,.03));
   }
   .shadow-floating {
-    box-shadow: var(--shadow-floating, 0 4px 6px -1px rgba(15, 23, 42, 0.05), 0 12px 24px -4px rgba(15, 23, 42, 0.08));
+    box-shadow: var(--shadow-floating, 0 4px 6px -1px rgba(33,30,26,.05), 0 16px 32px -8px rgba(33,30,26,.10));
   }
   .shadow-luminescent {
-    box-shadow: var(--shadow-luminescent, 0 0 0 1.5px #0F172A, 0 0 20px -4px rgba(245, 158, 11, 0.18));
+    box-shadow: var(--shadow-luminescent, 0 0 0 1.5px var(--p-ink), 0 0 20px -4px rgba(168,135,76,.28));
   }
 
   /* Minimum tactile touch target (WCAG 2.5.5) */
@@ -90,13 +131,12 @@
     min-width: 44px;
   }
 
-  /* Safe focus ring */
+  /* Safe focus ring (Signature #2 Luminescent Edge) */
   .focus-ring-safe {
     outline: none;
   }
   .focus-ring-safe:focus-visible {
-    outline: 2px solid #6366f1;
-    outline-offset: 2px;
+    box-shadow: var(--shadow-luminescent, 0 0 0 1.5px var(--p-ink), 0 0 20px -4px rgba(168,135,76,.28));
   }
 
   /* Scrollbar suppression utilities */
@@ -115,7 +155,7 @@
 
 ::-webkit-scrollbar { width: 14px; }
 ::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background-color: #cbd5e1; border-radius: 10px; border: 4px solid white; }
+::-webkit-scrollbar-thumb { background-color: var(--p-line-strong, #CFC5AE); border-radius: 10px; border: 4px solid var(--p-surface, white); }
 
 /*
  * ==============================================================================

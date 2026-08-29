@@ -30,19 +30,19 @@ export const ObservationFeed: React.FC<Props> = ({
 }) => {
   if (observations.length === 0) {
     return (
-      <div className="bg-white border border-dashed border-slate-200 rounded-3xl p-8 sm:p-10 text-center">
-        <div className="w-12 h-12 rounded-2xl bg-amber-50 border border-amber-200 text-amber-600 flex items-center justify-center mx-auto mb-3 shadow-2xs">
-          <Sparkles className="w-6 h-6 fill-amber-500 text-amber-500" />
+      <div className="bg-surface border border-dashed border-line rounded-3xl p-8 medium:p-10 text-center">
+        <div className="w-12 h-12 rounded-card bg-warning-tint border border-warning-line text-brass flex items-center justify-center mx-auto mb-3 shadow-hairline">
+          <Sparkles className="w-6 h-6 fill-brass text-brass" />
         </div>
-        <h4 className="text-sm font-bold text-slate-900">Belum ada momen belajar tercatat hari ini</h4>
-        <p className="text-xs text-slate-500 mt-1 max-w-md mx-auto">
+        <h4 className="text-sm font-bold text-ink">Belum ada momen belajar tercatat hari ini</h4>
+        <p className="text-xs text-ink-soft mt-1 max-w-md mx-auto">
           Dokumentasikan interaksi, karya, atau celoteh ananda saat kegiatan bermain di sentra berlangsung.
         </p>
         <button
           onClick={onOpenQuickCapture}
-          className="mt-4 w-full sm:w-auto px-4 py-2 rounded-xl text-xs font-bold bg-slate-900 text-white hover:bg-slate-800 shadow-xs transition cursor-pointer flex justify-center items-center mx-auto gap-1.5"
+          className="mt-4 w-full medium:w-auto px-4 py-2 rounded-field text-xs font-bold bg-brand text-on-brand hover-only:bg-surface-inset shadow-hairline transition cursor-pointer flex justify-center items-center mx-auto gap-2"
         >
-          <Sparkles className="w-3.5 h-3.5 text-amber-400 fill-amber-400" />
+          <Sparkles className="w-4 h-4 text-brass fill-brass" />
           <span>+ Rekam Momen Belajar Pertama</span>
         </button>
       </div>
@@ -52,15 +52,15 @@ export const ObservationFeed: React.FC<Props> = ({
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
-        <h3 className="text-sm font-black text-slate-900 flex items-center gap-2">
+        <h3 className="text-sm font-black text-ink flex items-center gap-2">
           <span>Linimasa Momen & Bukti Karya Hari Ini</span>
-          <span className="px-2 py-0.5 text-xs font-bold rounded-full bg-indigo-100 text-indigo-800 border border-indigo-200">
+          <span className="px-2 py-1 text-xs font-bold rounded-full bg-indigo-100 text-lppa-deep border border-lppa-line">
             {observations.length}
           </span>
         </h3>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 medium:grid-cols-2 gap-4">
         {observations.map((obs) => {
           const isDraft = obs.status === 'QUICK_DRAFT';
           const timeStr = new Date(obs.recorded_at).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
@@ -68,10 +68,10 @@ export const ObservationFeed: React.FC<Props> = ({
           return (
             <div
               key={obs.id}
-              className={`rounded-2xl border transition-all duration-200 p-4 bg-white shadow-sm flex flex-col justify-between ${
+              className={`rounded-card border transition-all duration-200 p-4 bg-surface shadow-hairline flex flex-col justify-between ${
                 isDraft
-                  ? 'border-amber-300 bg-amber-50/20'
-                  : 'border-slate-200 hover:border-indigo-300'
+                  ? 'border-warning-line bg-warning-tint/20'
+                  : 'border-line hover-only:border-indigo-300'
               }`}
             >
               <div>
@@ -81,17 +81,17 @@ export const ObservationFeed: React.FC<Props> = ({
                     {/* Teacher Initial Badge (Multi-teacher collaboration) */}
                     <div
                       title={`Pencatat: ${obs.recorded_by_name}`}
-                      className="w-7 h-7 rounded-xl bg-indigo-600 text-white font-bold text-[11px] flex items-center justify-center shadow-sm"
+                      className="w-7 h-7 rounded-field bg-indigo-600 text-on-brand font-bold text-[11px] flex items-center justify-center shadow-hairline"
                     >
                       {obs.recorded_by_initials}
                     </div>
 
                     <div>
-                      <div className="text-xs font-black text-slate-900">
+                      <div className="text-xs font-black text-ink">
                         {obs.target_student_names.join(', ')}
                       </div>
-                      <div className="text-[10px] text-slate-500 font-semibold flex items-center gap-1">
-                        <Clock className="w-3 h-3 text-slate-400" /> {timeStr} • {obs.domain}
+                      <div className="text-[10px] text-ink-soft font-semibold flex items-center gap-1">
+                        <Clock className="w-3 h-3 text-ink-faint" /> {timeStr} • {obs.domain}
                       </div>
                     </div>
                   </div>
@@ -99,18 +99,18 @@ export const ObservationFeed: React.FC<Props> = ({
                   {/* Status Badges */}
                   <div className="flex items-center gap-1">
                     {isDraft ? (
-                      <span className="px-2 py-0.5 text-[10px] font-extrabold rounded-lg bg-amber-100 text-amber-900 border border-amber-300 flex items-center gap-1">
-                        <Sparkles className="w-3 h-3 text-amber-700" /> Draf
+                      <span className="px-2 py-1 text-[10px] font-extrabold rounded-lg bg-warning-tint text-warning-deep border border-warning-line flex items-center gap-1">
+                        <Sparkles className="w-3 h-3 text-warning-deep" /> Draf
                       </span>
                     ) : (
-                      <span className="px-2 py-0.5 text-[10px] font-extrabold rounded-lg bg-emerald-100 text-emerald-900 border border-emerald-300 flex items-center gap-1">
-                        <CheckCircle className="w-3 h-3 text-emerald-700" /> Matang
+                      <span className="px-2 py-1 text-[10px] font-extrabold rounded-lg bg-success-tint text-success-deep border border-success-line flex items-center gap-1">
+                        <CheckCircle className="w-3 h-3 text-success-deep" /> Matang
                       </span>
                     )}
 
                     {obs.is_lppa_evidence && (
-                      <span title="Ditetapkan sebagai Bukti LPPA" className="p-1 rounded-lg bg-purple-100 text-purple-800 border border-purple-200">
-                        <Award className="w-3.5 h-3.5" />
+                      <span title="Ditetapkan sebagai Bukti LPPA" className="p-1 rounded-lg bg-lppa-tint text-lppa-deep border border-lppa-line">
+                        <Award className="w-4 h-4" />
                       </span>
                     )}
                   </div>
@@ -118,13 +118,13 @@ export const ObservationFeed: React.FC<Props> = ({
 
                 {/* Media preview if available */}
                 {obs.media_url && (
-                  <div className="mb-2.5 rounded-xl overflow-hidden h-32 bg-slate-950 border border-slate-200">
+                  <div className="mb-2.5 rounded-field overflow-hidden h-32 bg-surface-inset border border-line">
                     <img src={obs.media_url} alt="Evidence" className="w-full h-full object-cover" />
                   </div>
                 )}
 
                 {/* Observation Anecdote Narrative */}
-                <p className="text-xs text-slate-800 line-clamp-3 leading-relaxed mb-3 font-normal">
+                <p className="text-xs text-ink line-clamp-3 leading-relaxed mb-3 font-normal">
                   {obs.anecdote_description}
                 </p>
 
@@ -134,7 +134,7 @@ export const ObservationFeed: React.FC<Props> = ({
                     {obs.quick_tags.map(t => (
                       <span
                         key={t}
-                        className="px-2 py-0.5 text-[10px] font-semibold rounded-md bg-slate-100 text-slate-700 border border-slate-200"
+                        className="px-2 py-1 text-[10px] font-semibold rounded-md bg-surface-subtle text-ink-soft border border-line"
                       >
                         #{t}
                       </span>
@@ -144,10 +144,10 @@ export const ObservationFeed: React.FC<Props> = ({
               </div>
 
               {/* Bottom Footer: Privacy State & Enrich Button */}
-              <div className="pt-3 sm:pt-2 border-t border-slate-100 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
-                <div className="flex items-center gap-2 mb-1 sm:mb-0">
+              <div className="pt-3 medium:pt-2 border-t border-line-soft flex flex-col medium:flex-row items-stretch medium:items-center justify-between gap-3">
+                <div className="flex items-center gap-2 mb-1 medium:mb-0">
                   {obs.is_staff_confidential ? (
-                    <span className="text-[11px] text-amber-800 flex items-center gap-1 font-bold">
+                    <span className="text-[11px] text-warning-deep flex items-center gap-1 font-bold">
                       <Lock className="w-3 h-3" /> Khusus Pendidik
                     </span>
                   ) : obs.is_shared_with_guardian ? (
@@ -159,9 +159,9 @@ export const ObservationFeed: React.FC<Props> = ({
 
                 <button
                   onClick={() => onOpenEnrichment(obs)}
-                  className="w-full sm:w-auto px-3 py-2.5 sm:py-1.5 rounded-xl text-xs font-bold bg-indigo-50 hover:bg-indigo-100 text-indigo-800 border border-indigo-200 transition flex justify-center items-center gap-1.5 cursor-pointer shadow-xs"
+                  className="w-full medium:w-auto px-3 py-2 medium:py-1 rounded-field text-xs font-bold bg-lppa-tint hover-only:bg-indigo-100 text-lppa-deep border border-lppa-line transition flex justify-center items-center gap-2 cursor-pointer shadow-hairline"
                 >
-                  <FileEdit className="w-3.5 h-3.5 text-indigo-600" />
+                  <FileEdit className="w-4 h-4 text-lppa" />
                   <span>{isDraft ? 'Perkaya Narasi' : 'Edit Narasi'}</span>
                 </button>
               </div>

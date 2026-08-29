@@ -22,9 +22,9 @@ export interface ToastHUDProps {
 }
 
 const typeIconMap = {
-  success: <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />,
-  warning: <AlertCircle className="w-4 h-4 text-amber-400 shrink-0" />,
-  info: <Info className="w-4 h-4 text-sky-400 shrink-0" />
+  success: <CheckCircle2 className="w-4 h-4 text-success shrink-0" />,
+  warning: <AlertCircle className="w-4 h-4 text-brass shrink-0" />,
+  info: <Info className="w-4 h-4 text-info shrink-0" />
 };
 
 export const ToastHUD: React.FC<ToastHUDProps> = ({
@@ -62,9 +62,9 @@ export const ToastHUD: React.FC<ToastHUDProps> = ({
         exit={{ y: 24, opacity: 0, scale: 0.95 }}
         transition={{ type: 'spring', stiffness: 400, damping: 30 }}
         className={`
-          fixed bottom-28 lg:bottom-10 left-1/2 -translate-x-1/2 z-[80]
-          bg-slate-900/95 text-white border border-slate-700/80
-          shadow-floating backdrop-blur-md rounded-full px-4 py-2.5
+          fixed bottom-28 expanded:bottom-10 left-1/2 -translate-x-1/2 z-80
+          bg-surface-inset/95 text-canvas border border-line-strong/60
+          shadow-floating backdrop-blur-md rounded-full px-4 py-2
           flex items-center gap-3 text-xs font-medium max-w-[90vw] select-none
           ${className}
         `.trim().replace(/\s+/g, ' ')}
@@ -73,7 +73,7 @@ export const ToastHUD: React.FC<ToastHUDProps> = ({
       >
         {typeIconMap[type]}
 
-        <span className="truncate max-w-[240px] sm:max-w-sm">
+        <span className="truncate max-w-[240px] medium:max-w-sm">
           {message}
         </span>
 
@@ -84,7 +84,7 @@ export const ToastHUD: React.FC<ToastHUDProps> = ({
               undoAction.onUndo();
               onClose();
             }}
-            className="flex items-center gap-1 px-2.5 py-1 rounded-full bg-slate-800 hover:bg-slate-700 text-amber-400 font-bold transition text-[11px] cursor-pointer border border-slate-700 shrink-0"
+            className="flex items-center gap-1 px-2 py-1 rounded-full bg-brand hover-only:opacity-90 text-brass font-bold transition text-[11px] cursor-pointer border border-line-strong shrink-0"
           >
             <RotateCcw className="w-3 h-3" />
             <span>
@@ -96,10 +96,10 @@ export const ToastHUD: React.FC<ToastHUDProps> = ({
         <button
           type="button"
           onClick={onClose}
-          className="p-1 rounded-full text-slate-400 hover:text-white hover:bg-slate-800 transition cursor-pointer shrink-0"
+          className="p-1 rounded-full text-ink-faint hover-only:text-canvas hover-only:bg-brand transition cursor-pointer shrink-0"
           aria-label="Tutup notifikasi"
         >
-          <X className="w-3.5 h-3.5" />
+          <X className="w-4 h-4" />
         </button>
       </motion.div>
     </AnimatePresence>

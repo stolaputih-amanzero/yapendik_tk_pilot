@@ -41,25 +41,25 @@ export const ListItem: React.FC<ListItemProps> = ({
         }
       } : undefined}
       className={`
-        w-full border-b border-slate-100 py-3.5 px-4 md:px-5
+        w-full border-b border-line-soft py-3 px-4 medium:px-5
         flex items-center justify-between gap-3 min-w-0
         transition-colors duration-150
-        ${isInteractive ? 'cursor-pointer hover:bg-slate-50/70 active:bg-slate-100/80' : ''}
+        ${isInteractive ? 'cursor-pointer hover-only:bg-surface-subtle active:bg-line-soft' : ''}
         ${className}
       `.trim().replace(/\s+/g, ' ')}
     >
       {/* Left Section: Avatar & Main Text */}
-      <div className="flex items-center gap-3.5 min-w-0 flex-1">
+      <div className="flex items-center gap-3 min-w-0 flex-1">
         {avatar && <div className="shrink-0">{avatar}</div>}
         <div className="min-w-0 flex-1 space-y-0.5">
           <div className="flex items-center gap-2 min-w-0">
-            <span className="font-bold text-slate-900 text-sm truncate">
+            <span className="font-bold text-ink text-sm truncate">
               {title}
             </span>
             {badge && <span className="shrink-0">{badge}</span>}
           </div>
           {subtitle && (
-            <div className="text-xs text-slate-500 truncate font-medium">
+            <div className="text-xs text-ink-soft truncate font-medium">
               {subtitle}
             </div>
           )}
@@ -70,7 +70,7 @@ export const ListItem: React.FC<ListItemProps> = ({
       {(action || showChevron) && (
         <div className="shrink-0 flex items-center gap-2">
           {action}
-          {showChevron && <ChevronRight className="w-4 h-4 text-slate-400" />}
+          {showChevron && <ChevronRight className="w-4 h-4 text-ink-faint" />}
         </div>
       )}
     </div>

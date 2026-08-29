@@ -14,12 +14,12 @@ export interface AvatarChildProps {
 }
 
 const pastelPalette = [
-  { bg: 'bg-amber-100 text-amber-900 border-amber-200/80', symbol: '🌟' },
-  { bg: 'bg-emerald-100 text-emerald-900 border-emerald-200/80', symbol: '🍀' },
-  { bg: 'bg-sky-100 text-sky-900 border-sky-200/80', symbol: '⛵' },
-  { bg: 'bg-rose-100 text-rose-900 border-rose-200/80', symbol: '🎈' },
-  { bg: 'bg-violet-100 text-violet-900 border-violet-200/80', symbol: '🚀' },
-  { bg: 'bg-teal-100 text-teal-900 border-teal-200/80', symbol: '🦁' }
+  { bg: 'bg-warning-tint text-warning-deep border-warning-line', symbol: '🌟' },
+  { bg: 'bg-success-tint text-success-deep border-success-line', symbol: '🍀' },
+  { bg: 'bg-info-tint text-info-deep border-info-line', symbol: '⛵' },
+  { bg: 'bg-danger-tint text-danger-deep border-danger-line', symbol: '🎈' },
+  { bg: 'bg-lppa-tint text-lppa-deep border-lppa-line', symbol: '🚀' },
+  { bg: 'bg-surface-subtle text-ink border-line', symbol: '🦁' }
 ];
 
 const sizeMap = {
@@ -28,11 +28,11 @@ const sizeMap = {
     symbolSize: 'text-[9px] -bottom-1 -right-1'
   },
   md: {
-    container: 'w-10 h-10 text-sm rounded-xl',
+    container: 'w-10 h-10 text-sm rounded-field',
     symbolSize: 'text-[11px] -bottom-1 -right-1'
   },
   lg: {
-    container: 'w-12 h-12 text-base rounded-2xl',
+    container: 'w-12 h-12 text-base rounded-card',
     symbolSize: 'text-xs -bottom-1 -right-1'
   }
 };
@@ -73,7 +73,7 @@ export const AvatarChild: React.FC<AvatarChildProps> = ({
       <div
         className={`
           ${sizeConfig.container} ${theme.bg}
-          border font-black flex items-center justify-center tracking-tight shadow-xs
+          border font-black flex items-center justify-center tracking-tight shadow-hairline
         `.trim().replace(/\s+/g, ' ')}
         title={name}
       >
@@ -84,7 +84,7 @@ export const AvatarChild: React.FC<AvatarChildProps> = ({
         <span
           className={`
             absolute ${sizeConfig.symbolSize}
-            leading-none filter drop-shadow-xs
+            leading-none filter drop-shadow-hairline
           `.trim().replace(/\s+/g, ' ')}
           aria-hidden="true"
         >

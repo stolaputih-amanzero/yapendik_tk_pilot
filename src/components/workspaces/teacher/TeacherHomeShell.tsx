@@ -38,9 +38,11 @@ import { SafetyExceptionSignal, SafetyIncidentRecord } from '../../../types/scho
 import { OfflineSyncStateIndicator } from './OfflineSyncStateIndicator';
 
 import { TodaySurface } from './TodaySurface';
+import { GuardianNoticeLedger } from './GuardianNoticeLedger';
+import { DailyCompletionSummary } from './DailyCompletionSummary';
 import { LearningSurface } from './LearningSurface';
 import { StudentRosterSurface } from './StudentRosterSurface';
-import { SegmentedControl } from '../../ui';
+import { SegmentedControl, Button, Skeleton } from '../../ui';
 
 import { 
   CalendarDays, 
@@ -258,12 +260,12 @@ export const TeacherHomeShell: React.FC<{ onNavigateToCommunication?: () => void
 
   if (currentPersona?.role === 'GUARDIAN') {
     return (
-      <div className="bg-white border border-slate-200 rounded-2xl p-6 sm:p-8 text-center max-w-lg mx-auto mt-6 shadow-xs">
-        <div className="w-12 h-12 bg-sky-50 text-sky-700 border border-sky-200 rounded-2xl flex items-center justify-center mx-auto mb-4 font-bold">
+      <div className="bg-surface border border-line rounded-card p-4 medium:p-4 text-center max-w-lg mx-auto mt-6 shadow-hairline">
+        <div className="w-12 h-12 bg-info-tint text-info-deep border border-info-line rounded-control flex items-center justify-center mx-auto mb-4 font-bold">
           <Sparkles className="w-6 h-6" />
         </div>
-        <h3 className="text-base sm:text-lg font-bold text-slate-900">Portal Wali Murid</h3>
-        <p className="text-xs text-slate-500 font-medium mt-2 leading-relaxed">
+        <h3 className="text-base medium:text-lg font-bold text-ink">Portal Wali Murid</h3>
+        <p className="text-xs text-ink-soft font-medium mt-2 leading-relaxed">
           Selamat datang, <strong>{currentPersona.name}</strong>. Ruang Guru dikhususkan untuk pendidik TK. Anda dapat memantau capaian dan komunikasi perkembangan ananda melalui tab <strong>Jejak Ananda</strong> atau <strong>Buku Penghubung</strong>.
         </p>
       </div>
@@ -272,59 +274,79 @@ export const TeacherHomeShell: React.FC<{ onNavigateToCommunication?: () => void
 
   if (loading || !aggregate) {
     return (
-      <div className="min-h-[80vh] flex items-center justify-center p-8 text-slate-500">
-        <div className="flex flex-col items-center gap-3">
-          <div className="w-10 h-10 border-4 border-slate-900 border-t-transparent rounded-full animate-spin" />
-          <span className="text-sm font-semibold text-slate-700">Menyiapkan Ruang Guru (Teacher Home)...</span>
+      <div className="w-full space-y-6 pb-24 expanded:pb-0 text-ink font-sans p-4 medium:p-6 animate-in fade-in duration-200">
+        <div className="bg-surface-subtle border border-line rounded-card p-6 space-y-4 shadow-hairline">
+          <div className="flex justify-between items-center">
+            <div className="space-y-2">
+              <Skeleton className="h-4 w-24" />
+              <Skeleton className="h-8 w-48" />
+              <Skeleton className="h-4 w-64" />
+            </div>
+            <Skeleton className="h-10 w-32" />
+          </div>
+          <Skeleton className="h-10 w-72" />
+        </div>
+        <div className="p-4 bg-surface rounded-card border border-line space-y-3 shadow-hairline">
+          <Skeleton className="h-12 w-full" />
+          <Skeleton className="h-24 w-full" />
+        </div>
+        <div className="text-center pt-2">
+          <span className="text-xs font-semibold text-ink-soft">Menyiapkan Beranda Kelas...</span>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="w-full space-y-6 pb-24 lg:pb-0 text-slate-900 font-sans">
+    <div className="w-full space-y-6 pb-24 expanded:pb-0 text-ink font-sans">
       {/* Workspace Header Block (Amanaura Standard) */}
-      <div className="bg-slate-50 border-b border-slate-200 lg:rounded-2xl px-4 py-5 md:p-6 w-full text-slate-900 lg:border lg:shadow-sm">
+      <div className="bg-surface-subtle border-b border-line expanded:rounded-card px-4 py-5 medium:p-6 w-full text-ink expanded:border expanded:shadow-hairline">
         <div className="flex items-start justify-between gap-4">
           <div>
-            <div className="flex items-center space-x-1.5 text-emerald-600 text-[10px] sm:text-xs font-bold tracking-wider uppercase mb-1">
-              <Home className="w-3.5 h-3.5" />
+            <div className="flex items-center space-x-1.5 text-brass text-[10px] medium:text-xs font-bold uppercase tracking-wider mb-1">
+              <Home className="w-4 h-4" />
               <span>Ruang Guru</span>
             </div>
-            <h1 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight flex items-center gap-2">
+            <h1 className="text-xl medium:text-2xl font-display font-bold text-ink tracking-tight flex items-center gap-2">
               Beranda Kelas
             </h1>
-            <p className="text-slate-500 text-xs sm:text-sm mt-0.5">
-              {aggregate.class_name} • Wali Kelas: {aggregate.teacher_name}
+            <p className="text-ink-soft text-xs medium:text-sm mt-0.5">
+              {aggregate.class_name} • Wali Kelas: {aggregate.teacher_name || '—'}
             </p>
           </div>
 
-          <div className="flex items-center gap-2 md:gap-3 shrink-0">
+          <div className="flex items-center gap-2 medium:gap-3 shrink-0">
             <OfflineSyncStateIndicator />
             {/* Mobile Refresh */}
-            <button
-              onClick={loadData}
-              disabled={loading}
-              className="flex md:hidden items-center justify-center p-2 rounded-lg bg-white hover:bg-slate-100 text-slate-700 border border-slate-200 text-xs font-medium transition-colors shadow-xs shrink-0 cursor-pointer"
-              title="Segarkan Data"
-            >
-              <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin text-emerald-600' : ''}`} />
-            </button>
+            <div className="flex expanded:hidden">
+              <Button
+                variant="secondary"
+                size="sm"
+                onClick={loadData}
+                disabled={loading}
+                aria-label="Segarkan Data"
+                leftIcon={<RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin text-success' : ''}`} />}
+                className="rounded-field"
+              />
+            </div>
             {/* Desktop Refresh */}
-            <button
-              onClick={loadData}
-              disabled={loading}
-              className="hidden md:flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-lg bg-white hover:bg-slate-100 text-slate-700 border border-slate-200 text-xs font-medium transition-colors shadow-xs shrink-0 cursor-pointer"
-              title="Segarkan Data"
-            >
-              <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin text-emerald-600' : ''}`} />
-              <span>Segarkan Data</span>
-            </button>
+            <div className="hidden expanded:flex">
+              <Button
+                variant="secondary"
+                size="sm"
+                onClick={loadData}
+                disabled={loading}
+                leftIcon={<RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin text-success' : ''}`} />}
+                className="rounded-field"
+              >
+                Segarkan Data
+              </Button>
+            </div>
           </div>
         </div>
 
         {/* Surface Tab Segmented Control */}
-        <div className="mt-5 sm:mt-6">
+        <div className="mt-5 medium:mt-6">
           <SegmentedControl
             options={[
               { id: 'TODAY', label: 'Hari Ini', icon: CalendarDays },
@@ -334,13 +356,16 @@ export const TeacherHomeShell: React.FC<{ onNavigateToCommunication?: () => void
             value={activeTab}
             onChange={(val) => setActiveTab(val as 'TODAY' | 'LEARNING' | 'ROSTER')}
             size="sm"
-            className="w-full sm:w-auto"
+            className="w-full"
           />
         </div>
       </div>
 
       {/* Main Content Area */}
-      <div className="px-4 lg:px-0 space-y-6">
+      <div className="px-4 expanded:px-0 large:grid large:grid-cols-[minmax(0,1fr)_380px] large:gap-6 items-start pb-[132px] expanded:pb-8">
+        
+        {/* Left Column (Primary Dashboard & Surfaces) */}
+        <div className="space-y-6 min-w-0">
 
       {/* Tier 1: Real-time Classroom Pulse Banner */}
       <ClassroomPulseBanner
@@ -364,23 +389,31 @@ export const TeacherHomeShell: React.FC<{ onNavigateToCommunication?: () => void
 
       {/* Active Surface Router */}
       {activeTab === 'TODAY' ? (
-        <TodaySurface
-          roster={aggregate.roster}
-          guardianNotices={aggregate.guardian_notices}
-          isAttendanceComplete={aggregate.daily_completion.is_attendance_complete}
-          pendingEnrichmentCount={aggregate.daily_completion.pending_enrichment_count}
-          unacknowledgedNoticeCount={aggregate.daily_completion.unacknowledged_notice_count}
-          isAllClear={aggregate.daily_completion.is_all_clear}
-          onUpdateAttendanceBatch={handleUpdateAttendanceBatch}
-          onOpenChildPivot={studentId => setPivotStudentId(studentId)}
-          onQuickCaptureForChild={studentId => {
-            setQuickCaptureStudentId(studentId);
-            setIsQuickCaptureOpen(true);
-          }}
-          onAcknowledgeNotice={handleAcknowledgeNotice}
-          onSendNewNotice={handleSendNewNotice}
-          onOpenEnrichmentQueue={() => setActiveTab('LEARNING')}
-        />
+        <div className="space-y-6">
+          <TodaySurface
+            roster={aggregate.roster}
+            onUpdateAttendanceBatch={handleUpdateAttendanceBatch}
+            onOpenChildPivot={studentId => setPivotStudentId(studentId)}
+            onQuickCaptureForChild={studentId => {
+              setQuickCaptureStudentId(studentId);
+              setIsQuickCaptureOpen(true);
+            }}
+          />
+          <div className="block large:hidden space-y-6 pt-6 border-t border-line">
+            <DailyCompletionSummary
+              isAttendanceComplete={aggregate.daily_completion.is_attendance_complete}
+              pendingEnrichmentCount={aggregate.daily_completion.pending_enrichment_count}
+              unacknowledgedNoticeCount={aggregate.daily_completion.unacknowledged_notice_count}
+              isAllClear={aggregate.daily_completion.is_all_clear}
+              onOpenEnrichmentQueue={() => setActiveTab('LEARNING')}
+            />
+            <GuardianNoticeLedger
+              notices={aggregate.guardian_notices}
+              onAcknowledgeNotice={handleAcknowledgeNotice}
+              onSendNewNotice={handleSendNewNotice}
+            />
+          </div>
+        </div>
       ) : activeTab === 'LEARNING' ? (
         <LearningSurface
           context={aggregate.context}
@@ -409,8 +442,28 @@ export const TeacherHomeShell: React.FC<{ onNavigateToCommunication?: () => void
           onOpenContinuityModal={studentId => setContinuityModalStudentId(studentId)}
         />
       )}
+        </div>
 
-      {/* Floating Fast Capture Action Primitive [⚡ Momen Cepat] */}
+        {/* Right Column (Reconciliation & Communications) */}
+        <div className="hidden large:block space-y-6">
+          <DailyCompletionSummary
+            isAttendanceComplete={aggregate.daily_completion.is_attendance_complete}
+            pendingEnrichmentCount={aggregate.daily_completion.pending_enrichment_count}
+            unacknowledgedNoticeCount={aggregate.daily_completion.unacknowledged_notice_count}
+            isAllClear={aggregate.daily_completion.is_all_clear}
+            onOpenEnrichmentQueue={() => setActiveTab('LEARNING')}
+          />
+          <section className="pt-0 border-t-0 border-line">
+            <GuardianNoticeLedger
+              notices={aggregate.guardian_notices}
+              onAcknowledgeNotice={handleAcknowledgeNotice}
+              onSendNewNotice={handleSendNewNotice}
+            />
+          </section>
+        </div>
+      </div>
+
+      {/* Floating Fast Capture Action Primitive [ Momen Cepat] */}
       <QuickCaptureFloatingButton
         onClick={() => {
           setQuickCaptureStudentId(undefined);
@@ -502,7 +555,6 @@ export const TeacherHomeShell: React.FC<{ onNavigateToCommunication?: () => void
           onRefresh={() => loadData()}
         />
       )}
-      </div>
     </div>
   );
 };

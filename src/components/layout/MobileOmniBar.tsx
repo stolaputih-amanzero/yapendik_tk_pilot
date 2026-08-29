@@ -228,9 +228,9 @@ export const MobileOmniBar: React.FC<MobileOmniBarProps> = ({
   return (
     <>
       {/* 1. FLOATING OMNI-BAR & SMART CHIPS CONTAINER (Visible on Mobile only when collapsed) */}
-      <div className="fixed bottom-4 left-4 right-4 z-50 lg:hidden flex flex-col gap-2.5 pointer-events-auto min-w-0">
+      <div className="fixed bottom-4 left-4 right-4 z-50 expanded:hidden flex flex-col gap-2 pointer-events-auto min-w-0">
         {/* Row 1: Smart Chips Carousel */}
-        <div className="flex items-center gap-2.5 w-full justify-center overflow-x-auto no-scrollbar pb-0.5 min-w-0">
+        <div className="flex items-center gap-2 w-full justify-start overflow-x-auto no-scrollbar pb-0.5 min-w-0 [mask-image:linear-gradient(to_right,transparent_0,black_16px,black_calc(100%-16px),transparent_100%)]">
           {smartChips.map(chip => {
             const isActive = activeTab === chip.tab;
             return (
@@ -238,10 +238,10 @@ export const MobileOmniBar: React.FC<MobileOmniBarProps> = ({
                 key={chip.tab}
                 type="button"
                 onClick={() => onSelectTab(chip.tab)}
-                className={`shrink-0 px-3.5 py-1.5 rounded-full text-[11px] font-semibold transition-all duration-200 flex items-center gap-1.5 shadow-xs active:scale-95 cursor-pointer backdrop-blur-md whitespace-nowrap truncate border ${
+                className={`shrink-0 px-3 py-1 rounded-full text-[11px] font-semibold transition-all duration-200 flex items-center gap-2 shadow-hairline active:scale-95 cursor-pointer backdrop-blur-md whitespace-nowrap truncate border ${
                   isActive
-                    ? 'bg-slate-900 text-white border-slate-900 font-bold shadow-sm'
-                    : 'bg-white/90 hover:bg-white text-slate-700 border-slate-200 shadow-xs'
+                    ? 'bg-brand text-on-brand border-brand font-bold shadow-hairline'
+                    : 'bg-surface/90 hover-only:bg-surface text-ink border-line shadow-hairline'
                 }`}
               >
                 <span>{chip.label}</span>
@@ -254,22 +254,22 @@ export const MobileOmniBar: React.FC<MobileOmniBarProps> = ({
         <button
           type="button"
           onClick={() => setIsExpanded(true)}
-          className="w-full bg-white/95 backdrop-blur-xl border border-slate-200/80 shadow-xl p-3.5 rounded-2xl flex items-center justify-between text-slate-800 active:scale-[0.99] transition-all cursor-pointer hover:border-slate-300 min-w-0"
+          className="w-full bg-surface/95 backdrop-blur-xl border border-line shadow-floating p-3 rounded-card flex items-center justify-between text-ink active:scale-[0.99] transition-all cursor-pointer hover-only:border-line-strong min-w-0"
         >
           <div className="flex items-center space-x-2.5 min-w-0 truncate">
-            <div className="w-6 h-6 rounded-lg bg-slate-100 border border-slate-200 flex items-center justify-center text-slate-700 shrink-0">
-              <Command className="w-3.5 h-3.5" />
+            <div className="w-6 h-6 rounded-lg bg-surface-subtle border border-line flex items-center justify-center text-brass shrink-0">
+              <Command className="w-4 h-4" />
             </div>
-            <span className="text-xs text-slate-600 font-medium truncate">
+            <span className="text-xs text-ink-soft font-medium truncate">
               Apa fokus Anda hari ini?
             </span>
           </div>
 
-          <div className="flex items-center space-x-1.5 text-slate-500 shrink-0 ml-2">
-            <span className="text-[10px] font-mono uppercase bg-slate-100 px-2 py-0.5 rounded border border-slate-200 text-slate-600 font-bold">
+          <div className="flex items-center space-x-1.5 text-ink-faint shrink-0 ml-2">
+            <span className="text-[10px] font-mono uppercase tracking-wider bg-surface-subtle px-2 py-1 rounded border border-line text-ink-soft font-bold whitespace-nowrap">
               Menu
             </span>
-            <div className="w-6 h-6 rounded-md bg-slate-100 flex items-center justify-center text-slate-600">
+            <div className="w-6 h-6 rounded-md bg-surface-subtle flex items-center justify-center text-ink-soft">
               <ChevronUp className="w-4 h-4" />
             </div>
           </div>
@@ -279,22 +279,22 @@ export const MobileOmniBar: React.FC<MobileOmniBarProps> = ({
       {/* 2. APP LIBRARY BOTTOM SHEET DRAWER (When isExpanded is true) */}
       {isExpanded && (
         <div 
-          className="fixed inset-0 z-[60] bg-slate-900/40 backdrop-blur-xs lg:hidden flex flex-col justify-end transition-opacity duration-200"
+          className="fixed inset-0 z-60 bg-brand/40 backdrop-blur-xs expanded:hidden flex flex-col justify-end transition-opacity duration-200"
           onClick={() => setIsExpanded(false)}
         >
           <div 
-            className="bg-white w-full h-[85vh] rounded-t-3xl border-t border-slate-200 shadow-2xl flex flex-col overflow-hidden text-slate-900"
+            className="bg-surface w-full h-[85vh] rounded-t-3xl border-t border-line shadow-floating flex flex-col overflow-hidden text-ink"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Grab Handle */}
             <div className="pt-3 pb-1 flex justify-center">
-              <div className="w-12 h-1.5 bg-slate-300 rounded-full" />
+              <div className="w-12 h-1.5 bg-line-strong motif-poleng rounded-full" />
             </div>
 
             {/* Header: Search Omnibar & Close Button */}
-            <div className="p-4 border-b border-slate-100 flex items-center gap-3 min-w-0">
+            <div className="p-4 border-b border-line-soft flex items-center gap-3 min-w-0">
               <div className="relative flex-1 min-w-0">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-ink-faint">
                   <Search className="w-4 h-4" />
                 </div>
                 <input
@@ -303,14 +303,14 @@ export const MobileOmniBar: React.FC<MobileOmniBarProps> = ({
                   placeholder="Cari modul atau menu..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full bg-slate-50 border border-slate-200 rounded-xl pl-9 pr-8 py-2 text-xs text-slate-900 placeholder-slate-400 outline-none focus:border-slate-400 transition-colors"
+                  className="w-full bg-surface-subtle border border-line rounded-field pl-9 pr-8 py-2 text-xs text-ink placeholder:text-ink-faint outline-none focus:border-line-strong transition-colors"
                 />
                 {searchQuery && (
                   <button
                     onClick={() => setSearchQuery('')}
-                    className="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-slate-600"
+                    className="absolute inset-y-0 right-0 pr-3 flex items-center text-ink-faint hover-only:text-ink"
                   >
-                    <X className="w-3.5 h-3.5" />
+                    <X className="w-4 h-4" />
                   </button>
                 )}
               </div>
@@ -318,7 +318,7 @@ export const MobileOmniBar: React.FC<MobileOmniBarProps> = ({
               <button
                 type="button"
                 onClick={() => setIsExpanded(false)}
-                className="p-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-600 transition-colors shrink-0 cursor-pointer"
+                className="p-2 rounded-field bg-surface-subtle hover-only:bg-surface-subtle/80 text-ink-soft transition-colors shrink-0 cursor-pointer"
                 title="Tutup"
               >
                 <X className="w-4 h-4" />
@@ -326,19 +326,19 @@ export const MobileOmniBar: React.FC<MobileOmniBarProps> = ({
             </div>
 
             {/* App Library Grid Content */}
-            <div className="overflow-y-auto p-5 space-y-6 flex-1 min-w-0">
+            <div className="overflow-y-auto p-4 space-y-6 flex-1 min-w-0">
               {filteredGroups.length === 0 ? (
-                <div className="py-12 text-center text-slate-400 text-xs">
+                <div className="py-12 text-center text-ink-faint text-xs">
                   Tidak ada modul yang cocok dengan pencarian "{searchQuery}"
                 </div>
               ) : (
                 filteredGroups.map((group, groupIdx) => (
                   <div key={groupIdx} className="space-y-2.5 min-w-0">
-                    <h3 className="text-[10px] font-bold text-slate-400 uppercase tracking-wider px-1 truncate">
+                    <h3 className="text-[10px] font-bold text-ink-faint uppercase tracking-wider px-1 truncate">
                       {group.title}
                     </h3>
 
-                    <div className="grid grid-cols-3 sm:grid-cols-4 gap-3">
+                    <div className="grid grid-cols-3 medium:grid-cols-4 gap-3">
                       {group.items.map(item => {
                         const Icon = item.icon;
                         const isActive = activeTab === item.tab;
@@ -351,21 +351,21 @@ export const MobileOmniBar: React.FC<MobileOmniBarProps> = ({
                               onSelectTab(item.tab);
                               setIsExpanded(false);
                             }}
-                            className={`flex flex-col items-center justify-center p-3 rounded-2xl transition-all duration-150 cursor-pointer active:scale-95 text-center min-w-0 border ${
+                            className={`flex flex-col items-center justify-center p-3 rounded-card transition-all duration-150 cursor-pointer active:scale-95 text-center min-w-0 border ${
                               isActive
-                                ? 'bg-slate-900 text-white border-slate-900 shadow-sm'
-                                : 'bg-slate-50 hover:bg-slate-100 border-slate-200/80'
+                                ? 'bg-brand text-on-brand border-brand shadow-hairline'
+                                : 'bg-surface-subtle hover-only:bg-surface-subtle/80 border-line'
                             }`}
                           >
-                            <div className={`w-11 h-11 rounded-xl flex items-center justify-center mb-1.5 shadow-xs shrink-0 ${
+                            <div className={`w-11 h-11 rounded-field flex items-center justify-center mb-1.5 shadow-hairline shrink-0 ${
                               isActive 
-                                ? 'bg-slate-800 text-white' 
-                                : 'bg-white border border-slate-200 text-slate-700'
+                                ? 'bg-surface-inset text-on-brand' 
+                                : 'bg-surface border border-line text-ink'
                             }`}>
                               <Icon className="w-5 h-5" />
                             </div>
                             <span className={`text-[11px] leading-tight line-clamp-1 font-medium truncate w-full ${
-                              isActive ? 'text-white font-bold' : 'text-slate-700'
+                              isActive ? 'text-on-brand font-bold' : 'text-ink'
                             }`}>
                               {item.label}
                             </span>
@@ -377,21 +377,37 @@ export const MobileOmniBar: React.FC<MobileOmniBarProps> = ({
                 ))
               )}
 
-              {/* Bottom Test Action */}
-              <div className="pt-2 min-w-0">
+              {/* Bottom Test & Contract Actions */}
+              <div className="pt-2 min-w-0 space-y-2">
+                <button
+                  type="button"
+                  onClick={() => {
+                    onSelectTab('PERCONTOHAN');
+                    setIsExpanded(false);
+                  }}
+                  className={`w-full flex items-center justify-center space-x-2 py-3 px-4 rounded-field text-xs font-semibold transition-all cursor-pointer ${
+                    activeTab === 'PERCONTOHAN'
+                      ? 'bg-brand text-on-brand font-bold shadow-hairline'
+                      : 'bg-surface-subtle hover-only:bg-surface-subtle/80 text-ink border border-line'
+                  }`}
+                >
+                  <Sparkles className="w-4 h-4 text-brass shrink-0" />
+                  <span className="truncate">Living Contract</span>
+                </button>
+
                 <button
                   type="button"
                   onClick={() => {
                     onSelectTab('TESTS');
                     setIsExpanded(false);
                   }}
-                  className={`w-full flex items-center justify-center space-x-2 py-3 px-4 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
+                  className={`w-full flex items-center justify-center space-x-2 py-3 px-4 rounded-field text-xs font-semibold transition-all cursor-pointer ${
                     activeTab === 'TESTS'
-                      ? 'bg-slate-900 text-white font-bold shadow-sm'
-                      : 'bg-slate-50 hover:bg-slate-100 text-slate-700 border border-slate-200'
+                      ? 'bg-brand text-on-brand font-bold shadow-hairline'
+                      : 'bg-surface-subtle hover-only:bg-surface-subtle/80 text-ink border border-line'
                   }`}
                 >
-                  <FlaskConical className="w-4 h-4 text-slate-600 shrink-0" />
+                  <FlaskConical className="w-4 h-4 text-brass shrink-0" />
                   <span className="truncate">Uji Otorisasi Sistem (TESTS)</span>
                 </button>
               </div>

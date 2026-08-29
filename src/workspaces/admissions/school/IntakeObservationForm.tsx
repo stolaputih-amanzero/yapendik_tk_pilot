@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { ProspectiveChildApplicant, AdmissionsIntakeObservation, ClassLevel } from '../../../types/admissionsTypes';
 import { admissionsService } from '../../../services/admissionsService';
+import { SegmentedControl } from '../../../components/ui';
 import { Sparkles, Shield, User, X } from 'lucide-react';
 
 interface IntakeObservationFormProps {
@@ -76,23 +77,23 @@ export const IntakeObservationForm: React.FC<IntakeObservationFormProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto" data-testid="intake-observation-modal">
-      <div className="w-full max-w-3xl bg-white border border-slate-200 rounded-2xl shadow-xl p-6 md:p-8 space-y-6 my-8">
-        <div className="flex items-center justify-between border-b border-slate-100 pb-4">
+    <div className="fixed inset-0 z-50 bg-brand/60 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto" data-testid="intake-observation-modal">
+      <div className="w-full max-w-3xl bg-surface border border-line rounded-card shadow-floating p-6 medium:p-8 space-y-6 my-8">
+        <div className="flex items-center justify-between border-b border-line-soft pb-4">
           <div>
             <div className="flex items-center space-x-2">
-              <span className="px-2.5 py-0.5 text-[10px] uppercase tracking-wide font-bold rounded-full bg-slate-100 text-slate-600 border border-slate-200">
+              <span className="px-2 py-1 text-[10px] uppercase tracking-wider tracking-wide font-bold rounded-full bg-surface-subtle text-ink-soft border border-line">
                 Tahap 2: Asesmen Diagnostik
               </span>
             </div>
-            <h2 className="text-xl font-bold text-slate-900 tracking-tight mt-1">
+            <h2 className="text-xl font-bold text-ink tracking-tight mt-1">
               Instrumen Observasi Intake Calon Siswa
             </h2>
             <div className="flex flex-col gap-0.5 mt-2">
-              <span className="text-sm font-bold text-slate-900 leading-tight">
+              <span className="text-sm font-bold text-ink leading-tight">
                 {applicant.child_full_name}
               </span>
-              <span className="text-xs text-slate-500 font-mono">
+              <span className="text-xs text-ink-soft font-mono whitespace-nowrap">
                 NIK: {applicant.child_nik}
               </span>
             </div>
@@ -100,16 +101,16 @@ export const IntakeObservationForm: React.FC<IntakeObservationFormProps> = ({
           <button
             type="button"
             onClick={onClose}
-            className="p-2 text-slate-400 hover:text-slate-700 rounded-lg hover:bg-slate-100 transition-colors"
+            className="p-2 text-ink-faint hover-only:text-ink-soft rounded-lg hover-only:bg-surface-subtle transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
         <form onSubmit={handleSave} className="space-y-4 text-xs">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 medium:grid-cols-2 gap-4">
             <div>
-              <label className="block text-slate-800 font-bold mb-1">
+              <label className="block text-ink font-bold mb-1">
                 Kemandirian & Motorik Kasar
               </label>
               <textarea
@@ -117,12 +118,12 @@ export const IntakeObservationForm: React.FC<IntakeObservationFormProps> = ({
                 onChange={(e) => setGrossMotor(e.target.value)}
                 placeholder="Observasi berjalan jinjit, melompat, keseimbangan..."
                 rows={2}
-                className="w-full bg-slate-50 border border-slate-300 rounded-lg p-2.5 text-slate-900 focus:bg-white focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none"
+                className="w-full bg-surface-subtle border border-line rounded-lg p-2 text-ink focus:bg-surface focus:ring-2 focus:ring-brass focus:border-brass outline-none"
               />
             </div>
 
             <div>
-              <label className="block text-slate-800 font-bold mb-1">
+              <label className="block text-ink font-bold mb-1">
                 Motorik Halus & Koordinasi Visual
               </label>
               <textarea
@@ -130,12 +131,12 @@ export const IntakeObservationForm: React.FC<IntakeObservationFormProps> = ({
                 onChange={(e) => setFineMotor(e.target.value)}
                 placeholder="Genggaman krayon, meronce, meremas playdough..."
                 rows={2}
-                className="w-full bg-slate-50 border border-slate-300 rounded-lg p-2.5 text-slate-900 focus:bg-white focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none"
+                className="w-full bg-surface-subtle border border-line rounded-lg p-2 text-ink focus:bg-surface focus:ring-2 focus:ring-brass focus:border-brass outline-none"
               />
             </div>
 
             <div>
-              <label className="block text-slate-800 font-bold mb-1">
+              <label className="block text-ink font-bold mb-1">
                 Komunikasi & Ekspresi Bahasa
               </label>
               <textarea
@@ -143,12 +144,12 @@ export const IntakeObservationForm: React.FC<IntakeObservationFormProps> = ({
                 onChange={(e) => setLanguage(e.target.value)}
                 placeholder="Kemampuan menjawab nama, menyusun kalimat sederhana..."
                 rows={2}
-                className="w-full bg-slate-50 border border-slate-300 rounded-lg p-2.5 text-slate-900 focus:bg-white focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none"
+                className="w-full bg-surface-subtle border border-line rounded-lg p-2 text-ink focus:bg-surface focus:ring-2 focus:ring-brass focus:border-brass outline-none"
               />
             </div>
 
             <div>
-              <label className="block text-slate-800 font-bold mb-1">
+              <label className="block text-ink font-bold mb-1">
                 Sosio-Emosional & Kemandirian Toilet
               </label>
               <textarea
@@ -156,13 +157,13 @@ export const IntakeObservationForm: React.FC<IntakeObservationFormProps> = ({
                 onChange={(e) => setSocialEmotional(e.target.value)}
                 placeholder="Pemisahan dari orang tua, interaksi teman sebaya, BAK mandiri..."
                 rows={2}
-                className="w-full bg-slate-50 border border-slate-300 rounded-lg p-2.5 text-slate-900 focus:bg-white focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none"
+                className="w-full bg-surface-subtle border border-line rounded-lg p-2 text-ink focus:bg-surface focus:ring-2 focus:ring-brass focus:border-brass outline-none"
               />
             </div>
           </div>
 
           <div>
-            <label className="block text-slate-800 font-bold mb-1">
+            <label className="block text-ink font-bold mb-1">
               Catatan Kualitatif Observer (Guru Pengamat)
             </label>
             <textarea
@@ -171,27 +172,27 @@ export const IntakeObservationForm: React.FC<IntakeObservationFormProps> = ({
               placeholder="Catatan holistik mengenai respon sensorik, ketertarikan eksplorasi anak..."
               rows={3}
               required
-              className="w-full bg-slate-50 border border-slate-300 rounded-lg p-2.5 text-slate-900 focus:bg-white focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none"
+              className="w-full bg-surface-subtle border border-line rounded-lg p-2 text-ink focus:bg-surface focus:ring-2 focus:ring-brass focus:border-brass outline-none"
             />
           </div>
 
-          <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-3">
+          <div className="p-4 rounded-field bg-surface-subtle border border-line space-y-3">
             <div className="flex items-center space-x-2">
               <input
                 type="checkbox"
                 id="specialNeedsFlag"
                 checked={specialNeedsFlag}
                 onChange={(e) => setSpecialNeedsFlag(e.target.checked)}
-                className="w-4 h-4 rounded border-slate-300 text-purple-600 focus:ring-purple-500"
+                className="w-4 h-4 rounded border-line text-lppa focus:ring-brass"
               />
-              <label htmlFor="specialNeedsFlag" className="text-slate-800 font-bold cursor-pointer">
+              <label htmlFor="specialNeedsFlag" className="text-ink font-bold cursor-pointer">
                 Kebutuhan Pendampingan Khusus / Akomodasi Belajar Individual
               </label>
             </div>
 
             {specialNeedsFlag && (
               <div>
-                <label className="block text-slate-600 text-xs mb-1">
+                <label className="block text-ink-soft text-xs mb-1">
                   Deskripsi Kebutuhan Khusus / Alergi / Sensitivitas Sensorik
                 </label>
                 <input
@@ -199,39 +200,39 @@ export const IntakeObservationForm: React.FC<IntakeObservationFormProps> = ({
                   value={specialNeedsDesc}
                   onChange={(e) => setSpecialNeedsDesc(e.target.value)}
                   placeholder="Contoh: Sensitivitas suara keras, membutuhkan pendampingan artikulasi..."
-                  className="w-full bg-white border border-slate-300 rounded-lg p-2 text-slate-900"
+                  className="w-full bg-surface border border-line rounded-lg p-2 text-ink"
                 />
               </div>
             )}
           </div>
 
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-4 border-t border-slate-100">
-            <div className="flex flex-col sm:flex-row sm:items-center gap-2">
-              <span className="text-slate-600 font-medium">Rekomendasi Rombel:</span>
-              <select
+          <div className="flex flex-col medium:flex-row medium:items-center justify-between gap-4 pt-4 border-t border-line-soft">
+            <div className="flex flex-col medium:flex-row medium:items-center gap-2">
+              <span className="text-ink-soft text-xs font-semibold">Rekomendasi Rombel:</span>
+              <SegmentedControl
                 value={recommendedLevel}
-                onChange={(e) => setRecommendedLevel(e.target.value as ClassLevel)}
-                className="bg-white border border-slate-300 rounded-lg px-3 py-2 sm:py-1.5 text-slate-900 font-bold shadow-2xs w-full sm:w-auto"
-              >
-                <option value="KB">Kelompok Bermain (KB)</option>
-                <option value="TK_A">TK A</option>
-                <option value="TK_B">TK B</option>
-                <option value="TPA">TPA</option>
-              </select>
+                onChange={(val) => setRecommendedLevel(val as ClassLevel)}
+                options={[
+                  { id: 'KB', label: 'KB' },
+                  { id: 'TK_A', label: 'TK A' },
+                  { id: 'TK_B', label: 'TK B' },
+                  { id: 'TPA', label: 'TPA' },
+                ]}
+              />
             </div>
 
-            <div className="flex flex-col-reverse sm:flex-row items-stretch sm:items-center gap-3">
+            <div className="flex flex-col-reverse medium:flex-row items-stretch medium:items-center gap-3">
               <button
                 type="button"
                 onClick={onClose}
-                className="w-full sm:w-auto px-4 py-2.5 sm:py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold transition-colors"
+                className="w-full medium:w-auto px-4 py-2 medium:py-2 rounded-field bg-surface-subtle hover-only:bg-line-soft text-ink-soft font-bold transition-colors"
               >
                 Batal
               </button>
               <button
                 type="submit"
                 disabled={saving}
-                className="w-full sm:w-auto px-5 py-2.5 sm:py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold shadow-xs transition-colors"
+                className="w-full medium:w-auto px-5 py-2 medium:py-2 rounded-field bg-brand hover-only:bg-surface-inset text-on-brand font-bold shadow-hairline transition-colors"
                 data-testid="save-intake-btn"
               >
                 {saving ? 'Menyimpan...' : 'Simpan Observasi Intake'}

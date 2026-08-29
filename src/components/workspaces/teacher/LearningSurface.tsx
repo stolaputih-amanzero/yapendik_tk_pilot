@@ -10,6 +10,7 @@ import {
 } from '../../../types/teacherDailyTypes';
 import { LearningActivity, DevelopmentDomain } from '../../../domain/types';
 import { ObservationFeed } from './ObservationFeed';
+import { Button, Badge } from '../../ui';
 import { 
   BookOpen, 
   Layers, 
@@ -87,37 +88,39 @@ export const LearningSurface: React.FC<Props> = ({
   return (
     <div className="space-y-8 animate-in fade-in duration-200">
       {/* 1. Intentional Plan (RPPH & Sentra) */}
-      <section className="bg-white border-y md:border border-x-0 border-slate-200 md:rounded-2xl p-4 md:p-5 md:shadow-sm space-y-4 -mx-4 md:mx-0">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-200">
+      <section className="bg-surface border border-line rounded-card p-4 medium:p-4 shadow-hairline space-y-4">
+        <div className="flex flex-col medium:flex-row medium:items-center justify-between gap-3 pb-3 border-b border-line">
           <div className="flex items-center gap-3">
-            <div className="p-2.5 rounded-xl bg-indigo-50 text-indigo-700 border border-indigo-200">
+            <div className="p-2 rounded-control bg-lppa-tint text-lppa-deep border border-lppa-line">
               <BookOpen className="w-5 h-5" />
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <span className="text-xs font-extrabold uppercase tracking-wider text-indigo-700">
+                <span className="text-xs font-extrabold uppercase tracking-wider text-lppa-deep">
                   Rencana Pembelajaran Harian (RPPH)
                 </span>
-                <span className="px-2 py-0.5 text-[11px] font-semibold rounded-full bg-slate-100 text-slate-700 border border-slate-200">
+                <span className="px-2 py-1 text-[11px] font-semibold rounded-pill bg-surface-subtle text-ink-soft border border-line">
                   {context.date}
                 </span>
               </div>
-              <h3 className="text-lg font-black text-slate-900 mt-0.5">
+              <h3 className="text-lg font-display font-bold text-ink mt-0.5">
                 {activities[0]?.theme || 'Tema: Lingkunganku yang Indah & Bersih'}
               </h3>
-              <p className="text-xs text-slate-600 font-medium">
+              <p className="text-xs text-ink-soft font-medium">
                 Sub-tema: {activities[0]?.subTheme || 'Sentra Balok & Konstruksi Bangunan'}
               </p>
             </div>
           </div>
 
-          <button
+          <Button
+            variant="secondary"
+            size="sm"
             onClick={() => setShowAddPlanModal(true)}
-            className="w-full sm:w-auto px-4 py-2.5 sm:py-2 rounded-xl text-xs font-bold bg-indigo-50 hover:bg-indigo-100 text-indigo-800 border border-indigo-200 transition flex justify-center items-center gap-1.5 cursor-pointer shadow-sm"
+            leftIcon={<Plus className="w-4 h-4" />}
+            className="w-full medium:w-auto bg-lppa-tint hover-only:bg-lppa-tint/80 text-lppa-deep border-lppa-line rounded-field"
           >
-            <Plus className="w-4 h-4" />
-            <span>Tambah Aktivitas Sentra</span>
-          </button>
+            Tambah Aktivitas Sentra
+          </Button>
         </div>
 
         {/* Activities Steps List */}
@@ -126,10 +129,10 @@ export const LearningSurface: React.FC<Props> = ({
             activities.map((act) => (
               <div
                 key={act.id}
-                className={`p-4 rounded-2xl border transition ${
+                className={`p-4 rounded-field border transition ${
                   act.completed
-                    ? 'bg-emerald-50/70 border-emerald-300'
-                    : 'bg-slate-50 border-slate-200'
+                    ? 'bg-success-tint/70 border-success-line'
+                    : 'bg-surface-subtle border-line'
                 }`}
               >
                 <div className="flex items-start justify-between gap-3">
@@ -142,10 +145,10 @@ export const LearningSurface: React.FC<Props> = ({
                           onToggleActivityComplete(act.id);
                         }
                       }}
-                      className="mt-0.5 text-slate-400 hover:text-emerald-600 transition cursor-pointer"
+                      className="mt-0.5 text-ink-faint hover-only:text-success transition cursor-pointer"
                     >
                       {act.completed ? (
-                        <CheckCircle2 className="w-5 h-5 text-emerald-600" />
+                        <CheckCircle2 className="w-5 h-5 text-success" />
                       ) : (
                         <Circle className="w-5 h-5" />
                       )}
@@ -153,37 +156,33 @@ export const LearningSurface: React.FC<Props> = ({
 
                     <div>
                       <div className="flex items-center gap-2">
-                        <span className="text-xs font-mono font-bold text-slate-500">{act.timeSlot}</span>
-                        <h4 className="text-sm font-bold text-slate-900">{act.activityName}</h4>
+                        <span className="text-xs font-mono font-bold text-ink-soft whitespace-nowrap">{act.timeSlot}</span>
+                        <h4 className="text-sm font-bold text-ink">{act.activityName}</h4>
                       </div>
 
                       {/* Materials & Planned Steps */}
                       {act.materialsNeeded && act.materialsNeeded.length > 0 && (
-                        <p className="text-xs text-slate-700 mt-1">
+                        <p className="text-xs text-ink-soft mt-1">
                           <strong>Bahan & Alat:</strong> {act.materialsNeeded.join(', ')}
                         </p>
                       )}
 
                       {act.teacherReflection && (
-                        <div className="mt-2 p-2.5 rounded-xl bg-white border border-emerald-300 text-xs">
-                          <strong className="text-emerald-800">Refleksi Pendidik:</strong> {act.teacherReflection}
+                        <div className="mt-2 p-2 rounded-field bg-surface border border-success-line text-xs">
+                          <strong className="text-success-deep">Refleksi Pendidik:</strong> {act.teacherReflection}
                         </div>
                       )}
                     </div>
                   </div>
 
-                  <span className={`px-2.5 py-1 rounded-lg text-[10px] font-bold ${
-                    act.completed
-                      ? 'bg-emerald-100 text-emerald-800'
-                      : 'bg-amber-100 text-amber-800'
-                  }`}>
+                  <Badge variant={act.completed ? 'success' : 'warning'}>
                     {act.completed ? 'Selesai Dilaksanakan' : 'Rencana Main'}
-                  </span>
+                  </Badge>
                 </div>
               </div>
             ))
           ) : (
-            <div className="text-center py-6 text-slate-500 text-xs">
+            <div className="text-center py-6 text-ink-soft text-xs">
               Belum ada rencana aktivitas sentra untuk hari ini.
             </div>
           )}
@@ -201,12 +200,12 @@ export const LearningSurface: React.FC<Props> = ({
 
       {/* Modal: Reflection on Complete */}
       {reflectionModalActivity && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-xs">
-          <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 w-full max-w-md shadow-2xl border border-slate-200 dark:border-slate-800 text-xs space-y-4">
-            <h3 className="text-sm font-bold text-slate-900 dark:text-white">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-brand/70 backdrop-blur-xs">
+          <div className="bg-surface dark:bg-surface rounded-card p-6 w-full max-w-md shadow-floating border border-line text-xs space-y-4">
+            <h3 className="text-sm font-bold text-ink">
               Refleksi Aktivitas: {reflectionModalActivity.activityName}
             </h3>
-            <p className="text-slate-500">
+            <p className="text-ink-soft">
               Bagaimana keterlibatan anak selama kegiatan sentra ini? Apa respon dan capaian yang menonjol?
             </p>
             <textarea
@@ -214,21 +213,21 @@ export const LearningSurface: React.FC<Props> = ({
               value={reflectionText}
               onChange={e => setReflectionText(e.target.value)}
               placeholder="Contoh: Anak-anak sangat antusias menyusun jembatan balok, sebagian besar sudah memahami konsep keseimbangan..."
-              className="w-full px-3.5 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700"
+              className="w-full px-3 py-2 rounded-field bg-surface-subtle border border-line"
             />
-            <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-end gap-2 pt-2">
+            <div className="flex flex-col medium:flex-row items-stretch medium:items-center justify-end gap-2 pt-2">
               <button
                 onClick={() => {
                   onToggleActivityComplete(reflectionModalActivity.id);
                   setReflectionModalActivity(null);
                 }}
-                className="w-full sm:w-auto px-3 py-2.5 sm:py-1.5 font-bold text-slate-500 order-2 sm:order-1"
+                className="w-full medium:w-auto px-3 py-2 medium:py-1 font-bold text-ink-soft order-2 medium:order-1 cursor-pointer"
               >
                 Lewati Refleksi
               </button>
               <button
                 onClick={handleSaveReflection}
-                className="w-full sm:w-auto px-4 py-2.5 sm:py-1.5 rounded-xl font-bold bg-emerald-600 text-white flex justify-center order-1 sm:order-2"
+                className="w-full medium:w-auto px-4 py-2 medium:py-1 rounded-field font-bold bg-success text-on-brand flex justify-center order-1 medium:order-2 cursor-pointer"
               >
                 Simpan & Tandai Selesai
               </button>
@@ -239,73 +238,73 @@ export const LearningSurface: React.FC<Props> = ({
 
       {/* Modal: Add Plan Activity */}
       {showAddPlanModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-xs">
-          <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 w-full max-w-lg shadow-2xl border border-slate-200 dark:border-slate-800 text-xs space-y-4">
-            <h3 className="text-sm font-bold text-slate-900 dark:text-white">Susun Rencana Aktivitas Sentra</h3>
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-brand/70 backdrop-blur-xs">
+          <div className="bg-surface rounded-card p-6 w-full max-w-lg shadow-floating border border-line text-xs space-y-4">
+            <h3 className="text-sm font-bold text-ink">Susun Rencana Aktivitas Sentra</h3>
             <form onSubmit={handleActivitySubmit} className="space-y-3">
               <div>
-                <label className="block font-bold text-slate-700 dark:text-slate-300 mb-1">Nama Aktivitas Sentra</label>
+                <label className="block font-bold text-ink-soft mb-1">Nama Aktivitas Sentra</label>
                 <input
                   type="text"
                   placeholder="Contoh: Eksplorasi Membangun Menara & Jembatan"
                   value={activityName}
                   onChange={e => setActivityName(e.target.value)}
-                  className="w-full px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700"
+                  className="w-full px-3 py-2 rounded-field bg-surface-subtle border border-line"
                 />
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 medium:grid-cols-2 gap-3">
                 <div>
-                  <label className="block font-bold text-slate-700 dark:text-slate-300 mb-1">Waktu Pelaksanaan</label>
+                  <label className="block font-bold text-ink-soft mb-1">Waktu Pelaksanaan</label>
                   <input
                     type="text"
                     value={timeSlot}
                     onChange={e => setTimeSlot(e.target.value)}
-                    className="w-full px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700"
+                    className="w-full px-3 py-2 rounded-field bg-surface-subtle border border-line"
                   />
                 </div>
                 <div>
-                  <label className="block font-bold text-slate-700 dark:text-slate-300 mb-1">Sub-Tema</label>
+                  <label className="block font-bold text-ink-soft mb-1">Sub-Tema</label>
                   <input
                     type="text"
                     value={subTheme}
                     onChange={e => setSubTheme(e.target.value)}
-                    className="w-full px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700"
+                    className="w-full px-3 py-2 rounded-field bg-surface-subtle border border-line"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block font-bold text-slate-700 dark:text-slate-300 mb-1">Bahan & Alat Main</label>
+                <label className="block font-bold text-ink-soft mb-1">Bahan & Alat Main</label>
                 <input
                   type="text"
                   value={materials}
                   onChange={e => setMaterials(e.target.value)}
-                  className="w-full px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700"
+                  className="w-full px-3 py-2 rounded-field bg-surface-subtle border border-line"
                 />
               </div>
 
               <div>
-                <label className="block font-bold text-slate-700 dark:text-slate-300 mb-1">Langkah / Pijakan Main</label>
+                <label className="block font-bold text-ink-soft mb-1">Langkah / Pijakan Main</label>
                 <textarea
                   rows={2}
                   value={steps}
                   onChange={e => setSteps(e.target.value)}
-                  className="w-full px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700"
+                  className="w-full px-3 py-2 rounded-field bg-surface-subtle border border-line"
                 />
               </div>
 
-              <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-end gap-2 pt-4 sm:pt-2">
+              <div className="flex flex-col medium:flex-row items-stretch medium:items-center justify-end gap-2 pt-4 medium:pt-2">
                 <button
                   type="button"
                   onClick={() => setShowAddPlanModal(false)}
-                  className="w-full sm:w-auto px-4 py-2.5 sm:py-2 font-bold text-slate-500 order-2 sm:order-1"
+                  className="w-full medium:w-auto px-4 py-2 medium:py-2 font-bold text-ink-soft order-2 medium:order-1 cursor-pointer"
                 >
                   Batal
                 </button>
                 <button
                   type="submit"
-                  className="w-full sm:w-auto px-5 py-2.5 sm:py-2 rounded-xl font-bold bg-indigo-600 text-white flex justify-center order-1 sm:order-2"
+                  className="w-full medium:w-auto px-5 py-2 medium:py-2 rounded-field font-bold bg-brand text-on-brand flex justify-center order-1 medium:order-2 cursor-pointer"
                 >
                   Simpan Rencana
                 </button>

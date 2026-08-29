@@ -23,21 +23,21 @@ import { translateGovernanceError, TranslatedGovernanceError } from '../../servi
 import { 
   Activity, 
   ShieldCheck, 
-  AlertTriangle, 
   CheckCircle2, 
-  Users, 
-  UserCheck, 
-  Calendar, 
-  BookOpen, 
+  AlertTriangle, 
   RefreshCw, 
   Building2, 
-  Sparkles,
+  Users, 
+  UserCheck, 
+  GraduationCap, 
+  Calendar, 
   AlertCircle,
   TrendingUp,
+  Award,
   Layers,
-  Clock,
-  ArrowRight
+  ArrowUpRight
 } from 'lucide-react';
+import { ProgressBar, SelectSheet } from '../ui';
 
 export const InstitutionalHealthDashboard: React.FC = () => {
   const { securityContext, activeSchoolId, setActiveSchoolId } = useSecurityContext();
@@ -88,23 +88,23 @@ export const InstitutionalHealthDashboard: React.FC = () => {
       case 'HEALTHY':
         return {
           label: 'Sistem Sehat (HEALTHY)',
-          bg: 'bg-emerald-50 border-emerald-200 text-emerald-800',
-          dot: 'bg-emerald-600',
+          bg: 'bg-success-tint border-success-line text-success-deep',
+          dot: 'bg-success',
           icon: CheckCircle2
         };
       case 'ATTENTION_REQUIRED':
         return {
           label: 'Perlu Perhatian (ATTENTION)',
-          bg: 'bg-amber-50 border-amber-200 text-amber-800',
-          dot: 'bg-amber-500',
+          bg: 'bg-warning-tint border-warning-line text-warning-deep',
+          dot: 'bg-warning',
           icon: AlertTriangle
         };
       case 'CRITICAL_BLOCKER':
       default:
         return {
           label: 'Kendala Kritis (CRITICAL)',
-          bg: 'bg-rose-50 border-rose-200 text-rose-800',
-          dot: 'bg-rose-600',
+          bg: 'bg-danger-tint border-danger-line text-danger-deep',
+          dot: 'bg-danger',
           icon: AlertCircle
         };
     }
@@ -112,10 +112,10 @@ export const InstitutionalHealthDashboard: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="p-12 flex flex-col items-center justify-center min-h-[400px] text-slate-500 font-sans">
-        <RefreshCw className="w-8 h-8 animate-spin text-slate-700 mb-3" />
-        <p className="text-sm font-semibold text-slate-800">Mengkalkulasi Telemetri Kesehatan Lembaga secara Real-Time...</p>
-        <p className="text-xs text-slate-500 mt-1">Mengambil data agregasi dan indikator kepatuhan unit</p>
+      <div className="p-12 flex flex-col items-center justify-center min-h-[400px] text-ink-soft font-sans">
+        <RefreshCw className="w-8 h-8 animate-spin text-ink-soft mb-3" />
+        <p className="text-sm font-semibold text-ink">Mengkalkulasi Telemetri Kesehatan Lembaga secara Real-Time...</p>
+        <p className="text-xs text-ink-soft mt-1">Mengambil data agregasi dan indikator kepatuhan unit</p>
       </div>
     );
   }
@@ -140,40 +140,32 @@ export const InstitutionalHealthDashboard: React.FC = () => {
   const exceptions: DiagnosticException[] = telemetry?.exceptions || [];
 
   return (
-    <div className="space-y-6 text-slate-900 font-sans w-full" data-testid="institutional-health-dashboard">
+    <div className="space-y-6 text-ink font-sans w-full" data-testid="institutional-health-dashboard">
       {/* Header Banner */}
-      <div className="bg-slate-50 border-b border-slate-200 md:rounded-2xl px-4 py-5 md:p-6 w-full text-slate-900 md:border md:shadow-sm">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div className="bg-surface-subtle border-b border-line medium:rounded-card px-4 py-5 medium:p-6 w-full text-ink medium:border medium:shadow-hairline">
+        <div className="flex flex-col medium:flex-row medium:items-center justify-between gap-4">
           <div>
-            <div className="flex items-center space-x-1.5 text-emerald-600 text-[10px] sm:text-xs font-bold tracking-wider uppercase mb-1">
-              <Activity className="w-3.5 h-3.5" />
+            <div className="flex items-center space-x-1.5 text-success text-[10px] medium:text-xs font-bold uppercase tracking-wider mb-1">
+              <Activity className="w-4 h-4" />
               <span>Standar Yayasan • Telemetri &amp; Mutu</span>
             </div>
-            <h1 className="text-xl font-bold tracking-tight text-slate-900 flex items-center gap-2">
+            <h1 className="text-xl font-bold tracking-tight text-ink flex items-center gap-2">
               <span>Statistik &amp; Kesehatan Lembaga</span>
             </h1>
-            <p className="hidden md:block text-slate-500 text-xs mt-1 max-w-2xl">
+            <p className="hidden expanded:block text-ink-soft text-xs mt-1 max-w-2xl">
               {activeSchool?.name || 'TK Yapendik'}
               {telemetry?.academic_year_name ? ` • ${telemetry.academic_year_name} (${telemetry.semester})` : ''} • Monitoring kesehatan operasional multi-unit secara otomatis.
             </p>
           </div>
 
-          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 w-full md:w-auto">
+          <div className="flex flex-col medium:flex-row items-stretch medium:items-center gap-2 w-full medium:w-auto">
             {/* Superadmin Unit Switcher */}
             {isSuperadmin && schools.length > 1 && (
-              <select
-                value={currentSchoolId}
-                onChange={(e) => setActiveSchoolId(e.target.value)}
-                className="bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs text-slate-800 font-semibold focus:outline-none focus:ring-2 focus:ring-slate-900 shadow-2xs cursor-pointer"
-              >
-                {schools.map(s => (
-                  <option key={s.id} value={s.id}>{s.name}</option>
-                ))}
-              </select>
+              <SelectSheet value={currentSchoolId}   options={schools.map(s => ({ value: s.id, label: s.name }))} />
             )}
 
             {/* Health Status Pill */}
-            <div className={`px-3 py-1.5 rounded-full border text-xs font-bold flex items-center justify-center space-x-2 ${currentBadge.bg}`}>
+            <div className={`px-3 py-1 rounded-full border text-xs font-bold flex items-center justify-center space-x-2 ${currentBadge.bg}`}>
               <span className={`w-2 h-2 rounded-full ${currentBadge.dot}`}></span>
               <span>{currentBadge.label}</span>
             </div>
@@ -181,10 +173,10 @@ export const InstitutionalHealthDashboard: React.FC = () => {
             <button
               onClick={loadTelemetry}
               disabled={refreshing}
-              className="px-3.5 py-2 rounded-xl bg-white hover:bg-slate-100 text-slate-700 border border-slate-200 text-xs font-semibold flex justify-center items-center space-x-2 transition-all shadow-2xs cursor-pointer"
+              className="px-3 py-2 rounded-field bg-surface hover-only:bg-surface-subtle text-ink-soft border border-line text-xs font-semibold flex justify-center items-center space-x-2 transition-all shadow-hairline cursor-pointer"
               title="Segarkan Data"
             >
-              <RefreshCw className={`w-3.5 h-3.5 ${refreshing ? 'animate-spin text-slate-600' : ''}`} />
+              <RefreshCw className={`w-4 h-4 ${refreshing ? 'animate-spin text-ink-soft' : ''}`} />
               <span>Segarkan</span>
             </button>
           </div>
@@ -193,13 +185,13 @@ export const InstitutionalHealthDashboard: React.FC = () => {
 
       {/* Error Feedback Banner */}
       {errorFeedback && (
-        <div className="p-4 rounded-2xl border bg-rose-50 border-rose-200 text-rose-800 flex items-start space-x-3 text-xs shadow-2xs">
-          <AlertTriangle className="w-5 h-5 flex-shrink-0 mt-0.5 text-rose-600" />
+        <div className="p-4 rounded-card border bg-danger-tint border-danger-line text-danger-deep flex items-start space-x-3 text-xs shadow-hairline">
+          <AlertTriangle className="w-5 h-5 flex-shrink-0 mt-0.5 text-danger" />
           <div className="flex-1">
             <p className="font-semibold">{errorFeedback.title}</p>
-            <p className="mt-0.5 text-slate-700">{errorFeedback.message}</p>
+            <p className="mt-0.5 text-ink-soft">{errorFeedback.message}</p>
             {errorFeedback.actionSuggestion && (
-              <p className="mt-2 text-amber-900 font-medium bg-amber-50 p-2.5 rounded-xl border border-amber-200">
+              <p className="mt-2 text-warning-deep font-medium bg-warning-tint p-2 rounded-field border border-warning-line">
                 Saran Tindakan: {errorFeedback.actionSuggestion}
               </p>
             )}
@@ -208,116 +200,108 @@ export const InstitutionalHealthDashboard: React.FC = () => {
       )}
 
       {/* 4 Canonical Indicators Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+      <div className="grid grid-cols-1 medium:grid-cols-2 expanded:grid-cols-4 gap-5">
         {/* Indicator 1: Capacity Utilization */}
-        <div className="bg-white border border-slate-200 rounded-2xl p-5 shadow-2xs flex flex-col justify-between space-y-3">
+        <div className="bg-surface border border-line rounded-card p-4 shadow-hairline flex flex-col justify-between space-y-3">
           <div>
-            <div className="flex items-center justify-between text-slate-500 mb-1.5">
+            <div className="flex items-center justify-between text-ink-soft mb-1.5">
               <span className="text-[10px] font-bold uppercase tracking-wider">1. Utilisasi Kapasitas</span>
-              <Users className="w-4 h-4 text-slate-700" />
+              <Users className="w-4 h-4 text-ink-soft" />
             </div>
-            <div className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight font-mono">
+            <div className="text-2xl medium:text-3xl font-black text-ink tracking-tight font-mono">
               {indicators.capacity_utilization_pct}%
             </div>
-            <p className="text-xs text-slate-500 mt-1 font-medium">
+            <p className="text-xs text-ink-soft mt-1 font-medium">
               {metrics.total_placed_students} Siswa / {metrics.total_capacity} Daya Tampung
             </p>
           </div>
 
-          <div className="w-full bg-slate-100 rounded-full h-2 p-0.5 border border-slate-200">
-            <div 
-              className={`h-full rounded-full transition-all duration-500 ${
-                indicators.capacity_utilization_pct > 100 
-                  ? 'bg-rose-500' 
-                  : indicators.capacity_utilization_pct >= 80 
-                  ? 'bg-emerald-600' 
-                  : 'bg-slate-700'
-              }`}
-              style={{ width: `${Math.min(100, indicators.capacity_utilization_pct)}%` }}
-            ></div>
-          </div>
+          <ProgressBar
+            value={indicators.capacity_utilization_pct}
+            variant={indicators.capacity_utilization_pct > 100 ? 'danger' : indicators.capacity_utilization_pct >= 80 ? 'success' : 'brass'}
+            trackClassName="h-2"
+          />
         </div>
 
         {/* Indicator 2: Staffing Compliance */}
-        <div className="bg-white border border-slate-200 rounded-2xl p-5 shadow-2xs flex flex-col justify-between space-y-3">
+        <div className="bg-surface border border-line rounded-card p-4 shadow-hairline flex flex-col justify-between space-y-3">
           <div>
-            <div className="flex items-center justify-between text-slate-500 mb-1.5">
+            <div className="flex items-center justify-between text-ink-soft mb-1.5">
               <span className="text-[10px] font-bold uppercase tracking-wider">2. Penugasan Guru Kelas</span>
-              <UserCheck className="w-4 h-4 text-slate-700" />
+              <UserCheck className="w-4 h-4 text-ink-soft" />
             </div>
-            <div className={`text-2xl sm:text-3xl font-black tracking-tight font-mono ${
-              indicators.staffing_compliance ? 'text-emerald-700' : 'text-amber-600'
+            <div className={`text-2xl medium:text-3xl font-black tracking-tight font-mono ${
+              indicators.staffing_compliance ? 'text-success-deep' : 'text-brass'
             }`}>
               {indicators.staffing_compliance ? '100% Sesuai' : 'Perlu Perhatian'}
             </div>
-            <p className="text-xs text-slate-500 mt-1 font-medium">
+            <p className="text-xs text-ink-soft mt-1 font-medium">
               {metrics.unstaffed_classes === 0 
                 ? 'Seluruh rombel memiliki guru kelas' 
                 : `${metrics.unstaffed_classes} rombel belum ada guru kelas`}
             </p>
           </div>
 
-          <div className="flex items-center space-x-2 text-[10px] text-slate-500 font-mono">
+          <div className="flex items-center space-x-2 text-[10px] text-ink-soft font-mono whitespace-nowrap">
             <span>Status:</span>
-            <span className={indicators.staffing_compliance ? 'text-emerald-700 font-bold' : 'text-amber-600 font-bold'}>
+            <span className={indicators.staffing_compliance ? 'text-success-deep font-bold' : 'text-brass font-bold'}>
               {indicators.staffing_compliance ? 'TERPENUHI' : 'BELUM_LENGKAP'}
             </span>
           </div>
         </div>
 
         {/* Indicator 3: Attendance Consistency */}
-        <div className="bg-white border border-slate-200 rounded-2xl p-5 shadow-2xs flex flex-col justify-between space-y-3">
+        <div className="bg-surface border border-line rounded-card p-4 shadow-hairline flex flex-col justify-between space-y-3">
           <div>
-            <div className="flex items-center justify-between text-slate-500 mb-1.5">
+            <div className="flex items-center justify-between text-ink-soft mb-1.5">
               <span className="text-[10px] font-bold uppercase tracking-wider">3. Konsistensi Presensi</span>
-              <Calendar className="w-4 h-4 text-slate-700" />
+              <Calendar className="w-4 h-4 text-ink-soft" />
             </div>
-            <div className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight font-mono">
-              {indicators.attendance_recorded_days} <span className="text-sm font-semibold text-slate-500">Hari</span>
+            <div className="text-2xl medium:text-3xl font-black text-ink tracking-tight font-mono">
+              {indicators.attendance_recorded_days} <span className="text-sm font-semibold text-ink-soft">Hari</span>
             </div>
-            <p className="text-xs text-slate-500 mt-1 font-medium">
+            <p className="text-xs text-ink-soft mt-1 font-medium">
               Pencatatan Presensi Harian Terdata
             </p>
           </div>
 
-          <div className="flex items-center space-x-2 text-[10px] text-slate-500 font-mono">
+          <div className="flex items-center space-x-2 text-[10px] text-ink-soft font-mono whitespace-nowrap">
             <span>Periode:</span>
-            <span className="text-slate-800 font-bold">{telemetry?.semester || 'GANJIL'}</span>
+            <span className="text-ink font-bold">{telemetry?.semester || 'GANJIL'}</span>
           </div>
         </div>
 
         {/* Indicator 4: Curriculum Velocity & LPPA Progress */}
-        <div className="bg-white border border-slate-200 rounded-2xl p-5 shadow-2xs flex flex-col justify-between space-y-3">
+        <div className="bg-surface border border-line rounded-card p-4 shadow-hairline flex flex-col justify-between space-y-3">
           <div>
-            <div className="flex items-center justify-between text-slate-500 mb-1.5">
+            <div className="flex items-center justify-between text-ink-soft mb-1.5">
               <span className="text-[10px] font-bold uppercase tracking-wider">4. Kecepatan Kurikulum</span>
-              <BookOpen className="w-4 h-4 text-slate-700" />
+              <Activity className="w-4 h-4 text-ink-soft" />
             </div>
-            <div className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight font-mono">
+            <div className="text-2xl medium:text-3xl font-black text-ink tracking-tight font-mono">
               {indicators.curriculum_velocity_pct}%
             </div>
-            <p className="text-xs text-slate-500 mt-1 font-medium">
+            <p className="text-xs text-ink-soft mt-1 font-medium">
               {metrics.approved_lppa_count} LPPA Sah • {metrics.total_observations} Observasi
             </p>
           </div>
 
-          <div className="w-full bg-slate-100 rounded-full h-2 p-0.5 border border-slate-200">
-            <div 
-              className="h-full rounded-full bg-slate-900 transition-all duration-500"
-              style={{ width: `${Math.min(100, indicators.curriculum_velocity_pct)}%` }}
-            ></div>
-          </div>
+          <ProgressBar
+            value={indicators.curriculum_velocity_pct}
+            variant="brass"
+            trackClassName="h-2"
+          />
         </div>
       </div>
 
       {/* Operational Exceptions & Diagnostic Ledger */}
-      <div className="bg-white border border-slate-200 rounded-2xl p-5 sm:p-6 shadow-2xs space-y-4">
-        <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+      <div className="bg-surface border border-line rounded-card p-4 medium:p-6 shadow-hairline space-y-4">
+        <div className="flex items-center justify-between border-b border-line-soft pb-3">
           <div className="flex items-center space-x-2">
-            <AlertCircle className="w-4 h-4 text-slate-700" />
-            <h3 className="text-sm font-bold text-slate-900">Daftar Eksepsi &amp; Diagnostik Operasional Real-Time</h3>
+            <AlertCircle className="w-4 h-4 text-ink-soft" />
+            <h3 className="text-sm font-bold text-ink">Daftar Eksepsi &amp; Diagnostik Operasional Real-Time</h3>
           </div>
-          <span className="text-xs text-slate-500 font-medium">
+          <span className="text-xs text-ink-soft font-medium">
             {exceptions.length} Eksepsi Aktif
           </span>
         </div>
@@ -327,15 +311,15 @@ export const InstitutionalHealthDashboard: React.FC = () => {
             {exceptions.map((ex, idx) => (
               <div 
                 key={idx} 
-                className="p-3.5 bg-slate-50 border border-slate-200 rounded-xl flex items-start space-x-3 text-xs"
+                className="p-3 bg-surface-subtle border border-line rounded-field flex items-start space-x-3 text-xs"
               >
-                <AlertTriangle className="w-4 h-4 flex-shrink-0 text-amber-600 mt-0.5" />
+                <AlertTriangle className="w-4 h-4 flex-shrink-0 text-brass mt-0.5" />
                 <div className="flex-1">
                   <div className="flex items-center space-x-2">
-                    <span className="font-mono font-bold text-slate-900">{ex.code}</span>
-                    <span className="text-[10px] bg-slate-200 text-slate-700 px-1.5 py-0.5 rounded font-mono font-semibold">DIAGNOSTIK</span>
+                    <span className="font-mono font-bold text-ink">{ex.code}</span>
+                    <span className="text-[10px] bg-line-soft text-ink-soft px-1 py-1 rounded font-mono font-semibold whitespace-nowrap">DIAGNOSTIK</span>
                   </div>
-                  <p className="text-slate-600 mt-1">
+                  <p className="text-ink-soft mt-1">
                     {ex.message || (
                       ex.code === 'OVERCAPACITY_ROOMS' 
                         ? `Kapasitas ruang kelas terlampaui (${ex.placed} siswa aktif pada kapasitas ${ex.capacity}).`
@@ -351,11 +335,11 @@ export const InstitutionalHealthDashboard: React.FC = () => {
             ))}
           </div>
         ) : (
-          <div className="p-5 bg-slate-50 border border-slate-200 rounded-xl flex items-center space-x-3 text-xs text-emerald-800">
-            <CheckCircle2 className="w-5 h-5 flex-shrink-0 text-emerald-600" />
+          <div className="p-4 bg-surface-subtle border border-line rounded-field flex items-center space-x-3 text-xs text-success-deep">
+            <CheckCircle2 className="w-5 h-5 flex-shrink-0 text-success" />
             <div>
               <p className="font-bold">Seluruh Parameter Operasional Berjalan Normal</p>
-              <p className="text-slate-500 mt-0.5">Tidak ada eksepsi kelembagaan atau pelanggaran kapasitas yang terdeteksi saat ini.</p>
+              <p className="text-ink-soft mt-0.5">Tidak ada eksepsi kelembagaan atau pelanggaran kapasitas yang terdeteksi saat ini.</p>
             </div>
           </div>
         )}
@@ -363,16 +347,16 @@ export const InstitutionalHealthDashboard: React.FC = () => {
 
       {/* Superadmin Multi-School Foundation Stewardship Grid */}
       {isSuperadmin && multiSchoolData.length > 0 && (
-        <div className="bg-white border border-slate-200 rounded-2xl p-5 sm:p-6 shadow-2xs space-y-4">
-          <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+        <div className="bg-surface border border-line rounded-card p-4 medium:p-6 shadow-hairline space-y-4">
+          <div className="flex items-center justify-between border-b border-line-soft pb-3">
             <div className="flex items-center space-x-2">
-              <Building2 className="w-4 h-4 text-slate-700" />
-              <h3 className="text-sm font-bold text-slate-900">Matriks Kesehatan Multi-Unit Sekolah (Yayasan)</h3>
+              <Building2 className="w-4 h-4 text-ink-soft" />
+              <h3 className="text-sm font-bold text-ink">Matriks Kesehatan Multi-Unit Sekolah (Yayasan)</h3>
             </div>
-            <span className="text-xs text-slate-500 font-medium">{multiSchoolData.length} Unit Sekolah Terpantau</span>
+            <span className="text-xs text-ink-soft font-medium">{multiSchoolData.length} Unit Sekolah Terpantau</span>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 medium:grid-cols-2 expanded:grid-cols-3 gap-4">
             {multiSchoolData.map((item) => {
               const itemStatus = item.telemetry?.health_status || 'CRITICAL_BLOCKER';
               const b = getStatusBadge(itemStatus);
@@ -388,35 +372,35 @@ export const InstitutionalHealthDashboard: React.FC = () => {
                 <div 
                   key={item.schoolId}
                   onClick={() => setActiveSchoolId(item.schoolId)}
-                  className={`p-4 rounded-2xl border transition-all cursor-pointer ${
+                  className={`p-4 rounded-card border transition-all cursor-pointer ${
                     item.schoolId === currentSchoolId 
-                      ? 'bg-slate-50 border-slate-900 shadow-2xs' 
-                      : 'bg-white border-slate-200 hover:border-slate-300 shadow-2xs'
+                      ? 'bg-surface-subtle border-brand shadow-hairline' 
+                      : 'bg-surface border-line hover-only:border-line shadow-hairline'
                   }`}
                 >
                   <div className="flex items-center justify-between mb-2">
-                    <span className="font-bold text-slate-900 text-xs">{item.schoolName}</span>
-                    <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold uppercase border ${b.bg}`}>
+                    <span className="font-bold text-ink text-xs">{item.schoolName}</span>
+                    <span className={`px-2 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider border ${b.bg}`}>
                       {itemStatus === 'HEALTHY' ? 'SEHAT' : itemStatus === 'ATTENTION_REQUIRED' ? 'PERHATIAN' : 'KRITIS'}
                     </span>
                   </div>
 
-                  <div className="grid grid-cols-2 gap-2 text-[11px] text-slate-500 mt-3 pt-3 border-t border-slate-100">
+                  <div className="grid grid-cols-2 gap-2 text-[11px] text-ink-soft mt-3 pt-3 border-t border-line-soft">
                     <div>
                       <span>Utilisasi:</span>
-                      <p className="font-bold text-slate-900 font-mono">{itemIndicators.capacity_utilization_pct}%</p>
+                      <p className="font-bold text-ink font-mono">{itemIndicators.capacity_utilization_pct}%</p>
                     </div>
                     <div>
                       <span>Kecepatan:</span>
-                      <p className="font-bold text-slate-900 font-mono">{itemIndicators.curriculum_velocity_pct}%</p>
+                      <p className="font-bold text-ink font-mono">{itemIndicators.curriculum_velocity_pct}%</p>
                     </div>
                     <div>
                       <span>Presensi:</span>
-                      <p className="font-bold text-slate-900 font-mono">{itemIndicators.attendance_recorded_days} Hari</p>
+                      <p className="font-bold text-ink font-mono">{itemIndicators.attendance_recorded_days} Hari</p>
                     </div>
                     <div>
                       <span>Eksepsi:</span>
-                      <p className={`font-bold font-mono ${itemExceptions.length > 0 ? 'text-amber-600' : 'text-emerald-700'}`}>
+                      <p className={`font-bold font-mono ${itemExceptions.length > 0 ? 'text-brass' : 'text-success-deep'}`}>
                         {itemExceptions.length} Masalah
                       </p>
                     </div>

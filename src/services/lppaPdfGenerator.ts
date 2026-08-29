@@ -25,7 +25,7 @@ export function generateAndDownloadLppaPdf(record: CanonicalPublishedLppaRecord)
   const meta = record.publication_metadata;
   const signatures = record.signatures;
 
-  const studentName = student?.full_name || record.student_name || 'Siswa';
+  const studentName = student?.full_name || record.student_snapshot.full_name || 'Siswa';
   const className = record.class_name || 'Kelompok A';
   const dateObj = meta.published_at ? new Date(meta.published_at) : new Date();
   const formattedDate = dateObj.toISOString().slice(0, 10);
@@ -174,23 +174,23 @@ export function generateAndDownloadLppaPdf(record: CanonicalPublishedLppaRecord)
   // --- 4 KURIKULUM MERDEKA SECTIONS ---
   drawCardBox(
     '1. NILAI AGAMA DAN BUDI PEKERTI',
-    elements.nilai_agama_budi_pekerti.rating_score,
-    elements.nilai_agama_budi_pekerti.narrative_synthesis,
-    elements.nilai_agama_budi_pekerti.home_stimulus_recommendation
+    elements.nilai_agama_budi_pekerti.rating_summary,
+    elements.nilai_agama_budi_pekerti.final_narrative,
+    elements.nilai_agama_budi_pekerti.growth_recommendations
   );
 
   drawCardBox(
     '2. JATI DIRI & REGULASI EMOSI',
-    elements.jati_diri.rating_score,
-    elements.jati_diri.narrative_synthesis,
-    elements.jati_diri.home_stimulus_recommendation
+    elements.jati_diri.rating_summary,
+    elements.jati_diri.final_narrative,
+    elements.jati_diri.growth_recommendations
   );
 
   drawCardBox(
     '3. DASAR LITERASI, MATEMATIKA, SAINS, TEKNOLOGI, REKAYASA & SENI (STEAM)',
-    elements.literasi_steam.rating_score,
-    elements.literasi_steam.narrative_synthesis,
-    elements.literasi_steam.home_stimulus_recommendation
+    elements.literasi_steam.rating_summary,
+    elements.literasi_steam.final_narrative,
+    elements.literasi_steam.growth_recommendations
   );
 
   // 4. PROJEK P5
@@ -198,9 +198,9 @@ export function generateAndDownloadLppaPdf(record: CanonicalPublishedLppaRecord)
   const p5Title = `4. PROJEK PENGUATAN PROFIL PELAJAR PANCASILA (P5) — ${p5.project_title || 'Gaya Hidup Berkelanjutan'}`;
   drawCardBox(
     p5Title,
-    p5.rating_score,
-    `${p5.project_description ? `Tema Projek: ${p5.project_description}\n` : ''}${p5.narrative_synthesis}`,
-    p5.home_stimulus_recommendation
+    p5.rating_summary,
+    `${p5.project_description ? `Tema Projek: ${p5.project_description}\n` : ''}${p5.final_narrative}`,
+    p5.growth_recommendations
   );
 
   // --- 5. PERTUMBUHAN & PRESENSI GRID ---

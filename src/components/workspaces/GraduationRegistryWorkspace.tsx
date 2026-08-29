@@ -1,3 +1,4 @@
+import { SelectSheet } from '../ui';
 /**
  * Yapendik School OS — Stage 3.4-C: Graduation Registry Workspace
  * 
@@ -241,30 +242,30 @@ export const GraduationRegistryWorkspace: React.FC = () => {
   const selectedClassObj = tkbClasses.find(c => c.id === selectedClassId);
 
   return (
-    <div className="space-y-6 text-slate-900 font-sans w-full" data-testid="graduation-registry-workspace">
+    <div className="space-y-6 text-ink font-sans w-full pb-[132px] expanded:pb-8" data-testid="graduation-registry-workspace">
       {/* Header Banner */}
-      <div className="bg-slate-50 border-b border-slate-200 md:rounded-2xl px-4 py-5 md:p-6 w-full text-slate-900 md:border md:shadow-sm">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div className="bg-surface-subtle border-b border-line medium:rounded-card px-4 py-5 medium:p-6 w-full text-ink medium:border medium:shadow-hairline">
+        <div className="flex flex-col medium:flex-row medium:items-center justify-between gap-4">
           <div>
-            <div className="flex items-center space-x-1.5 text-emerald-600 text-[10px] sm:text-xs font-bold tracking-wider uppercase mb-1">
-              <GraduationCap className="w-3.5 h-3.5" />
+            <div className="flex items-center space-x-1.5 text-success text-[10px] medium:text-xs font-bold uppercase tracking-wider mb-1">
+              <GraduationCap className="w-4 h-4" />
               <span>Standar Yayasan • Buku Induk Alumni</span>
             </div>
-            <h1 className="text-xl font-bold tracking-tight text-slate-900 flex items-center gap-2">
+            <h1 className="text-xl font-bold tracking-tight text-ink flex items-center gap-2">
               <span>Buku Registrasi Kelulusan Siswa (Tingkat Akhir)</span>
             </h1>
-            <p className="hidden md:block text-slate-500 text-xs mt-1 max-w-2xl">
+            <p className="hidden expanded:block text-ink-soft text-xs mt-1 max-w-2xl">
               {school?.name || 'TK Yapendik'} • Penetapan kelulusan resmi, finalisasi rekam jejak, dan pencatatan buku induk alumni.
             </p>
           </div>
 
-          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 w-full md:w-auto">
+          <div className="flex flex-col medium:flex-row items-stretch medium:items-center gap-2 w-full medium:w-auto">
             <button
               onClick={loadClassesAndAlumni}
               disabled={loading}
-              className="px-3.5 py-2 rounded-xl bg-white hover:bg-slate-100 text-slate-700 border border-slate-200 text-xs font-semibold flex justify-center items-center space-x-2 transition-all shadow-2xs cursor-pointer"
+              className="px-3 py-2 rounded-field bg-surface hover-only:bg-surface-subtle text-ink-soft border border-line text-xs font-semibold flex justify-center items-center space-x-2 transition-all shadow-hairline cursor-pointer"
             >
-              <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin text-slate-600' : ''}`} />
+              <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin text-ink-soft' : ''}`} />
               <span>Segarkan Data</span>
             </button>
           </div>
@@ -273,21 +274,21 @@ export const GraduationRegistryWorkspace: React.FC = () => {
 
       {/* Feedback Banner */}
       {feedback && (
-        <div className={`p-4 rounded-2xl border flex items-start space-x-3 shadow-2xs ${
+        <div className={`p-4 rounded-card border flex items-start space-x-3 shadow-hairline ${
           feedback.type === 'success' 
-            ? 'bg-emerald-50 border-emerald-200 text-emerald-800' 
-            : 'bg-rose-50 border-rose-200 text-rose-800'
+            ? 'bg-success-tint border-success-line text-success-deep' 
+            : 'bg-danger-tint border-danger-line text-danger-deep'
         }`}>
           {feedback.type === 'success' ? (
-            <CheckCircle2 className="w-5 h-5 flex-shrink-0 mt-0.5 text-emerald-600" />
+            <CheckCircle2 className="w-5 h-5 flex-shrink-0 mt-0.5 text-success" />
           ) : (
-            <AlertTriangle className="w-5 h-5 flex-shrink-0 mt-0.5 text-rose-600" />
+            <AlertTriangle className="w-5 h-5 flex-shrink-0 mt-0.5 text-danger" />
           )}
           <div className="flex-1 text-xs">
             <p className="font-semibold">{feedback.type === 'success' ? 'Kelulusan Sukses' : feedback.diagnostics?.title || 'Operasi Ditolak'}</p>
             <p className="mt-0.5">{feedback.message}</p>
             {feedback.diagnostics?.actionSuggestion && (
-              <p className="mt-2 text-amber-900 font-medium bg-amber-50 p-2.5 rounded-xl border border-amber-200">
+              <p className="mt-2 text-warning-deep font-medium bg-warning-tint p-2 rounded-field border border-warning-line">
                 Saran Tindakan: {feedback.diagnostics.actionSuggestion}
               </p>
             )}
@@ -296,51 +297,45 @@ export const GraduationRegistryWorkspace: React.FC = () => {
       )}
 
       {/* Main Layout: Candidate Graduates on Left, Graduation Action & Summary on Right */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+      <div className="grid grid-cols-1 expanded:grid-cols-12 gap-6">
         {/* Left Column: Candidates Selection (7 Cols) */}
-        <div className="lg:col-span-7 bg-white border border-slate-200 rounded-2xl p-5 sm:p-6 shadow-2xs space-y-4">
-          <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+        <div className="expanded:col-span-7 bg-surface border border-line rounded-card p-4 medium:p-6 shadow-hairline space-y-4">
+          <div className="flex items-center justify-between border-b border-line-soft pb-3">
             <div>
-              <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Calon Lulusan</span>
-              <h3 className="text-sm font-bold text-slate-900 mt-0.5">Daftar Siswa Kelas Tingkat Akhir</h3>
+              <span className="text-[10px] font-bold text-ink-soft uppercase tracking-wider">Calon Lulusan</span>
+              <h3 className="text-sm font-bold text-ink mt-0.5">Daftar Siswa Kelas Tingkat Akhir</h3>
             </div>
-            <span className="text-xs text-slate-700 font-bold bg-slate-100 px-2.5 py-0.5 rounded-full border border-slate-200">
+            <span className="text-xs text-ink-soft font-bold bg-surface-subtle px-2 py-1 rounded-full border border-line">
               {selectedStudentIds.length} Siswa Terpilih
             </span>
           </div>
 
           {/* Classroom Selector */}
           <div>
-            <label className="block text-xs font-semibold text-slate-700 mb-1">Pilih Kelas Tingkat Akhir (TK B):</label>
-            <select
+            <label className="block text-xs font-semibold text-ink-soft mb-1">Pilih Kelas Tingkat Akhir (TK B):</label>
+            <SelectSheet
               value={selectedClassId}
-              onChange={(e) => setSelectedClassId(e.target.value)}
-              className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2 text-xs text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-slate-900 shadow-2xs font-medium"
-            >
-              {tkbClasses.map(c => (
-                <option key={c.id} value={c.id}>
-                  {c.name} ({c.age_group === 'TK_A_4_5' ? '4-5 Tahun' : '5-6 Tahun'}) • Kapasitas: {c.capacity} anak
-                </option>
-              ))}
-            </select>
+              onChange={setSelectedClassId}
+              options={tkbClasses.map(c => ({ value: c.id, label: `${c.name} (${c.age_group === 'TK_A_4_5' ? '4-5 Tahun' : '5-6 Tahun'}) • Kapasitas: ${c.capacity} anak` }))}
+            />
           </div>
 
           {/* Candidates Table */}
-          <div className="border border-slate-200 rounded-xl overflow-hidden bg-white shadow-2xs">
-            <div className="p-3 bg-slate-50 border-b border-slate-200 flex items-center justify-between text-xs">
-              <label className="flex items-center space-x-2 text-slate-700 font-semibold cursor-pointer">
+          <div className="border border-line rounded-field overflow-hidden bg-surface shadow-hairline">
+            <div className="p-3 bg-surface-subtle border-b border-line flex items-center justify-between text-xs">
+              <label className="flex items-center space-x-2 text-ink-soft font-semibold cursor-pointer">
                 <input
                   type="checkbox"
                   checked={candidates.length > 0 && selectedStudentIds.length === candidates.length}
                   onChange={(e) => handleSelectAll(e.target.checked)}
-                  className="rounded border-slate-300 text-slate-900 focus:ring-0 w-4 h-4 bg-white cursor-pointer"
+                  className="rounded border-line text-ink focus:ring-0 w-4 h-4 bg-surface cursor-pointer"
                 />
                 <span>Pilih Semua Siswa ({candidates.length})</span>
               </label>
-              <span className="text-[10px] text-slate-500 font-mono font-semibold">Status: AKTIF</span>
+              <span className="text-[10px] text-ink-soft font-mono font-semibold whitespace-nowrap">Status: AKTIF</span>
             </div>
 
-            <div className="max-h-80 overflow-y-auto divide-y divide-slate-100">
+            <div className="max-h-80 overflow-y-auto divide-y divide-line-soft">
               {candidates.length > 0 ? (
                 candidates.map(candidate => {
                   const isSelected = selectedStudentIds.includes(candidate.student_id);
@@ -348,8 +343,8 @@ export const GraduationRegistryWorkspace: React.FC = () => {
                     <div
                       key={candidate.student_id}
                       onClick={() => handleToggleStudent(candidate.student_id)}
-                      className={`p-3 flex items-center justify-between text-xs hover:bg-slate-50/80 cursor-pointer transition-colors ${
-                        isSelected ? 'bg-slate-50' : ''
+                      className={`p-3 flex items-center justify-between text-xs hover-only:bg-surface-subtle/80 cursor-pointer transition-colors ${
+                        isSelected ? 'bg-surface-subtle' : ''
                       }`}
                     >
                       <div className="flex items-center space-x-3">
@@ -357,19 +352,19 @@ export const GraduationRegistryWorkspace: React.FC = () => {
                           type="checkbox"
                           checked={isSelected}
                           onChange={() => {}}
-                          className="rounded border-slate-300 text-slate-900 focus:ring-0 w-4 h-4 bg-white"
+                          className="rounded border-line text-ink focus:ring-0 w-4 h-4 bg-surface"
                         />
                         <div>
-                          <p className="font-bold text-slate-900">{candidate.full_name}</p>
-                          <p className="text-[11px] text-slate-500 font-mono">NIS: {candidate.nis || '—'} • Gender: {candidate.gender === 'MALE' ? 'Laki-Laki' : 'Perempuan'}</p>
+                          <p className="font-bold text-ink">{candidate.full_name}</p>
+                          <p className="text-[11px] text-ink-soft font-mono whitespace-nowrap">NIS: {candidate.nis || '—'} • Gender: {candidate.gender === 'MALE' ? 'Laki-Laki' : 'Perempuan'}</p>
                         </div>
                       </div>
-                      <span className="text-[11px] font-mono text-slate-500">Masuk: {candidate.entry_date}</span>
+                      <span className="text-[11px] font-mono text-ink-soft whitespace-nowrap">Masuk: {candidate.entry_date}</span>
                     </div>
                   );
                 })
               ) : (
-                <div className="p-8 text-center text-slate-400 text-xs">
+                <div className="p-8 text-center text-ink-faint text-xs">
                   Tidak ada siswa dengan penempatan aktif di rombel tingkat akhir ini.
                 </div>
               )}
@@ -378,36 +373,36 @@ export const GraduationRegistryWorkspace: React.FC = () => {
         </div>
 
         {/* Right Column: Graduation Finalization Panel (5 Cols) */}
-        <div className="lg:col-span-5 bg-white border border-slate-200 rounded-2xl p-5 sm:p-6 shadow-2xs flex flex-col justify-between space-y-6">
+        <div className="expanded:col-span-5 bg-surface border border-line rounded-card p-4 medium:p-6 shadow-hairline flex flex-col justify-between space-y-6">
           <div className="space-y-4">
-            <div className="border-b border-slate-100 pb-3">
-              <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Finalisasi</span>
-              <h3 className="text-sm font-bold text-slate-900 mt-0.5">Penetapan Kelulusan Resmi</h3>
+            <div className="border-b border-line-soft pb-3">
+              <span className="text-[10px] font-bold text-ink-soft uppercase tracking-wider">Finalisasi</span>
+              <h3 className="text-sm font-bold text-ink mt-0.5">Penetapan Kelulusan Resmi</h3>
             </div>
 
             {/* Summary Card */}
-            <div className="bg-slate-50 border border-slate-200 rounded-xl p-4 space-y-3 text-xs">
-              <div className="flex justify-between text-slate-600">
+            <div className="bg-surface-subtle border border-line rounded-field p-4 space-y-3 text-xs">
+              <div className="flex justify-between text-ink-soft">
                 <span>Rombel Tingkat Akhir:</span>
-                <span className="font-bold text-slate-900">{selectedClassObj?.name || '—'}</span>
+                <span className="font-bold text-ink">{selectedClassObj?.name || '—'}</span>
               </div>
-              <div className="flex justify-between text-slate-600">
+              <div className="flex justify-between text-ink-soft">
                 <span>Jumlah Calon Dipilih:</span>
-                <span className="font-bold text-slate-900 font-mono">{selectedStudentIds.length} Siswa</span>
+                <span className="font-bold text-ink font-mono">{selectedStudentIds.length} Siswa</span>
               </div>
-              <div className="flex justify-between text-slate-600">
+              <div className="flex justify-between text-ink-soft">
                 <span>Tanggal Kelulusan:</span>
-                <span className="font-mono text-slate-700">{new Date().toLocaleDateString('id-ID')}</span>
+                <span className="font-mono text-ink-soft">{new Date().toLocaleDateString('id-ID')}</span>
               </div>
             </div>
 
             {/* Terminal Invariants Notice */}
-            <div className="bg-slate-50 border border-slate-200 rounded-xl p-4 text-xs text-slate-700 space-y-2">
-              <div className="flex items-center space-x-1.5 text-slate-900 font-semibold">
-                <ShieldCheck className="w-4 h-4 text-slate-600" />
+            <div className="bg-surface-subtle border border-line rounded-field p-4 text-xs text-ink-soft space-y-2">
+              <div className="flex items-center space-x-1.5 text-ink font-semibold">
+                <ShieldCheck className="w-4 h-4 text-ink-soft" />
                 <span>Konsekuensi Hukum &amp; Tata Kelola Kelulusan:</span>
               </div>
-              <ul className="text-slate-600 text-[11px] space-y-1.5 list-disc list-inside">
+              <ul className="text-ink-soft text-[11px] space-y-1.5 list-disc list-inside">
                 <li>Catatan penempatan aktif diakhiri dengan status <strong>COMPLETED</strong>.</li>
                 <li>Status kelembagaan siswa berubah menjadi <strong>GRADUATED</strong>.</li>
                 <li>Siswa otomatis terdaftar dalam Buku Induk Alumni.</li>
@@ -416,11 +411,11 @@ export const GraduationRegistryWorkspace: React.FC = () => {
           </div>
 
           {/* Action Trigger Button */}
-          <div className="pt-4 border-t border-slate-100">
+          <div className="pt-4 border-t border-line-soft">
             <button
               onClick={() => setShowGradModal(true)}
               disabled={!isAuthorizedActor || selectedStudentIds.length === 0}
-              className="w-full py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 disabled:opacity-40 text-white font-bold text-xs shadow-xs flex items-center justify-center space-x-2 transition-all cursor-pointer"
+              className="w-full py-2 rounded-field bg-brand hover-only:bg-surface-inset disabled:opacity-40 text-on-brand font-bold text-xs shadow-hairline flex items-center justify-center space-x-2 transition-all cursor-pointer"
             >
               <Award className="w-4 h-4" />
               <span>Tetapkan Kelulusan ({selectedStudentIds.length} Siswa)</span>
@@ -430,18 +425,18 @@ export const GraduationRegistryWorkspace: React.FC = () => {
       </div>
 
       {/* Historical Graduates / Alumni Ledger */}
-      <div className="bg-white border border-slate-200 rounded-2xl p-5 sm:p-6 shadow-2xs space-y-4">
-        <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+      <div className="bg-surface border border-line rounded-card p-4 medium:p-6 shadow-hairline space-y-4">
+        <div className="flex items-center justify-between border-b border-line-soft pb-3">
           <div className="flex items-center space-x-2">
-            <Archive className="w-4 h-4 text-slate-700" />
-            <h3 className="text-sm font-bold text-slate-900">Buku Induk Alumni &amp; Riwayat Kelulusan</h3>
+            <Archive className="w-4 h-4 text-ink-soft" />
+            <h3 className="text-sm font-bold text-ink">Buku Induk Alumni &amp; Riwayat Kelulusan</h3>
           </div>
-          <span className="text-xs text-slate-500 font-medium">Total {graduatedAlumni.length} Alumni Terdaftar</span>
+          <span className="text-xs text-ink-soft font-medium">Total {graduatedAlumni.length} Alumni Terdaftar</span>
         </div>
 
-        <div className="overflow-x-auto">
+        <div className="overflow-x-auto [mask-image:linear-gradient(to_right,transparent_0,black_16px,black_calc(100%-16px),transparent_100%)]">
           <table className="w-full text-left text-xs">
-            <thead className="bg-slate-50 text-slate-600 uppercase tracking-wider font-semibold border-b border-slate-200">
+            <thead className="bg-surface-subtle text-ink-soft uppercase tracking-wider font-semibold border-b border-line">
               <tr>
                 <th className="py-3 px-4">Nama Alumni</th>
                 <th className="py-3 px-4">NIS</th>
@@ -450,23 +445,23 @@ export const GraduationRegistryWorkspace: React.FC = () => {
                 <th className="py-3 px-4">Keterangan</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-100 font-medium">
+            <tbody className="divide-y divide-line-soft font-medium">
               {graduatedAlumni.length > 0 ? (
                 graduatedAlumni.map((alumnus) => (
-                  <tr key={alumnus.id} className="hover:bg-slate-50 transition-colors">
-                    <td className="py-3.5 px-4 font-bold text-slate-900 flex items-center space-x-2">
-                      <Award className="w-3.5 h-3.5 text-slate-600" />
+                  <tr key={alumnus.id} className="hover-only:bg-surface-subtle transition-colors">
+                    <td className="py-3 px-4 font-bold text-ink flex items-center space-x-2">
+                      <Award className="w-4 h-4 text-ink-soft" />
                       <span>{alumnus.full_name}</span>
                     </td>
-                    <td className="py-3.5 px-4 font-mono text-slate-600">{alumnus.nis}</td>
-                    <td className="py-3.5 px-4 text-slate-500">{alumnus.gender === 'MALE' ? 'Laki-Laki' : 'Perempuan'}</td>
-                    <td className="py-3.5 px-4 font-mono text-slate-500">{alumnus.exit_date}</td>
-                    <td className="py-3.5 px-4 text-slate-700 font-sans">{alumnus.remarks}</td>
+                    <td className="py-3 px-4 font-mono text-ink-soft">{alumnus.nis}</td>
+                    <td className="py-3 px-4 text-ink-soft">{alumnus.gender === 'MALE' ? 'Laki-Laki' : 'Perempuan'}</td>
+                    <td className="py-3 px-4 font-mono text-ink-soft">{alumnus.exit_date}</td>
+                    <td className="py-3 px-4 text-ink-soft font-sans">{alumnus.remarks}</td>
                   </tr>
                 ))
               ) : (
                 <tr>
-                  <td colSpan={5} className="py-8 text-center text-slate-400 text-xs">
+                  <td colSpan={5} className="py-8 text-center text-ink-faint text-xs">
                     Belum ada data alumni yang tercatat lulus di unit ini.
                   </td>
                 </tr>
@@ -478,56 +473,56 @@ export const GraduationRegistryWorkspace: React.FC = () => {
 
       {/* Confirmation Modal */}
       {showGradModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-xs animate-in fade-in duration-200">
-          <div className="bg-white border border-slate-200 rounded-2xl max-w-lg w-full p-5 sm:p-6 shadow-2xl space-y-4">
-            <div className="flex items-center justify-between pb-3 border-b border-slate-100">
-              <div className="flex items-center space-x-2 text-slate-900">
-                <Award className="w-4 h-4 text-slate-700" />
-                <h3 className="text-base font-bold text-slate-900">Konfirmasi Penetapan Kelulusan</h3>
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-brand/40 backdrop-blur-xs animate-in fade-in duration-200">
+          <div className="bg-surface border border-line rounded-card max-w-lg w-full p-4 medium:p-6 shadow-floating space-y-4">
+            <div className="flex items-center justify-between pb-3 border-b border-line-soft">
+              <div className="flex items-center space-x-2 text-ink">
+                <Award className="w-4 h-4 text-ink-soft" />
+                <h3 className="text-base font-bold text-ink">Konfirmasi Penetapan Kelulusan</h3>
               </div>
               <button
                 onClick={() => setShowGradModal(false)}
-                className="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 flex items-center justify-center transition-colors cursor-pointer shrink-0"
+                className="w-8 h-8 rounded-full bg-surface-subtle hover-only:bg-line-soft text-ink-soft flex items-center justify-center transition-colors cursor-pointer shrink-0"
               >
                 <X className="w-4 h-4" />
               </button>
             </div>
 
-            <div className="text-xs text-slate-700 space-y-3">
+            <div className="text-xs text-ink-soft space-y-3">
               <p>
                 Anda akan menetapkan kelulusan resmi bagi <strong>{selectedStudentIds.length} siswa</strong> dari kelas <strong>{selectedClassObj?.name}</strong>.
               </p>
 
-              <div className="bg-slate-50 p-3.5 rounded-xl border border-slate-200 space-y-2 text-[11px]">
-                <div className="flex justify-between text-slate-600">
+              <div className="bg-surface-subtle p-3 rounded-field border border-line space-y-2 text-[11px]">
+                <div className="flex justify-between text-ink-soft">
                   <span>Unit Sekolah:</span>
-                  <span className="font-bold text-slate-900">{school?.name}</span>
+                  <span className="font-bold text-ink">{school?.name}</span>
                 </div>
-                <div className="flex justify-between text-slate-600">
+                <div className="flex justify-between text-ink-soft">
                   <span>Rombel Asal:</span>
-                  <span className="font-bold text-slate-900">{selectedClassObj?.name}</span>
+                  <span className="font-bold text-ink">{selectedClassObj?.name}</span>
                 </div>
-                <div className="flex justify-between text-slate-600">
+                <div className="flex justify-between text-ink-soft">
                   <span>Jumlah Lulusan:</span>
-                  <span className="font-bold text-slate-900">{selectedStudentIds.length} Siswa</span>
+                  <span className="font-bold text-ink">{selectedStudentIds.length} Siswa</span>
                 </div>
-                <div className="flex justify-between text-slate-600">
+                <div className="flex justify-between text-ink-soft">
                   <span>Status Siswa:</span>
-                  <span className="font-bold text-emerald-700">LULUS (Alumni)</span>
+                  <span className="font-bold text-success-deep">LULUS (Alumni)</span>
                 </div>
               </div>
 
-              <div className="bg-amber-50 border border-amber-200 p-3 rounded-xl text-amber-800 text-[11px]">
+              <div className="bg-warning-tint border border-warning-line p-3 rounded-field text-warning-deep text-[11px]">
                 Perhatian: Tindakan ini bersifat final. Catatan penempatan yang telah selesai akan dikunci secara permanen dan dicatat dalam buku induk alumni.
               </div>
             </div>
 
-            <div className="flex flex-col sm:flex-row items-center justify-end gap-2.5 pt-3 border-t border-slate-100">
+            <div className="flex flex-col medium:flex-row items-center justify-end gap-2 pt-3 border-t border-line-soft">
               <button
                 type="button"
                 onClick={() => setShowGradModal(false)}
                 disabled={isProcessing}
-                className="w-full sm:w-auto px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold transition-colors cursor-pointer"
+                className="w-full medium:w-auto px-4 py-2 rounded-field bg-surface-subtle hover-only:bg-line-soft text-ink-soft text-xs font-bold transition-colors cursor-pointer"
               >
                 Batal
               </button>
@@ -535,9 +530,9 @@ export const GraduationRegistryWorkspace: React.FC = () => {
                 type="button"
                 onClick={handleExecuteGraduation}
                 disabled={isProcessing}
-                className="w-full sm:w-auto px-4 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold flex justify-center items-center space-x-2 cursor-pointer shadow-xs transition-colors"
+                className="w-full medium:w-auto px-4 py-2 rounded-field bg-brand hover-only:bg-surface-inset text-on-brand text-xs font-bold flex justify-center items-center space-x-2 cursor-pointer shadow-hairline transition-colors"
               >
-                {isProcessing ? <RefreshCw className="w-3.5 h-3.5 animate-spin" /> : <Award className="w-3.5 h-3.5" />}
+                {isProcessing ? <RefreshCw className="w-4 h-4 animate-spin" /> : <Award className="w-4 h-4" />}
                 <span>Tetapkan Lulus Sekarang</span>
               </button>
             </div>

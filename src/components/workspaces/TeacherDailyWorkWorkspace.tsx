@@ -8,7 +8,7 @@ import { db } from '../../db/database';
 import { useSecurityContext } from '../../auth/context';
 import { evaluateAuthorization } from '../../auth/authorization';
 import { LearningActivity, DevelopmentDomain, ClassRoom } from '../../domain/types';
-import { Button, Badge } from '../ui';
+import { Button, Badge, SelectSheet } from '../ui';
 import { 
   Calendar, 
   Clock, 
@@ -121,59 +121,51 @@ export const TeacherDailyWorkWorkspace: React.FC = () => {
   };
 
   const availableDomains: { key: DevelopmentDomain; label: string; bg: string }[] = [
-    { key: 'NILAI_AGAMA_MORAL', label: 'Nilai Agama & Moral', bg: 'bg-emerald-100 text-emerald-800' },
-    { key: 'FISIK_MOTORIK', label: 'Fisik-Motorik', bg: 'bg-amber-100 text-amber-800' },
-    { key: 'KOGNITIF', label: 'Kognitif', bg: 'bg-blue-100 text-blue-800' },
-    { key: 'BAHASA', label: 'Bahasa', bg: 'bg-purple-100 text-purple-800' },
-    { key: 'SOSIAL_EMOSIONAL', label: 'Sosial-Emosional', bg: 'bg-rose-100 text-rose-800' },
-    { key: 'SENI', label: 'Seni & Kreativitas', bg: 'bg-indigo-100 text-indigo-800' }
+    { key: 'NILAI_AGAMA_MORAL', label: 'Nilai Agama & Moral', bg: 'bg-success-tint text-success-deep' },
+    { key: 'FISIK_MOTORIK', label: 'Fisik-Motorik', bg: 'bg-warning-tint text-warning-deep' },
+    { key: 'KOGNITIF', label: 'Kognitif', bg: 'bg-blue-100 text-info-deep' },
+    { key: 'BAHASA', label: 'Bahasa', bg: 'bg-lppa-tint text-lppa-deep' },
+    { key: 'SOSIAL_EMOSIONAL', label: 'Sosial-Emosional', bg: 'bg-danger-tint text-danger-deep' },
+    { key: 'SENI', label: 'Seni & Kreativitas', bg: 'bg-indigo-100 text-lppa-deep' }
   ];
 
   return (
-    <div className="px-4 md:px-6 py-6 space-y-6 overflow-x-hidden w-full max-w-full">
+    <div className="px-4 medium:px-6 py-6 space-y-6 overflow-x-hidden w-full max-w-full pb-[132px] expanded:pb-8">
       {/* Workspace Context Bar */}
-      <div className="p-4 md:p-5 bg-white border-y md:border border-slate-200 md:rounded-xl md:shadow-xs flex flex-col md:flex-row md:items-start justify-between gap-4 -mx-4 md:mx-0">
+      <div className="p-4 medium:p-4 bg-surface border-y medium:border border-line medium:rounded-field medium:shadow-hairline flex flex-col medium:flex-row medium:items-start justify-between gap-4 -mx-4 expanded:mx-0">
         <div>
-          <h1 className="text-xl font-bold text-slate-900 flex items-center gap-2">
-            <BookOpen className="w-5 h-5 text-amber-600" />
+          <h1 className="text-xl font-bold text-ink flex items-center gap-2">
+            <BookOpen className="w-5 h-5 text-brass" />
             Agenda & Kerja Harian Guru (TK Pilot)
           </h1>
-          <p className="text-xs text-slate-500 mt-1">
+          <p className="text-xs text-ink-soft mt-1">
             Pengorganisasian sentra kegiatan, fokus capaian perkembangan, dan catatan refleksi pedagogis.
           </p>
         </div>
 
         {/* Filter selectors */}
-        <div className="flex flex-col gap-4 w-full md:w-auto flex-1 md:max-w-xl">
-          <div className="flex flex-col md:flex-row md:items-center gap-3 w-full">
-            <div className="flex items-center justify-between w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-700 text-xs">
-              <span className="text-slate-500 font-medium flex items-center gap-1.5"><Calendar className="w-3.5 h-3.5 text-slate-500" /> Tanggal:</span>
+        <div className="flex flex-col gap-4 w-full medium:w-auto flex-1 expanded:max-w-xl">
+          <div className="flex flex-col medium:flex-row medium:items-center gap-3 w-full">
+            <div className="flex items-center justify-between w-full bg-surface-subtle border border-line rounded-field px-3 py-2 text-ink-soft text-xs">
+              <span className="text-ink-soft font-medium flex items-center gap-2"><Calendar className="w-4 h-4 text-ink-soft" /> Tanggal:</span>
               <input
                 type="date"
                 value={selectedDate}
                 onChange={(e) => setSelectedDate(e.target.value)}
-                className="bg-transparent font-semibold text-slate-800 outline-none text-right flex-1 cursor-pointer ml-2"
+                className="bg-transparent font-semibold text-ink outline-none text-right flex-1 cursor-pointer ml-2"
               />
             </div>
 
-            <div className="flex items-center justify-between w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-700 text-xs">
-              <span className="text-slate-500 font-medium mr-2">Kelas:</span>
-              <select
-                value={selectedClassId}
-                onChange={(e) => setSelectedClassId(e.target.value)}
-                className="w-full flex justify-between bg-transparent font-semibold text-slate-800 outline-none text-right flex-1 cursor-pointer"
-              >
-                {classes.map(c => (
-                  <option key={c.id} value={c.id}>{c.name}</option>
-                ))}
-              </select>
+            <div className="flex items-center justify-between w-full bg-surface-subtle border border-line rounded-field px-3 py-2 text-ink-soft text-xs">
+              <span className="text-ink-soft font-medium mr-2">Kelas:</span>
+              <SelectSheet value={selectedClassId} onChange={setSelectedClassId} options={classes.map(c => ({ value: c.id, label: c.name }))} />
             </div>
           </div>
 
           {authResult.granted && (
             <Button
               variant="primary"
-              className="w-full md:w-auto shadow-sm flex justify-center"
+              className="w-full medium:w-auto shadow-hairline flex justify-center"
               onClick={() => setShowAddModal(true)}
               leftIcon={<Plus className="w-4 h-4" />}
             >
@@ -185,8 +177,8 @@ export const TeacherDailyWorkWorkspace: React.FC = () => {
 
       {/* Authorization banner if restricted */}
       {!authResult.granted && (
-        <div className="bg-amber-50 border border-amber-200 rounded-lg p-3 text-xs text-amber-800 flex items-start space-x-2">
-          <AlertCircle className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
+        <div className="bg-warning-tint border border-warning-line rounded-lg p-3 text-xs text-warning-deep flex items-start space-x-2">
+          <AlertCircle className="w-4 h-4 text-brass shrink-0 mt-0.5" />
           <div>
             <span className="font-semibold">Mode Tinjauan Terbatas:</span> {authResult.reason}
           </div>
@@ -195,42 +187,42 @@ export const TeacherDailyWorkWorkspace: React.FC = () => {
 
       {/* Activities Grid */}
       {activities.length === 0 ? (
-        <div className="bg-white border-y md:border border-slate-200 md:rounded-lg p-10 text-center my-6 md:shadow-xs -mx-4 md:mx-0">
-          <Layers className="w-10 h-10 text-slate-300 mx-auto mb-3" />
-          <h3 className="text-sm font-semibold text-slate-700">Belum ada agenda aktivitas untuk tanggal ini</h3>
-          <p className="text-xs text-slate-400 max-w-md mx-auto mt-1">
+        <div className="bg-surface border-y medium:border border-line medium:rounded-lg p-10 text-center my-6 medium:shadow-hairline -mx-4 expanded:mx-0">
+          <Layers className="w-10 h-10 text-ink-faint mx-auto mb-3" />
+          <h3 className="text-sm font-semibold text-ink-soft">Belum ada agenda aktivitas untuk tanggal ini</h3>
+          <p className="text-xs text-ink-faint max-w-md mx-auto mt-1">
             Gunakan tombol "Rencana Aktivitas Baru" di atas untuk menyusun jadwal pembelajaran sentra anak usia dini.
           </p>
         </div>
       ) : (
-        <div className="flex flex-col divide-y divide-slate-100 bg-white border-y md:border border-slate-200 md:rounded-xl md:shadow-xs pb-10 -mx-4 md:mx-0">
+        <div className="flex flex-col divide-y divide-line-soft bg-surface border-y medium:border border-line medium:rounded-field medium:shadow-hairline pb-10 -mx-4 expanded:mx-0">
           {activities.map((act) => (
             <div 
               key={act.id} 
-              className={`px-4 md:px-6 py-5 hover:bg-slate-50/50 transition-colors ${
-                act.completed ? 'bg-emerald-50/10' : ''
+              className={`px-4 medium:px-6 py-5 hover-only:bg-surface-subtle/50 transition-colors ${
+                act.completed ? 'bg-success-tint/10' : ''
               }`}
             >
               {/* Header */}
-              <div className="flex flex-col md:flex-row md:items-start justify-between gap-4 pb-4 border-b border-slate-100">
+              <div className="flex flex-col medium:flex-row medium:items-start justify-between gap-4 pb-4 border-b border-line-soft">
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center space-x-3 mb-2">
-                    <span className="text-[11px] font-mono px-2.5 py-1 rounded-full bg-slate-100 text-slate-600 font-bold flex items-center gap-1.5 shrink-0">
-                      <Clock className="w-3.5 h-3.5 text-slate-400" />
+                    <span className="text-[11px] font-mono px-2 py-1 rounded-full bg-surface-subtle text-ink-soft font-bold flex items-center gap-2 shrink-0 whitespace-nowrap">
+                      <Clock className="w-4 h-4 text-ink-faint" />
                       {act.timeSlot}
                     </span>
                     {act.completed && (
-                      <span className="text-[11px] px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-800 font-bold flex items-center gap-1.5 shrink-0">
+                      <span className="text-[11px] px-2 py-1 rounded-full bg-success-tint text-success-deep font-bold flex items-center gap-2 shrink-0">
                         <Check className="w-3 h-3" />
                         Selesai Dilaksanakan
                       </span>
                     )}
                   </div>
-                  <h3 className="text-base font-bold text-slate-900 leading-snug truncate">
+                  <h3 className="text-base font-bold text-ink leading-snug truncate">
                     {act.activityName}
                   </h3>
-                  <div className="text-xs text-slate-500 mt-1 truncate">
-                    Tema: <span className="font-semibold text-slate-700">{act.theme}</span> • {act.subTheme}
+                  <div className="text-xs text-ink-soft mt-1 truncate">
+                    Tema: <span className="font-semibold text-ink-soft">{act.theme}</span> • {act.subTheme}
                   </div>
                 </div>
               </div>
@@ -240,7 +232,7 @@ export const TeacherDailyWorkWorkspace: React.FC = () => {
                 {act.developmentalFocus.map(d => {
                   const dom = availableDomains.find(ad => ad.key === d);
                   return (
-                    <span key={d} className={`rounded-full px-2.5 py-0.5 text-[10px] font-bold ${dom?.bg || 'bg-slate-100'}`}>
+                    <span key={d} className={`rounded-full px-2 py-1 text-[10px] font-bold ${dom?.bg || 'bg-surface-subtle'}`}>
                       {dom?.label || d}
                     </span>
                   );
@@ -248,11 +240,11 @@ export const TeacherDailyWorkWorkspace: React.FC = () => {
               </div>
 
               {/* Steps and Materials */}
-              <div className="space-y-4 text-xs text-slate-700 pt-1">
+              <div className="space-y-4 text-xs text-ink-soft pt-1">
                 {act.materialsNeeded.length > 0 && (
                   <div>
-                    <span className="font-semibold text-slate-900 block mb-1">Alat & Bahan:</span>
-                    <ul className="list-disc list-inside space-y-0.5 text-slate-600 pl-1">
+                    <span className="font-semibold text-ink block mb-1">Alat & Bahan:</span>
+                    <ul className="list-disc list-inside space-y-0.5 text-ink-soft pl-1">
                       {act.materialsNeeded.map((m, idx) => (
                         <li key={idx}>{m}</li>
                       ))}
@@ -262,8 +254,8 @@ export const TeacherDailyWorkWorkspace: React.FC = () => {
 
                 {act.plannedSteps.length > 0 && (
                   <div>
-                    <span className="font-semibold text-slate-900 block mb-1">Langkah Alur Kegiatan:</span>
-                    <ol className="list-decimal list-inside space-y-1 text-slate-600 pl-1">
+                    <span className="font-semibold text-ink block mb-1">Langkah Alur Kegiatan:</span>
+                    <ol className="list-decimal list-inside space-y-1 text-ink-soft pl-1">
                       {act.plannedSteps.map((s, idx) => (
                         <li key={idx}>{s}</li>
                       ))}
@@ -273,11 +265,11 @@ export const TeacherDailyWorkWorkspace: React.FC = () => {
 
                 {/* Reflection */}
                 {act.teacherReflection && (
-                  <div className="mt-3 p-3 bg-amber-50/60 border border-amber-100 rounded-md">
-                    <span className="font-semibold text-amber-900 text-[11px] uppercase tracking-wide block mb-1">
+                  <div className="mt-3 p-3 bg-warning-tint/60 border border-amber-100 rounded-md">
+                    <span className="font-semibold text-warning-deep text-[11px] uppercase tracking-wider tracking-wide block mb-1">
                       Refleksi & Catatan Guru:
                     </span>
-                    <p className="text-slate-800 italic leading-relaxed">
+                    <p className="text-ink italic leading-relaxed">
                       "{act.teacherReflection}"
                     </p>
                   </div>
@@ -285,14 +277,14 @@ export const TeacherDailyWorkWorkspace: React.FC = () => {
               </div>
 
               {!act.completed ? (
-                <div className="mt-4 pt-4 border-t border-slate-100 flex justify-end">
+                <div className="mt-4 pt-4 border-t border-line-soft flex justify-end">
                   <Button 
                     variant="secondary" 
                     size="sm" 
                     onClick={() => handleToggleComplete(act)}
                     disabled={!authResult.granted}
                     leftIcon={<CheckCircle className="w-4 h-4" />}
-                    className="w-full md:w-auto flex justify-center"
+                    className="w-full medium:w-auto flex justify-center"
                   >
                     Tandai Selesai
                   </Button>
@@ -305,61 +297,61 @@ export const TeacherDailyWorkWorkspace: React.FC = () => {
 
       {/* Modal Add Activity */}
       {showAddModal && (
-        <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-xl shadow-2xl border border-slate-200 max-w-xl w-full max-h-[90vh] overflow-y-auto p-6">
-            <h2 className="text-lg font-bold text-slate-900 mb-4 pb-2 border-b border-slate-100">
+        <div className="fixed inset-0 bg-brand/60 backdrop-blur-xs flex items-center justify-center p-4 z-50">
+          <div className="bg-surface rounded-field shadow-floating border border-line max-w-xl w-full max-h-[90vh] overflow-y-auto p-6">
+            <h2 className="text-lg font-bold text-ink mb-4 pb-2 border-b border-line-soft">
               Rencana Aktivitas Pembelajaran TK
             </h2>
             <form onSubmit={handleCreateActivity} className="space-y-4 text-xs">
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block font-semibold text-slate-700 mb-1">Tema Utama</label>
+                  <label className="block font-semibold text-ink-soft mb-1">Tema Utama</label>
                   <input
                     type="text"
                     value={theme}
                     onChange={e => setTheme(e.target.value)}
                     required
-                    className="w-full border border-slate-300 rounded px-2.5 py-1.5 focus:ring-1 focus:ring-slate-900 outline-none"
+                    className="w-full border border-line rounded px-2 py-1 focus:ring-1 focus:ring-brass/30 outline-none"
                   />
                 </div>
                 <div>
-                  <label className="block font-semibold text-slate-700 mb-1">Sub-Tema</label>
+                  <label className="block font-semibold text-ink-soft mb-1">Sub-Tema</label>
                   <input
                     type="text"
                     value={subTheme}
                     onChange={e => setSubTheme(e.target.value)}
                     required
-                    className="w-full border border-slate-300 rounded px-2.5 py-1.5 focus:ring-1 focus:ring-slate-900 outline-none"
+                    className="w-full border border-line rounded px-2 py-1 focus:ring-1 focus:ring-brass/30 outline-none"
                   />
                 </div>
               </div>
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block font-semibold text-slate-700 mb-1">Nama Aktivitas</label>
+                  <label className="block font-semibold text-ink-soft mb-1">Nama Aktivitas</label>
                   <input
                     type="text"
                     placeholder="mis. Sentra Balok: Membangun Menara Rumah"
                     value={activityName}
                     onChange={e => setActivityName(e.target.value)}
                     required
-                    className="w-full border border-slate-300 rounded px-2.5 py-1.5 focus:ring-1 focus:ring-slate-900 outline-none"
+                    className="w-full border border-line rounded px-2 py-1 focus:ring-1 focus:ring-brass/30 outline-none"
                   />
                 </div>
                 <div>
-                  <label className="block font-semibold text-slate-700 mb-1">Waktu Pelaksanaan</label>
+                  <label className="block font-semibold text-ink-soft mb-1">Waktu Pelaksanaan</label>
                   <input
                     type="text"
                     value={timeSlot}
                     onChange={e => setTimeSlot(e.target.value)}
                     required
-                    className="w-full border border-slate-300 rounded px-2.5 py-1.5 focus:ring-1 focus:ring-slate-900 outline-none"
+                    className="w-full border border-line rounded px-2 py-1 focus:ring-1 focus:ring-brass/30 outline-none"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block font-semibold text-slate-700 mb-1.5">Fokus Capaian Perkembangan:</label>
+                <label className="block font-semibold text-ink-soft mb-1.5">Fokus Capaian Perkembangan:</label>
                 <div className="flex flex-wrap gap-2">
                   {availableDomains.map(d => {
                     const isChecked = selectedDomains.includes(d.key);
@@ -368,10 +360,10 @@ export const TeacherDailyWorkWorkspace: React.FC = () => {
                         type="button"
                         key={d.key}
                         onClick={() => toggleDomainSelection(d.key)}
-                        className={`px-2.5 py-1 rounded text-[11px] font-medium border transition-colors ${
+                        className={`px-2 py-1 rounded text-[11px] font-medium border transition-colors ${
                           isChecked 
-                            ? 'bg-slate-900 text-white border-slate-900' 
-                            : 'bg-slate-50 text-slate-600 border-slate-200 hover:bg-slate-100'
+                            ? 'bg-brand text-on-brand border-brand' 
+                            : 'bg-surface-subtle text-ink-soft border-line hover-only:bg-surface-subtle'
                         }`}
                       >
                         {d.label}
@@ -382,38 +374,38 @@ export const TeacherDailyWorkWorkspace: React.FC = () => {
               </div>
 
               <div>
-                <label className="block font-semibold text-slate-700 mb-1">Bahan & Perlengkapan (Satu per baris):</label>
+                <label className="block font-semibold text-ink-soft mb-1">Bahan & Perlengkapan (Satu per baris):</label>
                 <textarea
                   rows={3}
                   value={materials}
                   onChange={e => setMaterials(e.target.value)}
                   placeholder="Kertas gambar A3&#10;Cat warna primer non-toksik&#10;Lap pembersih"
-                  className="w-full border border-slate-300 rounded px-2.5 py-1.5 focus:ring-1 focus:ring-slate-900 outline-none"
+                  className="w-full border border-line rounded px-2 py-1 focus:ring-1 focus:ring-brass/30 outline-none"
                 />
               </div>
 
               <div>
-                <label className="block font-semibold text-slate-700 mb-1">Langkah-Langkah Kegiatan (Satu per baris):</label>
+                <label className="block font-semibold text-ink-soft mb-1">Langkah-Langkah Kegiatan (Satu per baris):</label>
                 <textarea
                   rows={4}
                   value={steps}
                   onChange={e => setSteps(e.target.value)}
                   placeholder="1. Pijakan sebelum main: Berdoa dan penjelasan aturan sentra&#10;2. Pijakan saat main: Eksplorasi mandiri dan stimulasi guru&#10;3. Pijakan setelah main: Membereskan mainan bersama"
-                  className="w-full border border-slate-300 rounded px-2.5 py-1.5 focus:ring-1 focus:ring-slate-900 outline-none"
+                  className="w-full border border-line rounded px-2 py-1 focus:ring-1 focus:ring-brass/30 outline-none"
                 />
               </div>
 
-              <div className="flex flex-col md:flex-row items-stretch md:items-center justify-end gap-3 pt-4 border-t border-slate-100">
+              <div className="flex flex-col medium:flex-row items-stretch medium:items-center justify-end gap-3 pt-4 border-t border-line-soft">
                 <button
                   type="button"
                   onClick={() => setShowAddModal(false)}
-                  className="w-full md:w-auto px-4 py-2 md:py-1.5 rounded border border-slate-300 text-slate-700 hover:bg-slate-50 font-medium text-center"
+                  className="w-full medium:w-auto px-4 py-2 medium:py-1 rounded border border-line text-ink-soft hover-only:bg-surface-subtle font-medium text-center"
                 >
                   Batal
                 </button>
                 <button
                   type="submit"
-                  className="w-full md:w-auto px-4 py-2 md:py-1.5 rounded bg-slate-900 text-white hover:bg-slate-800 font-semibold text-center"
+                  className="w-full medium:w-auto px-4 py-2 medium:py-1 rounded bg-brand text-on-brand hover-only:bg-surface-inset font-semibold text-center"
                 >
                   Simpan Rencana
                 </button>
@@ -425,16 +417,16 @@ export const TeacherDailyWorkWorkspace: React.FC = () => {
 
       {/* Modal Teacher Reflection */}
       {reflectionModalActivity && (
-        <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-xl shadow-2xl border border-slate-200 max-w-md w-full p-6 text-xs">
-            <h3 className="text-base font-bold text-slate-900 mb-2">
+        <div className="fixed inset-0 bg-brand/60 backdrop-blur-xs flex items-center justify-center p-4 z-50">
+          <div className="bg-surface rounded-field shadow-floating border border-line max-w-md w-full p-6 text-xs">
+            <h3 className="text-base font-bold text-ink mb-2">
               Refleksi Guru Setelah Pelaksanaan
             </h3>
-            <p className="text-slate-500 mb-4">
-              Aktivitas: <span className="font-semibold text-slate-800">{reflectionModalActivity.activityName}</span>
+            <p className="text-ink-soft mb-4">
+              Aktivitas: <span className="font-semibold text-ink">{reflectionModalActivity.activityName}</span>
             </p>
             <div className="space-y-3">
-              <label className="block font-semibold text-slate-700">
+              <label className="block font-semibold text-ink-soft">
                 Bagaimana respon anak-anak? Adakah anak yang memerlukan bimbingan khusus?
               </label>
               <textarea
@@ -442,21 +434,21 @@ export const TeacherDailyWorkWorkspace: React.FC = () => {
                 value={reflectionText}
                 onChange={e => setReflectionText(e.target.value)}
                 placeholder="Contoh: Seluruh anak antusias berpartisipasi. Kenzo menunjukkan inisiatif membagi giliran bermain balok kepada temannya..."
-                className="w-full border border-slate-300 rounded-md p-2.5 outline-none focus:ring-1 focus:ring-slate-900"
+                className="w-full border border-line rounded-md p-2 outline-none focus:ring-1 focus:ring-brass/30"
               />
             </div>
-            <div className="flex flex-col md:flex-row items-stretch md:items-center justify-end gap-3 mt-4 pt-4 border-t border-slate-100">
+            <div className="flex flex-col medium:flex-row items-stretch medium:items-center justify-end gap-3 mt-4 pt-4 border-t border-line-soft">
               <button
                 type="button"
                 onClick={() => setReflectionModalActivity(null)}
-                className="w-full md:w-auto px-4 py-2 md:py-1.5 rounded border border-slate-300 text-slate-700 font-medium text-center"
+                className="w-full medium:w-auto px-4 py-2 medium:py-1 rounded border border-line text-ink-soft font-medium text-center"
               >
                 Tutup
               </button>
               <button
                 type="button"
                 onClick={handleSaveReflection}
-                className="w-full md:w-auto px-4 py-2 md:py-1.5 rounded bg-emerald-700 text-white font-semibold hover:bg-emerald-800 text-center"
+                className="w-full medium:w-auto px-4 py-2 medium:py-1 rounded bg-emerald-700 text-on-brand font-semibold hover-only:bg-emerald-800 text-center"
               >
                 Simpan & Tandai Selesai
               </button>

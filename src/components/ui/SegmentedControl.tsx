@@ -35,15 +35,15 @@ export const SegmentedControl: React.FC<SegmentedControlProps> = ({
       return <span className="shrink-0">{icon}</span>;
     }
     const IconComp = icon as React.ElementType;
-    return <IconComp className="w-3.5 h-3.5 shrink-0" />;
+    return <IconComp className="w-4 h-4 shrink-0" />;
   };
 
   return (
     <div
       role="tablist"
       className={`
-        bg-slate-100 p-1 rounded-xl flex items-center gap-1 border border-slate-200/60
-        overflow-x-auto no-scrollbar select-none
+        bg-surface-subtle p-1 rounded-field flex items-center gap-1 border border-line
+        overflow-x-auto no-scrollbar select-none w-full expanded:w-fit
         ${className}
       `.trim().replace(/\s+/g, ' ')}
     >
@@ -58,23 +58,23 @@ export const SegmentedControl: React.FC<SegmentedControlProps> = ({
             aria-selected={isActive}
             onClick={() => onChange(option.id)}
             className={`
-              flex-1 flex items-center justify-center gap-1.5 rounded-lg font-semibold
-              transition-all duration-150 cursor-pointer active:scale-[0.98] whitespace-nowrap
-              ${isSm ? 'px-2.5 py-1 text-xs' : 'px-3.5 py-1.5 text-xs md:text-sm'}
+              flex-1 min-w-0 flex items-center justify-center gap-1.5 medium:gap-2 rounded-lg font-semibold
+              transition-all duration-150 cursor-pointer active:scale-[0.98]
+              ${isSm ? 'px-2 medium:px-3 py-1 text-[11px] medium:text-xs' : 'px-3 medium:px-4 py-2 text-xs medium:text-sm'}
               ${
                 isActive
-                  ? 'bg-white text-slate-900 font-bold shadow-xs'
-                  : 'text-slate-600 hover:text-slate-900 hover:bg-white/50'
+                  ? 'bg-surface text-ink font-bold shadow-hairline border border-line-strong border-b-2 border-b-brass'
+                  : 'text-ink-soft border border-transparent hover-only:text-ink hover-only:bg-surface/50'
               }
             `.trim().replace(/\s+/g, ' ')}
           >
             {renderIcon(option.icon)}
-            <span>{option.label}</span>
+            <span className="truncate">{option.label}</span>
             {option.badge !== undefined && (
               <span
                 className={`
-                  px-1.5 py-0.2 rounded-full text-[10px] font-mono font-bold
-                  ${isActive ? 'bg-slate-100 text-slate-800' : 'bg-slate-200/80 text-slate-600'}
+                  px-1 py-0 rounded-full text-[10px] font-mono font-bold
+                  ${isActive ? 'bg-surface-subtle text-ink' : 'bg-line-soft text-ink-soft'}
                 `.trim()}
               >
                 {option.badge}

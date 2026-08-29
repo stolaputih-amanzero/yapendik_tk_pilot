@@ -69,7 +69,7 @@ export const AdaptiveDialog: React.FC<AdaptiveDialogProps> = ({
   return (
     <AnimatePresence>
       {isOpen && (
-        <div className="fixed inset-0 z-[70] flex flex-col justify-end lg:justify-center lg:items-center p-0 lg:p-6 overflow-hidden">
+        <div className="fixed inset-0 z-70 flex flex-col justify-end expanded:justify-center expanded:items-center p-0 expanded:p-6 overflow-hidden">
           {/* Backdrop */}
           <motion.div
             initial={{ opacity: 0 }}
@@ -77,7 +77,7 @@ export const AdaptiveDialog: React.FC<AdaptiveDialogProps> = ({
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
             onClick={onClose}
-            className="fixed inset-0 bg-slate-900/60 backdrop-blur-xs"
+            className="fixed inset-0 bg-brand/60 backdrop-blur-xs"
           />
 
           {/* Dialog Container */}
@@ -87,29 +87,29 @@ export const AdaptiveDialog: React.FC<AdaptiveDialogProps> = ({
             exit={{ y: '100%', opacity: 0 }}
             transition={amanauraSpring}
             className={`
-              relative z-10 w-full bg-white text-slate-900 shadow-2xl
-              rounded-t-3xl lg:rounded-3xl border border-slate-200/90
-              flex flex-col max-h-[88vh] lg:max-h-[85vh] overflow-hidden
+              relative z-10 w-full bg-surface text-ink shadow-floating
+              rounded-t-3xl expanded:rounded-3xl border border-line
+              flex flex-col max-h-[88vh] expanded:max-h-[85vh] overflow-hidden
               ${maxWidthMap[maxWidth]}
               ${className}
             `.trim().replace(/\s+/g, ' ')}
           >
             {/* Mobile Pull-Down / Drag Handle */}
-            <div className="lg:hidden pt-3 pb-1 flex justify-center shrink-0">
-              <div className="w-12 h-1.5 bg-slate-300 rounded-full" />
+            <div className="expanded:hidden pt-3 pb-1 flex justify-center shrink-0">
+              <div className="w-12 h-1.5 bg-line-strong motif-poleng rounded-full" />
             </div>
 
             {/* Header */}
             {(title || description) && (
-              <div className="px-5 py-4 lg:px-6 lg:py-5 border-b border-slate-100 flex items-start justify-between gap-4 shrink-0 bg-white">
+              <div className="px-5 py-4 expanded:px-6 expanded:py-5 border-b border-line-soft flex items-start justify-between gap-4 shrink-0 bg-surface">
                 <div className="space-y-1 min-w-0 flex-1">
                   {title && (
-                    <h3 className="text-base lg:text-lg font-black text-slate-900 tracking-tight truncate">
+                    <h3 className="text-base expanded:text-lg font-black text-ink tracking-tight truncate">
                       {title}
                     </h3>
                   )}
                   {description && (
-                    <p className="text-xs text-slate-500 font-medium">
+                    <p className="text-xs text-ink-soft font-medium">
                       {description}
                     </p>
                   )}
@@ -117,7 +117,7 @@ export const AdaptiveDialog: React.FC<AdaptiveDialogProps> = ({
                 <button
                   type="button"
                   onClick={onClose}
-                  className="p-1.5 rounded-xl text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition cursor-pointer shrink-0"
+                  className="p-2 rounded-field text-ink-faint hover-only:text-ink hover-only:bg-surface-subtle transition cursor-pointer shrink-0"
                   aria-label="Tutup dialog"
                 >
                   <X className="w-5 h-5" />
@@ -126,13 +126,13 @@ export const AdaptiveDialog: React.FC<AdaptiveDialogProps> = ({
             )}
 
             {/* Body */}
-            <div className="p-5 lg:p-6 overflow-y-auto flex-1 space-y-4">
+            <div className="p-4 expanded:p-6 overflow-y-auto flex-1 space-y-4">
               {children}
             </div>
 
             {/* Footer */}
             {footer && (
-              <div className="px-5 py-3.5 lg:px-6 lg:py-4 bg-slate-50/80 border-t border-slate-100 flex flex-col-reverse sm:flex-row items-stretch sm:items-center sm:justify-end gap-2.5 shrink-0">
+              <div className="px-5 py-3 expanded:px-6 expanded:py-4 bg-surface-subtle/80 border-t border-line-soft flex flex-col-reverse medium:flex-row items-stretch medium:items-center medium:justify-end gap-2 shrink-0">
                 {footer}
               </div>
             )}

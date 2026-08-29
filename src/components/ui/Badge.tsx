@@ -5,7 +5,7 @@
 
 import React from 'react';
 
-export type BadgeVariant = 'success' | 'warning' | 'danger' | 'info' | 'lppa' | 'neutral';
+export type BadgeVariant = 'success' | 'warning' | 'danger' | 'info' | 'lppa' | 'brand' | 'neutral';
 
 export interface BadgeProps extends React.HTMLAttributes<HTMLSpanElement> {
   variant?: BadgeVariant;
@@ -16,35 +16,40 @@ export interface BadgeProps extends React.HTMLAttributes<HTMLSpanElement> {
 }
 
 const variantStyles: Record<BadgeVariant, { container: string; dot: string; ping: string }> = {
+  brand: {
+    container: 'bg-brand text-on-brand border-line-strong',
+    dot: 'bg-brass',
+    ping: 'bg-brass/60'
+  },
   success: {
-    container: 'bg-emerald-50 text-emerald-800 border-emerald-200/80',
-    dot: 'bg-emerald-500',
-    ping: 'bg-emerald-400'
+    container: 'bg-success-tint text-success-deep border-success-line',
+    dot: 'bg-success',
+    ping: 'bg-success/60'
   },
   warning: {
-    container: 'bg-amber-50 text-amber-900 border-amber-200/80',
-    dot: 'bg-amber-500',
-    ping: 'bg-amber-400'
+    container: 'bg-warning-tint text-warning-deep border-warning-line',
+    dot: 'bg-warning',
+    ping: 'bg-warning/60'
   },
   danger: {
-    container: 'bg-rose-50 text-rose-800 border-rose-200/80',
-    dot: 'bg-rose-500',
-    ping: 'bg-rose-400'
+    container: 'bg-danger-tint text-danger-deep border-danger-line',
+    dot: 'bg-danger',
+    ping: 'bg-danger/60'
   },
   info: {
-    container: 'bg-sky-50 text-sky-800 border-sky-200/80',
-    dot: 'bg-sky-500',
-    ping: 'bg-sky-400'
+    container: 'bg-info-tint text-info-deep border-info-line',
+    dot: 'bg-info',
+    ping: 'bg-info/60'
   },
   lppa: {
-    container: 'bg-purple-50 text-purple-800 border-purple-200/80',
-    dot: 'bg-purple-500',
-    ping: 'bg-purple-400'
+    container: 'bg-lppa-tint text-lppa-deep border-lppa-line',
+    dot: 'bg-lppa',
+    ping: 'bg-lppa/60'
   },
   neutral: {
-    container: 'bg-slate-100 text-slate-700 border-slate-200',
-    dot: 'bg-slate-400',
-    ping: 'bg-slate-300'
+    container: 'bg-surface-subtle text-ink-soft border-line',
+    dot: 'bg-ink-faint',
+    ping: 'bg-line-strong'
   }
 };
 
@@ -56,13 +61,13 @@ export const Badge: React.FC<BadgeProps> = ({
   className = '',
   ...props
 }) => {
-  const current = variantStyles[variant];
+  const current = variantStyles[variant] || variantStyles.neutral;
 
   return (
     <span
       className={`
-        font-mono text-[11px] font-bold px-2.5 py-0.5 rounded-full border
-        inline-flex items-center gap-1.5 shrink-0 select-none
+        font-mono text-[11px] font-bold px-2 py-1 rounded-full border
+        inline-flex items-center gap-2 shrink-0 select-none
         ${current.container}
         ${className}
       `.trim().replace(/\s+/g, ' ')}
