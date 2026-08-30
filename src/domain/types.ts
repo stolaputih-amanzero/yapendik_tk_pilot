@@ -11,7 +11,8 @@ export type Role =
   | 'TEACHER'
   | 'ASSISTANT_TEACHER'
   | 'STAFF'
-  | 'GUARDIAN';
+  | 'GUARDIAN'
+  | 'APPLICANT';
 
 export type SchoolLevel = 'TK' | 'SD' | 'SMP' | 'SMA';
 

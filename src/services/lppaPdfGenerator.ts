@@ -1,5 +1,5 @@
 /**
- * Yapendik School OS — LPPA Native PDF Vector Generator
+ * Amanaura OS — LPPA Native PDF Vector Generator
  * 
  * Direct programmatic vector PDF generator using jsPDF.
  * Zero external DOM dependency, zero html2canvas quirks, guaranteed instantaneous download
@@ -322,7 +322,7 @@ export function generateAndDownloadLppaPdf(record: CanonicalPublishedLppaRecord)
   doc.setFontSize(6.5);
   doc.setTextColor(148, 163, 184);
   doc.text(`No. Dokumen Resmi: ${meta.official_report_number}  •  SHA-256: ${meta.canonical_checksum_sha256.slice(0, 28)}...`, marginX, currentY);
-  doc.text('Verifikasi Kanonikal Yapendik School OS', marginX + contentWidth, currentY, { align: 'right' });
+  doc.text('Verifikasi Dokumen Resmi Portofolio Digital', marginX + contentWidth, currentY, { align: 'right' });
 
   // 8. TRIGGER DIRECT FILE DOWNLOAD
   doc.save(filename);

@@ -20,7 +20,9 @@ const FORBIDDEN_RULES = [
   { regex: /\\buppercase\\b(?!.*\\btracking-wider\\b)/, name: 'R-TRACKING-UPPER: Elemen dengan uppercase WAJIB tracking-wider' },
   { regex: /\b(motif-poleng|padma|gunungan)\b/, name: 'R-ORNAMENT: Zero-Ornament Doctrine violation (motif-poleng/padma/gunungan dilarang)' },
   { regex: /ClassroomPulseBanner.*border-warning-line/, name: 'R-FLAT-BOX: Kotak alert border-warning-line dilarang pada banner kehadiran (Wajib divide-y divide-line-hairline)' },
-  { regex: /className=['"][^'"]*?(?<!focus-visible:)(?<!focus:)(?<!hover-only:)(?<!hover:)\bshadow-luminescent\b/, name: 'R-GLOW: shadow-luminescent tanpa prefix interaksi (Wajib focus-visible: / hover-only:)' }
+  { regex: /className=['"][^'"]*?(?<!focus-visible:)(?<!focus:)(?<!hover-only:)(?<!hover:)\bshadow-luminescent\b/, name: 'R-GLOW: shadow-luminescent tanpa prefix interaksi (Wajib focus-visible: / hover-only:)' },
+  { regex: /(?<!TK\s)(?<!Yayasan\s)\bYapendik\s+(School\s+)?OS\b/i, name: 'R-BRAND: Legacy "Yapendik OS" Brand Slot Violation (Wajib gunakan "Amanaura OS")' },
+  { regex: /\b(?:ease-spring|ease-bounce|--ease-spring|--ease-bounce)\b/, name: 'R-PHYSICS: Competing bezier spring violation (Amanaura Spring {380,32,0.8} is the sole motion physics)' }
 ];
 
 const ALLOWED_FILES = [
@@ -52,6 +54,9 @@ function scanDir(dir, fileList = []) {
 
 const srcDir = path.resolve('src');
 const allFiles = scanDir(srcDir);
+if (fs.existsSync(path.resolve('index.html'))) {
+  allFiles.push(path.resolve('index.html'));
+}
 
 let violationCount = 0;
 const violationsByFile = {};
@@ -131,6 +136,21 @@ if (fs.existsSync(SPECIMEN_FULL_PATH)) {
   });
 }
 
+
+// Validate Manifest PWA Brand (R-BRAND)
+const manifestPath = path.resolve('public', 'manifest.json');
+if (fs.existsSync(manifestPath)) {
+  const manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf8'));
+  if (manifest.name !== 'Amanaura OS') {
+    violationCount++;
+    if (!violationsByFile['public/manifest.json']) violationsByFile['public/manifest.json'] = [];
+    violationsByFile['public/manifest.json'].push({
+      lineNum: 1,
+      line: `name: "${manifest.name}"`,
+      name: 'R-BRAND: manifest.name must be "Amanaura OS"'
+    });
+  }
+}
 
 console.log('════════════════════════════════════════════════════════════════');
 console.log('🏛️  AMANAURA DESIGN SYSTEM — DEEP STRUCTURAL CI GUARD AUDIT');

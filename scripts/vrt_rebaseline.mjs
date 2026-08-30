@@ -1,7 +1,7 @@
 /**
- * Yapendik School OS — Visual Regression Testing (VRT) Re-baseline Engine
- * Captures 3 MD3 Viewports (COMPACT, MEDIUM, EXPANDED) × 2 Themes (Light, Dark)
- * Across all Keluarga A + Keluarga B key pages.
+ * Amanaura OS × FLOW — Visual Regression Testing (VRT) Re-baseline Engine
+ * Captures 3 Viewports (COMPACT, MEDIUM, EXPANDED) × 2 Themes (Ivory Canvas, Midnight Sanctuary)
+ * Across 14 Canonical Workspaces (84 snapshots total).
  */
 
 import { chromium } from '@playwright/test';
@@ -18,38 +18,41 @@ const VIEWPORTS = [
 ];
 
 const THEMES = [
-  { name: 'light', label: 'Frangipani Day' },
-  { name: 'dark', label: 'Night Temple' }
+  { name: 'light', label: 'Ivory Canvas' },
+  { name: 'dark', label: 'Midnight Sanctuary' }
 ];
 
 const ROUTES = [
-  { hash: '#beranda-guru', name: 'beranda-guru', title: 'Beranda Kelas & Guru' },
-  { hash: '#presensi', name: 'presensi', title: 'B-1 Presensi Harian' },
-  { hash: '#adopsi-ks', name: 'adopsi-ks', title: 'A-1 Inbox Adopsi Kebijakan KS' },
-  { hash: '#yayasan', name: 'yayasan', title: 'A-3 Foundation Console' },
-  { hash: '#percontohan', name: 'spesimen-hidup', title: 'A-4 Pusat Kebijakan & Spesimen' },
-  { hash: '#kerja-harian', name: 'kerja-harian-guru', title: 'A-5 Agenda & Kerja Harian Guru' },
-  { hash: '#observasi', name: 'catatan-observasi', title: 'A-5 Detail Observasi & Anekdot' },
-  { hash: '#jejak-anak', name: 'jejak-anak', title: 'Jejak Perkembangan Anak' },
+  { hash: '#beranda-guru', name: 'beranda-guru', title: 'Beranda Kelas' },
+  { hash: '#presensi', name: 'presensi', title: 'Presensi Harian' },
+  { hash: '#kerja-harian', name: 'kerja-harian', title: 'Jurnal Harian' },
+  { hash: '#observasi', name: 'observasi', title: 'Momen Belajar' },
+  { hash: '#perkembangan', name: 'perkembangan', title: 'Rapor LPPA' },
+  { hash: '#jejak-anak', name: 'jejak-anak', title: 'Jejak Anak' },
   { hash: '#buku-penghubung', name: 'buku-penghubung', title: 'Buku Penghubung' },
-  { hash: '#siklus-akademik', name: 'siklus-akademik', title: 'B-4 Siklus Akademik & Semester' },
-  { hash: '#uji-otorisasi', name: 'uji-otorisasi', title: 'B-5 Uji Otorisasi & Log Keamanan' }
+  { hash: '#portal-keluarga', name: 'portal-keluarga', title: 'Portal Keluarga' },
+  { hash: '#adopsi-ks', name: 'adopsi-ks', title: 'Kotak Kebijakan' },
+  { hash: '#yayasan', name: 'yayasan', title: 'Console Yayasan' },
+  { hash: '#kesehatan-sekolah', name: 'kesehatan-sekolah', title: 'Statistik Unit' },
+  { hash: '#siklus-akademik', name: 'siklus-akademik', title: 'Tahun Ajaran' },
+  { hash: '#uji-otorisasi', name: 'uji-otorisasi', title: 'Uji Otorisasi' },
+  { hash: '#percontohan', name: 'percontohan', title: 'Living Contract & Token Specimen' }
 ];
 
-const OUT_DIR = path.resolve('tests', 'vrt-baseline', 'v4.0');
+const OUT_DIR = path.resolve('tests', 'vrt-baseline', 'v5.0_amanaura_flow');
 if (!fs.existsSync(OUT_DIR)) {
   fs.mkdirSync(OUT_DIR, { recursive: true });
 }
 
 async function run() {
   console.log('════════════════════════════════════════════════════════════════');
-  console.log('🏛️  AMANAURA DESIGN SYSTEM v4.0 — VRT RE-BASELINE ENGINE');
+  console.log('🏛️  AMANAURA OS × FLOW — VRT RE-BASELINE ENGINE (84 SNAPSHOTS)');
   console.log('════════════════════════════════════════════════════════════════');
 
   const browser = await chromium.launch({ headless: true });
   const manifest = {
     timestamp: new Date().toISOString(),
-    version: '4.0.0-crystal-sovereign',
+    version: '1.0.0-amanaura-os-flow-sealed',
     totalCaptures: 0,
     files: []
   };

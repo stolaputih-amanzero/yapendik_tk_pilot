@@ -67,7 +67,7 @@ export const SupabaseSettingsModal: React.FC<SupabaseSettingsModalProps> = ({ is
         </div>
 
         <p className="text-ink-soft mb-4 leading-relaxed">
-          Yapendik School OS dirancang dengan arsitektur <i>Online-First</i> dan repositori adaptif terisolasi.
+          Amanaura OS dirancang dengan arsitektur <i>Online-First</i> dan repositori adaptif terisolasi.
         </p>
 
         {/* Current status banner */}

@@ -9,6 +9,7 @@ import { PremiumLoginScreen } from './components/auth/PremiumLoginScreen';
 import { TopBar, WorkspaceTab } from './components/layout/TopBar';
 import { Sidebar } from './components/layout/Sidebar';
 import { MobileOmniBar } from './components/layout/MobileOmniBar';
+import { ProfileDrawer } from './components/layout/ProfileDrawer';
 import { TeacherDailyWorkWorkspace } from './components/workspaces/TeacherDailyWorkWorkspace';
 import { ObservationWorkspace } from './components/workspaces/ObservationWorkspace';
 import { DevelopmentWorkspace } from './components/workspaces/DevelopmentWorkspace';
@@ -29,6 +30,7 @@ import { FoundationLayout } from './workspaces/foundation/FoundationLayout';
 import { HeadmasterAdoptionLayout } from './workspaces/school/HeadmasterAdoptionLayout';
 import { ApplicationDashboard } from './workspaces/admissions/portal/ApplicationDashboard';
 import { HeadmasterAdmissionsDesk } from './workspaces/admissions/school/HeadmasterAdmissionsDesk';
+import { GuardianWorkspace } from './workspaces/guardian/GuardianWorkspace';
 import { SupabaseSettingsModal } from './components/workspaces/SupabaseSettingsModal';
 import { db } from './db/database';
 import { Building2 } from 'lucide-react';
@@ -49,6 +51,7 @@ const TAB_TO_HASH: Record<WorkspaceTab, string> = {
   FOUNDATION_GOVERNANCE: 'yayasan',
   ADMISSIONS_PORTAL: 'portal-ppdb',
   ADMISSIONS_DESK: 'meja-ppdb',
+  GUARDIAN_WORKSPACE: 'portal-keluarga',
   ACADEMIC_LIFECYCLE: 'siklus-akademik',
   COHORT_PROMOTION: 'kenaikan-kelas',
   GRADUATION_REGISTRY: 'kelulusan',
@@ -79,6 +82,7 @@ const getInitialTab = (): WorkspaceTab => {
 const AppContent: React.FC = () => {
   const [activeTab, setActiveTab] = useState<WorkspaceTab>(getInitialTab);
   const [isSupabaseModalOpen, setIsSupabaseModalOpen] = useState(false);
+  const [isProfileDrawerOpen, setIsProfileDrawerOpen] = useState(false);
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState<boolean>(() => {
     if (typeof window !== 'undefined') {
       const saved = localStorage.getItem('yapendik_sidebar_collapsed');
@@ -107,12 +111,26 @@ const AppContent: React.FC = () => {
   const schools = db.getSchools();
 
   React.useEffect(() => {
-    if (currentPersona?.role === 'GUARDIAN' || currentPersona?.role === 'APPLICANT_GUARDIAN' || currentPersona?.role === 'PARENT_BUDI') {
-      if (activeTab === 'TEACHER_HOME' || activeTab === 'DAILY_WORK' || activeTab === 'ATTENDANCE' || activeTab === 'INSTITUTIONAL_HEALTH') {
-        setActiveTab('COMMUNICATION');
+    if (currentPersona?.role === 'APPLICANT' || currentPersona?.id === 'user_parent_bona') {
+      setActiveTab('ADMISSIONS_PORTAL');
+    } else if (currentPersona?.id === 'user_parent_budi') {
+      if (activeTab === 'TEACHER_HOME' || activeTab === 'DAILY_WORK' || activeTab === 'ATTENDANCE' || activeTab === 'INSTITUTIONAL_HEALTH' || activeTab === 'HEADMASTER_ADOPTION' || activeTab === 'FOUNDATION_GOVERNANCE') {
+        setActiveTab('GUARDIAN_WORKSPACE');
+      }
+    } else if (currentPersona?.role === 'HEADMASTER') {
+      if (activeTab === 'TEACHER_HOME' || activeTab === 'DAILY_WORK' || activeTab === 'ATTENDANCE' || activeTab === 'GUARDIAN_WORKSPACE') {
+        setActiveTab('HEADMASTER_ADOPTION');
+      }
+    } else if (currentPersona?.role === 'YAPENDIK_SUPERADMIN') {
+      if (activeTab === 'TEACHER_HOME' || activeTab === 'DAILY_WORK' || activeTab === 'ATTENDANCE' || activeTab === 'GUARDIAN_WORKSPACE') {
+        setActiveTab('FOUNDATION_GOVERNANCE');
+      }
+    } else if (currentPersona?.role === 'TEACHER') {
+      if (activeTab === 'HEADMASTER_ADOPTION' || activeTab === 'FOUNDATION_GOVERNANCE' || activeTab === 'GUARDIAN_WORKSPACE' || activeTab === 'ADMISSIONS_PORTAL') {
+        setActiveTab('TEACHER_HOME');
       }
     }
-  }, [currentPersona?.role]);
+  }, [currentPersona?.id, currentPersona?.role]);
 
   // 1. Listen for browser Back/Forward (hashchange)
   React.useEffect(() => {
@@ -144,7 +162,7 @@ const AppContent: React.FC = () => {
     return (
       <div className="min-h-[100dvh] flex flex-col items-center justify-center bg-canvas text-ink">
         <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-brand mb-4"></div>
-        <div className="font-semibold text-sm">Memuat Konteks Identitas Yapendik OS...</div>
+        <div className="font-semibold text-sm">Memuat Konteks Identitas Amanaura OS...</div>
       </div>
     );
   }
@@ -171,10 +189,12 @@ const AppContent: React.FC = () => {
 
       {/* Main Content Column */}
       <div className="flex-1 flex flex-col min-w-0 max-h-[100dvh] overflow-y-scroll bg-canvas expanded:bg-transparent relative scrollbar-stable">
-        {/* Global Top Bar (Header) */}
+        {/* Global Context Bar (TopBar Header) */}
         <TopBar
+          activeTab={activeTab}
           onOpenSupabaseModal={() => setIsSupabaseModalOpen(true)}
           onSelectTab={setActiveTab}
+          onOpenProfileDrawer={() => setIsProfileDrawerOpen(true)}
         />
 
         {/* Institutional Context Ribbon (Hidden on Mobile) */}
@@ -234,10 +254,11 @@ const AppContent: React.FC = () => {
           {activeTab === 'GRADUATION_REGISTRY' && <GraduationRegistryWorkspace />}
           {activeTab === 'FOUNDATION_GOVERNANCE' && <FoundationLayout />}
           {activeTab === 'HEADMASTER_ADOPTION' && <HeadmasterAdoptionLayout />}
+          {activeTab === 'GUARDIAN_WORKSPACE' && <GuardianWorkspace />}
           {activeTab === 'ADMISSIONS_PORTAL' && (
             <ApplicationDashboard 
-              creatorUid={currentPersona.id || 'user_parent_budi'} 
-              personId={currentPersona.personId || 'per_parent_budi'}
+              creatorUid={currentPersona.id || 'user_parent_bona'} 
+              personId={currentPersona.personId || 'per_parent_bona'}
               guardianName={currentPersona.name}
             />
           )}
@@ -261,15 +282,10 @@ const AppContent: React.FC = () => {
 
         {/* Institutional Footer (Hidden on Mobile) */}
         <footer className="hidden expanded:flex bg-surface border-t border-line py-4 px-6 text-xs text-ink-soft mt-auto shrink-0">
-          <div className="max-w-7xl mx-auto flex flex-col medium:flex-row items-center justify-between gap-2 w-full">
-            <div className="flex items-center space-x-2">
-              <span className="font-semibold text-ink">Yapendik School OS</span>
-              <span>—</span>
-              <span>Prinsip Konstitusi: Make It Simple • Keep It Future-Proof • Child-Centered</span>
-            </div>
-            <div className="font-mono text-[11px] text-ink-faint whitespace-nowrap">
-              Yapendik GPIB
-            </div>
+          <div className="max-w-7xl mx-auto flex items-center space-x-2 w-full">
+            <span className="font-semibold text-ink">Amanaura OS</span>
+            <span>—</span>
+            <span>Make It Simple • Keep It Future-Proof • Child-Centered</span>
           </div>
         </footer>
       </div>
@@ -284,6 +300,13 @@ const AppContent: React.FC = () => {
       <SupabaseSettingsModal
         isOpen={isSupabaseModalOpen}
         onClose={() => setIsSupabaseModalOpen(false)}
+      />
+
+      {/* Mobile Profile & Context Drawer (ADR-UX-011 §4.2) */}
+      <ProfileDrawer
+        isOpen={isProfileDrawerOpen}
+        onClose={() => setIsProfileDrawerOpen(false)}
+        onSelectTab={setActiveTab}
       />
     </div>
   );

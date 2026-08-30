@@ -516,7 +516,7 @@ export const LppaPrintPreviewModal: React.FC<Props> = ({
                 </div>
                 <div className="flex items-center gap-1 text-ink-faint">
                   <QrCode className="w-6 h-6" />
-                  <span>Verifikasi Kanonikal Yapendik OS</span>
+                  <span>Verifikasi Dokumen Resmi Portofolio Digital</span>
                 </div>
               </div>
             </div>

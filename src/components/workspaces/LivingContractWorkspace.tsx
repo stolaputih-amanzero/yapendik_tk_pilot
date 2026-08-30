@@ -64,6 +64,12 @@ function parseColorToRgb(colorStr: string): [number, number, number] | null {
   if (rgbMatch) {
     return [parseInt(rgbMatch[1], 10), parseInt(rgbMatch[2], 10), parseInt(rgbMatch[3], 10)];
   }
+  const oklchMatch = s.match(/oklch\(\s*([\d.]+)/i);
+  if (oklchMatch) {
+    const l = parseFloat(oklchMatch[1]);
+    const v = Math.round(l * 255);
+    return [v, v, v];
+  }
   return null;
 }
 
@@ -96,77 +102,79 @@ const TOKEN_GROUPS: TokenGroup[] = [
   {
     groupName: 'Canvas & Surface',
     tokens: [
-      { varName: '--p-canvas', label: 'Canvas Base' },
-      { varName: '--p-surface', label: 'Surface Card' },
-      { varName: '--p-surface-subtle', label: 'Surface Subtle' },
-      { varName: '--p-surface-inset', label: 'Surface Inset' },
+      { varName: '--canvas', label: 'Canvas Base' },
+      { varName: '--surface', label: 'Surface Card' },
+      { varName: '--surface-subtle', label: 'Surface Subtle' },
+      { varName: '--surface-glass', label: 'Surface Glass' },
+      { varName: '--surface-inset', label: 'Surface Inset' },
     ]
   },
   {
     groupName: 'Typography & Ink',
     tokens: [
-      { varName: '--p-ink', label: 'Ink Primary' },
-      { varName: '--p-ink-soft', label: 'Ink Soft' },
-      { varName: '--p-ink-faint', label: 'Ink Faint' },
+      { varName: '--ink', label: 'Ink Primary' },
+      { varName: '--ink-soft', label: 'Ink Soft' },
+      { varName: '--ink-faint', label: 'Ink Faint' },
     ]
   },
   {
     groupName: 'Lines & Hairlines',
     tokens: [
-      { varName: '--p-line', label: 'Line Standard' },
-      { varName: '--p-line-soft', label: 'Line Soft' },
-      { varName: '--p-line-strong', label: 'Line Strong' },
+      { varName: '--line', label: 'Line Standard' },
+      { varName: '--line-hairline', label: 'Line Hairline' },
+      { varName: '--line-soft', label: 'Line Soft' },
+      { varName: '--line-strong', label: 'Line Strong' },
     ]
   },
   {
     groupName: 'Brand & Signatures',
     tokens: [
-      { varName: '--p-brand', label: 'Brand Base' },
-      { varName: '--p-on-brand', label: 'On Brand Contrast' },
-      { varName: '--p-brand-primary', label: 'Brand Primary' },
-      { varName: '--p-brand-deep', label: 'Brand Deep' },
-      { varName: '--p-brick', label: 'Brick Accent' },
+      { varName: '--brand', label: 'Brand Base' },
+      { varName: '--brand-deep', label: 'Brand Deep' },
+      { varName: '--brand-tint', label: 'Brand Tint' },
+      { varName: '--brand-accent', label: 'Brand Accent (Gold)' },
+      { varName: '--accent-valor', label: 'Accent Valor (Gold)' },
+      { varName: '--on-brand', label: 'On Brand Contrast' },
+      { varName: '--on-accent', label: 'On Accent Contrast' },
     ]
   },
   {
     groupName: 'Semantics: Success & Warning',
     tokens: [
-      { varName: '--p-success', label: 'Success Solid' },
-      { varName: '--p-success-deep', label: 'Success Deep' },
-      { varName: '--p-success-tint', label: 'Success Tint' },
-      { varName: '--p-success-line', label: 'Success Line' },
-      { varName: '--p-warning', label: 'Warning Solid' },
-      { varName: '--p-warning-deep', label: 'Warning Deep' },
-      { varName: '--p-warning-tint', label: 'Warning Tint' },
-      { varName: '--p-warning-line', label: 'Warning Line' },
+      { varName: '--success', label: 'Success Solid' },
+      { varName: '--success-deep', label: 'Success Deep' },
+      { varName: '--success-tint', label: 'Success Tint' },
+      { varName: '--success-line', label: 'Success Line' },
+      { varName: '--warning', label: 'Warning Solid' },
+      { varName: '--warning-deep', label: 'Warning Deep' },
+      { varName: '--warning-tint', label: 'Warning Tint' },
+      { varName: '--warning-line', label: 'Warning Line' },
     ]
   },
   {
     groupName: 'Semantics: Danger, Info & LPPA',
     tokens: [
-      { varName: '--p-danger', label: 'Danger Solid' },
-      { varName: '--p-danger-deep', label: 'Danger Deep' },
-      { varName: '--p-danger-tint', label: 'Danger Tint' },
-      { varName: '--p-danger-line', label: 'Danger Line' },
-      { varName: '--p-info', label: 'Info Solid' },
-      { varName: '--p-info-deep', label: 'Info Deep' },
-      { varName: '--p-info-tint', label: 'Info Tint' },
-      { varName: '--p-info-line', label: 'Info Line' },
-      { varName: '--p-lppa', label: 'LPPA Solid' },
-      { varName: '--p-lppa-deep', label: 'LPPA Deep' },
-      { varName: '--p-lppa-tint', label: 'LPPA Tint' },
-      { varName: '--p-lppa-line', label: 'LPPA Line' },
+      { varName: '--danger', label: 'Danger Solid' },
+      { varName: '--danger-deep', label: 'Danger Deep' },
+      { varName: '--danger-tint', label: 'Danger Tint' },
+      { varName: '--danger-line', label: 'Danger Line' },
+      { varName: '--info', label: 'Info Solid' },
+      { varName: '--info-deep', label: 'Info Deep' },
+      { varName: '--info-tint', label: 'Info Tint' },
+      { varName: '--info-line', label: 'Info Line' },
+      { varName: '--lppa', label: 'LPPA Solid' },
+      { varName: '--lppa-deep', label: 'LPPA Deep' },
+      { varName: '--lppa-tint', label: 'LPPA Tint' },
+      { varName: '--lppa-line', label: 'LPPA Line' },
     ]
   },
   {
-    groupName: 'Jenjang Tint Tokens',
+    groupName: 'Jenjang Color Tokens',
     tokens: [
-      { varName: '--p-jj-kb', label: 'Jenjang KB (Sprout)' },
-      { varName: '--p-jj-tka', label: 'Jenjang TK-A (Sky)' },
-      { varName: '--p-jj-tkb', label: 'Jenjang TK-B (Amber)' },
-      { varName: '--p-jj-sd', label: 'Jenjang SD (Moss)' },
-      { varName: '--p-jj-smp', label: 'Jenjang SMP (River)' },
-      { varName: '--p-jj-sma', label: 'Jenjang SMA (Wisteria)' },
+      { varName: '--jj-tk', label: 'Jenjang TK (Amber)' },
+      { varName: '--jj-sd', label: 'Jenjang SD (Moss)' },
+      { varName: '--jj-smp', label: 'Jenjang SMP (River)' },
+      { varName: '--jj-sma', label: 'Jenjang SMA (Wisteria)' },
     ]
   }
 ];
@@ -206,7 +214,7 @@ export const LivingContractWorkspace: React.FC = () => {
           computed[tok.varName] = styles.getPropertyValue(tok.varName).trim();
         });
       });
-      const currentCanvas = styles.getPropertyValue('--p-canvas').trim();
+      const currentCanvas = styles.getPropertyValue('--canvas').trim();
       setCanvasColor(currentCanvas);
       setRuntimeValues(computed);
     }
@@ -229,17 +237,17 @@ export const LivingContractWorkspace: React.FC = () => {
         <div className="flex flex-col medium:flex-row medium:items-start justify-between gap-4">
           <div>
             <div className="flex items-center gap-1.5 text-brand-deep text-xs font-bold uppercase tracking-wider mb-1">
-              <Sparkles className="w-4 h-4 text-brand-deep shrink-0" />
+              <Sparkles className="w-4 h-4 text-brand-primary shrink-0" />
               <span>Sistem Desain • Spesimen Hidup</span>
             </div>
             <h1 className="text-[28px] medium:text-3xl font-bold tracking-tight text-ink leading-tight flex items-center gap-2 flex-wrap">
               <span>Spesimen Hidup Amanaura</span>
-              <span className="text-xs font-mono font-bold text-warning-deep bg-warning-tint px-3 py-1 rounded-full border border-warning-line">
-                v4.0 CRYSTAL SOVEREIGN
+              <span className="text-xs font-mono font-bold text-accent-valor bg-brand-tint px-3 py-1 rounded-full border border-line-hairline">
+                v5.0 AMANAURA FLOW
               </span>
             </h1>
             <p className="text-ink-soft text-sm max-w-2xl mt-1">
-              Spesimen Hidup Verifikasi 6 State (COMPACT / MEDIUM / EXPANDED × Frangipani Day / Night Temple) &amp; Validasi Purity Token.
+              Verifikasi 6 State (COMPACT / MEDIUM / EXPANDED × Ivory Canvas / Midnight Sanctuary) &amp; Validasi Purity Token.
             </p>
           </div>
 
@@ -251,7 +259,7 @@ export const LivingContractWorkspace: React.FC = () => {
               className="rounded-xl text-xs font-bold"
               leftIcon={isDark ? <Sun className="w-4 h-4 text-brand-primary" /> : <Moon className="w-4 h-4 text-brand-primary" />}
             >
-              {isDark ? 'Frangipani Day' : 'Night Temple'}
+              {isDark ? 'Ivory Canvas' : 'Midnight Sanctuary'}
             </Button>
           </div>
         </div>
@@ -276,7 +284,7 @@ export const LivingContractWorkspace: React.FC = () => {
               <span className="text-xs font-semibold text-ink-soft">Tema Aktif</span>
             </div>
             <span className="font-mono text-xs font-bold text-ink px-2 py-1 bg-surface rounded-lg border border-line-hairline whitespace-nowrap">
-              {isDark ? 'NIGHT TEMPLE' : 'FRANGIPANI DAY'}
+              {isDark ? 'MIDNIGHT SANCTUARY' : 'IVORY CANVAS'}
             </span>
           </div>
 
@@ -356,7 +364,7 @@ export const LivingContractWorkspace: React.FC = () => {
               <span className="text-xs font-bold text-ink">6. Circadian Light</span>
               <Badge variant="lppa">Siang &amp; Malam</Badge>
             </div>
-            <p className="text-xs text-ink-soft">Transisi Frangipani Day ke Night Temple tanpa silau.</p>
+            <p className="text-xs text-ink-soft">Transisi Ivory Canvas ke Midnight Sanctuary tanpa silau.</p>
           </div>
         </div>
       </section>
@@ -365,7 +373,7 @@ export const LivingContractWorkspace: React.FC = () => {
       <section className="space-y-4">
         <div className="border-b border-line pb-2">
           <h2 className="text-base font-bold text-ink">Palet Token Kanonikal</h2>
-          <p className="text-xs text-ink-soft">Swatch Runtime (getComputedStyle) &amp; Rasio Kontras terhadap Canvas ({canvasColor})</p>
+          <p className="text-xs text-ink-soft">Swatch Runtime (getComputedStyle) &amp; Rasio Kontras terhadap Canvas ({canvasColor || 'oklch'})</p>
         </div>
 
         <div className="space-y-6">
@@ -374,20 +382,36 @@ export const LivingContractWorkspace: React.FC = () => {
               <h3 className="text-xs font-bold uppercase tracking-wider text-ink-soft">{grp.groupName}</h3>
               <div className="grid grid-cols-2 medium:grid-cols-3 large:grid-cols-4 gap-2.5">
                 {grp.tokens.map((tok, tIdx) => {
-                  const hex = runtimeValues[tok.varName] || '...';
-                  const contrast = calculateContrastRatio(hex, canvasColor);
+                  const rawVal = runtimeValues[tok.varName];
+                  const isUndefined = !rawVal || rawVal.trim() === '';
+                  const contrast = calculateContrastRatio(rawVal || '', canvasColor);
                   return (
-                    <div key={tIdx} className="bg-surface-subtle border border-line-hairline rounded-xl p-3 flex items-center gap-3">
+                    <div 
+                      key={tIdx} 
+                      className={`rounded-xl p-3 flex items-center gap-3 border transition-colors ${
+                        isUndefined 
+                          ? 'bg-danger-tint/30 border-danger-line' 
+                          : 'bg-surface-subtle border-line-hairline'
+                      }`}
+                    >
                       <div 
-                        className="w-8 h-8 rounded-lg border border-line-hairline shrink-0 shadow-hairline"
-                        style={{ backgroundColor: `var(${tok.varName})` }}
-                      />
+                        className={`w-8 h-8 rounded-lg shrink-0 shadow-hairline border flex items-center justify-center ${
+                          isUndefined ? 'bg-danger border-danger-deep' : 'border-line-hairline'
+                        }`}
+                        style={isUndefined ? undefined : { backgroundColor: `var(${tok.varName})` }}
+                      >
+                        {isUndefined && <span className="text-[8px] font-mono font-bold text-on-brand">ERR</span>}
+                      </div>
                       <div className="min-w-0 flex-1">
                         <div className="text-xs font-bold text-ink truncate">{tok.label}</div>
                         <div className="font-mono text-[10px] text-ink-soft truncate">{tok.varName}</div>
-                        <div className="flex items-center justify-between text-[9px] font-mono text-ink-faint mt-0.5">
-                          <span>{hex}</span>
-                          <span className="text-ink font-semibold">{contrast}</span>
+                        <div className="flex items-center justify-between text-[9px] font-mono mt-0.5">
+                          <span className={isUndefined ? 'text-danger-deep font-bold' : 'text-ink-faint truncate max-w-[110px]'}>
+                            {isUndefined ? 'UNDEFINED' : rawVal}
+                          </span>
+                          <span className={`font-semibold shrink-0 ml-1 ${isUndefined ? 'text-danger-deep' : 'text-ink'}`}>
+                            {isUndefined ? '—' : contrast}
+                          </span>
                         </div>
                       </div>
                     </div>
@@ -563,19 +587,80 @@ export const LivingContractWorkspace: React.FC = () => {
               createdAt="29 Agu 2026, 14:00"
             />
           </div>
-
-          <div className="bg-surface-subtle border border-line-hairline p-4 rounded-xl space-y-3">
+        <div className="bg-surface-subtle border border-line-hairline p-4 rounded-xl space-y-3">
             <span className="text-xs font-bold text-ink block">ForbiddenActionGate (FB-06 Hard Block)</span>
             <ForbiddenActionGate 
               actionType="CLASSROOM_MUTATION"
-              fallback={
-                <div className="p-3 bg-danger-tint border border-danger-line rounded-xl">
-                  <Badge variant="danger" dot={true}>HARD-BLOCK (FB-06) Mutasi Kelas Dibatasi</Badge>
-                </div>
-              }
+              userRole="TEACHER"
             >
-              <Badge variant="success">Akses Terbuka</Badge>
+              <div className="text-xs text-ink-soft">
+                Gerbang blok mutasi lintas-sekolah aktif (FB-06).
+              </div>
             </ForbiddenActionGate>
+          </div>
+        </div>
+      </section>
+
+      {/* §5 FLOW Typography & Colored Shadows Showcase */}
+      <section className="space-y-4">
+        <div className="border-b border-line pb-2">
+          <h2 className="text-base font-bold text-ink">Sistem Tipografi &amp; Colored Shadows (FLOW Soul)</h2>
+          <p className="text-xs text-ink-soft">Geist Sans, Instrument Serif (Strict Allowlist), Geist Mono &amp; Navy-tinted Elevation</p>
+        </div>
+
+        {/* Typography Showcase */}
+        <div className="p-4 rounded-xl bg-surface-subtle border border-line-hairline space-y-4">
+          <div>
+            <span className="text-[10px] text-brand-deep font-bold uppercase tracking-wider block mb-1">
+              Display &amp; Seremonial (Instrument Serif)
+            </span>
+            <h3 className="font-serif text-3xl text-ink leading-tight">
+              Selamat Pagi, Pendidik Peradaban
+            </h3>
+            <p className="text-xs italic font-serif text-ink-soft mt-1">
+              "Setiap anak adalah bintang yang bertumbuh menurut orbit kemampuannya masing-masing."
+            </p>
+          </div>
+
+          <div className="border-t border-line-hairline pt-3">
+            <span className="text-[10px] text-brand-deep font-bold uppercase tracking-wider block mb-1">
+              UI &amp; Body Text (Geist Sans)
+            </span>
+            <p className="text-sm font-sans text-ink leading-relaxed">
+              Geist Sans menghadirkan keterbacaan modern yang sangat jernih dan taktil untuk alur kerja harian guru dan kepala sekolah.
+            </p>
+          </div>
+
+          <div className="border-t border-line-hairline pt-3">
+            <span className="text-[10px] text-brand-deep font-bold uppercase tracking-wider block mb-1">
+              Data &amp; Angka Presisi (Geist Mono — tabular-nums)
+            </span>
+            <div className="flex flex-wrap gap-4 text-xs font-mono tabular-nums text-ink">
+              <span className="p-2 rounded-lg bg-surface border border-line-hairline">NISN: 0012984921</span>
+              <span className="p-2 rounded-lg bg-surface border border-line-hairline">Jam Lokal: 08:30:15 WIB</span>
+              <span className="p-2 rounded-lg bg-surface border border-line-hairline">Ref: REF-YPK-2026-08</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Colored Shadows Demo */}
+        <div className="space-y-2">
+          <span className="text-xs font-bold uppercase tracking-wider text-ink-soft">
+            Navy-Tinted Colored Elevation (FLOW Floating Allowlist)
+          </span>
+          <div className="grid grid-cols-1 medium:grid-cols-3 gap-4 pt-1">
+            <div className="bg-surface p-5 shadow-soft rounded-xl border border-line-hairline space-y-1">
+              <span className="text-xs font-bold text-ink block">Shadow Soft</span>
+              <p className="text-xs text-ink-soft">Elevasi halus untuk kartu pratinjau dan floating item.</p>
+            </div>
+            <div className="bg-surface p-5 shadow-medium rounded-xl border border-line-hairline space-y-1">
+              <span className="text-xs font-bold text-ink block">Shadow Medium</span>
+              <p className="text-xs text-ink-soft">Elevasi menengah untuk dropdown, popover, dan tooltips.</p>
+            </div>
+            <div className="bg-surface p-5 shadow-floating rounded-xl border border-line-hairline space-y-1">
+              <span className="text-xs font-bold text-ink block">Shadow Floating</span>
+              <p className="text-xs text-ink-soft">Elevasi tinggi untuk Mobile Omni-Bar, FAB, dan modal dialog.</p>
+            </div>
           </div>
         </div>
       </section>

@@ -1,8 +1,10 @@
 /**
- * Yapendik School OS — Global Top Bar
+ * Amanaura OS × FLOW — Context Bar (TopBar)
+ * Architectural Specification: ADR-UX-011 §4.1
  * 
- * Clean Header Contract:
- * [ZONE 1: Brand Title] — [ZONE 3: Status & Mobile-Clean Persona Switcher]
+ * "Context Bar, Not Brand Bar"
+ * Left Zone: Active Page Title & Operational Context
+ * Right Zone: Presence Marker ✦, Quick Theme, & Avatar Profile Trigger
  */
 
 import React, { useState } from 'react';
@@ -11,13 +13,15 @@ import { useTheme } from '../../hooks/useTheme';
 import { 
   Building2, 
   Database, 
-  LogOut, 
-  CheckCircle2, 
   ChevronDown,
   Sun,
-  Moon
+  Moon,
+  Sparkles,
+  LogOut
 } from 'lucide-react';
 import { getSupabaseConfig } from '../../db/supabaseClient';
+import { getTabMetadata } from '../../config/routeRegistry';
+import { useConnectionStatus, getBreathStateMeta } from '../../hooks/useConnectionStatus';
 
 export type WorkspaceTab = 
   | 'TEACHER_HOME'
@@ -38,151 +42,199 @@ export type WorkspaceTab =
   | 'HEADMASTER_ADOPTION'
   | 'ADMISSIONS_PORTAL'
   | 'ADMISSIONS_DESK'
+  | 'GUARDIAN_WORKSPACE'
   | 'TESTS'
   | 'PERCONTOHAN';
 
 interface TopBarProps {
+  activeTab?: WorkspaceTab;
   onOpenSupabaseModal: () => void;
   onSelectTab?: (tab: WorkspaceTab) => void;
+  onOpenProfileDrawer?: () => void;
 }
 
 export const TopBar: React.FC<TopBarProps> = ({
+  activeTab = 'TEACHER_HOME',
   onOpenSupabaseModal,
-  onSelectTab
+  onSelectTab,
+  onOpenProfileDrawer
 }) => {
   const { currentPersona, personas, switchPersona, signOut } = useSecurityContext();
   const { isDark, toggleTheme } = useTheme();
-  const [showPersonaMenu, setShowPersonaMenu] = useState(false);
+  const { state: connectionState, queuedMutations } = useConnectionStatus();
+  const [showDesktopPersonaMenu, setShowDesktopPersonaMenu] = useState(false);
   const supabaseConfig = getSupabaseConfig();
-  const isSimulationEnabled = import.meta.env.VITE_ENABLE_SIMULATION === 'true';
+  const isSimulationEnabled = typeof import.meta !== 'undefined' && import.meta.env?.VITE_ENABLE_SIMULATION === 'true';
+
+  const tabMeta = getTabMetadata(activeTab);
+  const breathMeta = getBreathStateMeta(connectionState, queuedMutations);
+
+  const handleAvatarClick = () => {
+    if (onOpenProfileDrawer && window.innerWidth < 840) {
+      // Mobile / Tablet: Open Mobile Profile Drawer
+      onOpenProfileDrawer();
+    } else {
+      // Desktop: Toggle desktop quick menu
+      setShowDesktopPersonaMenu(prev => !prev);
+    }
+  };
 
   return (
-    <header className="bg-surface-glass backdrop-blur-xl border-b border-line-hairline text-ink sticky top-0 z-40 px-4 medium:px-6 h-16 flex items-center justify-between shadow-hairline min-w-0 shrink-0 transition-colors duration-300">
-      {/* ZONE 1: BRAND TITLE */}
+    <header 
+      data-testid="topbar"
+      className="bg-surface-glass backdrop-blur-xl border-b border-line-hairline text-ink sticky top-0 z-40 px-4 medium:px-6 h-16 flex items-center justify-between shadow-hairline min-w-0 shrink-0 transition-colors duration-300"
+    >
+      {/* ZONE 1: CONTEXT TITLE (Dynamic Active Page) */}
       <div className="flex items-center space-x-2.5 medium:space-x-3 shrink-0 min-w-0">
-        <Building2 className="w-5 h-5 text-brand-primary shrink-0" />
-        <div className="flex items-center space-x-1.5 min-w-0">
-          <span className="font-bold tracking-tight text-ink text-base medium:text-lg whitespace-nowrap truncate font-display">
-            Yapendik OS
+        <div className="flex flex-col min-w-0">
+          <div className="flex items-center space-x-2 min-w-0">
+            <h1 className="font-bold tracking-tight text-ink text-base medium:text-lg whitespace-nowrap truncate">
+              {tabMeta.title}
+            </h1>
+            <span 
+              className={`${breathMeta.colorClass} text-xs ${breathMeta.animationClass} select-none shrink-0`} 
+              aria-label={breathMeta.ariaLabel}
+              title={breathMeta.title}
+            >
+              ✦
+            </span>
+            {breathMeta.showCapsule && (
+              <span className="px-2 py-1 rounded-full bg-warning-tint text-warning-deep border border-warning-line text-[10px] font-mono font-semibold shrink-0 animate-in fade-in">
+                {breathMeta.capsuleText}
+              </span>
+            )}
+          </div>
+          <span className="text-[10px] text-ink-faint hidden medium:block font-medium truncate">
+            {tabMeta.category} • {tabMeta.description}
           </span>
-          <span className="text-brand-primary text-xs animate-amanaura-breath select-none shrink-0" aria-hidden="true" title="Amanaura Breath ✦">✦</span>
         </div>
       </div>
 
-      {/* ZONE 3: ACTIONS & CLEAN CONTEXT SELECTOR */}
+      {/* ZONE 2: ACTIONS & AVATAR PROFILE TRIGGER */}
       <div className="flex items-center space-x-2 medium:space-x-3 shrink-0">
-        {/* Supabase status indicator (Hidden in production / simulation-disabled mode) */}
+        {/* Supabase status indicator (Simulation mode only) */}
         {isSimulationEnabled && (
           <button
+            type="button"
             onClick={onOpenSupabaseModal}
             title={supabaseConfig.statusMessage}
-            className="flex items-center space-x-1.5 px-2 py-1 rounded-control bg-surface-subtle hover-only:bg-surface-subtle/80 border border-line-hairline text-xs font-mono text-ink-soft transition-colors whitespace-nowrap shrink-0 cursor-pointer"
+            className="flex items-center space-x-1.5 px-3 py-2 rounded-control bg-surface-subtle hover-only:bg-surface border border-line-hairline text-xs font-mono text-ink-soft transition-colors whitespace-nowrap shrink-0 cursor-pointer min-h-[44px]"
           >
             <Database className={`w-4 h-4 ${supabaseConfig.isConnected ? 'text-success' : 'text-ink-faint'}`} />
-            <span className="hidden medium:inline">
-              {supabaseConfig.isConnected ? 'Supabase On' : 'Storage Engine'}
+            <span className="hidden large:inline">
+              {supabaseConfig.isConnected ? 'Supabase On' : 'Storage'}
             </span>
           </button>
         )}
 
-        {/* Dark/Light Mode Toggle */}
+        {/* Dark/Light Mode Quick Toggle */}
         <button
           type="button"
           onClick={toggleTheme}
-          aria-label={isDark ? "Beralih ke Crystal Day (Light Mode)" : "Beralih ke OLED Night (Dark Mode)"}
-          title={isDark ? "Beralih ke Crystal Day (Light Mode)" : "Beralih ke OLED Night (Dark Mode)"}
-          className="p-2 rounded-control bg-surface-subtle hover-only:bg-surface text-ink-soft hover-only:text-ink transition-colors cursor-pointer shrink-0 border border-line-hairline"
+          aria-label={isDark ? "Beralih ke Ivory Canvas (Light Mode)" : "Beralih ke Midnight Sanctuary (Dark Mode)"}
+          title={isDark ? "Beralih ke Ivory Canvas (Light Mode)" : "Beralih ke Midnight Sanctuary (Dark Mode)"}
+          className="p-3 rounded-control bg-surface-subtle hover-only:bg-surface text-ink-soft hover-only:text-ink transition-colors cursor-pointer shrink-0 border border-line-hairline min-h-[48px] min-w-[48px] flex items-center justify-center"
         >
           {isDark ? (
-            <Sun className="w-4 h-4 text-brand-accent animate-in fade-in" />
+            <Sun className="w-4 h-4 text-accent-valor" />
           ) : (
-            <Moon className="w-4 h-4 text-ink-soft animate-in fade-in" />
+            <Moon className="w-4 h-4 text-ink-soft" />
           )}
         </button>
 
-        {/* Persona Switcher Dropdown */}
+        {/* Avatar Profile Trigger (Touch Floor 48dp) */}
         <div className="relative">
           <button
-            onClick={() => setShowPersonaMenu(!showPersonaMenu)}
-            className="flex items-center space-x-2 p-1 medium:px-3 medium:py-1 rounded-control bg-surface-subtle hover-only:bg-surface-subtle/80 border border-line-hairline text-left transition-colors whitespace-nowrap cursor-pointer text-ink"
-            title={currentPersona?.name || 'Pengguna'}
+            type="button"
+            onClick={handleAvatarClick}
+            aria-label="Buka Menu Profil & Pengaturan"
+            className="flex items-center space-x-2 p-1 medium:px-3 medium:py-2 rounded-full medium:rounded-control bg-surface-subtle hover-only:bg-surface border border-line-hairline text-left transition-colors whitespace-nowrap cursor-pointer text-ink min-h-[48px] min-w-[48px]"
+            title={currentPersona?.name || 'Profil Pengguna'}
           >
-            <div className="w-7 h-7 rounded-full bg-brand-primary text-on-brand flex items-center justify-center text-xs font-bold shrink-0">
-              {currentPersona?.name.charAt(0) || 'U'}
-            </div>
-            <div className="text-xs hidden expanded:block leading-tight text-left min-w-0">
-              <div className="font-semibold text-ink truncate max-w-[140px] expanded:max-w-[180px]">
-                {currentPersona?.name || 'Pengguna'}
+            <div className="relative shrink-0">
+              <div className="w-8 h-8 rounded-full bg-brand-primary text-on-brand flex items-center justify-center text-xs font-bold shadow-soft">
+                {currentPersona?.name.charAt(0) || 'U'}
               </div>
-              <div className="text-ink-soft text-[10px] truncate max-w-[140px] expanded:max-w-[180px]">
-                {currentPersona?.role || 'AUTH'} • {currentPersona?.schoolName?.split(' ')[0] || 'Unit'}
-              </div>
+              {/* Presence Marker Breath ✦ */}
+              <span className="absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full bg-surface flex items-center justify-center">
+                <span className={`w-2 h-2 rounded-full ${breathMeta.state === 'ONLINE' || breathMeta.state === 'RECONCILING' ? 'bg-accent-valor' : 'bg-ink-faint'} ${breathMeta.animationClass}`} />
+              </span>
             </div>
-            <ChevronDown className="w-4 h-4 text-ink-faint hidden medium:block shrink-0" />
+
+            <div className="hidden medium:flex flex-col min-w-0 pr-1">
+              <span className="text-xs font-bold text-ink truncate max-w-[120px]">
+                {currentPersona?.name}
+              </span>
+              <span className="text-[10px] text-ink-faint font-medium truncate">
+                {currentPersona?.role}
+              </span>
+            </div>
+
+            <ChevronDown className="w-4 h-4 text-ink-faint hidden expanded:block shrink-0" />
           </button>
 
-          {showPersonaMenu && (
-            <div className="absolute right-0 mt-2 w-72 medium:w-80 rounded-card shadow-floating bg-surface border border-line-hairline p-2 z-50">
-              <div className="px-3 py-2 border-b border-line-soft mb-1">
-                <div className="text-xs font-bold text-ink uppercase tracking-wider">
-                  Ganti Konteks Persona
-                </div>
-                <div className="text-[11px] text-ink-soft mt-0.5 line-clamp-2">
-                  Uji perilaku sistem dari berbagai sudut pandang peran sekolah.
-                </div>
+          {/* Desktop Persona Dropdown Menu (Secondary on Desktop) */}
+          {showDesktopPersonaMenu && (
+            <div className="absolute right-0 mt-2 w-72 bg-surface border border-line-hairline rounded-card shadow-floating z-50 p-2 animate-in fade-in zoom-in-95 duration-150">
+              <div className="px-3 py-2 border-b border-line-hairline mb-1">
+                <div className="text-xs font-bold text-ink">{currentPersona?.name}</div>
+                <div className="text-[11px] text-ink-soft">{currentPersona?.schoolName || 'Unit Satuan'}</div>
               </div>
-              <div className="space-y-1 max-h-72 overflow-y-auto">
-                {personas.map(p => {
-                  const isSelected = p.id === currentPersona.id;
-                  return (
-                    <button
-                      key={p.id}
-                      onClick={() => {
-                        switchPersona(p.id);
-                        setShowPersonaMenu(false);
-                        if (onSelectTab) {
-                          if (p.role === 'GUARDIAN' || p.id === 'user_parent_budi' || p.id === 'user_parent_bona') {
-                            onSelectTab('ADMISSIONS_PORTAL');
-                          } else if (p.role === 'TEACHER') {
-                            onSelectTab('TEACHER_HOME');
-                          } else if (p.role === 'HEADMASTER') {
-                            onSelectTab('ADMISSIONS_DESK');
-                          } else if (p.role === 'YAPENDIK_SUPERADMIN') {
-                            onSelectTab('INSTITUTIONAL_HEALTH');
-                          }
+
+              <div className="text-[10px] font-bold text-ink-faint uppercase px-3 py-1 tracking-wider">
+                Ganti Peran (Simulasi)
+              </div>
+
+              <div className="max-h-48 overflow-y-auto space-y-0.5">
+                {personas.map(p => (
+                  <button
+                    key={p.id}
+                    type="button"
+                    onClick={() => {
+                      switchPersona(p.id);
+                      setShowDesktopPersonaMenu(false);
+                      if (onSelectTab) {
+                        if (p.role === 'APPLICANT' || p.id === 'user_parent_bona') {
+                          onSelectTab('ADMISSIONS_PORTAL');
+                        } else if (p.role === 'GUARDIAN' || p.id === 'user_parent_budi') {
+                          onSelectTab('GUARDIAN_WORKSPACE');
+                        } else if (p.role === 'TEACHER') {
+                          onSelectTab('TEACHER_HOME');
+                        } else if (p.role === 'HEADMASTER') {
+                          onSelectTab('HEADMASTER_ADOPTION');
+                        } else if (p.role === 'YAPENDIK_SUPERADMIN' || p.role === 'FOUNDATION_DIRECTOR') {
+                          onSelectTab('FOUNDATION_GOVERNANCE');
                         }
-                      }}
-                      className={`w-full text-left p-2 rounded-lg text-xs transition-colors flex items-start space-x-2.5 cursor-pointer ${
-                        isSelected ? 'bg-surface-subtle border border-line-strong' : 'hover-only:bg-surface-subtle border border-transparent'
-                      }`}
-                    >
-                      <div className={`w-6 h-6 rounded-full flex items-center justify-center font-bold text-xs shrink-0 mt-0.5 ${
-                        isSelected ? 'bg-brand text-on-brand' : 'bg-line-soft text-ink-soft'
-                      }`}>
-                        {p.name.charAt(0)}
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <div className="font-semibold text-ink truncate">{p.name}</div>
-                        <div className="text-ink-soft font-mono text-[10px] truncate whitespace-nowrap">{p.role}</div>
-                        <div className="text-ink-faint text-[11px] truncate">{p.schoolName}</div>
-                      </div>
-                      {isSelected && (
-                        <CheckCircle2 className="w-4 h-4 text-success shrink-0 mt-1" />
-                      )}
-                    </button>
-                  );
-                })}
+                      }
+                    }}
+                    className={`w-full px-3 py-2 text-left rounded-control text-xs flex items-center justify-between cursor-pointer transition-colors ${
+                      p.id === currentPersona?.id
+                        ? 'bg-surface-subtle font-bold text-brand-primary'
+                        : 'text-ink-soft hover-only:bg-surface-subtle/70 hover-only:text-ink'
+                    }`}
+                  >
+                    <div className="truncate">
+                      <div>{p.name}</div>
+                      <div className="text-[10px] text-ink-faint">{p.role}</div>
+                    </div>
+                    {p.id === currentPersona?.id && (
+                      <span className="text-accent-valor text-xs shrink-0">●</span>
+                    )}
+                  </button>
+                ))}
               </div>
-              <div className="mt-2 pt-2 border-t border-line-soft">
+
+              <div className="pt-1.5 mt-1 border-t border-line-hairline">
                 <button
+                  type="button"
                   onClick={() => {
+                    setShowDesktopPersonaMenu(false);
                     signOut();
-                    setShowPersonaMenu(false);
                   }}
-                  className="w-full text-left p-2 rounded-lg text-xs font-semibold text-danger-deep hover-only:bg-danger-tint transition-colors flex items-center space-x-2 cursor-pointer"
+                  className="w-full py-2 px-3 text-left rounded-control text-xs text-danger hover-only:bg-danger-tint font-medium flex items-center space-x-2 transition-colors cursor-pointer min-h-[44px]"
                 >
-                  <LogOut className="w-4 h-4 shrink-0" />
-                  <span>Keluar / Sign Out</span>
+                  <LogOut className="w-4 h-4" />
+                  <span>Keluar dari Sesi</span>
                 </button>
               </div>
             </div>

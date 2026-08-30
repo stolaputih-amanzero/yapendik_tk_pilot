@@ -60,7 +60,7 @@ export function translateGovernanceError(error: any): TranslatedGovernanceError 
     return {
       title: 'Sesi Kedaluwarsa / Belum Terautentikasi',
       message: 'Identitas sesi pengguna tidak ditemukan atau telah kedaluwarsa.',
-      actionSuggestion: 'Silakan masuk kembali (login) ke Yapendik School OS.',
+      actionSuggestion: 'Silakan masuk kembali (login) ke Amanaura OS.',
       isGovernanceError: true,
       code: 'UNAUTHENTICATED'
     };

@@ -31,6 +31,9 @@ import {
   Sparkles,
   Layers
 } from 'lucide-react';
+import { HeadmasterBriefing } from '../../components/workspaces/briefing/HeadmasterBriefing';
+import { HeadmasterBriefingData } from '../../types/briefingTypes';
+import { briefingEngine } from '../../services/BriefingEngine';
 
 export type AdoptionView = 'INBOX' | 'RESPONSES';
 
@@ -49,6 +52,7 @@ export const HeadmasterAdoptionLayout: React.FC = () => {
   const [outcomes, setOutcomes] = useState<ObservedOutcomeEffect[]>(() => {
     return institutionalLearningService.listOutcomes().filter(o => o.school_id === schoolId);
   });
+  const [briefingData, setBriefingData] = useState<HeadmasterBriefingData | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
   // Adoption Form State
@@ -75,6 +79,13 @@ export const HeadmasterAdoptionLayout: React.FC = () => {
       setActions(relevantActions);
       setAdoptions(schoolAdoptions);
       setOutcomes(schoolOutcomes);
+
+      const bData = await briefingEngine.getBriefingDataForUser(
+        'HEADMASTER',
+        schoolId,
+        currentPersona?.personId
+      );
+      setBriefingData(bData as HeadmasterBriefingData);
     } catch (err) {
       console.error('Failed to load headmaster adoption data:', err);
     } finally {
@@ -163,9 +174,17 @@ export const HeadmasterAdoptionLayout: React.FC = () => {
 
   return (
     <div 
-      className="w-full max-w-6xl mx-auto px-4 medium:px-6 pt-6 pb-[160px] space-y-8 animate-in fade-in duration-200 text-ink"
+      className="w-full max-w-6xl mx-auto px-4 medium:px-6 pt-4 pb-[160px] space-y-6 animate-in fade-in duration-200 text-ink"
       data-testid="headmaster-adoption-hub"
     >
+      {/* Stage 6-A The Warm Briefing Header */}
+      {briefingData && (
+        <HeadmasterBriefing
+          data={briefingData}
+          onOpenAuthorityQueue={() => setActiveView('INBOX')}
+        />
+      )}
+
       {/* 1. HERO CANVAS (R-1 Hero Canvas) */}
       <header className="space-y-4">
         <div className="flex flex-col medium:flex-row medium:items-start justify-between gap-4">

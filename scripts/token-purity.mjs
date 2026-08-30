@@ -10,7 +10,11 @@ const FORBIDDEN_PATTERNS = [
   { regex: /\bring-(?:slate|gray)-\d+/, name: 'ring-neutral-raw' },
   { regex: /\btext-(?:red|amber|emerald|rose|green)-\d{2,3}\b/, name: 'text-color-raw' },
   { regex: /(fill|stroke)-(red|amber|emerald|rose|green|indigo|blue|slate|gray|zinc)-\d{2,3}/, name: 'fill-stroke-color-raw' },
-  { regex: /\b(?:bg|text|border|ring|fill)-brass(?:-soft)?\b/, name: 'deprecated-brass-token' }
+  { regex: /\b(?:bg|text|border|ring|fill)-brass(?:-soft)?\b/, name: 'deprecated-brass-token' },
+  { regex: /--p-[a-z0-9-]+/, name: 'zombie-p-prefix-token' },
+  { regex: /--shadow-ambient\b/, name: 'zombie-shadow-ambient-token' },
+  { regex: /--(?:brass|brick)(?:-[a-z0-9-]+)?\b/, name: 'zombie-brass-brick-token' },
+  { regex: /\b(?:bg|text|border|ring|fill)-brick(?:-[a-z0-9-]+)?\b/, name: 'deprecated-brick-token' }
 ];
 
 const ALLOWED_FILES = [

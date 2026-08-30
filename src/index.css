@@ -1,3 +1,13 @@
+@import "@fontsource/geist/400.css";
+@import "@fontsource/geist/500.css";
+@import "@fontsource/geist/600.css";
+@import "@fontsource/geist/700.css";
+
+@import "@fontsource/instrument-serif/400.css";
+@import "@fontsource/instrument-serif/400-italic.css";
+
+@import "@fontsource/geist-mono/400.css";
+@import "@fontsource/geist-mono/500.css";
 @import "@fontsource/jetbrains-mono/400.css";
 @import "@fontsource/jetbrains-mono/700.css";
 
@@ -7,74 +17,205 @@
 @custom-variant dark (&:where(.dark, .dark *));
 @custom-variant hover-only (@media (hover: hover));
 
-/* ═══ AMANAURA v4.0 — CRYSTAL SOVEREIGN (Runtime Variables) ═══ */
-:root { /* CRYSTAL DAY (System Light) */
-  --system-bg:#F2F2F7; --secondary-bg:#FFFFFF; --tertiary-bg:#E5E5EA;
-  --glass-bg:rgba(255,255,255,0.75); --inset-bg:#000000;
-  --label-primary:#000000; --label-secondary:#3C3C43; --label-tertiary:#8E8E93;
-  --separator:rgba(60,60,67,0.12); --separator-hairline:rgba(0,0,0,0.05);
-  --separator-soft:rgba(0,0,0,0.03); --separator-strong:rgba(60,60,67,0.29);
-  --brand-blue:#007AFF; --brand-blue-deep:#0055D4; --brand-blue-tint:rgba(0,122,255,0.10);
-  --brand-yellow:#FFCC00; --brand-yellow-deep:#8A6D00;
-  --on-brand:#FFFFFF; --on-accent:#000000;
-  --success:#34C759; --success-deep:#248A3D; --success-tint:#EAF7EC; --success-line:#C4E8CB;
-  --warning:#FF9500; --warning-deep:#9A5A00; --warning-tint:#FFF5E6; --warning-line:#FFD9A6;
-  --danger:#FF3B30;  --danger-deep:#C4302B;  --danger-tint:#FFECEB;  --danger-line:#FFC7C3;
-  --info:#5856D6;    --info-deep:#4644B8;    --info-tint:#F0F0FC;    --info-line:#D6D5F5;
-  --lppa:#AF52DE;    --lppa-deep:#8A3FA8;    --lppa-tint:#F8F0FC;    --lppa-line:#EBD3F2;
-  --jj-tk:#FF9500; --jj-sd:#34C759; --jj-smp:#007AFF; --jj-sma:#5856D6;
-}
-.dark { /* OLED NIGHT (System Dark) */
-  --system-bg:#000000; --secondary-bg:#1C1C1E; --tertiary-bg:#2C2C2E;
-  --glass-bg:rgba(28,28,30,0.75); --inset-bg:#FFFFFF;
-  --label-primary:#FFFFFF; --label-secondary:#EBEBF5; --label-tertiary:#8E8E93;
-  --separator:rgba(235,235,245,0.15); --separator-hairline:rgba(255,255,255,0.08);
-  --separator-soft:rgba(255,255,255,0.04); --separator-strong:rgba(235,235,245,0.30);
-  --brand-blue:#0A84FF; --brand-blue-deep:#64B5FF; --brand-blue-tint:rgba(10,132,255,0.16);
-  --brand-yellow:#FFD60A; --brand-yellow-deep:#FFD60A;
-  --on-brand:#FFFFFF; --on-accent:#000000;
-  --success:#30D158; --success-deep:#30D158; --success-tint:#12291A; --success-line:#2E5B3A;
-  --warning:#FF9F0A; --warning-deep:#FF9F0A; --warning-tint:#2E2415; --warning-line:#5B4423;
-  --danger:#FF453A;  --danger-deep:#FF453A;  --danger-tint:#2E1B19;  --danger-line:#5B322E;
-  --info:#5E5CE6;    --info-deep:#8A89F0;    --info-tint:#1E1E33;    --info-line:#3A396B;
-  --lppa:#BF5AF2;    --lppa-deep:#D08AF7;    --lppa-tint:#2A1B30;    --lppa-line:#4E3560;
-  --jj-tk:#FF9F0A; --jj-sd:#30D158; --jj-smp:#0A84FF; --jj-sma:#5E5CE6;
-  --shadow-luminescent:0 0 0 1.5px var(--label-primary), 0 0 16px -6px rgba(10,132,255,.28);
-}
-/* ═══ Alias Layer (Tailwind v4 @theme inline) — nama utility TIDAK berubah ═══ */
-@theme inline {
-  --color-canvas:var(--system-bg); --color-surface:var(--secondary-bg);
-  --color-surface-subtle:var(--tertiary-bg); --color-surface-glass:var(--glass-bg);
-  --color-surface-inset:var(--inset-bg);
-  --color-ink:var(--label-primary); --color-ink-soft:var(--label-secondary); --color-ink-faint:var(--label-tertiary);
-  --color-line:var(--separator); --color-line-hairline:var(--separator-hairline);
-  --color-line-soft:var(--separator-soft); --color-line-strong:var(--separator-strong);
-  --color-brand:var(--brand-blue); --color-brand-primary:var(--brand-blue);
-  --color-brand-deep:var(--brand-blue-deep); --color-brand-tint:var(--brand-blue-tint);
-  --color-brand-accent:var(--brand-yellow); --color-on-brand:var(--on-brand); --color-on-accent:var(--on-accent);
-  --color-success:var(--success); --color-success-deep:var(--success-deep);
-  --color-success-tint:var(--success-tint); --color-success-line:var(--success-line);
-  --color-warning:var(--warning); --color-warning-deep:var(--warning-deep);
-  --color-warning-tint:var(--warning-tint); --color-warning-line:var(--warning-line);
-  --color-danger:var(--danger); --color-danger-deep:var(--danger-deep);
-  --color-danger-tint:var(--danger-tint); --color-danger-line:var(--danger-line);
-  --color-info:var(--info); --color-info-deep:var(--info-deep);
-  --color-info-tint:var(--info-tint); --color-info-line:var(--info-line);
-  --color-lppa:var(--lppa); --color-lppa-deep:var(--lppa-deep);
-  --color-lppa-tint:var(--lppa-tint); --color-lppa-line:var(--lppa-line);
-  --color-jj-tk:var(--jj-tk); --color-jj-sd:var(--jj-sd); --color-jj-smp:var(--jj-smp); --color-jj-sma:var(--jj-sma);
-  --font-sans:-apple-system,BlinkMacSystemFont,"SF Pro Text","Inter",sans-serif;
-  --font-mono:"JetBrains Mono",SFMono-Regular,Menlo,monospace;
-  --radius-card:18px; --radius-field:12px; --radius-control:8px; --radius-pill:9999px;
-  --shadow-hairline:0 1px 0 rgba(0,0,0,.04);
-  --shadow-ambient:0 1px 2px rgba(0,0,0,.04),0 4px 12px rgba(0,0,0,.05);
-  --shadow-floating:0 4px 6px -1px rgba(0,0,0,.06),0 16px 32px -8px rgba(0,0,0,.12);
-  --shadow-luminescent:0 0 0 1.5px var(--label-primary),0 0 20px -4px rgba(0,122,255,.35);
-  --breakpoint-compact:0px; --breakpoint-medium:600px; --breakpoint-expanded:840px;
-  --breakpoint-large:1200px; --breakpoint-extra-large:1600px;
+/* ═══ AMANAURA OS × FLOW — CANONICAL TOKENS (oklch) ═══ */
+:root { /* THE IVORY CANVAS (System Light) */
+  --canvas: oklch(0.985 0.005 90);           /* Warm Ivory */
+  --surface: oklch(1 0 0);                    /* Pure White */
+  --surface-subtle: oklch(0.96 0.005 90);
+  --surface-glass: oklch(0.985 0.005 90 / 0.85);
+  --surface-inset: oklch(0.2 0.02 260);       /* Charcoal Navy */
+  
+  --ink: oklch(0.2 0.02 260);                 /* Charcoal Navy */
+  --ink-soft: oklch(0.5 0.02 260);            /* Slate Navy */
+  --ink-faint: oklch(0.7 0.01 260);
+  
+  --line: oklch(0.92 0.005 90);
+  --line-hairline: oklch(0.94 0.003 90);
+  --line-soft: oklch(0.95 0.003 90);
+  --line-strong: oklch(0.85 0.01 90);
+  
+  --brand: oklch(0.25 0.06 260);              /* Deep Navy */
+  --brand-deep: oklch(0.18 0.05 260);
+  --brand-tint: oklch(0.25 0.06 260 / 0.10);
+  --brand-accent: oklch(0.75 0.14 85);        /* Warm Gold (accent-valor) */
+  --accent-valor: oklch(0.75 0.14 85);
+  --on-brand: oklch(0.985 0.005 90);          /* Warm Ivory */
+  --on-accent: oklch(0.15 0.02 260);
+  
+  /* Semantic signals */
+  --success: oklch(0.55 0.15 145);            /* Moss */
+  --success-deep: oklch(0.45 0.12 145);
+  --success-tint: oklch(0.95 0.02 145);
+  --success-line: oklch(0.85 0.05 145);
+  
+  --warning: oklch(0.65 0.15 60);             /* Clay */
+  --warning-deep: oklch(0.55 0.12 60);
+  --warning-tint: oklch(0.95 0.03 60);
+  --warning-line: oklch(0.85 0.06 60);
+  
+  --danger: oklch(0.55 0.18 25);              /* Rust */
+  --danger-deep: oklch(0.45 0.15 25);
+  --danger-tint: oklch(0.95 0.04 25);
+  --danger-line: oklch(0.85 0.07 25);
+  
+  --info: oklch(0.55 0.12 240);               /* River */
+  --info-deep: oklch(0.45 0.1 240);
+  --info-tint: oklch(0.95 0.02 240);
+  --info-line: oklch(0.85 0.05 240);
+  
+  --lppa: oklch(0.55 0.14 300);               /* Wisteria */
+  --lppa-deep: oklch(0.45 0.12 300);
+  --lppa-tint: oklch(0.95 0.03 300);
+  --lppa-line: oklch(0.85 0.06 300);
+  
+  /* Jenjang warna */
+  --jj-tk: oklch(0.65 0.15 50);
+  --jj-sd: oklch(0.55 0.15 145);
+  --jj-smp: oklch(0.55 0.12 240);
+  --jj-sma: oklch(0.55 0.14 300);
 }
 
-/* Keyframes for Amanaura Breath (4s Resting Human Pulse) */
+.dark { /* THE MIDNIGHT SANCTUARY (System Dark) */
+  --canvas: oklch(0.15 0.02 260);             /* Deep Midnight */
+  --surface: oklch(0.20 0.02 260);            /* Elevated Night */
+  --surface-subtle: oklch(0.25 0.02 260);
+  --surface-glass: oklch(0.18 0.025 260 / 0.85);
+  --surface-inset: oklch(0.95 0.005 90);      /* Warm Ivory */
+  
+  --ink: oklch(0.95 0.005 90);
+  --ink-soft: oklch(0.65 0.02 260);
+  --ink-faint: oklch(0.45 0.01 260);
+  
+  --line: oklch(0.25 0.02 260);
+  --line-hairline: oklch(0.22 0.015 260);
+  --line-soft: oklch(0.20 0.02 260);
+  --line-strong: oklch(0.35 0.02 260);
+  
+  --brand: oklch(0.75 0.1 260);               /* Luminous Navy */
+  --brand-deep: oklch(0.85 0.08 260);
+  --brand-tint: oklch(0.75 0.1 260 / 0.16);
+  --brand-accent: oklch(0.80 0.15 85);        /* Bright Gold */
+  --accent-valor: oklch(0.80 0.15 85);
+  --on-brand: oklch(0.15 0.02 260);           /* Deep Midnight */
+  --on-accent: oklch(0.15 0.02 260);
+  
+  --success: oklch(0.75 0.12 145);
+  --success-deep: oklch(0.85 0.1 145);
+  --success-tint: oklch(0.25 0.03 145);
+  --success-line: oklch(0.35 0.05 145);
+  
+  --warning: oklch(0.80 0.12 60);
+  --warning-deep: oklch(0.90 0.1 60);
+  --warning-tint: oklch(0.30 0.04 60);
+  --warning-line: oklch(0.40 0.06 60);
+  
+  --danger: oklch(0.75 0.15 25);
+  --danger-deep: oklch(0.85 0.12 25);
+  --danger-tint: oklch(0.30 0.05 25);
+  --danger-line: oklch(0.40 0.07 25);
+  
+  --info: oklch(0.75 0.1 240);
+  --info-deep: oklch(0.85 0.08 240);
+  --info-tint: oklch(0.25 0.03 240);
+  --info-line: oklch(0.35 0.05 240);
+  
+  --lppa: oklch(0.75 0.12 300);
+  --lppa-deep: oklch(0.85 0.1 300);
+  --lppa-tint: oklch(0.30 0.04 300);
+  --lppa-line: oklch(0.40 0.06 300);
+  
+  --jj-tk: oklch(0.80 0.12 50);
+  --jj-sd: oklch(0.75 0.12 145);
+  --jj-smp: oklch(0.75 0.1 240);
+  --jj-sma: oklch(0.75 0.12 300);
+  
+  --shadow-luminescent: 0 0 0 1.5px var(--ink), 0 0 16px -6px oklch(0.75 0.1 260 / 0.28);
+}
+
+/* ═══ Alias Layer (Tailwind v4 @theme inline) — nama utility TIDAK berubah ═══ */
+@theme inline {
+  --color-canvas: var(--canvas);
+  --color-surface: var(--surface);
+  --color-surface-subtle: var(--surface-subtle);
+  --color-surface-glass: var(--surface-glass);
+  --color-surface-inset: var(--surface-inset);
+  
+  --color-ink: var(--ink);
+  --color-ink-soft: var(--ink-soft);
+  --color-ink-faint: var(--ink-faint);
+  
+  --color-line: var(--line);
+  --color-line-hairline: var(--line-hairline);
+  --color-line-soft: var(--line-soft);
+  --color-line-strong: var(--line-strong);
+  
+  --color-brand: var(--brand);
+  --color-brand-primary: var(--brand);
+  --color-brand-deep: var(--brand-deep);
+  --color-brand-tint: var(--brand-tint);
+  --color-brand-accent: var(--brand-accent);
+  --color-accent-valor: var(--accent-valor);
+  --color-on-brand: var(--on-brand);
+  --color-on-accent: var(--on-accent);
+  
+  --color-success: var(--success);
+  --color-success-deep: var(--success-deep);
+  --color-success-tint: var(--success-tint);
+  --color-success-line: var(--success-line);
+  
+  --color-warning: var(--warning);
+  --color-warning-deep: var(--warning-deep);
+  --color-warning-tint: var(--warning-tint);
+  --color-warning-line: var(--warning-line);
+  
+  --color-danger: var(--danger);
+  --color-danger-deep: var(--danger-deep);
+  --color-danger-tint: var(--danger-tint);
+  --color-danger-line: var(--danger-line);
+  
+  --color-info: var(--info);
+  --color-info-deep: var(--info-deep);
+  --color-info-tint: var(--info-tint);
+  --color-info-line: var(--info-line);
+  
+  --color-lppa: var(--lppa);
+  --color-lppa-deep: var(--lppa-deep);
+  --color-lppa-tint: var(--lppa-tint);
+  --color-lppa-line: var(--lppa-line);
+  
+  --color-jj-tk: var(--jj-tk);
+  --color-jj-sd: var(--jj-sd);
+  --color-jj-smp: var(--jj-smp);
+  --color-jj-sma: var(--jj-sma);
+
+  --font-display: "Instrument Serif", "Playfair Display", Georgia, serif;
+  --font-serif: "Instrument Serif", "Playfair Display", Georgia, serif;
+  --font-sans: "Geist", "Inter", -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
+  --font-mono: "Geist Mono", "JetBrains Mono", SFMono-Regular, Menlo, monospace;
+
+  --radius-card: 18px;
+  --radius-field: 12px;
+  --radius-control: 8px;
+  --radius-pill: 9999px;
+
+  --shadow-hairline: 0 1px 0 oklch(0.25 0.06 260 / 0.05);
+  --shadow-soft: 0 4px 24px -4px oklch(0.25 0.06 260 / 0.08), 
+                 0 2px 8px -2px oklch(0.25 0.06 260 / 0.04);
+  --shadow-medium: 0 8px 32px -8px oklch(0.25 0.06 260 / 0.12), 
+                   0 4px 12px -4px oklch(0.25 0.06 260 / 0.08);
+  --shadow-floating: 0 16px 48px -12px oklch(0.25 0.06 260 / 0.18), 
+                     0 8px 24px -8px oklch(0.25 0.06 260 / 0.12);
+  --shadow-luminescent: 0 0 0 1.5px var(--ink), 
+                        0 0 20px -4px oklch(0.75 0.14 85 / 0.28);
+
+  --breakpoint-compact: 0px;
+  --breakpoint-medium: 600px;
+  --breakpoint-expanded: 840px;
+  --breakpoint-large: 1200px;
+  --breakpoint-extra-large: 1600px;
+}
+
+/* Keyframes for Amanaura Breath (4s Daytime / 8s Nighttime Pulse) */
 @keyframes amanaura-pulse {
   0%, 100% {
     opacity: 1;
@@ -86,13 +227,24 @@
   }
 }
 
+@keyframes amanaura-pulse-slow {
+  0%, 100% {
+    opacity: 0.7;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.25;
+    transform: scale(0.94);
+  }
+}
+
 /* 
  * CANONICAL REUSABLE UTILITIES & ERGONOMICS
  */
 @layer utilities {
   /* Hairline Border */
   .hairline-b { 
-    border-bottom: 1px solid var(--separator, rgba(60, 60, 67, 0.12)); 
+    border-bottom: 1px solid var(--line, oklch(0.92 0.005 90)); 
   }
 
   /* Amanaura Breath Animation */
@@ -100,24 +252,31 @@
     animation: amanaura-pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
   }
 
-  /* Explicit Shadow Utilities */
-  .shadow-hairline {
-    box-shadow: var(--shadow-hairline, 0 1px 0 rgba(0, 0, 0, 0.04));
-  }
-  .shadow-ambient {
-    box-shadow: var(--shadow-ambient, 0 1px 2px rgba(0, 0, 0, 0.04), 0 4px 12px rgba(0, 0, 0, 0.05));
-  }
-  .shadow-floating {
-    box-shadow: var(--shadow-floating, 0 4px 6px -1px rgba(0, 0, 0, 0.06), 0 16px 32px -8px rgba(0, 0, 0, 0.12));
-  }
-  .shadow-luminescent {
-    box-shadow: var(--shadow-luminescent, 0 0 0 1.5px var(--label-primary, #000), 0 0 20px -4px rgba(0, 122, 255, 0.35));
+  .animate-amanaura-breath-slow {
+    animation: amanaura-pulse-slow 8s cubic-bezier(0.4, 0, 0.6, 1) infinite;
   }
 
-  /* Minimum tactile touch target (WCAG 2.5.5) */
+  /* Explicit Shadow Utilities */
+  .shadow-hairline {
+    box-shadow: var(--shadow-hairline, 0 1px 0 oklch(0.25 0.06 260 / 0.05));
+  }
+  .shadow-soft {
+    box-shadow: var(--shadow-soft, 0 4px 24px -4px oklch(0.25 0.06 260 / 0.08), 0 2px 8px -2px oklch(0.25 0.06 260 / 0.04));
+  }
+  .shadow-medium {
+    box-shadow: var(--shadow-medium, 0 8px 32px -8px oklch(0.25 0.06 260 / 0.12), 0 4px 12px -4px oklch(0.25 0.06 260 / 0.08));
+  }
+  .shadow-floating {
+    box-shadow: var(--shadow-floating, 0 16px 48px -12px oklch(0.25 0.06 260 / 0.18), 0 8px 24px -8px oklch(0.25 0.06 260 / 0.12));
+  }
+  .shadow-luminescent {
+    box-shadow: var(--shadow-luminescent, 0 0 0 1.5px var(--ink, #000), 0 0 20px -4px oklch(0.75 0.14 85 / 0.28));
+  }
+
+  /* Minimum tactile touch target (WCAG 2.5.5 / 48dp floor) */
   .touch-target-min {
-    min-height: 44px;
-    min-width: 44px;
+    min-height: 48px;
+    min-width: 48px;
   }
 
   /* Safe focus ring (Signature #2 Luminescent Edge) */
@@ -125,7 +284,7 @@
     outline: none;
   }
   .focus-ring-safe:focus-visible {
-    box-shadow: var(--shadow-luminescent, 0 0 0 1.5px var(--label-primary, #000), 0 0 20px -4px rgba(0, 122, 255, 0.35));
+    box-shadow: var(--shadow-luminescent, 0 0 0 1.5px var(--ink, #000), 0 0 20px -4px oklch(0.75 0.14 85 / 0.28));
   }
 
   /* Scrollbar suppression utilities */
@@ -281,4 +440,18 @@
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
   }
+}
+
+/* Explicit Font Utility Enforcement */
+.font-serif,
+.font-display {
+  font-family: "Instrument Serif", "Playfair Display", Georgia, serif !important;
+}
+
+.font-sans {
+  font-family: "Geist", "Inter", -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif !important;
+}
+
+.font-mono {
+  font-family: "Geist Mono", "JetBrains Mono", SFMono-Regular, Menlo, monospace !important;
 }

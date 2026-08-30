@@ -22,8 +22,9 @@ import {
 } from 'lucide-react';
 
 export const PremiumLoginScreen: React.FC = () => {
+  const isSimulationEnabled = typeof import.meta !== 'undefined' && import.meta?.env ? import.meta.env.VITE_ENABLE_SIMULATION !== 'false' : true;
   const [authTab, setAuthTab] = useState<'REAL_AUTH' | 'SIMULATION'>(
-    import.meta.env.VITE_ENABLE_SIMULATION === 'true' ? 'SIMULATION' : 'REAL_AUTH'
+    isSimulationEnabled ? 'SIMULATION' : 'REAL_AUTH'
   );
   const [loginEmail, setLoginEmail] = useState('');
   const [loginPassword, setLoginPassword] = useState('');
@@ -44,8 +45,6 @@ export const PremiumLoginScreen: React.FC = () => {
       setLoginError(res.error || 'Autentikasi gagal. Periksa kembali email dan kata sandi Anda.');
     }
   };
-
-  const isSimulationEnabled = import.meta.env.VITE_ENABLE_SIMULATION === 'true';
 
   return (
     <div className="min-h-[100dvh] flex flex-col expanded:flex-row bg-canvas text-ink font-sans selection:bg-brand selection:text-on-brand">
@@ -69,16 +68,16 @@ export const PremiumLoginScreen: React.FC = () => {
             </div>
             <div>
               <h1 className="text-xl font-black text-ink tracking-tight flex items-center gap-2 font-display">
-                Yapendik School OS
+                Amanaura OS <span className="text-accent-valor text-base font-normal">✦</span>
               </h1>
-              <p className="text-xs text-ink-soft font-medium">Enterprise Institutional Operating System</p>
+              <p className="text-xs text-ink-soft font-medium">The Warm, Tactile, and Dignified Operating Experience</p>
             </div>
           </div>
         </div>
 
         {/* Middle Educational Vision & Pillar Highlights */}
         <div className="relative z-10 my-auto py-8">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-surface-subtle border border-line text-ink text-xs font-semibold mb-6">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-transparent border border-line-hairline text-ink text-xs font-semibold mb-6">
             <Sparkles className="w-4 h-4 text-brand-primary fill-brand-primary" />
             <span>Fondasi Pendidikan Usia Dini Berkarakter</span>
           </div>
@@ -92,8 +91,8 @@ export const PremiumLoginScreen: React.FC = () => {
           </p>
 
           <div className="grid grid-cols-1 gap-3 max-w-lg">
-            <div className="flex items-start space-x-3.5 p-3 rounded-card bg-surface-subtle border border-line">
-              <div className="p-2 rounded-field bg-warning-tint border border-warning-line text-warning-deep shrink-0">
+            <div className="flex items-start space-x-3.5 p-3.5 rounded-card bg-transparent border border-line-hairline transition-colors">
+              <div className="p-2 rounded-field bg-warning-tint/60 border border-warning-line text-warning-deep shrink-0">
                 <Sparkles className="w-4 h-4 text-warning fill-warning" />
               </div>
               <div>
@@ -102,8 +101,8 @@ export const PremiumLoginScreen: React.FC = () => {
               </div>
             </div>
 
-            <div className="flex items-start space-x-3.5 p-3 rounded-card bg-surface-subtle border border-line">
-              <div className="p-2 rounded-field bg-success-tint border border-success-line text-success-deep shrink-0">
+            <div className="flex items-start space-x-3.5 p-3.5 rounded-card bg-transparent border border-line-hairline transition-colors">
+              <div className="p-2 rounded-field bg-success-tint/60 border border-success-line text-success-deep shrink-0">
                 <ShieldCheck className="w-4 h-4 text-success" />
               </div>
               <div>
@@ -112,8 +111,8 @@ export const PremiumLoginScreen: React.FC = () => {
               </div>
             </div>
 
-            <div className="flex items-start space-x-3.5 p-3 rounded-card bg-surface-subtle border border-line">
-              <div className="p-2 rounded-field bg-info-tint border border-info-line text-info-deep shrink-0">
+            <div className="flex items-start space-x-3.5 p-3.5 rounded-card bg-transparent border border-line-hairline transition-colors">
+              <div className="p-2 rounded-field bg-info-tint/60 border border-info-line text-info-deep shrink-0">
                 <HeartHandshake className="w-4 h-4 text-info" />
               </div>
               <div>
@@ -126,7 +125,7 @@ export const PremiumLoginScreen: React.FC = () => {
 
         {/* Bottom Footer Credit */}
         <div className="relative z-10 pt-6 border-t border-line flex items-center justify-between text-xs text-ink-soft">
-          <span>Yayasan Pendidikan Kristen - Yapendik GPIB</span>
+          <span>Amanaura OS ✦ FLOW Design System • 2026</span>
         </div>
       </div>
 
@@ -139,8 +138,8 @@ export const PremiumLoginScreen: React.FC = () => {
               <Building2 className="w-5 h-5 text-brand-primary" />
             </div>
             <div>
-              <h1 className="text-base font-bold text-ink font-display">Yapendik School OS</h1>
-              <p className="text-[11px] text-ink-soft font-mono whitespace-nowrap">TK PILOT v1.0 • PORTAL GURU & YAYASAN</p>
+              <h1 className="text-base font-bold text-ink font-display">Amanaura OS</h1>
+              <p className="text-[11px] text-ink-soft font-mono whitespace-nowrap">PLATFORM v1.0 • PORTAL GURU & YAYASAN</p>
             </div>
           </div>
 
@@ -150,7 +149,7 @@ export const PremiumLoginScreen: React.FC = () => {
               Portal Akses Institusi
             </h2>
             <p className="text-xs text-ink-soft font-medium">
-              Silakan autentikasi identitas Anda untuk memasuki ruang kerja Yapendik OS.
+              Silakan autentikasi identitas Anda untuk memasuki ruang kerja Amanaura OS.
             </p>
           </div>
 

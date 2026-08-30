@@ -1,47 +1,52 @@
 /**
- * Yapendik School OS — Premium SaaS Left Sidebar Navigation
- * Role-Based Grouped Navigation & Humanized School Operations Copywriting
+ * Amanaura OS × FLOW — Desktop Navigation Sidebar
+ * Architectural Specification: ADR-UX-011 §4.3 & §7.1 (Law R-8 & Law R-9)
+ * 
+ * Pure Flat Fluid Doctrine (Zero Background Containers):
+ * - Header Brand Mark: Naked glyph ✦ (Zero boxed container, zero background box).
+ * - Rest State: Pure flat typography, border-l-2 border-transparent, bg-transparent (Zero hover background fill).
+ * - Active State: Flush 2px left accent line (border-l-2 border-brand-primary), bg-transparent (Zero background container).
+ * - Icons: Naked Glyphs (Law R-9) at 16px (w-4 h-4), pure glyphs without badge boxes.
+ * - Touch Targets: Enforce minimum 48dp floor (min-h-[48px]).
  */
 
 import React from 'react';
-import { useSecurityContext } from '../../auth/context';
-import { WorkspaceTab } from './TopBar';
 import { 
   Building2, 
-  Activity, 
-  Settings2, 
-  Clock, 
-  Shield, 
-  Landmark, 
-  ArrowUpRight, 
-  GraduationCap, 
   Home, 
-  Sparkles, 
-  FileCheck, 
-  CheckSquare, 
-  ClipboardList, 
-  UserCheck, 
+  CalendarCheck2, 
+  Clock, 
+  Palette, 
   TrendingUp, 
+  Sparkles, 
   MessageSquare, 
   Users, 
-  Palette, 
-  FileText, 
-  FlaskConical,
-  LucideIcon
+  ShieldCheck, 
+  HeartHandshake, 
+  GraduationCap, 
+  Flame, 
+  Settings, 
+  FlaskConical, 
+  ChevronLeft, 
+  ChevronRight,
+  Compass,
+  FileCheck2
 } from 'lucide-react';
+import { useSecurityContext } from '../../auth/context';
+import { WorkspaceTab } from './TopBar';
 
 interface SidebarProps {
   activeTab: WorkspaceTab;
   onSelectTab: (tab: WorkspaceTab) => void;
-  className?: string;
   isCollapsed?: boolean;
   onToggleCollapse?: () => void;
+  className?: string;
 }
 
 interface NavItem {
   tab: WorkspaceTab;
   label: string;
-  icon: LucideIcon;
+  icon: React.ComponentType<{ className?: string }>;
   badge?: string;
 }
 
@@ -53,125 +58,117 @@ interface NavGroup {
 export const Sidebar: React.FC<SidebarProps> = ({
   activeTab,
   onSelectTab,
-  className = '',
   isCollapsed = false,
-  onToggleCollapse
+  onToggleCollapse,
+  className = ''
 }) => {
-  const { currentPersona, securityContext } = useSecurityContext();
+  const { currentPersona } = useSecurityContext();
+  const role = currentPersona?.role || 'TEACHER';
 
-  const role = currentPersona?.role || securityContext?.role || 'TEACHER';
-  const isSuperadminOrFoundation = 
-    role === 'YAPENDIK_SUPERADMIN' || 
-    securityContext?.role === 'YAPENDIK_SUPERADMIN' ||
-    securityContext?.role === 'FOUNDATION_DIRECTOR';
-  const isHeadmaster = 
-    role === 'HEADMASTER' ||
-    securityContext?.role === 'HEADMASTER';
-  const isGuardianOrApplicant = 
-    role === 'GUARDIAN' || 
-    role === 'APPLICANT' ||
-    role === 'PARENT_BUDI' ||
-    securityContext?.role === 'GUARDIAN' ||
-    securityContext?.role === 'APPLICANT_GUARDIAN';
-
-  // Humanized Navigation Groups per Role
+  // Role-Based Navigation Definition
   let navGroups: NavGroup[] = [];
 
-  if (isSuperadminOrFoundation) {
+  if (role === 'YAPENDIK_SUPERADMIN' || role === 'FOUNDATION_DIRECTOR') {
     navGroups = [
       {
-        title: 'PUSAT KOMANDO',
+        title: 'Console Yayasan',
         items: [
-          { tab: 'INSTITUTIONAL_HEALTH', label: 'Statistik Unit', icon: Activity }
+          { tab: 'FOUNDATION_GOVERNANCE', label: 'Console Yayasan', icon: Building2 },
+          { tab: 'INSTITUTIONAL_HEALTH', label: 'Statistik Unit', icon: Flame },
+          { tab: 'GOVERNANCE', label: 'Audit Tata Kelola', icon: ShieldCheck }
         ]
       },
       {
-        title: 'TATA KELOLA OPERASIONAL',
+        title: 'Akademik & PPDB',
         items: [
-          { tab: 'PROVISIONING', label: 'Pengaturan Unit', icon: Settings2 },
-          { tab: 'ACADEMIC_LIFECYCLE', label: 'Tahun Ajaran', icon: Clock },
-          { tab: 'GOVERNANCE', label: 'Log Keamanan', icon: Shield }
+          { tab: 'ACADEMIC_LIFECYCLE', label: 'Tahun Ajaran', icon: Compass },
+          { tab: 'COHORT_PROMOTION', label: 'Kenaikan Kelas', icon: GraduationCap },
+          { tab: 'GRADUATION_REGISTRY', label: 'Buku Induk', icon: FileCheck2 },
+          { tab: 'ADMISSIONS_PORTAL', label: 'Portal PPDB', icon: HeartHandshake }
         ]
       },
       {
-        title: 'STANDAR AKADEMIK',
+        title: 'Administrasi',
         items: [
-          { tab: 'FOUNDATION_GOVERNANCE', label: 'Pusat Kebijakan', icon: Landmark },
-          { tab: 'COHORT_PROMOTION', label: 'Promosi Kelas', icon: ArrowUpRight },
-          { tab: 'GRADUATION_REGISTRY', label: 'Buku Kelulusan', icon: GraduationCap }
-        ]
-      },
-      {
-        title: 'AUDIT LAPANGAN',
-        items: [
-          { tab: 'TEACHER_HOME', label: 'Ruang Guru', icon: Home },
-          { tab: 'STUDENT_JOURNEY', label: 'Jejak Anak', icon: Sparkles }
+          { tab: 'PROVISIONING', label: 'Kesiapan Unit', icon: Settings }
         ]
       }
     ];
-  } else if (isHeadmaster) {
+  } else if (role === 'HEADMASTER') {
     navGroups = [
       {
-        title: 'MANAJEMEN UNIT',
+        title: 'Kepemimpinan Sekolah',
         items: [
-          { tab: 'ADMISSIONS_DESK', label: 'Meja PPDB', icon: FileCheck },
-          { tab: 'HEADMASTER_ADOPTION', label: 'Standar Yayasan', icon: CheckSquare },
-          { tab: 'INSTITUTIONAL_HEALTH', label: 'Statistik Unit', icon: Activity }
+          { tab: 'HEADMASTER_ADOPTION', label: 'Kotak Kebijakan', icon: ShieldCheck },
+          { tab: 'INSTITUTIONAL_HEALTH', label: 'Statistik Unit', icon: Flame },
+          { tab: 'ADMISSIONS_DESK', label: 'Meja PPDB', icon: HeartHandshake, badge: 'PPDB' }
         ]
       },
       {
-        title: 'AKADEMIK & PROMOSI',
+        title: 'Akademik & Observasi',
         items: [
-          { tab: 'COHORT_PROMOTION', label: 'Promosi Kelas', icon: ArrowUpRight },
-          { tab: 'GRADUATION_REGISTRY', label: 'Buku Kelulusan', icon: GraduationCap }
+          { tab: 'DEVELOPMENT', label: 'Verifikasi LPPA', icon: TrendingUp },
+          { tab: 'STUDENT_JOURNEY', label: 'Jejak Anak', icon: Sparkles },
+          { tab: 'ROSTER', label: 'Data Roster', icon: Users }
         ]
       },
       {
-        title: 'PEMANTAUAN KELAS',
+        title: 'Tata Kelola',
         items: [
-          { tab: 'TEACHER_HOME', label: 'Ruang Guru', icon: Home },
-          { tab: 'STUDENT_JOURNEY', label: 'Jejak Anak', icon: Sparkles }
+          { tab: 'ACADEMIC_LIFECYCLE', label: 'Tahun Ajaran', icon: Compass },
+          { tab: 'COHORT_PROMOTION', label: 'Kenaikan Kelas', icon: GraduationCap },
+          { tab: 'GRADUATION_REGISTRY', label: 'Buku Induk', icon: FileCheck2 }
         ]
       }
     ];
-  } else if (isGuardianOrApplicant) {
+  } else if (role === 'APPLICANT' || currentPersona?.id === 'user_parent_bona') {
     navGroups = [
       {
-        title: 'ANAK SAYA',
+        title: 'Layanan PPDB',
         items: [
-          { tab: 'STUDENT_JOURNEY', label: 'Jejak Ananda', icon: Sparkles },
-          { tab: 'OBSERVATIONS', label: 'Karya & Observasi', icon: Palette }
+          { tab: 'ADMISSIONS_PORTAL', label: 'Pendaftaran PPDB', icon: HeartHandshake }
+        ]
+      }
+    ];
+  } else if (role === 'GUARDIAN' || currentPersona?.id === 'user_parent_budi') {
+    navGroups = [
+      {
+        title: 'Portal Keluarga',
+        items: [
+          { tab: 'GUARDIAN_WORKSPACE', label: 'Portal Keluarga', icon: Home },
+          { tab: 'COMMUNICATION', label: 'Buku Penghubung', icon: MessageSquare },
+          { tab: 'DEVELOPMENT', label: 'Perkembangan Ananda', icon: TrendingUp },
+          { tab: 'STUDENT_JOURNEY', label: 'Jejak Anak', icon: Sparkles }
         ]
       },
       {
-        title: 'ADMINISTRASI',
+        title: 'Layanan Sekolah',
         items: [
-          { tab: 'ADMISSIONS_PORTAL', label: 'Portal PPDB', icon: FileText },
-          { tab: 'COMMUNICATION', label: 'Buku Penghubung', icon: MessageSquare }
+          { tab: 'ADMISSIONS_PORTAL', label: 'Pendaftaran PPDB', icon: HeartHandshake }
         ]
       }
     ];
   } else {
-    // Default: TEACHER
+    // Default: Guru Kelas (Teacher Workspace)
     navGroups = [
       {
-        title: 'RUANG KELAS',
+        title: 'Ruang Kelas',
         items: [
-          { tab: 'TEACHER_HOME', label: 'Beranda Guru', icon: Home },
-          { tab: 'DAILY_WORK', label: 'Kerja Harian', icon: ClipboardList },
-          { tab: 'ATTENDANCE', label: 'Presensi', icon: UserCheck }
+          { tab: 'TEACHER_HOME', label: 'Beranda Kelas', icon: Home },
+          { tab: 'ATTENDANCE', label: 'Presensi Harian', icon: CalendarCheck2 },
+          { tab: 'DAILY_WORK', label: 'Jurnal Harian', icon: Clock }
         ]
       },
       {
-        title: 'AKADEMIK & OBSERVASI',
+        title: 'Akademik & Observasi',
         items: [
-          { tab: 'OBSERVATIONS', label: 'Observasi', icon: Palette },
-          { tab: 'DEVELOPMENT', label: 'Perkembangan', icon: TrendingUp },
+          { tab: 'OBSERVATIONS', label: 'Momen Belajar', icon: Palette },
+          { tab: 'DEVELOPMENT', label: 'Rapor LPPA', icon: TrendingUp },
           { tab: 'STUDENT_JOURNEY', label: 'Jejak Anak', icon: Sparkles }
         ]
       },
       {
-        title: 'KEMITRAAN',
+        title: 'Kemitraan & Roster',
         items: [
           { tab: 'COMMUNICATION', label: 'Buku Penghubung', icon: MessageSquare },
           { tab: 'ROSTER', label: 'Data Roster', icon: Users }
@@ -183,51 +180,50 @@ export const Sidebar: React.FC<SidebarProps> = ({
   return (
     <aside
       aria-label="Sidebar Navigasi"
-      className={`bg-surface border-r border-line h-[100dvh] sticky top-0 hidden expanded:flex flex-col justify-between text-ink z-30 shrink-0 transition-[width] duration-300 ease-in-out select-none ${
+      className={`bg-surface border-r border-line-hairline h-[100dvh] sticky top-0 hidden expanded:flex flex-col justify-between text-ink z-30 shrink-0 transition-[width] duration-300 ease-in-out select-none ${
         isCollapsed ? 'w-[72px]' : 'w-64'
       } ${className}`}
     >
-      {/* Top Header branding section in sidebar (Clickable Collapse/Expand Toggle) */}
-      <div className={`border-b border-line-soft flex items-center min-w-0 transition-all ${
-        isCollapsed ? 'p-3 justify-center' : 'p-4'
+      {/* Top Header Section — Pure Naked Brand Glyph & Wordmark (Zero Background Box) */}
+      <div className={`border-b border-line-hairline flex items-center min-w-0 transition-all ${
+        isCollapsed ? 'p-3 justify-center' : 'px-5 py-4'
       }`}>
         <button
           type="button"
           onClick={onToggleCollapse}
           title={isCollapsed ? 'Buka Menu Sidebar' : 'Ciutkan Menu Sidebar'}
           aria-label={isCollapsed ? 'Buka Menu Sidebar' : 'Ciutkan Menu Sidebar'}
-          className={`flex items-center text-left min-w-0 group cursor-pointer rounded-field transition-colors ${
-            isCollapsed ? 'justify-center p-1' : 'w-full space-x-3 p-2 -m-1 hover-only:bg-surface-subtle'
+          className={`flex items-center text-left min-w-0 w-full group cursor-pointer transition-colors min-h-[48px] ${
+            isCollapsed ? 'justify-center' : 'space-x-3'
           }`}
         >
-          <div
-            className="w-9 h-9 rounded-xl bg-surface-subtle border border-line-hairline flex items-center justify-center text-ink shrink-0 shadow-hairline group-hover-only:bg-surface-subtle/80 group-hover-only:border-line transition-all"
-          >
-            <Building2 className="w-5 h-5 text-brand-primary" />
-          </div>
+          <span className="text-accent-valor text-lg select-none shrink-0 animate-amanaura-breath" aria-hidden="true">
+            ✦
+          </span>
           {!isCollapsed && (
             <div className="min-w-0 flex-1">
-              <h2 className="font-bold text-sm tracking-tight text-ink truncate group-hover-only:text-ink transition-colors font-display">
-                Yapendik OS
-              </h2>
+              <div className="flex items-center space-x-1.5 min-w-0">
+                <h2 className="font-normal text-base tracking-wide text-ink truncate font-serif">
+                  Amanaura OS
+                </h2>
+                <span className="text-accent-valor text-xs select-none shrink-0" aria-hidden="true">✦</span>
+              </div>
               <p className="text-[10px] text-ink-soft font-mono tracking-wider truncate uppercase font-semibold whitespace-nowrap">
-                {role.replace('_', ' ')}
+                {currentPersona?.schoolName?.split(' ')[0] || 'Unit TK'} • {role.replace('_', ' ')}
               </p>
             </div>
           )}
         </button>
       </div>
 
-      {/* Main Grouped Navigation Surface */}
-      <nav className={`flex-1 overflow-y-auto overflow-x-hidden py-3 space-y-4 scrollbar-thin scrollbar-thumb-line-soft min-w-0 ${
-        isCollapsed ? 'px-2' : 'px-3'
-      }`}>
+      {/* Main Grouped Navigation Surface — Pure Flat Fluid (Zero Background Containers) */}
+      <nav className="flex-1 overflow-y-auto overflow-x-hidden py-3 space-y-4 no-scrollbar min-w-0 px-0">
         {navGroups.map((group, groupIdx) => (
-          <div key={groupIdx} className="space-y-1 min-w-0">
+          <div key={groupIdx} className="space-y-0.5 min-w-0">
             {isCollapsed ? (
-              groupIdx > 0 && <div className="w-7 h-px bg-line-hairline mx-auto my-2" />
+              groupIdx > 0 && <div className="w-6 h-px bg-line-hairline mx-auto my-2" />
             ) : (
-              <div className="text-[10px] text-ink-faint font-bold uppercase tracking-wider px-3 mb-1.5 select-none truncate">
+              <div className="text-[10px] text-ink-faint font-mono font-semibold uppercase tracking-widest px-5 py-2 select-none truncate">
                 {group.title}
               </div>
             )}
@@ -241,25 +237,24 @@ export const Sidebar: React.FC<SidebarProps> = ({
                     type="button"
                     onClick={() => onSelectTab(item.tab)}
                     aria-label={item.label}
-                    className={`w-full flex items-center rounded-xl text-xs font-medium transition-all duration-150 cursor-pointer min-w-0 relative overflow-hidden ${
+                    className={`w-full flex items-center text-xs transition-colors duration-150 cursor-pointer min-w-0 min-h-[48px] border-l-2 bg-transparent ${
                       isCollapsed
-                        ? 'justify-center h-10 w-10 mx-auto'
-                        : 'space-x-2.5 px-3 py-2 text-left'
+                        ? 'justify-center py-3'
+                        : 'space-x-3 px-5 py-3 text-left'
                     } ${
                       isActive
-                        ? 'bg-brand-tint text-brand-deep font-semibold shadow-hairline border border-brand-primary/20'
-                        : 'text-ink-soft hover-only:text-ink hover-only:bg-surface-subtle border border-transparent'
+                        ? 'border-brand-primary text-ink font-semibold'
+                        : 'border-transparent text-ink-soft hover-only:text-ink font-normal'
                     }`}
                   >
-                    {isActive && (
-                      <div className="absolute inset-0 bg-brand-tint rounded-xl -z-10" />
-                    )}
-                    <Icon className={`w-4 h-4 shrink-0 transition-colors ${isActive ? 'text-brand-deep' : 'text-ink-faint group-hover-only:text-ink'}`} />
+                    <Icon className={`w-4 h-4 shrink-0 transition-colors ${
+                      isActive ? 'text-accent-valor' : 'text-ink-faint group-hover-only:text-ink'
+                    }`} />
                     {!isCollapsed && (
                       <>
                         <span className="truncate flex-1 text-left line-clamp-1">{item.label}</span>
                         {item.badge && (
-                          <span className="text-[9px] font-mono px-2 py-1 rounded bg-surface-subtle text-ink-soft border border-line-hairline shrink-0 whitespace-nowrap">
+                          <span className="text-[10px] font-mono text-accent-valor font-medium tracking-wider shrink-0 whitespace-nowrap">
                             {item.badge}
                           </span>
                         )}
@@ -267,13 +262,13 @@ export const Sidebar: React.FC<SidebarProps> = ({
                     )}
                   </button>
 
-                  {/* Sleek Tooltip for Collapsed Mode */}
+                  {/* Tooltip for Collapsed Mode (F-5 Floating Allowlist) */}
                   {isCollapsed && (
-                    <div className="pointer-events-none absolute left-full top-1/2 -translate-y-1/2 ml-3 z-50 hidden group-hover:flex items-center">
-                      <div className="bg-surface-inset text-on-brand text-xs font-medium px-2 py-1 rounded-lg shadow-floating whitespace-nowrap flex items-center space-x-1.5 border border-line-strong animate-in fade-in zoom-in-95 duration-150">
+                    <div className="pointer-events-none absolute left-full top-1/2 -translate-y-1/2 ml-2 z-50 hidden group-hover-only:flex items-center">
+                      <div className="bg-surface text-ink text-xs font-medium px-3 py-2 rounded-xl shadow-floating whitespace-nowrap flex items-center space-x-1.5 border border-line-hairline animate-in fade-in zoom-in-95 duration-150">
                         <span>{item.label}</span>
                         {item.badge && (
-                          <span className="text-[9px] font-mono px-1 py-0 rounded bg-brand text-brand-primary border border-line-strong whitespace-nowrap">
+                          <span className="text-[9px] font-mono px-2 py-1 rounded-full bg-surface-subtle text-ink-soft border border-line-hairline whitespace-nowrap">
                             {item.badge}
                           </span>
                         )}
@@ -287,31 +282,29 @@ export const Sidebar: React.FC<SidebarProps> = ({
         ))}
       </nav>
 
-      {/* Bottom Actions */}
-      <div className={`border-t border-line-soft bg-surface-subtle/80 min-w-0 transition-all space-y-1.5 ${
-        isCollapsed ? 'p-2' : 'p-3'
-      }`}>
+      {/* Bottom Actions: Living Contract & Developer Tests — Pure Flat Fluid Surface */}
+      <div className="border-t border-line-hairline min-w-0 transition-all space-y-0.5 py-2 bg-surface">
         {/* Living Contract Button */}
         <div className="relative group min-w-0">
           <button
             type="button"
             onClick={() => onSelectTab('PERCONTOHAN')}
             aria-label="Living Contract ✦"
-            className={`w-full flex items-center rounded-field text-xs font-semibold transition-all duration-150 cursor-pointer min-w-0 ${
+            className={`w-full flex items-center text-xs transition-colors duration-150 cursor-pointer min-w-0 min-h-[48px] border-l-2 bg-transparent ${
               isCollapsed
-                ? 'justify-center h-10 w-10 mx-auto'
-                : 'space-x-2.5 px-3 py-2 text-left'
+                ? 'justify-center py-3'
+                : 'space-x-3 px-5 py-3 text-left'
             } ${
               activeTab === 'PERCONTOHAN'
-                ? 'bg-brand text-on-brand shadow-hairline font-bold'
-                : 'text-ink-soft hover-only:text-ink hover-only:bg-surface border border-line'
+                ? 'border-brand-primary text-ink font-semibold'
+                : 'border-transparent text-ink-soft hover-only:text-ink font-normal'
             }`}
           >
-            <Sparkles className="w-4 h-4 shrink-0 text-brand-primary" />
+            <Sparkles className={`w-4 h-4 shrink-0 ${activeTab === 'PERCONTOHAN' ? 'text-accent-valor' : 'text-ink-faint'}`} />
             {!isCollapsed && (
               <>
                 <span className="truncate flex-1 text-left line-clamp-1">Living Contract</span>
-                <span className="text-[9px] font-mono px-1 py-1 rounded bg-surface-inset text-on-brand border border-line-strong shrink-0 whitespace-nowrap">
+                <span className="text-[10px] font-mono text-accent-valor shrink-0 whitespace-nowrap font-bold">
                   ✦ ADS
                 </span>
               </>
@@ -320,12 +313,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
           {/* Tooltip in collapsed mode */}
           {isCollapsed && (
-            <div className="pointer-events-none absolute left-full top-1/2 -translate-y-1/2 ml-3.5 z-50 hidden group-hover:flex items-center">
-              <div className="bg-surface-inset text-on-brand text-xs font-medium px-2 py-1 rounded-lg shadow-floating whitespace-nowrap flex items-center space-x-1.5 border border-line-strong">
-                <span>Living Contract</span>
-                <span className="text-[9px] font-mono px-1 py-0 rounded bg-surface-inset text-on-brand border border-line-strong whitespace-nowrap">
-                  ADS
-                </span>
+            <div className="pointer-events-none absolute left-full top-1/2 -translate-y-1/2 ml-2 z-50 hidden group-hover-only:flex items-center">
+              <div className="bg-surface text-ink text-xs font-medium px-3 py-2 rounded-xl shadow-floating whitespace-nowrap flex items-center space-x-1.5 border border-line-hairline">
+                <span>Living Contract ✦ ADS</span>
               </div>
             </div>
           )}
@@ -337,21 +327,21 @@ export const Sidebar: React.FC<SidebarProps> = ({
             type="button"
             onClick={() => onSelectTab('TESTS')}
             aria-label="Uji Otorisasi (TESTS)"
-            className={`w-full flex items-center rounded-field text-xs font-semibold transition-all duration-150 cursor-pointer min-w-0 ${
+            className={`w-full flex items-center text-xs transition-colors duration-150 cursor-pointer min-w-0 min-h-[48px] border-l-2 bg-transparent ${
               isCollapsed
-                ? 'justify-center h-10 w-10 mx-auto'
-                : 'space-x-2.5 px-3 py-2 text-left'
+                ? 'justify-center py-3'
+                : 'space-x-3 px-5 py-3 text-left'
             } ${
               activeTab === 'TESTS'
-                ? 'bg-brand text-on-brand shadow-hairline font-bold'
-                : 'text-ink-soft hover-only:text-ink hover-only:bg-surface border border-line'
+                ? 'border-brand-primary text-ink font-semibold'
+                : 'border-transparent text-ink-soft hover-only:text-ink font-normal'
             }`}
           >
             <FlaskConical className={`w-4 h-4 shrink-0 ${activeTab === 'TESTS' ? 'text-brand-primary' : 'text-ink-faint'}`} />
             {!isCollapsed && (
               <>
                 <span className="truncate flex-1 text-left line-clamp-1">Uji Otorisasi</span>
-                <span className="text-[9px] font-mono px-1 py-1 rounded bg-line-soft text-ink-soft border border-line-strong shrink-0 whitespace-nowrap">
+                <span className="text-[10px] font-mono text-ink-faint shrink-0 whitespace-nowrap">
                   TESTS
                 </span>
               </>
@@ -360,18 +350,34 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
           {/* Tooltip in collapsed mode */}
           {isCollapsed && (
-            <div className="pointer-events-none absolute left-full top-1/2 -translate-y-1/2 ml-3.5 z-50 hidden group-hover:flex items-center">
-              <div className="bg-surface-inset text-on-brand text-xs font-medium px-2 py-1 rounded-lg shadow-floating whitespace-nowrap flex items-center space-x-1.5 border border-line-strong">
-                <span>Uji Otorisasi</span>
-                <span className="text-[9px] font-mono px-1 py-0 rounded bg-brand text-brand-primary border border-line-strong whitespace-nowrap">
-                  TESTS
-                </span>
+            <div className="pointer-events-none absolute left-full top-1/2 -translate-y-1/2 ml-2 z-50 hidden group-hover-only:flex items-center">
+              <div className="bg-surface text-ink text-xs font-medium px-3 py-2 rounded-xl shadow-floating whitespace-nowrap flex items-center space-x-1.5 border border-line-hairline">
+                <span>Uji Otorisasi (TESTS)</span>
               </div>
             </div>
           )}
         </div>
+
+        {/* Sidebar Collapse Toggle Button */}
+        <button
+          type="button"
+          onClick={onToggleCollapse}
+          aria-label={isCollapsed ? "Buka Navigasi Penuh" : "Ciutkan Navigasi"}
+          title={isCollapsed ? "Buka Navigasi Penuh" : "Ciutkan Navigasi"}
+          className="w-full flex items-center px-5 py-3 text-ink-soft hover-only:text-ink bg-transparent transition-colors cursor-pointer min-h-[44px] text-xs space-x-2"
+        >
+          {isCollapsed ? (
+            <div className="w-full flex justify-center">
+              <ChevronRight className="w-4 h-4" />
+            </div>
+          ) : (
+            <div className="flex items-center space-x-2 text-xs">
+              <ChevronLeft className="w-4 h-4" />
+              <span>Ciutkan Menu</span>
+            </div>
+          )}
+        </button>
       </div>
     </aside>
   );
 };
-

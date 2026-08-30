@@ -90,14 +90,14 @@ export function evaluateAuthorization(req: AuthorizationRequest): AuthorizationR
     };
   }
 
-  // 4. Guardian Context & Child Relationship Isolation
-  if (context.role === 'GUARDIAN') {
-    // Guardians can only VIEW and ACKNOWLEDGE
+  // 4. Guardian & Applicant Context Isolation
+  if (context.role === 'GUARDIAN' || context.role === 'APPLICANT') {
+    // Guardians and Applicants can only VIEW and ACKNOWLEDGE
     if (action !== 'VIEW' && action !== 'ACKNOWLEDGE') {
       return {
         granted: false,
         code: 'DENY_INSUFFICIENT_ROLE',
-        reason: `Akses ditolak: Orang Tua / Wali tidak memiliki hak '${action}' pada '${resource}'.`
+        reason: `Akses ditolak: Orang Tua / Pemohon tidak memiliki hak '${action}' pada '${resource}'.`
       };
     }
 

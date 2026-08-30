@@ -1,40 +1,38 @@
 {
-  "short_name": "Yapendik OS",
-  "name": "Yapendik School OS — TK Pilot",
+  "name": "Amanaura OS",
+  "short_name": "Amanaura",
+  "description": "The Warm, Tactile, and Dignified Operating Experience.",
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "any",
+  "theme_color": "#1e293b",
+  "background_color": "#0f172a",
   "icons": [
     {
-      "src": "data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏫</text></svg>",
+      "src": "data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>✦</text></svg>",
       "type": "image/svg+xml",
       "sizes": "192x192 512x512",
       "purpose": "any maskable"
     }
   ],
-  "start_url": "/",
-  "background_color": "#F7F4ED",
-  "theme_color": "#211E1A",
-  "display": "standalone",
-  "orientation": "portrait",
   "shortcuts": [
     {
-      "name": "Presensi Hari Ini",
-      "short_name": "Presensi",
-      "description": "Buka pencatatan presensi & skrining harian anak",
-      "url": "/attendance",
-      "icons": [{ "src": "data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📋</text></svg>", "sizes": "96x96" }]
+      "name": "Beranda Kelas",
+      "short_name": "Beranda",
+      "description": "Pusat komando sirkadian ruang kelas",
+      "url": "/#beranda-guru"
     },
     {
-      "name": "Rekam Momen Belajar",
+      "name": "Momen Belajar",
       "short_name": "Observasi",
-      "description": "Ambil foto dan catat anekdot perkembangan anak",
-      "url": "/observations/new",
-      "icons": [{ "src": "data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📸</text></svg>", "sizes": "96x96" }]
+      "description": "Perekaman momen dan anekdot perkembangan",
+      "url": "/#observasi"
     },
     {
-      "name": "Kotak Kebijakan",
-      "short_name": "Kebijakan",
-      "description": "Pusat adopsi standar dan kebijakan yayasan",
-      "url": "/school/adoption/inbox",
-      "icons": [{ "src": "data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏛️</text></svg>", "sizes": "96x96" }]
+      "name": "Portal Keluarga",
+      "short_name": "Keluarga",
+      "description": "Galeri momen dan buku penghubung anak",
+      "url": "/#portal-keluarga"
     }
   ]
 }

@@ -1,0 +1,680 @@
+{
+  "timestamp": "2026-08-30T16:29:13.734Z",
+  "version": "1.0.0-amanaura-os-flow-sealed",
+  "totalCaptures": 84,
+  "files": [
+    {
+      "route": "#beranda-guru",
+      "page": "Beranda Kelas",
+      "viewport": "COMPACT (390x844)",
+      "theme": "Ivory Canvas",
+      "file": "beranda-guru_compact_light.png",
+      "sha256": "cc66be7655fd3f24"
+    },
+    {
+      "route": "#presensi",
+      "page": "Presensi Harian",
+      "viewport": "COMPACT (390x844)",
+      "theme": "Ivory Canvas",
+      "file": "presensi_compact_light.png",
+      "sha256": "cc66be7655fd3f24"
+    },
+    {
+      "route": "#kerja-harian",
+      "page": "Jurnal Harian",
+      "viewport": "COMPACT (390x844)",
+      "theme": "Ivory Canvas",
+      "file": "kerja-harian_compact_light.png",
+      "sha256": "cc66be7655fd3f24"
+    },
+    {
+      "route": "#observasi",
+      "page": "Momen Belajar",
+      "viewport": "COMPACT (390x844)",
+      "theme": "Ivory Canvas",
+      "file": "observasi_compact_light.png",
+      "sha256": "cc66be7655fd3f24"
+    },
+    {
+      "route": "#perkembangan",
+      "page": "Rapor LPPA",
+      "viewport": "COMPACT (390x844)",
+      "theme": "Ivory Canvas",
+      "file": "perkembangan_compact_light.png",
+      "sha256": "cc66be7655fd3f24"
+    },
+    {
+      "route": "#jejak-anak",
+      "page": "Jejak Anak",
+      "viewport": "COMPACT (390x844)",
+      "theme": "Ivory Canvas",
+      "file": "jejak-anak_compact_light.png",
+      "sha256": "cc66be7655fd3f24"
+    },
+    {
+      "route": "#buku-penghubung",
+      "page": "Buku Penghubung",
+      "viewport": "COMPACT (390x844)",
+      "theme": "Ivory Canvas",
+      "file": "buku-penghubung_compact_light.png",
+      "sha256": "cc66be7655fd3f24"
+    },
+    {
+      "route": "#portal-keluarga",
+      "page": "Portal Keluarga",
+      "viewport": "COMPACT (390x844)",
+      "theme": "Ivory Canvas",
+      "file": "portal-keluarga_compact_light.png",
+      "sha256": "cc66be7655fd3f24"
+    },
+    {
+      "route": "#adopsi-ks",
+      "page": "Kotak Kebijakan",
+      "viewport": "COMPACT (390x844)",
+      "theme": "Ivory Canvas",
+      "file": "adopsi-ks_compact_light.png",
+      "sha256": "cc66be7655fd3f24"
+    },
+    {
+      "route": "#yayasan",
+      "page": "Console Yayasan",
+      "viewport": "COMPACT (390x844)",
+      "theme": "Ivory Canvas",
+      "file": "yayasan_compact_light.png",
+      "sha256": "cc66be7655fd3f24"
+    },
+    {
+      "route": "#kesehatan-sekolah",
+      "page": "Statistik Unit",
+      "viewport": "COMPACT (390x844)",
+      "theme": "Ivory Canvas",
+      "file": "kesehatan-sekolah_compact_light.png",
+      "sha256": "cc66be7655fd3f24"
+    },
+    {
+      "route": "#siklus-akademik",
+      "page": "Tahun Ajaran",
+      "viewport": "COMPACT (390x844)",
+      "theme": "Ivory Canvas",
+      "file": "siklus-akademik_compact_light.png",
+      "sha256": "cc66be7655fd3f24"
+    },
+    {
+      "route": "#uji-otorisasi",
+      "page": "Uji Otorisasi",
+      "viewport": "COMPACT (390x844)",
+      "theme": "Ivory Canvas",
+      "file": "uji-otorisasi_compact_light.png",
+      "sha256": "cc66be7655fd3f24"
+    },
+    {
+      "route": "#percontohan",
+      "page": "Living Contract & Token Specimen",
+      "viewport": "COMPACT (390x844)",
+      "theme": "Ivory Canvas",
+      "file": "percontohan_compact_light.png",
+      "sha256": "cc66be7655fd3f24"
+    },
+    {
+      "route": "#beranda-guru",
+      "page": "Beranda Kelas",
+      "viewport": "COMPACT (390x844)",
+      "theme": "Midnight Sanctuary",
+      "file": "beranda-guru_compact_dark.png",
+      "sha256": "cc66be7655fd3f24"
+    },
+    {
+      "route": "#presensi",
+      "page": "Presensi Harian",
+      "viewport": "COMPACT (390x844)",
+      "theme": "Midnight Sanctuary",
+      "file": "presensi_compact_dark.png",
+      "sha256": "cc66be7655fd3f24"
+    },
+    {
+      "route": "#kerja-harian",
+      "page": "Jurnal Harian",
+      "viewport": "COMPACT (390x844)",
+      "theme": "Midnight Sanctuary",
+      "file": "kerja-harian_compact_dark.png",
+      "sha256": "cc66be7655fd3f24"
+    },
+    {
+      "route": "#observasi",
+      "page": "Momen Belajar",
+      "viewport": "COMPACT (390x844)",
+      "theme": "Midnight Sanctuary",
+      "file": "observasi_compact_dark.png",
+      "sha256": "cc66be7655fd3f24"
+    },
+    {
+      "route": "#perkembangan",
+      "page": "Rapor LPPA",
+      "viewport": "COMPACT (390x844)",
+      "theme": "Midnight Sanctuary",
+      "file": "perkembangan_compact_dark.png",
+      "sha256": "cc66be7655fd3f24"
+    },
+    {
+      "route": "#jejak-anak",
+      "page": "Jejak Anak",
+      "viewport": "COMPACT (390x844)",
+      "theme": "Midnight Sanctuary",
+      "file": "jejak-anak_compact_dark.png",
+      "sha256": "cc66be7655fd3f24"
+    },
+    {
+      "route": "#buku-penghubung",
+      "page": "Buku Penghubung",
+      "viewport": "COMPACT (390x844)",
+      "theme": "Midnight Sanctuary",
+      "file": "buku-penghubung_compact_dark.png",
+      "sha256": "cc66be7655fd3f24"
+    },
+    {
+      "route": "#portal-keluarga",
+      "page": "Portal Keluarga",
+      "viewport": "COMPACT (390x844)",
+      "theme": "Midnight Sanctuary",
+      "file": "portal-keluarga_compact_dark.png",
+      "sha256": "cc66be7655fd3f24"
+    },
+    {
+      "route": "#adopsi-ks",
+      "page": "Kotak Kebijakan",
+      "viewport": "COMPACT (390x844)",
+      "theme": "Midnight Sanctuary",
+      "file": "adopsi-ks_compact_dark.png",
+      "sha256": "cc66be7655fd3f24"
+    },
+    {
+      "route": "#yayasan",
+      "page": "Console Yayasan",
+      "viewport": "COMPACT (390x844)",
+      "theme": "Midnight Sanctuary",
+      "file": "yayasan_compact_dark.png",
+      "sha256": "cc66be7655fd3f24"
+    },
+    {
+      "route": "#kesehatan-sekolah",
+      "page": "Statistik Unit",
+      "viewport": "COMPACT (390x844)",
+      "theme": "Midnight Sanctuary",
+      "file": "kesehatan-sekolah_compact_dark.png",
+      "sha256": "cc66be7655fd3f24"
+    },
+    {
+      "route": "#siklus-akademik",
+      "page": "Tahun Ajaran",
+      "viewport": "COMPACT (390x844)",
+      "theme": "Midnight Sanctuary",
+      "file": "siklus-akademik_compact_dark.png",
+      "sha256": "cc66be7655fd3f24"
+    },
+    {
+      "route": "#uji-otorisasi",
+      "page": "Uji Otorisasi",
+      "viewport": "COMPACT (390x844)",
+      "theme": "Midnight Sanctuary",
+      "file": "uji-otorisasi_compact_dark.png",
+      "sha256": "cc66be7655fd3f24"
+    },
+    {
+      "route": "#percontohan",
+      "page": "Living Contract & Token Specimen",
+      "viewport": "COMPACT (390x844)",
+      "theme": "Midnight Sanctuary",
+      "file": "percontohan_compact_dark.png",
+      "sha256": "cc66be7655fd3f24"
+    },
+    {
+      "route": "#beranda-guru",
+      "page": "Beranda Kelas",
+      "viewport": "MEDIUM (768x1024)",
+      "theme": "Ivory Canvas",
+      "file": "beranda-guru_medium_light.png",
+      "sha256": "1c02eb5c83db5b81"
+    },
+    {
+      "route": "#presensi",
+      "page": "Presensi Harian",
+      "viewport": "MEDIUM (768x1024)",
+      "theme": "Ivory Canvas",
+      "file": "presensi_medium_light.png",
+      "sha256": "1c02eb5c83db5b81"
+    },
+    {
+      "route": "#kerja-harian",
+      "page": "Jurnal Harian",
+      "viewport": "MEDIUM (768x1024)",
+      "theme": "Ivory Canvas",
+      "file": "kerja-harian_medium_light.png",
+      "sha256": "1c02eb5c83db5b81"
+    },
+    {
+      "route": "#observasi",
+      "page": "Momen Belajar",
+      "viewport": "MEDIUM (768x1024)",
+      "theme": "Ivory Canvas",
+      "file": "observasi_medium_light.png",
+      "sha256": "1c02eb5c83db5b81"
+    },
+    {
+      "route": "#perkembangan",
+      "page": "Rapor LPPA",
+      "viewport": "MEDIUM (768x1024)",
+      "theme": "Ivory Canvas",
+      "file": "perkembangan_medium_light.png",
+      "sha256": "1c02eb5c83db5b81"
+    },
+    {
+      "route": "#jejak-anak",
+      "page": "Jejak Anak",
+      "viewport": "MEDIUM (768x1024)",
+      "theme": "Ivory Canvas",
+      "file": "jejak-anak_medium_light.png",
+      "sha256": "1c02eb5c83db5b81"
+    },
+    {
+      "route": "#buku-penghubung",
+      "page": "Buku Penghubung",
+      "viewport": "MEDIUM (768x1024)",
+      "theme": "Ivory Canvas",
+      "file": "buku-penghubung_medium_light.png",
+      "sha256": "1c02eb5c83db5b81"
+    },
+    {
+      "route": "#portal-keluarga",
+      "page": "Portal Keluarga",
+      "viewport": "MEDIUM (768x1024)",
+      "theme": "Ivory Canvas",
+      "file": "portal-keluarga_medium_light.png",
+      "sha256": "1c02eb5c83db5b81"
+    },
+    {
+      "route": "#adopsi-ks",
+      "page": "Kotak Kebijakan",
+      "viewport": "MEDIUM (768x1024)",
+      "theme": "Ivory Canvas",
+      "file": "adopsi-ks_medium_light.png",
+      "sha256": "1c02eb5c83db5b81"
+    },
+    {
+      "route": "#yayasan",
+      "page": "Console Yayasan",
+      "viewport": "MEDIUM (768x1024)",
+      "theme": "Ivory Canvas",
+      "file": "yayasan_medium_light.png",
+      "sha256": "1c02eb5c83db5b81"
+    },
+    {
+      "route": "#kesehatan-sekolah",
+      "page": "Statistik Unit",
+      "viewport": "MEDIUM (768x1024)",
+      "theme": "Ivory Canvas",
+      "file": "kesehatan-sekolah_medium_light.png",
+      "sha256": "1c02eb5c83db5b81"
+    },
+    {
+      "route": "#siklus-akademik",
+      "page": "Tahun Ajaran",
+      "viewport": "MEDIUM (768x1024)",
+      "theme": "Ivory Canvas",
+      "file": "siklus-akademik_medium_light.png",
+      "sha256": "1c02eb5c83db5b81"
+    },
+    {
+      "route": "#uji-otorisasi",
+      "page": "Uji Otorisasi",
+      "viewport": "MEDIUM (768x1024)",
+      "theme": "Ivory Canvas",
+      "file": "uji-otorisasi_medium_light.png",
+      "sha256": "1c02eb5c83db5b81"
+    },
+    {
+      "route": "#percontohan",
+      "page": "Living Contract & Token Specimen",
+      "viewport": "MEDIUM (768x1024)",
+      "theme": "Ivory Canvas",
+      "file": "percontohan_medium_light.png",
+      "sha256": "1c02eb5c83db5b81"
+    },
+    {
+      "route": "#beranda-guru",
+      "page": "Beranda Kelas",
+      "viewport": "MEDIUM (768x1024)",
+      "theme": "Midnight Sanctuary",
+      "file": "beranda-guru_medium_dark.png",
+      "sha256": "1c02eb5c83db5b81"
+    },
+    {
+      "route": "#presensi",
+      "page": "Presensi Harian",
+      "viewport": "MEDIUM (768x1024)",
+      "theme": "Midnight Sanctuary",
+      "file": "presensi_medium_dark.png",
+      "sha256": "1c02eb5c83db5b81"
+    },
+    {
+      "route": "#kerja-harian",
+      "page": "Jurnal Harian",
+      "viewport": "MEDIUM (768x1024)",
+      "theme": "Midnight Sanctuary",
+      "file": "kerja-harian_medium_dark.png",
+      "sha256": "1c02eb5c83db5b81"
+    },
+    {
+      "route": "#observasi",
+      "page": "Momen Belajar",
+      "viewport": "MEDIUM (768x1024)",
+      "theme": "Midnight Sanctuary",
+      "file": "observasi_medium_dark.png",
+      "sha256": "1c02eb5c83db5b81"
+    },
+    {
+      "route": "#perkembangan",
+      "page": "Rapor LPPA",
+      "viewport": "MEDIUM (768x1024)",
+      "theme": "Midnight Sanctuary",
+      "file": "perkembangan_medium_dark.png",
+      "sha256": "1c02eb5c83db5b81"
+    },
+    {
+      "route": "#jejak-anak",
+      "page": "Jejak Anak",
+      "viewport": "MEDIUM (768x1024)",
+      "theme": "Midnight Sanctuary",
+      "file": "jejak-anak_medium_dark.png",
+      "sha256": "1c02eb5c83db5b81"
+    },
+    {
+      "route": "#buku-penghubung",
+      "page": "Buku Penghubung",
+      "viewport": "MEDIUM (768x1024)",
+      "theme": "Midnight Sanctuary",
+      "file": "buku-penghubung_medium_dark.png",
+      "sha256": "1c02eb5c83db5b81"
+    },
+    {
+      "route": "#portal-keluarga",
+      "page": "Portal Keluarga",
+      "viewport": "MEDIUM (768x1024)",
+      "theme": "Midnight Sanctuary",
+      "file": "portal-keluarga_medium_dark.png",
+      "sha256": "1c02eb5c83db5b81"
+    },
+    {
+      "route": "#adopsi-ks",
+      "page": "Kotak Kebijakan",
+      "viewport": "MEDIUM (768x1024)",
+      "theme": "Midnight Sanctuary",
+      "file": "adopsi-ks_medium_dark.png",
+      "sha256": "1c02eb5c83db5b81"
+    },
+    {
+      "route": "#yayasan",
+      "page": "Console Yayasan",
+      "viewport": "MEDIUM (768x1024)",
+      "theme": "Midnight Sanctuary",
+      "file": "yayasan_medium_dark.png",
+      "sha256": "1c02eb5c83db5b81"
+    },
+    {
+      "route": "#kesehatan-sekolah",
+      "page": "Statistik Unit",
+      "viewport": "MEDIUM (768x1024)",
+      "theme": "Midnight Sanctuary",
+      "file": "kesehatan-sekolah_medium_dark.png",
+      "sha256": "1c02eb5c83db5b81"
+    },
+    {
+      "route": "#siklus-akademik",
+      "page": "Tahun Ajaran",
+      "viewport": "MEDIUM (768x1024)",
+      "theme": "Midnight Sanctuary",
+      "file": "siklus-akademik_medium_dark.png",
+      "sha256": "1c02eb5c83db5b81"
+    },
+    {
+      "route": "#uji-otorisasi",
+      "page": "Uji Otorisasi",
+      "viewport": "MEDIUM (768x1024)",
+      "theme": "Midnight Sanctuary",
+      "file": "uji-otorisasi_medium_dark.png",
+      "sha256": "1c02eb5c83db5b81"
+    },
+    {
+      "route": "#percontohan",
+      "page": "Living Contract & Token Specimen",
+      "viewport": "MEDIUM (768x1024)",
+      "theme": "Midnight Sanctuary",
+      "file": "percontohan_medium_dark.png",
+      "sha256": "1c02eb5c83db5b81"
+    },
+    {
+      "route": "#beranda-guru",
+      "page": "Beranda Kelas",
+      "viewport": "EXPANDED (1440x900)",
+      "theme": "Ivory Canvas",
+      "file": "beranda-guru_expanded_light.png",
+      "sha256": "063c96ef45cae4f3"
+    },
+    {
+      "route": "#presensi",
+      "page": "Presensi Harian",
+      "viewport": "EXPANDED (1440x900)",
+      "theme": "Ivory Canvas",
+      "file": "presensi_expanded_light.png",
+      "sha256": "063c96ef45cae4f3"
+    },
+    {
+      "route": "#kerja-harian",
+      "page": "Jurnal Harian",
+      "viewport": "EXPANDED (1440x900)",
+      "theme": "Ivory Canvas",
+      "file": "kerja-harian_expanded_light.png",
+      "sha256": "063c96ef45cae4f3"
+    },
+    {
+      "route": "#observasi",
+      "page": "Momen Belajar",
+      "viewport": "EXPANDED (1440x900)",
+      "theme": "Ivory Canvas",
+      "file": "observasi_expanded_light.png",
+      "sha256": "063c96ef45cae4f3"
+    },
+    {
+      "route": "#perkembangan",
+      "page": "Rapor LPPA",
+      "viewport": "EXPANDED (1440x900)",
+      "theme": "Ivory Canvas",
+      "file": "perkembangan_expanded_light.png",
+      "sha256": "063c96ef45cae4f3"
+    },
+    {
+      "route": "#jejak-anak",
+      "page": "Jejak Anak",
+      "viewport": "EXPANDED (1440x900)",
+      "theme": "Ivory Canvas",
+      "file": "jejak-anak_expanded_light.png",
+      "sha256": "063c96ef45cae4f3"
+    },
+    {
+      "route": "#buku-penghubung",
+      "page": "Buku Penghubung",
+      "viewport": "EXPANDED (1440x900)",
+      "theme": "Ivory Canvas",
+      "file": "buku-penghubung_expanded_light.png",
+      "sha256": "063c96ef45cae4f3"
+    },
+    {
+      "route": "#portal-keluarga",
+      "page": "Portal Keluarga",
+      "viewport": "EXPANDED (1440x900)",
+      "theme": "Ivory Canvas",
+      "file": "portal-keluarga_expanded_light.png",
+      "sha256": "063c96ef45cae4f3"
+    },
+    {
+      "route": "#adopsi-ks",
+      "page": "Kotak Kebijakan",
+      "viewport": "EXPANDED (1440x900)",
+      "theme": "Ivory Canvas",
+      "file": "adopsi-ks_expanded_light.png",
+      "sha256": "063c96ef45cae4f3"
+    },
+    {
+      "route": "#yayasan",
+      "page": "Console Yayasan",
+      "viewport": "EXPANDED (1440x900)",
+      "theme": "Ivory Canvas",
+      "file": "yayasan_expanded_light.png",
+      "sha256": "063c96ef45cae4f3"
+    },
+    {
+      "route": "#kesehatan-sekolah",
+      "page": "Statistik Unit",
+      "viewport": "EXPANDED (1440x900)",
+      "theme": "Ivory Canvas",
+      "file": "kesehatan-sekolah_expanded_light.png",
+      "sha256": "063c96ef45cae4f3"
+    },
+    {
+      "route": "#siklus-akademik",
+      "page": "Tahun Ajaran",
+      "viewport": "EXPANDED (1440x900)",
+      "theme": "Ivory Canvas",
+      "file": "siklus-akademik_expanded_light.png",
+      "sha256": "063c96ef45cae4f3"
+    },
+    {
+      "route": "#uji-otorisasi",
+      "page": "Uji Otorisasi",
+      "viewport": "EXPANDED (1440x900)",
+      "theme": "Ivory Canvas",
+      "file": "uji-otorisasi_expanded_light.png",
+      "sha256": "063c96ef45cae4f3"
+    },
+    {
+      "route": "#percontohan",
+      "page": "Living Contract & Token Specimen",
+      "viewport": "EXPANDED (1440x900)",
+      "theme": "Ivory Canvas",
+      "file": "percontohan_expanded_light.png",
+      "sha256": "063c96ef45cae4f3"
+    },
+    {
+      "route": "#beranda-guru",
+      "page": "Beranda Kelas",
+      "viewport": "EXPANDED (1440x900)",
+      "theme": "Midnight Sanctuary",
+      "file": "beranda-guru_expanded_dark.png",
+      "sha256": "063c96ef45cae4f3"
+    },
+    {
+      "route": "#presensi",
+      "page": "Presensi Harian",
+      "viewport": "EXPANDED (1440x900)",
+      "theme": "Midnight Sanctuary",
+      "file": "presensi_expanded_dark.png",
+      "sha256": "063c96ef45cae4f3"
+    },
+    {
+      "route": "#kerja-harian",
+      "page": "Jurnal Harian",
+      "viewport": "EXPANDED (1440x900)",
+      "theme": "Midnight Sanctuary",
+      "file": "kerja-harian_expanded_dark.png",
+      "sha256": "063c96ef45cae4f3"
+    },
+    {
+      "route": "#observasi",
+      "page": "Momen Belajar",
+      "viewport": "EXPANDED (1440x900)",
+      "theme": "Midnight Sanctuary",
+      "file": "observasi_expanded_dark.png",
+      "sha256": "063c96ef45cae4f3"
+    },
+    {
+      "route": "#perkembangan",
+      "page": "Rapor LPPA",
+      "viewport": "EXPANDED (1440x900)",
+      "theme": "Midnight Sanctuary",
+      "file": "perkembangan_expanded_dark.png",
+      "sha256": "063c96ef45cae4f3"
+    },
+    {
+      "route": "#jejak-anak",
+      "page": "Jejak Anak",
+      "viewport": "EXPANDED (1440x900)",
+      "theme": "Midnight Sanctuary",
+      "file": "jejak-anak_expanded_dark.png",
+      "sha256": "063c96ef45cae4f3"
+    },
+    {
+      "route": "#buku-penghubung",
+      "page": "Buku Penghubung",
+      "viewport": "EXPANDED (1440x900)",
+      "theme": "Midnight Sanctuary",
+      "file": "buku-penghubung_expanded_dark.png",
+      "sha256": "063c96ef45cae4f3"
+    },
+    {
+      "route": "#portal-keluarga",
+      "page": "Portal Keluarga",
+      "viewport": "EXPANDED (1440x900)",
+      "theme": "Midnight Sanctuary",
+      "file": "portal-keluarga_expanded_dark.png",
+      "sha256": "063c96ef45cae4f3"
+    },
+    {
+      "route": "#adopsi-ks",
+      "page": "Kotak Kebijakan",
+      "viewport": "EXPANDED (1440x900)",
+      "theme": "Midnight Sanctuary",
+      "file": "adopsi-ks_expanded_dark.png",
+      "sha256": "063c96ef45cae4f3"
+    },
+    {
+      "route": "#yayasan",
+      "page": "Console Yayasan",
+      "viewport": "EXPANDED (1440x900)",
+      "theme": "Midnight Sanctuary",
+      "file": "yayasan_expanded_dark.png",
+      "sha256": "063c96ef45cae4f3"
+    },
+    {
+      "route": "#kesehatan-sekolah",
+      "page": "Statistik Unit",
+      "viewport": "EXPANDED (1440x900)",
+      "theme": "Midnight Sanctuary",
+      "file": "kesehatan-sekolah_expanded_dark.png",
+      "sha256": "063c96ef45cae4f3"
+    },
+    {
+      "route": "#siklus-akademik",
+      "page": "Tahun Ajaran",
+      "viewport": "EXPANDED (1440x900)",
+      "theme": "Midnight Sanctuary",
+      "file": "siklus-akademik_expanded_dark.png",
+      "sha256": "063c96ef45cae4f3"
+    },
+    {
+      "route": "#uji-otorisasi",
+      "page": "Uji Otorisasi",
+      "viewport": "EXPANDED (1440x900)",
+      "theme": "Midnight Sanctuary",
+      "file": "uji-otorisasi_expanded_dark.png",
+      "sha256": "063c96ef45cae4f3"
+    },
+    {
+      "route": "#percontohan",
+      "page": "Living Contract & Token Specimen",
+      "viewport": "EXPANDED (1440x900)",
+      "theme": "Midnight Sanctuary",
+      "file": "percontohan_expanded_dark.png",
+      "sha256": "063c96ef45cae4f3"
+    }
+  ],
+  "masterBaselineHash": "1ebe138d7fb04915de67eeccd5a227c5"
+}

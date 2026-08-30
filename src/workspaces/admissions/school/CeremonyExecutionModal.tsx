@@ -78,7 +78,7 @@ export const CeremonyExecutionModal: React.FC<CeremonyExecutionModalProps> = ({
             Upacara Pengukuhan Status Siswa Resmi
           </h2>
           <p className="text-xs text-ink-soft max-w-lg mx-auto leading-relaxed">
-            Proses akhir untuk meresmikan pendaftar menjadi siswa aktif di sistem Yapendik OS.
+            Proses akhir untuk meresmikan pendaftar menjadi siswa aktif di sistem Amanaura OS.
           </p>
         </div>
 

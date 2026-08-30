@@ -85,14 +85,14 @@ export const SEED_PERSONAS: PersonaProfile[] = [
   {
     id: 'user_parent_bona',
     name: 'Bona Pandjaitan, S.T.',
-    role: 'GUARDIAN',
-    roleTitle: 'Orang Tua Pendaftar PPDB (Ayah Timothy)',
+    role: 'APPLICANT',
+    roleTitle: 'Orang Tua Calon Siswa PPDB (Ayah Timothy)',
     schoolId: 'sch_tk_yapendik_01',
     schoolName: 'TK Yapendik 01 Menteng',
     personId: 'per_parent_bona',
     assignedClasses: [],
     guardianChildrenPersonIds: [],
-    description: 'Orang Tua Pendaftar Baru (Guest APPLICANT_GUARDIAN) ananda Timothy Andreas Pandjaitan.',
+    description: 'Orang Tua Pendaftar Baru (Guest APPLICANT) ananda Timothy Andreas Pandjaitan.',
     isSimulation: true
   },
   {

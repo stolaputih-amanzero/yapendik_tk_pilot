@@ -31,6 +31,9 @@ import {
   CheckCircle2, 
   RefreshCw
 } from 'lucide-react';
+import { FoundationBriefing } from '../../components/workspaces/briefing/FoundationBriefing';
+import { FoundationBriefingData } from '../../types/briefingTypes';
+import { briefingEngine } from '../../services/BriefingEngine';
 
 export type FoundationView = 'PROJECTIONS' | 'INSIGHTS' | 'ACTIONS';
 
@@ -47,6 +50,7 @@ export const FoundationLayout: React.FC<FoundationLayoutProps> = ({ initialView 
   const [actions, setActions] = useState<InstitutionalActionRecord[]>(() => institutionalLearningService.listActions());
   const [adoptions, setAdoptions] = useState<SchoolAdoptionResponse[]>(() => institutionalLearningService.listAdoptions());
   const [outcomes, setOutcomes] = useState<ObservedOutcomeEffect[]>(() => institutionalLearningService.listOutcomes());
+  const [briefingData, setBriefingData] = useState<FoundationBriefingData | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
   // Closed-loop status mapping
@@ -58,6 +62,13 @@ export const FoundationLayout: React.FC<FoundationLayoutProps> = ({ initialView 
       const pList = await institutionalLearningService.deriveCurriculumDomainDistribution('ay_2026_2027');
       const iList = institutionalLearningService.listInsights();
       const aList = institutionalLearningService.listActions();
+
+      const bData = await briefingEngine.getBriefingDataForUser(
+        'FOUNDATION',
+        'sch_tk_yapendik_01',
+        currentPersona?.personId
+      );
+      setBriefingData(bData as FoundationBriefingData);
       const adList = institutionalLearningService.listAdoptions();
       const oList = institutionalLearningService.listOutcomes();
 
@@ -88,9 +99,17 @@ export const FoundationLayout: React.FC<FoundationLayoutProps> = ({ initialView 
   return (
     <ForbiddenActionGate>
       <div 
-        className="w-full max-w-6xl mx-auto px-4 medium:px-6 pt-6 pb-[160px] space-y-8 animate-in fade-in duration-200 text-ink"
+        className="w-full max-w-6xl mx-auto px-4 medium:px-6 pt-4 pb-[160px] space-y-6 animate-in fade-in duration-200 text-ink"
         data-testid="foundation-governance-console"
       >
+        {/* Stage 6-A The Warm Briefing Header */}
+        {briefingData && (
+          <FoundationBriefing
+            data={briefingData}
+            onOpenInsightsConsole={() => setActiveView('INSIGHTS')}
+          />
+        )}
+
         {/* 1. HERO CANVAS (Hukum F-7: R-1 Hero Canvas tanpa panel pembungkus) */}
         <header className="space-y-4">
           <div className="flex flex-col medium:flex-row medium:items-start justify-between gap-4">

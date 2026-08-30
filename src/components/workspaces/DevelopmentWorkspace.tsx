@@ -281,7 +281,7 @@ export const DevelopmentWorkspace: React.FC = () => {
             <div className="flex flex-col medium:flex-row medium:items-center justify-between gap-4">
               <div>
                 <div className="text-xs font-mono text-brand-primary uppercase tracking-wider tracking-widest mb-1 whitespace-nowrap">
-                  YAPENDIK SCHOOL OS — DOKUMEN RESMI LPPA
+                  DOKUMEN RESMI CAPAIAN PERKEMBANGAN (LPPA)
                 </div>
                 <h2 className="text-2xl font-bold">{selectedStudent.person.fullName}</h2>
                 <div className="text-xs text-ink-faint mt-1 flex flex-wrap gap-x-4 gap-y-1">

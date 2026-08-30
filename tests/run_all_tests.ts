@@ -57,8 +57,32 @@ try {
   console.log('\n▶️ [16/17] Running Stage 6 Admissions Glass Layer Adversarial UI Suite (Suite 29)...');
   execSync('npx tsx tests/stage6_admissions_ui_contracts.test.tsx', { stdio: 'inherit' });
 
-  console.log('\n▶️ [17/17] Running Amanaura Design System v1.0 Primitives Suite (Suite 30)...');
+  console.log('\n▶️ [17/18] Running Amanaura Design System v1.0 Primitives Suite (Suite 30)...');
   execSync('npx tsx tests/amanaura_primitives.test.tsx', { stdio: 'inherit' });
+
+  console.log('\n▶️ [18/19] Running Stage 6-A Briefing & Closure Backend Contracts Suite...');
+  execSync('npx tsx tests/stage6a_briefing_backend.test.ts', { stdio: 'inherit' });
+
+  console.log('\n▶️ [19/20] Running Stage 6-A Briefing Engine & State Machines Suite...');
+  execSync('npx tsx tests/stage6a_briefing_engine.test.ts', { stdio: 'inherit' });
+
+  console.log('\n▶️ [20/21] Running Stage 6-A Teacher & KS Briefing Glass Layer UI Suite (Suite 31)...');
+  execSync('npx tsx tests/stage6a_briefing_ui_contracts.test.tsx', { stdio: 'inherit' });
+
+  console.log('\n▶️ [21/22] Running Stage 6-A Foundation & Guardian Briefing UI Suite (Suite 32)...');
+  execSync('npx tsx tests/stage6a_foundation_guardian_ui.test.tsx', { stdio: 'inherit' });
+
+  console.log('\n▶️ [22/23] Running Stage 6-A Adaptive Chrome & Navigation Contracts Suite (Suite 33)...');
+  execSync('npx tsx tests/stage6a_adaptive_chrome.test.tsx', { stdio: 'inherit' });
+
+  console.log('\n▶️ [23/24] Running Stage 6-A The Living Shell & Ergonomics Suite (Suite 34)...');
+  execSync('npx tsx tests/stage6a_living_shell.test.tsx', { stdio: 'inherit' });
+
+  console.log('\n▶️ [24/25] Running Stage 6-A Weight Discipline & VRT Final Suite (Suite 35)...');
+  execSync('npx tsx tests/stage6a_weight_discipline_vrt.test.tsx', { stdio: 'inherit' });
+
+  console.log('\n▶️ [25/25] Running Stage 6-A Identity Hygiene & Brand Contracts Suite (Suite 36)...');
+  execSync('npx tsx tests/stage6a_identity_hygiene.test.tsx', { stdio: 'inherit' });
 
   console.log('\n════════════════════════════════════════════════════════════════');
   console.log('🎉 ALL INTEGRATION & SECURITY TEST SUITES COMPLETED SUCCESSFULLY');

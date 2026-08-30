@@ -43,6 +43,9 @@ import { DailyCompletionSummary } from './DailyCompletionSummary';
 import { LearningSurface } from './LearningSurface';
 import { StudentRosterSurface } from './StudentRosterSurface';
 import { SegmentedControl, Button, Skeleton, AdaptiveDialog } from '../../ui';
+import { TeacherBriefing } from '../briefing/TeacherBriefing';
+import { TeacherBriefingData } from '../../../types/briefingTypes';
+import { briefingEngine } from '../../../services/BriefingEngine';
 
 import { 
   CalendarDays, 
@@ -66,6 +69,7 @@ export const TeacherHomeShell: React.FC<{ onNavigateToCommunication?: () => void
   
   const [aggregate, setAggregate] = useState<TeacherHomeAggregatePayload | null>(null);
   const [learningActivities, setLearningActivities] = useState<LearningActivity[]>([]);
+  const [briefingData, setBriefingData] = useState<TeacherBriefingData | null>(null);
   const [loading, setLoading] = useState(true);
 
   // Safety Assurance States (Stage 4.4-C)
@@ -111,6 +115,10 @@ export const TeacherHomeShell: React.FC<{ onNavigateToCommunication?: () => void
 
       const incs = await schoolSafetyAssuranceService.getIncidents(schoolId, 'TEACHER', classId);
       setActiveIncidents(incs);
+
+      // Load Stage 6-A Warm Briefing Data
+      const bData = await briefingEngine.getBriefingDataForUser('TEACHER', schoolId, teacherPersonId);
+      setBriefingData(bData as TeacherBriefingData);
     } catch (err) {
       console.error('Error loading Teacher Home aggregate:', err);
     } finally {
@@ -317,17 +325,29 @@ export const TeacherHomeShell: React.FC<{ onNavigateToCommunication?: () => void
 
   return (
     <div className="w-full pb-24 expanded:pb-0 text-ink font-sans">
+      {/* Stage 6-A The Warm Briefing Header */}
+      {briefingData && (
+        <TeacherBriefing
+          data={briefingData}
+          onTriggerAction={(actionId) => {
+            if (actionId === 'act_take_attendance') {
+              setActiveTab('TODAY');
+            } else if (actionId === 'act_record_moment') {
+              setIsQuickCaptureOpen(true);
+            }
+          }}
+          onClosureCompleted={loadData}
+        />
+      )}
+
       {/* Workspace Header Section (F-1 & F-6) */}
-      <div className="px-4 medium:px-5 pt-6 pb-2 w-full text-ink">
+      <div className="px-4 medium:px-5 pt-2 pb-2 w-full text-ink">
         <div className="flex items-start justify-between gap-4">
           <div>
             <div className="flex items-center space-x-1.5 text-brand-deep text-xs font-semibold uppercase tracking-wider mb-1">
               <Home className="w-4 h-4 text-brand-primary" />
               <span>Ruang Guru</span>
             </div>
-            <h1 className="text-[28px] medium:text-3xl font-bold text-ink tracking-tight flex items-center gap-2">
-              Beranda Kelas
-            </h1>
             <p className="text-ink-soft text-xs medium:text-sm mt-0.5">
               {aggregate.class_name} • Wali Kelas: {aggregate.teacher_name || '—'}
             </p>
