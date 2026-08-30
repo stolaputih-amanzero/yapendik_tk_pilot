@@ -88,27 +88,27 @@ export const AttendanceGrid: React.FC<Props> = ({
           </div>
 
           <Button
-            variant="primary"
+            variant="secondary"
             size="sm"
             onClick={handleMarkAllPresent}
-            leftIcon={<CheckCheck className="w-3.5 h-3.5" />}
-            className="shrink-0 text-xs font-semibold rounded-xl cursor-pointer whitespace-nowrap px-3 py-2"
+            leftIcon={<CheckCheck className="w-3.5 h-3.5 text-brand-primary" />}
+            className="shrink-0 text-xs font-semibold rounded-xl cursor-pointer whitespace-nowrap px-3 py-2 border border-line bg-surface hover-only:bg-surface-subtle text-ink shadow-hairline"
             title="Tandai Semua Hadir Sekaligus"
           >
             <span className="hidden compact:inline">Tandai </span>Semua Hadir
           </Button>
         </div>
 
-        {/* Row 2: Flat Fluid Filter Chips Strip */}
+        {/* Row 2: Flat Fluid Filter Chips Strip (Uniform Calm Palette) */}
         <div className="flex items-center gap-1.5 overflow-x-auto pb-0.5 no-scrollbar select-none">
           <button
             type="button"
             onClick={() => setStatusFilter('ALL')}
             className={`
-              px-3 py-1 rounded-full text-xs font-semibold transition cursor-pointer whitespace-nowrap
+              px-3 py-1 rounded-full text-xs font-medium transition cursor-pointer whitespace-nowrap border
               ${statusFilter === 'ALL'
-                ? 'bg-ink text-on-brand font-bold shadow-hairline'
-                : 'bg-surface text-ink-soft border border-line hover-only:text-ink hover-only:bg-surface-subtle'
+                ? 'bg-surface-subtle text-ink font-bold border-line-strong shadow-hairline'
+                : 'bg-surface text-ink-soft border-line hover-only:text-ink hover-only:bg-surface-subtle'
               }
             `.trim()}
           >
@@ -119,16 +119,16 @@ export const AttendanceGrid: React.FC<Props> = ({
             type="button"
             onClick={() => setStatusFilter('UNACCOUNTED')}
             className={`
-              flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold transition cursor-pointer whitespace-nowrap
+              flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium transition cursor-pointer whitespace-nowrap border
               ${statusFilter === 'UNACCOUNTED'
-                ? 'bg-brand-primary text-on-brand font-bold shadow-hairline'
-                : 'bg-surface text-ink-soft border border-line hover-only:text-ink hover-only:bg-surface-subtle'
+                ? 'bg-surface-subtle text-ink font-bold border-line-strong shadow-hairline'
+                : 'bg-surface text-ink-soft border-line hover-only:text-ink hover-only:bg-surface-subtle'
               }
             `.trim()}
           >
             <span>Belum Diisi</span>
             {unaccountedCount > 0 && (
-              <span className={`px-1.5 py-0.2 rounded-full text-[10px] font-mono font-bold ${statusFilter === 'UNACCOUNTED' ? 'bg-surface text-ink' : 'bg-warning text-on-brand'}`}>
+              <span className={`px-1.5 py-0.2 rounded-full text-[10px] font-mono font-bold ${statusFilter === 'UNACCOUNTED' ? 'bg-brand-primary text-on-brand' : 'bg-surface-subtle text-ink-soft'}`}>
                 {unaccountedCount}
               </span>
             )}
@@ -138,14 +138,14 @@ export const AttendanceGrid: React.FC<Props> = ({
             type="button"
             onClick={() => setStatusFilter('ATTENTION')}
             className={`
-              flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold transition cursor-pointer whitespace-nowrap
+              flex items-center gap-1 px-3 py-1 rounded-full text-xs font-medium transition cursor-pointer whitespace-nowrap border
               ${statusFilter === 'ATTENTION'
-                ? 'bg-danger text-on-brand font-bold shadow-hairline'
-                : 'bg-surface text-danger-deep border border-danger-line hover-only:bg-danger-tint'
+                ? 'bg-danger-tint text-danger-deep font-bold border-danger-line shadow-hairline'
+                : 'bg-surface text-ink-soft border-line hover-only:text-danger-deep hover-only:bg-danger-tint/30'
               }
             `.trim()}
           >
-            <AlertTriangle className="w-3 h-3 text-danger shrink-0" />
+            <AlertTriangle className="w-3 h-3 text-warning shrink-0" />
             <span>Perhatian</span>
           </button>
         </div>

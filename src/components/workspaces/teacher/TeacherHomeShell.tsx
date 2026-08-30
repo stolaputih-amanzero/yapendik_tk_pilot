@@ -56,7 +56,8 @@ import {
   RefreshCw,
   ChevronDown,
   AlertTriangle,
-  FileText
+  FileText,
+  Info
 } from 'lucide-react';
 
 const getTodayDateString = (): string => {
@@ -356,38 +357,31 @@ export const TeacherHomeShell: React.FC<{ onNavigateToCommunication?: () => void
       )}
 
       {/* Workspace Header Section (F-1 & F-6) */}
-      <div className="px-4 medium:px-5 pt-2 pb-2 w-full text-ink">
-        <div className="flex items-start justify-between gap-4">
-          <div>
-            <div className="flex items-center space-x-1.5 text-ink-soft/70 text-[11px] font-semibold uppercase tracking-widest mb-1">
-              <Home className="w-3.5 h-3.5 text-ink-soft/70" />
-              <span>Ruang Guru</span>
-            </div>
-            {(() => {
-              const currentClass = db.getClasses(schoolId).find(c => c.id === classId);
-              const homeroomTeacher = currentClass?.homeroomTeacherId ? db.getPersonById(currentClass.homeroomTeacherId) : undefined;
-              const coTeacher = currentClass?.coTeacherId ? db.getPersonById(currentClass.coTeacherId) : undefined;
-              const className = aggregate?.context?.class_name || currentClass?.name || 'Kelompok A (TK A)';
-              const homeroomName = homeroomTeacher?.fullName || aggregate?.context?.teacher?.name || currentPersona?.name || 'ERNA BOYKELA R';
+      <div className="px-4 medium:px-5 pt-1 pb-1 w-full text-ink">
+        <div className="flex items-center justify-between gap-4">
+          {(() => {
+            const currentClass = db.getClasses(schoolId).find(c => c.id === classId);
+            const homeroomTeacher = currentClass?.homeroomTeacherId ? db.getPersonById(currentClass.homeroomTeacherId) : undefined;
+            const coTeacher = currentClass?.coTeacherId ? db.getPersonById(currentClass.coTeacherId) : undefined;
+            const className = aggregate?.context?.class_name || currentClass?.name || 'Kelompok A (TK A)';
+            const homeroomName = homeroomTeacher?.fullName || aggregate?.context?.teacher?.name || currentPersona?.name || 'ERNA BOYKELA R';
+            const teacherInfoText = `Wali Kelas: ${toTitleCase(homeroomName)}${coTeacher ? ` • Pendamping: ${toTitleCase(coTeacher.fullName)}` : ''}`;
 
-              return (
-                <div className="space-y-0.5">
-                  <h2 className="text-xl medium:text-2xl font-bold text-ink leading-tight">
-                    {className}
-                  </h2>
-                  <p className="text-ink-soft text-xs medium:text-sm flex items-center gap-1.5 flex-wrap">
-                    <span>Wali Kelas: <strong className="text-ink font-semibold">{toTitleCase(homeroomName)}</strong></span>
-                    {coTeacher && (
-                      <>
-                        <span className="text-ink-faint">•</span>
-                        <span>Pendamping: <strong className="text-ink-soft font-medium">{toTitleCase(coTeacher.fullName)}</strong></span>
-                      </>
-                    )}
-                  </p>
-                </div>
-              );
-            })()}
-          </div>
+            return (
+              <div className="flex items-center gap-2">
+                <h2 className="text-xl medium:text-2xl font-bold text-ink leading-tight">
+                  {className}
+                </h2>
+                <span 
+                  className="text-ink-faint text-xs cursor-help inline-flex items-center p-1 rounded-full hover-only:bg-surface-subtle transition-colors" 
+                  title={teacherInfoText}
+                  aria-label={teacherInfoText}
+                >
+                  <Info className="w-3.5 h-3.5 text-ink-faint hover-only:text-ink" />
+                </span>
+              </div>
+            );
+          })()}
         </div>
 
         {/* Surface Tab Flat Navigation (Law R-8 Flat Fluid Navigation) */}
