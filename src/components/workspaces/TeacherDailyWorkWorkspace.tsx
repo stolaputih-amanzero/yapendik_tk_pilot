@@ -4,7 +4,7 @@
  * Canvas-Native Flat Architecture (Hukum F-7 / A-5).
  */
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { db } from '../../db/database';
 import { useSecurityContext } from '../../auth/context';
 import { evaluateAuthorization } from '../../auth/authorization';
@@ -32,6 +32,7 @@ const getTodayDateString = (): string => {
 
 export const TeacherDailyWorkWorkspace: React.FC = () => {
   const { securityContext, currentPersona } = useSecurityContext();
+  const dateInputRef = useRef<HTMLInputElement>(null);
   const [activities, setActivities] = useState<LearningActivity[]>([]);
   const [classes, setClasses] = useState<ClassRoom[]>([]);
   const [selectedClassId, setSelectedClassId] = useState<string>('cls_maranatha_tka');
@@ -172,15 +173,47 @@ export const TeacherDailyWorkWorkspace: React.FC = () => {
 
         {/* 2. FLAT CONTROLS (R-2 Kontrol Flat) */}
         <div className="flex flex-col medium:flex-row items-stretch medium:items-center gap-3 pt-2">
-          <div className="flex items-center justify-between bg-surface-subtle border border-line-hairline rounded-xl px-3 py-2 text-ink-soft text-xs min-h-[44px]">
-            <span className="text-ink-soft font-medium flex items-center gap-2 whitespace-nowrap">
-              <Calendar className="w-4 h-4 text-ink-soft" /> Tanggal:
+          <div 
+            onClick={() => {
+              try {
+                dateInputRef.current?.showPicker();
+              } catch {
+                dateInputRef.current?.focus();
+              }
+            }}
+            className="relative flex items-center justify-between bg-surface-subtle border border-line-hairline hover:border-brand-primary rounded-xl px-3 py-2 text-xs font-semibold text-ink cursor-pointer transition-all min-h-[44px] group"
+          >
+            <div className="flex items-center gap-2">
+              <Calendar className="w-4 h-4 text-brand-primary group-hover:scale-110 transition-transform shrink-0" />
+              <span className="text-ink font-bold">
+                {(() => {
+                  try {
+                    const [y, m, d] = selectedDate.split('-').map(Number);
+                    const dateObj = new Date(y, m - 1, d);
+                    return dateObj.toLocaleDateString('id-ID', {
+                      weekday: 'short',
+                      day: 'numeric',
+                      month: 'short',
+                      year: 'numeric'
+                    });
+                  } catch {
+                    return selectedDate;
+                  }
+                })()}
+              </span>
+            </div>
+            
+            <span className="text-[10px] font-semibold text-ink-soft bg-surface border border-line-soft px-2 py-0.5 rounded-md group-hover:border-brand-primary group-hover:text-brand-primary transition-colors flex items-center gap-1 shrink-0 ml-2">
+              Ubah ▾
             </span>
+
             <input
+              ref={dateInputRef}
               type="date"
               value={selectedDate}
               onChange={(e) => setSelectedDate(e.target.value)}
-              className="bg-transparent font-semibold text-ink outline-none text-right cursor-pointer ml-2"
+              className="absolute inset-0 opacity-0 cursor-pointer w-full h-full"
+              aria-label="Pilih Tanggal Kegiatan"
             />
           </div>
 

@@ -4,7 +4,7 @@
  * Standardized with Amanaura Design System v1.0 Stacked List Layout.
  */
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { db } from '../../db/database';
 import { useSecurityContext } from '../../auth/context';
 import { evaluateAuthorization } from '../../auth/authorization';
@@ -35,6 +35,7 @@ const getTodayDateString = (): string => {
 
 export const AttendanceWorkspace: React.FC = () => {
   const { securityContext } = useSecurityContext();
+  const dateInputRef = useRef<HTMLInputElement>(null);
   const [classes, setClasses] = useState<ClassRoom[]>([]);
   const [selectedClassId, setSelectedClassId] = useState<string>('cls_maranatha_tka');
   const [selectedDate, setSelectedDate] = useState<string>(getTodayDateString);
@@ -197,11 +198,11 @@ export const AttendanceWorkspace: React.FC = () => {
         {/* Filters */}
         <div className="flex flex-col gap-4 w-full">
           <div className="flex flex-col medium:flex-row medium:items-center gap-3 w-full">
-            <div className="space-y-1">
+            <div className="space-y-1 min-w-[240px]">
               <div className="flex items-center justify-between">
                 <span className="text-[11px] font-bold text-ink-soft">Tanggal Presensi</span>
                 {isToday ? (
-                  <span className="text-[10px] font-semibold px-2 py-0.2 rounded-full bg-emerald-500/10 text-emerald-600 border border-emerald-500/20">
+                  <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-500 border border-emerald-500/20">
                     Hari Ini (Otomatis)
                   </span>
                 ) : (
@@ -214,14 +215,48 @@ export const AttendanceWorkspace: React.FC = () => {
                   </button>
                 )}
               </div>
-              <div className="relative flex items-center">
+              <div 
+                onClick={() => {
+                  try {
+                    dateInputRef.current?.showPicker();
+                  } catch {
+                    dateInputRef.current?.focus();
+                  }
+                }}
+                className="relative flex items-center justify-between bg-surface border border-line hover:border-brand-primary rounded-xl px-3 py-2 text-xs font-semibold text-ink cursor-pointer transition-all shadow-hairline group"
+              >
+                <div className="flex items-center gap-2.5">
+                  <Calendar className="w-4 h-4 text-brand-primary group-hover:scale-110 transition-transform shrink-0" />
+                  <span className="font-bold text-ink truncate">
+                    {(() => {
+                      try {
+                        const [y, m, d] = selectedDate.split('-').map(Number);
+                        const dateObj = new Date(y, m - 1, d);
+                        return dateObj.toLocaleDateString('id-ID', {
+                          weekday: 'short',
+                          day: 'numeric',
+                          month: 'short',
+                          year: 'numeric'
+                        });
+                      } catch {
+                        return selectedDate;
+                      }
+                    })()}
+                  </span>
+                </div>
+                
+                <span className="text-[10px] font-semibold text-ink-soft bg-surface-subtle border border-line-soft px-2 py-0.5 rounded-md group-hover:border-brand-primary group-hover:text-brand-primary transition-colors flex items-center gap-1 shrink-0 ml-2">
+                  Ubah ▾
+                </span>
+
                 <input
+                  ref={dateInputRef}
                   type="date"
                   value={selectedDate}
                   onChange={(e) => setSelectedDate(e.target.value)}
-                  className="w-full bg-surface border border-line rounded-xl pl-9 pr-3 py-2 text-xs text-ink font-semibold focus:border-brand-primary focus:outline-none dark:[color-scheme:dark] [color-scheme:light]"
+                  className="absolute inset-0 opacity-0 cursor-pointer w-full h-full"
+                  aria-label="Pilih Tanggal Presensi"
                 />
-                <Calendar className="w-4 h-4 text-brand-primary absolute left-3 pointer-events-none" />
               </div>
             </div>
 
