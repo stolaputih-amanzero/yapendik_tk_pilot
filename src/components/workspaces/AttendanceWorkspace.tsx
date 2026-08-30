@@ -240,10 +240,10 @@ export const AttendanceWorkspace: React.FC = () => {
   ];
 
   const moodSegments: SegmentedControlOption[] = [
-    { id: 'CERIA', label: 'Ceria', tooltip: 'Ceria / Senang', icon: <Smile className="w-4 h-4" />, hideLabel: true },
-    { id: 'TENANG', label: 'Stabil', tooltip: 'Stabil / Tenang', icon: <Meh className="w-4 h-4" />, hideLabel: true },
-    { id: 'GELISAH', label: 'Lesu', tooltip: 'Lesu / Lelah', icon: <Frown className="w-4 h-4" />, hideLabel: true },
-    { id: 'MENANGIS', label: 'Rewel', tooltip: 'Rewel / Menangis', icon: <Angry className="w-4 h-4" />, hideLabel: true }
+    { id: 'CERIA', label: 'Ceria', tooltip: 'Ceria / Senang', icon: <Smile className="w-4 h-4" />, hideLabel: true, activeClassName: 'bg-success text-on-brand shadow-hairline' },
+    { id: 'TENANG', label: 'Stabil', tooltip: 'Stabil / Tenang', icon: <Meh className="w-4 h-4" />, hideLabel: true, activeClassName: 'bg-info text-on-brand shadow-hairline' },
+    { id: 'GELISAH', label: 'Lesu', tooltip: 'Lesu / Lelah', icon: <Frown className="w-4 h-4" />, hideLabel: true, activeClassName: 'bg-warning text-on-brand shadow-hairline' },
+    { id: 'MENANGIS', label: 'Rewel', tooltip: 'Rewel / Menangis', icon: <Angry className="w-4 h-4" />, hideLabel: true, activeClassName: 'bg-danger text-on-brand shadow-hairline' }
   ];
 
   const classSegments = classes.map(c => ({
@@ -462,7 +462,7 @@ export const AttendanceWorkspace: React.FC = () => {
                           value={row.arrivalMood || 'CERIA'}
                           onChange={(val) => handleMoodChange(s.id, val)}
                           size="sm"
-                          className="w-full min-h-[40px]"
+                          className="w-full min-h-[44px]"
                         />
                       </div>
                     )}
