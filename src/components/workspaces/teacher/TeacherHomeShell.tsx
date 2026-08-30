@@ -59,12 +59,20 @@ import {
   FileText
 } from 'lucide-react';
 
+const getTodayDateString = (): string => {
+  const d = new Date();
+  const year = d.getFullYear();
+  const month = String(d.getMonth() + 1).padStart(2, '0');
+  const day = String(d.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+};
+
 export const TeacherHomeShell: React.FC<{ onNavigateToCommunication?: () => void }> = ({ onNavigateToCommunication }) => {
   const { securityContext, currentPersona } = useSecurityContext();
 
   const [activeTab, setActiveTab] = useState<'TODAY' | 'LEARNING' | 'ROSTER'>('TODAY');
   const [operatingState, setOperatingState] = useState<OperatingState>('WELCOME');
-  const [selectedDate, setSelectedDate] = useState<string>('2026-08-26');
+  const [selectedDate, setSelectedDate] = useState<string>(getTodayDateString);
   
   const [aggregate, setAggregate] = useState<TeacherHomeAggregatePayload | null>(null);
   const [learningActivities, setLearningActivities] = useState<LearningActivity[]>([]);

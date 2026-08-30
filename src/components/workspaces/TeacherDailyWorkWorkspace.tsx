@@ -22,12 +22,20 @@ import {
   Sparkles
 } from 'lucide-react';
 
+const getTodayDateString = (): string => {
+  const d = new Date();
+  const year = d.getFullYear();
+  const month = String(d.getMonth() + 1).padStart(2, '0');
+  const day = String(d.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+};
+
 export const TeacherDailyWorkWorkspace: React.FC = () => {
   const { securityContext, currentPersona } = useSecurityContext();
   const [activities, setActivities] = useState<LearningActivity[]>([]);
   const [classes, setClasses] = useState<ClassRoom[]>([]);
-  const [selectedClassId, setSelectedClassId] = useState<string>('cls_tka_01');
-  const [selectedDate, setSelectedDate] = useState<string>('2026-08-24');
+  const [selectedClassId, setSelectedClassId] = useState<string>('cls_maranatha_tka');
+  const [selectedDate, setSelectedDate] = useState<string>(getTodayDateString);
   const [showAddModal, setShowAddModal] = useState(false);
   const [reflectionModalActivity, setReflectionModalActivity] = useState<LearningActivity | null>(null);
   const [reflectionText, setReflectionText] = useState('');

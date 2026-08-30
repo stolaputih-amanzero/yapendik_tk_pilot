@@ -24,11 +24,19 @@ import {
   Users
 } from 'lucide-react';
 
+const getTodayDateString = (): string => {
+  const d = new Date();
+  const year = d.getFullYear();
+  const month = String(d.getMonth() + 1).padStart(2, '0');
+  const day = String(d.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+};
+
 export const AttendanceWorkspace: React.FC = () => {
   const { securityContext } = useSecurityContext();
   const [classes, setClasses] = useState<ClassRoom[]>([]);
-  const [selectedClassId, setSelectedClassId] = useState<string>('cls_tka_01');
-  const [selectedDate, setSelectedDate] = useState<string>('2026-08-24');
+  const [selectedClassId, setSelectedClassId] = useState<string>('cls_maranatha_tka');
+  const [selectedDate, setSelectedDate] = useState<string>(getTodayDateString);
   const [students, setStudents] = useState<any[]>([]);
   const [attendanceMap, setAttendanceMap] = useState<Record<string, {
     status: AttendanceStatus;
@@ -37,6 +45,8 @@ export const AttendanceWorkspace: React.FC = () => {
     notes: string;
   }>>({});
   const [savedSuccess, setSavedSuccess] = useState(false);
+
+  const isToday = selectedDate === getTodayDateString();
 
   const loadData = () => {
     if (!securityContext) return;
@@ -186,12 +196,30 @@ export const AttendanceWorkspace: React.FC = () => {
         {/* Filters */}
         <div className="flex flex-col gap-4 w-full">
           <div className="flex flex-col medium:flex-row medium:items-center gap-3 w-full">
-            <Input
-              type="date"
-              label="Tanggal"
-              value={selectedDate}
-              onChange={(e) => setSelectedDate(e.target.value)}
-            />
+            <div className="space-y-1">
+              <div className="flex items-center justify-between">
+                <span className="text-[11px] font-bold text-ink-soft">Tanggal Presensi</span>
+                {isToday ? (
+                  <span className="text-[10px] font-semibold px-2 py-0.2 rounded-full bg-emerald-500/10 text-emerald-600 border border-emerald-500/20">
+                    Hari Ini (Otomatis)
+                  </span>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={() => setSelectedDate(getTodayDateString())}
+                    className="text-[10px] text-brand-primary hover:underline font-semibold cursor-pointer"
+                  >
+                    Kembali ke Hari Ini
+                  </button>
+                )}
+              </div>
+              <input
+                type="date"
+                value={selectedDate}
+                onChange={(e) => setSelectedDate(e.target.value)}
+                className="w-full bg-surface border border-line rounded-xl p-2 text-xs text-ink font-semibold focus:border-brand-primary focus:outline-none"
+              />
+            </div>
 
             <SelectSheet
               label="Kelas"
