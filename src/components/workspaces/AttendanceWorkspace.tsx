@@ -466,112 +466,137 @@ export const AttendanceWorkspace: React.FC = () => {
                       />
                     </div>
 
-                    {/* Conditional Temperature & Mood Sub-Row (Rendered ONLY when status === 'HADIR') */}
+                    {/* Conditional Arrival Mood (Rendered ONLY when status === 'HADIR') */}
                     {row.status === 'HADIR' && (
-                      <div className="flex flex-col gap-2 pt-1 animate-in fade-in slide-in-from-top-1 duration-150">
-                        {/* Temperature Stepper [−][value °C mono][+] */}
-                        <div className={`self-start flex items-center justify-between border rounded-field px-3 py-2 transition-colors ${
-                          isFever 
-                            ? 'bg-warning-tint text-warning-deep border-warning-line' 
-                            : 'bg-surface border-line text-ink'
-                        }`}>
-                          <div className="flex items-center gap-2 text-xs font-semibold mr-2">
-                            <Thermometer className={`w-4 h-4 ${isFever ? 'text-warning-deep' : 'text-brand-primary'}`} />
-                            <span className="font-mono tabular-nums font-bold text-xs">
-                              {row.temperature.toFixed(1)} °C
-                            </span>
-                          </div>
-                          <div className="flex items-center gap-1">
-                            <button
-                              type="button"
-                              disabled={!authResult.granted || row.temperature <= 34.0}
-                              onClick={() => handleTempChange(s.id, Math.max(34.0, Math.round((row.temperature - 0.1) * 10) / 10))}
-                              className="w-6 h-6 rounded-md bg-surface-subtle hover-only:bg-line-soft border border-line flex items-center justify-center font-bold text-ink text-xs active:scale-95 disabled:opacity-40 cursor-pointer"
-                              title="Turunkan 0.1°C"
-                            >
-                              −
-                            </button>
-                            <button
-                              type="button"
-                              disabled={!authResult.granted || row.temperature >= 42.0}
-                              onClick={() => handleTempChange(s.id, Math.min(42.0, Math.round((row.temperature + 0.1) * 10) / 10))}
-                              className="w-6 h-6 rounded-md bg-surface-subtle hover-only:bg-line-soft border border-line flex items-center justify-center font-bold text-ink text-xs active:scale-95 disabled:opacity-40 cursor-pointer"
-                              title="Naikkan 0.1°C"
-                            >
-                              +
-                            </button>
-                          </div>
-                        </div>
-
-                        {/* Arrival Mood: SegmentedControl with short labels (w-full) */}
-                        <div className="w-full">
-                          <SegmentedControl
-                            options={moodSegments}
-                            value={row.arrivalMood || 'CERIA'}
-                            onChange={(val) => handleMoodChange(s.id, val)}
-                            size="sm"
-                            className="w-full min-h-[40px]"
-                          />
-                        </div>
-                      </div>
-                    )}
-                  </div>
-
-                  {/* Arrival Notes: Ghost button / Preview / AutoResizeTextarea */}
-                  <div className="w-full pt-1 border-t border-line-hairline">
-                    {isEditingNote ? (
-                      <div className="space-y-1.5 animate-in fade-in duration-150">
-                        <div className="flex items-center justify-between">
-                          <label className="text-[11px] font-semibold text-ink-soft flex items-center gap-1">
-                            <FileText className="w-4 h-4 text-brand-primary" />
-                            Catatan Kedatangan / Penjemputan
-                          </label>
-                          <button
-                            type="button"
-                            onClick={() => setActiveNoteStudentId(null)}
-                            className="text-[11px] font-semibold text-brand-primary hover-only:underline cursor-pointer"
-                          >
-                            Selesai
-                          </button>
-                        </div>
-                        <AutoResizeTextarea
-                          minRows={2}
-                          maxRows={4}
-                          autoFocus
-                          disabled={!authResult.granted}
-                          placeholder="Tulis catatan kondisi kedatangan atau penjemputan anak..."
-                          value={row.notes}
-                          onChange={(e) => handleNotesChange(s.id, e.target.value)}
-                          className="bg-surface border border-line rounded-xl text-xs text-ink placeholder:text-ink-faint focus:border-brand-primary p-3"
+                      <div className="w-full pt-1 animate-in fade-in slide-in-from-top-1 duration-150">
+                        <SegmentedControl
+                          options={moodSegments}
+                          value={row.arrivalMood || 'CERIA'}
+                          onChange={(val) => handleMoodChange(s.id, val)}
+                          size="sm"
+                          className="w-full min-h-[40px]"
                         />
                       </div>
-                    ) : hasNotes ? (
-                      <div 
-                        onClick={() => setActiveNoteStudentId(s.id)}
-                        className="flex items-center justify-between gap-2 text-xs bg-surface-subtle hover-only:bg-surface-subtle/80 px-3 py-2 rounded-xl border border-line-soft cursor-pointer transition-colors"
-                      >
-                        <div className="flex items-center gap-2 min-w-0 flex-1">
-                          <FileText className="w-4 h-4 text-brand-primary shrink-0" />
-                          <span className="text-ink text-xs line-clamp-1 truncate font-medium">
-                            {row.notes}
-                          </span>
-                        </div>
-                        <span className="text-[10px] font-semibold text-ink-soft bg-surface border border-line-soft px-2 py-1 rounded shrink-0">
-                          Ubah
-                        </span>
-                      </div>
-                    ) : (
-                      <button
-                        type="button"
-                        disabled={!authResult.granted}
-                        onClick={() => setActiveNoteStudentId(s.id)}
-                        className="w-full flex items-center justify-center gap-1.5 text-xs font-semibold text-ink-soft hover-only:text-ink py-2 px-3 rounded-xl border border-dashed border-line-soft hover-only:border-brand-primary/50 bg-surface-subtle/30 hover-only:bg-surface-subtle transition-all cursor-pointer min-h-[44px]"
-                      >
-                        <Plus className="w-4 h-4 text-brand-primary shrink-0" />
-                        <span>Catatan</span>
-                      </button>
                     )}
                   </div>
+
+                  {/* Arrival Notes & Special Screening (Option B) */}
+                  {(() => {
+                    const isCustomTemp = row.temperature !== 36.5;
+                    const hasSpecialDetail = hasNotes || (row.status === 'HADIR' && isCustomTemp);
+
+                    return (
+                      <div className="w-full pt-1 border-t border-line-hairline">
+                        {isEditingNote ? (
+                          <div className="space-y-2.5 animate-in fade-in duration-150 bg-surface-subtle/50 p-3 rounded-xl border border-line-soft">
+                            <div className="flex items-center justify-between">
+                              <label className="text-[11px] font-semibold text-ink-soft flex items-center gap-1.5">
+                                <FileText className="w-4 h-4 text-brand-primary shrink-0" />
+                                Catatan &amp; Skrining Khusus
+                              </label>
+                              <button
+                                type="button"
+                                onClick={() => setActiveNoteStudentId(null)}
+                                className="text-[11px] font-semibold text-brand-primary hover-only:underline cursor-pointer"
+                              >
+                                Selesai
+                              </button>
+                            </div>
+
+                            {/* Temperature Stepper inside Screening Panel (HADIR-only) */}
+                            {row.status === 'HADIR' && (
+                              <div className={`flex items-center justify-between gap-3 border rounded-xl px-3 py-2 transition-colors ${
+                                isFever 
+                                  ? 'bg-warning-tint text-warning-deep border-warning-line' 
+                                  : 'bg-surface border-line text-ink'
+                              }`}>
+                                <div className="flex items-center gap-2">
+                                  <Thermometer className={`w-4 h-4 shrink-0 ${isFever ? 'text-warning-deep' : 'text-brand-primary'}`} />
+                                  <div className="flex flex-col">
+                                    <span className="text-[10px] font-medium text-ink-soft">Suhu Tubuh</span>
+                                    <span className="font-mono tabular-nums font-bold text-xs">
+                                      {row.temperature.toFixed(1)} °C {isFever && <span className="text-[10px] text-warning-deep font-bold ml-1">(Demam)</span>}
+                                    </span>
+                                  </div>
+                                </div>
+                                <div className="flex items-center gap-1">
+                                  <button
+                                    type="button"
+                                    disabled={!authResult.granted || row.temperature <= 34.0}
+                                    onClick={() => handleTempChange(s.id, Math.max(34.0, Math.round((row.temperature - 0.1) * 10) / 10))}
+                                    className="w-7 h-7 rounded-lg bg-surface-subtle hover-only:bg-line-soft border border-line flex items-center justify-center font-bold text-ink text-xs active:scale-95 disabled:opacity-40 cursor-pointer"
+                                    title="Turunkan 0.1°C"
+                                  >
+                                    −
+                                  </button>
+                                  <button
+                                    type="button"
+                                    disabled={!authResult.granted || row.temperature >= 42.0}
+                                    onClick={() => handleTempChange(s.id, Math.min(42.0, Math.round((row.temperature + 0.1) * 10) / 10))}
+                                    className="w-7 h-7 rounded-lg bg-surface-subtle hover-only:bg-line-soft border border-line flex items-center justify-center font-bold text-ink text-xs active:scale-95 disabled:opacity-40 cursor-pointer"
+                                    title="Naikkan 0.1°C"
+                                  >
+                                    +
+                                  </button>
+                                </div>
+                              </div>
+                            )}
+
+                            {/* AutoResize Textarea */}
+                            <AutoResizeTextarea
+                              minRows={2}
+                              maxRows={4}
+                              autoFocus
+                              disabled={!authResult.granted}
+                              placeholder="Tulis catatan kondisi kedatangan, kesehatan, atau penjemputan anak..."
+                              value={row.notes}
+                              onChange={(e) => handleNotesChange(s.id, e.target.value)}
+                              className="bg-surface border border-line rounded-xl text-xs text-ink placeholder:text-ink-faint focus:border-brand-primary p-3"
+                            />
+                          </div>
+                        ) : hasSpecialDetail ? (
+                          <div 
+                            onClick={() => setActiveNoteStudentId(s.id)}
+                            className="flex items-center justify-between gap-2 text-xs bg-surface-subtle hover-only:bg-surface-subtle/80 px-3 py-2 rounded-xl border border-line-soft cursor-pointer transition-colors"
+                          >
+                            <div className="flex items-center gap-2 min-w-0 flex-1 flex-wrap">
+                              {row.status === 'HADIR' && isCustomTemp && (
+                                <Badge variant={isFever ? 'warning' : 'neutral'}>
+                                  <Thermometer className="w-3 h-3 mr-0.5 inline" />
+                                  {row.temperature.toFixed(1)} °C
+                                </Badge>
+                              )}
+                              {hasNotes ? (
+                                <div className="flex items-center gap-1.5 min-w-0 flex-1">
+                                  <FileText className="w-3.5 h-3.5 text-brand-primary shrink-0" />
+                                  <span className="text-ink text-xs line-clamp-1 truncate font-medium">
+                                    {row.notes}
+                                  </span>
+                                </div>
+                              ) : (
+                                <span className="text-ink-soft text-xs italic font-medium">
+                                  Suhu tercatat
+                                </span>
+                              )}
+                            </div>
+                            <span className="text-[10px] font-semibold text-ink-soft bg-surface border border-line-soft px-2 py-1 rounded shrink-0">
+                              Ubah
+                            </span>
+                          </div>
+                        ) : (
+                          <button
+                            type="button"
+                            disabled={!authResult.granted}
+                            onClick={() => setActiveNoteStudentId(s.id)}
+                            className="w-full flex items-center justify-center gap-1.5 text-xs font-semibold text-ink-soft hover-only:text-ink py-2 px-3 rounded-xl border border-dashed border-line-soft hover-only:border-brand-primary/50 bg-surface-subtle/30 hover-only:bg-surface-subtle transition-all cursor-pointer min-h-[44px]"
+                          >
+                            <Plus className="w-4 h-4 text-brand-primary shrink-0" />
+                            <span>Catatan</span>
+                          </button>
+                        )}
+                      </div>
+                    );
+                  })()}
                 </div>
               );
             })}
