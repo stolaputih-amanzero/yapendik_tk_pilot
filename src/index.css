@@ -147,8 +147,11 @@ input[type="week"] {
 .dark input[type="time"],
 .dark input[type="datetime-local"],
 .dark input[type="month"],
-.dark input[type="week"] {
-  color-scheme: dark;
+.dark input[type="week"],
+html.dark input[type="date"],
+html.dark input[type="time"],
+html.dark input[type="datetime-local"] {
+  color-scheme: dark !important;
 }
 
 input[type="date"]::-webkit-calendar-picker-indicator,
@@ -176,18 +179,23 @@ input[type="week"]::-webkit-calendar-picker-indicator:hover {
 .dark input[type="time"]::-webkit-calendar-picker-indicator,
 .dark input[type="datetime-local"]::-webkit-calendar-picker-indicator,
 .dark input[type="month"]::-webkit-calendar-picker-indicator,
-.dark input[type="week"]::-webkit-calendar-picker-indicator {
-  filter: invert(0.9) brightness(1.2);
-  opacity: 0.85;
+.dark input[type="week"]::-webkit-calendar-picker-indicator,
+html.dark input[type="date"]::-webkit-calendar-picker-indicator,
+html.dark input[type="time"]::-webkit-calendar-picker-indicator,
+html.dark input[type="datetime-local"]::-webkit-calendar-picker-indicator {
+  filter: invert(1) brightness(1.8) !important;
+  opacity: 0.95 !important;
+  cursor: pointer;
 }
 
 .dark input[type="date"]::-webkit-calendar-picker-indicator:hover,
 .dark input[type="time"]::-webkit-calendar-picker-indicator:hover,
 .dark input[type="datetime-local"]::-webkit-calendar-picker-indicator:hover,
 .dark input[type="month"]::-webkit-calendar-picker-indicator:hover,
-.dark input[type="week"]::-webkit-calendar-picker-indicator:hover {
-  filter: invert(1) brightness(1.5);
-  opacity: 1;
+.dark input[type="week"]::-webkit-calendar-picker-indicator:hover,
+html.dark input[type="date"]::-webkit-calendar-picker-indicator:hover {
+  filter: invert(1) brightness(2.2) !important;
+  opacity: 1 !important;
 }
 
 /* ═══ Alias Layer (Tailwind v4 @theme inline) — nama utility TIDAK berubah ═══ */

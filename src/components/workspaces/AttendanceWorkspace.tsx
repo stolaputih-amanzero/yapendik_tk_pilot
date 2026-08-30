@@ -16,6 +16,7 @@ import {
 import { Button, AvatarChild, Badge, Input, SelectSheet } from '../ui';
 import { 
   CalendarCheck, 
+  Calendar,
   Check, 
   Thermometer, 
   Save, 
@@ -213,12 +214,15 @@ export const AttendanceWorkspace: React.FC = () => {
                   </button>
                 )}
               </div>
-              <input
-                type="date"
-                value={selectedDate}
-                onChange={(e) => setSelectedDate(e.target.value)}
-                className="w-full bg-surface border border-line rounded-xl p-2 text-xs text-ink font-semibold focus:border-brand-primary focus:outline-none"
-              />
+              <div className="relative flex items-center">
+                <input
+                  type="date"
+                  value={selectedDate}
+                  onChange={(e) => setSelectedDate(e.target.value)}
+                  className="w-full bg-surface border border-line rounded-xl pl-9 pr-3 py-2 text-xs text-ink font-semibold focus:border-brand-primary focus:outline-none dark:[color-scheme:dark] [color-scheme:light]"
+                />
+                <Calendar className="w-4 h-4 text-brand-primary absolute left-3 pointer-events-none" />
+              </div>
             </div>
 
             <SelectSheet
