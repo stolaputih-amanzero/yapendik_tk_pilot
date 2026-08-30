@@ -6,7 +6,7 @@
 import React, { useState } from 'react';
 import { useSecurityContext } from '../../auth/context';
 import { SupabaseSettingsModal } from '../workspaces/SupabaseSettingsModal';
-import { Button, Badge, ListItem } from '../ui';
+import { Button } from '../ui';
 import { 
   Building2, 
   ShieldCheck, 
@@ -16,23 +16,18 @@ import {
   Lock, 
   AlertCircle, 
   SlidersHorizontal,
-  Users,
   ArrowRight,
   Flower2
 } from 'lucide-react';
 
 export const PremiumLoginScreen: React.FC = () => {
-  const isSimulationEnabled = typeof import.meta !== 'undefined' && import.meta?.env ? import.meta.env.VITE_ENABLE_SIMULATION !== 'false' : true;
-  const [authTab, setAuthTab] = useState<'REAL_AUTH' | 'SIMULATION'>(
-    isSimulationEnabled ? 'SIMULATION' : 'REAL_AUTH'
-  );
   const [loginEmail, setLoginEmail] = useState('');
   const [loginPassword, setLoginPassword] = useState('');
   const [loginError, setLoginError] = useState<string | null>(null);
   const [isLoggingIn, setIsLoggingIn] = useState(false);
   const [isSupabaseModalOpen, setIsSupabaseModalOpen] = useState(false);
 
-  const { authState, switchPersona, signInWithEmail } = useSecurityContext();
+  const { authState, signInWithEmail } = useSecurityContext();
 
   const handleRealLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -153,51 +148,16 @@ export const PremiumLoginScreen: React.FC = () => {
             </p>
           </div>
 
-          {/* Mode Switcher Tabs (Only shown if VITE_ENABLE_SIMULATION is enabled) */}
-          {isSimulationEnabled && (
-            <div className="flex bg-surface-subtle p-1 rounded-field border border-line mb-6 text-xs">
-              <button
-                type="button"
-                onClick={() => setAuthTab('SIMULATION')}
-                className={`flex-1 py-2 px-3 rounded-lg font-semibold transition-all duration-150 flex items-center justify-center gap-2 cursor-pointer ${
-                  authTab === 'SIMULATION' 
-                    ? 'bg-surface text-ink shadow-hairline font-bold' 
-                    : 'text-ink-soft hover-only:text-ink'
-                }`}
-              >
-                <Users className="w-4 h-4" />
-                <span>Simulasi Persona (6+ Role)</span>
-              </button>
-              <button
-                type="button"
-                onClick={() => setAuthTab('REAL_AUTH')}
-                className={`flex-1 py-2 px-3 rounded-lg font-semibold transition-all duration-150 flex items-center justify-center gap-2 cursor-pointer ${
-                  authTab === 'REAL_AUTH' 
-                    ? 'bg-brand text-on-brand shadow-hairline font-bold' 
-                    : 'text-ink-soft hover-only:text-ink'
-                }`}
-              >
-                <Lock className="w-4 h-4" />
-                <span>Login Pengguna</span>
-              </button>
-            </div>
-          )}
-
-          {/* Special Canonical Identity Warning Notice (C-13) */}
+          {/* spesial notices (C-13) */}
           {authState === 'AUTHENTICATED_NO_PERSON' && (
             <div className="bg-warning-tint border border-warning-line rounded-field p-4 mb-6 text-left text-xs">
               <div className="flex items-center space-x-2 text-warning-deep font-bold mb-1.5">
                 <ShieldCheck className="w-4 h-4 text-warning shrink-0" />
                 <span>Notice Identitas Kanonikal (C-13)</span>
               </div>
-              <p className="text-warning-deep leading-relaxed mb-2 font-medium">
-                Akun Anda terautentikasi, namun profil Anda belum terdaftar aktif di sistem sekolah. Silakan hubungi Tata Usaha untuk aktivasi.
+              <p className="text-warning-deep leading-relaxed font-medium">
+                Akun Anda terautentikasi, namun profil Anda belum terdaftar aktif di sistem sekolah. Silakan hubungi Administrator Yayasan atau Kepala Sekolah untuk aktivasi identitas.
               </p>
-              {isSimulationEnabled && (
-                <p className="text-warning-deep/80 text-[11px]">
-                  Gunakan tab simulasi persona di atas untuk pengujian fungsional modul TK Pilot.
-                </p>
-              )}
             </div>
           )}
 
@@ -226,154 +186,83 @@ export const PremiumLoginScreen: React.FC = () => {
           )}
 
           {/* REAL AUTHENTICATION FORM */}
-          {authTab === 'REAL_AUTH' ? (
-            <form onSubmit={handleRealLogin} className="space-y-4 text-left">
-              <div>
-                <label className="block text-xs font-bold text-ink mb-1.5">
-                  Email Institusi Yapendik
-                </label>
-                <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-ink-faint">
-                    <Mail className="w-4 h-4" />
-                  </div>
-                  <input
-                    type="email"
-                    required
-                    placeholder="nama@yapendik.sch.id"
-                    value={loginEmail}
-                    onChange={(e) => setLoginEmail(e.target.value)}
-                    className="w-full bg-surface-subtle border border-line rounded-field pl-10 pr-4 py-2 text-xs text-ink placeholder:text-ink-faint outline-none focus:border-brand focus:ring-1 focus:ring-brand transition-all font-medium"
-                  />
+          <form onSubmit={handleRealLogin} className="space-y-4 text-left">
+            <div>
+              <label className="block text-xs font-bold text-ink mb-1.5">
+                Email Pengguna
+              </label>
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-ink-faint">
+                  <Mail className="w-4 h-4" />
                 </div>
-              </div>
-
-              <div>
-                <label className="block text-xs font-bold text-ink mb-1.5">
-                  Kata Sandi
-                </label>
-                <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-ink-faint">
-                    <Lock className="w-4 h-4" />
-                  </div>
-                  <input
-                    type="password"
-                    required
-                    placeholder="••••••••"
-                    value={loginPassword}
-                    onChange={(e) => setLoginPassword(e.target.value)}
-                    className="w-full bg-surface-subtle border border-line rounded-field pl-10 pr-4 py-2 text-xs text-ink placeholder:text-ink-faint outline-none focus:border-brand focus:ring-1 focus:ring-brand transition-all font-medium"
-                  />
-                </div>
-              </div>
-
-              {loginError && (
-                <div className="p-3 bg-danger-tint border border-danger-line rounded-field text-danger-deep text-xs font-medium flex items-start space-x-2.5">
-                  <AlertCircle className="w-4 h-4 text-danger shrink-0 mt-0.5" />
-                  <div className="leading-relaxed">{loginError}</div>
-                </div>
-              )}
-
-              <Button
-                type="submit"
-                variant="primary"
-                size="lg"
-                isLoading={isLoggingIn}
-                rightIcon={!isLoggingIn ? <ArrowRight className="w-4 h-4" /> : undefined}
-                className="w-full shadow-hairline mt-2"
-              >
-                {isLoggingIn ? 'Memvalidasi Identitas...' : 'Masuk ke Ruang Kerja'}
-              </Button>
-            </form>
-          ) : (
-            /* SIMULATION PERSONA SELECTOR */
-            <div className="space-y-2 text-left mb-2">
-              <div className="text-[11px] text-ink-soft mb-2 font-medium">
-                Pilih persona uji untuk mengeksplorasi modul sesuai kewenangan peran:
-              </div>
-
-              <div className="bg-surface border border-line rounded-field overflow-hidden divide-y divide-line-soft shadow-hairline">
-                <ListItem
-                  title="SHIRLEY A.T.WAKKARY"
-                  subtitle="Pengawas Mutu Pendidikan Yayasan (Superadmin)"
-                  badge={<Badge variant="lppa">SUPERADMIN</Badge>}
-                  onClick={() => switchPersona('user_superadmin_shirley')}
-                  showChevron
-                />
-
-                <ListItem
-                  title="SHERYL Y N UMBAS, S.IKOM, M.PD"
-                  subtitle="Kepala Sekolah TK Yapendik Maranatha"
-                  badge={<Badge variant="success">HEADMASTER</Badge>}
-                  onClick={() => switchPersona('user_headmaster_sheryl')}
-                  showChevron
-                />
-
-                <ListItem
-                  title="ERNA BOYKELA R"
-                  subtitle="Wali Kelas TK A (Kelompok A)"
-                  badge={<Badge variant="info">TEACHER</Badge>}
-                  onClick={() => switchPersona('user_teacher_erna')}
-                  showChevron
-                />
-
-                <ListItem
-                  title="CHARLOTHA JOVANNCA BLANDINNA R"
-                  subtitle="Guru Pendamping TK A"
-                  badge={<Badge variant="info">ASSISTANT</Badge>}
-                  onClick={() => switchPersona('user_teacher_charlotha')}
-                  showChevron
-                />
-
-                <ListItem
-                  title="EVI TANIA"
-                  subtitle="Wali Kelas TK B (Kelompok B)"
-                  badge={<Badge variant="info">TEACHER</Badge>}
-                  onClick={() => switchPersona('user_teacher_evi')}
-                  showChevron
-                />
-
-                <ListItem
-                  title="JULEN PATRICIA"
-                  subtitle="Orang Tua / Wali (Ananda Millen - TK A)"
-                  badge={<Badge variant="neutral">GUARDIAN</Badge>}
-                  onClick={() => switchPersona('user_guard_julen')}
-                  showChevron
-                />
-
-                <ListItem
-                  title="MUTIARA ZEGA"
-                  subtitle="Orang Tua / Wali (Ananda Kayla - TK B)"
-                  badge={<Badge variant="neutral">GUARDIAN</Badge>}
-                  onClick={() => switchPersona('user_guard_mutiara')}
-                  showChevron
+                <input
+                  type="email"
+                  required
+                  placeholder="contoh: sherylumbas9@gmail.com"
+                  value={loginEmail}
+                  onChange={(e) => setLoginEmail(e.target.value)}
+                  className="w-full bg-surface-subtle border border-line rounded-field pl-10 pr-4 py-2.5 text-xs text-ink placeholder:text-ink-faint outline-none focus:border-brand focus:ring-1 focus:ring-brand transition-all font-medium"
                 />
               </div>
             </div>
-          )}
+
+            <div>
+              <label className="block text-xs font-bold text-ink mb-1.5">
+                Kata Sandi
+              </label>
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-ink-faint">
+                  <Lock className="w-4 h-4" />
+                </div>
+                <input
+                  type="password"
+                  required
+                  placeholder="••••••••"
+                  value={loginPassword}
+                  onChange={(e) => setLoginPassword(e.target.value)}
+                  className="w-full bg-surface-subtle border border-line rounded-field pl-10 pr-4 py-2.5 text-xs text-ink placeholder:text-ink-faint outline-none focus:border-brand focus:ring-1 focus:ring-brand transition-all font-medium"
+                />
+              </div>
+            </div>
+
+            {loginError && (
+              <div className="p-3 bg-danger-tint border border-danger-line rounded-field text-danger-deep text-xs font-medium flex items-start space-x-2.5">
+                <AlertCircle className="w-4 h-4 text-danger shrink-0 mt-0.5" />
+                <div className="leading-relaxed">{loginError}</div>
+              </div>
+            )}
+
+            <Button
+              type="submit"
+              variant="primary"
+              size="lg"
+              isLoading={isLoggingIn}
+              rightIcon={!isLoggingIn ? <ArrowRight className="w-4 h-4" /> : undefined}
+              className="w-full shadow-hairline mt-2"
+            >
+              {isLoggingIn ? 'Memvalidasi Identitas...' : 'Masuk ke Ruang Kerja'}
+            </Button>
+          </form>
 
           {/* Footer Controls */}
-          <div className={`mt-6 pt-4 border-t border-line-soft flex items-center text-xs text-ink-soft ${isSimulationEnabled ? 'justify-between' : 'justify-end'}`}>
-            {isSimulationEnabled && (
-              <button
-                type="button"
-                onClick={() => setIsSupabaseModalOpen(true)}
-                className="inline-flex items-center gap-2 text-ink-soft hover-only:text-ink transition-colors text-xs font-semibold cursor-pointer"
-              >
-                <SlidersHorizontal className="w-4 h-4" />
-                <span>Konfigurasi Supabase</span>
-              </button>
-            )}
-            <span className="font-mono text-[11px] text-ink-faint whitespace-nowrap">V2.1.5</span>
+          <div className="mt-6 pt-4 border-t border-line-soft flex items-center justify-between text-xs text-ink-soft">
+            <button
+              type="button"
+              onClick={() => setIsSupabaseModalOpen(true)}
+              className="inline-flex items-center gap-2 text-ink-soft hover-only:text-ink transition-colors text-xs font-semibold cursor-pointer"
+            >
+              <SlidersHorizontal className="w-4 h-4" />
+              <span>Status Koneksi Supabase</span>
+            </button>
+            <span className="font-mono text-[11px] text-ink-faint whitespace-nowrap">Production v1.0</span>
           </div>
         </div>
 
-        {/* Supabase Settings Modal (Only accessible if simulation / dev enabled) */}
-        {isSimulationEnabled && (
-          <SupabaseSettingsModal
-            isOpen={isSupabaseModalOpen}
-            onClose={() => setIsSupabaseModalOpen(false)}
-          />
-        )}
+        {/* Supabase Settings Modal */}
+        <SupabaseSettingsModal
+          isOpen={isSupabaseModalOpen}
+          onClose={() => setIsSupabaseModalOpen(false)}
+        />
       </div>
     </div>
   );
