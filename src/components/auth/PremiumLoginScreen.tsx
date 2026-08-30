@@ -5,7 +5,6 @@
 
 import React, { useState } from 'react';
 import { useSecurityContext } from '../../auth/context';
-import { SupabaseSettingsModal } from '../workspaces/SupabaseSettingsModal';
 import { Button } from '../ui';
 import { 
   Building2, 
@@ -15,7 +14,6 @@ import {
   Mail, 
   Lock, 
   AlertCircle, 
-  SlidersHorizontal,
   ArrowRight,
   Flower2
 } from 'lucide-react';
@@ -25,7 +23,6 @@ export const PremiumLoginScreen: React.FC = () => {
   const [loginPassword, setLoginPassword] = useState('');
   const [loginError, setLoginError] = useState<string | null>(null);
   const [isLoggingIn, setIsLoggingIn] = useState(false);
-  const [isSupabaseModalOpen, setIsSupabaseModalOpen] = useState(false);
 
   const { authState, signInWithEmail } = useSecurityContext();
 
@@ -243,26 +240,7 @@ export const PremiumLoginScreen: React.FC = () => {
               {isLoggingIn ? 'Memvalidasi Identitas...' : 'Masuk ke Ruang Kerja'}
             </Button>
           </form>
-
-          {/* Footer Controls */}
-          <div className="mt-6 pt-4 border-t border-line-soft flex items-center justify-between text-xs text-ink-soft">
-            <button
-              type="button"
-              onClick={() => setIsSupabaseModalOpen(true)}
-              className="inline-flex items-center gap-2 text-ink-soft hover-only:text-ink transition-colors text-xs font-semibold cursor-pointer"
-            >
-              <SlidersHorizontal className="w-4 h-4" />
-              <span>Status Koneksi Supabase</span>
-            </button>
-            <span className="font-mono text-[11px] text-ink-faint whitespace-nowrap">Production v1.0</span>
-          </div>
         </div>
-
-        {/* Supabase Settings Modal */}
-        <SupabaseSettingsModal
-          isOpen={isSupabaseModalOpen}
-          onClose={() => setIsSupabaseModalOpen(false)}
-        />
       </div>
     </div>
   );
