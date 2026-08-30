@@ -6,11 +6,13 @@
 
 BEGIN;
 
--- 1. Clean legacy pilot seed data (temporarily bypass immutability triggers for legacy mock cleanup)
-ALTER TABLE public.student_progress_reports DISABLE TRIGGER ALL;
-ALTER TABLE public.student_placement_records DISABLE TRIGGER ALL;
-ALTER TABLE public.observation_records DISABLE TRIGGER ALL;
-ALTER TABLE public.daily_attendance DISABLE TRIGGER ALL;
+-- 1. Clean legacy pilot seed data (drop user immutability triggers before cleanup, then recreate)
+DROP TRIGGER IF EXISTS trg_report_published_immutability ON public.student_progress_reports;
+DROP TRIGGER IF EXISTS trg_guard_closed_semester_lppa ON public.student_progress_reports;
+DROP TRIGGER IF EXISTS trg_fb06_block_foundation_lppa ON public.student_progress_reports;
+DROP TRIGGER IF EXISTS trg_placement_terminalization_guard ON public.student_placement_records;
+DROP TRIGGER IF EXISTS trg_guard_closed_semester_obs ON public.observation_records;
+DROP TRIGGER IF EXISTS trg_guard_closed_semester_att ON public.daily_attendance;
 
 DELETE FROM public.pdf_generation_requests 
 WHERE target_student_id IN (
@@ -60,10 +62,25 @@ DELETE FROM public.students
 WHERE school_id IN ('sch_tk_yapendik_01', 'sch_tk_yapendik_02')
    OR school_id IN (SELECT id FROM public.schools WHERE npsn IN ('20104821', '20108955'));
 
-ALTER TABLE public.student_progress_reports ENABLE TRIGGER ALL;
-ALTER TABLE public.student_placement_records ENABLE TRIGGER ALL;
-ALTER TABLE public.observation_records ENABLE TRIGGER ALL;
-ALTER TABLE public.daily_attendance ENABLE TRIGGER ALL;
+CREATE TRIGGER trg_report_published_immutability
+  BEFORE UPDATE OR DELETE ON public.student_progress_reports
+  FOR EACH ROW EXECUTE FUNCTION public.trg_enforce_published_report_immutability();
+
+CREATE TRIGGER trg_guard_closed_semester_lppa
+  BEFORE INSERT OR UPDATE OR DELETE ON public.student_progress_reports
+  FOR EACH ROW EXECUTE FUNCTION public.fn_guard_closed_semester_mutations();
+
+CREATE TRIGGER trg_fb06_block_foundation_lppa
+  BEFORE INSERT OR UPDATE OR DELETE ON public.student_progress_reports
+  FOR EACH ROW EXECUTE FUNCTION public.fn_fb06_block_foundation_mutations();
+
+CREATE TRIGGER trg_guard_closed_semester_obs
+  BEFORE INSERT OR UPDATE OR DELETE ON public.observation_records
+  FOR EACH ROW EXECUTE FUNCTION public.fn_guard_closed_semester_mutations();
+
+CREATE TRIGGER trg_guard_closed_semester_att
+  BEFORE INSERT OR UPDATE OR DELETE ON public.daily_attendance
+  FOR EACH ROW EXECUTE FUNCTION public.fn_guard_closed_semester_mutations();
 
 DELETE FROM public.teacher_profiles 
 WHERE school_id IN ('sch_tk_yapendik_01', 'sch_tk_yapendik_02')
