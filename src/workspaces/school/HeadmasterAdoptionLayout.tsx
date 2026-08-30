@@ -83,7 +83,7 @@ export const HeadmasterAdoptionLayout: React.FC = () => {
       const bData = await briefingEngine.getBriefingDataForUser(
         'HEADMASTER',
         schoolId,
-        currentPersona?.personId
+        currentPersona?.personId || currentPersona?.id
       );
       setBriefingData(bData as HeadmasterBriefingData);
     } catch (err) {

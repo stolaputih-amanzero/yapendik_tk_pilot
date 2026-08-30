@@ -301,6 +301,7 @@ export class BriefingEngineService {
     });
 
     if (role === 'TEACHER') {
+      const person = userId ? db.getPersonById(userId) : null;
       const isDiana = Boolean(
         userId && (
           userId === 'user_teacher_diana_tk2' ||
@@ -308,7 +309,24 @@ export class BriefingEngineService {
           userId.toLowerCase().includes('diana')
         )
       );
-      const teacherSalutation = isDiana ? 'Bu Diana' : 'Bu Siti';
+      const isSiti = Boolean(
+        userId && (
+          userId === 'user_teacher_siti' ||
+          userId === 'per_teacher_siti' ||
+          userId.toLowerCase().includes('siti')
+        )
+      );
+      let teacherSalutation = 'Bu Erna';
+      if (isDiana) {
+        teacherSalutation = 'Bu Diana';
+      } else if (isSiti) {
+        teacherSalutation = 'Bu Siti';
+      } else if (person?.preferredName) {
+        teacherSalutation = person.preferredName;
+      } else if (person?.fullName) {
+        teacherSalutation = 'Bu ' + person.fullName.split(' ')[0];
+      }
+
       const teacherData: TeacherBriefingData = {
         role: 'TEACHER',
         mode,
@@ -342,8 +360,10 @@ export class BriefingEngineService {
         },
         warm_echo: {
           source_type: 'PARENT_MESSAGE',
-          source_author: 'Bunda Kenzo',
-          quote_text: 'Terima kasih Bu Siti, Kenzo sangat ceria bercerita tentang balok hari ini.',
+          source_author: (isDiana || isSiti) ? 'Bunda Kenzo' : 'Mama Millen',
+          quote_text: (isDiana || isSiti) 
+            ? 'Terima kasih Bu Guru, Kenzo sangat ceria bercerita tentang balok hari ini.'
+            : 'Terima kasih Bu Guru, Millen sangat ceria dan antusias bercerita tentang sentra bermain hari ini.',
           timestamp: '11:45'
         }
       };
@@ -352,15 +372,32 @@ export class BriefingEngineService {
     }
 
     if (role === 'HEADMASTER') {
+      const person = userId ? db.getPersonById(userId) : null;
+      const isEsther = Boolean(
+        userId && (
+          userId === 'user_headmaster_esther' ||
+          userId === 'per_headmaster_esther' ||
+          userId.toLowerCase().includes('esther')
+        )
+      );
+      let ksSalutation = 'Ibu Sheryl';
+      if (isEsther) {
+        ksSalutation = 'Ibu Esther';
+      } else if (person?.preferredName) {
+        ksSalutation = person.preferredName;
+      } else if (person?.fullName) {
+        ksSalutation = 'Ibu ' + person.fullName.split(' ')[0];
+      }
+
       const ksData: HeadmasterBriefingData = {
         role: 'HEADMASTER',
         mode,
-        greeting: mode === 'PENUTUP' ? 'Hari ini selesai, Ibu Esther.' : 'Selamat pagi, Ibu Esther',
+        greeting: mode === 'PENUTUP' ? `Hari ini selesai, ${ksSalutation}.` : `Selamat pagi, ${ksSalutation}`,
         date_formatted: dateFormatted,
         school_local_time: localTimeString,
         reconciliation: {
-          classes_complete: 3,
-          classes_total: 3,
+          classes_complete: 2,
+          classes_total: 2,
           safety_alerts: 0
         },
         authority_queue: {
@@ -379,7 +416,7 @@ export class BriefingEngineService {
         },
         warm_echo: {
           source_type: 'TEACHER_REFLECTION',
-          source_author: 'Bu Siti Nurhaliza',
+          source_author: isEsther ? 'Bu Siti Nurhaliza' : 'Bu Erna Boykela',
           quote_text: 'Sentra bermain peran berjalan sangat kondusif, anak-anak saling berbagi peran.',
           timestamp: '12:15'
         }
@@ -389,10 +426,27 @@ export class BriefingEngineService {
     }
 
     if (role === 'FOUNDATION') {
+      const person = userId ? db.getPersonById(userId) : null;
+      const isAndreas = Boolean(
+        userId && (
+          userId === 'user_superadmin_yapendik' ||
+          userId === 'per_superadmin_andreas' ||
+          userId.toLowerCase().includes('andreas')
+        )
+      );
+      let foundationSalutation = 'Ibu Shirley';
+      if (isAndreas) {
+        foundationSalutation = 'Pak Andreas';
+      } else if (person?.preferredName) {
+        foundationSalutation = person.preferredName;
+      } else if (person?.fullName) {
+        foundationSalutation = 'Ibu ' + person.fullName.split(' ')[0];
+      }
+
       const foundationData: FoundationBriefingData = {
         role: 'FOUNDATION',
         mode,
-        greeting: mode === 'PENUTUP' ? 'Siklus minggu ini selesai, Pak Andreas.' : 'Selamat pagi, Pak Andreas',
+        greeting: mode === 'PENUTUP' ? `Siklus minggu ini selesai, ${foundationSalutation}.` : `Selamat pagi, ${foundationSalutation}`,
         date_formatted: dateFormatted,
         school_local_time: localTimeString,
         cycle_view: 'WEEKLY_REVIEW',
@@ -410,7 +464,7 @@ export class BriefingEngineService {
         },
         warm_echo: {
           source_type: 'HEADMASTER_NOTE',
-          source_author: 'Kepala Sekolah TK Menteng',
+          source_author: isAndreas ? 'Kepala Sekolah TK Menteng' : 'Kepala Sekolah TK Maranatha',
           quote_text: 'Bantuan material loose-parts telah aktif digunakan dalam 4 siklus bermain.',
           timestamp: 'Kemarin'
         }
