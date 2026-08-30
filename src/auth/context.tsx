@@ -29,98 +29,7 @@ export interface PersonaProfile {
   isSimulation?: boolean;
 }
 
-export const SEED_PERSONAS: PersonaProfile[] = [
-  {
-    id: 'user_teacher_siti',
-    name: 'Siti Rahmawati, S.Pd',
-    role: 'TEACHER',
-    roleTitle: 'Wali Kelas TK A (Kelompok Bintang Ceria)',
-    schoolId: 'sch_tk_yapendik_01',
-    schoolName: 'TK Yapendik 01 Menteng',
-    personId: 'per_teacher_siti',
-    assignedClasses: ['cls_tka_01'],
-    guardianChildrenPersonIds: [],
-    description: 'Guru Inti kelompok usia 4-5 tahun, aktif mengamati perkembangan motorik & bahasa.',
-    isSimulation: true
-  },
-  {
-    id: 'user_teacher_maria',
-    name: 'Maria Magdalena, S.Pd.Aud',
-    role: 'TEACHER',
-    roleTitle: 'Wali Kelas TK B (Kelompok Matahari)',
-    schoolId: 'sch_tk_yapendik_01',
-    schoolName: 'TK Yapendik 01 Menteng',
-    personId: 'per_teacher_maria',
-    assignedClasses: ['cls_tkb_01'],
-    guardianChildrenPersonIds: [],
-    description: 'Guru Inti kelompok usia 5-6 tahun, persiapan transisi ke jenjang SD.',
-    isSimulation: true
-  },
-  {
-    id: 'user_headmaster_esther',
-    name: 'Dra. Esther Nugroho, M.Pd',
-    role: 'HEADMASTER',
-    roleTitle: 'Kepala Sekolah TK Yapendik 01',
-    schoolId: 'sch_tk_yapendik_01',
-    schoolName: 'TK Yapendik 01 Menteng',
-    personId: 'per_headmaster_esther',
-    assignedClasses: ['cls_tka_01', 'cls_tkb_01'],
-    guardianChildrenPersonIds: [],
-    description: 'Pimpinan sekolah bertanggung jawab atas kurikulum, validasi LPPA, dan supervisi pendidik.',
-    isSimulation: true
-  },
-  {
-    id: 'user_parent_budi',
-    name: 'Budi Santoso, S.T.',
-    role: 'GUARDIAN',
-    roleTitle: 'Orang Tua / Wali Murid (Ayah Kenzo & Nathanael)',
-    schoolId: 'sch_tk_yapendik_01',
-    schoolName: 'TK Yapendik 01 Menteng',
-    personId: 'per_parent_budi',
-    assignedClasses: [],
-    guardianChildrenPersonIds: ['per_child_kenzo'],
-    description: 'Wali sah Ananda Kenzo (TK A) & Pendaftar PPDB Calon Siswa Nathanael Santoso.',
-    isSimulation: true
-  },
-  {
-    id: 'user_parent_bona',
-    name: 'Bona Pandjaitan, S.T.',
-    role: 'APPLICANT',
-    roleTitle: 'Orang Tua Calon Siswa PPDB (Ayah Timothy)',
-    schoolId: 'sch_tk_yapendik_01',
-    schoolName: 'TK Yapendik 01 Menteng',
-    personId: 'per_parent_bona',
-    assignedClasses: [],
-    guardianChildrenPersonIds: [],
-    description: 'Orang Tua Pendaftar Baru (Guest APPLICANT) ananda Timothy Andreas Pandjaitan.',
-    isSimulation: true
-  },
-  {
-    id: 'user_teacher_diana_tk2',
-    name: 'Diana Sari, S.Pd',
-    role: 'TEACHER',
-    roleTitle: 'Guru TK Yapendik 02 Kebayoran',
-    schoolId: 'sch_tk_yapendik_02',
-    schoolName: 'TK Yapendik 02 Kebayoran',
-    personId: 'per_teacher_diana',
-    assignedClasses: ['cls_tka_02'],
-    guardianChildrenPersonIds: [],
-    description: 'Pendidik dari unit sekolah berbeda. Digunakan untuk memvalidasi isolasi batas sekolah (Negative Tests).',
-    isSimulation: true
-  },
-  {
-    id: 'user_superadmin_yapendik',
-    name: 'Dr. Andreas Hendrawan (Yayasan)',
-    role: 'YAPENDIK_SUPERADMIN',
-    roleTitle: 'Pengawas Mutu Pendidikan Yayasan Yapendik',
-    schoolId: 'sch_tk_yapendik_01',
-    schoolName: 'Yayasan Pendidikan Kristen Yapendik',
-    personId: 'per_superadmin_andreas',
-    assignedClasses: ['cls_tka_01', 'cls_tkb_01', 'cls_tka_02'],
-    guardianChildrenPersonIds: [],
-    description: 'Tata kelola lintas sekolah, penjaminan mutu kurikulum TK Pilot, dan audit menyeluruh.',
-    isSimulation: true
-  },
+export const GENESIS_PERSONAS: PersonaProfile[] = [
   {
     id: 'user_superadmin_shirley',
     name: 'SHIRLEY A.T.WAKKARY',
@@ -185,7 +94,132 @@ export const SEED_PERSONAS: PersonaProfile[] = [
     guardianChildrenPersonIds: [],
     description: 'Guru Inti Perkembangan Motorik & Sentra Kelompok B.',
     isSimulation: true
+  },
+  {
+    id: 'user_guard_julen',
+    name: 'JULEN PATRICIA',
+    role: 'GUARDIAN',
+    roleTitle: 'Orang Tua / Wali Murid (Wali Millen - TK A)',
+    schoolId: 'sch_tk_maranatha',
+    schoolName: 'TK YAPENDIK GPIB Cabang Maranatha',
+    personId: 'per_guard_julen_patricia',
+    assignedClasses: [],
+    guardianChildrenPersonIds: ['per_child_millen'],
+    description: 'Wali sah Ananda Jequaline Arabella (Millen) di Kelompok A.',
+    isSimulation: true
+  },
+  {
+    id: 'user_guard_mutiara',
+    name: 'MUTIARA ZEGA',
+    role: 'GUARDIAN',
+    roleTitle: 'Orang Tua / Wali Murid (Wali Kayla - TK B)',
+    schoolId: 'sch_tk_maranatha',
+    schoolName: 'TK YAPENDIK GPIB Cabang Maranatha',
+    personId: 'per_guard_mutiara_zega',
+    assignedClasses: [],
+    guardianChildrenPersonIds: ['per_child_kayla'],
+    description: 'Wali sah Ananda Kayla Gabriella di Kelompok B.',
+    isSimulation: true
+  },
+  {
+    id: 'user_parent_bona',
+    name: 'Bona Pandjaitan, S.T.',
+    role: 'APPLICANT',
+    roleTitle: 'Orang Tua Calon Siswa PPDB (Guest)',
+    schoolId: 'sch_tk_maranatha',
+    schoolName: 'TK YAPENDIK GPIB Cabang Maranatha',
+    personId: 'per_parent_bona',
+    assignedClasses: [],
+    guardianChildrenPersonIds: [],
+    description: 'Orang Tua Pendaftar Baru (Guest APPLICANT) ananda Timothy Andreas Pandjaitan.',
+    isSimulation: true
   }
+];
+
+export const LEGACY_TEST_PERSONAS: PersonaProfile[] = [
+  {
+    id: 'user_teacher_siti',
+    name: 'Siti Rahmawati, S.Pd',
+    role: 'TEACHER',
+    roleTitle: 'Wali Kelas TK A (Kelompok Bintang Ceria)',
+    schoolId: 'sch_tk_yapendik_01',
+    schoolName: 'TK Yapendik 01 Menteng',
+    personId: 'per_teacher_siti',
+    assignedClasses: ['cls_tka_01'],
+    guardianChildrenPersonIds: [],
+    description: 'Test Fixture: Guru Inti kelompok usia 4-5 tahun.',
+    isSimulation: true
+  },
+  {
+    id: 'user_teacher_maria',
+    name: 'Maria Magdalena, S.Pd.Aud',
+    role: 'TEACHER',
+    roleTitle: 'Wali Kelas TK B (Kelompok Matahari)',
+    schoolId: 'sch_tk_yapendik_01',
+    schoolName: 'TK Yapendik 01 Menteng',
+    personId: 'per_teacher_maria',
+    assignedClasses: ['cls_tkb_01'],
+    guardianChildrenPersonIds: [],
+    description: 'Test Fixture: Guru Inti kelompok usia 5-6 tahun.',
+    isSimulation: true
+  },
+  {
+    id: 'user_headmaster_esther',
+    name: 'Dra. Esther Nugroho, M.Pd',
+    role: 'HEADMASTER',
+    roleTitle: 'Kepala Sekolah TK Yapendik 01',
+    schoolId: 'sch_tk_yapendik_01',
+    schoolName: 'TK Yapendik 01 Menteng',
+    personId: 'per_headmaster_esther',
+    assignedClasses: ['cls_tka_01', 'cls_tkb_01'],
+    guardianChildrenPersonIds: [],
+    description: 'Test Fixture: Pimpinan sekolah.',
+    isSimulation: true
+  },
+  {
+    id: 'user_parent_budi',
+    name: 'Budi Santoso, S.T.',
+    role: 'GUARDIAN',
+    roleTitle: 'Orang Tua / Wali Murid',
+    schoolId: 'sch_tk_yapendik_01',
+    schoolName: 'TK Yapendik 01 Menteng',
+    personId: 'per_parent_budi',
+    assignedClasses: [],
+    guardianChildrenPersonIds: ['per_child_kenzo'],
+    description: 'Test Fixture: Wali murid.',
+    isSimulation: true
+  },
+  {
+    id: 'user_teacher_diana_tk2',
+    name: 'Diana Sari, S.Pd',
+    role: 'TEACHER',
+    roleTitle: 'Guru TK Yapendik 02 Kebayoran',
+    schoolId: 'sch_tk_yapendik_02',
+    schoolName: 'TK Yapendik 02 Kebayoran',
+    personId: 'per_teacher_diana',
+    assignedClasses: ['cls_tka_02'],
+    guardianChildrenPersonIds: [],
+    description: 'Test Fixture: Pendidik dari unit sekolah berbeda.',
+    isSimulation: true
+  },
+  {
+    id: 'user_superadmin_yapendik',
+    name: 'Dr. Andreas Hendrawan (Yayasan)',
+    role: 'YAPENDIK_SUPERADMIN',
+    roleTitle: 'Pengawas Mutu Pendidikan Yayasan Yapendik',
+    schoolId: 'sch_tk_yapendik_01',
+    schoolName: 'Yayasan Pendidikan Kristen Yapendik',
+    personId: 'per_superadmin_andreas',
+    assignedClasses: ['cls_tka_01', 'cls_tkb_01', 'cls_tka_02'],
+    guardianChildrenPersonIds: [],
+    description: 'Test Fixture: Superadministrator institusi.',
+    isSimulation: true
+  }
+];
+
+export const SEED_PERSONAS: PersonaProfile[] = [
+  ...GENESIS_PERSONAS,
+  ...LEGACY_TEST_PERSONAS
 ];
 
 export type AuthState = 
@@ -528,7 +562,7 @@ export const SecurityContextProvider: React.FC<{ children: React.ReactNode }> = 
       signInWithEmail,
       switchPersona,
       signOut,
-      personas: SEED_PERSONAS,
+      personas: GENESIS_PERSONAS,
       activeSchoolId,
       setActiveSchoolId
     }}>

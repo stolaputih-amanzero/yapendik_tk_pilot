@@ -21,18 +21,35 @@ import {
 
 export const SEED_SCHOOLS: School[] = [
   {
-    id: 'sch_tk_yapendik_01',
-    npsn: '20104821',
-    name: 'TK Yapendik 01 Menteng',
+    id: 'sch_tk_maranatha',
+    npsn: '69820291',
+    name: 'TK YAPENDIK GPIB Cabang Maranatha',
     level: 'TK',
     subType: 'PAUD_TERPADU',
-    address: 'Jl. Teuku Cik Ditiro No. 42, Menteng',
+    address: 'JL. BALADEWA NO. 32, TANAH TINGGI',
     city: 'Jakarta Pusat',
     province: 'DKI Jakarta',
-    phone: '021-3190284',
-    email: 'tk01.menteng@yapendik.sch.id',
-    headmasterPersonId: 'per_headmaster_esther',
-    academicYearActiveId: 'ay_2026_2027_ganjil',
+    phone: '081281310123',
+    email: 'yapendikmaranathajkt@gmail.com',
+    headmasterPersonId: 'per_headmaster_sheryl',
+    academicYearActiveId: 'ay_maranatha_2026_2027_ganjil',
+    status: 'ACTIVE',
+    operationalReadiness: 'READY',
+    createdAt: '2026-07-01T08:00:00Z'
+  },
+  {
+    id: 'sch_tk_yapendik_01',
+    npsn: '69820291',
+    name: 'TK YAPENDIK GPIB Cabang Maranatha',
+    level: 'TK',
+    subType: 'PAUD_TERPADU',
+    address: 'JL. BALADEWA NO. 32, TANAH TINGGI',
+    city: 'Jakarta Pusat',
+    province: 'DKI Jakarta',
+    phone: '081281310123',
+    email: 'yapendikmaranathajkt@gmail.com',
+    headmasterPersonId: 'per_headmaster_sheryl',
+    academicYearActiveId: 'ay_maranatha_2026_2027_ganjil',
     status: 'ACTIVE',
     operationalReadiness: 'READY',
     createdAt: '2026-07-01T08:00:00Z'
@@ -58,12 +75,21 @@ export const SEED_SCHOOLS: School[] = [
 
 export const SEED_ACADEMIC_YEARS: AcademicYear[] = [
   {
+    id: 'ay_maranatha_2026_2027_ganjil',
+    schoolId: 'sch_tk_maranatha',
+    name: 'Tahun Ajaran 2026/2027',
+    semester: 'GANJIL',
+    startDate: '2026-07-01',
+    endDate: '2026-12-31',
+    isActive: true
+  },
+  {
     id: 'ay_2026_2027_ganjil',
     schoolId: 'sch_tk_yapendik_01',
     name: 'Tahun Ajaran 2026/2027',
     semester: 'GANJIL',
-    startDate: '2026-07-15',
-    endDate: '2026-12-20',
+    startDate: '2026-07-01',
+    endDate: '2026-12-31',
     isActive: true
   },
   {
@@ -78,6 +104,29 @@ export const SEED_ACADEMIC_YEARS: AcademicYear[] = [
 ];
 
 export const SEED_CLASSES: ClassRoom[] = [
+  {
+    id: 'cls_maranatha_tka',
+    schoolId: 'sch_tk_maranatha',
+    academicYearId: 'ay_maranatha_2026_2027_ganjil',
+    name: 'Kelompok A (TK A)',
+    ageGroup: 'TK_A_4_5',
+    roomNumber: 'Ruang TK A',
+    capacity: 20,
+    homeroomTeacherId: 'per_teacher_erna',
+    coTeacherId: 'per_teacher_charlotha',
+    isActive: true
+  },
+  {
+    id: 'cls_maranatha_tkb',
+    schoolId: 'sch_tk_maranatha',
+    academicYearId: 'ay_maranatha_2026_2027_ganjil',
+    name: 'Kelompok B (TK B)',
+    ageGroup: 'TK_B_5_6',
+    roomNumber: 'Ruang TK B',
+    capacity: 20,
+    homeroomTeacherId: 'per_teacher_evi',
+    isActive: true
+  },
   {
     id: 'cls_tka_01',
     schoolId: 'sch_tk_yapendik_01',
@@ -114,7 +163,124 @@ export const SEED_CLASSES: ClassRoom[] = [
 ];
 
 export const SEED_PERSONS: Person[] = [
-  // Teachers & Staff
+  // TK Yapendik Maranatha Leadership & Teachers
+  {
+    id: 'per_superadmin_shirley',
+    nationalIdNumber: '3171035906670007',
+    fullName: 'SHIRLEY A.T.WAKKARY',
+    preferredName: 'Ibu Shirley',
+    gender: 'FEMALE',
+    birthDate: '1967-06-19',
+    birthPlace: 'Jakarta',
+    phone: '081281310123',
+    address: 'Kompleks Yapendik Graha, Jakarta',
+    createdAt: '2026-07-01T00:00:00Z',
+    updatedAt: '2026-07-01T00:00:00Z'
+  },
+  {
+    id: 'per_headmaster_sheryl',
+    nationalIdNumber: '3171034909940005',
+    fullName: 'SHERYL Y N UMBAS, S.IKOM, M.PD',
+    preferredName: 'Ibu Sheryl',
+    gender: 'FEMALE',
+    birthDate: '1994-09-09',
+    birthPlace: 'Jakarta',
+    phone: '081219748487',
+    address: 'JL. BALADEWA NO. 32, TANAH TINGGI JAKARTA PUSAT',
+    createdAt: '2026-07-01T00:00:00Z',
+    updatedAt: '2026-07-01T00:00:00Z'
+  },
+  {
+    id: 'per_teacher_erna',
+    nationalIdNumber: '3172025811680008',
+    fullName: 'ERNA BOYKELA R',
+    preferredName: 'Bu Erna',
+    gender: 'FEMALE',
+    birthDate: '1968-11-28',
+    birthPlace: 'Jakarta',
+    phone: '081218641392',
+    address: 'Jakarta',
+    createdAt: '2026-07-01T00:00:00Z',
+    updatedAt: '2026-07-01T00:00:00Z'
+  },
+  {
+    id: 'per_teacher_charlotha',
+    nationalIdNumber: '3172025108050013',
+    fullName: 'CHARLOTHA JOVANNCA BLANDINNA R',
+    preferredName: 'Bu Jovannca',
+    gender: 'FEMALE',
+    birthDate: '1985-05-01',
+    birthPlace: 'Jakarta',
+    phone: '081385868377',
+    address: 'Jakarta',
+    createdAt: '2026-07-01T00:00:00Z',
+    updatedAt: '2026-07-01T00:00:00Z'
+  },
+  {
+    id: 'per_teacher_evi',
+    nationalIdNumber: '3171054311980001',
+    fullName: 'EVI TANIA',
+    preferredName: 'Bu Evi',
+    gender: 'FEMALE',
+    birthDate: '1998-03-11',
+    birthPlace: 'Jakarta',
+    phone: '089536851668',
+    address: 'Jakarta',
+    createdAt: '2026-07-01T00:00:00Z',
+    updatedAt: '2026-07-01T00:00:00Z'
+  },
+
+  // TK Maranatha Guardians & Children (Selection)
+  {
+    id: 'per_child_millen',
+    nationalIdNumber: '3276054207210001',
+    fullName: 'JEQUALINE ARABELLA MASPAITELLA',
+    preferredName: 'MILLEN',
+    gender: 'FEMALE',
+    birthDate: '2021-07-02',
+    birthPlace: 'DEPOK',
+    address: 'JL LAUT HALMAHERA I BLOK N/12 KEL ABADIJAYA KEC SUKMAJAYA KOTA DEPOK JAWA BARAT 16417',
+    createdAt: '2026-07-01T00:00:00Z',
+    updatedAt: '2026-07-01T00:00:00Z'
+  },
+  {
+    id: 'per_guard_julen_patricia',
+    nationalIdNumber: '3276055507940003',
+    fullName: 'JULEN PATRICIA',
+    preferredName: 'Ibu Julen',
+    gender: 'FEMALE',
+    birthDate: '1994-07-15',
+    phone: '081282276536',
+    address: 'JL LAUT HALMAHERA I BLOK N/12 KEL ABADIJAYA KEC SUKMAJAYA KOTA DEPOK JAWA BARAT 16417',
+    createdAt: '2026-07-01T00:00:00Z',
+    updatedAt: '2026-07-01T00:00:00Z'
+  },
+  {
+    id: 'per_child_kayla',
+    nationalIdNumber: '3171034407200004',
+    fullName: 'KAYLA GABRIELLA ZEGA',
+    preferredName: 'KAYLA',
+    gender: 'FEMALE',
+    birthDate: '2020-07-04',
+    birthPlace: 'JAKARTA',
+    address: 'JL. KRAMAT SENTIONG NO. 18 JAKARTA PUSAT',
+    createdAt: '2026-07-01T00:00:00Z',
+    updatedAt: '2026-07-01T00:00:00Z'
+  },
+  {
+    id: 'per_guard_mutiara_zega',
+    nationalIdNumber: '3171035208950002',
+    fullName: 'MUTIARA ZEGA',
+    preferredName: 'Ibu Mutiara',
+    gender: 'FEMALE',
+    birthDate: '1995-08-12',
+    phone: '081289123456',
+    address: 'JL. KRAMAT SENTIONG NO. 18 JAKARTA PUSAT',
+    createdAt: '2026-07-01T00:00:00Z',
+    updatedAt: '2026-07-01T00:00:00Z'
+  },
+
+  // Legacy Test Fixtures (kept for test isolation)
   {
     id: 'per_teacher_siti',
     fullName: 'Siti Rahmawati, S.Pd',

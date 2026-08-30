@@ -43,7 +43,7 @@ import {
 
 import { getSupabaseClient } from './supabaseClient';
 
-const CACHE_ROOT_PREFIX = 'yapendik_os_v2_';
+const CACHE_ROOT_PREFIX = 'yapendik_os_v3_genesis_';
 
 // ==============================================================================
 // MAPPER HELPERS (CamelCase Domain Object <-> SnakeCase Supabase Table)
