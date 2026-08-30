@@ -19,6 +19,7 @@
 
 /* ═══ AMANAURA OS × FLOW — CANONICAL TOKENS (oklch) ═══ */
 :root { /* THE IVORY CANVAS (System Light) */
+  color-scheme: light;
   --canvas: oklch(0.985 0.005 90);           /* Warm Ivory */
   --surface: oklch(1 0 0);                    /* Pure White */
   --surface-subtle: oklch(0.96 0.005 90);
@@ -76,6 +77,7 @@
 }
 
 .dark { /* THE MIDNIGHT SANCTUARY (System Dark) */
+  color-scheme: dark;
   --canvas: oklch(0.15 0.02 260);             /* Deep Midnight */
   --surface: oklch(0.20 0.02 260);            /* Elevated Night */
   --surface-subtle: oklch(0.25 0.02 260);
@@ -130,6 +132,62 @@
   --jj-sma: oklch(0.75 0.12 300);
   
   --shadow-luminescent: 0 0 0 1.5px var(--ink), 0 0 16px -6px oklch(0.75 0.1 260 / 0.28);
+}
+
+/* ═══ Native Date / Time / Calendar Picker Indicator Theming ═══ */
+input[type="date"],
+input[type="time"],
+input[type="datetime-local"],
+input[type="month"],
+input[type="week"] {
+  color-scheme: light;
+}
+
+.dark input[type="date"],
+.dark input[type="time"],
+.dark input[type="datetime-local"],
+.dark input[type="month"],
+.dark input[type="week"] {
+  color-scheme: dark;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator,
+input[type="time"]::-webkit-calendar-picker-indicator,
+input[type="datetime-local"]::-webkit-calendar-picker-indicator,
+input[type="month"]::-webkit-calendar-picker-indicator,
+input[type="week"]::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+  opacity: 0.75;
+  border-radius: 6px;
+  padding: 2px;
+  transition: opacity 0.15s ease, filter 0.15s ease, transform 0.15s ease;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator:hover,
+input[type="time"]::-webkit-calendar-picker-indicator:hover,
+input[type="datetime-local"]::-webkit-calendar-picker-indicator:hover,
+input[type="month"]::-webkit-calendar-picker-indicator:hover,
+input[type="week"]::-webkit-calendar-picker-indicator:hover {
+  opacity: 1;
+  transform: scale(1.08);
+}
+
+.dark input[type="date"]::-webkit-calendar-picker-indicator,
+.dark input[type="time"]::-webkit-calendar-picker-indicator,
+.dark input[type="datetime-local"]::-webkit-calendar-picker-indicator,
+.dark input[type="month"]::-webkit-calendar-picker-indicator,
+.dark input[type="week"]::-webkit-calendar-picker-indicator {
+  filter: invert(0.9) brightness(1.2);
+  opacity: 0.85;
+}
+
+.dark input[type="date"]::-webkit-calendar-picker-indicator:hover,
+.dark input[type="time"]::-webkit-calendar-picker-indicator:hover,
+.dark input[type="datetime-local"]::-webkit-calendar-picker-indicator:hover,
+.dark input[type="month"]::-webkit-calendar-picker-indicator:hover,
+.dark input[type="week"]::-webkit-calendar-picker-indicator:hover {
+  filter: invert(1) brightness(1.5);
+  opacity: 1;
 }
 
 /* ═══ Alias Layer (Tailwind v4 @theme inline) — nama utility TIDAK berubah ═══ */
