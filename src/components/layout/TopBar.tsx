@@ -9,13 +9,10 @@
 
 import React, { useState } from 'react';
 import { useSecurityContext } from '../../auth/context';
-import { useTheme } from '../../hooks/useTheme';
 import { 
   Building2, 
   Database, 
   ChevronDown,
-  Sun,
-  Moon,
   Sparkles,
   LogOut
 } from 'lucide-react';
@@ -60,7 +57,6 @@ export const TopBar: React.FC<TopBarProps> = ({
   onOpenProfileDrawer
 }) => {
   const { currentPersona, personas, switchPersona, signOut } = useSecurityContext();
-  const { isDark, toggleTheme } = useTheme();
   const { state: connectionState, queuedMutations } = useConnectionStatus();
   const [showDesktopPersonaMenu, setShowDesktopPersonaMenu] = useState(false);
   const supabaseConfig = getSupabaseConfig();
@@ -112,35 +108,17 @@ export const TopBar: React.FC<TopBarProps> = ({
 
       {/* ZONE 2: ACTIONS & AVATAR PROFILE TRIGGER */}
       <div className="flex items-center space-x-2 medium:space-x-3 shrink-0">
-        {/* Supabase status indicator (Simulation mode only) */}
+        {/* Supabase status indicator (Simulation mode, Mobile Viewport Only) */}
         {isSimulationEnabled && (
           <button
             type="button"
             onClick={onOpenSupabaseModal}
             title={supabaseConfig.statusMessage}
-            className="flex items-center space-x-1.5 px-3 py-2 rounded-control bg-surface-subtle hover-only:bg-surface border border-line-hairline text-xs font-mono text-ink-soft transition-colors whitespace-nowrap shrink-0 cursor-pointer min-h-[44px]"
+            className="flex expanded:hidden items-center space-x-1.5 px-2.5 py-2 rounded-control bg-surface-subtle hover-only:bg-surface border border-line-hairline text-xs font-mono text-ink-soft transition-colors whitespace-nowrap shrink-0 cursor-pointer min-h-[44px]"
           >
             <Database className={`w-4 h-4 ${supabaseConfig.isConnected ? 'text-success' : 'text-ink-faint'}`} />
-            <span className="hidden large:inline">
-              {supabaseConfig.isConnected ? 'Supabase On' : 'Storage'}
-            </span>
           </button>
         )}
-
-        {/* Dark/Light Mode Quick Toggle */}
-        <button
-          type="button"
-          onClick={toggleTheme}
-          aria-label={isDark ? "Beralih ke Ivory Canvas (Light Mode)" : "Beralih ke Midnight Sanctuary (Dark Mode)"}
-          title={isDark ? "Beralih ke Ivory Canvas (Light Mode)" : "Beralih ke Midnight Sanctuary (Dark Mode)"}
-          className="p-3 rounded-control bg-surface-subtle hover-only:bg-surface text-ink-soft hover-only:text-ink transition-colors cursor-pointer shrink-0 border border-line-hairline min-h-[48px] min-w-[48px] flex items-center justify-center"
-        >
-          {isDark ? (
-            <Sun className="w-4 h-4 text-accent-valor" />
-          ) : (
-            <Moon className="w-4 h-4 text-ink-soft" />
-          )}
-        </button>
 
         {/* Avatar Profile Trigger (Touch Floor 48dp) */}
         <div className="relative">

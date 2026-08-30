@@ -30,9 +30,12 @@ import {
   ChevronLeft, 
   ChevronRight,
   Compass,
-  FileCheck2
+  FileCheck2,
+  Sun,
+  Moon
 } from 'lucide-react';
 import { useSecurityContext } from '../../auth/context';
+import { useTheme } from '../../hooks/useTheme';
 import { WorkspaceTab } from './TopBar';
 
 interface SidebarProps {
@@ -63,6 +66,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
   className = ''
 }) => {
   const { currentPersona } = useSecurityContext();
+  const { isDark, toggleTheme } = useTheme();
   const role = currentPersona?.role || 'TEACHER';
 
   // Role-Based Navigation Definition
@@ -353,6 +357,46 @@ export const Sidebar: React.FC<SidebarProps> = ({
             <div className="pointer-events-none absolute left-full top-1/2 -translate-y-1/2 ml-2 z-50 hidden group-hover-only:flex items-center">
               <div className="bg-surface text-ink text-xs font-medium px-3 py-2 rounded-xl shadow-floating whitespace-nowrap flex items-center space-x-1.5 border border-line-hairline">
                 <span>Uji Otorisasi (TESTS)</span>
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* Theme Toggle Button (Ivory Canvas <-> Midnight Sanctuary) */}
+        <div className="relative group min-w-0">
+          <button
+            type="button"
+            onClick={toggleTheme}
+            aria-label={isDark ? "Beralih ke Ivory Canvas (Light Mode)" : "Beralih ke Midnight Sanctuary (Dark Mode)"}
+            title={isDark ? "Beralih ke Ivory Canvas (Light Mode)" : "Beralih ke Midnight Sanctuary (Dark Mode)"}
+            className={`w-full flex items-center text-xs transition-colors duration-150 cursor-pointer min-w-0 min-h-[48px] border-l-2 border-transparent bg-transparent text-ink-soft hover-only:text-ink ${
+              isCollapsed
+                ? 'justify-center py-3'
+                : 'space-x-3 px-5 py-3 text-left'
+            }`}
+          >
+            {isDark ? (
+              <Sun className="w-4 h-4 shrink-0 text-accent-valor" />
+            ) : (
+              <Moon className="w-4 h-4 shrink-0 text-ink-faint" />
+            )}
+            {!isCollapsed && (
+              <>
+                <span className="truncate flex-1 text-left line-clamp-1">
+                  {isDark ? 'Ivory Canvas' : 'Midnight Sanctuary'}
+                </span>
+                <span className="text-[10px] font-mono text-ink-faint shrink-0 whitespace-nowrap uppercase">
+                  {isDark ? 'Light' : 'Dark'}
+                </span>
+              </>
+            )}
+          </button>
+
+          {/* Tooltip in collapsed mode */}
+          {isCollapsed && (
+            <div className="pointer-events-none absolute left-full top-1/2 -translate-y-1/2 ml-2 z-50 hidden group-hover-only:flex items-center">
+              <div className="bg-surface text-ink text-xs font-medium px-3 py-2 rounded-xl shadow-floating whitespace-nowrap flex items-center space-x-1.5 border border-line-hairline">
+                <span>{isDark ? 'Beralih ke Ivory Canvas (Light)' : 'Beralih ke Midnight Sanctuary (Dark)'}</span>
               </div>
             </div>
           )}

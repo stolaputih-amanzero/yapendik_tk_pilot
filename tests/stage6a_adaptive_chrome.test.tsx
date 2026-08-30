@@ -123,6 +123,19 @@ async function runAdaptiveChromeTests() {
       );
       assert.ok(!html.includes('Yapendik OS ✦'), 'Did not expect bulky "Yapendik OS ✦" logo in TopBar');
     });
+
+    runCheck('TopBar [NO THEME TOGGLE]: Theme toggle is removed from TopBar (moved to Profile/Sidebar)', () => {
+      const html = renderToString(
+        <SecurityContextProvider>
+          <TopBar 
+            activeTab="TEACHER_HOME"
+            onOpenSupabaseModal={() => {}}
+            onSelectTab={() => {}}
+          />
+        </SecurityContextProvider>
+      );
+      assert.ok(!html.includes('Beralih ke Ivory Canvas'), 'Did not expect theme toggle in TopBar');
+    });
   }
 
   // --- MODULE 3: Mobile Profile Drawer Contract ---
@@ -216,6 +229,20 @@ async function runAdaptiveChromeTests() {
         </SecurityContextProvider>
       );
       assert.ok(html.includes('border-transparent'), 'Expected border-transparent on inactive links');
+    });
+
+    runCheck('Sidebar [THEME TOGGLE]: Sidebar renders desktop theme switch button', () => {
+      const html = renderToString(
+        <SecurityContextProvider>
+          <Sidebar 
+            activeTab="TEACHER_HOME"
+            onSelectTab={() => {}}
+            isCollapsed={false}
+            onToggleCollapse={() => {}}
+          />
+        </SecurityContextProvider>
+      );
+      assert.ok(html.includes('Beralih ke'), 'Expected theme toggle in Sidebar');
     });
   }
 
