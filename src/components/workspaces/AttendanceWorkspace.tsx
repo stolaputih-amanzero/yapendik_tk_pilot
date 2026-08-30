@@ -288,8 +288,8 @@ export const AttendanceWorkspace: React.FC = () => {
           </div>
         </div>
 
-        {/* Control Bar: Flex layout with un-truncated Date + Class SegmentedControl */}
-        <div className="flex items-center gap-2">
+        {/* Control Bar: Date (Full Width) + Class SegmentedControl (Full Width Below) */}
+        <div className="space-y-2">
           {/* Tanggal: Field SelectSheet/date, label value formatID -> "Sen, 24 Agu 2026", class font-mono tabular-nums */}
           <div 
             onClick={() => {
@@ -299,7 +299,7 @@ export const AttendanceWorkspace: React.FC = () => {
                 dateInputRef.current?.focus();
               }
             }}
-            className="relative flex-1 min-w-0 flex items-center justify-between bg-surface border border-line hover-only:border-brand-primary rounded-xl px-3 py-2 text-xs font-medium text-ink cursor-pointer transition-all shadow-hairline group min-h-[44px]"
+            className="relative w-full flex items-center justify-between bg-surface border border-line hover-only:border-brand-primary rounded-xl px-3 py-2 text-xs font-medium text-ink cursor-pointer transition-all shadow-hairline group min-h-[44px]"
           >
             <div className="flex items-center gap-2 min-w-0">
               <Calendar className="w-4 h-4 text-brand-primary shrink-0" />
@@ -320,14 +320,14 @@ export const AttendanceWorkspace: React.FC = () => {
             />
           </div>
 
-          {/* Kelas: SegmentedControl ['TK A','TK B'] */}
-          <div className="shrink-0">
+          {/* Kelas: SegmentedControl ['TK A','TK B'] Melebar Penuh */}
+          <div className="w-full">
             <SegmentedControl
               options={classSegments}
               value={selectedClassId}
               onChange={setSelectedClassId}
-              size="sm"
-              className="h-[44px]"
+              size="md"
+              className="w-full min-h-[44px]"
             />
           </div>
         </div>
@@ -391,7 +391,7 @@ export const AttendanceWorkspace: React.FC = () => {
 
       {/* 2. LIST ITEM (ATTENDANCE GRID / CHILD CARD) */}
       {students.length > 0 ? (
-        <div className="flex flex-col divide-y divide-line-soft pb-[160px]">
+        <div className="flex flex-col divide-y divide-line border-b border-line pb-[160px]">
           {students.map((s, idx) => {
             const row = attendanceMap[s.id] || { status: 'HADIR', temperature: 36.5, arrivalMood: 'CERIA', notes: '' };
             const isFever = row.temperature >= 37.5;
@@ -548,7 +548,7 @@ export const AttendanceWorkspace: React.FC = () => {
                       className="w-full flex items-center justify-center gap-1.5 text-xs font-semibold text-ink-soft hover-only:text-ink py-2 px-3 rounded-xl border border-dashed border-line-soft hover-only:border-brand-primary/50 bg-surface-subtle/30 hover-only:bg-surface-subtle transition-all cursor-pointer min-h-[44px]"
                     >
                       <Plus className="w-4 h-4 text-brand-primary shrink-0" />
-                      <span>+ Catatan</span>
+                      <span>Catatan</span>
                     </button>
                   )}
                 </div>
