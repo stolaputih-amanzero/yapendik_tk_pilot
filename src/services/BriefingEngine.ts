@@ -301,7 +301,11 @@ export class BriefingEngineService {
     });
 
     if (role === 'TEACHER') {
-      const person = userId ? db.getPersonById(userId) : null;
+      const person = userId 
+        ? (db.getPersonById(userId) || 
+           SEED_PERSONS.find(p => p.id === userId || (userId.includes('evi') && p.id === 'per_teacher_evi') || (userId.includes('charlotha') && p.id === 'per_teacher_charlotha') || (userId.includes('erna') && p.id === 'per_teacher_erna') || (userId.includes('diana') && p.id === 'per_teacher_diana') || (userId.includes('siti') && p.id === 'per_teacher_siti')))
+        : null;
+
       const isDiana = Boolean(
         userId && (
           userId === 'user_teacher_diana_tk2' ||
@@ -316,16 +320,48 @@ export class BriefingEngineService {
           userId.toLowerCase().includes('siti')
         )
       );
-      let teacherSalutation = 'Bu Erna';
-      if (isDiana) {
+      const isEvi = Boolean(
+        userId && (
+          userId === 'user_teacher_evi' ||
+          userId === 'per_teacher_evi' ||
+          userId.toLowerCase().includes('evi')
+        )
+      );
+      const isCharlotha = Boolean(
+        userId && (
+          userId === 'user_teacher_charlotha' ||
+          userId === 'per_teacher_charlotha' ||
+          userId.toLowerCase().includes('charlotha') ||
+          userId.toLowerCase().includes('jovannca')
+        )
+      );
+
+      let teacherSalutation = 'Bu Guru';
+      if (person?.preferredName) {
+        teacherSalutation = person.preferredName;
+      } else if (isEvi) {
+        teacherSalutation = 'Bu Evi';
+      } else if (isCharlotha) {
+        teacherSalutation = 'Bu Jovannca';
+      } else if (isDiana) {
         teacherSalutation = 'Bu Diana';
       } else if (isSiti) {
         teacherSalutation = 'Bu Siti';
-      } else if (person?.preferredName) {
-        teacherSalutation = person.preferredName;
       } else if (person?.fullName) {
         teacherSalutation = 'Bu ' + person.fullName.split(' ')[0];
+      } else {
+        teacherSalutation = 'Bu Erna';
       }
+
+      const warmAuthor = isDiana || isSiti 
+        ? 'Bunda Kenzo' 
+        : (isEvi ? 'Mama Kayla' : 'Mama Millen');
+
+      const warmQuote = isDiana || isSiti
+        ? 'Terima kasih Bu Guru, Kenzo sangat ceria bercerita tentang balok hari ini.'
+        : (isEvi
+            ? 'Terima kasih Bu Evi, Kayla sangat senang dan antusias belajar di Kelompok B hari ini.'
+            : 'Terima kasih Bu Guru, Millen sangat ceria dan antusias bercerita tentang sentra bermain hari ini.');
 
       const teacherData: TeacherBriefingData = {
         role: 'TEACHER',
@@ -360,10 +396,8 @@ export class BriefingEngineService {
         },
         warm_echo: {
           source_type: 'PARENT_MESSAGE',
-          source_author: (isDiana || isSiti) ? 'Bunda Kenzo' : 'Mama Millen',
-          quote_text: (isDiana || isSiti) 
-            ? 'Terima kasih Bu Guru, Kenzo sangat ceria bercerita tentang balok hari ini.'
-            : 'Terima kasih Bu Guru, Millen sangat ceria dan antusias bercerita tentang sentra bermain hari ini.',
+          source_author: warmAuthor,
+          quote_text: warmQuote,
           timestamp: '11:45'
         }
       };
