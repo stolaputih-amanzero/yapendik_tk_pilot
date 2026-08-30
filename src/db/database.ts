@@ -482,7 +482,8 @@ export class DatabaseEngine {
       this.students = Array.from(studentMap.values());
       this.persist('students', this.students);
 
-      const relMap = new Map(loadedGuardians.map(r => [r.id, r]));
+      const validLoadedGuardians = loadedGuardians.filter(r => !r.id.startsWith('rel_maranatha_'));
+      const relMap = new Map(validLoadedGuardians.map(r => [r.id, r]));
       SEED_GUARDIAN_RELATIONSHIPS.forEach(sr => relMap.set(sr.id, { ...sr, ...(relMap.get(sr.id) || {}) }));
       this.guardianRelationships = Array.from(relMap.values());
       this.persist('guardian_relationships', this.guardianRelationships);

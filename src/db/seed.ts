@@ -313,6 +313,39 @@ export const SEED_PERSONS: Person[] = [
   // ==========================================================================
   // Class A Students & Guardians
   {
+    id: 'per_child_millen',
+    nationalIdNumber: '3276054207210001',
+    fullName: 'JEQUALINE ARABELLA MASPAITELLA',
+    preferredName: 'MILLEN',
+    gender: 'FEMALE',
+    birthDate: '2021-07-02',
+    birthPlace: 'DEPOK',
+    address: 'JL LAUT HALMAHERA I BLOK N/12 KEL ABADIJAYA KEC SUKMAJAYA KOTA DEPOK JAWA BARAT 16417',
+    createdAt: '2026-07-01T00:00:00Z',
+    updatedAt: '2026-07-01T00:00:00Z'
+  },
+  {
+    id: 'per_guard_michael_maspaitella',
+    nationalIdNumber: '3171044609930003',
+    fullName: 'MICHAEL MASPAITELLA',
+    preferredName: 'Pak Michael',
+    gender: 'MALE',
+    address: 'JL LAUT HALMAHERA I BLOK N/12 KEL ABADIJAYA KEC SUKMAJAYA KOTA DEPOK JAWA BARAT 16417',
+    createdAt: '2026-07-01T00:00:00Z',
+    updatedAt: '2026-07-01T00:00:00Z'
+  },
+  {
+    id: 'per_guard_julen_patricia',
+    nationalIdNumber: '3171044609930002',
+    fullName: 'JULEN PATRICIA',
+    preferredName: 'Ibu Julen',
+    gender: 'FEMALE',
+    phone: '081296970087',
+    address: 'JL LAUT HALMAHERA I BLOK N/12 KEL ABADIJAYA KEC SUKMAJAYA KOTA DEPOK JAWA BARAT 16417',
+    createdAt: '2026-07-01T00:00:00Z',
+    updatedAt: '2026-07-01T00:00:00Z'
+  },
+  {
     id: 'per_child_carissa',
     nationalIdNumber: '3171088804210002',
     fullName: 'CARISSA ELEANOR NAPITUPULU',
@@ -320,6 +353,16 @@ export const SEED_PERSONS: Person[] = [
     gender: 'FEMALE',
     birthDate: '2021-04-28',
     birthPlace: 'JAKARTA',
+    address: 'KP RAWA SELATAN I NO 45 RT 011/005 KEL GALUR KEC JOHAR BARU JAKARTA PUSAT 10530',
+    createdAt: '2026-07-01T00:00:00Z',
+    updatedAt: '2026-07-01T00:00:00Z'
+  },
+  {
+    id: 'per_guard_dulpri',
+    nationalIdNumber: '3275027012920008',
+    fullName: 'DULPRI',
+    preferredName: 'Pak Dulpri',
+    gender: 'MALE',
     address: 'KP RAWA SELATAN I NO 45 RT 011/005 KEL GALUR KEC JOHAR BARU JAKARTA PUSAT 10530',
     createdAt: '2026-07-01T00:00:00Z',
     updatedAt: '2026-07-01T00:00:00Z'
@@ -348,6 +391,16 @@ export const SEED_PERSONS: Person[] = [
     updatedAt: '2026-07-01T00:00:00Z'
   },
   {
+    id: 'per_guard_alfredo_diego',
+    nationalIdNumber: '3171086710990004',
+    fullName: 'ALFREDO DIEGO OKTAVIO',
+    preferredName: 'Pak Alfredo',
+    gender: 'MALE',
+    address: 'JL TANAH TINGGI SAWAH RT 015/008 KEL TANAH TINGGI KEC JOHAR BARU JAKARTA PUSAT 10540',
+    createdAt: '2026-07-01T00:00:00Z',
+    updatedAt: '2026-07-01T00:00:00Z'
+  },
+  {
     id: 'per_guard_devia_permata',
     nationalIdNumber: '3171086710990005',
     fullName: 'DEVIA PERMATA SARI',
@@ -366,6 +419,16 @@ export const SEED_PERSONS: Person[] = [
     gender: 'FEMALE',
     birthDate: '2022-02-06',
     birthPlace: 'JAKARTA',
+    address: 'JL TANAH TINGGI 2 NO 16 RT 07/002 KEL TANAH TINGGI KEC JOHAR BARU JAKARTA PUSAT',
+    createdAt: '2026-07-01T00:00:00Z',
+    updatedAt: '2026-07-01T00:00:00Z'
+  },
+  {
+    id: 'per_guard_hasamuda_hulu',
+    nationalIdNumber: '1204144710970001',
+    fullName: 'HASAMUDA HULU',
+    preferredName: 'Pak Hasamuda',
+    gender: 'MALE',
     address: 'JL TANAH TINGGI 2 NO 16 RT 07/002 KEL TANAH TINGGI KEC JOHAR BARU JAKARTA PUSAT',
     createdAt: '2026-07-01T00:00:00Z',
     updatedAt: '2026-07-01T00:00:00Z'
@@ -394,6 +457,16 @@ export const SEED_PERSONS: Person[] = [
     updatedAt: '2026-07-01T00:00:00Z'
   },
   {
+    id: 'per_guard_catur_putranto',
+    nationalIdNumber: '3305114507940003',
+    fullName: 'CATUR PUTRANTO',
+    preferredName: 'Pak Catur',
+    gender: 'MALE',
+    address: 'JL CEMPAKA PUTIH BARAT RT 03/010 KEL CEMPAKA PUTIH BARAT KEC CEMPAKA PUTIH JAKARTA PUSAT',
+    createdAt: '2026-07-01T00:00:00Z',
+    updatedAt: '2026-07-01T00:00:00Z'
+  },
+  {
     id: 'per_guard_salamah',
     nationalIdNumber: '3305114507940004',
     fullName: 'SALAMAH',
@@ -412,6 +485,16 @@ export const SEED_PERSONS: Person[] = [
     gender: 'MALE',
     birthDate: '2021-09-15',
     birthPlace: 'JAKARTA',
+    address: 'JL CULAN NO 1 KEL KRAMAT KEC SENEN JAKARTA PUSAT',
+    createdAt: '2026-07-01T00:00:00Z',
+    updatedAt: '2026-07-01T00:00:00Z'
+  },
+  {
+    id: 'per_guard_herluin_karyadi',
+    nationalIdNumber: '3171046711790001',
+    fullName: 'HERLUIN KARYADI PRAPTO U',
+    preferredName: 'Pak Herluin',
+    gender: 'MALE',
     address: 'JL CULAN NO 1 KEL KRAMAT KEC SENEN JAKARTA PUSAT',
     createdAt: '2026-07-01T00:00:00Z',
     updatedAt: '2026-07-01T00:00:00Z'
@@ -440,6 +523,16 @@ export const SEED_PERSONS: Person[] = [
     updatedAt: '2026-07-01T00:00:00Z'
   },
   {
+    id: 'per_guard_david_ardy',
+    nationalIdNumber: '1208016308890002',
+    fullName: 'DAVID ARDY MARULITUA HUTAGAOL',
+    preferredName: 'Pak David',
+    gender: 'MALE',
+    address: 'JL. PULOMAS BARAT DAYA R5 KAYU PUTIH PULO GADUNG, JAKARTA TIMUR',
+    createdAt: '2026-07-01T00:00:00Z',
+    updatedAt: '2026-07-01T00:00:00Z'
+  },
+  {
     id: 'per_guard_rani_sinaga',
     nationalIdNumber: '1208016308890001',
     fullName: 'RANI RIDAHYANTA SINAGA',
@@ -458,6 +551,16 @@ export const SEED_PERSONS: Person[] = [
     gender: 'MALE',
     birthDate: '2021-04-18',
     birthPlace: 'JAKARTA',
+    address: 'JL. BATU BIDURI BULAN NO. 52 KAYU PUTIH PULOGADUNG, JAKARTA TIMUR',
+    createdAt: '2026-07-01T00:00:00Z',
+    updatedAt: '2026-07-01T00:00:00Z'
+  },
+  {
+    id: 'per_guard_george_alexandre',
+    nationalIdNumber: '2171105802900001',
+    fullName: 'GEORGE ALEXANDRE PUTRA',
+    preferredName: 'Pak George',
+    gender: 'MALE',
     address: 'JL. BATU BIDURI BULAN NO. 52 KAYU PUTIH PULOGADUNG, JAKARTA TIMUR',
     createdAt: '2026-07-01T00:00:00Z',
     updatedAt: '2026-07-01T00:00:00Z'
@@ -486,6 +589,16 @@ export const SEED_PERSONS: Person[] = [
     updatedAt: '2026-07-01T00:00:00Z'
   },
   {
+    id: 'per_guard_favor_bancin',
+    nationalIdNumber: '6204065404850003',
+    fullName: 'FAVOR ADELAIDE BANCIN',
+    preferredName: 'Pak Favor',
+    gender: 'MALE',
+    address: 'JALAN SEDERHANA NO. 5 PANJI DABUTAR SITINJO, SUMATERA UTARA',
+    createdAt: '2026-07-01T00:00:00Z',
+    updatedAt: '2026-07-01T00:00:00Z'
+  },
+  {
     id: 'per_guard_muliathy_briany',
     nationalIdNumber: '6204065404850004',
     fullName: 'MULIATHY BRIANY',
@@ -499,6 +612,39 @@ export const SEED_PERSONS: Person[] = [
 
   // Class B Students & Guardians
   {
+    id: 'per_child_kayla',
+    nationalIdNumber: '3171086202220006',
+    fullName: 'ADELINE MIKAYLA HAREFA',
+    preferredName: 'KAYLA',
+    gender: 'FEMALE',
+    birthDate: '2022-02-22',
+    birthPlace: 'JAKARTA',
+    address: 'JL. RAWA SELATAN I TOWN HOUSE ONASIS B-10 NO. 37, GALUR JOHAR BARU, JAKARTA PUSAT',
+    createdAt: '2026-07-01T00:00:00Z',
+    updatedAt: '2026-07-01T00:00:00Z'
+  },
+  {
+    id: 'per_guard_andi_harefa',
+    nationalIdNumber: '1204024604890001',
+    fullName: 'ANDI NOVA HAREFA',
+    preferredName: 'Pak Andi',
+    gender: 'MALE',
+    address: 'JL. RAWA SELATAN I TOWN HOUSE ONASIS B-10 NO. 37, GALUR JOHAR BARU, JAKARTA PUSAT',
+    createdAt: '2026-07-01T00:00:00Z',
+    updatedAt: '2026-07-01T00:00:00Z'
+  },
+  {
+    id: 'per_guard_mutiara_zega',
+    nationalIdNumber: '1204024604890002',
+    fullName: 'MUTIARA ZEGA',
+    preferredName: 'Ibu Mutiara',
+    gender: 'FEMALE',
+    phone: '081394642219',
+    address: 'JL. RAWA SELATAN I TOWN HOUSE ONASIS B-10 NO. 37, GALUR JOHAR BARU, JAKARTA PUSAT',
+    createdAt: '2026-07-01T00:00:00Z',
+    updatedAt: '2026-07-01T00:00:00Z'
+  },
+  {
     id: 'per_child_dominic',
     nationalIdNumber: '3171032810200001',
     fullName: 'DOMINIC JOVAN',
@@ -506,6 +652,16 @@ export const SEED_PERSONS: Person[] = [
     gender: 'MALE',
     birthDate: '2020-10-28',
     birthPlace: 'JAKARTA',
+    address: 'JL. HARAPAN MULIA II NO. 5, HARAPAN MULIA KEMAYORAN, JAKARTA PUSAT',
+    createdAt: '2026-07-01T00:00:00Z',
+    updatedAt: '2026-07-01T00:00:00Z'
+  },
+  {
+    id: 'per_guard_henky_santoso',
+    nationalIdNumber: '3171034202790003',
+    fullName: 'HENKY SANTOSO',
+    preferredName: 'Pak Henky',
+    gender: 'MALE',
     address: 'JL. HARAPAN MULIA II NO. 5, HARAPAN MULIA KEMAYORAN, JAKARTA PUSAT',
     createdAt: '2026-07-01T00:00:00Z',
     updatedAt: '2026-07-01T00:00:00Z'
@@ -534,6 +690,16 @@ export const SEED_PERSONS: Person[] = [
     updatedAt: '2026-07-01T00:00:00Z'
   },
   {
+    id: 'per_guard_bram_kevin',
+    nationalIdNumber: '3175017001950003',
+    fullName: 'BRAM KEVIN SUPUSEPA',
+    preferredName: 'Pak Bram',
+    gender: 'MALE',
+    address: 'JL. KR PULO GUNDUL K.207, TANAH TINGGI JOHAR BARU, JAKARTA PUSAT',
+    createdAt: '2026-07-01T00:00:00Z',
+    updatedAt: '2026-07-01T00:00:00Z'
+  },
+  {
     id: 'per_guard_lillyanti_posumah',
     nationalIdNumber: '3175017001950004',
     fullName: 'LILLYANTI FENI POSUMAH',
@@ -552,6 +718,16 @@ export const SEED_PERSONS: Person[] = [
     gender: 'MALE',
     birthDate: '2020-11-22',
     birthPlace: 'JAKARTA',
+    address: 'KP. JAWA RAWASARI CEMPAKA PUTIH, JAKARTA PUSAT',
+    createdAt: '2026-07-01T00:00:00Z',
+    updatedAt: '2026-07-01T00:00:00Z'
+  },
+  {
+    id: 'per_guard_veron_situmorang',
+    nationalIdNumber: '3171054810810006',
+    fullName: 'VERON NEDEZ SITUMORANG',
+    preferredName: 'Pak Veron',
+    gender: 'MALE',
     address: 'KP. JAWA RAWASARI CEMPAKA PUTIH, JAKARTA PUSAT',
     createdAt: '2026-07-01T00:00:00Z',
     updatedAt: '2026-07-01T00:00:00Z'
@@ -580,6 +756,16 @@ export const SEED_PERSONS: Person[] = [
     updatedAt: '2026-07-01T00:00:00Z'
   },
   {
+    id: 'per_guard_andri_syawali',
+    nationalIdNumber: '1204106401960002',
+    fullName: 'ANDRI SYAWALI',
+    preferredName: 'Pak Andri',
+    gender: 'MALE',
+    address: 'JL. CEMPAKA PUTIH UTARA BLOK O NO. 112, CEMPAKA BARU KEMAYORAN JAKARTA PUSAT',
+    createdAt: '2026-07-01T00:00:00Z',
+    updatedAt: '2026-07-01T00:00:00Z'
+  },
+  {
     id: 'per_guard_bilief_zebua',
     nationalIdNumber: '1204106401960001',
     fullName: 'BILIEF SENNIAR ZEBUA',
@@ -598,6 +784,16 @@ export const SEED_PERSONS: Person[] = [
     gender: 'MALE',
     birthDate: '2020-09-09',
     birthPlace: 'JAKARTA',
+    address: 'JL. RAWA TENGAH NO. 8, GALUR JOHAR BARU, JAKARTA PUSAT',
+    createdAt: '2026-07-01T00:00:00Z',
+    updatedAt: '2026-07-01T00:00:00Z'
+  },
+  {
+    id: 'per_guard_remon',
+    nationalIdNumber: '1212047003920002',
+    fullName: 'REMON',
+    preferredName: 'Pak Remon',
+    gender: 'MALE',
     address: 'JL. RAWA TENGAH NO. 8, GALUR JOHAR BARU, JAKARTA PUSAT',
     createdAt: '2026-07-01T00:00:00Z',
     updatedAt: '2026-07-01T00:00:00Z'
@@ -626,6 +822,16 @@ export const SEED_PERSONS: Person[] = [
     updatedAt: '2026-07-01T00:00:00Z'
   },
   {
+    id: 'per_guard_denis',
+    nationalIdNumber: '3171085911910002',
+    fullName: 'DENIS',
+    preferredName: 'Pak Denis',
+    gender: 'MALE',
+    address: 'JL. KP RAWA SAWAH JOHAR BARU, JAKARTA PUSAT',
+    createdAt: '2026-07-01T00:00:00Z',
+    updatedAt: '2026-07-01T00:00:00Z'
+  },
+  {
     id: 'per_guard_marshella_novita',
     nationalIdNumber: '3171085911910001',
     fullName: 'MARSHELLA NOVITA',
@@ -644,6 +850,16 @@ export const SEED_PERSONS: Person[] = [
     gender: 'MALE',
     birthDate: '2021-04-17',
     birthPlace: 'JAKARTA',
+    address: 'JL. GALUR SELATAN NO. 20, GALUR JOHAR BARU JAKARTA PUSAT',
+    createdAt: '2026-07-01T00:00:00Z',
+    updatedAt: '2026-07-01T00:00:00Z'
+  },
+  {
+    id: 'per_guard_hengki_adi',
+    nationalIdNumber: '1207055011910002',
+    fullName: 'HENGKI PRIANDO HALOMOAN ADI CHANDRA',
+    preferredName: 'Pak Hengki',
+    gender: 'MALE',
     address: 'JL. GALUR SELATAN NO. 20, GALUR JOHAR BARU JAKARTA PUSAT',
     createdAt: '2026-07-01T00:00:00Z',
     updatedAt: '2026-07-01T00:00:00Z'
@@ -1054,9 +1270,18 @@ export const SEED_STUDENTS: StudentProfile[] = [
 ];
 
 export const SEED_GUARDIAN_RELATIONSHIPS: GuardianRelationship[] = [
-  // 17 Real Relationships for Maranatha Students
+  // Class A (9 Students × 2 Parents = 18 Relationships)
   {
-    id: 'rel_maranatha_01',
+    id: 'gr_millen_father',
+    studentPersonId: 'per_child_millen',
+    guardianPersonId: 'per_guard_michael_maspaitella',
+    relationshipType: 'FATHER',
+    isPrimaryContact: false,
+    isLegalGuardian: true,
+    emergencyContactPriority: 2
+  },
+  {
+    id: 'gr_millen_mother',
     studentPersonId: 'per_child_millen',
     guardianPersonId: 'per_guard_julen_patricia',
     relationshipType: 'MOTHER',
@@ -1065,7 +1290,16 @@ export const SEED_GUARDIAN_RELATIONSHIPS: GuardianRelationship[] = [
     emergencyContactPriority: 1
   },
   {
-    id: 'rel_maranatha_02',
+    id: 'gr_carissa_father',
+    studentPersonId: 'per_child_carissa',
+    guardianPersonId: 'per_guard_dulpri',
+    relationshipType: 'FATHER',
+    isPrimaryContact: false,
+    isLegalGuardian: true,
+    emergencyContactPriority: 2
+  },
+  {
+    id: 'gr_carissa_mother',
     studentPersonId: 'per_child_carissa',
     guardianPersonId: 'per_guard_herni_tiurma',
     relationshipType: 'MOTHER',
@@ -1074,7 +1308,16 @@ export const SEED_GUARDIAN_RELATIONSHIPS: GuardianRelationship[] = [
     emergencyContactPriority: 1
   },
   {
-    id: 'rel_maranatha_03',
+    id: 'gr_rainer_father',
+    studentPersonId: 'per_child_rainer',
+    guardianPersonId: 'per_guard_alfredo_diego',
+    relationshipType: 'FATHER',
+    isPrimaryContact: false,
+    isLegalGuardian: true,
+    emergencyContactPriority: 2
+  },
+  {
+    id: 'gr_rainer_mother',
     studentPersonId: 'per_child_rainer',
     guardianPersonId: 'per_guard_devia_permata',
     relationshipType: 'MOTHER',
@@ -1083,7 +1326,16 @@ export const SEED_GUARDIAN_RELATIONSHIPS: GuardianRelationship[] = [
     emergencyContactPriority: 1
   },
   {
-    id: 'rel_maranatha_04',
+    id: 'gr_falen_father',
+    studentPersonId: 'per_child_falen',
+    guardianPersonId: 'per_guard_hasamuda_hulu',
+    relationshipType: 'FATHER',
+    isPrimaryContact: false,
+    isLegalGuardian: true,
+    emergencyContactPriority: 2
+  },
+  {
+    id: 'gr_falen_mother',
     studentPersonId: 'per_child_falen',
     guardianPersonId: 'per_guard_senimawati_zega',
     relationshipType: 'MOTHER',
@@ -1092,7 +1344,16 @@ export const SEED_GUARDIAN_RELATIONSHIPS: GuardianRelationship[] = [
     emergencyContactPriority: 1
   },
   {
-    id: 'rel_maranatha_05',
+    id: 'gr_adrian_father',
+    studentPersonId: 'per_child_adrian',
+    guardianPersonId: 'per_guard_catur_putranto',
+    relationshipType: 'FATHER',
+    isPrimaryContact: false,
+    isLegalGuardian: true,
+    emergencyContactPriority: 2
+  },
+  {
+    id: 'gr_adrian_mother',
     studentPersonId: 'per_child_adrian',
     guardianPersonId: 'per_guard_salamah',
     relationshipType: 'MOTHER',
@@ -1101,7 +1362,16 @@ export const SEED_GUARDIAN_RELATIONSHIPS: GuardianRelationship[] = [
     emergencyContactPriority: 1
   },
   {
-    id: 'rel_maranatha_06',
+    id: 'gr_adhi_father',
+    studentPersonId: 'per_child_adhi',
+    guardianPersonId: 'per_guard_herluin_karyadi',
+    relationshipType: 'FATHER',
+    isPrimaryContact: false,
+    isLegalGuardian: true,
+    emergencyContactPriority: 2
+  },
+  {
+    id: 'gr_adhi_mother',
     studentPersonId: 'per_child_adhi',
     guardianPersonId: 'per_guard_nancy_ferawati',
     relationshipType: 'MOTHER',
@@ -1110,7 +1380,16 @@ export const SEED_GUARDIAN_RELATIONSHIPS: GuardianRelationship[] = [
     emergencyContactPriority: 1
   },
   {
-    id: 'rel_maranatha_07',
+    id: 'gr_liora_father',
+    studentPersonId: 'per_child_liora',
+    guardianPersonId: 'per_guard_david_ardy',
+    relationshipType: 'FATHER',
+    isPrimaryContact: false,
+    isLegalGuardian: true,
+    emergencyContactPriority: 2
+  },
+  {
+    id: 'gr_liora_mother',
     studentPersonId: 'per_child_liora',
     guardianPersonId: 'per_guard_rani_sinaga',
     relationshipType: 'MOTHER',
@@ -1119,7 +1398,16 @@ export const SEED_GUARDIAN_RELATIONSHIPS: GuardianRelationship[] = [
     emergencyContactPriority: 1
   },
   {
-    id: 'rel_maranatha_08',
+    id: 'gr_zio_father',
+    studentPersonId: 'per_child_zio',
+    guardianPersonId: 'per_guard_george_alexandre',
+    relationshipType: 'FATHER',
+    isPrimaryContact: false,
+    isLegalGuardian: true,
+    emergencyContactPriority: 2
+  },
+  {
+    id: 'gr_zio_mother',
     studentPersonId: 'per_child_zio',
     guardianPersonId: 'per_guard_penta_romla',
     relationshipType: 'MOTHER',
@@ -1128,7 +1416,16 @@ export const SEED_GUARDIAN_RELATIONSHIPS: GuardianRelationship[] = [
     emergencyContactPriority: 1
   },
   {
-    id: 'rel_maranatha_09',
+    id: 'gr_brian_father',
+    studentPersonId: 'per_child_brian',
+    guardianPersonId: 'per_guard_favor_bancin',
+    relationshipType: 'FATHER',
+    isPrimaryContact: false,
+    isLegalGuardian: true,
+    emergencyContactPriority: 2
+  },
+  {
+    id: 'gr_brian_mother',
     studentPersonId: 'per_child_brian',
     guardianPersonId: 'per_guard_muliathy_briany',
     relationshipType: 'MOTHER',
@@ -1136,8 +1433,19 @@ export const SEED_GUARDIAN_RELATIONSHIPS: GuardianRelationship[] = [
     isLegalGuardian: true,
     emergencyContactPriority: 1
   },
+
+  // Class B (8 Students × 2 Parents = 16 Relationships)
   {
-    id: 'rel_maranatha_10',
+    id: 'gr_kayla_father',
+    studentPersonId: 'per_child_kayla',
+    guardianPersonId: 'per_guard_andi_harefa',
+    relationshipType: 'FATHER',
+    isPrimaryContact: false,
+    isLegalGuardian: true,
+    emergencyContactPriority: 2
+  },
+  {
+    id: 'gr_kayla_mother',
     studentPersonId: 'per_child_kayla',
     guardianPersonId: 'per_guard_mutiara_zega',
     relationshipType: 'MOTHER',
@@ -1146,7 +1454,16 @@ export const SEED_GUARDIAN_RELATIONSHIPS: GuardianRelationship[] = [
     emergencyContactPriority: 1
   },
   {
-    id: 'rel_maranatha_11',
+    id: 'gr_dominic_father',
+    studentPersonId: 'per_child_dominic',
+    guardianPersonId: 'per_guard_henky_santoso',
+    relationshipType: 'FATHER',
+    isPrimaryContact: false,
+    isLegalGuardian: true,
+    emergencyContactPriority: 2
+  },
+  {
+    id: 'gr_dominic_mother',
     studentPersonId: 'per_child_dominic',
     guardianPersonId: 'per_guard_friny',
     relationshipType: 'MOTHER',
@@ -1155,7 +1472,16 @@ export const SEED_GUARDIAN_RELATIONSHIPS: GuardianRelationship[] = [
     emergencyContactPriority: 1
   },
   {
-    id: 'rel_maranatha_12',
+    id: 'gr_lyra_father',
+    studentPersonId: 'per_child_lyra',
+    guardianPersonId: 'per_guard_bram_kevin',
+    relationshipType: 'FATHER',
+    isPrimaryContact: false,
+    isLegalGuardian: true,
+    emergencyContactPriority: 2
+  },
+  {
+    id: 'gr_lyra_mother',
     studentPersonId: 'per_child_lyra',
     guardianPersonId: 'per_guard_lillyanti_posumah',
     relationshipType: 'MOTHER',
@@ -1164,7 +1490,16 @@ export const SEED_GUARDIAN_RELATIONSHIPS: GuardianRelationship[] = [
     emergencyContactPriority: 1
   },
   {
-    id: 'rel_maranatha_13',
+    id: 'gr_levin_father',
+    studentPersonId: 'per_child_levin',
+    guardianPersonId: 'per_guard_veron_situmorang',
+    relationshipType: 'FATHER',
+    isPrimaryContact: false,
+    isLegalGuardian: true,
+    emergencyContactPriority: 2
+  },
+  {
+    id: 'gr_levin_mother',
     studentPersonId: 'per_child_levin',
     guardianPersonId: 'per_guard_henny_sitindaon',
     relationshipType: 'MOTHER',
@@ -1173,7 +1508,16 @@ export const SEED_GUARDIAN_RELATIONSHIPS: GuardianRelationship[] = [
     emergencyContactPriority: 1
   },
   {
-    id: 'rel_maranatha_14',
+    id: 'gr_adriel_father',
+    studentPersonId: 'per_child_adriel',
+    guardianPersonId: 'per_guard_andri_syawali',
+    relationshipType: 'FATHER',
+    isPrimaryContact: false,
+    isLegalGuardian: true,
+    emergencyContactPriority: 2
+  },
+  {
+    id: 'gr_adriel_mother',
     studentPersonId: 'per_child_adriel',
     guardianPersonId: 'per_guard_bilief_zebua',
     relationshipType: 'MOTHER',
@@ -1182,7 +1526,16 @@ export const SEED_GUARDIAN_RELATIONSHIPS: GuardianRelationship[] = [
     emergencyContactPriority: 1
   },
   {
-    id: 'rel_maranatha_15',
+    id: 'gr_zane_father',
+    studentPersonId: 'per_child_zane',
+    guardianPersonId: 'per_guard_remon',
+    relationshipType: 'FATHER',
+    isPrimaryContact: false,
+    isLegalGuardian: true,
+    emergencyContactPriority: 2
+  },
+  {
+    id: 'gr_zane_mother',
     studentPersonId: 'per_child_zane',
     guardianPersonId: 'per_guard_yanti_siagian',
     relationshipType: 'MOTHER',
@@ -1191,7 +1544,16 @@ export const SEED_GUARDIAN_RELATIONSHIPS: GuardianRelationship[] = [
     emergencyContactPriority: 1
   },
   {
-    id: 'rel_maranatha_16',
+    id: 'gr_clea_father',
+    studentPersonId: 'per_child_clea',
+    guardianPersonId: 'per_guard_denis',
+    relationshipType: 'FATHER',
+    isPrimaryContact: false,
+    isLegalGuardian: true,
+    emergencyContactPriority: 2
+  },
+  {
+    id: 'gr_clea_mother',
     studentPersonId: 'per_child_clea',
     guardianPersonId: 'per_guard_marshella_novita',
     relationshipType: 'MOTHER',
@@ -1200,7 +1562,16 @@ export const SEED_GUARDIAN_RELATIONSHIPS: GuardianRelationship[] = [
     emergencyContactPriority: 1
   },
   {
-    id: 'rel_maranatha_17',
+    id: 'gr_nathan_father',
+    studentPersonId: 'per_child_nathan',
+    guardianPersonId: 'per_guard_hengki_adi',
+    relationshipType: 'FATHER',
+    isPrimaryContact: false,
+    isLegalGuardian: true,
+    emergencyContactPriority: 2
+  },
+  {
+    id: 'gr_nathan_mother',
     studentPersonId: 'per_child_nathan',
     guardianPersonId: 'per_guard_novita_ginting',
     relationshipType: 'MOTHER',
