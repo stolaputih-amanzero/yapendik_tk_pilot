@@ -154,6 +154,20 @@ async function runAdaptiveChromeTests() {
       assert.ok(html.includes('Denting 432Hz'), 'Expected Denting 432Hz toggle');
     });
 
+    runCheck('ProfileDrawer [LIVING CONTRACT ADS]: Renders Living Contract entry in drawer', () => {
+      const html = renderToString(
+        <SecurityContextProvider>
+          <ProfileDrawer 
+            isOpen={true}
+            onClose={() => {}}
+            onSelectTab={() => {}}
+          />
+        </SecurityContextProvider>
+      );
+      assert.ok(html.includes('Living Contract'), 'Expected Living Contract in ProfileDrawer');
+      assert.ok(html.includes('ADS'), 'Expected ADS badge in ProfileDrawer');
+    });
+
     runCheck('ProfileDrawer [48dp FLOOR]: PWA and Sign Out action buttons enforce 48dp floor', () => {
       const html = renderToString(
         <SecurityContextProvider>
@@ -216,7 +230,7 @@ async function runAdaptiveChromeTests() {
       assert.ok(html.includes('border-transparent'), 'Expected border-transparent on inactive links');
     });
 
-    runCheck('Sidebar [THEME TOGGLE]: Sidebar renders desktop theme switch button', () => {
+    runCheck('Sidebar [NO THEME TOGGLE]: Theme toggle is removed from Sidebar (centralized in ProfileDrawer)', () => {
       const html = renderToString(
         <SecurityContextProvider>
           <Sidebar 
@@ -227,7 +241,7 @@ async function runAdaptiveChromeTests() {
           />
         </SecurityContextProvider>
       );
-      assert.ok(html.includes('Beralih ke'), 'Expected theme toggle in Sidebar');
+      assert.ok(!html.includes('Beralih ke'), 'Did not expect theme toggle in Sidebar');
     });
 
     runCheck('Sidebar [USER PROFILE]: Desktop Sidebar renders user persona profile trigger', () => {

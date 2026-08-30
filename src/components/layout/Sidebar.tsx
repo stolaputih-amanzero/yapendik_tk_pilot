@@ -18,7 +18,7 @@ import {
   Clock, 
   Palette, 
   TrendingUp, 
-  Sparkles, 
+  Sparkles,
   MessageSquare, 
   Users, 
   ShieldCheck, 
@@ -29,12 +29,9 @@ import {
   ChevronDown,
   LogOut,
   Compass,
-  FileCheck2,
-  Sun,
-  Moon
+  FileCheck2
 } from 'lucide-react';
 import { useSecurityContext } from '../../auth/context';
-import { useTheme } from '../../hooks/useTheme';
 import { WorkspaceTab } from './TopBar';
 
 interface SidebarProps {
@@ -67,7 +64,6 @@ export const Sidebar: React.FC<SidebarProps> = ({
   className = ''
 }) => {
   const { currentPersona, personas, switchPersona, signOut } = useSecurityContext();
-  const { isDark, toggleTheme } = useTheme();
   const [showPersonaMenu, setShowPersonaMenu] = useState(false);
   const role = currentPersona?.role || 'TEACHER';
 
@@ -288,87 +284,10 @@ export const Sidebar: React.FC<SidebarProps> = ({
         ))}
       </nav>
 
-      {/* Bottom Actions: Living Contract & Developer Tests — Pure Flat Fluid Surface */}
+      {/* Bottom Actions: User Profile & Persona Switcher — Pure Flat Fluid Surface */}
       <div className="border-t border-line-hairline min-w-0 transition-all space-y-0.5 py-2 bg-surface">
-        {/* Living Contract Button */}
-        <div className="relative group min-w-0">
-          <button
-            type="button"
-            onClick={() => onSelectTab('PERCONTOHAN')}
-            aria-label="Living Contract ✦"
-            className={`w-full flex items-center text-xs transition-colors duration-150 cursor-pointer min-w-0 min-h-[48px] border-l-2 bg-transparent ${
-              isCollapsed
-                ? 'justify-center py-3'
-                : 'space-x-3 px-5 py-3 text-left'
-            } ${
-              activeTab === 'PERCONTOHAN'
-                ? 'border-brand-primary text-ink font-semibold'
-                : 'border-transparent text-ink-soft hover-only:text-ink font-normal'
-            }`}
-          >
-            <Sparkles className={`w-4 h-4 shrink-0 ${activeTab === 'PERCONTOHAN' ? 'text-accent-valor' : 'text-ink-faint'}`} />
-            {!isCollapsed && (
-              <>
-                <span className="truncate flex-1 text-left line-clamp-1">Living Contract</span>
-                <span className="text-[10px] font-mono text-accent-valor shrink-0 whitespace-nowrap font-bold">
-                  ✦ ADS
-                </span>
-              </>
-            )}
-          </button>
-
-          {/* Tooltip in collapsed mode */}
-          {isCollapsed && (
-            <div className="pointer-events-none absolute left-full top-1/2 -translate-y-1/2 ml-2 z-50 hidden group-hover-only:flex items-center">
-              <div className="bg-surface text-ink text-xs font-medium px-3 py-2 rounded-xl shadow-floating whitespace-nowrap flex items-center space-x-1.5 border border-line-hairline">
-                <span>Living Contract ✦ ADS</span>
-              </div>
-            </div>
-          )}
-        </div>
-
-        {/* Theme Toggle Button (Ivory Canvas <-> Midnight Sanctuary) */}
-        <div className="relative group min-w-0">
-          <button
-            type="button"
-            onClick={toggleTheme}
-            aria-label={isDark ? "Beralih ke Ivory Canvas (Light Mode)" : "Beralih ke Midnight Sanctuary (Dark Mode)"}
-            title={isDark ? "Beralih ke Ivory Canvas (Light Mode)" : "Beralih ke Midnight Sanctuary (Dark Mode)"}
-            className={`w-full flex items-center text-xs transition-colors duration-150 cursor-pointer min-w-0 min-h-[48px] border-l-2 border-transparent bg-transparent text-ink-soft hover-only:text-ink ${
-              isCollapsed
-                ? 'justify-center py-3'
-                : 'space-x-3 px-5 py-3 text-left'
-            }`}
-          >
-            {isDark ? (
-              <Sun className="w-4 h-4 shrink-0 text-accent-valor" />
-            ) : (
-              <Moon className="w-4 h-4 shrink-0 text-ink-faint" />
-            )}
-            {!isCollapsed && (
-              <>
-                <span className="truncate flex-1 text-left line-clamp-1">
-                  {isDark ? 'Ivory Canvas' : 'Midnight Sanctuary'}
-                </span>
-                <span className="text-[10px] font-mono text-ink-faint shrink-0 whitespace-nowrap uppercase">
-                  {isDark ? 'Light' : 'Dark'}
-                </span>
-              </>
-            )}
-          </button>
-
-          {/* Tooltip in collapsed mode */}
-          {isCollapsed && (
-            <div className="pointer-events-none absolute left-full top-1/2 -translate-y-1/2 ml-2 z-50 hidden group-hover-only:flex items-center">
-              <div className="bg-surface text-ink text-xs font-medium px-3 py-2 rounded-xl shadow-floating whitespace-nowrap flex items-center space-x-1.5 border border-line-hairline">
-                <span>{isDark ? 'Beralih ke Ivory Canvas (Light)' : 'Beralih ke Midnight Sanctuary (Dark)'}</span>
-              </div>
-            </div>
-          )}
-        </div>
-
         {/* User Profile Card & Persona Switcher (Desktop/Tablet) */}
-        <div className="relative group min-w-0 pt-1 border-t border-line-hairline">
+        <div className="relative group min-w-0">
           <button
             type="button"
             onClick={() => setShowPersonaMenu(prev => !prev)}

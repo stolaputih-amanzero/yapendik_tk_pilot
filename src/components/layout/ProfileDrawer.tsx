@@ -173,6 +173,32 @@ export const ProfileDrawer: React.FC<ProfileDrawerProps> = ({
                 </div>
               </button>
             </div>
+
+            {/* Living Contract (Amanaura Design System) */}
+            {onSelectTab && (
+              <button
+                type="button"
+                onClick={() => {
+                  onSelectTab('PERCONTOHAN');
+                  onClose();
+                }}
+                className="w-full p-3 rounded-xl bg-surface border border-line-hairline hover-only:bg-surface-subtle transition-colors flex items-center justify-between text-left cursor-pointer min-h-[48px]"
+                aria-label="Buka Living Contract (Amanaura Design System)"
+              >
+                <div className="flex items-center space-x-2.5 min-w-0">
+                  <Sparkles className="w-5 h-5 text-accent-valor shrink-0" />
+                  <div className="min-w-0">
+                    <div className="text-xs font-semibold text-ink flex items-center space-x-1.5">
+                      <span>Living Contract</span>
+                      <span className="text-[10px] font-mono text-accent-valor font-bold">✦ ADS</span>
+                    </div>
+                    <div className="text-[11px] text-ink-soft truncate">
+                      Eksplorasi Desain Sistem &amp; Arsitektur Komponen
+                    </div>
+                  </div>
+                </div>
+              </button>
+            )}
           </div>
 
           {/* Persona Switcher (Test / Multi-Role Explorer) */}
