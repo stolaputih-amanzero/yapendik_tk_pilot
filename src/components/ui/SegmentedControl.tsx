@@ -10,6 +10,7 @@ export interface SegmentedControlOption {
   label: string;
   icon?: React.ComponentType<{ className?: string }> | React.ReactNode;
   badge?: string | number;
+  activeClassName?: string;
 }
 
 export interface SegmentedControlProps {
@@ -63,7 +64,7 @@ export const SegmentedControl: React.FC<SegmentedControlProps> = ({
               ${isSm ? 'px-2 medium:px-3 py-1 text-[11px] medium:text-xs' : 'px-3 medium:px-4 py-2 text-xs medium:text-sm'}
               ${
                 isActive
-                  ? 'bg-surface text-ink font-bold shadow-hairline border-b-2 border-b-brand-primary'
+                  ? (option.activeClassName || 'bg-surface text-ink font-bold shadow-hairline border-b-2 border-b-brand-primary')
                   : 'text-ink-soft border border-transparent hover-only:text-ink hover-only:bg-surface/50'
               }
             `.trim().replace(/\s+/g, ' ')}
