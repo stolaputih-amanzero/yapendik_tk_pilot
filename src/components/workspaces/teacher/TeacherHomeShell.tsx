@@ -359,8 +359,8 @@ export const TeacherHomeShell: React.FC<{ onNavigateToCommunication?: () => void
       <div className="px-4 medium:px-5 pt-2 pb-2 w-full text-ink">
         <div className="flex items-start justify-between gap-4">
           <div>
-            <div className="flex items-center space-x-1.5 text-brand-primary text-xs font-semibold uppercase tracking-wider mb-1">
-              <Home className="w-4 h-4 text-brand-primary" />
+            <div className="flex items-center space-x-1.5 text-ink-soft/70 text-[11px] font-semibold uppercase tracking-widest mb-1">
+              <Home className="w-3.5 h-3.5 text-ink-soft/70" />
               <span>Ruang Guru</span>
             </div>
             {(() => {
@@ -372,7 +372,7 @@ export const TeacherHomeShell: React.FC<{ onNavigateToCommunication?: () => void
 
               return (
                 <div className="space-y-0.5">
-                  <h2 className="text-lg medium:text-xl font-bold text-ink leading-tight">
+                  <h2 className="text-xl medium:text-2xl font-bold text-ink leading-tight">
                     {className}
                   </h2>
                   <p className="text-ink-soft text-xs medium:text-sm flex items-center gap-1.5 flex-wrap">

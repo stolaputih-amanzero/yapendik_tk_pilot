@@ -25,19 +25,21 @@ export const QuickCaptureFloatingButton: React.FC<Props> = ({ onClick, pendingDr
   }, [onClick]);
 
   return (
-    <div className="fixed bottom-[calc(env(safe-area-inset-bottom,0px)+96px)] right-4 expanded:bottom-6 expanded:right-6 z-40 flex items-center gap-3 pointer-events-auto">
-      {/* Floating Action Button */}
+    <div className="fixed bottom-[calc(env(safe-area-inset-bottom,0px)+92px)] right-4 expanded:bottom-6 expanded:right-6 z-40 flex items-center gap-3 pointer-events-auto">
+      {/* Extended Floating Action Pill */}
       <button
         type="button"
         onClick={onClick}
-        aria-label="Rekam Momen Belajar"
-        className="group relative flex items-center justify-center w-14 h-14 medium:w-16 medium:h-16 rounded-pill bg-brand-primary text-on-brand shadow-floating hover-only:scale-105 active:scale-95 transition-all duration-200 cursor-pointer border border-line-hairline"
+        title="Catat Momen Belajar Cepat (Ctrl+K)"
+        aria-label="Catat Momen Belajar Cepat"
+        className="group relative flex items-center gap-2 px-4 py-3 min-h-[48px] rounded-full bg-brand-primary text-on-brand shadow-floating hover-only:scale-105 active:scale-95 transition-all duration-200 cursor-pointer border border-line-hairline font-bold text-xs"
       >
-        <Sparkles className="w-6 h-6 medium:w-7 medium:h-7 text-on-brand fill-on-brand group-hover:rotate-12 transition-transform" />
+        <Sparkles className="w-4 h-4 text-on-brand fill-on-brand group-hover:rotate-12 transition-transform shrink-0" />
+        <span className="whitespace-nowrap font-semibold tracking-wide">Catat Momen</span>
 
         {/* Pending Draft Counter Badge */}
         {pendingDraftCount > 0 && (
-          <span className="absolute top-0 right-0 w-5 h-5 medium:w-6 medium:h-6 rounded-pill bg-danger text-on-brand text-[10px] medium:text-xs font-mono font-bold whitespace-nowrap flex items-center justify-center border-2 border-brand-primary shadow-floating animate-bounce">
+          <span className="ml-1 px-1.5 py-0.5 rounded-full bg-danger text-on-brand text-[10px] font-mono font-bold whitespace-nowrap">
             {pendingDraftCount}
           </span>
         )}

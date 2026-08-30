@@ -73,7 +73,7 @@ export const AttendanceGrid: React.FC<Props> = ({
   return (
     <div className="space-y-4">
       {/* Top Toolbar: Search, Filters & Bulk Actions (Flat Fluid single-depth) */}
-      <div className="flex flex-col expanded:flex-row items-stretch expanded:items-center justify-between gap-3 bg-surface p-4 rounded-2xl shadow-hairline">
+      <div className="flex flex-col expanded:flex-row items-stretch expanded:items-center justify-between gap-2.5 medium:gap-3 bg-surface p-3 medium:p-4 rounded-2xl shadow-hairline border border-line">
         {/* Search Bar */}
         <div className="relative flex-1 max-w-sm">
           <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-ink-faint" />
