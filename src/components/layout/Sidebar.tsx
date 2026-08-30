@@ -10,7 +10,7 @@
  * - Touch Targets: Enforce minimum 48dp floor (min-h-[48px]).
  */
 
-import React, { useState } from 'react';
+import React from 'react';
 import { 
   Building2, 
   Home, 
@@ -26,9 +26,7 @@ import {
   GraduationCap, 
   Flame, 
   Settings, 
-  ChevronDown,
-  LogOut,
-  Compass,
+  Compass, 
   FileCheck2
 } from 'lucide-react';
 import { useSecurityContext } from '../../auth/context';
@@ -63,8 +61,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
   onOpenProfileDrawer,
   className = ''
 }) => {
-  const { currentPersona, personas, switchPersona, signOut } = useSecurityContext();
-  const [showPersonaMenu, setShowPersonaMenu] = useState(false);
+  const { currentPersona } = useSecurityContext();
   const role = currentPersona?.role || 'TEACHER';
 
   // Role-Based Navigation Definition
@@ -290,8 +287,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
         <div className="relative group min-w-0">
           <button
             type="button"
-            onClick={() => setShowPersonaMenu(prev => !prev)}
-            aria-label="Menu Profil & Ganti Persona"
+            onClick={() => onOpenProfileDrawer?.()}
+            aria-label="Menu Profil Pengguna"
             title={currentPersona?.name || 'Profil Pengguna'}
             className={`w-full flex items-center text-xs transition-colors duration-150 cursor-pointer min-w-0 min-h-[48px] border-l-2 border-transparent bg-transparent text-ink hover-only:bg-surface-subtle/50 ${
               isCollapsed
@@ -317,91 +314,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 </div>
               </div>
             )}
-
-            {!isCollapsed && (
-              <ChevronDown className={`w-3.5 h-3.5 text-ink-faint transition-transform shrink-0 ${showPersonaMenu ? 'rotate-180' : ''}`} />
-            )}
           </button>
-
-          {/* Persona Switcher Popover Menu */}
-          {showPersonaMenu && (
-            <div 
-              className={`absolute bottom-full mb-2 z-50 bg-surface rounded-2xl border border-line shadow-floating p-2 space-y-1 ${
-                isCollapsed ? 'left-full ml-2 w-64' : 'left-2 right-2'
-              }`}
-            >
-              <div className="px-3 py-1.5 border-b border-line-hairline flex items-center justify-between">
-                <span className="text-[10px] font-mono font-bold text-ink-faint uppercase tracking-wider">
-                  Ganti Persona
-                </span>
-                {onOpenProfileDrawer && (
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setShowPersonaMenu(false);
-                      onOpenProfileDrawer();
-                    }}
-                    className="text-[10px] text-brand-primary hover-only:underline font-medium cursor-pointer"
-                  >
-                    Profil Lengkap
-                  </button>
-                )}
-              </div>
-
-              <div className="max-h-48 overflow-y-auto space-y-0.5 py-1">
-                {personas.map((p) => (
-                  <button
-                    key={p.id}
-                    type="button"
-                    onClick={() => {
-                      switchPersona(p.id);
-                      setShowPersonaMenu(false);
-                      if (onSelectTab) {
-                        if (p.role === 'GUARDIAN') {
-                          onSelectTab('GUARDIAN_WORKSPACE');
-                        } else if (p.role === 'APPLICANT') {
-                          onSelectTab('ADMISSIONS_PORTAL');
-                        } else if (p.role === 'TEACHER') {
-                          onSelectTab('TEACHER_HOME');
-                        } else if (p.role === 'HEADMASTER') {
-                          onSelectTab('HEADMASTER_ADOPTION');
-                        } else if (p.role === 'YAPENDIK_SUPERADMIN' || p.role === 'FOUNDATION_DIRECTOR') {
-                          onSelectTab('FOUNDATION_GOVERNANCE');
-                        }
-                      }
-                    }}
-                    className={`w-full px-3 py-2 text-left rounded-xl text-xs flex items-center justify-between cursor-pointer transition-colors ${
-                      p.id === currentPersona?.id
-                        ? 'bg-surface-subtle font-bold text-brand-primary'
-                        : 'text-ink-soft hover-only:bg-surface-subtle/70 hover-only:text-ink'
-                    }`}
-                  >
-                    <div className="truncate">
-                      <div className="truncate">{p.name}</div>
-                      <div className="text-[10px] text-ink-faint font-mono">{p.role}</div>
-                    </div>
-                    {p.id === currentPersona?.id && (
-                      <span className="text-accent-valor text-xs shrink-0">●</span>
-                    )}
-                  </button>
-                ))}
-              </div>
-
-              <div className="pt-1.5 mt-1 border-t border-line-hairline">
-                <button
-                  type="button"
-                  onClick={() => {
-                    setShowPersonaMenu(false);
-                    signOut();
-                  }}
-                  className="w-full py-2 px-3 text-left rounded-xl text-xs text-danger hover-only:bg-danger-tint font-medium flex items-center space-x-2 transition-colors cursor-pointer min-h-[40px]"
-                >
-                  <LogOut className="w-4 h-4" />
-                  <span>Keluar dari Sesi</span>
-                </button>
-              </div>
-            </div>
-          )}
         </div>
       </div>
     </aside>

@@ -16,7 +16,6 @@ import {
   VolumeX, 
   Download, 
   LogOut, 
-  Check, 
   Building2, 
   Sparkles,
   Wifi,
@@ -39,7 +38,7 @@ export const ProfileDrawer: React.FC<ProfileDrawerProps> = ({
   onClose,
   onSelectTab
 }) => {
-  const { currentPersona, personas, switchPersona, signOut } = useSecurityContext();
+  const { currentPersona, signOut } = useSecurityContext();
   const { isDark, toggleTheme } = useTheme();
   const { isOnline } = useOfflineStatus();
   const { isInstallable, isInstalled, isIOS, promptInstall } = useInstallPrompt();
@@ -199,71 +198,6 @@ export const ProfileDrawer: React.FC<ProfileDrawerProps> = ({
                 </div>
               </button>
             )}
-          </div>
-
-          {/* Persona Switcher (Test / Multi-Role Explorer) */}
-          <div className="space-y-3">
-            <div className="flex items-center justify-between">
-              <span className="text-xs font-bold uppercase tracking-wider text-ink-soft">
-                Ganti Peran Pengguna (Simulasi)
-              </span>
-              <span className="text-[11px] text-ink-faint font-mono">
-                {personas.length} Peran Tersedia
-              </span>
-            </div>
-
-            <div className="space-y-1.5 max-h-56 overflow-y-auto pr-1">
-              {personas.map(p => {
-                const isSelected = p.id === currentPersona?.id;
-                return (
-                  <button
-                    key={p.id}
-                    type="button"
-                    onClick={() => {
-                      switchPersona(p.id);
-                      onClose();
-                      if (onSelectTab) {
-                        if (p.role === 'APPLICANT') {
-                          onSelectTab('ADMISSIONS_PORTAL');
-                        } else if (p.role === 'GUARDIAN') {
-                          onSelectTab('GUARDIAN_WORKSPACE');
-                        } else if (p.role === 'TEACHER') {
-                          onSelectTab('TEACHER_HOME');
-                        } else if (p.role === 'HEADMASTER') {
-                          onSelectTab('HEADMASTER_ADOPTION');
-                        } else if (p.role === 'YAPENDIK_SUPERADMIN' || p.role === 'FOUNDATION_DIRECTOR') {
-                          onSelectTab('FOUNDATION_GOVERNANCE');
-                        }
-                      }
-                    }}
-                    className={`w-full p-3 rounded-xl border text-left transition-all flex items-center justify-between cursor-pointer min-h-[48px] ${
-                      isSelected
-                        ? 'bg-surface-subtle border-brand-primary text-ink shadow-soft'
-                        : 'bg-surface border-line-hairline text-ink-soft hover-only:bg-surface-subtle/70 hover-only:text-ink'
-                    }`}
-                  >
-                    <div className="flex items-center space-x-3 min-w-0">
-                      <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold shrink-0 ${
-                        isSelected ? 'bg-brand-primary text-on-brand' : 'bg-surface-subtle text-ink'
-                      }`}>
-                        {p.name.charAt(0)}
-                      </div>
-                      <div className="min-w-0">
-                        <div className="text-xs font-semibold text-ink truncate">
-                          {p.name}
-                        </div>
-                        <div className="text-[10px] text-ink-soft truncate">
-                          {p.role} • {p.schoolName?.split(' ')[0] || 'Unit'}
-                        </div>
-                      </div>
-                    </div>
-                    {isSelected && (
-                      <Check className="w-4 h-4 text-brand-primary shrink-0" />
-                    )}
-                  </button>
-                );
-              })}
-            </div>
           </div>
 
           {/* Living Shell & Connectivity Info */}
