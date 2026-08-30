@@ -120,6 +120,71 @@ export const SEED_PERSONAS: PersonaProfile[] = [
     guardianChildrenPersonIds: [],
     description: 'Tata kelola lintas sekolah, penjaminan mutu kurikulum TK Pilot, dan audit menyeluruh.',
     isSimulation: true
+  },
+  {
+    id: 'user_superadmin_shirley',
+    name: 'SHIRLEY A.T.WAKKARY',
+    role: 'YAPENDIK_SUPERADMIN',
+    roleTitle: 'Pengawas Mutu Pendidikan Yayasan (Superadmin)',
+    schoolId: 'sch_tk_maranatha',
+    schoolName: 'Pengurus Yayasan Yapendik',
+    personId: 'per_superadmin_shirley',
+    assignedClasses: ['cls_maranatha_tka', 'cls_maranatha_tkb'],
+    guardianChildrenPersonIds: [],
+    description: 'Tata kelola lintas sekolah, pengawas mutu pendidikan, dan superadministrator institusi.',
+    isSimulation: true
+  },
+  {
+    id: 'user_headmaster_sheryl',
+    name: 'SHERYL Y N UMBAS, S.IKOM, M.PD',
+    role: 'HEADMASTER',
+    roleTitle: 'Kepala Sekolah TK Yapendik Maranatha',
+    schoolId: 'sch_tk_maranatha',
+    schoolName: 'TK YAPENDIK GPIB Cabang Maranatha',
+    personId: 'per_headmaster_sheryl',
+    assignedClasses: ['cls_maranatha_tka', 'cls_maranatha_tkb'],
+    guardianChildrenPersonIds: [],
+    description: 'Pimpinan sekolah bertanggung jawab atas kepemimpinan kurikulum, validasi LPPA, dan ritme sekolah.',
+    isSimulation: true
+  },
+  {
+    id: 'user_teacher_erna',
+    name: 'ERNA BOYKELA R',
+    role: 'TEACHER',
+    roleTitle: 'Guru Kelas / Wali Kelompok A (TK A)',
+    schoolId: 'sch_tk_maranatha',
+    schoolName: 'TK YAPENDIK GPIB Cabang Maranatha',
+    personId: 'per_teacher_erna',
+    assignedClasses: ['cls_maranatha_tka'],
+    guardianChildrenPersonIds: [],
+    description: 'Guru Inti Sentra Kurikulum Merdeka PAUD Kelompok A.',
+    isSimulation: true
+  },
+  {
+    id: 'user_teacher_charlotha',
+    name: 'CHARLOTHA JOVANNCA BLANDINNA R',
+    role: 'ASSISTANT_TEACHER',
+    roleTitle: 'Guru Pendamping Kelompok A (TK A)',
+    schoolId: 'sch_tk_maranatha',
+    schoolName: 'TK YAPENDIK GPIB Cabang Maranatha',
+    personId: 'per_teacher_charlotha',
+    assignedClasses: ['cls_maranatha_tka'],
+    guardianChildrenPersonIds: [],
+    description: 'Guru Pendamping & Literasi Anak Usia Dini Kelompok A.',
+    isSimulation: true
+  },
+  {
+    id: 'user_teacher_evi',
+    name: 'EVI TANIA',
+    role: 'TEACHER',
+    roleTitle: 'Guru Kelas / Wali Kelompok B (TK B)',
+    schoolId: 'sch_tk_maranatha',
+    schoolName: 'TK YAPENDIK GPIB Cabang Maranatha',
+    personId: 'per_teacher_evi',
+    assignedClasses: ['cls_maranatha_tkb'],
+    guardianChildrenPersonIds: [],
+    description: 'Guru Inti Perkembangan Motorik & Sentra Kelompok B.',
+    isSimulation: true
   }
 ];
 
@@ -223,7 +288,12 @@ export const SecurityContextProvider: React.FC<{ children: React.ReactNode }> = 
         'user_headmaster_esther': 'esther@yapendik.sch.id',
         'user_parent_budi': 'budi@yapendik.sch.id',
         'user_teacher_diana_tk2': 'diana@yapendik.sch.id',
-        'user_superadmin_yapendik': 'andreas@yapendik.sch.id'
+        'user_superadmin_yapendik': 'andreas@yapendik.sch.id',
+        'user_superadmin_shirley': 'shirleyumbas@gmail.com',
+        'user_headmaster_sheryl': 'sherylumbas9@gmail.com',
+        'user_teacher_erna': 'yapendikmaranathajkt@gmail.com',
+        'user_teacher_charlotha': 'ratmalajovannca@gmail.com',
+        'user_teacher_evi': 'taniaevi101@gmail.com'
       };
 
       const matchedSeed = SEED_PERSONAS.find(p => 
@@ -249,73 +319,105 @@ export const SecurityContextProvider: React.FC<{ children: React.ReactNode }> = 
         .eq('id', mappedPersonId)
         .maybeSingle();
 
-      const fullName = personData?.full_name || matchedSeed?.name || session.user.email || 'Pengguna Terdaftar';
+      const fullName = personData?.full_name || matchedSeed?.name || session.user.user_metadata?.full_name || session.user.email || 'Pengguna Terdaftar';
 
       // 3. Dynamically resolve institutional role & school context
       let resolvedRole: Role = 'GUARDIAN';
       let resolvedRoleTitle: string = 'Orang Tua / Wali';
-      let resolvedSchoolId: string = 'sch_tk_yapendik_01';
-      let resolvedSchoolName: string = 'TK Yapendik 01 Menteng';
+      let resolvedSchoolId: string = 'sch_tk_maranatha';
+      let resolvedSchoolName: string = 'TK YAPENDIK GPIB Cabang Maranatha';
       let assignedClasses: string[] = [];
       let guardianChildrenPersonIds: string[] = [];
 
-      // Check Staff Profiles (SUPERADMIN, HEADMASTER, ADMIN, etc.)
-      const { data: staffProfiles } = await supabase
-        .from('staff_profiles')
-        .select('*, schools(name)')
-        .eq('person_id', mappedPersonId)
-        .eq('is_active', true)
-        .order('join_date', { ascending: false, nullsFirst: false });
-      const staffProfile = staffProfiles?.[0];
+      const userMetaRole = session.user.user_metadata?.role;
 
-      if (staffProfile?.role === 'SUPERADMIN' || matchedSeed?.role === 'YAPENDIK_SUPERADMIN') {
+      // 3.1 Check Governance Profile (SUPERADMIN / YAPENDIK_SUPERADMIN)
+      let isSuperAdmin = false;
+      const { data: govProfiles } = await supabase
+        .from('governance_profiles')
+        .select('*')
+        .eq('person_id', mappedPersonId)
+        .eq('is_active', true);
+      const govProfile = govProfiles?.[0];
+
+      if (
+        govProfile?.role === 'SUPERADMIN' ||
+        govProfile?.role === 'YAPENDIK_SUPERADMIN' ||
+        userMetaRole === 'SUPERADMIN' ||
+        userMetaRole === 'YAPENDIK_SUPERADMIN' ||
+        matchedSeed?.role === 'YAPENDIK_SUPERADMIN' ||
+        mappedPersonId === 'per_superadmin_shirley' ||
+        mappedPersonId === 'per_superadmin_andreas'
+      ) {
+        isSuperAdmin = true;
         resolvedRole = 'YAPENDIK_SUPERADMIN';
-        resolvedRoleTitle = 'Pengawas Mutu Pendidikan Yayasan';
-        resolvedSchoolName = 'Yayasan Yapendik';
-      } else if (staffProfile || matchedSeed?.role === 'HEADMASTER' || matchedSeed?.role === 'STAFF') {
-        const isHeadmaster = staffProfile?.role === 'HEADMASTER' || matchedSeed?.role === 'HEADMASTER';
-        resolvedRole = isHeadmaster ? 'HEADMASTER' : 'STAFF';
-        resolvedRoleTitle = isHeadmaster ? 'Kepala Sekolah' : 'Staf Administrasi';
-        resolvedSchoolId = staffProfile?.school_id || matchedSeed?.schoolId || 'sch_tk_yapendik_01';
-        resolvedSchoolName = (staffProfile as any)?.schools?.name || matchedSeed?.schoolName || 'Unit TK Yapendik';
-      } else {
-        // Check Teacher Profile
-        const { data: teacherProfiles } = await supabase
-          .from('teacher_profiles')
+        resolvedRoleTitle = 'Pengawas Mutu Pendidikan Yayasan (Superadmin)';
+        resolvedSchoolId = 'sch_tk_maranatha';
+        resolvedSchoolName = 'Pengurus Yayasan Yapendik';
+        assignedClasses = matchedSeed?.assignedClasses || ['cls_maranatha_tka', 'cls_maranatha_tkb'];
+      }
+
+      if (!isSuperAdmin) {
+        // 3.2 Check Staff Profiles (SUPERADMIN, HEADMASTER, ADMIN, etc.)
+        const { data: staffProfiles } = await supabase
+          .from('staff_profiles')
           .select('*, schools(name)')
           .eq('person_id', mappedPersonId)
           .eq('is_active', true)
           .order('join_date', { ascending: false, nullsFirst: false });
-        const teacherProfile = teacherProfiles?.[0];
+        const staffProfile = staffProfiles?.[0];
 
-        if (teacherProfile || matchedSeed?.role === 'TEACHER' || matchedSeed?.role === 'ASSISTANT_TEACHER') {
-          resolvedRole = (matchedSeed?.role === 'ASSISTANT_TEACHER' ? 'ASSISTANT_TEACHER' : 'TEACHER');
-          resolvedRoleTitle = matchedSeed?.roleTitle || 'Pendidik / Guru Kelas';
-          resolvedSchoolId = teacherProfile?.school_id || matchedSeed?.schoolId || 'sch_tk_yapendik_01';
-          resolvedSchoolName = (teacherProfile as any)?.schools?.name || matchedSeed?.schoolName || 'Unit TK Yapendik';
-
-          // Get assigned classes
-          const { data: classesData } = await supabase
-            .from('classes')
-            .select('id')
-            .or(`homeroom_teacher_id.eq.${mappedPersonId},co_teacher_id.eq.${mappedPersonId}`);
-          
-          if (classesData && classesData.length > 0) {
-            assignedClasses = classesData.map(c => c.id);
-          } else if (matchedSeed?.assignedClasses) {
-            assignedClasses = matchedSeed.assignedClasses;
-          }
+        if (staffProfile?.role === 'SUPERADMIN') {
+          resolvedRole = 'YAPENDIK_SUPERADMIN';
+          resolvedRoleTitle = 'Pengawas Mutu Pendidikan Yayasan (Superadmin)';
+          resolvedSchoolId = staffProfile.school_id || 'sch_tk_maranatha';
+          resolvedSchoolName = (staffProfile as any)?.schools?.name || 'Pengurus Yayasan Yapendik';
+        } else if (staffProfile || userMetaRole === 'HEADMASTER' || matchedSeed?.role === 'HEADMASTER' || matchedSeed?.role === 'STAFF') {
+          const isHeadmaster = staffProfile?.role === 'HEADMASTER' || userMetaRole === 'HEADMASTER' || matchedSeed?.role === 'HEADMASTER';
+          resolvedRole = isHeadmaster ? 'HEADMASTER' : 'STAFF';
+          resolvedRoleTitle = isHeadmaster ? 'Kepala Sekolah' : 'Staf Administrasi';
+          resolvedSchoolId = staffProfile?.school_id || matchedSeed?.schoolId || 'sch_tk_maranatha';
+          resolvedSchoolName = (staffProfile as any)?.schools?.name || matchedSeed?.schoolName || 'TK YAPENDIK GPIB Cabang Maranatha';
         } else {
-          // Check Guardian Relationships
-          const { data: guardianData } = await supabase
-            .from('guardian_relationships')
-            .select('student_person_id')
-            .eq('guardian_person_id', mappedPersonId);
+          // 3.3 Check Teacher Profile
+          const { data: teacherProfiles } = await supabase
+            .from('teacher_profiles')
+            .select('*, schools(name)')
+            .eq('person_id', mappedPersonId)
+            .eq('is_active', true)
+            .order('join_date', { ascending: false, nullsFirst: false });
+          const teacherProfile = teacherProfiles?.[0];
 
-          if (guardianData && guardianData.length > 0) {
-            resolvedRole = 'GUARDIAN';
-            resolvedRoleTitle = 'Orang Tua / Wali Murid';
-            guardianChildrenPersonIds = guardianData.map(g => g.student_person_id);
+          if (teacherProfile || userMetaRole === 'TEACHER' || userMetaRole === 'ASSISTANT_TEACHER' || matchedSeed?.role === 'TEACHER' || matchedSeed?.role === 'ASSISTANT_TEACHER') {
+            const isAssistant = userMetaRole === 'ASSISTANT_TEACHER' || matchedSeed?.role === 'ASSISTANT_TEACHER';
+            resolvedRole = isAssistant ? 'ASSISTANT_TEACHER' : 'TEACHER';
+            resolvedRoleTitle = isAssistant ? 'Guru Pendamping Kelas' : (matchedSeed?.roleTitle || 'Pendidik / Guru Kelas');
+            resolvedSchoolId = teacherProfile?.school_id || matchedSeed?.schoolId || 'sch_tk_maranatha';
+            resolvedSchoolName = (teacherProfile as any)?.schools?.name || matchedSeed?.schoolName || 'TK YAPENDIK GPIB Cabang Maranatha';
+
+            // Get assigned classes
+            const { data: classesData } = await supabase
+              .from('classes')
+              .select('id')
+              .or(`homeroom_teacher_id.eq.${mappedPersonId},co_teacher_id.eq.${mappedPersonId}`);
+            
+            if (classesData && classesData.length > 0) {
+              assignedClasses = classesData.map(c => c.id);
+            } else if (matchedSeed?.assignedClasses) {
+              assignedClasses = matchedSeed.assignedClasses;
+            }
+          } else {
+            // 3.4 Check Guardian Relationships
+            const { data: guardianData } = await supabase
+              .from('guardian_relationships')
+              .select('student_person_id')
+              .eq('guardian_person_id', mappedPersonId);
+
+            if (guardianData && guardianData.length > 0) {
+              resolvedRole = 'GUARDIAN';
+              resolvedRoleTitle = 'Orang Tua / Wali Murid';
+              guardianChildrenPersonIds = guardianData.map(g => g.student_person_id);
+            }
           }
         }
       }
