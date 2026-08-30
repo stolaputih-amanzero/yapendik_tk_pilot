@@ -12,7 +12,7 @@ import {
 } from '../../../types/teacherDailyTypes';
 import { AttendanceStatus } from '../../../domain/types';
 import { AttendanceGrid } from './AttendanceGrid';
-import { AlertTriangle, ChevronRight } from 'lucide-react';
+import { AlertTriangle } from 'lucide-react';
 
 interface Props {
   roster: StudentRosterItem[];
@@ -47,25 +47,16 @@ export const TodaySurface: React.FC<Props> = ({
             </p>
           </div>
 
-          {/* Mobile Sleek Integrated Status Capsule */}
-          {pulse && onOpenPulseModal && (
+          {/* Medical Exception Badge (Only when exceptions exist) */}
+          {hasSafetyExceptions && onOpenPulseModal && (
             <button
               type="button"
               onClick={onOpenPulseModal}
-              className="large:hidden flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-surface border border-line hover-only:border-brand-primary text-xs cursor-pointer active:scale-95 transition shadow-hairline text-ink"
-              aria-label="Lihat ringkasan kehadiran dan status kelas"
+              className="flex items-center gap-1 px-2.5 py-1 rounded-full bg-danger-tint border border-danger-line text-danger-deep font-bold text-xs cursor-pointer active:scale-95 transition shadow-hairline"
+              aria-label="Peringatan Medis Siswa"
             >
-              <span className="w-2 h-2 rounded-full bg-success shrink-0" />
-              <span className="font-mono font-bold text-success-deep text-xs">
-                {pulse.present_count}/{pulse.total_students}
-              </span>
-              {hasSafetyExceptions && (
-                <span className="ml-1 px-1.5 py-0.5 rounded-full bg-danger-tint text-danger-deep font-bold text-[10px] flex items-center gap-0.5 border border-danger-line">
-                  <AlertTriangle className="w-2.5 h-2.5 text-danger shrink-0" />
-                  <span>Medis</span>
-                </span>
-              )}
-              <ChevronRight className="w-3.5 h-3.5 text-ink-faint shrink-0" />
+              <AlertTriangle className="w-3 h-3 text-danger shrink-0" />
+              <span>Perhatian Medis</span>
             </button>
           )}
         </div>

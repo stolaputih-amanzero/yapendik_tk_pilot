@@ -7,13 +7,7 @@ import React, { useState } from 'react';
 import { StudentRosterItem, ArrivalMood } from '../../../types/teacherDailyTypes';
 import { AttendanceStatus } from '../../../domain/types';
 import { ChildCard } from './ChildCard';
-import { Button } from '../../ui';
-import { 
-  CheckCheck, 
-  Search, 
-  Users, 
-  AlertTriangle 
-} from 'lucide-react';
+import { Users } from 'lucide-react';
 
 interface Props {
   roster: StudentRosterItem[];
@@ -28,19 +22,22 @@ export const AttendanceGrid: React.FC<Props> = ({
   onOpenChildPivot,
   onQuickCaptureForChild
 }) => {
-  const [searchQuery, setSearchQuery] = useState('');
-  const [statusFilter, setStatusFilter] = useState<'ALL' | 'UNACCOUNTED' | 'HADIR' | 'ATTENTION'>('ALL');
+  const [statusFilter, setStatusFilter] = useState<'ALL' | 'HADIR' | 'SAKIT' | 'IZIN' | 'ALPA'>('ALL');
 
-  // Filter students based on search and selected filter chip
+  // Compute live counts
+  const totalStudents = roster.length;
+  const recordedCount = roster.filter(s => !!s.today_status).length;
+  const hadirCount = roster.filter(s => s.today_status === 'HADIR').length;
+  const sakitCount = roster.filter(s => s.today_status === 'SAKIT').length;
+  const izinCount = roster.filter(s => s.today_status === 'IZIN').length;
+  const alpaCount = roster.filter(s => s.today_status === 'ALPA').length;
+
+  // Filter students based on selected metric filter
   const filteredStudents = roster.filter(student => {
-    const matchesSearch = student.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      student.nis.includes(searchQuery);
-
-    if (!matchesSearch) return false;
-
-    if (statusFilter === 'UNACCOUNTED') return !student.today_status;
     if (statusFilter === 'HADIR') return student.today_status === 'HADIR';
-    if (statusFilter === 'ATTENTION') return student.today_status === 'SAKIT' || Boolean(student.allergies);
+    if (statusFilter === 'SAKIT') return student.today_status === 'SAKIT';
+    if (statusFilter === 'IZIN') return student.today_status === 'IZIN';
+    if (statusFilter === 'ALPA') return student.today_status === 'ALPA';
     return true;
   });
 
@@ -60,95 +57,115 @@ export const AttendanceGrid: React.FC<Props> = ({
     onUpdateBatch([{ studentId, status: roster.find(r => r.student_id === studentId)?.today_status || 'HADIR', note }]);
   };
 
-  const handleMarkAllPresent = () => {
-    const updates = roster.map(s => ({
-      studentId: s.student_id,
-      status: (s.today_status || 'HADIR') as AttendanceStatus,
-      mood: s.today_mood || 'CERIA'
-    }));
-    onUpdateBatch(updates);
-  };
-  const unaccountedCount = roster.filter(s => !s.today_status).length;
-
   return (
     <div className="space-y-4">
-      {/* Top Toolbar: Search, Filters & Bulk Actions (Flat Fluid single-depth) */}
-      <div className="space-y-2.5">
-        {/* Row 1: Search Input (flex-1) + Quick Bulk Action (sejajar) */}
-        <div className="flex items-center gap-2">
-          <div className="relative flex-1">
-            <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-ink-faint" />
-            <input
-              type="text"
-              placeholder="Cari nama ananda / NIS..."
-              value={searchQuery}
-              onChange={e => setSearchQuery(e.target.value)}
-              className="w-full pl-9 pr-3 py-2 text-xs rounded-xl bg-surface border border-line focus:outline-none focus:ring-1 focus:ring-brand-primary text-ink placeholder:text-ink-faint font-medium transition-all shadow-hairline"
-            />
-          </div>
+      {/* 5 Clickable Metric Cards as Interactive Filters (Unified with Attendance Workspace) */}
+      <div className="grid grid-cols-5 gap-1.5 medium:gap-2">
+        {/* 1. Total (Recorded / Total) */}
+        <button
+          type="button"
+          onClick={() => setStatusFilter('ALL')}
+          className={`flex flex-col items-center justify-center py-2 px-1 rounded-xl border text-center transition-all cursor-pointer select-none active:scale-95 min-h-[46px] ${
+            statusFilter === 'ALL'
+              ? 'bg-surface-subtle border-brand-primary text-ink ring-1 ring-brand-primary/50 shadow-hairline'
+              : 'bg-surface border-line text-ink hover-only:border-line-strong hover-only:bg-surface-subtle'
+          }`}
+          title="Tampilkan Semua Ananda"
+          aria-pressed={statusFilter === 'ALL'}
+        >
+          <span className="font-mono tabular-nums font-bold text-xs medium:text-sm text-ink leading-tight">
+            {recordedCount}/{totalStudents}
+          </span>
+          <span className="text-[10px] medium:text-[11px] font-medium text-ink-soft leading-tight mt-0.5 whitespace-nowrap">
+            Total
+          </span>
+        </button>
 
-          <Button
-            variant="secondary"
-            size="sm"
-            onClick={handleMarkAllPresent}
-            leftIcon={<CheckCheck className="w-3.5 h-3.5 text-brand-primary" />}
-            className="shrink-0 text-xs font-semibold rounded-xl cursor-pointer whitespace-nowrap px-3 py-2 border border-line bg-surface hover-only:bg-surface-subtle text-ink shadow-hairline"
-            title="Tandai Semua Hadir Sekaligus"
-          >
-            <span className="hidden compact:inline">Tandai </span>Semua Hadir
-          </Button>
-        </div>
+        {/* 2. Hadir */}
+        <button
+          type="button"
+          onClick={() => setStatusFilter(prev => prev === 'HADIR' ? 'ALL' : 'HADIR')}
+          className={`flex flex-col items-center justify-center py-2 px-1 rounded-xl border text-center transition-all cursor-pointer select-none active:scale-95 min-h-[46px] ${
+            statusFilter === 'HADIR'
+              ? 'bg-success-tint border-success text-success-deep ring-1 ring-success/50 shadow-hairline'
+              : 'bg-success-tint/30 border-success-line/60 text-success-deep hover-only:bg-success-tint/60'
+          }`}
+          title="Filter Ananda Hadir"
+          aria-pressed={statusFilter === 'HADIR'}
+        >
+          <span className="font-mono tabular-nums font-bold text-xs medium:text-sm text-success-deep leading-tight">
+            {hadirCount}
+          </span>
+          <span className="text-[10px] medium:text-[11px] font-semibold text-success-deep leading-tight mt-0.5 whitespace-nowrap">
+            Hadir
+          </span>
+        </button>
 
-        {/* Row 2: Flat Fluid Filter Chips Strip (Uniform Calm Palette) */}
-        <div className="flex items-center gap-1.5 overflow-x-auto pb-0.5 no-scrollbar select-none">
-          <button
-            type="button"
-            onClick={() => setStatusFilter('ALL')}
-            className={`
-              px-3 py-1 rounded-full text-xs font-medium transition cursor-pointer whitespace-nowrap border
-              ${statusFilter === 'ALL'
-                ? 'bg-surface-subtle text-ink font-bold border-line-strong shadow-hairline'
-                : 'bg-surface text-ink-soft border-line hover-only:text-ink hover-only:bg-surface-subtle'
-              }
-            `.trim()}
-          >
-            Semua ({roster.length})
-          </button>
+        {/* 3. Sakit */}
+        <button
+          type="button"
+          onClick={() => setStatusFilter(prev => prev === 'SAKIT' ? 'ALL' : 'SAKIT')}
+          className={`flex flex-col items-center justify-center py-2 px-1 rounded-xl border text-center transition-all cursor-pointer select-none active:scale-95 min-h-[46px] ${
+            statusFilter === 'SAKIT'
+              ? 'bg-warning-tint border-warning text-warning-deep ring-1 ring-warning/50 shadow-hairline'
+              : sakitCount > 0
+                ? 'bg-warning-tint/30 border-warning-line/60 text-warning-deep hover-only:bg-warning-tint/60'
+                : 'bg-surface border-line text-ink hover-only:border-line-strong hover-only:bg-surface-subtle'
+          }`}
+          title="Filter Ananda Sakit"
+          aria-pressed={statusFilter === 'SAKIT'}
+        >
+          <span className={`font-mono tabular-nums font-bold text-xs medium:text-sm leading-tight ${sakitCount > 0 ? 'text-warning-deep' : 'text-ink'}`}>
+            {sakitCount}
+          </span>
+          <span className={`text-[10px] medium:text-[11px] leading-tight mt-0.5 whitespace-nowrap ${sakitCount > 0 ? 'font-semibold text-warning-deep' : 'font-medium text-ink-soft'}`}>
+            Sakit
+          </span>
+        </button>
 
-          <button
-            type="button"
-            onClick={() => setStatusFilter('UNACCOUNTED')}
-            className={`
-              flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium transition cursor-pointer whitespace-nowrap border
-              ${statusFilter === 'UNACCOUNTED'
-                ? 'bg-surface-subtle text-ink font-bold border-line-strong shadow-hairline'
-                : 'bg-surface text-ink-soft border-line hover-only:text-ink hover-only:bg-surface-subtle'
-              }
-            `.trim()}
-          >
-            <span>Belum Diisi</span>
-            {unaccountedCount > 0 && (
-              <span className={`px-1.5 py-0.2 rounded-full text-[10px] font-mono font-bold ${statusFilter === 'UNACCOUNTED' ? 'bg-brand-primary text-on-brand' : 'bg-surface-subtle text-ink-soft'}`}>
-                {unaccountedCount}
-              </span>
-            )}
-          </button>
+        {/* 4. Izin */}
+        <button
+          type="button"
+          onClick={() => setStatusFilter(prev => prev === 'IZIN' ? 'ALL' : 'IZIN')}
+          className={`flex flex-col items-center justify-center py-2 px-1 rounded-xl border text-center transition-all cursor-pointer select-none active:scale-95 min-h-[46px] ${
+            statusFilter === 'IZIN'
+              ? 'bg-info-tint border-info text-info-deep ring-1 ring-info/50 shadow-hairline'
+              : izinCount > 0
+                ? 'bg-info-tint/30 border-info-line/60 text-info-deep hover-only:bg-info-tint/60'
+                : 'bg-surface border-line text-ink hover-only:border-line-strong hover-only:bg-surface-subtle'
+          }`}
+          title="Filter Ananda Izin"
+          aria-pressed={statusFilter === 'IZIN'}
+        >
+          <span className={`font-mono tabular-nums font-bold text-xs medium:text-sm leading-tight ${izinCount > 0 ? 'text-info-deep' : 'text-ink'}`}>
+            {izinCount}
+          </span>
+          <span className={`text-[10px] medium:text-[11px] leading-tight mt-0.5 whitespace-nowrap ${izinCount > 0 ? 'font-semibold text-info-deep' : 'font-medium text-ink-soft'}`}>
+            Izin
+          </span>
+        </button>
 
-          <button
-            type="button"
-            onClick={() => setStatusFilter('ATTENTION')}
-            className={`
-              flex items-center gap-1 px-3 py-1 rounded-full text-xs font-medium transition cursor-pointer whitespace-nowrap border
-              ${statusFilter === 'ATTENTION'
-                ? 'bg-danger-tint text-danger-deep font-bold border-danger-line shadow-hairline'
-                : 'bg-surface text-ink-soft border-line hover-only:text-danger-deep hover-only:bg-danger-tint/30'
-              }
-            `.trim()}
-          >
-            <AlertTriangle className="w-3 h-3 text-warning shrink-0" />
-            <span>Perhatian</span>
-          </button>
-        </div>
+        {/* 5. Alpa */}
+        <button
+          type="button"
+          onClick={() => setStatusFilter(prev => prev === 'ALPA' ? 'ALL' : 'ALPA')}
+          className={`flex flex-col items-center justify-center py-2 px-1 rounded-xl border text-center transition-all cursor-pointer select-none active:scale-95 min-h-[46px] ${
+            statusFilter === 'ALPA'
+              ? 'bg-danger-tint border-danger text-danger-deep ring-1 ring-danger/50 shadow-hairline'
+              : alpaCount > 0
+                ? 'bg-danger-tint/30 border-danger-line/60 text-danger-deep hover-only:bg-danger-tint/60'
+                : 'bg-surface border-line text-ink hover-only:border-line-strong hover-only:bg-surface-subtle'
+          }`}
+          title="Filter Ananda Alpa"
+          aria-pressed={statusFilter === 'ALPA'}
+        >
+          <span className={`font-mono tabular-nums font-bold text-xs medium:text-sm leading-tight ${alpaCount > 0 ? 'text-danger-deep' : 'text-ink'}`}>
+            {alpaCount}
+          </span>
+          <span className={`text-[10px] medium:text-[11px] leading-tight mt-0.5 whitespace-nowrap ${alpaCount > 0 ? 'font-semibold text-danger-deep' : 'font-medium text-ink-soft'}`}>
+            Alpa
+          </span>
+        </button>
       </div>
 
       {/* Children Cards Grid (1 to 16 cards) */}
