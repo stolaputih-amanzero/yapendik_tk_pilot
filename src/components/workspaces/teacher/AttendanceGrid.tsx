@@ -73,68 +73,81 @@ export const AttendanceGrid: React.FC<Props> = ({
   return (
     <div className="space-y-4">
       {/* Top Toolbar: Search, Filters & Bulk Actions (Flat Fluid single-depth) */}
-      <div className="flex flex-col expanded:flex-row items-stretch expanded:items-center justify-between gap-2.5 medium:gap-3 bg-surface p-3 medium:p-4 rounded-2xl shadow-hairline border border-line">
-        {/* Search Bar */}
-        <div className="relative flex-1 max-w-sm">
-          <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-ink-faint" />
-          <input
-            type="text"
-            placeholder="Cari nama ananda / NIS..."
-            value={searchQuery}
-            onChange={e => setSearchQuery(e.target.value)}
-            className="w-full pl-9 pr-3 py-2 text-xs rounded-xl bg-surface-subtle border border-line-hairline focus:outline-none focus:ring-1 focus:ring-brand-primary text-ink placeholder:text-ink-faint font-medium transition-all"
-          />
-        </div>
+      <div className="space-y-2.5">
+        {/* Row 1: Search Input (flex-1) + Quick Bulk Action (sejajar) */}
+        <div className="flex items-center gap-2">
+          <div className="relative flex-1">
+            <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-ink-faint" />
+            <input
+              type="text"
+              placeholder="Cari nama ananda / NIS..."
+              value={searchQuery}
+              onChange={e => setSearchQuery(e.target.value)}
+              className="w-full pl-9 pr-3 py-2 text-xs rounded-xl bg-surface border border-line focus:outline-none focus:ring-1 focus:ring-brand-primary text-ink placeholder:text-ink-faint font-medium transition-all shadow-hairline"
+            />
+          </div>
 
-        {/* Filter Chips */}
-        <div className="flex items-center gap-2 overflow-x-auto pb-1 medium:pb-0 scrollbar-hide min-w-0">
-          <Button
-            variant={statusFilter === 'ALL' ? 'primary' : 'secondary'}
-            size="sm"
-            onClick={() => setStatusFilter('ALL')}
-            className="rounded-xl"
-          >
-            Semua ({roster.length})
-          </Button>
-
-          <Button
-            variant={statusFilter === 'UNACCOUNTED' ? 'primary' : 'secondary'}
-            size="sm"
-            onClick={() => setStatusFilter('UNACCOUNTED')}
-            rightIcon={
-              unaccountedCount > 0 ? (
-                <span className="w-4 h-4 rounded-full text-[10px] flex items-center justify-center font-bold bg-warning text-on-brand">
-                  {unaccountedCount}
-                </span>
-              ) : undefined
-            }
-            className="rounded-xl"
-          >
-            Belum Diisi
-          </Button>
-
-          <Button
-            variant={statusFilter === 'ATTENTION' ? 'danger' : 'secondary'}
-            size="sm"
-            onClick={() => setStatusFilter('ATTENTION')}
-            leftIcon={<AlertTriangle className="w-4 h-4 text-warning" />}
-            className="rounded-xl"
-          >
-            Perhatian
-          </Button>
-        </div>
-
-        {/* Quick Bulk Action Button */}
-        <div className="shrink-0 flex items-center">
           <Button
             variant="primary"
             size="sm"
             onClick={handleMarkAllPresent}
-            leftIcon={<CheckCheck className="w-4 h-4" />}
-            className="w-full expanded:w-auto text-xs font-semibold rounded-xl cursor-pointer"
+            leftIcon={<CheckCheck className="w-3.5 h-3.5" />}
+            className="shrink-0 text-xs font-semibold rounded-xl cursor-pointer whitespace-nowrap px-3 py-2"
+            title="Tandai Semua Hadir Sekaligus"
           >
-            Tandai Semua Hadir
+            <span className="hidden compact:inline">Tandai </span>Semua Hadir
           </Button>
+        </div>
+
+        {/* Row 2: Flat Fluid Filter Chips Strip */}
+        <div className="flex items-center gap-1.5 overflow-x-auto pb-0.5 no-scrollbar select-none">
+          <button
+            type="button"
+            onClick={() => setStatusFilter('ALL')}
+            className={`
+              px-3 py-1 rounded-full text-xs font-semibold transition cursor-pointer whitespace-nowrap
+              ${statusFilter === 'ALL'
+                ? 'bg-ink text-on-brand font-bold shadow-hairline'
+                : 'bg-surface text-ink-soft border border-line hover-only:text-ink hover-only:bg-surface-subtle'
+              }
+            `.trim()}
+          >
+            Semua ({roster.length})
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setStatusFilter('UNACCOUNTED')}
+            className={`
+              flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold transition cursor-pointer whitespace-nowrap
+              ${statusFilter === 'UNACCOUNTED'
+                ? 'bg-brand-primary text-on-brand font-bold shadow-hairline'
+                : 'bg-surface text-ink-soft border border-line hover-only:text-ink hover-only:bg-surface-subtle'
+              }
+            `.trim()}
+          >
+            <span>Belum Diisi</span>
+            {unaccountedCount > 0 && (
+              <span className={`px-1.5 py-0.2 rounded-full text-[10px] font-mono font-bold ${statusFilter === 'UNACCOUNTED' ? 'bg-surface text-ink' : 'bg-warning text-on-brand'}`}>
+                {unaccountedCount}
+              </span>
+            )}
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setStatusFilter('ATTENTION')}
+            className={`
+              flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold transition cursor-pointer whitespace-nowrap
+              ${statusFilter === 'ATTENTION'
+                ? 'bg-danger text-on-brand font-bold shadow-hairline'
+                : 'bg-surface text-danger-deep border border-danger-line hover-only:bg-danger-tint'
+              }
+            `.trim()}
+          >
+            <AlertTriangle className="w-3 h-3 text-danger shrink-0" />
+            <span>Perhatian</span>
+          </button>
         </div>
       </div>
 

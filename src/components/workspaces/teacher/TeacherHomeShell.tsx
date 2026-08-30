@@ -460,44 +460,6 @@ export const TeacherHomeShell: React.FC<{ onNavigateToCommunication?: () => void
                   onStateChange={setOperatingState}
                 />
               </div>
-              {/* STEP 1: Micro-Cockpit Capsule on Mobile (Hari Ini Only) */}
-              <div className="block large:hidden">
-                <button
-                  type="button"
-                  onClick={() => setIsPulseModalOpen(true)}
-                  aria-label="Buka Rincian Status Kelas dan Jadwal Sentra"
-                  className="w-full bg-surface rounded-2xl px-4 py-3 min-h-[48px] flex items-center justify-between gap-3 text-xs border border-line-hairline shadow-hairline active:scale-[0.99] transition cursor-pointer hover-only:bg-surface-subtle text-ink"
-                >
-                  <div className="flex items-center gap-2 flex-wrap min-w-0">
-                    {/* Presence Pill */}
-                    <span className="font-mono font-bold text-success-deep flex items-center gap-1.5 whitespace-nowrap">
-                      <span className="w-2 h-2 rounded-full bg-success shrink-0" />
-                      <span>{aggregate.pulse.present_count}/{aggregate.pulse.total_students} Hadir</span>
-                      <span className="text-ink-soft text-[11px] font-normal">({attendanceRate}%)</span>
-                    </span>
-
-                    {/* Message Pill */}
-                    {aggregate.pulse.unread_guardian_notes > 0 && (
-                      <span className="text-ink-soft flex items-center gap-1 whitespace-nowrap font-medium">
-                        • {aggregate.pulse.unread_guardian_notes} Pesan
-                      </span>
-                    )}
-
-                    {/* C-1 Safety Exception Alert if any */}
-                    {hasSafetyExceptions && (
-                      <span className="px-2 py-0.5 rounded-full bg-danger-tint text-danger-deep font-bold text-[10px] flex items-center gap-1 whitespace-nowrap border border-danger-line">
-                        <AlertTriangle className="w-3 h-3 text-danger shrink-0" />
-                        <span>Perhatian Medis</span>
-                      </span>
-                    )}
-                  </div>
-
-                  <div className="flex items-center gap-1 text-ink-faint shrink-0">
-                    <span className="text-[11px] font-medium hidden compact:inline">Status</span>
-                    <ChevronDown className="w-4 h-4 text-ink-faint" />
-                  </div>
-                </button>
-              </div>
               <TodaySurface
                 roster={aggregate.roster}
                 onUpdateAttendanceBatch={handleUpdateAttendanceBatch}
@@ -506,6 +468,9 @@ export const TeacherHomeShell: React.FC<{ onNavigateToCommunication?: () => void
                   setQuickCaptureStudentId(studentId);
                   setIsQuickCaptureOpen(true);
                 }}
+                pulse={aggregate.pulse}
+                hasSafetyExceptions={hasSafetyExceptions}
+                onOpenPulseModal={() => setIsPulseModalOpen(true)}
               />
 
               {/* STEP 2: Mobile Bottom Decoupling - Replaced huge inline dump with sleek Action Trigger */}
