@@ -849,6 +849,10 @@ export class DatabaseEngine {
     return { ...student, person };
   }
 
+  public getGuardianRelationships(): GuardianRelationship[] {
+    return [...this.guardianRelationships];
+  }
+
   public getChildrenForGuardian(guardianPersonId: string) {
     const relations = this.guardianRelationships.filter(r => r.guardianPersonId === guardianPersonId);
     const studentPersonIds = relations.map(r => r.studentPersonId);
@@ -919,8 +923,7 @@ export class DatabaseEngine {
       ...student,
       ...(data.bloodType !== undefined ? { bloodType: data.bloodType } : {}),
       ...(data.allergies !== undefined ? { allergies: data.allergies } : {}),
-      ...(data.specialNeeds !== undefined ? { specialNeeds: data.specialNeeds } : {}),
-      updatedAt: new Date().toISOString()
+      ...(data.specialNeeds !== undefined ? { specialNeeds: data.specialNeeds } : {})
     };
 
     this.students[studentIdx] = updatedStudent;
@@ -973,8 +976,7 @@ export class DatabaseEngine {
       action: 'UPDATE_STUDENT_PROFILE',
       resource: 'STUDENT_ROSTER',
       resourceId: studentId,
-      details: `Memperbarui profil data ananda ${data.fullName || student.id} (Gol. Darah: ${data.bloodType || student.bloodType || '-'})`,
-      timestamp: new Date().toISOString()
+      details: `Memperbarui profil data ananda ${data.fullName || student.id} (Gol. Darah: ${data.bloodType || student.bloodType || '-'})`
     });
 
     this.notify();

@@ -1,7 +1,6 @@
 /**
  * Yapendik School OS — Domain 04: Attendance Register (Presensi Harian TK)
- * Includes health screening (temperature), arrival mood observation, and attendance status.
- * Standardized with Amanaura Design System v1.0 Stacked List Layout.
+ * Refactor Compact: Clean, Intuitive, Conditional (Amanaura Design System v1.0).
  */
 
 import React, { useState, useEffect, useRef } from 'react';
@@ -9,20 +8,24 @@ import { db } from '../../db/database';
 import { useSecurityContext } from '../../auth/context';
 import { evaluateAuthorization } from '../../auth/authorization';
 import { 
-  DailyAttendanceEntry, 
   AttendanceStatus, 
   ClassRoom 
 } from '../../domain/types';
-import { Button, AvatarChild, Badge, Input, SelectSheet } from '../ui';
+import { 
+  Button, 
+  AvatarChild, 
+  Badge, 
+  SegmentedControl, 
+  AutoResizeTextarea, 
+  SelectSheet,
+  ToastHUD 
+} from '../ui';
 import { 
   CalendarCheck, 
-  Calendar,
-  Check, 
+  Calendar, 
   Thermometer, 
   Save, 
-  CheckCircle2, 
-  AlertCircle,
-  Users
+  Users 
 } from 'lucide-react';
 
 const getTodayDateString = (): string => {
@@ -33,9 +36,26 @@ const getTodayDateString = (): string => {
   return `${year}-${month}-${day}`;
 };
 
+const formatDateID = (dateStr: string): string => {
+  try {
+    const [y, m, d] = dateStr.split('-').map(Number);
+    const dateObj = new Date(y, m - 1, d);
+    return dateObj.toLocaleDateString('id-ID', {
+      weekday: 'short',
+      day: 'numeric',
+      month: 'short',
+      year: 'numeric'
+    });
+  } catch {
+    return dateStr;
+  }
+};
+
 export const AttendanceWorkspace: React.FC = () => {
   const { securityContext } = useSecurityContext();
   const dateInputRef = useRef<HTMLInputElement>(null);
+  const saveTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
   const [classes, setClasses] = useState<ClassRoom[]>([]);
   const [selectedClassId, setSelectedClassId] = useState<string>('cls_maranatha_tka');
   const [selectedDate, setSelectedDate] = useState<string>(getTodayDateString);
@@ -46,9 +66,10 @@ export const AttendanceWorkspace: React.FC = () => {
     arrivalMood: 'CERIA' | 'TENANG' | 'GELISAH' | 'MENANGIS';
     notes: string;
   }>>({});
-  const [savedSuccess, setSavedSuccess] = useState(false);
-
-  const isToday = selectedDate === getTodayDateString();
+  
+  const [isDirty, setIsDirty] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
+  const [showToast, setShowToast] = useState(false);
 
   const loadData = () => {
     if (!securityContext) return;
@@ -82,6 +103,7 @@ export const AttendanceWorkspace: React.FC = () => {
       }
     });
     setAttendanceMap(newMap);
+    setIsDirty(false);
   };
 
   useEffect(() => {
@@ -89,11 +111,19 @@ export const AttendanceWorkspace: React.FC = () => {
     return db.subscribe(loadData);
   }, [securityContext?.activeSchoolId, selectedClassId, selectedDate]);
 
+  useEffect(() => {
+    return () => {
+      if (saveTimeoutRef.current) {
+        clearTimeout(saveTimeoutRef.current);
+      }
+    };
+  }, []);
+
   const authResult = evaluateAuthorization({
     context: securityContext,
     action: 'CREATE',
     resource: 'ATTENDANCE_REGISTER',
-    resourceSchoolId: securityContext.activeSchoolId,
+    resourceSchoolId: securityContext?.activeSchoolId || '',
     targetClassId: selectedClassId
   });
 
@@ -105,7 +135,7 @@ export const AttendanceWorkspace: React.FC = () => {
         status
       }
     }));
-    setSavedSuccess(false);
+    setIsDirty(true);
   };
 
   const handleMoodChange = (studentId: string, mood: any) => {
@@ -116,7 +146,7 @@ export const AttendanceWorkspace: React.FC = () => {
         arrivalMood: mood
       }
     }));
-    setSavedSuccess(false);
+    setIsDirty(true);
   };
 
   const handleTempChange = (studentId: string, temp: number) => {
@@ -127,7 +157,7 @@ export const AttendanceWorkspace: React.FC = () => {
         temperature: temp
       }
     }));
-    setSavedSuccess(false);
+    setIsDirty(true);
   };
 
   const handleNotesChange = (studentId: string, notes: string) => {
@@ -138,7 +168,7 @@ export const AttendanceWorkspace: React.FC = () => {
         notes
       }
     }));
-    setSavedSuccess(false);
+    setIsDirty(true);
   };
 
   const handleSaveAll = () => {
@@ -146,162 +176,183 @@ export const AttendanceWorkspace: React.FC = () => {
       alert(`Akses Ditolak: ${authResult.reason}`);
       return;
     }
+    if (isSaving || !isDirty) return;
 
-    const batchEntries = students.map(s => {
-      const row = attendanceMap[s.id] || { status: 'HADIR', temperature: 36.5, arrivalMood: 'CERIA', notes: '' };
-      return {
-        schoolId: securityContext.activeSchoolId,
-        classId: selectedClassId,
-        studentId: s.id,
-        date: selectedDate,
-        status: row.status,
-        notes: row.notes,
-        recordedByPersonId: securityContext.personId,
-        temperatureCelsius: row.temperature,
-        arrivalMood: row.arrivalMood
-      };
-    });
+    setIsSaving(true);
+    if (saveTimeoutRef.current) clearTimeout(saveTimeoutRef.current);
 
-    db.saveAttendanceBatch(
-      batchEntries,
-      securityContext.personName,
-      securityContext.userId,
-      securityContext.role
-    );
-    setSavedSuccess(true);
-    setTimeout(() => setSavedSuccess(false), 3000);
+    saveTimeoutRef.current = setTimeout(() => {
+      if (!securityContext) {
+        setIsSaving(false);
+        return;
+      }
+
+      const batchEntries = students.map(s => {
+        const row = attendanceMap[s.id] || { status: 'HADIR', temperature: 36.5, arrivalMood: 'CERIA', notes: '' };
+        const isHadir = row.status === 'HADIR';
+        return {
+          schoolId: securityContext.activeSchoolId,
+          classId: selectedClassId,
+          studentId: s.id,
+          date: selectedDate,
+          status: row.status,
+          notes: row.notes,
+          recordedByPersonId: securityContext.personId,
+          temperatureCelsius: isHadir ? row.temperature : undefined,
+          arrivalMood: isHadir ? row.arrivalMood : undefined
+        };
+      });
+
+      db.saveAttendanceBatch(
+        batchEntries,
+        securityContext.personName,
+        securityContext.userId,
+        securityContext.role
+      );
+
+      setIsSaving(false);
+      setIsDirty(false);
+      setShowToast(true);
+    }, 300);
   };
 
-  const statusOptions: { value: AttendanceStatus; label: string; color: string }[] = [
-    { value: 'HADIR', label: 'Hadir', color: 'bg-success text-on-brand' },
-    { value: 'SAKIT', label: 'Sakit', color: 'bg-warning text-on-brand' },
-    { value: 'IZIN', label: 'Izin', color: 'bg-info text-on-brand' },
-    { value: 'ALPA', label: 'Alpa', color: 'bg-danger text-on-brand' }
+  const statusOptions: { value: AttendanceStatus; label: string; activeColor: string }[] = [
+    { value: 'HADIR', label: 'Hadir', activeColor: 'bg-success text-on-brand' },
+    { value: 'SAKIT', label: 'Sakit', activeColor: 'bg-warning text-on-brand' },
+    { value: 'IZIN', label: 'Izin', activeColor: 'bg-info text-on-brand' },
+    { value: 'ALPA', label: 'Alpa', activeColor: 'bg-danger text-on-brand' }
   ];
 
-  const classOptions = classes.map(c => ({ value: c.id, label: c.name }));
+  const classSegments = classes.map(c => ({
+    id: c.id,
+    label: c.name.includes('A') ? 'TK A' : c.name.includes('B') ? 'TK B' : c.name
+  }));
+
+  // Live Micro-Summary Counts
+  const entries = Object.values(attendanceMap) as { status: AttendanceStatus }[];
+  const hadirCount = entries.filter(v => v.status === 'HADIR').length;
+  const sakitCount = entries.filter(v => v.status === 'SAKIT').length;
+  const izinCount = entries.filter(v => v.status === 'IZIN').length;
+  const alpaCount = entries.filter(v => v.status === 'ALPA').length;
+  const belumCount = Math.max(0, students.length - (hadirCount + sakitCount + izinCount + alpaCount));
 
   return (
-    <div className="space-y-6">
-      {/* Header Bar */}
-      <div className="px-4 medium:px-6 py-4 bg-surface border-b border-line-soft flex flex-col medium:flex-row medium:items-center justify-between gap-4">
-        <div>
-          <h1 className="text-xl medium:text-2xl font-bold text-ink flex items-center gap-2 font-display">
-            <CalendarCheck className="w-6 h-6 text-success shrink-0" />
-            Buku Presensi & Skrining Kedatangan Siswa
-          </h1>
-          <p className="text-xs text-ink-soft font-medium mt-1">
-            Pencatatan kehadiran harian, pemeriksaan suhu tubuh anak, dan observasi mood kedatangan.
-          </p>
+    <div className="space-y-4">
+      {/* 1. HEADER (COMPACT & EXPANDED ADAPTIVE) */}
+      <div className="bg-surface border-b border-line-soft px-4 pt-3 pb-3 space-y-2.5">
+        {/* Expanded Description Only */}
+        <div className="hidden expanded:flex expanded:items-center justify-between gap-4 pb-1">
+          <div>
+            <h1 className="text-xl font-bold text-ink flex items-center gap-2 font-display">
+              <CalendarCheck className="w-5 h-5 text-success shrink-0" />
+              Buku Presensi & Skrining Kedatangan Siswa
+            </h1>
+            <p className="text-xs text-ink-soft mt-0.5">
+              Pencatatan kehadiran harian, pemeriksaan suhu tubuh anak, dan observasi mood kedatangan.
+            </p>
+          </div>
         </div>
 
-        {/* Filters */}
-        <div className="flex flex-col gap-4 w-full">
-          <div className="flex flex-col medium:flex-row medium:items-center gap-3 w-full">
-            <div className="space-y-1 min-w-[240px]">
-              <div className="flex items-center justify-between">
-                <span className="text-[11px] font-bold text-ink-soft">Tanggal Presensi</span>
-                {isToday ? (
-                  <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-500 border border-emerald-500/20">
-                    Hari Ini (Otomatis)
-                  </span>
-                ) : (
-                  <button
-                    type="button"
-                    onClick={() => setSelectedDate(getTodayDateString())}
-                    className="text-[10px] text-brand-primary hover:underline font-semibold cursor-pointer"
-                  >
-                    Kembali ke Hari Ini
-                  </button>
-                )}
-              </div>
-              <div 
-                onClick={() => {
-                  try {
-                    dateInputRef.current?.showPicker();
-                  } catch {
-                    dateInputRef.current?.focus();
-                  }
-                }}
-                className="relative flex items-center justify-between bg-surface border border-line hover:border-brand-primary rounded-xl px-3 py-2 text-xs font-semibold text-ink cursor-pointer transition-all shadow-hairline group"
-              >
-                <div className="flex items-center gap-2.5">
-                  <Calendar className="w-4 h-4 text-brand-primary group-hover:scale-110 transition-transform shrink-0" />
-                  <span className="font-bold text-ink truncate">
-                    {(() => {
-                      try {
-                        const [y, m, d] = selectedDate.split('-').map(Number);
-                        const dateObj = new Date(y, m - 1, d);
-                        return dateObj.toLocaleDateString('id-ID', {
-                          weekday: 'short',
-                          day: 'numeric',
-                          month: 'short',
-                          year: 'numeric'
-                        });
-                      } catch {
-                        return selectedDate;
-                      }
-                    })()}
-                  </span>
-                </div>
-                
-                <span className="text-[10px] font-semibold text-ink-soft bg-surface-subtle border border-line-soft px-2 py-0.5 rounded-md group-hover:border-brand-primary group-hover:text-brand-primary transition-colors flex items-center gap-1 shrink-0 ml-2">
-                  Ubah ▾
-                </span>
-
-                <input
-                  ref={dateInputRef}
-                  type="date"
-                  value={selectedDate}
-                  onChange={(e) => setSelectedDate(e.target.value)}
-                  className="absolute inset-0 opacity-0 cursor-pointer w-full h-full"
-                  aria-label="Pilih Tanggal Presensi"
-                />
-              </div>
+        {/* Control Grid: 2 Columns */}
+        <div className="grid grid-cols-2 gap-2 items-center">
+          {/* Tanggal: Field SelectSheet/date, label value formatID -> "Sen, 24 Agu 2026", class font-mono tabular-nums */}
+          <div 
+            onClick={() => {
+              try {
+                dateInputRef.current?.showPicker();
+              } catch {
+                dateInputRef.current?.focus();
+              }
+            }}
+            className="relative flex items-center justify-between bg-surface border border-line hover-only:border-brand-primary rounded-xl px-3 py-2 text-xs font-medium text-ink cursor-pointer transition-all shadow-hairline group min-h-[44px]"
+          >
+            <div className="flex items-center gap-2 min-w-0">
+              <Calendar className="w-4 h-4 text-brand-primary shrink-0" />
+              <span className="font-mono tabular-nums font-bold text-ink text-[12px] truncate">
+                {formatDateID(selectedDate)}
+              </span>
             </div>
-
-            <SelectSheet
-              label="Kelas"
-              value={selectedClassId}
-              onChange={setSelectedClassId}
-              options={classOptions}
+            <span className="text-[10px] font-semibold text-ink-soft bg-surface-subtle border border-line-soft px-2 py-1 rounded shrink-0">
+              ▾
+            </span>
+            <input
+              ref={dateInputRef}
+              type="date"
+              value={selectedDate}
+              onChange={(e) => setSelectedDate(e.target.value)}
+              className="absolute inset-0 opacity-0 cursor-pointer w-full h-full"
+              aria-label="Pilih Tanggal Presensi"
             />
           </div>
 
-          {authResult.granted && (
-            <Button
-              variant="primary"
-              size="md"
-              onClick={handleSaveAll}
-              leftIcon={<Save className="w-4 h-4" />}
-              className="w-full medium:w-auto mt-2 medium:mt-0 shadow-hairline"
-            >
-              Simpan Presensi
-            </Button>
+          {/* Kelas: SegmentedControl ['TK A','TK B'] */}
+          <SegmentedControl
+            options={classSegments}
+            value={selectedClassId}
+            onChange={setSelectedClassId}
+            size="sm"
+            className="w-full h-[44px]"
+          />
+        </div>
+
+        {/* Micro-Summary Live: {total} Murid • {hadir} Hadir • {sakit} Sakit • {belum} Belum */}
+        <div className="flex items-center gap-2 text-xs text-ink-soft font-medium pt-1 px-1 flex-wrap">
+          <span className="font-semibold text-ink">{students.length} Murid</span>
+          <span className="text-ink-faint">•</span>
+          <span className="flex items-center gap-1">
+            <span className="w-1.5 h-1.5 rounded-full bg-success inline-block"></span>
+            <span className="font-semibold text-success-deep">{hadirCount} Hadir</span>
+          </span>
+          <span className="text-ink-faint">•</span>
+          <span className="flex items-center gap-1">
+            <span className="w-1.5 h-1.5 rounded-full bg-warning inline-block"></span>
+            <span className="font-semibold text-warning-deep">{sakitCount} Sakit</span>
+          </span>
+          {izinCount > 0 && (
+            <>
+              <span className="text-ink-faint">•</span>
+              <span className="flex items-center gap-1">
+                <span className="w-1.5 h-1.5 rounded-full bg-info inline-block"></span>
+                <span className="font-semibold text-info-deep">{izinCount} Izin</span>
+              </span>
+            </>
+          )}
+          {alpaCount > 0 && (
+            <>
+              <span className="text-ink-faint">•</span>
+              <span className="flex items-center gap-1">
+                <span className="w-1.5 h-1.5 rounded-full bg-danger inline-block"></span>
+                <span className="font-semibold text-danger-deep">{alpaCount} Alpa</span>
+              </span>
+            </>
+          )}
+          {belumCount > 0 && (
+            <>
+              <span className="text-ink-faint">•</span>
+              <span className="flex items-center gap-1 text-ink-faint">
+                <span className="w-1.5 h-1.5 rounded-full bg-ink-faint inline-block"></span>
+                <span>{belumCount} Belum</span>
+              </span>
+            </>
           )}
         </div>
       </div>
 
-      {savedSuccess && (
-        <div className="bg-success-tint border border-success-line rounded-card p-3 text-xs text-success-deep flex items-center space-x-2.5 animate-in fade-in duration-200">
-          <CheckCircle2 className="w-4 h-4 text-success shrink-0" />
-          <span className="font-semibold">Presensi kelas dan skrining suhu berhasil disimpan ke database.</span>
-        </div>
-      )}
-
-      {/* Stacked List of Students (Mobile-First Edge-to-Edge) */}
+      {/* 2. LIST ITEM (ATTENDANCE GRID / CHILD CARD) */}
       {students.length > 0 ? (
-        <div className="flex flex-col divide-y divide-line-soft pb-32">
+        <div className="flex flex-col divide-y divide-line-soft pb-[160px]">
           {students.map((s, idx) => {
             const row = attendanceMap[s.id] || { status: 'HADIR', temperature: 36.5, arrivalMood: 'CERIA', notes: '' };
+            const isFever = row.temperature >= 37.5;
+
             return (
               <div 
                 key={s.id} 
-                className="px-4 medium:px-6 py-5 flex flex-col expanded:flex-row expanded:items-center gap-4 hover-only:bg-surface-subtle/50 transition-colors"
+                className="px-4 medium:px-6 py-4 flex flex-col gap-3 hover-only:bg-surface-subtle/40 transition-colors"
               >
-                {/* Left Profile: Avatar, Name & NIS */}
-                <div className="flex items-center gap-3 min-w-0 expanded:w-72 shrink-0">
-                  <div className="text-[11px] font-mono font-bold text-ink-faint w-5 text-right shrink-0 whitespace-nowrap">
+                {/* Child Identity Header: Number, Avatar, Full Name (No Truncate), NIS */}
+                <div className="flex items-center gap-3 min-w-0">
+                  <div className="text-[11px] font-mono font-bold text-ink-faint w-4 text-right shrink-0">
                     {idx + 1}
                   </div>
                   <AvatarChild
@@ -311,7 +362,7 @@ export const AttendanceWorkspace: React.FC = () => {
                     showSymbol
                   />
                   <div className="min-w-0 flex-1">
-                    <h4 className="text-sm font-bold text-ink truncate">
+                    <h4 className="text-[15px] font-semibold leading-snug break-words text-ink">
                       {s.person?.fullName || 'Siswa'}
                     </h4>
                     <div className="flex items-center gap-2 mt-0.5">
@@ -322,49 +373,66 @@ export const AttendanceWorkspace: React.FC = () => {
                   </div>
                 </div>
 
-                {/* Right/Bottom Controls: 1-Tap Attendance & Detail Inputs */}
-                <div className="flex-1 flex flex-col gap-3 min-w-0">
-                  {/* Status 1-Tap Selection Buttons */}
-                  <div className="grid grid-cols-4 medium:flex medium:flex-wrap items-center gap-2">
-                    {statusOptions.map(opt => {
-                      const isSelected = row.status === opt.value;
-                      return (
-                        <button
-                          key={opt.value}
-                          type="button"
-                          disabled={!authResult.granted}
-                          onClick={() => handleStatusChange(s.id, opt.value)}
-                          className={`py-1 px-3 rounded-field text-xs font-bold transition-all duration-150 flex items-center justify-center gap-1 cursor-pointer active:scale-[0.98] ${
-                            isSelected 
-                              ? `${opt.color} shadow-hairline font-bold` 
-                              : 'bg-surface-subtle text-ink hover-only:bg-surface-subtle/80 border border-line font-semibold'
-                          } ${!authResult.granted ? 'opacity-50 cursor-not-allowed' : ''}`}
-                        >
-                          <span>{opt.label}</span>
-                        </button>
-                      );
-                    })}
-                  </div>
-
-                  {/* Sub-row: Temperature, Mood & Notes */}
-                  <div className="mt-3 flex flex-row items-center gap-3 w-full text-xs">
-                    {/* Temperature */}
-                    <div className="flex items-center gap-2 bg-surface-subtle border border-line rounded-field px-2 py-1 w-28 shrink-0">
-                      <Thermometer className="w-4 h-4 text-brand-primary" />
-                      <input
-                        type="number"
-                        step="0.1"
-                        min="34"
-                        max="42"
+                {/* Status 1-Tap Pill Selection Buttons */}
+                <div className="grid grid-cols-4 gap-2 pt-1">
+                  {statusOptions.map(opt => {
+                    const isSelected = row.status === opt.value;
+                    return (
+                      <button
+                        key={opt.value}
+                        type="button"
                         disabled={!authResult.granted}
-                        value={row.temperature}
-                        onChange={(e) => handleTempChange(s.id, parseFloat(e.target.value))}
-                        className="w-10 bg-transparent text-center font-mono font-bold text-ink outline-none text-xs whitespace-nowrap"
-                      />
-                      <span className="text-ink-faint font-semibold">°C</span>
+                        onClick={() => handleStatusChange(s.id, opt.value)}
+                        className={`py-2 px-2 rounded-field text-xs transition-all duration-150 flex items-center justify-center cursor-pointer active:scale-[0.98] ${
+                          isSelected 
+                            ? `${opt.activeColor} font-bold shadow-hairline` 
+                            : 'bg-surface border border-line text-ink-soft hover-only:bg-surface-subtle font-medium'
+                        } ${!authResult.granted ? 'opacity-50 cursor-not-allowed' : ''}`}
+                      >
+                        <span>{opt.label}</span>
+                      </button>
+                    );
+                  })}
+                </div>
+
+                {/* Conditional Temperature & Mood Sub-Row (Rendered ONLY when status === 'HADIR') */}
+                {row.status === 'HADIR' && (
+                  <div className="flex flex-col compact:flex-row items-stretch compact:items-center gap-2 pt-1 animate-in fade-in slide-in-from-top-1 duration-150">
+                    {/* Temperature Stepper [−][value °C mono][+] */}
+                    <div className={`flex items-center justify-between border rounded-field px-3 py-2 shrink-0 transition-colors ${
+                      isFever 
+                        ? 'bg-warning-tint text-warning-deep border-warning-line' 
+                        : 'bg-surface border-line text-ink'
+                    }`}>
+                      <div className="flex items-center gap-2 text-xs font-semibold mr-2">
+                        <Thermometer className={`w-4 h-4 ${isFever ? 'text-warning-deep' : 'text-brand-primary'}`} />
+                        <span className="font-mono tabular-nums font-bold text-xs">
+                          {row.temperature.toFixed(1)} °C
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-1">
+                        <button
+                          type="button"
+                          disabled={!authResult.granted || row.temperature <= 34.0}
+                          onClick={() => handleTempChange(s.id, Math.max(34.0, Math.round((row.temperature - 0.1) * 10) / 10))}
+                          className="w-6 h-6 rounded-md bg-surface-subtle hover-only:bg-line-soft border border-line flex items-center justify-center font-bold text-ink text-xs active:scale-95 disabled:opacity-40 cursor-pointer"
+                          title="Turunkan 0.1°C"
+                        >
+                          −
+                        </button>
+                        <button
+                          type="button"
+                          disabled={!authResult.granted || row.temperature >= 42.0}
+                          onClick={() => handleTempChange(s.id, Math.min(42.0, Math.round((row.temperature + 0.1) * 10) / 10))}
+                          className="w-6 h-6 rounded-md bg-surface-subtle hover-only:bg-line-soft border border-line flex items-center justify-center font-bold text-ink text-xs active:scale-95 disabled:opacity-40 cursor-pointer"
+                          title="Naikkan 0.1°C"
+                        >
+                          +
+                        </button>
+                      </div>
                     </div>
 
-                    {/* Arrival Mood */}
+                    {/* Arrival Mood SelectSheet */}
                     <div className="flex-1 min-w-0">
                       <SelectSheet
                         disabled={!authResult.granted}
@@ -372,35 +440,68 @@ export const AttendanceWorkspace: React.FC = () => {
                         onChange={(val) => handleMoodChange(s.id, val)}
                         options={[
                           { value: 'CERIA', label: 'Ceria & Bersemangat' },
-                          { value: 'TENANG', label: 'Tenang & Rileks' },
-                          { value: 'GELISAH', label: 'Gelisah' },
-                          { value: 'MENANGIS', label: 'Menangis / Cemas' },
+                          { value: 'TENANG', label: 'Cukup Stabil' },
+                          { value: 'GELISAH', label: 'Lesu Perlu Pendampingan' },
+                          { value: 'MENANGIS', label: 'Rewel Butuh Tenang' },
                         ]}
                         placeholder="Pilih Mood..."
                       />
                     </div>
                   </div>
-                  
-                  {/* Arrival Notes */}
-                  <div className="mt-3 w-full">
-                    <Input
-                      disabled={!authResult.granted}
-                      placeholder="Catatan kedatangan / penjemputan..."
-                      value={row.notes}
-                      onChange={(e) => handleNotesChange(s.id, e.target.value)}
-                    />
-                  </div>
+                )}
+
+                {/* Arrival Notes: AutoResizeTextarea collapsed 1 baris, expand on focus */}
+                <div className="w-full">
+                  <AutoResizeTextarea
+                    minRows={1}
+                    maxRows={4}
+                    disabled={!authResult.granted}
+                    placeholder="Catatan kedatangan / penjemputan..."
+                    value={row.notes}
+                    onChange={(e) => handleNotesChange(s.id, e.target.value)}
+                    className="bg-surface border border-line rounded-xl text-xs text-ink placeholder:text-ink-faint focus:border-brand-primary p-2"
+                  />
                 </div>
               </div>
             );
           })}
         </div>
       ) : (
-        <div className="bg-surface rounded-card border border-dashed border-line-strong p-12 text-center text-ink-soft shadow-hairline">
+        <div className="bg-surface rounded-card border border-dashed border-line-strong p-12 text-center text-ink-soft shadow-hairline mx-4">
           <Users className="w-10 h-10 text-ink-faint mx-auto mb-2 opacity-60" />
           <h4 className="text-sm font-bold text-ink">Belum ada data siswa di kelas ini</h4>
           <p className="text-xs text-ink-soft mt-1">Pilih kelas lain atau tambahkan siswa melalui modul PPDB / Roster.</p>
         </div>
+      )}
+
+      {/* 3. ACTION DOCK STICKY (BOTTOM FIXED) */}
+      {authResult.granted && students.length > 0 && (
+        <div className="fixed inset-x-0 bottom-[calc(env(safe-area-inset-bottom,0px)+84px)] px-4 z-40 max-w-lg mx-auto pointer-events-none">
+          <div className="pointer-events-auto shadow-floating rounded-2xl bg-surface/95 backdrop-blur-md p-2 border border-line">
+            <Button
+              variant="primary"
+              size="lg"
+              disabled={!authResult.granted || isSaving || !isDirty}
+              onClick={handleSaveAll}
+              leftIcon={<Save className="w-4 h-4" />}
+              className="w-full min-h-[48px] text-sm font-bold shadow-soft transition-all"
+            >
+              {isSaving 
+                ? 'Menyimpan...' 
+                : `Simpan Presensi • ${hadirCount}/${students.length}`}
+            </Button>
+          </div>
+        </div>
+      )}
+
+      {/* ToastHUD Feedback */}
+      {showToast && (
+        <ToastHUD
+          message={`Presensi kelas ${classSegments.find(c => c.id === selectedClassId)?.label || ''} berhasil disimpan.`}
+          type="success"
+          onClose={() => setShowToast(false)}
+          durationMs={3500}
+        />
       )}
     </div>
   );

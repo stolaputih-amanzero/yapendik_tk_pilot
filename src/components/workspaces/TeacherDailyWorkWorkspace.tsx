@@ -181,10 +181,10 @@ export const TeacherDailyWorkWorkspace: React.FC = () => {
                 dateInputRef.current?.focus();
               }
             }}
-            className="relative flex items-center justify-between bg-surface-subtle border border-line-hairline hover:border-brand-primary rounded-xl px-3 py-2 text-xs font-semibold text-ink cursor-pointer transition-all min-h-[44px] group"
+            className="relative flex items-center justify-between bg-surface-subtle border border-line-hairline hover-only:border-brand-primary rounded-xl px-3 py-2 text-xs font-semibold text-ink cursor-pointer transition-all min-h-[44px] group"
           >
             <div className="flex items-center gap-2">
-              <Calendar className="w-4 h-4 text-brand-primary group-hover:scale-110 transition-transform shrink-0" />
+              <Calendar className="w-4 h-4 text-brand-primary shrink-0" />
               <span className="text-ink font-bold">
                 {(() => {
                   try {
@@ -203,7 +203,7 @@ export const TeacherDailyWorkWorkspace: React.FC = () => {
               </span>
             </div>
             
-            <span className="text-[10px] font-semibold text-ink-soft bg-surface border border-line-soft px-2 py-0.5 rounded-md group-hover:border-brand-primary group-hover:text-brand-primary transition-colors flex items-center gap-1 shrink-0 ml-2">
+            <span className="text-[10px] font-semibold text-ink-soft bg-surface border border-line-soft px-2 py-1 rounded-md flex items-center gap-1 shrink-0 ml-2">
               Ubah ▾
             </span>
 

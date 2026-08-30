@@ -41,8 +41,8 @@ export interface Person {
   fullName: string;
   preferredName: string;
   gender: 'MALE' | 'FEMALE';
-  birthDate: string; // YYYY-MM-DD
-  birthPlace: string;
+  birthDate?: string; // YYYY-MM-DD
+  birthPlace?: string;
   phone?: string;
   address?: string;
   createdAt: string;

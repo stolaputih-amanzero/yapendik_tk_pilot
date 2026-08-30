@@ -303,7 +303,7 @@ export class BriefingEngineService {
     if (role === 'TEACHER') {
       const person = userId 
         ? (db.getPersonById(userId) || 
-           SEED_PERSONS.find(p => p.id === userId || (userId.includes('evi') && p.id === 'per_teacher_evi') || (userId.includes('charlotha') && p.id === 'per_teacher_charlotha') || (userId.includes('erna') && p.id === 'per_teacher_erna') || (userId.includes('diana') && p.id === 'per_teacher_diana') || (userId.includes('siti') && p.id === 'per_teacher_siti')))
+           db.getPersons().find(p => p.id === userId || (userId.includes('evi') && p.id === 'per_teacher_evi') || (userId.includes('charlotha') && p.id === 'per_teacher_charlotha') || (userId.includes('erna') && p.id === 'per_teacher_erna') || (userId.includes('diana') && p.id === 'per_teacher_diana') || (userId.includes('siti') && p.id === 'per_teacher_siti')))
         : null;
 
       const isDiana = Boolean(
@@ -513,7 +513,7 @@ export class BriefingEngineService {
     let childPerson = rels.length > 0 ? db.getPersonById(rels[0].studentPersonId) : null;
 
     if (!childPerson && userId) {
-      const stu = db.getStudentById(userId) || db.getStudents().find(s => s.personId === userId);
+      const stu = db.getStudentById(userId) || (schoolId ? db.getStudents(schoolId).find(s => s.personId === userId) : undefined);
       if (stu) {
         childPerson = db.getPersonById(stu.personId);
       }

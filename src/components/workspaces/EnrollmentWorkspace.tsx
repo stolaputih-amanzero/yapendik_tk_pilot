@@ -128,7 +128,7 @@ export const EnrollmentWorkspace: React.FC = () => {
         <div className="flex flex-col medium:flex-row medium:items-center justify-between gap-4">
           <div>
             <div className="flex items-center gap-2">
-              <span className="px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-brand-subtle text-brand-primary border border-brand-line">
+              <span className="px-3 py-1 rounded-full text-[11px] font-semibold bg-brand-subtle text-brand-primary border border-brand-line">
                 Data Pokok Pendidikan • DAPODIK & Buku Induk
               </span>
             </div>
@@ -143,7 +143,7 @@ export const EnrollmentWorkspace: React.FC = () => {
 
           {/* Quick Stats Capsule */}
           <div className="flex items-center gap-2 self-start medium:self-auto">
-            <div className="px-3.5 py-1.5 rounded-xl bg-surface-subtle border border-line text-xs flex items-center gap-2">
+            <div className="px-3 py-2 rounded-xl bg-surface-subtle border border-line text-xs flex items-center gap-2">
               <GraduationCap className="w-4 h-4 text-brand-primary" />
               <span className="font-semibold text-ink">{students.length} Siswa Terdaftar</span>
             </div>
@@ -161,14 +161,14 @@ export const EnrollmentWorkspace: React.FC = () => {
                 onClick={() => setSelectedClassId(c.id)}
                 className={`px-4 py-2 rounded-xl text-xs font-semibold transition-all touch-target-min whitespace-nowrap flex items-center gap-2 ${
                   isSelected
-                    ? 'bg-brand-primary text-white shadow-sm'
+                    ? 'bg-brand-primary text-on-brand shadow-sm'
                     : 'bg-surface-subtle hover-only:bg-line-soft text-ink-soft'
                 }`}
               >
                 <span>{c.name}</span>
                 {c.ageGroup && (
-                  <span className={`text-[10px] px-1.5 py-0.2 rounded font-normal ${
-                    isSelected ? 'bg-white/20 text-white' : 'bg-black/5 text-ink-faint'
+                  <span className={`text-[10px] px-2 py-1 rounded font-normal ${
+                    isSelected ? 'bg-surface-subtle/20 text-on-brand' : 'bg-surface-subtle text-ink-faint'
                   }`}>
                     {c.ageGroup === 'TK_A_4_5' ? '4-5 Thn' : '5-6 Thn'}
                   </span>
@@ -205,7 +205,7 @@ export const EnrollmentWorkspace: React.FC = () => {
           return (
             <div 
               key={s.id} 
-              className="bg-surface border border-line hover:border-brand-primary/40 transition-colors rounded-2xl p-5 shadow-hairline space-y-4 relative group"
+              className="bg-surface border border-line hover-only:border-brand-primary/40 transition-colors rounded-2xl p-5 shadow-hairline space-y-4 relative group"
             >
               {/* Header: Student Info */}
               <div className="flex items-start justify-between gap-3 pb-3 border-b border-line-soft">
@@ -216,7 +216,7 @@ export const EnrollmentWorkspace: React.FC = () => {
                   <div>
                     <h3 className="font-bold text-ink text-sm leading-tight">{s.person?.fullName || 'Siswa'}</h3>
                     <div className="text-xs text-ink-soft flex flex-wrap items-center gap-2 mt-1">
-                      <span className="bg-surface-subtle px-2 py-0.5 rounded font-medium text-ink">
+                      <span className="bg-surface-subtle px-2 py-1 rounded font-medium text-ink">
                         Panggilan: <b className="text-brand-deep">{s.person?.preferredName || '-'}</b>
                       </span>
                       <span>•</span>
@@ -236,14 +236,14 @@ export const EnrollmentWorkspace: React.FC = () => {
                     <button
                       type="button"
                       onClick={() => openEditModal(s)}
-                      className="px-2.5 py-1 rounded-lg text-xs font-semibold bg-brand-subtle hover-only:bg-brand-primary hover-only:text-white text-brand-primary border border-brand-line flex items-center gap-1.5 transition-colors cursor-pointer"
+                      className="px-3 py-1 rounded-lg text-xs font-semibold bg-brand-subtle hover-only:bg-brand-primary hover-only:text-on-brand text-brand-primary border border-brand-line flex items-center gap-1.5 transition-colors cursor-pointer"
                       title="Edit Data Siswa & Golongan Darah"
                     >
-                      <Edit3 className="w-3.5 h-3.5" />
+                      <Edit3 className="w-4 h-4" />
                       <span>Edit</span>
                     </button>
                   )}
-                  <span className="text-[10px] font-mono px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-600 border border-emerald-500/20 font-semibold whitespace-nowrap">
+                  <span className="text-[10px] font-mono px-3 py-1 rounded-full bg-success-tint text-success-deep border border-success-line font-semibold whitespace-nowrap">
                     {s.status}
                   </span>
                 </div>
@@ -251,20 +251,20 @@ export const EnrollmentWorkspace: React.FC = () => {
 
               {/* Detail Demographics */}
               <div className="grid grid-cols-2 gap-2 text-xs">
-                <div className="bg-surface-subtle p-2.5 rounded-xl border border-line-soft space-y-0.5">
+                <div className="bg-surface-subtle p-3 rounded-xl border border-line-soft space-y-1">
                   <span className="text-ink-faint block text-[10px] uppercase font-semibold tracking-wider">Kelahiran</span>
                   <span className="font-semibold text-ink block truncate">
                     {s.person?.birthPlace || 'Jakarta'}, {s.person?.birthDate || '-'}
                   </span>
                   <span className="text-[11px] text-ink-soft">
-                    {s.person?.gender === 'FEMALE' ? 'Perempuan (👧)' : 'Laki-laki (👦)'}
+                    {s.person?.gender === 'FEMALE' ? 'Perempuan' : 'Laki-laki'}
                   </span>
                 </div>
 
-                <div className="bg-surface-subtle p-2.5 rounded-xl border border-line-soft space-y-0.5">
+                <div className="bg-surface-subtle p-3 rounded-xl border border-line-soft space-y-1">
                   <span className="text-ink-faint block text-[10px] uppercase font-semibold tracking-wider">Kesehatan & Gol. Darah</span>
                   <span className="font-semibold text-ink block">
-                    Gol. Darah: <b className="text-brand-deep font-mono px-1.5 py-0.2 bg-brand-subtle rounded border border-brand-line">{s.bloodType || 'O'}</b>
+                    Gol. Darah: <b className="text-brand-deep font-mono px-2 py-1 bg-brand-subtle rounded border border-brand-line">{s.bloodType || 'O'}</b>
                   </span>
                   <span className="text-[11px] text-ink-soft block truncate">
                     {s.allergies && s.allergies !== 'Tidak ada' ? `Alergi: ${s.allergies}` : 'Bebas alergi'}
@@ -274,8 +274,8 @@ export const EnrollmentWorkspace: React.FC = () => {
 
               {/* Address */}
               {s.person?.address && (
-                <div className="text-xs bg-surface-subtle/60 p-2.5 rounded-xl border border-line-soft flex items-start gap-2 text-ink-soft">
-                  <MapPin className="w-3.5 h-3.5 text-ink-faint shrink-0 mt-0.5" />
+                <div className="text-xs bg-surface-subtle/60 p-3 rounded-xl border border-line-soft flex items-start gap-2 text-ink-soft">
+                  <MapPin className="w-4 h-4 text-ink-faint shrink-0 mt-0.5" />
                   <span className="text-[11px] leading-relaxed line-clamp-2">{s.person.address}</span>
                 </div>
               )}
@@ -284,7 +284,7 @@ export const EnrollmentWorkspace: React.FC = () => {
               <div className="pt-1">
                 <div className="flex items-center justify-between mb-2">
                   <span className="text-[11px] font-bold uppercase tracking-wider text-ink-faint flex items-center gap-1.5">
-                    <Heart className="w-3.5 h-3.5 text-brand-primary" />
+                    <Heart className="w-4 h-4 text-brand-primary" />
                     Orang Tua / Wali Murid Terdaftar ({s.guardians?.length || 0})
                   </span>
                 </div>
@@ -304,17 +304,17 @@ export const EnrollmentWorkspace: React.FC = () => {
                           <div className="space-y-1">
                             <div className="flex items-center gap-2">
                               <span className="font-bold text-ink text-xs">{g.person?.fullName || 'Wali'}</span>
-                              <span className="text-[10px] px-1.5 py-0.2 rounded bg-surface border border-line text-ink-soft font-medium">
+                              <span className="text-[10px] px-2 py-1 rounded bg-surface border border-line text-ink-soft font-medium">
                                 {relLabel}
                               </span>
                             </div>
 
                             {g.person?.phone && (
                               <div className="text-xs text-ink-soft flex items-center gap-1.5">
-                                <Phone className="w-3 h-3 text-brand-primary shrink-0" />
+                                <Phone className="w-4 h-4 text-brand-primary shrink-0" />
                                 <a 
                                   href={`tel:${g.person.phone}`}
-                                  className="font-mono text-ink hover:underline"
+                                  className="font-mono text-ink hover-only:underline"
                                 >
                                   {g.person.phone}
                                 </a>
@@ -329,7 +329,7 @@ export const EnrollmentWorkspace: React.FC = () => {
                           </div>
 
                           {g.relation?.isPrimaryContact && (
-                            <span className="text-[10px] px-2 py-0.5 rounded-full bg-brand-subtle text-brand-primary border border-brand-line font-semibold shrink-0">
+                            <span className="text-[10px] px-2 py-1 rounded-full bg-brand-subtle text-brand-primary border border-brand-line font-semibold shrink-0">
                               Kontak Utama
                             </span>
                           )}
@@ -350,7 +350,7 @@ export const EnrollmentWorkspace: React.FC = () => {
 
       {/* Modal Edit Data Siswa */}
       {editingStudent && (
-        <div className="fixed inset-0 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4 z-50 animate-in fade-in duration-150">
+        <div className="fixed inset-0 bg-surface-inset/60 backdrop-blur-xs flex items-center justify-center p-4 z-50 animate-in fade-in duration-150">
           <div className="bg-surface rounded-2xl shadow-floating border border-line max-w-lg w-full max-h-[90vh] overflow-y-auto p-6 text-xs text-ink space-y-4">
             <div className="flex items-center justify-between pb-3 border-b border-line">
               <div>
@@ -364,14 +364,14 @@ export const EnrollmentWorkspace: React.FC = () => {
               </div>
               <button 
                 onClick={() => setEditingStudent(null)} 
-                className="text-ink-soft hover-only:text-ink cursor-pointer p-1 rounded-lg hover:bg-surface-subtle"
+                className="text-ink-soft hover-only:text-ink cursor-pointer p-1 rounded-lg hover-only:bg-surface-subtle"
               >
                 <X className="w-5 h-5" />
               </button>
             </div>
 
             {saveSuccessMessage && (
-              <div className="p-3 bg-emerald-500/10 text-emerald-600 border border-emerald-500/20 rounded-xl font-semibold flex items-center gap-2">
+              <div className="p-3 bg-success-tint text-success-deep border border-success-line rounded-xl font-semibold flex items-center gap-2">
                 <Check className="w-4 h-4" />
                 <span>{saveSuccessMessage}</span>
               </div>
@@ -379,24 +379,24 @@ export const EnrollmentWorkspace: React.FC = () => {
 
             <form onSubmit={handleSaveStudent} className="space-y-4">
               {/* Golongan Darah & Kesehatan (High Priority) */}
-              <div className="p-3.5 bg-brand-subtle/50 border border-brand-line rounded-xl space-y-3">
-                <span className="text-[11px] font-bold uppercase tracking-wider text-brand-deep block">
-                  🩸 Data Kesehatan &amp; Golongan Darah
+              <div className="p-4 bg-brand-subtle/50 border border-brand-line rounded-xl space-y-3">
+                <span className="text-[11px] font-bold uppercase tracking-wider text-brand-deep flex items-center gap-1.5">
+                  <Heart className="w-4 h-4 text-brand-primary" /> Data Kesehatan &amp; Golongan Darah
                 </span>
 
                 <div className="grid grid-cols-2 gap-3">
                   <div>
-                    <label className="block font-bold text-ink mb-1">Golongan Darah</label>
-                    <select
+                    <SelectSheet
+                      label="Golongan Darah"
                       value={editBloodType}
-                      onChange={(e) => setEditBloodType(e.target.value as any)}
-                      className="w-full bg-surface border border-line rounded-xl p-2.5 text-xs text-ink font-semibold focus:border-brand-primary focus:outline-none"
-                    >
-                      <option value="A">Golongan Darah A</option>
-                      <option value="B">Golongan Darah B</option>
-                      <option value="AB">Golongan Darah AB</option>
-                      <option value="O">Golongan Darah O</option>
-                    </select>
+                      onChange={(val) => setEditBloodType(val as any)}
+                      options={[
+                        { value: 'A', label: 'Golongan Darah A' },
+                        { value: 'B', label: 'Golongan Darah B' },
+                        { value: 'AB', label: 'Golongan Darah AB' },
+                        { value: 'O', label: 'Golongan Darah O' },
+                      ]}
+                    />
                   </div>
 
                   <div>
@@ -406,7 +406,7 @@ export const EnrollmentWorkspace: React.FC = () => {
                       value={editAllergies}
                       onChange={(e) => setEditAllergies(e.target.value)}
                       placeholder="Contoh: Alergi udang, telur / Tidak ada"
-                      className="w-full bg-surface border border-line rounded-xl p-2.5 text-xs text-ink focus:border-brand-primary focus:outline-none"
+                      className="w-full bg-surface border border-line rounded-xl p-3 text-xs text-ink focus:border-brand-primary focus:outline-none"
                     />
                   </div>
                 </div>
@@ -418,15 +418,15 @@ export const EnrollmentWorkspace: React.FC = () => {
                     value={editSpecialNeeds}
                     onChange={(e) => setEditSpecialNeeds(e.target.value)}
                     placeholder="Contoh: Menggunakan kacamata / Tidak ada"
-                    className="w-full bg-surface border border-line rounded-xl p-2.5 text-xs text-ink focus:border-brand-primary focus:outline-none"
+                    className="w-full bg-surface border border-line rounded-xl p-3 text-xs text-ink focus:border-brand-primary focus:outline-none"
                   />
                 </div>
               </div>
 
               {/* Data Identitas */}
               <div className="space-y-3">
-                <span className="text-[11px] font-bold uppercase tracking-wider text-ink-faint block">
-                  👤 Identitas Anak
+                <span className="text-[11px] font-bold uppercase tracking-wider text-ink-faint flex items-center gap-1.5">
+                  <User className="w-4 h-4 text-brand-primary" /> Identitas Anak
                 </span>
 
                 <div className="grid grid-cols-2 gap-3">
@@ -437,7 +437,7 @@ export const EnrollmentWorkspace: React.FC = () => {
                       value={editFullName}
                       onChange={(e) => setEditFullName(e.target.value)}
                       required
-                      className="w-full bg-surface border border-line rounded-xl p-2.5 text-xs text-ink font-semibold focus:border-brand-primary focus:outline-none"
+                      className="w-full bg-surface border border-line rounded-xl p-3 text-xs text-ink font-semibold focus:border-brand-primary focus:outline-none"
                     />
                   </div>
                   <div>
@@ -446,7 +446,7 @@ export const EnrollmentWorkspace: React.FC = () => {
                       type="text"
                       value={editPreferredName}
                       onChange={(e) => setEditPreferredName(e.target.value)}
-                      className="w-full bg-surface border border-line rounded-xl p-2.5 text-xs text-ink focus:border-brand-primary focus:outline-none"
+                      className="w-full bg-surface border border-line rounded-xl p-3 text-xs text-ink focus:border-brand-primary focus:outline-none"
                     />
                   </div>
                 </div>
@@ -459,19 +459,19 @@ export const EnrollmentWorkspace: React.FC = () => {
                       value={editNik}
                       onChange={(e) => setEditNik(e.target.value)}
                       placeholder="16 digit NIK"
-                      className="w-full bg-surface border border-line rounded-xl p-2.5 text-xs font-mono text-ink focus:border-brand-primary focus:outline-none"
+                      className="w-full bg-surface border border-line rounded-xl p-3 text-xs font-mono text-ink focus:border-brand-primary focus:outline-none"
                     />
                   </div>
                   <div>
-                    <label className="block font-bold text-ink-soft mb-1">Jenis Kelamin</label>
-                    <select
+                    <SelectSheet
+                      label="Jenis Kelamin"
                       value={editGender}
-                      onChange={(e) => setEditGender(e.target.value as any)}
-                      className="w-full bg-surface border border-line rounded-xl p-2.5 text-xs text-ink focus:border-brand-primary focus:outline-none"
-                    >
-                      <option value="MALE">Laki-laki (👦)</option>
-                      <option value="FEMALE">Perempuan (👧)</option>
-                    </select>
+                      onChange={(val) => setEditGender(val as any)}
+                      options={[
+                        { value: 'MALE', label: 'Laki-laki' },
+                        { value: 'FEMALE', label: 'Perempuan' }
+                      ]}
+                    />
                   </div>
                 </div>
 
@@ -482,7 +482,7 @@ export const EnrollmentWorkspace: React.FC = () => {
                       type="text"
                       value={editBirthPlace}
                       onChange={(e) => setEditBirthPlace(e.target.value)}
-                      className="w-full bg-surface border border-line rounded-xl p-2.5 text-xs text-ink focus:border-brand-primary focus:outline-none"
+                      className="w-full bg-surface border border-line rounded-xl p-3 text-xs text-ink focus:border-brand-primary focus:outline-none"
                     />
                   </div>
                   <div>
@@ -491,7 +491,7 @@ export const EnrollmentWorkspace: React.FC = () => {
                       type="date"
                       value={editBirthDate}
                       onChange={(e) => setEditBirthDate(e.target.value)}
-                      className="w-full bg-surface border border-line rounded-xl p-2.5 text-xs font-mono text-ink focus:border-brand-primary focus:outline-none"
+                      className="w-full bg-surface border border-line rounded-xl p-3 text-xs font-mono text-ink focus:border-brand-primary focus:outline-none"
                     />
                   </div>
                 </div>
@@ -503,7 +503,7 @@ export const EnrollmentWorkspace: React.FC = () => {
                     value={editAddress}
                     onChange={(e) => setEditAddress(e.target.value)}
                     placeholder="Alamat lengkap domisili anak"
-                    className="w-full bg-surface border border-line rounded-xl p-2.5 text-xs text-ink focus:border-brand-primary focus:outline-none"
+                    className="w-full bg-surface border border-line rounded-xl p-3 text-xs text-ink focus:border-brand-primary focus:outline-none"
                   />
                 </div>
               </div>
@@ -520,9 +520,9 @@ export const EnrollmentWorkspace: React.FC = () => {
                 <button
                   type="submit"
                   disabled={isSaving}
-                  className="px-4 py-2 rounded-xl text-xs font-semibold bg-brand-primary text-white hover-only:bg-brand-deep flex items-center gap-1.5 cursor-pointer shadow-sm disabled:opacity-50"
+                  className="px-4 py-2 rounded-xl text-xs font-semibold bg-brand-primary text-on-brand hover-only:bg-brand-deep flex items-center gap-1.5 cursor-pointer shadow-sm disabled:opacity-50"
                 >
-                  <Save className="w-3.5 h-3.5" />
+                  <Save className="w-4 h-4" />
                   <span>{isSaving ? 'Menyimpan...' : 'Simpan Perubahan'}</span>
                 </button>
               </div>
