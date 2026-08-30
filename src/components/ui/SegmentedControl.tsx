@@ -11,6 +11,8 @@ export interface SegmentedControlOption {
   icon?: React.ComponentType<{ className?: string }> | React.ReactNode;
   badge?: string | number;
   activeClassName?: string;
+  tooltip?: string;
+  hideLabel?: boolean;
 }
 
 export interface SegmentedControlProps {
@@ -61,6 +63,8 @@ export const SegmentedControl: React.FC<SegmentedControlProps> = ({
             type="button"
             role="tab"
             aria-selected={isActive}
+            title={option.tooltip || option.label}
+            aria-label={option.label || option.id}
             onClick={() => onChange(option.id)}
             className={`
               flex-1 min-w-max flex items-center justify-center gap-1.5 medium:gap-2 rounded-lg font-semibold
@@ -74,7 +78,9 @@ export const SegmentedControl: React.FC<SegmentedControlProps> = ({
             `.trim().replace(/\s+/g, ' ')}
           >
             {renderIcon(option.icon)}
-            <span className="whitespace-nowrap">{option.label}</span>
+            {!option.hideLabel && option.label ? (
+              <span className="whitespace-nowrap">{option.label}</span>
+            ) : null}
             {option.badge !== undefined && (
               <span
                 className={`

@@ -27,7 +27,11 @@ import {
   Save, 
   Users,
   Plus,
-  FileText
+  FileText,
+  Smile,
+  Meh,
+  Frown,
+  Angry
 } from 'lucide-react';
 
 const getTodayDateString = (): string => {
@@ -236,10 +240,10 @@ export const AttendanceWorkspace: React.FC = () => {
   ];
 
   const moodSegments: SegmentedControlOption[] = [
-    { id: 'CERIA', label: 'Ceria' },
-    { id: 'TENANG', label: 'Stabil' },
-    { id: 'GELISAH', label: 'Lesu' },
-    { id: 'MENANGIS', label: 'Rewel' }
+    { id: 'CERIA', label: 'Ceria', tooltip: 'Ceria / Senang', icon: <Smile className="w-4 h-4" />, hideLabel: true },
+    { id: 'TENANG', label: 'Stabil', tooltip: 'Stabil / Tenang', icon: <Meh className="w-4 h-4" />, hideLabel: true },
+    { id: 'GELISAH', label: 'Lesu', tooltip: 'Lesu / Lelah', icon: <Frown className="w-4 h-4" />, hideLabel: true },
+    { id: 'MENANGIS', label: 'Rewel', tooltip: 'Rewel / Menangis', icon: <Angry className="w-4 h-4" />, hideLabel: true }
   ];
 
   const classSegments = classes.map(c => ({
@@ -348,59 +352,72 @@ export const AttendanceWorkspace: React.FC = () => {
             />
           </div>
 
-          {/* Tone Band Micro-Summary & Progress */}
-          <div className="flex-1 min-w-0 bg-surface-subtle/70 px-4 py-2.5 rounded-xl border border-line-hairline flex flex-col justify-center gap-1.5">
-            <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs tabular-nums text-ink-soft font-medium">
-              <span className="font-semibold text-ink">{students.length} Murid</span>
-              <span className="text-ink-faint">•</span>
-              <span className="flex items-center gap-1.5">
-                <span className="w-1.5 h-1.5 rounded-full bg-success inline-block"></span>
-                <span className="font-semibold text-success-deep">{hadirCount} Hadir</span>
+          {/* Vertical Metric Cards (5 Columns: Total Recorded/Max + 4 Statuses) */}
+          <div className="flex-1 min-w-0 grid grid-cols-5 gap-1.5 medium:gap-2">
+            {/* 1. Total (Recorded / Total) */}
+            <div className={`flex flex-col items-center justify-center py-1.5 px-1 rounded-xl border text-center shadow-hairline min-h-[44px] transition-all ${
+              totalRecorded === students.length && students.length > 0
+                ? 'bg-surface border-brand-primary/40 text-ink'
+                : 'bg-surface border-line text-ink'
+            }`}>
+              <span className="font-mono tabular-nums font-bold text-xs medium:text-sm text-ink leading-tight">
+                {totalRecorded}/{students.length}
               </span>
-              {sakitCount > 0 && (
-                <>
-                  <span className="text-ink-faint">•</span>
-                  <span className="flex items-center gap-1.5">
-                    <span className="w-1.5 h-1.5 rounded-full bg-warning inline-block"></span>
-                    <span className="font-semibold text-warning-deep">{sakitCount} Sakit</span>
-                  </span>
-                </>
-              )}
-              {izinCount > 0 && (
-                <>
-                  <span className="text-ink-faint">•</span>
-                  <span className="flex items-center gap-1.5">
-                    <span className="w-1.5 h-1.5 rounded-full bg-info inline-block"></span>
-                    <span className="font-semibold text-info-deep">{izinCount} Izin</span>
-                  </span>
-                </>
-              )}
-              {alpaCount > 0 && (
-                <>
-                  <span className="text-ink-faint">•</span>
-                  <span className="flex items-center gap-1.5">
-                    <span className="w-1.5 h-1.5 rounded-full bg-danger inline-block"></span>
-                    <span className="font-semibold text-danger-deep">{alpaCount} Alpa</span>
-                  </span>
-                </>
-              )}
-              {belumCount > 0 && (
-                <>
-                  <span className="text-ink-faint">•</span>
-                  <span className="flex items-center gap-1.5 text-ink-faint">
-                    <span className="w-1.5 h-1.5 rounded-full bg-ink-faint inline-block"></span>
-                    <span>{belumCount} Belum</span>
-                  </span>
-                </>
-              )}
+              <span className="text-[10px] medium:text-[11px] font-medium text-ink-soft leading-tight mt-0.5 whitespace-nowrap">
+                Total
+              </span>
             </div>
 
-            {/* Thin Progress Bar (h-1 success) */}
-            <div className="w-full bg-line-soft h-1 rounded-full overflow-hidden">
-              <div 
-                className="bg-success h-full transition-all duration-300 rounded-full"
-                style={{ width: `${students.length > 0 ? Math.min(100, Math.round((totalRecorded / students.length) * 100)) : 0}%` }}
-              />
+            {/* 2. Hadir */}
+            <div className="flex flex-col items-center justify-center py-1.5 px-1 rounded-xl bg-success-tint/40 border border-success-line/60 text-center shadow-hairline min-h-[44px]">
+              <span className="font-mono tabular-nums font-bold text-xs medium:text-sm text-success-deep leading-tight">
+                {hadirCount}
+              </span>
+              <span className="text-[10px] medium:text-[11px] font-semibold text-success-deep leading-tight mt-0.5 whitespace-nowrap">
+                Hadir
+              </span>
+            </div>
+
+            {/* 3. Sakit */}
+            <div className={`flex flex-col items-center justify-center py-1.5 px-1 rounded-xl border text-center transition-all min-h-[44px] ${
+              sakitCount > 0 
+                ? 'bg-warning-tint/40 border-warning-line/60 text-warning-deep shadow-hairline' 
+                : 'bg-surface border-line text-ink'
+            }`}>
+              <span className={`font-mono tabular-nums font-bold text-xs medium:text-sm leading-tight ${sakitCount > 0 ? 'text-warning-deep' : 'text-ink'}`}>
+                {sakitCount}
+              </span>
+              <span className={`text-[10px] medium:text-[11px] leading-tight mt-0.5 whitespace-nowrap ${sakitCount > 0 ? 'font-semibold text-warning-deep' : 'font-medium text-ink-soft'}`}>
+                Sakit
+              </span>
+            </div>
+
+            {/* 4. Izin */}
+            <div className={`flex flex-col items-center justify-center py-1.5 px-1 rounded-xl border text-center transition-all min-h-[44px] ${
+              izinCount > 0 
+                ? 'bg-info-tint/40 border-info-line/60 text-info-deep shadow-hairline' 
+                : 'bg-surface border-line text-ink'
+            }`}>
+              <span className={`font-mono tabular-nums font-bold text-xs medium:text-sm leading-tight ${izinCount > 0 ? 'text-info-deep' : 'text-ink'}`}>
+                {izinCount}
+              </span>
+              <span className={`text-[10px] medium:text-[11px] leading-tight mt-0.5 whitespace-nowrap ${izinCount > 0 ? 'font-semibold text-info-deep' : 'font-medium text-ink-soft'}`}>
+                Izin
+              </span>
+            </div>
+
+            {/* 5. Alpa */}
+            <div className={`flex flex-col items-center justify-center py-1.5 px-1 rounded-xl border text-center transition-all min-h-[44px] ${
+              alpaCount > 0 
+                ? 'bg-danger-tint/40 border-danger-line/60 text-danger-deep shadow-hairline' 
+                : 'bg-surface border-line text-ink'
+            }`}>
+              <span className={`font-mono tabular-nums font-bold text-xs medium:text-sm leading-tight ${alpaCount > 0 ? 'text-danger-deep' : 'text-ink'}`}>
+                {alpaCount}
+              </span>
+              <span className={`text-[10px] medium:text-[11px] leading-tight mt-0.5 whitespace-nowrap ${alpaCount > 0 ? 'font-semibold text-danger-deep' : 'font-medium text-ink-soft'}`}>
+                Alpa
+              </span>
             </div>
           </div>
         </div>
