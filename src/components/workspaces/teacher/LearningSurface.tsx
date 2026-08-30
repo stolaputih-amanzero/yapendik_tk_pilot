@@ -96,14 +96,14 @@ export const LearningSurface: React.FC<Props> = ({
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <span className="text-xs font-extrabold uppercase tracking-wider text-lppa-deep">
+                <span className="text-xs font-bold text-lppa-deep">
                   Rencana Pembelajaran Harian (RPPH)
                 </span>
                 <span className="px-2 py-1 text-[11px] font-semibold rounded-pill bg-surface-subtle text-ink-soft border border-line">
                   {context.date}
                 </span>
               </div>
-              <h3 className="text-lg font-display font-bold text-ink mt-0.5">
+              <h3 className="text-lg font-bold text-ink mt-0.5">
                 {activities[0]?.theme || 'Tema: Lingkunganku yang Indah & Bersih'}
               </h3>
               <p className="text-xs text-ink-soft font-medium">

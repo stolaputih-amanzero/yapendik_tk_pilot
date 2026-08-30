@@ -60,7 +60,7 @@ export const OperatingStateIndicator: React.FC<Props> = ({ currentState, onState
       </div>
 
       {/* 2. Judul & Deskripsi Penuh (Typography Carries Hierarchy) */}
-      <div className="text-base font-display font-bold text-ink leading-snug">
+      <div className="text-base font-bold text-ink leading-snug">
         <span>{activeConfig.label}</span>
         <span className="text-xs font-normal text-ink-soft ml-2">— {activeConfig.description}</span>
       </div>

@@ -31,7 +31,7 @@ export const TodaySurface: React.FC<Props> = ({
       <section className="space-y-3">
         <div className="flex items-center justify-between">
           <div>
-            <h3 className="text-base font-display font-bold text-ink">
+            <h3 className="text-base font-bold text-ink">
               Presensi Harian
             </h3>
             <p className="text-xs text-ink-soft font-medium mt-0.5 hidden medium:block">

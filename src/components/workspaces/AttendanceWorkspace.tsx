@@ -267,7 +267,7 @@ export const AttendanceWorkspace: React.FC = () => {
         {/* Expanded Description & Desktop Save Action */}
         <div className="hidden expanded:flex expanded:items-center justify-between gap-4 pb-2 border-b border-line-hairline">
           <div>
-            <h1 className="text-xl font-bold text-ink flex items-center gap-2 font-display">
+            <h1 className="text-xl font-bold text-ink flex items-center gap-2">
               <CalendarCheck className="w-5 h-5 text-success shrink-0" />
               Buku Presensi &amp; Skrining Kedatangan Siswa
             </h1>
@@ -430,6 +430,7 @@ export const AttendanceWorkspace: React.FC = () => {
                         name={s.person?.fullName || 'Siswa'}
                         id={s.id}
                         size="md"
+                        showSymbol={false}
                       />
                       <div className="min-w-0 flex-1">
                         <h4 className="text-[15px] font-semibold leading-snug break-words normal-case text-ink">

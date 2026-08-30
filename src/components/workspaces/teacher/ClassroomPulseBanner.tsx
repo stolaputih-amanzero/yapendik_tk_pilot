@@ -18,6 +18,14 @@ interface Props {
   activeIncidentsCount?: number;
 }
 
+const toTitleCase = (str: string) => {
+  return str
+    .toLowerCase()
+    .split(' ')
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ');
+};
+
 export const ClassroomPulseBanner: React.FC<Props> = ({
   context,
   pulse,
@@ -65,8 +73,8 @@ export const ClassroomPulseBanner: React.FC<Props> = ({
       {/* 2. Strip Kehadiran (Anchor 1: bg-surface White Panel on Gray Canvas) */}
       <div className="bg-surface rounded-2xl p-4 medium:p-5 flex items-center justify-between text-ink w-full shadow-hairline">
         <div>
-          <div className="text-[11px] text-ink-soft uppercase tracking-wider font-semibold leading-none">
-            KEHADIRAN HARI INI
+          <div className="text-[11px] text-ink-soft font-semibold leading-none">
+            Kehadiran Hari Ini
           </div>
           <div className="text-base medium:text-lg font-bold text-success-deep leading-tight mt-1.5 font-mono whitespace-nowrap">
             {pulse.present_count}/{pulse.total_students} <span className="text-xs text-ink-soft font-normal">({attendanceRate}%)</span>
@@ -120,9 +128,9 @@ export const ClassroomPulseBanner: React.FC<Props> = ({
       {/* 4. Critical Health & Safety Exceptions Row (Anchor 2: divide-y divide-line 0.12 opacity) */}
       {validAlerts.length > 0 && (
         <div className="pt-2 space-y-1">
-          <h3 className="text-[11px] font-bold uppercase tracking-wider text-brand-deep mb-2 flex items-center gap-2">
+          <h3 className="text-xs font-bold text-brand-deep mb-2 flex items-center gap-2">
             <AlertTriangle className="w-4 h-4 text-warning shrink-0" />
-            <span>PERHATIAN PAGI:</span>
+            <span>Perhatian Pagi:</span>
           </h3>
 
           <div className="divide-y divide-line w-full">
@@ -134,7 +142,7 @@ export const ClassroomPulseBanner: React.FC<Props> = ({
               >
                 <AlertTriangle className="w-4 h-4 text-warning shrink-0 mt-0.5" />
                 <div className="flex flex-wrap items-baseline gap-1.5 min-w-0 flex-1">
-                  <span className="font-semibold text-warning-deep">{alert.student_name}</span>
+                  <span className="font-semibold text-warning-deep">{toTitleCase(alert.student_name)}</span>
                   <span className="text-warning-deep">—</span>
                   {alert.temperature && (
                     <span className="text-danger-deep font-bold mr-1 font-mono whitespace-nowrap">

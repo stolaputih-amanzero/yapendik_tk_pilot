@@ -29,7 +29,7 @@ export const DailyCompletionSummary: React.FC<Props> = ({
           }`}>
             {isAllClear ? <CheckCheck className="w-5 h-5" /> : <Sparkles className="w-5 h-5 text-brand-primary fill-brand-primary" />}
           </div>
-          <h4 className="text-xs font-bold uppercase tracking-wider text-brand-deep font-display">
+          <h4 className="text-xs font-bold uppercase tracking-wider text-brand-deep">
             {isAllClear ? 'Semua Tugas Selesai' : 'Status Rekonsiliasi'}
           </h4>
         </div>

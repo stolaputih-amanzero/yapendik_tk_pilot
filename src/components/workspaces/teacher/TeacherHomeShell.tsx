@@ -67,6 +67,14 @@ const getTodayDateString = (): string => {
   return `${year}-${month}-${day}`;
 };
 
+const toTitleCase = (str: string) => {
+  return str
+    .toLowerCase()
+    .split(' ')
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ');
+};
+
 export const TeacherHomeShell: React.FC<{ onNavigateToCommunication?: () => void }> = ({ onNavigateToCommunication }) => {
   const { securityContext, currentPersona } = useSecurityContext();
 
@@ -351,7 +359,7 @@ export const TeacherHomeShell: React.FC<{ onNavigateToCommunication?: () => void
       <div className="px-4 medium:px-5 pt-2 pb-2 w-full text-ink">
         <div className="flex items-start justify-between gap-4">
           <div>
-            <div className="flex items-center space-x-1.5 text-brand-deep text-xs font-semibold uppercase tracking-wider mb-1">
+            <div className="flex items-center space-x-1.5 text-brand-primary text-xs font-semibold uppercase tracking-wider mb-1">
               <Home className="w-4 h-4 text-brand-primary" />
               <span>Ruang Guru</span>
             </div>
@@ -363,17 +371,20 @@ export const TeacherHomeShell: React.FC<{ onNavigateToCommunication?: () => void
               const homeroomName = homeroomTeacher?.fullName || aggregate?.context?.teacher?.name || currentPersona?.name || 'ERNA BOYKELA R';
 
               return (
-                <p className="text-ink-soft text-xs medium:text-sm mt-0.5 flex items-center gap-1.5 flex-wrap">
-                  <span className="font-semibold text-ink">{className}</span>
-                  <span className="text-ink-faint">•</span>
-                  <span>Wali Kelas: <strong className="text-ink font-semibold">{homeroomName}</strong></span>
-                  {coTeacher && (
-                    <>
-                      <span className="text-ink-faint">•</span>
-                      <span>Pendamping: <strong className="text-ink-soft font-medium">{coTeacher.fullName}</strong></span>
-                    </>
-                  )}
-                </p>
+                <div className="space-y-0.5">
+                  <h2 className="text-lg medium:text-xl font-bold text-ink leading-tight">
+                    {className}
+                  </h2>
+                  <p className="text-ink-soft text-xs medium:text-sm flex items-center gap-1.5 flex-wrap">
+                    <span>Wali Kelas: <strong className="text-ink font-semibold">{toTitleCase(homeroomName)}</strong></span>
+                    {coTeacher && (
+                      <>
+                        <span className="text-ink-faint">•</span>
+                        <span>Pendamping: <strong className="text-ink-soft font-medium">{toTitleCase(coTeacher.fullName)}</strong></span>
+                      </>
+                    )}
+                  </p>
+                </div>
               );
             })()}
           </div>
@@ -389,8 +400,8 @@ export const TeacherHomeShell: React.FC<{ onNavigateToCommunication?: () => void
             ]}
             value={activeTab}
             onChange={(val) => setActiveTab(val as 'TODAY' | 'LEARNING' | 'ROSTER')}
-            size="sm"
-            className="w-full expanded:w-fit"
+            size="md"
+            className="w-full expanded:w-fit min-h-[48px]"
           />
         </div>
 
@@ -463,22 +474,6 @@ export const TeacherHomeShell: React.FC<{ onNavigateToCommunication?: () => void
               onStateChange={setOperatingState}
             />
           </div>
-
-          {/* C-1 Safety Signal: Prominent Mobile Alert Badge if Health/Safety Alert Active */}
-          {hasSafetyExceptions && (
-            <div 
-              onClick={() => setIsSafetyModalOpen(true)}
-              className="block large:hidden p-3 rounded-2xl bg-danger-tint border border-danger-line text-danger-deep flex items-center justify-between text-xs font-semibold cursor-pointer shadow-hairline active:scale-[0.99] transition"
-            >
-              <div className="flex items-center gap-2">
-                <AlertTriangle className="w-4 h-4 text-danger shrink-0" />
-                <span>Peringatan Kesehatan / Alergi Siswa Aktif</span>
-              </div>
-              <span className="text-[10px] font-mono font-bold bg-surface px-2 py-1 rounded-full border border-danger-line whitespace-nowrap">
-                LIHAT DETAIL
-              </span>
-            </div>
-          )}
 
           {/* Active Surface Router */}
           {activeTab === 'TODAY' ? (

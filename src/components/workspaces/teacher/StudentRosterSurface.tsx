@@ -43,7 +43,7 @@ export const StudentRosterSurface: React.FC<Props> = ({
       <div className="bg-surface rounded-card border border-line p-4 medium:p-4 shadow-hairline flex flex-col medium:flex-row medium:items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-2 flex-wrap">
-            <h3 className="text-base medium:text-lg font-display font-bold text-ink">Roster Siswa</h3>
+            <h3 className="text-base medium:text-lg font-bold text-ink">Roster Siswa</h3>
             <Badge variant="lppa">
               {roster.length} Peserta Didik
             </Badge>
@@ -82,7 +82,7 @@ export const StudentRosterSurface: React.FC<Props> = ({
                       name={student.name}
                       id={student.student_id}
                       size="md"
-                      showSymbol
+                      showSymbol={false}
                     />
                     <div className="min-w-0 flex-1">
                       <h4 className="text-sm font-bold text-ink leading-snug truncate">{student.name}</h4>

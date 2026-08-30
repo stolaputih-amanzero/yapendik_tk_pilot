@@ -254,7 +254,7 @@ export const ObservationWorkspace: React.FC = () => {
                 {/* Header Row */}
                 <div className="flex flex-col medium:flex-row medium:items-start gap-3 justify-between">
                   <div className="flex items-start gap-3 min-w-0">
-                    <AvatarChild name={student?.person?.fullName || 'Siswa'} id={obs.studentId} size="md" showSymbol />
+                    <AvatarChild name={student?.person?.fullName || 'Siswa'} id={obs.studentId} size="md" />
                     <div className="space-y-0.5 min-w-0">
                       <div className="flex items-center gap-2">
                         <h3 className="font-bold text-ink text-base truncate">{student?.person?.fullName || 'Siswa'}</h3>
