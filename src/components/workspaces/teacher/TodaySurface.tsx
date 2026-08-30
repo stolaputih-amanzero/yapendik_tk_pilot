@@ -12,7 +12,7 @@ import {
 } from '../../../types/teacherDailyTypes';
 import { AttendanceStatus } from '../../../domain/types';
 import { AttendanceGrid } from './AttendanceGrid';
-import { AlertTriangle } from 'lucide-react';
+
 
 interface Props {
   roster: StudentRosterItem[];
@@ -46,19 +46,6 @@ export const TodaySurface: React.FC<Props> = ({
               Sentuh 1-ketuk untuk mengubah status. Rekam suhu &amp; mood pagi.
             </p>
           </div>
-
-          {/* Medical Exception Badge (Only when exceptions exist) */}
-          {hasSafetyExceptions && onOpenPulseModal && (
-            <button
-              type="button"
-              onClick={onOpenPulseModal}
-              className="flex items-center gap-1 px-2.5 py-1 rounded-full bg-danger-tint border border-danger-line text-danger-deep font-bold text-xs cursor-pointer active:scale-95 transition shadow-hairline"
-              aria-label="Peringatan Medis Siswa"
-            >
-              <AlertTriangle className="w-3 h-3 text-danger shrink-0" />
-              <span>Perhatian Medis</span>
-            </button>
-          )}
         </div>
 
         <AttendanceGrid
