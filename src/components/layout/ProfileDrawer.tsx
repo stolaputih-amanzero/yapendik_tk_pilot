@@ -223,9 +223,9 @@ export const ProfileDrawer: React.FC<ProfileDrawerProps> = ({
                       switchPersona(p.id);
                       onClose();
                       if (onSelectTab) {
-                        if (p.role === 'APPLICANT' || p.id === 'user_parent_bona') {
+                        if (p.role === 'APPLICANT') {
                           onSelectTab('ADMISSIONS_PORTAL');
-                        } else if (p.role === 'GUARDIAN' || p.id === 'user_parent_budi') {
+                        } else if (p.role === 'GUARDIAN') {
                           onSelectTab('GUARDIAN_WORKSPACE');
                         } else if (p.role === 'TEACHER') {
                           onSelectTab('TEACHER_HOME');

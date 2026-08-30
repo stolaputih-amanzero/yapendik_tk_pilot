@@ -420,15 +420,16 @@ export class BriefingEngineService {
     }
 
     // Guardian
-    const isBona = Boolean(
+    const isKayla = Boolean(
       userId && (
-        userId === 'user_parent_bona' || 
-        userId === 'per_parent_bona' || 
-        userId.toLowerCase().includes('bona')
+        userId === 'user_guard_mutiara' || 
+        userId === 'per_guard_mutiara_zega' || 
+        userId.toLowerCase().includes('mutiara') ||
+        userId.toLowerCase().includes('kayla')
       )
     );
-    const childName = isBona ? 'Timothy' : 'Kenzo';
-    const salutation = isBona ? 'Ayah Timothy' : 'Ayah Kenzo';
+    const childName = isKayla ? 'Kayla' : 'Millen';
+    const salutation = isKayla ? 'Ibu Mutiara' : 'Ibu Julen';
 
     const guardianData: GuardianBriefingData = {
       role: 'GUARDIAN',
@@ -443,16 +444,16 @@ export class BriefingEngineService {
         active_phase_name: activePhase?.phase_name || 'Main Sentra'
       },
       latest_moment: {
-        moment_id: isBona ? 'mom_timothy_01' : 'mom_kenzo_01',
+        moment_id: isKayla ? 'mom_kayla_01' : 'mom_millen_01',
         thumbnail_url: '/assets/moments/moment_sample.jpg',
-        caption: isBona 
-          ? 'Bermain puzzle eksplorasi warna dan bentuk bersama teman.'
-          : 'Bermain balok membangun jembatan bersama teman.',
+        caption: isKayla 
+          ? 'Bermain puzzle eksplorasi warna dan bentuk bersama teman di Kelompok B.'
+          : 'Bermain balok membangun jembatan bersama teman di Kelompok A.',
         captured_at: '09:30'
       },
-      teacher_note: isBona
-        ? 'Timothy sangat antusias mengeksplorasi sentra seni hari ini.'
-        : 'Kenzo sangat tekun saat menyusun balok bertingkat hari ini.',
+      teacher_note: isKayla
+        ? 'Kayla sangat antusias mengeksplorasi sentra motorik hari ini.'
+        : 'Millen sangat tekun dan ceria saat bernyanyi dan menyusun balok hari ini.',
       lppa_published_available: true
     };
     this.assertNonSurveillance(guardianData);

@@ -50,7 +50,7 @@ export const GuardianWorkspace: React.FC = () => {
     loadData();
   }, [schoolId, currentPersona?.personId, currentPersona?.id]);
 
-  const childName = briefingData?.child_name || (currentPersona?.id?.includes('bona') ? 'Timothy' : 'Kenzo');
+  const childName = briefingData?.child_name || 'Millen';
 
   return (
     <div className="w-full min-h-[100dvh] bg-canvas text-ink pb-24 expanded:pb-8 font-sans animate-in fade-in duration-200">

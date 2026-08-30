@@ -111,9 +111,9 @@ const AppContent: React.FC = () => {
   const schools = db.getSchools();
 
   React.useEffect(() => {
-    if (currentPersona?.role === 'APPLICANT' || currentPersona?.id === 'user_parent_bona') {
+    if (currentPersona?.role === 'APPLICANT') {
       setActiveTab('ADMISSIONS_PORTAL');
-    } else if (currentPersona?.id === 'user_parent_budi') {
+    } else if (currentPersona?.role === 'GUARDIAN') {
       if (activeTab === 'TEACHER_HOME' || activeTab === 'DAILY_WORK' || activeTab === 'ATTENDANCE' || activeTab === 'INSTITUTIONAL_HEALTH' || activeTab === 'HEADMASTER_ADOPTION' || activeTab === 'FOUNDATION_GOVERNANCE') {
         setActiveTab('GUARDIAN_WORKSPACE');
       }
@@ -130,7 +130,7 @@ const AppContent: React.FC = () => {
         setActiveTab('TEACHER_HOME');
       }
     }
-  }, [currentPersona?.id, currentPersona?.role]);
+  }, [currentPersona?.role, currentPersona?.id]);
 
   // 1. Listen for browser Back/Forward (hashchange)
   React.useEffect(() => {
@@ -255,9 +255,9 @@ const AppContent: React.FC = () => {
           {activeTab === 'GUARDIAN_WORKSPACE' && <GuardianWorkspace />}
           {activeTab === 'ADMISSIONS_PORTAL' && (
             <ApplicationDashboard 
-              creatorUid={currentPersona.id || 'user_parent_bona'} 
-              personId={currentPersona.personId || 'per_parent_bona'}
-              guardianName={currentPersona.name}
+              creatorUid={currentPersona?.id || 'usr_guest_applicant'} 
+              personId={currentPersona?.personId || 'per_guest_applicant'}
+              guardianName={currentPersona?.name || 'Orang Tua Calon Siswa'}
             />
           )}
           {activeTab === 'ADMISSIONS_DESK' && (

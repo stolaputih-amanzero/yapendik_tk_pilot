@@ -120,19 +120,6 @@ export const GENESIS_PERSONAS: PersonaProfile[] = [
     guardianChildrenPersonIds: ['per_child_kayla'],
     description: 'Wali sah Ananda Kayla Gabriella di Kelompok B.',
     isSimulation: true
-  },
-  {
-    id: 'user_parent_bona',
-    name: 'Bona Pandjaitan, S.T.',
-    role: 'APPLICANT',
-    roleTitle: 'Orang Tua Calon Siswa PPDB (Guest)',
-    schoolId: 'sch_tk_maranatha',
-    schoolName: 'TK YAPENDIK GPIB Cabang Maranatha',
-    personId: 'per_parent_bona',
-    assignedClasses: [],
-    guardianChildrenPersonIds: [],
-    description: 'Orang Tua Pendaftar Baru (Guest APPLICANT) ananda Timothy Andreas Pandjaitan.',
-    isSimulation: true
   }
 ];
 

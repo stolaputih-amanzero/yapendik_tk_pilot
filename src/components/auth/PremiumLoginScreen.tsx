@@ -293,58 +293,58 @@ export const PremiumLoginScreen: React.FC = () => {
 
               <div className="bg-surface border border-line rounded-field overflow-hidden divide-y divide-line-soft shadow-hairline">
                 <ListItem
-                  title="Siti Rahmawati, S.Pd"
-                  subtitle="Wali Kelas TK A (Kelompok Bintang Ceria)"
-                  badge={<Badge variant="info">TEACHER</Badge>}
-                  onClick={() => switchPersona('user_teacher_siti')}
-                  showChevron
-                />
-
-                <ListItem
-                  title="Maria Magdalena, S.Pd.Aud"
-                  subtitle="Wali Kelas TK B (Kelompok Matahari)"
-                  badge={<Badge variant="info">TEACHER</Badge>}
-                  onClick={() => switchPersona('user_teacher_maria')}
-                  showChevron
-                />
-
-                <ListItem
-                  title="Dra. Esther Nugroho, M.Pd"
-                  subtitle="Kepala Sekolah TK Yapendik 01 Menteng"
-                  badge={<Badge variant="success">HEADMASTER</Badge>}
-                  onClick={() => switchPersona('user_headmaster_esther')}
-                  showChevron
-                />
-
-                <ListItem
-                  title="Budi Santoso, S.T."
-                  subtitle="Orang Tua / Wali (Ayah Kenzo & Nathanael)"
-                  badge={<Badge variant="neutral">GUARDIAN</Badge>}
-                  onClick={() => switchPersona('user_parent_budi')}
-                  showChevron
-                />
-
-                <ListItem
-                  title="Bona Pandjaitan, S.T."
-                  subtitle="Orang Tua Calon Siswa PPDB (Ayah Timothy)"
-                  badge={<Badge variant="warning">APPLICANT</Badge>}
-                  onClick={() => switchPersona('user_parent_bona')}
-                  showChevron
-                />
-
-                <ListItem
-                  title="Diana Sari, S.Pd (TK 02)"
-                  subtitle="Guru TK 02 Kebayoran (Negative Test Isolasi)"
-                  badge={<Badge variant="danger">CROSS_SCHOOL</Badge>}
-                  onClick={() => switchPersona('user_teacher_diana_tk2')}
-                  showChevron
-                />
-
-                <ListItem
-                  title="Dr. Andreas Hendrawan"
-                  subtitle="Pengawas Mutu Pendidikan Yayasan Yapendik"
+                  title="SHIRLEY A.T.WAKKARY"
+                  subtitle="Pengawas Mutu Pendidikan Yayasan (Superadmin)"
                   badge={<Badge variant="lppa">SUPERADMIN</Badge>}
-                  onClick={() => switchPersona('user_superadmin_yapendik')}
+                  onClick={() => switchPersona('user_superadmin_shirley')}
+                  showChevron
+                />
+
+                <ListItem
+                  title="SHERYL Y N UMBAS, S.IKOM, M.PD"
+                  subtitle="Kepala Sekolah TK Yapendik Maranatha"
+                  badge={<Badge variant="success">HEADMASTER</Badge>}
+                  onClick={() => switchPersona('user_headmaster_sheryl')}
+                  showChevron
+                />
+
+                <ListItem
+                  title="ERNA BOYKELA R"
+                  subtitle="Wali Kelas TK A (Kelompok A)"
+                  badge={<Badge variant="info">TEACHER</Badge>}
+                  onClick={() => switchPersona('user_teacher_erna')}
+                  showChevron
+                />
+
+                <ListItem
+                  title="CHARLOTHA JOVANNCA BLANDINNA R"
+                  subtitle="Guru Pendamping TK A"
+                  badge={<Badge variant="info">ASSISTANT</Badge>}
+                  onClick={() => switchPersona('user_teacher_charlotha')}
+                  showChevron
+                />
+
+                <ListItem
+                  title="EVI TANIA"
+                  subtitle="Wali Kelas TK B (Kelompok B)"
+                  badge={<Badge variant="info">TEACHER</Badge>}
+                  onClick={() => switchPersona('user_teacher_evi')}
+                  showChevron
+                />
+
+                <ListItem
+                  title="JULEN PATRICIA"
+                  subtitle="Orang Tua / Wali (Ananda Millen - TK A)"
+                  badge={<Badge variant="neutral">GUARDIAN</Badge>}
+                  onClick={() => switchPersona('user_guard_julen')}
+                  showChevron
+                />
+
+                <ListItem
+                  title="MUTIARA ZEGA"
+                  subtitle="Orang Tua / Wali (Ananda Kayla - TK B)"
+                  badge={<Badge variant="neutral">GUARDIAN</Badge>}
+                  onClick={() => switchPersona('user_guard_mutiara')}
                   showChevron
                 />
               </div>

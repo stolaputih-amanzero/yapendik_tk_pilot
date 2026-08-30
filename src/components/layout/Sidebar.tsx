@@ -123,7 +123,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
         ]
       }
     ];
-  } else if (role === 'APPLICANT' || currentPersona?.id === 'user_parent_bona') {
+  } else if (role === 'APPLICANT') {
     navGroups = [
       {
         title: 'Layanan PPDB',
@@ -132,7 +132,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
         ]
       }
     ];
-  } else if (role === 'GUARDIAN' || currentPersona?.id === 'user_parent_budi') {
+  } else if (role === 'GUARDIAN') {
     navGroups = [
       {
         title: 'Portal Keluarga',
