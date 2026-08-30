@@ -197,7 +197,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
             isCollapsed ? 'justify-center' : 'space-x-3'
           }`}
         >
-          <span className="text-accent-valor text-lg select-none shrink-0 animate-amanaura-breath" aria-hidden="true">
+          <span className="text-accent-valor text-lg select-none shrink-0" aria-hidden="true">
             ✦
           </span>
           {!isCollapsed && (

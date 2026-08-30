@@ -69,23 +69,11 @@ export const BriefingShell: React.FC<BriefingShellProps> = ({
         )}
       </div>
 
-      {/* Greeting Title with Amanaura Circadian Breath ✦ */}
+      {/* Greeting Title */}
       <div className="flex items-baseline justify-between gap-3">
         <h1 className="text-3xl medium:text-4xl font-serif font-normal text-ink tracking-wide leading-tight">
           {greeting}
         </h1>
-        <span
-          className={`shrink-0 select-none text-base ${
-            isClosure
-              ? 'animate-amanaura-breath-slow text-ink-soft opacity-60'
-              : isPreview
-              ? 'animate-amanaura-breath text-brand-accent'
-              : 'animate-amanaura-breath text-brand-primary'
-          }`}
-          aria-hidden="true"
-        >
-          ✦
-        </span>
       </div>
 
       {/* Sub-briefing content rendered flat on canvas */}

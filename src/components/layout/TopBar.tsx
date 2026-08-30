@@ -155,9 +155,9 @@ export const TopBar: React.FC<TopBarProps> = ({
               <div className="w-8 h-8 rounded-full bg-brand-primary text-on-brand flex items-center justify-center text-xs font-bold shadow-soft">
                 {currentPersona?.name.charAt(0) || 'U'}
               </div>
-              {/* Presence Marker Breath ✦ */}
+              {/* Presence Marker Dot */}
               <span className="absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full bg-surface flex items-center justify-center">
-                <span className={`w-2 h-2 rounded-full ${breathMeta.state === 'ONLINE' || breathMeta.state === 'RECONCILING' ? 'bg-accent-valor' : 'bg-ink-faint'} ${breathMeta.animationClass}`} />
+                <span className={`w-2 h-2 rounded-full ${breathMeta.state === 'ONLINE' || breathMeta.state === 'RECONCILING' ? 'bg-accent-valor' : 'bg-ink-faint'}`} />
               </span>
             </div>
 

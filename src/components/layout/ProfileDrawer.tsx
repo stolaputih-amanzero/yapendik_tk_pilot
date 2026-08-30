@@ -81,7 +81,7 @@ export const ProfileDrawer: React.FC<ProfileDrawerProps> = ({
             <span className="font-serif font-bold text-base text-ink tracking-tight">
               Amanaura OS
             </span>
-            <span className="text-accent-valor text-xs animate-amanaura-breath" aria-hidden="true">✦</span>
+            <span className="text-accent-valor text-xs" aria-hidden="true">✦</span>
             <span className="text-xs text-ink-soft">• Profil &amp; Pengaturan</span>
           </div>
           <button
@@ -106,7 +106,7 @@ export const ProfileDrawer: React.FC<ProfileDrawerProps> = ({
                 className="absolute bottom-0 right-0 w-4 h-4 rounded-full bg-surface flex items-center justify-center"
                 title="Status Aktif Sirkadian"
               >
-                <span className="w-2.5 h-2.5 rounded-full bg-accent-valor animate-amanaura-breath" />
+                <span className="w-2.5 h-2.5 rounded-full bg-accent-valor" />
               </span>
             </div>
             <div className="min-w-0 flex-1">

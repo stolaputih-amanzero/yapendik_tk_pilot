@@ -52,11 +52,11 @@ async function runBriefingUITests() {
   }
 
   // ------------------------------------------------------------------------------
-  // 1. BRIEFING SHELL & CIRCADIAN PULSE
+  // 1. BRIEFING SHELL & GREETING
   // ------------------------------------------------------------------------------
-  console.log('--- MODULE 1: BriefingShell Header & Amanaura Breath ✦ ---');
+  console.log('--- MODULE 1: BriefingShell Header & Seremonial Greetings ---');
 
-  runCheck('BriefingShell [OPERATIONAL BREATH]: Renders 4s active human pulse glyph ✦', () => {
+  runCheck('BriefingShell [OPERATIONAL GREETING]: Renders greeting and local school time', () => {
     const raw = renderToString(
       <BriefingShell
         greeting="Selamat pagi, Bu Siti"
@@ -71,11 +71,9 @@ async function runBriefingUITests() {
 
     assert.ok(html.includes('Selamat pagi, Bu Siti'), 'Must render greeting');
     assert.ok(html.includes('08:15'), 'Must render school local time');
-    assert.ok(html.includes('animate-amanaura-breath'), 'Must apply 4s breath animation');
-    assert.ok(html.includes('✦'), 'Must render Amanaura signature glyph');
   });
 
-  runCheck('BriefingShell [CLOSURE BREATH]: Renders 8s slow resting pulse glyph in closure mode', () => {
+  runCheck('BriefingShell [CLOSURE GREETING]: Renders closure greeting in penutup mode', () => {
     const raw = renderToString(
       <BriefingShell
         greeting="Hari ini selesai, Bu Siti"
@@ -88,8 +86,7 @@ async function runBriefingUITests() {
     );
     const html = cleanHtml(raw);
 
-    assert.ok(html.includes('animate-amanaura-breath-slow'), 'Must apply 8s slow breath animation');
-    assert.ok(html.includes('opacity-60'), 'Must dim brightness in nighttime closure');
+    assert.ok(html.includes('Hari ini selesai, Bu Siti'), 'Must render closure greeting');
   });
 
   // ------------------------------------------------------------------------------
