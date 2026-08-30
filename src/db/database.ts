@@ -893,6 +893,94 @@ export class DatabaseEngine {
     return { success: true };
   }
 
+  public updateStudentProfile(
+    studentId: string,
+    data: {
+      bloodType?: 'A' | 'B' | 'AB' | 'O';
+      allergies?: string;
+      specialNeeds?: string;
+      fullName?: string;
+      preferredName?: string;
+      nationalIdNumber?: string;
+      birthPlace?: string;
+      birthDate?: string;
+      gender?: 'MALE' | 'FEMALE';
+      address?: string;
+    },
+    actorName: string = 'Pendidik',
+    userId: string = 'system',
+    role: any = 'TEACHER'
+  ): { success: boolean; student?: any } {
+    const studentIdx = this.students.findIndex(s => s.id === studentId);
+    if (studentIdx === -1) return { success: false };
+
+    const student = this.students[studentIdx];
+    const updatedStudent: StudentProfile = {
+      ...student,
+      ...(data.bloodType !== undefined ? { bloodType: data.bloodType } : {}),
+      ...(data.allergies !== undefined ? { allergies: data.allergies } : {}),
+      ...(data.specialNeeds !== undefined ? { specialNeeds: data.specialNeeds } : {}),
+      updatedAt: new Date().toISOString()
+    };
+
+    this.students[studentIdx] = updatedStudent;
+    this.persist('students', this.students);
+
+    // Update associated Person
+    const personIdx = this.persons.findIndex(p => p.id === student.personId);
+    if (personIdx !== -1) {
+      const person = this.persons[personIdx];
+      const updatedPerson: Person = {
+        ...person,
+        ...(data.fullName ? { fullName: data.fullName } : {}),
+        ...(data.preferredName ? { preferredName: data.preferredName } : {}),
+        ...(data.nationalIdNumber !== undefined ? { nationalIdNumber: data.nationalIdNumber } : {}),
+        ...(data.birthPlace ? { birthPlace: data.birthPlace } : {}),
+        ...(data.birthDate ? { birthDate: data.birthDate } : {}),
+        ...(data.gender ? { gender: data.gender } : {}),
+        ...(data.address !== undefined ? { address: data.address } : {}),
+        updatedAt: new Date().toISOString()
+      };
+      this.persons[personIdx] = updatedPerson;
+      this.persist('persons', this.persons);
+    }
+
+    // Sync to Supabase Cloud if available
+    const supabase = getSupabaseClient();
+    if (supabase) {
+      supabase.from('students')
+        .update(mappers.student.toDb(updatedStudent))
+        .eq('id', studentId)
+        .then(({ error }) => {
+          if (error) console.error('Supabase error updating student:', error);
+        });
+
+      if (personIdx !== -1) {
+        supabase.from('persons')
+          .update(mappers.person.toDb(this.persons[personIdx]))
+          .eq('id', student.personId)
+          .then(({ error }) => {
+            if (error) console.error('Supabase error updating person:', error);
+          });
+      }
+    }
+
+    this.recordAudit({
+      schoolId: student.schoolId,
+      userId,
+      personName: actorName,
+      role,
+      action: 'UPDATE_STUDENT_PROFILE',
+      resource: 'STUDENT_ROSTER',
+      resourceId: studentId,
+      details: `Memperbarui profil data ananda ${data.fullName || student.id} (Gol. Darah: ${data.bloodType || student.bloodType || '-'})`,
+      timestamp: new Date().toISOString()
+    });
+
+    this.notify();
+    return { success: true, student: this.getStudentById(studentId) };
+  }
+
   // ----------------------------------------------------
   // LEARNING ACTIVITIES (TEACHER DAILY WORK)
   // ----------------------------------------------------

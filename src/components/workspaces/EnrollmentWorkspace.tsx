@@ -2,14 +2,35 @@ import React, { useState, useEffect } from 'react';
 import { db } from '../../db/database';
 import { useSecurityContext } from '../../auth/context';
 import { ClassRoom, StudentProfile, Person, GuardianRelationship } from '../../domain/types';
-import { Users, User, Heart, Shield, Phone, MapPin, Calendar, Activity, Info, Sparkles, GraduationCap } from 'lucide-react';
-import { SelectSheet } from '../ui';
+import { Users, User, Heart, Shield, Phone, MapPin, Calendar, Activity, Info, Sparkles, GraduationCap, Edit3, X, Save, Check } from 'lucide-react';
+import { SelectSheet, Button } from '../ui';
 
 export const EnrollmentWorkspace: React.FC = () => {
   const { securityContext } = useSecurityContext();
   const [classes, setClasses] = useState<ClassRoom[]>([]);
   const [selectedClassId, setSelectedClassId] = useState<string>('cls_maranatha_tka');
   const [students, setStudents] = useState<any[]>([]);
+
+  // Edit Student Modal State
+  const [editingStudent, setEditingStudent] = useState<any | null>(null);
+  const [editFullName, setEditFullName] = useState<string>('');
+  const [editPreferredName, setEditPreferredName] = useState<string>('');
+  const [editNis, setEditNis] = useState<string>('');
+  const [editNik, setEditNik] = useState<string>('');
+  const [editGender, setEditGender] = useState<'MALE' | 'FEMALE'>('MALE');
+  const [editBirthPlace, setEditBirthPlace] = useState<string>('');
+  const [editBirthDate, setEditBirthDate] = useState<string>('');
+  const [editBloodType, setEditBloodType] = useState<'A' | 'B' | 'AB' | 'O'>('O');
+  const [editAllergies, setEditAllergies] = useState<string>('');
+  const [editSpecialNeeds, setEditSpecialNeeds] = useState<string>('');
+  const [editAddress, setEditAddress] = useState<string>('');
+  const [isSaving, setIsSaving] = useState<boolean>(false);
+  const [saveSuccessMessage, setSaveSuccessMessage] = useState<string | null>(null);
+
+  const isStaff = securityContext?.role === 'TEACHER' || 
+                  securityContext?.role === 'ASSISTANT_TEACHER' || 
+                  securityContext?.role === 'HEADMASTER' || 
+                  securityContext?.role === 'YAPENDIK_SUPERADMIN';
 
   const loadData = () => {
     if (!securityContext) return;
@@ -41,6 +62,60 @@ export const EnrollmentWorkspace: React.FC = () => {
     loadData();
     return db.subscribe(loadData);
   }, [securityContext?.activeSchoolId, selectedClassId]);
+
+  const openEditModal = (s: any) => {
+    setEditingStudent(s);
+    setEditFullName(s.person?.fullName || '');
+    setEditPreferredName(s.person?.preferredName || '');
+    setEditNis(s.nis || '');
+    setEditNik(s.person?.nationalIdNumber || '');
+    setEditGender(s.person?.gender === 'FEMALE' ? 'FEMALE' : 'MALE');
+    setEditBirthPlace(s.person?.birthPlace || '');
+    setEditBirthDate(s.person?.birthDate || '');
+    setEditBloodType(s.bloodType || 'O');
+    setEditAllergies(s.allergies || '');
+    setEditSpecialNeeds(s.specialNeeds || '');
+    setEditAddress(s.person?.address || '');
+    setSaveSuccessMessage(null);
+  };
+
+  const handleSaveStudent = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!editingStudent || !securityContext) return;
+    setIsSaving(true);
+
+    try {
+      db.updateStudentProfile(
+        editingStudent.id,
+        {
+          fullName: editFullName.trim(),
+          preferredName: editPreferredName.trim(),
+          nationalIdNumber: editNik.trim() || undefined,
+          gender: editGender,
+          birthPlace: editBirthPlace.trim(),
+          birthDate: editBirthDate,
+          bloodType: editBloodType,
+          allergies: editAllergies.trim() || undefined,
+          specialNeeds: editSpecialNeeds.trim() || undefined,
+          address: editAddress.trim() || undefined
+        },
+        securityContext.personName,
+        securityContext.userId,
+        securityContext.role
+      );
+
+      setSaveSuccessMessage('Data siswa berhasil diperbarui!');
+      setTimeout(() => {
+        setEditingStudent(null);
+        setIsSaving(false);
+        setSaveSuccessMessage(null);
+        loadData();
+      }, 700);
+    } catch (err) {
+      console.error('Failed to update student:', err);
+      setIsSaving(false);
+    }
+  };
 
   const currentClass = classes.find(c => c.id === selectedClassId);
   const homeroomTeacher = currentClass?.homeroomTeacherId ? db.getPersonById(currentClass.homeroomTeacherId) : null;
@@ -130,7 +205,7 @@ export const EnrollmentWorkspace: React.FC = () => {
           return (
             <div 
               key={s.id} 
-              className="bg-surface border border-line hover:border-brand-primary/40 transition-colors rounded-2xl p-5 shadow-hairline space-y-4"
+              className="bg-surface border border-line hover:border-brand-primary/40 transition-colors rounded-2xl p-5 shadow-hairline space-y-4 relative group"
             >
               {/* Header: Student Info */}
               <div className="flex items-start justify-between gap-3 pb-3 border-b border-line-soft">
@@ -156,9 +231,22 @@ export const EnrollmentWorkspace: React.FC = () => {
                   </div>
                 </div>
 
-                <span className="text-[10px] font-mono px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-600 border border-emerald-500/20 font-semibold whitespace-nowrap">
-                  {s.status}
-                </span>
+                <div className="flex items-center gap-2 shrink-0">
+                  {isStaff && (
+                    <button
+                      type="button"
+                      onClick={() => openEditModal(s)}
+                      className="px-2.5 py-1 rounded-lg text-xs font-semibold bg-brand-subtle hover-only:bg-brand-primary hover-only:text-white text-brand-primary border border-brand-line flex items-center gap-1.5 transition-colors cursor-pointer"
+                      title="Edit Data Siswa & Golongan Darah"
+                    >
+                      <Edit3 className="w-3.5 h-3.5" />
+                      <span>Edit</span>
+                    </button>
+                  )}
+                  <span className="text-[10px] font-mono px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-600 border border-emerald-500/20 font-semibold whitespace-nowrap">
+                    {s.status}
+                  </span>
+                </div>
               </div>
 
               {/* Detail Demographics */}
@@ -176,7 +264,7 @@ export const EnrollmentWorkspace: React.FC = () => {
                 <div className="bg-surface-subtle p-2.5 rounded-xl border border-line-soft space-y-0.5">
                   <span className="text-ink-faint block text-[10px] uppercase font-semibold tracking-wider">Kesehatan & Gol. Darah</span>
                   <span className="font-semibold text-ink block">
-                    Gol. Darah: <b className="text-brand-deep">{s.bloodType || 'O'}</b>
+                    Gol. Darah: <b className="text-brand-deep font-mono px-1.5 py-0.2 bg-brand-subtle rounded border border-brand-line">{s.bloodType || 'O'}</b>
                   </span>
                   <span className="text-[11px] text-ink-soft block truncate">
                     {s.allergies && s.allergies !== 'Tidak ada' ? `Alergi: ${s.allergies}` : 'Bebas alergi'}
@@ -259,6 +347,189 @@ export const EnrollmentWorkspace: React.FC = () => {
           );
         })}
       </div>
+
+      {/* Modal Edit Data Siswa */}
+      {editingStudent && (
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4 z-50 animate-in fade-in duration-150">
+          <div className="bg-surface rounded-2xl shadow-floating border border-line max-w-lg w-full max-h-[90vh] overflow-y-auto p-6 text-xs text-ink space-y-4">
+            <div className="flex items-center justify-between pb-3 border-b border-line">
+              <div>
+                <h2 className="text-base font-bold text-ink flex items-center gap-2">
+                  <Edit3 className="w-4 h-4 text-brand-primary" />
+                  Edit Profil Data Siswa
+                </h2>
+                <p className="text-[11px] text-ink-soft">
+                  Perbarui informasi golongan darah, riwayat kesehatan, dan data kependudukan.
+                </p>
+              </div>
+              <button 
+                onClick={() => setEditingStudent(null)} 
+                className="text-ink-soft hover-only:text-ink cursor-pointer p-1 rounded-lg hover:bg-surface-subtle"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            {saveSuccessMessage && (
+              <div className="p-3 bg-emerald-500/10 text-emerald-600 border border-emerald-500/20 rounded-xl font-semibold flex items-center gap-2">
+                <Check className="w-4 h-4" />
+                <span>{saveSuccessMessage}</span>
+              </div>
+            )}
+
+            <form onSubmit={handleSaveStudent} className="space-y-4">
+              {/* Golongan Darah & Kesehatan (High Priority) */}
+              <div className="p-3.5 bg-brand-subtle/50 border border-brand-line rounded-xl space-y-3">
+                <span className="text-[11px] font-bold uppercase tracking-wider text-brand-deep block">
+                  🩸 Data Kesehatan &amp; Golongan Darah
+                </span>
+
+                <div className="grid grid-cols-2 gap-3">
+                  <div>
+                    <label className="block font-bold text-ink mb-1">Golongan Darah</label>
+                    <select
+                      value={editBloodType}
+                      onChange={(e) => setEditBloodType(e.target.value as any)}
+                      className="w-full bg-surface border border-line rounded-xl p-2.5 text-xs text-ink font-semibold focus:border-brand-primary focus:outline-none"
+                    >
+                      <option value="A">Golongan Darah A</option>
+                      <option value="B">Golongan Darah B</option>
+                      <option value="AB">Golongan Darah AB</option>
+                      <option value="O">Golongan Darah O</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="block font-bold text-ink mb-1">Riwayat Alergi</label>
+                    <input
+                      type="text"
+                      value={editAllergies}
+                      onChange={(e) => setEditAllergies(e.target.value)}
+                      placeholder="Contoh: Alergi udang, telur / Tidak ada"
+                      className="w-full bg-surface border border-line rounded-xl p-2.5 text-xs text-ink focus:border-brand-primary focus:outline-none"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block font-bold text-ink mb-1">Kebutuhan Khusus / Catatan Tambahan</label>
+                  <input
+                    type="text"
+                    value={editSpecialNeeds}
+                    onChange={(e) => setEditSpecialNeeds(e.target.value)}
+                    placeholder="Contoh: Menggunakan kacamata / Tidak ada"
+                    className="w-full bg-surface border border-line rounded-xl p-2.5 text-xs text-ink focus:border-brand-primary focus:outline-none"
+                  />
+                </div>
+              </div>
+
+              {/* Data Identitas */}
+              <div className="space-y-3">
+                <span className="text-[11px] font-bold uppercase tracking-wider text-ink-faint block">
+                  👤 Identitas Anak
+                </span>
+
+                <div className="grid grid-cols-2 gap-3">
+                  <div>
+                    <label className="block font-bold text-ink-soft mb-1">Nama Lengkap Siswa</label>
+                    <input
+                      type="text"
+                      value={editFullName}
+                      onChange={(e) => setEditFullName(e.target.value)}
+                      required
+                      className="w-full bg-surface border border-line rounded-xl p-2.5 text-xs text-ink font-semibold focus:border-brand-primary focus:outline-none"
+                    />
+                  </div>
+                  <div>
+                    <label className="block font-bold text-ink-soft mb-1">Nama Panggilan</label>
+                    <input
+                      type="text"
+                      value={editPreferredName}
+                      onChange={(e) => setEditPreferredName(e.target.value)}
+                      className="w-full bg-surface border border-line rounded-xl p-2.5 text-xs text-ink focus:border-brand-primary focus:outline-none"
+                    />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-3">
+                  <div>
+                    <label className="block font-bold text-ink-soft mb-1">NIK (Nomor Induk Kependudukan)</label>
+                    <input
+                      type="text"
+                      value={editNik}
+                      onChange={(e) => setEditNik(e.target.value)}
+                      placeholder="16 digit NIK"
+                      className="w-full bg-surface border border-line rounded-xl p-2.5 text-xs font-mono text-ink focus:border-brand-primary focus:outline-none"
+                    />
+                  </div>
+                  <div>
+                    <label className="block font-bold text-ink-soft mb-1">Jenis Kelamin</label>
+                    <select
+                      value={editGender}
+                      onChange={(e) => setEditGender(e.target.value as any)}
+                      className="w-full bg-surface border border-line rounded-xl p-2.5 text-xs text-ink focus:border-brand-primary focus:outline-none"
+                    >
+                      <option value="MALE">Laki-laki (👦)</option>
+                      <option value="FEMALE">Perempuan (👧)</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-3">
+                  <div>
+                    <label className="block font-bold text-ink-soft mb-1">Tempat Lahir</label>
+                    <input
+                      type="text"
+                      value={editBirthPlace}
+                      onChange={(e) => setEditBirthPlace(e.target.value)}
+                      className="w-full bg-surface border border-line rounded-xl p-2.5 text-xs text-ink focus:border-brand-primary focus:outline-none"
+                    />
+                  </div>
+                  <div>
+                    <label className="block font-bold text-ink-soft mb-1">Tanggal Lahir</label>
+                    <input
+                      type="date"
+                      value={editBirthDate}
+                      onChange={(e) => setEditBirthDate(e.target.value)}
+                      className="w-full bg-surface border border-line rounded-xl p-2.5 text-xs font-mono text-ink focus:border-brand-primary focus:outline-none"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block font-bold text-ink-soft mb-1">Alamat Tempat Tinggal</label>
+                  <textarea
+                    rows={2}
+                    value={editAddress}
+                    onChange={(e) => setEditAddress(e.target.value)}
+                    placeholder="Alamat lengkap domisili anak"
+                    className="w-full bg-surface border border-line rounded-xl p-2.5 text-xs text-ink focus:border-brand-primary focus:outline-none"
+                  />
+                </div>
+              </div>
+
+              {/* Action Buttons */}
+              <div className="flex items-center justify-end gap-2 pt-3 border-t border-line">
+                <button
+                  type="button"
+                  onClick={() => setEditingStudent(null)}
+                  className="px-4 py-2 rounded-xl text-xs font-semibold bg-surface-subtle hover-only:bg-line-soft text-ink-soft cursor-pointer"
+                >
+                  Batal
+                </button>
+                <button
+                  type="submit"
+                  disabled={isSaving}
+                  className="px-4 py-2 rounded-xl text-xs font-semibold bg-brand-primary text-white hover-only:bg-brand-deep flex items-center gap-1.5 cursor-pointer shadow-sm disabled:opacity-50"
+                >
+                  <Save className="w-3.5 h-3.5" />
+                  <span>{isSaving ? 'Menyimpan...' : 'Simpan Perubahan'}</span>
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
