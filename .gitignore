@@ -7,3 +7,5 @@ coverage/
 .env*
 !.env.example
 tests/evidence/gate-06/raw-artifacts/
+doc/genesis_data_*.json
+
