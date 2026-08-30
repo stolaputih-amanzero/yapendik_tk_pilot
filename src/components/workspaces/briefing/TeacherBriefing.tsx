@@ -26,6 +26,7 @@ export const TeacherBriefing: React.FC<TeacherBriefingProps> = ({
   const { soundEnabled, toggleSound, playClosureChime } = useClosureSound();
   const [isClosing, setIsClosing] = useState(false);
   const [closedState, setClosedState] = useState<'TUNTAS' | 'SISA_TENANG' | null>(null);
+  const [isEchoExpanded, setIsEchoExpanded] = useState(false);
 
   const handleQuickAction = () => {
     if (quick_action && onTriggerAction) {
@@ -181,14 +182,26 @@ export const TeacherBriefing: React.FC<TeacherBriefingProps> = ({
 
         {/* WARM ECHO (Signature #6 Emotional Affirmation) */}
         {warm_echo && (
-          <div className="border-l-2 border-brand-primary pl-3 py-1 mt-3 space-y-1">
-            <div className="flex items-center gap-1.5 text-xs text-ink-faint">
-              <MessageSquare className="w-4 h-4 text-brand-primary" />
-              <span>Gema Hangat • {warm_echo.source_author}</span>
+          <div className="mt-2">
+            {/* Compact Interactive Chip Trigger */}
+            <button
+              type="button"
+              onClick={() => setIsEchoExpanded(!isEchoExpanded)}
+              className="flex items-center gap-1.5 text-xs text-ink-soft bg-surface hover-only:bg-surface-subtle border border-line-soft rounded-full px-3 py-1 transition cursor-pointer active:scale-95 text-left shadow-hairline"
+              title="Ketuk untuk membaca pesan apresiasi orang tua"
+              aria-expanded={isEchoExpanded}
+            >
+              <MessageSquare className="w-3.5 h-3.5 text-brand-primary shrink-0" />
+              <span className="font-semibold text-ink">Gema Hangat • {warm_echo.source_author}</span>
+              <span className={`text-[10px] text-ink-faint transition-transform duration-200 ml-1 ${isEchoExpanded ? 'rotate-180' : ''}`}>▼</span>
+            </button>
+
+            {/* Expandable Quote Drawer */}
+            <div className={`border-l-2 border-brand-primary pl-3 py-1 mt-2 space-y-1 ${isEchoExpanded ? 'block animate-in fade-in slide-in-from-top-1 duration-200' : 'hidden'}`}>
+              <p className="text-sm italic font-serif text-ink-soft leading-relaxed">
+                "{warm_echo.quote_text}"
+              </p>
             </div>
-            <p className="text-sm italic font-serif text-ink-soft leading-relaxed">
-              "{warm_echo.quote_text}"
-            </p>
           </div>
         )}
       </div>
