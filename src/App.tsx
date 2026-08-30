@@ -202,7 +202,7 @@ const AppContent: React.FC = () => {
             <div className="flex items-center space-x-3">
               <div className="flex items-center space-x-2 font-semibold text-ink">
                 <Building2 className="w-4 h-4 text-brand-primary shrink-0" />
-                {currentPersona.role === 'YAPENDIK_SUPERADMIN' ? (
+                {currentPersona.role === 'YAPENDIK_SUPERADMIN' && schools.length > 1 ? (
                   <div className="w-60">
                     <SelectSheet
                       value={activeSchoolId}
@@ -211,7 +211,7 @@ const AppContent: React.FC = () => {
                     />
                   </div>
                 ) : (
-                  <span className="font-bold text-ink">{activeSchool?.name || 'Unit TK Yapendik'}</span>
+                  <span className="font-bold text-ink">{activeSchool?.name || schools[0]?.name || 'TK YAPENDIK GPIB Cabang Maranatha'}</span>
                 )}
               </div>
               <span className="text-line-soft">•</span>

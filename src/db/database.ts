@@ -460,7 +460,11 @@ export class DatabaseEngine {
 
   private initialize() {
     try {
-      this.schools = this.loadOrSeed('schools', SEED_SCHOOLS);
+      const loadedSchools = this.loadOrSeed('schools', SEED_SCHOOLS);
+      const realSchools = loadedSchools.filter(s => s.id === 'sch_tk_maranatha' || (!s.id.startsWith('sch_tk_yapendik_') && s.id !== 'sch_tk_yapendik_01' && s.id !== 'sch_tk_yapendik_02'));
+      this.schools = realSchools.length > 0 ? realSchools : [...SEED_SCHOOLS];
+      this.persist('schools', this.schools);
+
       this.academicYears = this.loadOrSeed('academic_years', SEED_ACADEMIC_YEARS);
       this.classes = this.loadOrSeed('classes', SEED_CLASSES);
       this.persons = this.loadOrSeed('persons', SEED_PERSONS);
@@ -710,11 +714,12 @@ export class DatabaseEngine {
   // SCHOOL & ACADEMIC QUERIES
   // ----------------------------------------------------
   public getSchools(): School[] {
-    return [...this.schools];
+    const valid = this.schools.filter(s => s.id === 'sch_tk_maranatha' || (!s.id.startsWith('sch_tk_yapendik_') && s.id !== 'sch_tk_yapendik_01' && s.id !== 'sch_tk_yapendik_02'));
+    return valid.length > 0 ? valid : [...SEED_SCHOOLS];
   }
 
   public getSchoolById(schoolId: string): School | undefined {
-    return this.schools.find(s => s.id === schoolId);
+    return this.schools.find(s => s.id === schoolId) || this.getSchools()[0];
   }
 
   public getClasses(schoolId: string): ClassRoom[] {

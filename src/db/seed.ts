@@ -36,40 +36,6 @@ export const SEED_SCHOOLS: School[] = [
     status: 'ACTIVE',
     operationalReadiness: 'READY',
     createdAt: '2026-07-01T08:00:00Z'
-  },
-  {
-    id: 'sch_tk_yapendik_01',
-    npsn: '69820291',
-    name: 'TK YAPENDIK GPIB Cabang Maranatha',
-    level: 'TK',
-    subType: 'PAUD_TERPADU',
-    address: 'JL. BALADEWA NO. 32, TANAH TINGGI',
-    city: 'Jakarta Pusat',
-    province: 'DKI Jakarta',
-    phone: '081281310123',
-    email: 'yapendikmaranathajkt@gmail.com',
-    headmasterPersonId: 'per_headmaster_sheryl',
-    academicYearActiveId: 'ay_maranatha_2026_2027_ganjil',
-    status: 'ACTIVE',
-    operationalReadiness: 'READY',
-    createdAt: '2026-07-01T08:00:00Z'
-  },
-  {
-    id: 'sch_tk_yapendik_02',
-    npsn: '20108955',
-    name: 'TK Yapendik 02 Kebayoran',
-    level: 'TK',
-    subType: 'STANDARD',
-    address: 'Jl. Gandaria I No. 18, Kebayoran Baru',
-    city: 'Jakarta Selatan',
-    province: 'DKI Jakarta',
-    phone: '021-7243911',
-    email: 'tk02.kebayoran@yapendik.sch.id',
-    headmasterPersonId: 'per_headmaster_johan',
-    academicYearActiveId: 'ay_2026_2027_ganjil_02',
-    status: 'ACTIVE',
-    operationalReadiness: 'NOT_READY',
-    createdAt: '2026-07-01T08:00:00Z'
   }
 ];
 
