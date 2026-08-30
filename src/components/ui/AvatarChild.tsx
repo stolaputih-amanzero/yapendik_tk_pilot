@@ -59,7 +59,7 @@ export const AvatarChild: React.FC<AvatarChildProps> = ({
   name,
   id,
   size = 'md',
-  showSymbol = true,
+  showSymbol = false,
   className = ''
 }) => {
   const seed = id || name || 'default';

@@ -260,21 +260,6 @@ export const AttendanceWorkspace: React.FC = () => {
   const totalRecorded = hadirCount + sakitCount + izinCount + alpaCount;
   const belumCount = Math.max(0, students.length - totalRecorded);
 
-  const getStatusDot = (status?: AttendanceStatus) => {
-    switch (status) {
-      case 'HADIR':
-        return { bg: 'bg-success', label: 'Hadir' };
-      case 'SAKIT':
-        return { bg: 'bg-warning', label: 'Sakit' };
-      case 'IZIN':
-        return { bg: 'bg-info', label: 'Izin' };
-      case 'ALPA':
-        return { bg: 'bg-danger', label: 'Alpa' };
-      default:
-        return null;
-    }
-  };
-
   return (
     <div className="space-y-4">
       {/* 1. HEADER (COMPACT & EXPANDED ADAPTIVE) */}
@@ -427,10 +412,9 @@ export const AttendanceWorkspace: React.FC = () => {
       {students.length > 0 ? (
         <div className="px-4 medium:px-6 pt-2 pb-[160px]">
           <div className="grid grid-cols-1 expanded:grid-cols-2 large:grid-cols-3 gap-4">
-            {students.map((s, idx) => {
+            {students.map((s) => {
               const row = attendanceMap[s.id] || { status: 'HADIR', temperature: 36.5, arrivalMood: 'CERIA', notes: '' };
               const isFever = row.temperature >= 37.5;
-              const statusInfo = getStatusDot(row.status);
               const isEditingNote = activeNoteStudentId === s.id;
               const hasNotes = Boolean(row.notes && row.notes.trim().length > 0);
 
@@ -440,25 +424,12 @@ export const AttendanceWorkspace: React.FC = () => {
                   className="bg-surface border border-line rounded-2xl p-4 shadow-hairline flex flex-col justify-between gap-3 hover-only:border-brand-primary/40 transition-colors"
                 >
                   <div className="space-y-3">
-                    {/* Child Identity Header: Number/Dot, Avatar, Title Case Name, NIS */}
+                    {/* Child Identity Header: Avatar, Title Case Name, NIS */}
                     <div className="flex items-center gap-3 min-w-0">
-                      <div className="w-5 flex items-center justify-center shrink-0">
-                        {statusInfo ? (
-                          <span 
-                            className={`w-2.5 h-2.5 rounded-full inline-block shadow-xs ${statusInfo.bg}`} 
-                            title={statusInfo.label} 
-                          />
-                        ) : (
-                          <span className="text-[11px] font-mono font-bold text-ink-faint">
-                            {idx + 1}
-                          </span>
-                        )}
-                      </div>
                       <AvatarChild
                         name={s.person?.fullName || 'Siswa'}
                         id={s.id}
                         size="md"
-                        showSymbol
                       />
                       <div className="min-w-0 flex-1">
                         <h4 className="text-[15px] font-semibold leading-snug break-words normal-case text-ink">
