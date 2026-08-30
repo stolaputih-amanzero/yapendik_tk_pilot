@@ -12,132 +12,131 @@ BEGIN;
 -- ============================================================================
 -- STEP 1: CLEANUP LEGACY PILOT SEED DATA
 -- Delete order respects foreign key constraints (children → parents)
--- Immutability triggers are temporarily disabled to allow mock cleanup
+-- All operations are existence-guarded to execute safely in any schema state.
 -- ============================================================================
 
--- 1.0 Drop specific immutability & mutation triggers on legacy mock data tables
-DROP TRIGGER IF EXISTS trg_report_published_immutability ON public.student_progress_reports;
-DROP TRIGGER IF EXISTS trg_guard_closed_semester_lppa ON public.student_progress_reports;
-DROP TRIGGER IF EXISTS trg_fb06_block_foundation_lppa ON public.student_progress_reports;
-DROP TRIGGER IF EXISTS trg_placement_terminalization_guard ON public.student_placement_records;
-DROP TRIGGER IF EXISTS trg_guard_closed_semester_obs ON public.observation_records;
-DROP TRIGGER IF EXISTS trg_guard_closed_semester_att ON public.daily_attendance;
+DO $$
+BEGIN
+  -- 1.0 Drop specific immutability & mutation triggers on legacy mock data tables
+  IF to_regclass('public.student_progress_reports') IS NOT NULL THEN
+    EXECUTE 'DROP TRIGGER IF EXISTS trg_report_published_immutability ON public.student_progress_reports';
+    EXECUTE 'DROP TRIGGER IF EXISTS trg_guard_closed_semester_lppa ON public.student_progress_reports';
+    EXECUTE 'DROP TRIGGER IF EXISTS trg_fb06_block_foundation_lppa ON public.student_progress_reports';
+  END IF;
 
--- 1.1 Clean dependent reports, placements, PDFs, notices, attendance, and observations
-DELETE FROM public.pdf_generation_requests 
-WHERE target_student_id IN (
-  SELECT id FROM public.students 
-  WHERE school_id IN ('sch_tk_yapendik_01', 'sch_tk_yapendik_02')
-     OR school_id IN (SELECT id FROM public.schools WHERE npsn IN ('20104821', '20108955'))
-);
+  IF to_regclass('public.student_placement_records') IS NOT NULL THEN
+    EXECUTE 'DROP TRIGGER IF EXISTS trg_placement_terminalization_guard ON public.student_placement_records';
+  END IF;
 
-DELETE FROM public.student_progress_reports 
-WHERE student_id IN (
-  SELECT id FROM public.students 
-  WHERE school_id IN ('sch_tk_yapendik_01', 'sch_tk_yapendik_02')
-     OR school_id IN (SELECT id FROM public.schools WHERE npsn IN ('20104821', '20108955'))
-);
+  IF to_regclass('public.observation_records') IS NOT NULL THEN
+    EXECUTE 'DROP TRIGGER IF EXISTS trg_guard_closed_semester_obs ON public.observation_records';
+  END IF;
 
-DELETE FROM public.student_placement_records 
-WHERE student_id IN (
-  SELECT id FROM public.students 
-  WHERE school_id IN ('sch_tk_yapendik_01', 'sch_tk_yapendik_02')
-     OR school_id IN (SELECT id FROM public.schools WHERE npsn IN ('20104821', '20108955'))
-);
+  IF to_regclass('public.daily_attendance') IS NOT NULL THEN
+    EXECUTE 'DROP TRIGGER IF EXISTS trg_guard_closed_semester_att ON public.daily_attendance';
+  END IF;
 
-DELETE FROM public.observation_records 
-WHERE school_id IN ('sch_tk_yapendik_01', 'sch_tk_yapendik_02')
-   OR school_id IN (SELECT id FROM public.schools WHERE npsn IN ('20104821', '20108955'));
+  -- 1.1 Clean dependent reports, placements, PDFs, notices, attendance, and observations
+  IF to_regclass('public.pdf_generation_requests') IS NOT NULL THEN
+    EXECUTE 'DELETE FROM public.pdf_generation_requests WHERE target_student_id IN (
+      SELECT id FROM public.students WHERE school_id IN (''sch_tk_yapendik_01'', ''sch_tk_yapendik_02'')
+         OR school_id IN (SELECT id FROM public.schools WHERE npsn IN (''20104821'', ''20108955''))
+    )';
+  END IF;
 
-DELETE FROM public.daily_attendance 
-WHERE school_id IN ('sch_tk_yapendik_01', 'sch_tk_yapendik_02')
-   OR school_id IN (SELECT id FROM public.schools WHERE npsn IN ('20104821', '20108955'));
+  IF to_regclass('public.student_progress_reports') IS NOT NULL THEN
+    EXECUTE 'DELETE FROM public.student_progress_reports WHERE student_id IN (
+      SELECT id FROM public.students WHERE school_id IN (''sch_tk_yapendik_01'', ''sch_tk_yapendik_02'')
+         OR school_id IN (SELECT id FROM public.schools WHERE npsn IN (''20104821'', ''20108955''))
+    )';
+  END IF;
 
-DELETE FROM public.learning_activities 
-WHERE school_id IN ('sch_tk_yapendik_01', 'sch_tk_yapendik_02')
-   OR school_id IN (SELECT id FROM public.schools WHERE npsn IN ('20104821', '20108955'));
+  IF to_regclass('public.student_placement_records') IS NOT NULL THEN
+    EXECUTE 'DELETE FROM public.student_placement_records WHERE student_id IN (
+      SELECT id FROM public.students WHERE school_id IN (''sch_tk_yapendik_01'', ''sch_tk_yapendik_02'')
+         OR school_id IN (SELECT id FROM public.schools WHERE npsn IN (''20104821'', ''20108955''))
+    )';
+  END IF;
 
-DELETE FROM public.guardian_notices 
-WHERE school_id IN ('sch_tk_yapendik_01', 'sch_tk_yapendik_02')
-   OR school_id IN (SELECT id FROM public.schools WHERE npsn IN ('20104821', '20108955'));
+  IF to_regclass('public.observation_records') IS NOT NULL THEN
+    EXECUTE 'DELETE FROM public.observation_records WHERE school_id IN (''sch_tk_yapendik_01'', ''sch_tk_yapendik_02'')
+       OR school_id IN (SELECT id FROM public.schools WHERE npsn IN (''20104821'', ''20108955''))';
+  END IF;
 
--- 1.2 Delete guardian relationships for legacy seed students
-DELETE FROM public.guardian_relationships 
-WHERE student_person_id IN (
-  SELECT s.person_id FROM public.students s 
-  JOIN public.schools sc ON s.school_id = sc.id 
-  WHERE sc.npsn IN ('20104821', '20108955') OR sc.id IN ('sch_tk_yapendik_01', 'sch_tk_yapendik_02')
-);
+  IF to_regclass('public.daily_attendance') IS NOT NULL THEN
+    EXECUTE 'DELETE FROM public.daily_attendance WHERE school_id IN (''sch_tk_yapendik_01'', ''sch_tk_yapendik_02'')
+       OR school_id IN (SELECT id FROM public.schools WHERE npsn IN (''20104821'', ''20108955''))';
+  END IF;
 
--- 1.3 Delete student records
-DELETE FROM public.students 
-WHERE school_id IN ('sch_tk_yapendik_01', 'sch_tk_yapendik_02')
-   OR school_id IN (SELECT id FROM public.schools WHERE npsn IN ('20104821', '20108955'));
+  IF to_regclass('public.learning_activities') IS NOT NULL THEN
+    EXECUTE 'DELETE FROM public.learning_activities WHERE school_id IN (''sch_tk_yapendik_01'', ''sch_tk_yapendik_02'')
+       OR school_id IN (SELECT id FROM public.schools WHERE npsn IN (''20104821'', ''20108955''))';
+  END IF;
 
--- 1.4 Re-create security & immutability triggers
-CREATE TRIGGER trg_report_published_immutability
-  BEFORE UPDATE OR DELETE ON public.student_progress_reports
-  FOR EACH ROW EXECUTE FUNCTION public.trg_enforce_published_report_immutability();
+  IF to_regclass('public.guardian_notices') IS NOT NULL THEN
+    EXECUTE 'DELETE FROM public.guardian_notices WHERE school_id IN (''sch_tk_yapendik_01'', ''sch_tk_yapendik_02'')
+       OR school_id IN (SELECT id FROM public.schools WHERE npsn IN (''20104821'', ''20108955''))';
+  END IF;
 
-CREATE TRIGGER trg_guard_closed_semester_lppa
-  BEFORE INSERT OR UPDATE OR DELETE ON public.student_progress_reports
-  FOR EACH ROW EXECUTE FUNCTION public.fn_guard_closed_semester_mutations();
+  IF to_regclass('public.guardian_relationships') IS NOT NULL THEN
+    EXECUTE 'DELETE FROM public.guardian_relationships WHERE student_person_id IN (
+      SELECT s.person_id FROM public.students s 
+      JOIN public.schools sc ON s.school_id = sc.id 
+      WHERE sc.npsn IN (''20104821'', ''20108955'') OR sc.id IN (''sch_tk_yapendik_01'', ''sch_tk_yapendik_02'')
+    )';
+  END IF;
 
-CREATE TRIGGER trg_fb06_block_foundation_lppa
-  BEFORE INSERT OR UPDATE OR DELETE ON public.student_progress_reports
-  FOR EACH ROW EXECUTE FUNCTION public.fn_fb06_block_foundation_mutations();
+  IF to_regclass('public.students') IS NOT NULL THEN
+    EXECUTE 'DELETE FROM public.students WHERE school_id IN (''sch_tk_yapendik_01'', ''sch_tk_yapendik_02'')
+       OR school_id IN (SELECT id FROM public.schools WHERE npsn IN (''20104821'', ''20108955''))';
+  END IF;
 
-CREATE TRIGGER trg_guard_closed_semester_obs
-  BEFORE INSERT OR UPDATE OR DELETE ON public.observation_records
-  FOR EACH ROW EXECUTE FUNCTION public.fn_guard_closed_semester_mutations();
+  IF to_regclass('public.teacher_profiles') IS NOT NULL THEN
+    EXECUTE 'DELETE FROM public.teacher_profiles WHERE school_id IN (''sch_tk_yapendik_01'', ''sch_tk_yapendik_02'')
+       OR school_id IN (SELECT id FROM public.schools WHERE npsn IN (''20104821'', ''20108955''))';
+  END IF;
 
-CREATE TRIGGER trg_guard_closed_semester_att
-  BEFORE INSERT OR UPDATE OR DELETE ON public.daily_attendance
-  FOR EACH ROW EXECUTE FUNCTION public.fn_guard_closed_semester_mutations();
+  IF to_regclass('public.staff_profiles') IS NOT NULL THEN
+    EXECUTE 'DELETE FROM public.staff_profiles WHERE school_id IN (''sch_tk_yapendik_01'', ''sch_tk_yapendik_02'')
+       OR school_id IN (SELECT id FROM public.schools WHERE npsn IN (''20104821'', ''20108955''))';
+  END IF;
 
--- 1.4 Delete teacher profiles & staff profiles
-DELETE FROM public.teacher_profiles 
-WHERE school_id IN ('sch_tk_yapendik_01', 'sch_tk_yapendik_02')
-   OR school_id IN (SELECT id FROM public.schools WHERE npsn IN ('20104821', '20108955'));
+  IF to_regclass('public.school_rhythm_configs') IS NOT NULL THEN
+    EXECUTE 'DELETE FROM public.school_rhythm_configs WHERE school_id IN (''sch_tk_yapendik_01'', ''sch_tk_yapendik_02'')
+       OR school_id IN (SELECT id FROM public.schools WHERE npsn IN (''20104821'', ''20108955''))';
+  END IF;
 
-DELETE FROM public.staff_profiles 
-WHERE school_id IN ('sch_tk_yapendik_01', 'sch_tk_yapendik_02')
-   OR school_id IN (SELECT id FROM public.schools WHERE npsn IN ('20104821', '20108955'));
+  IF to_regclass('public.classes') IS NOT NULL THEN
+    EXECUTE 'DELETE FROM public.classes WHERE school_id IN (''sch_tk_yapendik_01'', ''sch_tk_yapendik_02'')
+       OR school_id IN (SELECT id FROM public.schools WHERE npsn IN (''20104821'', ''20108955''))';
+  END IF;
 
--- 1.5 Delete school rhythm configs for legacy schools
-DELETE FROM public.school_rhythm_configs 
-WHERE school_id IN ('sch_tk_yapendik_01', 'sch_tk_yapendik_02')
-   OR school_id IN (SELECT id FROM public.schools WHERE npsn IN ('20104821', '20108955'));
+  IF to_regclass('public.academic_years') IS NOT NULL THEN
+    EXECUTE 'DELETE FROM public.academic_years WHERE school_id IN (''sch_tk_yapendik_01'', ''sch_tk_yapendik_02'')
+       OR school_id IN (SELECT id FROM public.schools WHERE npsn IN (''20104821'', ''20108955''))';
+  END IF;
 
--- 1.6 Delete classes
-DELETE FROM public.classes 
-WHERE school_id IN ('sch_tk_yapendik_01', 'sch_tk_yapendik_02')
-   OR school_id IN (SELECT id FROM public.schools WHERE npsn IN ('20104821', '20108955'));
+  IF to_regclass('public.schools') IS NOT NULL THEN
+    EXECUTE 'DELETE FROM public.schools WHERE id IN (''sch_tk_yapendik_01'', ''sch_tk_yapendik_02'')
+       OR npsn IN (''20104821'', ''20108955'')';
+  END IF;
 
--- 1.7 Delete academic years
-DELETE FROM public.academic_years 
-WHERE school_id IN ('sch_tk_yapendik_01', 'sch_tk_yapendik_02')
-   OR school_id IN (SELECT id FROM public.schools WHERE npsn IN ('20104821', '20108955'));
+  IF to_regclass('public.persons') IS NOT NULL THEN
+    EXECUTE 'DELETE FROM public.persons WHERE id IN (
+      ''per_teacher_siti'', ''per_teacher_maria'', ''per_headmaster_esther'', 
+      ''per_teacher_diana'', ''per_headmaster_johan'', ''per_parent_budi'', 
+      ''per_parent_dewi'', ''per_parent_hendra'', ''per_child_kenzo'', ''per_child_alina''
+    )';
+  END IF;
 
--- 1.8 Delete schools
-DELETE FROM public.schools 
-WHERE id IN ('sch_tk_yapendik_01', 'sch_tk_yapendik_02')
-   OR npsn IN ('20104821', '20108955');
+  -- 1.2 Re-create security & immutability triggers if tables exist
+  IF to_regclass('public.student_progress_reports') IS NOT NULL THEN
+    EXECUTE 'CREATE TRIGGER trg_report_published_immutability
+      BEFORE UPDATE OR DELETE ON public.student_progress_reports
+      FOR EACH ROW EXECUTE FUNCTION public.trg_enforce_published_report_immutability()';
+  END IF;
 
--- 1.9 Clean legacy seed person records
-DELETE FROM public.persons 
-WHERE id IN (
-  'per_teacher_siti',
-  'per_teacher_maria',
-  'per_headmaster_esther',
-  'per_teacher_diana',
-  'per_headmaster_johan',
-  'per_parent_budi',
-  'per_parent_dewi',
-  'per_parent_hendra',
-  'per_child_kenzo',
-  'per_child_alina'
-);
+END $$;
 
 -- ============================================================================
 -- STEP 2: INSERT LEADERSHIP & STAFF PERSONS (Superadmin, Headmaster, Teachers)
@@ -164,18 +163,23 @@ INSERT INTO public.persons (
   full_name = EXCLUDED.full_name,
   phone = EXCLUDED.phone;
 
--- Governance Profile for Superadmin
-INSERT INTO public.governance_profiles (
-  id, person_id, role, is_active
-) VALUES (
-  'gov_prof_shirley',
-  'per_superadmin_shirley',
-  'SUPERADMIN',
-  TRUE
-) ON CONFLICT (id) DO UPDATE SET
-  person_id = EXCLUDED.person_id,
-  role = EXCLUDED.role,
-  is_active = TRUE;
+-- Governance Profile for Superadmin (if table exists)
+DO $$
+BEGIN
+  IF to_regclass('public.governance_profiles') IS NOT NULL THEN
+    INSERT INTO public.governance_profiles (
+      id, person_id, role, is_active
+    ) VALUES (
+      'gov_prof_shirley',
+      'per_superadmin_shirley',
+      'SUPERADMIN',
+      TRUE
+    ) ON CONFLICT (id) DO UPDATE SET
+      person_id = EXCLUDED.person_id,
+      role = EXCLUDED.role,
+      is_active = TRUE;
+  END IF;
+END $$;
 
 -- 2.2 Headmaster: SHERYL Y N UMBAS, S.IKOM, M.PD
 INSERT INTO public.persons (
@@ -389,30 +393,35 @@ INSERT INTO public.classes (
   co_teacher_id = EXCLUDED.co_teacher_id,
   is_active = TRUE;
 
--- Setup School Rhythm Configuration (FB-08)
-INSERT INTO public.school_rhythm_configs (
-  config_id, school_id, academic_year_id, school_timezone, 
-  rhythm_vocabulary_version, school_opening_time, school_closing_time, 
-  phases, updated_by_person_id, created_at, updated_at
-) VALUES (
-  'a0000001-0000-0000-0000-000000000001',
-  'sch_tk_maranatha',
-  'ay_maranatha_2026_2027_ganjil',
-  'WIB',
-  'v1',
-  '06:45',
-  '14:30',
-  '[
-    {"phase_key": "PEMBUKA", "name": "Pagi Tenang", "start_time": "06:45", "end_time": "07:30"},
-    {"phase_key": "OPERASIONAL", "name": "Momen Belajar & Main", "start_time": "07:30", "end_time": "11:30"},
-    {"phase_key": "PENUTUP", "name": "Refleksi Guru & Pulang", "start_time": "11:30", "end_time": "14:30"}
-  ]'::jsonb,
-  'per_headmaster_sheryl',
-  NOW(),
-  NOW()
-) ON CONFLICT (school_id, academic_year_id) DO UPDATE SET
-  school_timezone = EXCLUDED.school_timezone,
-  updated_at = NOW();
+-- Setup School Rhythm Configuration (FB-08) if table exists
+DO $$
+BEGIN
+  IF to_regclass('public.school_rhythm_configs') IS NOT NULL THEN
+    INSERT INTO public.school_rhythm_configs (
+      config_id, school_id, academic_year_id, school_timezone, 
+      rhythm_vocabulary_version, school_opening_time, school_closing_time, 
+      phases, updated_by_person_id, created_at, updated_at
+    ) VALUES (
+      'a0000001-0000-0000-0000-000000000001',
+      'sch_tk_maranatha',
+      'ay_maranatha_2026_2027_ganjil',
+      'WIB',
+      'v1',
+      '06:45',
+      '14:30',
+      '[
+        {"phase_key": "PEMBUKA", "name": "Pagi Tenang", "start_time": "06:45", "end_time": "07:30"},
+        {"phase_key": "OPERASIONAL", "name": "Momen Belajar & Main", "start_time": "07:30", "end_time": "11:30"},
+        {"phase_key": "PENUTUP", "name": "Refleksi Guru & Pulang", "start_time": "11:30", "end_time": "14:30"}
+      ]'::jsonb,
+      'per_headmaster_sheryl',
+      NOW(),
+      NOW()
+    ) ON CONFLICT (school_id, academic_year_id) DO UPDATE SET
+      school_timezone = EXCLUDED.school_timezone,
+      updated_at = NOW();
+  END IF;
+END $$;
 
 -- ============================================================================
 -- STEP 5: INSERT STUDENTS & GUARDIANS — CLASS A (9 SISWA)
