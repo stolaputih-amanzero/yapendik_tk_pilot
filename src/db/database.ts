@@ -473,18 +473,27 @@ export class DatabaseEngine {
       const loadedGuardians = this.loadOrSeed('guardian_relationships', SEED_GUARDIAN_RELATIONSHIPS);
 
       const personMap = new Map(loadedPersons.map(p => [p.id, p]));
-      SEED_PERSONS.forEach(sp => personMap.set(sp.id, { ...sp, ...(personMap.get(sp.id) || {}) }));
+      SEED_PERSONS.forEach(sp => {
+        const existing = personMap.get(sp.id) || {};
+        personMap.set(sp.id, { ...existing, ...sp });
+      });
       this.persons = Array.from(personMap.values());
       this.persist('persons', this.persons);
 
       const studentMap = new Map(loadedStudents.map(s => [s.id, s]));
-      SEED_STUDENTS.forEach(ss => studentMap.set(ss.id, { ...ss, ...(studentMap.get(ss.id) || {}) }));
+      SEED_STUDENTS.forEach(ss => {
+        const existing = studentMap.get(ss.id) || {};
+        studentMap.set(ss.id, { ...existing, ...ss });
+      });
       this.students = Array.from(studentMap.values());
       this.persist('students', this.students);
 
       const validLoadedGuardians = loadedGuardians.filter(r => !r.id.startsWith('rel_maranatha_'));
       const relMap = new Map(validLoadedGuardians.map(r => [r.id, r]));
-      SEED_GUARDIAN_RELATIONSHIPS.forEach(sr => relMap.set(sr.id, { ...sr, ...(relMap.get(sr.id) || {}) }));
+      SEED_GUARDIAN_RELATIONSHIPS.forEach(sr => {
+        const existing = relMap.get(sr.id) || {};
+        relMap.set(sr.id, { ...existing, ...sr });
+      });
       this.guardianRelationships = Array.from(relMap.values());
       this.persist('guardian_relationships', this.guardianRelationships);
 
@@ -767,30 +776,42 @@ export class DatabaseEngine {
     return this.students
       .filter(s => s.schoolId === schoolId && (!classId || s.currentClassId === classId))
       .map(s => {
-        const person: Person = this.persons.find(p => p.id === s.personId) || {
-          id: s.personId,
-          fullName: s.nis ? `Siswa (${s.nis})` : 'Siswa',
-          preferredName: 'Siswa',
-          gender: 'MALE',
-          birthDate: '2020-01-01',
-          birthPlace: 'Jakarta',
-          createdAt: new Date().toISOString(),
-          updatedAt: new Date().toISOString()
-        };
-        const guardianRels = this.guardianRelationships.filter(r => r.studentPersonId === s.personId);
-        const guardians = guardianRels.map(r => ({
-          relation: r,
-          person: (this.persons.find(p => p.id === r.guardianPersonId) || {
-            id: r.guardianPersonId,
-            fullName: 'Wali Murid',
-            preferredName: 'Wali',
+        const person: Person = 
+          this.persons.find(p => p.id === s.personId && p.fullName !== 'Siswa') || 
+          SEED_PERSONS.find(p => p.id === s.personId) || 
+          this.persons.find(p => p.id === s.personId) || {
+            id: s.personId,
+            fullName: s.nis ? `Siswa (${s.nis})` : 'Siswa',
+            preferredName: 'Siswa',
             gender: 'MALE',
-            birthDate: '1985-01-01',
+            birthDate: '2020-01-01',
             birthPlace: 'Jakarta',
             createdAt: new Date().toISOString(),
             updatedAt: new Date().toISOString()
-          }) as Person
-        }));
+          };
+
+        const guardianRels = this.guardianRelationships.filter(r => r.studentPersonId === s.personId);
+        const guardians = guardianRels.map(r => {
+          const foundPerson: Person = 
+            this.persons.find(p => p.id === r.guardianPersonId && p.fullName !== 'Wali Murid') ||
+            SEED_PERSONS.find(p => p.id === r.guardianPersonId) ||
+            this.persons.find(p => p.id === r.guardianPersonId) || {
+              id: r.guardianPersonId,
+              fullName: 'Wali Murid',
+              preferredName: 'Wali',
+              gender: 'MALE',
+              birthDate: '1985-01-01',
+              birthPlace: 'Jakarta',
+              createdAt: new Date().toISOString(),
+              updatedAt: new Date().toISOString()
+            };
+
+          return {
+            relation: r,
+            person: foundPerson
+          };
+        });
+
         return { ...s, person, guardians };
       });
   }
