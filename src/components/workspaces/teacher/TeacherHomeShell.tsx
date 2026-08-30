@@ -390,66 +390,49 @@ export const TeacherHomeShell: React.FC<{ onNavigateToCommunication?: () => void
           </div>
         </div>
 
-        {/* Surface Tab Segmented Control */}
-        <div className="mt-4 medium:mt-5">
-          <SegmentedControl
-            options={[
+        {/* Surface Tab Flat Navigation (Law R-8 Flat Fluid Navigation) */}
+        <div className="mt-3">
+          <nav 
+            role="tablist" 
+            aria-label="Permukaan Beranda Guru" 
+            className="flex items-center gap-1 border-b border-line-soft w-full overflow-x-auto no-scrollbar"
+          >
+            {[
               { id: 'TODAY', label: 'Hari Ini', icon: CalendarDays },
               { id: 'LEARNING', label: 'Belajar & Karya', icon: Puzzle },
               { id: 'ROSTER', label: 'Siswa & Rapor', icon: Users }
-            ]}
-            value={activeTab}
-            onChange={(val) => setActiveTab(val as 'TODAY' | 'LEARNING' | 'ROSTER')}
-            size="md"
-            className="w-full expanded:w-fit min-h-[48px]"
-          />
-        </div>
-
-        {/* STEP 1: Micro-Cockpit Capsule on Mobile (large:hidden) */}
-        <div className="mt-3 block large:hidden">
-          <button
-            type="button"
-            onClick={() => setIsPulseModalOpen(true)}
-            aria-label="Buka Rincian Status Kelas dan Jadwal Sentra"
-            className="w-full bg-surface rounded-2xl px-4 py-3 min-h-[48px] flex items-center justify-between gap-3 text-xs border border-line-hairline shadow-hairline active:scale-[0.99] transition cursor-pointer hover-only:bg-surface-subtle"
-          >
-            <div className="flex items-center gap-2 flex-wrap min-w-0">
-              {/* Presence Pill */}
-              <span className="font-mono font-bold text-success-deep flex items-center gap-1.5 whitespace-nowrap">
-                <span className="w-2 h-2 rounded-full bg-success shrink-0" />
-                <span>{aggregate.pulse.present_count}/{aggregate.pulse.total_students} Hadir</span>
-                <span className="text-ink-soft text-[11px] font-normal">({attendanceRate}%)</span>
-              </span>
-
-              {/* Message Pill */}
-              {aggregate.pulse.unread_guardian_notes > 0 && (
-                <span className="text-ink-soft flex items-center gap-1 whitespace-nowrap font-medium">
-                  • {aggregate.pulse.unread_guardian_notes} Pesan
-                </span>
-              )}
-
-              {/* C-1 Safety Exception Alert if any */}
-              {hasSafetyExceptions && (
-                <span className="px-2 py-1 rounded-full bg-danger-tint text-danger-deep font-bold text-[10px] flex items-center gap-1 whitespace-nowrap">
-                  <AlertTriangle className="w-3 h-3 text-danger shrink-0" />
-                  <span>Perhatian Medis/Alergi</span>
-                </span>
-              )}
-            </div>
-
-            <div className="flex items-center gap-1 text-ink-faint shrink-0">
-              <span className="text-[11px] font-medium hidden compact:inline">Status</span>
-              <ChevronDown className="w-4 h-4 text-ink-faint" />
-            </div>
-          </button>
+            ].map(tab => {
+              const isActive = activeTab === tab.id;
+              const Icon = tab.icon;
+              return (
+                <button
+                  key={tab.id}
+                  role="tab"
+                  aria-selected={isActive}
+                  type="button"
+                  onClick={() => setActiveTab(tab.id as 'TODAY' | 'LEARNING' | 'ROSTER')}
+                  className={`
+                    flex items-center gap-2 py-3 px-3 medium:px-4 text-xs medium:text-sm font-semibold transition-all duration-150 cursor-pointer whitespace-nowrap -mb-px
+                    ${isActive 
+                      ? 'text-ink border-b-2 border-brand-primary font-bold' 
+                      : 'text-ink-soft hover-only:text-ink border-b-2 border-transparent hover-only:border-line'
+                    }
+                  `.trim()}
+                >
+                  <Icon className={`w-4 h-4 shrink-0 ${isActive ? 'text-brand-primary' : 'text-ink-soft'}`} />
+                  <span>{tab.label}</span>
+                </button>
+              );
+            })}
+          </nav>
         </div>
       </div>
 
       {/* Main Content Area (F-1 & F-2 + Anchor 4 Spatial Rhythm) */}
-      <section className="px-4 medium:px-5 pt-4 space-y-8 large:grid large:grid-cols-[minmax(0,1fr)_380px] large:gap-8 large:space-y-0 items-start pb-[160px] expanded:pb-8">
+      <section className="px-4 medium:px-5 pt-3 space-y-6 large:grid large:grid-cols-[minmax(0,1fr)_380px] large:gap-8 large:space-y-0 items-start pb-[160px] expanded:pb-8">
         
         {/* Left Column (Primary Dashboard & Surfaces) */}
-        <div className="space-y-8 min-w-0">
+        <div className="space-y-6 min-w-0">
 
           {/* Desktop Full Tier 1: Real-time Classroom Pulse Banner (large:block) */}
           <div className="hidden large:block">
@@ -477,7 +460,45 @@ export const TeacherHomeShell: React.FC<{ onNavigateToCommunication?: () => void
 
           {/* Active Surface Router */}
           {activeTab === 'TODAY' ? (
-            <div className="space-y-8">
+            <div className="space-y-6">
+              {/* STEP 1: Micro-Cockpit Capsule on Mobile (Hari Ini Only) */}
+              <div className="block large:hidden">
+                <button
+                  type="button"
+                  onClick={() => setIsPulseModalOpen(true)}
+                  aria-label="Buka Rincian Status Kelas dan Jadwal Sentra"
+                  className="w-full bg-surface rounded-2xl px-4 py-3 min-h-[48px] flex items-center justify-between gap-3 text-xs border border-line-hairline shadow-hairline active:scale-[0.99] transition cursor-pointer hover-only:bg-surface-subtle text-ink"
+                >
+                  <div className="flex items-center gap-2 flex-wrap min-w-0">
+                    {/* Presence Pill */}
+                    <span className="font-mono font-bold text-success-deep flex items-center gap-1.5 whitespace-nowrap">
+                      <span className="w-2 h-2 rounded-full bg-success shrink-0" />
+                      <span>{aggregate.pulse.present_count}/{aggregate.pulse.total_students} Hadir</span>
+                      <span className="text-ink-soft text-[11px] font-normal">({attendanceRate}%)</span>
+                    </span>
+
+                    {/* Message Pill */}
+                    {aggregate.pulse.unread_guardian_notes > 0 && (
+                      <span className="text-ink-soft flex items-center gap-1 whitespace-nowrap font-medium">
+                        • {aggregate.pulse.unread_guardian_notes} Pesan
+                      </span>
+                    )}
+
+                    {/* C-1 Safety Exception Alert if any */}
+                    {hasSafetyExceptions && (
+                      <span className="px-2 py-0.5 rounded-full bg-danger-tint text-danger-deep font-bold text-[10px] flex items-center gap-1 whitespace-nowrap border border-danger-line">
+                        <AlertTriangle className="w-3 h-3 text-danger shrink-0" />
+                        <span>Perhatian Medis</span>
+                      </span>
+                    )}
+                  </div>
+
+                  <div className="flex items-center gap-1 text-ink-faint shrink-0">
+                    <span className="text-[11px] font-medium hidden compact:inline">Status</span>
+                    <ChevronDown className="w-4 h-4 text-ink-faint" />
+                  </div>
+                </button>
+              </div>
               <TodaySurface
                 roster={aggregate.roster}
                 onUpdateAttendanceBatch={handleUpdateAttendanceBatch}

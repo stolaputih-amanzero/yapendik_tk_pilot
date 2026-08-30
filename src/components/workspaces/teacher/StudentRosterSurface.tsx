@@ -24,6 +24,14 @@ interface Props {
   onOpenContinuityModal?: (studentId: string) => void;
 }
 
+const toTitleCase = (str: string) => {
+  return str
+    .toLowerCase()
+    .split(' ')
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ');
+};
+
 export const StudentRosterSurface: React.FC<Props> = ({
   roster,
   onOpenChildPivot,
@@ -85,7 +93,7 @@ export const StudentRosterSurface: React.FC<Props> = ({
                       showSymbol={false}
                     />
                     <div className="min-w-0 flex-1">
-                      <h4 className="text-sm font-bold text-ink leading-snug truncate">{student.name}</h4>
+                      <h4 className="text-sm font-bold text-ink leading-snug truncate">{toTitleCase(student.name)}</h4>
                       <p className="text-[11px] text-ink-soft font-mono font-semibold whitespace-nowrap">NIS: {student.nis}</p>
                     </div>
                   </div>
