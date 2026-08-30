@@ -498,11 +498,52 @@ export class DatabaseEngine {
       this.persist('guardian_relationships', this.guardianRelationships);
 
       this.milestones = this.loadOrSeed('milestones', SEED_DEVELOPMENT_MILESTONES);
-      this.activities = this.loadOrSeed('activities', SEED_LEARNING_ACTIVITIES);
-      this.observations = this.loadOrSeed('observations', SEED_OBSERVATIONS);
-      this.attendance = this.loadOrSeed('attendance', SEED_ATTENDANCE);
-      this.notices = this.loadOrSeed('notices', SEED_GUARDIAN_NOTICES);
-      this.auditLogs = this.loadOrSeed('audit_logs', SEED_AUDIT_LOGS);
+
+      const loadedActs = this.loadOrSeed('activities', SEED_LEARNING_ACTIVITIES);
+      const actMap = new Map(loadedActs.filter(a => a.schoolId === 'sch_tk_maranatha').map(a => [a.id, a]));
+      SEED_LEARNING_ACTIVITIES.forEach(sa => {
+        const existing = actMap.get(sa.id) || {};
+        actMap.set(sa.id, { ...existing, ...sa });
+      });
+      this.activities = Array.from(actMap.values());
+      this.persist('activities', this.activities);
+
+      const loadedObs = this.loadOrSeed('observations', SEED_OBSERVATIONS);
+      const obsMap = new Map(loadedObs.filter(o => o.schoolId === 'sch_tk_maranatha').map(o => [o.id, o]));
+      SEED_OBSERVATIONS.forEach(so => {
+        const existing = obsMap.get(so.id) || {};
+        obsMap.set(so.id, { ...existing, ...so });
+      });
+      this.observations = Array.from(obsMap.values());
+      this.persist('observations', this.observations);
+
+      const loadedAtt = this.loadOrSeed('attendance', SEED_ATTENDANCE);
+      const attMap = new Map(loadedAtt.filter(a => a.schoolId === 'sch_tk_maranatha').map(a => [a.id, a]));
+      SEED_ATTENDANCE.forEach(sa => {
+        const existing = attMap.get(sa.id) || {};
+        attMap.set(sa.id, { ...existing, ...sa });
+      });
+      this.attendance = Array.from(attMap.values());
+      this.persist('attendance', this.attendance);
+
+      const loadedNotices = this.loadOrSeed('notices', SEED_GUARDIAN_NOTICES);
+      const notifMap = new Map(loadedNotices.filter(n => n.schoolId === 'sch_tk_maranatha').map(n => [n.id, n]));
+      SEED_GUARDIAN_NOTICES.forEach(sn => {
+        const existing = notifMap.get(sn.id) || {};
+        notifMap.set(sn.id, { ...existing, ...sn });
+      });
+      this.notices = Array.from(notifMap.values());
+      this.persist('notices', this.notices);
+
+      const loadedAudits = this.loadOrSeed('audit_logs', SEED_AUDIT_LOGS);
+      const auditMap = new Map(loadedAudits.filter(a => a.schoolId === 'sch_tk_maranatha').map(a => [a.id, a]));
+      SEED_AUDIT_LOGS.forEach(sa => {
+        const existing = auditMap.get(sa.id) || {};
+        auditMap.set(sa.id, { ...existing, ...sa });
+      });
+      this.auditLogs = Array.from(auditMap.values());
+      this.persist('audit_logs', this.auditLogs);
+
       this.progressReports = this.loadOrSeed('progress_reports', []);
 
       // Trigger asynchronous sync from Supabase Cloud
