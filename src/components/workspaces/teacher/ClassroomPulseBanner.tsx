@@ -50,28 +50,18 @@ export const ClassroomPulseBanner: React.FC<Props> = ({
   );
 
   return (
-    <section className="space-y-4 mb-8">
-      {/* 1. Header Identitas Kelas (Directly on canvas) */}
-      <div className="flex items-start justify-between gap-3">
-        <div>
-          <div className="flex items-center gap-2 flex-wrap">
-            <h2 className="text-xl medium:text-2xl font-bold tracking-tight text-ink leading-tight">
-              {context.class_name}
-            </h2>
-            {context.is_semester_closed && (
-              <Badge variant="danger" dot>
-                SEMESTER DITUTUP
-              </Badge>
-            )}
-          </div>
-          <p className="text-xs text-ink-soft font-medium mt-0.5">
-            {formattedDate}
-          </p>
+    <section className="space-y-4 mb-6">
+      {/* 1. Status Semester Khusus */}
+      {context.is_semester_closed && (
+        <div className="flex items-center gap-2 mb-2">
+          <Badge variant="danger" dot>
+            SEMESTER DITUTUP
+          </Badge>
         </div>
-      </div>
+      )}
 
-      {/* 2. Strip Kehadiran (Anchor 1: bg-surface White Panel on Gray Canvas) */}
-      <div className="bg-surface rounded-2xl p-4 medium:p-5 flex items-center justify-between text-ink w-full shadow-hairline">
+      {/* 2. Strip Kehadiran (Anchor 1: bg-surface Panel on Canvas) */}
+      <div className="bg-surface rounded-2xl p-4 medium:p-5 flex items-center justify-between text-ink w-full shadow-hairline border border-line">
         <div>
           <div className="text-[11px] text-ink-soft font-semibold leading-none">
             Kehadiran Hari Ini

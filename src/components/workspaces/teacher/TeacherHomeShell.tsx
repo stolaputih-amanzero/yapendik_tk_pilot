@@ -434,33 +434,32 @@ export const TeacherHomeShell: React.FC<{ onNavigateToCommunication?: () => void
         {/* Left Column (Primary Dashboard & Surfaces) */}
         <div className="space-y-6 min-w-0">
 
-          {/* Desktop Full Tier 1: Real-time Classroom Pulse Banner (large:block) */}
-          <div className="hidden large:block">
-            <ClassroomPulseBanner
-              context={aggregate.context}
-              pulse={aggregate.pulse}
-              onFilterExceptionStudent={studentId => setPivotStudentId(studentId)}
-              onOpenGuardianNotices={() => {
-                if (onNavigateToCommunication) {
-                  onNavigateToCommunication();
-                }
-              }}
-              onOpenSafetyModal={() => setIsSafetyModalOpen(true)}
-              activeIncidentsCount={activeIncidentsUnresolved.length}
-            />
-          </div>
-
-          {/* Desktop Dynamic Operating State Rhythm Indicator (large:block) */}
-          <div className="hidden large:block">
-            <OperatingStateIndicator
-              currentState={operatingState}
-              onStateChange={setOperatingState}
-            />
-          </div>
-
           {/* Active Surface Router */}
           {activeTab === 'TODAY' ? (
             <div className="space-y-6">
+              {/* Desktop Full Tier 1: Real-time Classroom Pulse Banner (large:block, Hari Ini Only) */}
+              <div className="hidden large:block">
+                <ClassroomPulseBanner
+                  context={aggregate.context}
+                  pulse={aggregate.pulse}
+                  onFilterExceptionStudent={studentId => setPivotStudentId(studentId)}
+                  onOpenGuardianNotices={() => {
+                    if (onNavigateToCommunication) {
+                      onNavigateToCommunication();
+                    }
+                  }}
+                  onOpenSafetyModal={() => setIsSafetyModalOpen(true)}
+                  activeIncidentsCount={activeIncidentsUnresolved.length}
+                />
+              </div>
+
+              {/* Desktop Dynamic Operating State Rhythm Indicator (large:block, Hari Ini Only) */}
+              <div className="hidden large:block">
+                <OperatingStateIndicator
+                  currentState={operatingState}
+                  onStateChange={setOperatingState}
+                />
+              </div>
               {/* STEP 1: Micro-Cockpit Capsule on Mobile (Hari Ini Only) */}
               <div className="block large:hidden">
                 <button
