@@ -15,6 +15,7 @@ import { renderToString } from 'react-dom/server';
 import { TopBar, WorkspaceTab } from '../src/components/layout/TopBar';
 import { ProfileDrawer } from '../src/components/layout/ProfileDrawer';
 import { Sidebar } from '../src/components/layout/Sidebar';
+import { MobileOmniBar } from '../src/components/layout/MobileOmniBar';
 import { ROUTE_REGISTRY, getTabMetadata } from '../src/config/routeRegistry';
 import { SecurityContextProvider } from '../src/auth/context';
 
@@ -87,11 +88,7 @@ async function runAdaptiveChromeTests() {
     runCheck('TopBar [CONTEXT TITLE]: Renders dynamic active page title "Beranda Kelas"', () => {
       const html = renderToString(
         <SecurityContextProvider>
-          <TopBar 
-            activeTab="TEACHER_HOME"
-            onOpenSupabaseModal={() => {}}
-            onSelectTab={() => {}}
-          />
+          <TopBar activeTab="TEACHER_HOME" />
         </SecurityContextProvider>
       );
       assert.ok(html.includes('Beranda Kelas'), 'Expected "Beranda Kelas" in TopBar HTML');
@@ -100,11 +97,7 @@ async function runAdaptiveChromeTests() {
     runCheck('TopBar [PRESENCE MARKER]: Renders Amanaura Breath ✦ presence glyph', () => {
       const html = renderToString(
         <SecurityContextProvider>
-          <TopBar 
-            activeTab="TEACHER_HOME"
-            onOpenSupabaseModal={() => {}}
-            onSelectTab={() => {}}
-          />
+          <TopBar activeTab="TEACHER_HOME" />
         </SecurityContextProvider>
       );
       assert.ok(html.includes('✦'), 'Expected "✦" presence marker glyph in TopBar HTML');
@@ -114,27 +107,19 @@ async function runAdaptiveChromeTests() {
     runCheck('TopBar [NON-BRAND BAR]: Zero bulky "Yapendik OS ✦" logo banner in TopBar', () => {
       const html = renderToString(
         <SecurityContextProvider>
-          <TopBar 
-            activeTab="TEACHER_HOME"
-            onOpenSupabaseModal={() => {}}
-            onSelectTab={() => {}}
-          />
+          <TopBar activeTab="TEACHER_HOME" />
         </SecurityContextProvider>
       );
       assert.ok(!html.includes('Yapendik OS ✦'), 'Did not expect bulky "Yapendik OS ✦" logo in TopBar');
     });
 
-    runCheck('TopBar [NO THEME TOGGLE]: Theme toggle is removed from TopBar (moved to Profile/Sidebar)', () => {
+    runCheck('TopBar [PURE CLEAN CONTEXT BAR]: Zero avatar button or dropdown menu in TopBar', () => {
       const html = renderToString(
         <SecurityContextProvider>
-          <TopBar 
-            activeTab="TEACHER_HOME"
-            onOpenSupabaseModal={() => {}}
-            onSelectTab={() => {}}
-          />
+          <TopBar activeTab="TEACHER_HOME" />
         </SecurityContextProvider>
       );
-      assert.ok(!html.includes('Beralih ke Ivory Canvas'), 'Did not expect theme toggle in TopBar');
+      assert.ok(!html.includes('Buka Menu Profil'), 'Did not expect avatar menu trigger in clean TopBar');
     });
   }
 
@@ -243,6 +228,36 @@ async function runAdaptiveChromeTests() {
         </SecurityContextProvider>
       );
       assert.ok(html.includes('Beralih ke'), 'Expected theme toggle in Sidebar');
+    });
+
+    runCheck('Sidebar [USER PROFILE]: Desktop Sidebar renders user persona profile trigger', () => {
+      const html = renderToString(
+        <SecurityContextProvider>
+          <Sidebar 
+            activeTab="TEACHER_HOME"
+            onSelectTab={() => {}}
+            isCollapsed={false}
+            onToggleCollapse={() => {}}
+          />
+        </SecurityContextProvider>
+      );
+      assert.ok(html.includes('Menu Profil'), 'Expected Profile trigger in Sidebar');
+    });
+  }
+
+  // --- MODULE 5: Mobile Omni-Bar & Profile Hub ---
+  console.log('\n--- MODULE 5: Mobile Omni-Bar & Profile Integration ---');
+  {
+    runCheck('MobileOmniBar [PROFILE DOCK TRIGGER]: Renders user avatar trigger in mobile dock', () => {
+      const html = renderToString(
+        <SecurityContextProvider>
+          <MobileOmniBar 
+            activeTab="TEACHER_HOME"
+            onSelectTab={() => {}}
+          />
+        </SecurityContextProvider>
+      );
+      assert.ok(html.includes('aria-label="Profil &amp; Pengaturan"'), 'Expected profile trigger in MobileOmniBar dock');
     });
   }
 

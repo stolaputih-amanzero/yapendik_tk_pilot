@@ -185,16 +185,14 @@ const AppContent: React.FC = () => {
         onSelectTab={setActiveTab} 
         isCollapsed={isSidebarCollapsed}
         onToggleCollapse={handleToggleSidebar}
+        onOpenProfileDrawer={() => setIsProfileDrawerOpen(true)}
       />
 
       {/* Main Content Column */}
       <div className="flex-1 flex flex-col min-w-0 max-h-[100dvh] overflow-y-scroll bg-canvas expanded:bg-transparent relative scrollbar-stable">
-        {/* Global Context Bar (TopBar Header) */}
+        {/* Global Context Bar (TopBar Header) - 100% Pure Clean Context */}
         <TopBar
           activeTab={activeTab}
-          onOpenSupabaseModal={() => setIsSupabaseModalOpen(true)}
-          onSelectTab={setActiveTab}
-          onOpenProfileDrawer={() => setIsProfileDrawerOpen(true)}
         />
 
         {/* Institutional Context Ribbon (Hidden on Mobile) */}
@@ -294,6 +292,7 @@ const AppContent: React.FC = () => {
       <MobileOmniBar
         activeTab={activeTab}
         onSelectTab={setActiveTab}
+        onOpenProfileDrawer={() => setIsProfileDrawerOpen(true)}
       />
 
       {/* Supabase Integration Configuration Modal */}

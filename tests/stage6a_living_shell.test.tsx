@@ -89,8 +89,6 @@ async function runLivingShellTests() {
         <SecurityContextProvider>
           <TopBar 
             activeTab="TEACHER_HOME"
-            onOpenSupabaseModal={() => {}}
-            onSelectTab={() => {}}
           />
         </SecurityContextProvider>
       );
