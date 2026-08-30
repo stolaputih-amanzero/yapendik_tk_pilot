@@ -242,12 +242,12 @@ export const GraduationRegistryWorkspace: React.FC = () => {
   const selectedClassObj = tkbClasses.find(c => c.id === selectedClassId);
 
   return (
-    <div className="space-y-6 text-ink font-sans w-full pb-[132px] expanded:pb-8" data-testid="graduation-registry-workspace">
+    <div className="space-y-6 text-ink font-sans w-full pb-[160px] expanded:pb-8" data-testid="graduation-registry-workspace">
       {/* Header Banner */}
       <div className="bg-surface-subtle border-b border-line medium:rounded-card px-4 py-5 medium:p-6 w-full text-ink medium:border medium:shadow-hairline">
         <div className="flex flex-col medium:flex-row medium:items-center justify-between gap-4">
           <div>
-            <div className="flex items-center space-x-1.5 text-success text-[10px] medium:text-xs font-bold uppercase tracking-wider mb-1">
+            <div className="flex items-center space-x-1.5 text-success-deep text-[10px] medium:text-xs font-bold uppercase tracking-wider mb-1">
               <GraduationCap className="w-4 h-4" />
               <span>Standar Yayasan • Buku Induk Alumni</span>
             </div>
@@ -415,7 +415,7 @@ export const GraduationRegistryWorkspace: React.FC = () => {
             <button
               onClick={() => setShowGradModal(true)}
               disabled={!isAuthorizedActor || selectedStudentIds.length === 0}
-              className="w-full py-2 rounded-field bg-brand hover-only:bg-surface-inset disabled:opacity-40 text-on-brand font-bold text-xs shadow-hairline flex items-center justify-center space-x-2 transition-all cursor-pointer"
+              className="w-full py-2 rounded-field bg-brand hover-only:opacity-90 disabled:opacity-40 text-on-brand font-bold text-xs shadow-hairline flex items-center justify-center space-x-2 transition-all cursor-pointer"
             >
               <Award className="w-4 h-4" />
               <span>Tetapkan Kelulusan ({selectedStudentIds.length} Siswa)</span>
@@ -434,7 +434,7 @@ export const GraduationRegistryWorkspace: React.FC = () => {
           <span className="text-xs text-ink-soft font-medium">Total {graduatedAlumni.length} Alumni Terdaftar</span>
         </div>
 
-        <div className="overflow-x-auto [mask-image:linear-gradient(to_right,transparent_0,black_16px,black_calc(100%-16px),transparent_100%)]">
+        <div className="overflow-x-auto">
           <table className="w-full text-left text-xs">
             <thead className="bg-surface-subtle text-ink-soft uppercase tracking-wider font-semibold border-b border-line">
               <tr>
@@ -530,7 +530,7 @@ export const GraduationRegistryWorkspace: React.FC = () => {
                 type="button"
                 onClick={handleExecuteGraduation}
                 disabled={isProcessing}
-                className="w-full medium:w-auto px-4 py-2 rounded-field bg-brand hover-only:bg-surface-inset text-on-brand text-xs font-bold flex justify-center items-center space-x-2 cursor-pointer shadow-hairline transition-colors"
+                className="w-full medium:w-auto px-4 py-2 rounded-field bg-brand hover-only:opacity-90 text-on-brand text-xs font-bold flex justify-center items-center space-x-2 cursor-pointer shadow-hairline transition-colors"
               >
                 {isProcessing ? <RefreshCw className="w-4 h-4 animate-spin" /> : <Award className="w-4 h-4" />}
                 <span>Tetapkan Lulus Sekarang</span>

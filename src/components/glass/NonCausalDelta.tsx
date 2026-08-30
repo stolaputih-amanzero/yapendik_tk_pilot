@@ -77,9 +77,9 @@ export const NonCausalDelta: React.FC<NonCausalDeltaProps> = ({
       </div>
 
       {/* 2. Qualitative Human Reflection Callout */}
-      <div className="bg-surface-subtle/80 border-l-2 border-amber-500 rounded-r-lg p-3 text-xs text-ink-soft space-y-1">
+      <div className="bg-surface-subtle/80 border-l-2 border-warning-deep rounded-r-lg p-3 text-xs text-ink-soft space-y-1">
         <div className="flex items-center gap-1 font-semibold text-ink text-[11px]">
-          <Quote className="w-3 h-3 text-brass" />
+          <Quote className="w-3 h-3 text-brand-primary" />
           <span>Refleksi Kualitatif Pendidik / Kepala Sekolah:</span>
         </div>
         <p className="italic text-ink-soft leading-relaxed font-serif pl-2">
@@ -97,7 +97,7 @@ export const NonCausalDelta: React.FC<NonCausalDeltaProps> = ({
         className="pt-2 border-t border-line-soft text-[10px] text-ink-faint leading-tight flex items-start gap-1"
         data-testid="ethical-footnote"
       >
-        <Sparkles className="w-3 h-3 text-brass/70 shrink-0 mt-0.5" />
+        <Sparkles className="w-3 h-3 text-brand-primary/70 shrink-0 mt-0.5" />
         <span className="max-w-prose text-justify">
           <strong className="text-ink-soft">Catatan Pengamatan:</strong> Angka kenaikan persentase ini adalah hasil pengamatan di lapangan, bukan bukti mutlak bahwa kebijakan tersebut adalah satu-satunya penyebab perubahan.
         </span>

@@ -4,6 +4,7 @@
  * 
  * Executive Stewardship Console for Foundation Directors, Trustees, and Superadmins.
  * Enforces Zero-PII Projections, K-Anonymity (FB-07), and Mutation Hard Block (FB-06).
+ * Canvas-Native Flat Architecture (Hukum F-7 / A-3).
  */
 
 import React, { useState, useEffect } from 'react';
@@ -17,7 +18,6 @@ import {
   ObservedOutcomeEffect 
 } from '../../types/institutionalLearningTypes';
 import { 
-  PrivacyShield, 
   CanonicalAnchor, 
   NonCausalDelta, 
   ForbiddenActionGate 
@@ -29,13 +29,7 @@ import {
   Lightbulb, 
   FileText, 
   CheckCircle2, 
-  Layers, 
-  TrendingUp, 
-  Sparkles, 
-  ArrowRight,
-  RefreshCw,
-  Info,
-  Lock
+  RefreshCw
 } from 'lucide-react';
 
 export type FoundationView = 'PROJECTIONS' | 'INSIGHTS' | 'ACTIONS';
@@ -93,48 +87,55 @@ export const FoundationLayout: React.FC<FoundationLayoutProps> = ({ initialView 
 
   return (
     <ForbiddenActionGate>
-      <div className="space-y-6 medium:space-y-6 w-full pb-[132px] expanded:pb-8" data-testid="foundation-governance-console">
-        {/* Workspace Header */}
-        <div className="bg-surface-subtle border-b border-line medium:rounded-card px-4 py-5 medium:p-6 w-full text-ink medium:border medium:shadow-hairline">
-          <div className="flex flex-col medium:flex-row medium:items-center justify-between gap-4">
+      <div 
+        className="w-full max-w-6xl mx-auto px-4 medium:px-6 pt-6 pb-[160px] space-y-8 animate-in fade-in duration-200 text-ink"
+        data-testid="foundation-governance-console"
+      >
+        {/* 1. HERO CANVAS (Hukum F-7: R-1 Hero Canvas tanpa panel pembungkus) */}
+        <header className="space-y-4">
+          <div className="flex flex-col medium:flex-row medium:items-start justify-between gap-4">
             <div>
-              <div className="flex items-center space-x-1.5 text-success text-[10px] medium:text-xs font-bold uppercase tracking-wider mb-1">
-                <Building2 className="w-4 h-4" />
+              <div className="flex items-center gap-1.5 text-brand-deep text-xs font-bold uppercase tracking-wider mb-1">
+                <Building2 className="w-4 h-4 text-brand-deep shrink-0" />
                 <span>Standar Yayasan • Tata Kelola Multi-Unit</span>
               </div>
-              <h1 className="text-xl font-bold tracking-tight text-ink flex items-center gap-2">
-                <span>Pusat Kebijakan Yayasan</span>
+              <h1 className="text-[28px] medium:text-3xl font-bold tracking-tight text-ink leading-tight">
+                Pusat Kebijakan Yayasan
               </h1>
-              <p className="hidden expanded:block text-ink-soft text-xs mt-1 max-w-2xl">
+              <p className="text-ink-soft text-sm max-w-2xl mt-1">
                 Proyeksi agregat capaian lintas unit TK, telaah pola pembelajaran, dan penerbitan dukungan kebijakan berkesinambungan.
               </p>
             </div>
 
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 shrink-0">
               <button
                 onClick={refreshData}
                 disabled={isLoading}
-                className="flex items-center gap-2 px-3 py-1 rounded-field bg-surface hover-only:bg-surface-subtle text-ink-soft border border-line text-xs font-semibold transition-colors shadow-hairline cursor-pointer"
+                className="flex items-center gap-2 px-3 py-2 rounded-xl bg-surface-subtle hover-only:bg-surface-subtle/80 text-ink-soft border border-line-hairline text-xs font-semibold transition-colors cursor-pointer"
               >
-                <RefreshCw className={`w-4 h-4 ${isLoading ? 'animate-spin' : ''}`} />
+                <RefreshCw className={`w-4 h-4 ${isLoading ? 'animate-spin text-brand-primary' : ''}`} />
                 <span>Segarkan Data</span>
               </button>
 
-              <div className="bg-surface border border-line px-3 py-1 rounded-field text-right shadow-hairline">
-                <div className="text-[10px] text-ink-faint font-mono uppercase tracking-wider font-bold whitespace-nowrap">Pengawas Yayasan</div>
-                <div className="text-xs font-bold text-ink">{currentPersona?.name || 'Superadmin Yayasan'}</div>
+              <div className="bg-surface-subtle border border-line-hairline px-3 py-1 rounded-xl text-right">
+                <div className="text-[10px] text-ink-faint font-mono uppercase tracking-wider font-bold whitespace-nowrap">
+                  Pengawas Yayasan
+                </div>
+                <div className="text-xs font-bold text-ink">
+                  {currentPersona?.name || 'Superadmin Yayasan'}
+                </div>
               </div>
             </div>
           </div>
 
-          {/* Navigation Tabs */}
-          <div className="flex border-b border-line mt-6 gap-2 text-xs overflow-x-auto scrollbar-hide [mask-image:linear-gradient(to_right,transparent_0,black_16px,black_calc(100%-16px),transparent_100%)]">
+          {/* 2. NAVIGATION PILLS FLAT (R-2 Kontrol Flat) */}
+          <div className="flex items-center gap-2 overflow-x-auto pb-1 pt-2">
             <button
               onClick={() => setActiveView('PROJECTIONS')}
-              className={`flex items-center gap-2 pb-3 px-3 font-semibold transition-colors relative whitespace-nowrap cursor-pointer ${
+              className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all whitespace-nowrap cursor-pointer ${
                 activeView === 'PROJECTIONS'
-                  ? 'text-ink border-b-2 border-brand'
-                  : 'text-ink-soft hover-only:text-ink'
+                  ? 'bg-brand-primary text-on-brand shadow-hairline'
+                  : 'bg-surface-subtle text-ink-soft hover-only:text-ink border border-line-hairline'
               }`}
               data-testid="tab-projections"
             >
@@ -144,10 +145,10 @@ export const FoundationLayout: React.FC<FoundationLayoutProps> = ({ initialView 
 
             <button
               onClick={() => setActiveView('INSIGHTS')}
-              className={`flex items-center gap-2 pb-3 px-3 font-semibold transition-colors relative whitespace-nowrap cursor-pointer ${
+              className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all whitespace-nowrap cursor-pointer ${
                 activeView === 'INSIGHTS'
-                  ? 'text-ink border-b-2 border-brand'
-                  : 'text-ink-soft hover-only:text-ink'
+                  ? 'bg-brand-primary text-on-brand shadow-hairline'
+                  : 'bg-surface-subtle text-ink-soft hover-only:text-ink border border-line-hairline'
               }`}
               data-testid="tab-insights"
             >
@@ -157,108 +158,115 @@ export const FoundationLayout: React.FC<FoundationLayoutProps> = ({ initialView 
 
             <button
               onClick={() => setActiveView('ACTIONS')}
-              className={`flex items-center gap-2 pb-3 px-3 font-semibold transition-colors relative whitespace-nowrap cursor-pointer ${
+              className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all whitespace-nowrap cursor-pointer ${
                 activeView === 'ACTIONS'
-                  ? 'text-ink border-b-2 border-brand'
-                  : 'text-ink-soft hover-only:text-ink'
+                  ? 'bg-brand-primary text-on-brand shadow-hairline'
+                  : 'bg-surface-subtle text-ink-soft hover-only:text-ink border border-line-hairline'
               }`}
               data-testid="tab-actions"
             >
               <FileText className="w-4 h-4" />
               <span>Inisiatif &amp; Aksi Yayasan</span>
               {actions.length > 0 && (
-                <span className="px-1 py-0 rounded-full bg-surface-subtle text-[10px] text-ink-soft font-mono font-bold whitespace-nowrap">
+                <span className={`px-2 py-1 rounded-full text-[10px] font-mono font-bold whitespace-nowrap ${
+                  activeView === 'ACTIONS'
+                    ? 'bg-on-brand/20 text-on-brand'
+                    : 'bg-surface-subtle text-ink-soft'
+                }`}>
                   {actions.length}
                 </span>
               )}
             </button>
           </div>
-        </div>
+        </header>
 
-        {/* VIEW 1: MULTI-SCHOOL PROJECTIONS (HEATMAPS & REDACTED AGGREGATES) */}
+        {/* VIEW 1: MULTI-SCHOOL PROJECTIONS (R-3 & R-4) */}
         {activeView === 'PROJECTIONS' && (
-          <div className="space-y-6 px-4 medium:px-5 medium:px-0" data-testid="foundation-projections-view">
-            {/* Privacy Invariant Banner */}
-            <div className="bg-surface border border-line rounded-card p-4 medium:p-4 flex items-start gap-3 text-xs text-ink-soft shadow-hairline">
-              <ShieldCheck className="w-5 h-5 text-success shrink-0 mt-0.5" />
-              <div className="space-y-1">
-                <div className="font-bold text-ink text-xs medium:text-sm">
-                  Jaminan Privasi &amp; Agregasi Multi-Unit (Invarian FB-01 &amp; FB-07)
-                </div>
-                <p className="text-ink-soft leading-relaxed">
-                  Data yang disajikan adalah agregat statistik Kurikulum Merdeka TK tingkat gugus unit. Seluruh identitas individual siswa diredaksi secara otomatis demi menjaga etika pengamatan dan privasi anak.
-                </p>
+          <div className="space-y-6" data-testid="foundation-projections-view">
+            {/* Jaminan Privasi (R-4 Footnote Etis) */}
+            <div className="border-l-2 border-info-line pl-3 py-1 space-y-1">
+              <div className="flex items-center gap-1.5 font-bold text-ink text-xs">
+                <ShieldCheck className="w-4 h-4 text-brand-primary shrink-0" />
+                <span>Jaminan Privasi &amp; Agregasi Multi-Unit (Invarian FB-01 &amp; FB-07)</span>
               </div>
+              <p className="text-ink-soft leading-relaxed text-xs">
+                Data yang disajikan adalah agregat statistik Kurikulum Merdeka TK tingkat gugus unit. Seluruh identitas individual siswa diredaksi secara otomatis demi menjaga etika pengamatan dan privasi anak.
+              </p>
             </div>
 
-            {/* Aggregated Domain Telemetry Grid */}
-            <div className="grid grid-cols-1 medium:grid-cols-2 expanded:grid-cols-3 gap-4">
+            {/* Aggregated Domain Telemetry (R-3 divide-y di canvas) */}
+            <div className="divide-y divide-line border-y border-line">
               {patterns.map((pat) => (
-                <div 
+                <article 
                   key={pat.pattern_id}
-                  className="bg-surface border border-line rounded-card p-4 medium:p-4 shadow-hairline space-y-3"
+                  className="py-5 space-y-3"
                   data-testid="pattern-telemetry-card"
                 >
-                  <div className="flex items-start justify-between">
-                    <div>
-                      <span className="text-[10px] font-mono uppercase tracking-wider px-2 py-1 rounded-full bg-surface-subtle text-ink-soft border border-line font-bold whitespace-nowrap">
+                  <div className="flex flex-wrap items-start justify-between gap-2">
+                    <div className="space-y-1">
+                      <span className="text-[10px] font-mono uppercase tracking-wider px-3 py-1 rounded-full bg-surface-subtle text-ink-soft border border-line-hairline font-bold whitespace-nowrap">
                         {pat.curriculum_domain}
                       </span>
-                      <h3 className="font-bold text-ink text-sm mt-2">
+                      <h3 className="font-bold text-ink text-base pt-1">
                         {pat.pattern_name}
                       </h3>
                     </div>
-                    <span className="text-xs font-mono font-bold text-success-deep bg-success-tint px-2 py-1 rounded-full border border-success-line whitespace-nowrap">
+                    <span className="text-xs font-mono font-bold text-success-deep bg-success-tint px-3 py-1 rounded-full border border-success-line whitespace-nowrap">
                       {pat.statistical_significance || 'Signifikan'}
                     </span>
                   </div>
 
-                  <p className="text-xs text-ink-soft leading-relaxed line-clamp-3">
+                  <p className="text-xs medium:text-sm text-ink-soft leading-relaxed">
                     {pat.description || 'Pola capaian teramati pada kelompok kegiatan main bermakna.'}
                   </p>
 
-                  <div className="pt-2 border-t border-line-soft flex items-center justify-between text-[11px] text-ink-faint">
+                  <div className="pt-2 flex items-center justify-between text-xs text-ink-faint font-mono">
                     <span>Sampel: {pat.sample_size_classes || 3} Rombel</span>
                     <span>Tingkat Kepastian: {pat.confidence_score ? `${(pat.confidence_score * 100).toFixed(0)}%` : '95%'}</span>
                   </div>
-                </div>
+                </article>
               ))}
             </div>
           </div>
         )}
 
-        {/* VIEW 2: PATTERN & INSIGHT STUDIO */}
+        {/* VIEW 2: PATTERN & INSIGHT STUDIO (R-3 divide-y) */}
         {activeView === 'INSIGHTS' && (
-          <div className="space-y-4 px-4 medium:px-5 medium:px-0" data-testid="foundation-insights-view">
-            <div className="flex items-center justify-between pb-1">
+          <div className="space-y-6" data-testid="foundation-insights-view">
+            <div className="flex items-center justify-between border-b border-line pb-3">
               <div>
-                <h2 className="text-sm medium:text-base font-bold text-ink">Temuan Analitis &amp; Keputusan Yayasan</h2>
-                <p className="text-xs text-ink-soft">Daftar wawasan pembelajaran lintas unit yang memerlukan fasilitasi kelembagaan.</p>
+                <h2 className="text-base font-bold text-ink">Temuan Analitis &amp; Keputusan Yayasan</h2>
+                <p className="text-xs text-ink-soft mt-0.5">Daftar wawasan pembelajaran lintas unit yang memerlukan fasilitasi kelembagaan.</p>
               </div>
-              <span className="text-xs text-ink-soft font-medium">{insights.length} Temuan</span>
+              <span className="text-xs text-ink-faint font-mono">{insights.length} Temuan</span>
             </div>
 
-            <div className="space-y-4">
+            <div className="divide-y divide-line border-b border-line">
               {insights.map((ins) => (
-                <div 
+                <article 
                   key={ins.insight_id}
-                  className="bg-surface rounded-card border border-line p-4 medium:p-4 shadow-hairline space-y-3.5"
+                  className="py-5 space-y-3"
                 >
                   <div className="flex flex-col medium:flex-row medium:items-start justify-between gap-2">
                     <div className="space-y-1">
                       <div className="flex items-center gap-2">
                         <span className="font-mono text-xs font-bold text-ink whitespace-nowrap">{ins.insight_id}</span>
-                        <span className="px-2 py-1 rounded-full text-[10px] font-mono font-bold bg-info-tint text-info-deep border border-info-line whitespace-nowrap">
+                        <span className="px-3 py-1 rounded-full text-[10px] font-mono font-bold bg-info-tint text-info-deep border border-info-line whitespace-nowrap">
                           {ins.curriculum_domain}
                         </span>
                       </div>
-                      <h4 className="font-bold text-ink text-sm">{ins.title}</h4>
-                      <p className="text-xs text-ink-soft leading-relaxed">{ins.narrative_summary}</p>
+                      <h4 className="font-bold text-ink text-base">{ins.title}</h4>
+                      <p className="text-xs medium:text-sm text-ink-soft leading-relaxed">{ins.narrative_summary}</p>
                     </div>
 
                     {ins.decision_record && (
-                      <div className="text-right shrink-0">
-                        <span className="px-2 py-1 rounded-full bg-success-tint text-success-deep border border-success-line text-[10px] font-bold font-mono whitespace-nowrap">
+                      <div className="text-right shrink-0 flex items-center gap-2">
+                        {ins.decision_record.decision_id && (
+                          <span className="font-mono text-[10px] text-ink-faint">
+                            {ins.decision_record.decision_id}
+                          </span>
+                        )}
+                        <span className="px-3 py-1 rounded-full bg-info-tint text-info-deep border border-info-line text-[10px] font-bold font-mono whitespace-nowrap">
                           DISETUJUI DEWAN
                         </span>
                       </div>
@@ -266,19 +274,19 @@ export const FoundationLayout: React.FC<FoundationLayoutProps> = ({ initialView 
                   </div>
 
                   {ins.decision_record && (
-                    <div className="bg-surface-subtle border border-line-soft rounded-field p-3 text-xs space-y-1">
-                      <div className="font-bold text-ink text-[11px] flex items-center gap-2">
-                        <Lightbulb className="w-4 h-4 text-brass" />
+                    <div className="border-l-2 border-brand-primary/40 pl-3 py-1 space-y-1 text-xs">
+                      <div className="font-bold text-ink text-xs flex items-center gap-1.5">
+                        <Lightbulb className="w-4 h-4 text-brand-primary shrink-0" />
                         <span>Rekomendasi Keputusan Dewan Yayasan:</span>
                       </div>
                       <p className="text-ink-soft">{ins.decision_record.recommended_action_type} • {ins.decision_record.governance_notes}</p>
                     </div>
                   )}
-                </div>
+                </article>
               ))}
 
               {insights.length === 0 && (
-                <div className="p-8 text-center bg-surface border border-line rounded-card text-ink-faint text-xs shadow-hairline">
+                <div className="py-12 text-center text-ink-faint text-xs">
                   Belum ada temuan analitis baru pada periode ini.
                 </div>
               )}
@@ -286,33 +294,33 @@ export const FoundationLayout: React.FC<FoundationLayoutProps> = ({ initialView 
           </div>
         )}
 
-        {/* VIEW 3: ACTION LEDGER & CLOSED-LOOP TRACKER */}
+        {/* VIEW 3: ACTION LEDGER & CLOSED-LOOP TRACKER (R-3 divide-y & R-5 Timeline Stepper) */}
         {activeView === 'ACTIONS' && (
-          <div className="space-y-4 px-4 medium:px-5 medium:px-0" data-testid="foundation-actions-view">
-            <div className="flex items-center justify-between pb-1">
+          <div className="space-y-6" data-testid="foundation-actions-view">
+            <div className="flex items-center justify-between border-b border-line pb-3">
               <div>
-                <h2 className="text-sm medium:text-base font-bold text-ink">Buku Besar Inisiatif &amp; Evaluasi Aksi Yayasan</h2>
-                <p className="text-xs text-ink-soft">Pelacakan siklus hidup kebijakan dari penerbitan hingga evaluasi dampak nyata di unit TK.</p>
+                <h2 className="text-base font-bold text-ink">Buku Besar Inisiatif &amp; Evaluasi Aksi Yayasan</h2>
+                <p className="text-xs text-ink-soft mt-0.5">Pelacakan siklus hidup kebijakan dari penerbitan hingga evaluasi dampak nyata di unit TK.</p>
               </div>
-              <span className="text-xs text-ink-soft font-medium">{actions.length} Inisiatif</span>
+              <span className="text-xs text-ink-faint font-mono">{actions.length} Inisiatif</span>
             </div>
 
-            {/* Actions List */}
-            <div className="space-y-4">
+            {/* Actions List (divide-y divide-line) */}
+            <div className="divide-y divide-line border-b border-line">
               {actions.map((act) => {
                 const isClosed = closedLoopStatus[act.action_id] || false;
                 const matchingAdoptions = adoptions.filter(ad => ad.action_id === act.action_id);
                 const matchingOutcomes = outcomes.filter(o => o.action_id === act.action_id);
 
                 return (
-                  <div 
+                  <article 
                     key={act.action_id}
-                    className="bg-surface border border-line rounded-card p-4 medium:p-4 space-y-4 shadow-hairline"
+                    className="py-6 space-y-4"
                     data-testid="action-ledger-item"
                   >
                     {/* Header with CanonicalAnchor */}
-                    <div className="flex flex-col medium:flex-row medium:items-center justify-between gap-3 medium:gap-2 pb-3 border-b border-line-soft">
-                      <div className="overflow-x-auto min-w-0 w-full medium:w-auto pb-1 -mb-1 scrollbar-hide [mask-image:linear-gradient(to_right,transparent_0,black_16px,black_calc(100%-16px),transparent_100%)]">
+                    <div className="flex flex-col medium:flex-row medium:items-center justify-between gap-3 medium:gap-2">
+                      <div className="overflow-x-auto min-w-0 w-full medium:w-auto pb-1 -mb-1 scrollbar-hide">
                         <CanonicalAnchor
                           actionId={act.action_id}
                           status={act.support_payload?.support_lifecycle_status || act.directive_payload?.directive_lifecycle_status || 'DEPLOYED'}
@@ -320,55 +328,55 @@ export const FoundationLayout: React.FC<FoundationLayoutProps> = ({ initialView 
                           actionTitle={act.title}
                         />
                       </div>
-                      <span className="text-[11px] font-mono text-ink-faint shrink-0 whitespace-nowrap">
+                      <span className="text-xs font-mono text-ink-faint shrink-0 whitespace-nowrap">
                         {`Cakupan: ${typeof act.target_scope === 'string' ? act.target_scope : 'Semua Unit TK'}`}
                       </span>
                     </div>
 
                     {/* Summary & Rationale */}
-                    <div className="text-xs text-ink-soft space-y-1.5">
-                      <p className="font-medium text-ink">{act.policy_intent || act.title}</p>
+                    <div className="text-xs space-y-1.5">
+                      <p className="font-medium text-ink text-sm">{act.policy_intent || act.title}</p>
                       {act.action_type === 'SUPPORT_INITIATIVE' && act.support_payload && (
-                        <div className="text-ink-soft bg-surface-subtle p-3 rounded-field border border-line-soft">
+                        <p className="text-ink-soft pl-3 border-l-2 border-line">
                           <strong className="text-ink">Fasilitasi Yayasan:</strong> {act.support_payload.resource_allocation_details}
-                        </div>
+                        </p>
                       )}
                     </div>
 
-                    {/* Closed-Loop Visualizer Stepper */}
-                    <div className="bg-surface-subtle/70 border border-line/80 rounded-field p-4 space-y-3" data-testid="closed-loop-stepper">
-                      <div className="text-[11px] font-bold text-ink uppercase tracking-wider flex items-center justify-between flex-wrap gap-2">
+                    {/* Closed-Loop Visualizer Stepper (R-5 Timeline Stepper langsung di canvas) */}
+                    <div className="space-y-3 pt-1" data-testid="closed-loop-stepper">
+                      <div className="text-xs font-bold text-ink uppercase tracking-wider flex items-center justify-between flex-wrap gap-2">
                         <span>Siklus Evaluasi Pertanggungjawaban Kebijakan</span>
                         {isClosed ? (
-                          <span className="text-success-deep font-bold flex items-center gap-1 text-[11px] bg-success-tint px-2 py-1 rounded-full border border-success-line">
-                            <CheckCircle2 className="w-4 h-4" /> SIKLUS TERTUTUP LENGKAP
+                          <span className="text-success-deep font-bold flex items-center gap-1 text-xs bg-success-tint px-3 py-1 rounded-full border border-success-line">
+                            <CheckCircle2 className="w-4 h-4 text-success" /> SIKLUS TERTUTUP LENGKAP
                           </span>
                         ) : (
-                          <span className="text-warning-deep font-semibold text-[11px] bg-warning-tint px-2 py-1 rounded-full border border-warning-line">
+                          <span className="text-warning-deep font-semibold text-xs bg-warning-tint px-3 py-1 rounded-full border border-warning-line">
                             Menunggu Adopsi / Pengamatan Lapangan
                           </span>
                         )}
                       </div>
 
                       {/* Stepper Timeline Bar */}
-                      <div className="grid grid-cols-2 medium:grid-cols-4 gap-2 text-center text-[10px] font-mono pt-1 whitespace-nowrap">
-                        <div className="p-2 rounded-field bg-success-tint border border-success-line text-success-deep font-bold shadow-hairline">
+                      <div className="grid grid-cols-2 medium:grid-cols-4 gap-2 text-center text-xs font-mono pt-1 whitespace-nowrap">
+                        <div className="p-3 rounded-xl bg-success-tint border border-success-line text-success-deep font-bold shadow-hairline">
                           1. Diterbitkan Yayasan
                         </div>
-                        <div className="p-2 rounded-field bg-success-tint border border-success-line text-success-deep font-bold shadow-hairline">
+                        <div className="p-3 rounded-xl bg-success-tint border border-success-line text-success-deep font-bold shadow-hairline">
                           2. Dikirim ke Unit TK
                         </div>
-                        <div className={`p-2 rounded-field border font-bold shadow-hairline ${
+                        <div className={`p-3 rounded-xl border font-bold shadow-hairline ${
                           matchingAdoptions.length > 0
                             ? 'bg-success-tint border-success-line text-success-deep'
-                            : 'bg-surface border-line text-ink-faint'
+                            : 'bg-surface-subtle border-line text-ink-faint'
                         }`}>
                           {`3. Diadopsi Sekolah (${matchingAdoptions.length})`}
                         </div>
-                        <div className={`p-2 rounded-field border font-bold shadow-hairline ${
+                        <div className={`p-3 rounded-xl border font-bold shadow-hairline ${
                           matchingOutcomes.length > 0
                             ? 'bg-success-tint border-success-line text-success-deep'
-                            : 'bg-surface border-line text-ink-faint'
+                            : 'bg-surface-subtle border-line text-ink-faint'
                         }`}>
                           {`4. Dampak Terukur (${matchingOutcomes.length})`}
                         </div>
@@ -387,12 +395,12 @@ export const FoundationLayout: React.FC<FoundationLayoutProps> = ({ initialView 
                         />
                       </div>
                     ))}
-                  </div>
+                  </article>
                 );
               })}
 
               {actions.length === 0 && (
-                <div className="p-8 text-center bg-surface border border-line rounded-card text-ink-faint text-xs shadow-hairline">
+                <div className="py-12 text-center text-ink-faint text-xs">
                   Belum ada inisiatif kebijakan yang diterbitkan oleh Yayasan.
                 </div>
               )}

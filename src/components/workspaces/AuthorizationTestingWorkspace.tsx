@@ -74,15 +74,15 @@ export const AuthorizationTestingWorkspace: React.FC = () => {
   return (
     <div className="px-4 medium:px-6 py-6 space-y-6">
       {/* Header */}
-      <div className="bg-surface border border-line rounded-lg p-4 shadow-hairline flex flex-col medium:flex-row medium:items-center justify-between gap-4">
+      <div className="bg-surface border border-line-hairline rounded-card p-4 shadow-hairline flex flex-col medium:flex-row medium:items-center justify-between gap-4">
         <div>
-          <div className="flex items-center space-x-2 text-xs font-mono text-success-deep uppercase tracking-wider tracking-wide mb-1 whitespace-nowrap">
-            <Lock className="w-4 h-4" />
+          <div className="flex items-center space-x-1.5 text-xs font-bold text-brand-deep uppercase tracking-wider mb-1 whitespace-nowrap">
+            <Lock className="w-4 h-4 text-brand-deep shrink-0" />
             <span>Constitutional Security Gate — Contextual Policy Engine</span>
           </div>
           <h1 className="text-xl font-bold text-ink flex items-center gap-2">
-            <ShieldCheck className="w-5 h-5 text-success" />
-            Automated Negative & Positive Authorization Testing
+            <ShieldCheck className="w-5 h-5 text-brand-deep shrink-0" />
+            <span>Automated Negative &amp; Positive Authorization Testing</span>
           </h1>
           <p className="text-xs text-ink-soft mt-1">
             Verifikasi ketat batas multi-sekolah, proteksi data anak (PII), hak wali murid, dan pencegahan eskalasi wewenang.
@@ -91,7 +91,7 @@ export const AuthorizationTestingWorkspace: React.FC = () => {
 
         <button
           onClick={handleRunAllTests}
-          className="w-full medium:w-auto mt-3 medium:mt-0 bg-brand hover-only:bg-surface-inset text-on-brand text-xs font-semibold px-4 py-2 rounded-md transition-colors flex items-center justify-center space-x-2 shrink-0 shadow-hairline"
+          className="w-full medium:w-auto mt-3 medium:mt-0 bg-brand hover-only:opacity-90 text-on-brand text-xs font-semibold px-4 py-2 rounded-md transition-colors flex items-center justify-center space-x-2 shrink-0 shadow-hairline"
         >
           <RefreshCw className="w-4 h-4" />
           <span>Jalankan Seluruh Uji Otorisasi</span>
@@ -248,7 +248,7 @@ export const AuthorizationTestingWorkspace: React.FC = () => {
         <div className="flex flex-col medium:flex-row medium:items-center justify-between pt-2 gap-3">
           <button
             onClick={handleRunSimulator}
-            className="w-full medium:w-auto mt-3 medium:mt-0 bg-brand hover-only:bg-surface-inset text-on-brand text-xs font-semibold px-4 py-2 rounded transition-colors flex items-center justify-center space-x-1.5 shadow-hairline"
+            className="w-full medium:w-auto mt-3 medium:mt-0 bg-brand hover-only:opacity-90 text-on-brand text-xs font-semibold px-4 py-2 rounded transition-colors flex items-center justify-center space-x-1.5 shadow-hairline"
           >
             <Play className="w-4 h-4" />
             <span>Evaluasi Kebijakan Otorisasi</span>

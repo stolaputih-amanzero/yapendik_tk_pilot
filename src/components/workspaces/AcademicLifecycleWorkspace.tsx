@@ -220,8 +220,8 @@ export const AcademicLifecycleWorkspace: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="p-8 flex flex-col items-center justify-center min-h-[400px] text-ink-faint pb-[132px] expanded:pb-8">
-        <RefreshCw className="w-8 h-8 animate-spin text-brass mb-3" />
+      <div className="p-8 flex flex-col items-center justify-center min-h-[400px] text-ink-faint pb-[160px] expanded:pb-8">
+        <RefreshCw className="w-8 h-8 animate-spin text-brand-primary mb-3" />
         <p className="text-sm font-medium">Memuat Status Siklus Akademik & Rekonsiliasi...</p>
       </div>
     );
@@ -230,11 +230,11 @@ export const AcademicLifecycleWorkspace: React.FC = () => {
   return (
     <div className="space-y-6 text-ink font-sans w-full" data-testid="academic-lifecycle-workspace">
       {/* Header Banner */}
-      <div className="bg-surface-subtle border-b border-line medium:rounded-card px-4 py-5 medium:p-6 w-full text-ink medium:border medium:shadow-hairline">
+      <div className="bg-surface border-b border-line medium:rounded-card px-4 py-5 medium:p-6 w-full text-ink medium:border medium:shadow-hairline">
         <div className="flex flex-col medium:flex-row medium:items-center justify-between gap-4">
           <div>
-            <div className="flex items-center space-x-1.5 text-success text-[10px] medium:text-xs font-bold uppercase tracking-wider mb-1">
-              <Calendar className="w-4 h-4" />
+            <div className="flex items-center space-x-1.5 text-brand-deep text-[10px] medium:text-xs font-bold uppercase tracking-wider mb-1">
+              <Calendar className="w-4 h-4 text-brand-deep shrink-0" />
               <span>Standar Yayasan • Tahun Ajaran &amp; Semester</span>
             </div>
             <h1 className="text-xl font-bold tracking-tight text-ink flex items-center gap-2">
@@ -258,7 +258,7 @@ export const AcademicLifecycleWorkspace: React.FC = () => {
             {isAuthorizedActor && activePeriod?.lifecycle_status === 'CLOSED' && (
               <button
                 onClick={() => setShowInitModal(true)}
-                className="px-4 py-2 rounded-field bg-brand hover-only:bg-surface-inset text-on-brand font-bold text-xs shadow-hairline flex justify-center items-center space-x-2 transition-all cursor-pointer"
+                className="px-4 py-2 rounded-field bg-brand hover-only:opacity-90 text-on-brand font-bold text-xs shadow-hairline flex justify-center items-center space-x-2 transition-all cursor-pointer"
               >
                 <PlusCircle className="w-4 h-4" />
                 <span>Buka Semester Baru</span>
@@ -268,7 +268,7 @@ export const AcademicLifecycleWorkspace: React.FC = () => {
         </div>
 
         {/* Sub-Tab Switcher for Headmaster & Superadmin */}
-        <div className="flex border-b border-line mt-6 gap-2 text-xs overflow-x-auto scrollbar-hide [mask-image:linear-gradient(to_right,transparent_0,black_16px,black_calc(100%-16px),transparent_100%)]">
+        <div className="flex border-b border-line mt-6 gap-2 text-xs overflow-x-auto scrollbar-hide">
           <button
             onClick={() => setActiveSubTab('OVERVIEW')}
             className={`flex items-center gap-2 pb-3 px-3 font-semibold transition-colors relative whitespace-nowrap cursor-pointer ${
@@ -451,7 +451,7 @@ export const AcademicLifecycleWorkspace: React.FC = () => {
                   </div>
                   <div className="flex justify-between items-center p-2 bg-surface-subtle rounded-field border border-line-soft">
                     <span className="text-ink-soft">Rapor Masih Draf:</span>
-                    <span className={`font-bold font-mono ${draftLppaCount > 0 ? 'text-brass' : 'text-ink-faint'}`}>
+                    <span className={`font-bold font-mono ${draftLppaCount > 0 ? 'text-brand-primary' : 'text-ink-faint'}`}>
                       {draftLppaCount} Draf
                     </span>
                   </div>
@@ -462,7 +462,7 @@ export const AcademicLifecycleWorkspace: React.FC = () => {
                     ? 'bg-success-tint border-success-line text-success-deep' 
                     : 'bg-warning-tint border-warning-line text-warning-deep'
                 }`}>
-                  {isReadyForClosure ? <CheckCircle2 className="w-4 h-4 text-success shrink-0" /> : <AlertCircle className="w-4 h-4 text-brass shrink-0" />}
+                  {isReadyForClosure ? <CheckCircle2 className="w-4 h-4 text-success shrink-0" /> : <AlertCircle className="w-4 h-4 text-brand-primary shrink-0" />}
                   <span className="font-semibold">
                     {isReadyForClosure 
                       ? 'Seluruh siswa telah memiliki rapor LPPA sah (100%).' 
@@ -476,7 +476,7 @@ export const AcademicLifecycleWorkspace: React.FC = () => {
                 <button
                   onClick={() => setShowCloseModal(true)}
                   disabled={!isAuthorizedActor}
-                  className="w-full py-2 rounded-field bg-brand hover-only:bg-surface-inset disabled:opacity-50 text-on-brand font-bold text-xs shadow-hairline flex items-center justify-center space-x-2 transition-all cursor-pointer mt-4"
+                  className="w-full py-2 rounded-field bg-brand hover-only:opacity-90 disabled:opacity-50 text-on-brand font-bold text-xs shadow-hairline flex items-center justify-center space-x-2 transition-all cursor-pointer mt-4"
                 >
                   <Lock className="w-4 h-4" />
                   <span>Tutup Semester Secara Resmi</span>
@@ -495,7 +495,7 @@ export const AcademicLifecycleWorkspace: React.FC = () => {
               <span className="text-xs text-ink-soft font-medium">Total {allPeriods.length} Periode Tercatat</span>
             </div>
 
-            <div className="overflow-x-auto [mask-image:linear-gradient(to_right,transparent_0,black_16px,black_calc(100%-16px),transparent_100%)]">
+            <div className="overflow-x-auto">
               <table className="w-full text-left text-xs">
                 <thead className="bg-surface-subtle text-ink-soft uppercase tracking-wider font-semibold border-b border-line">
                   <tr>
@@ -592,7 +592,7 @@ export const AcademicLifecycleWorkspace: React.FC = () => {
                 type="button"
                 onClick={handleCloseSemester}
                 disabled={isProcessing}
-                className="w-full medium:w-auto px-4 py-2 rounded-field bg-brand hover-only:bg-surface-inset text-on-brand text-xs font-bold flex justify-center items-center space-x-2 shadow-hairline transition-colors cursor-pointer"
+                className="w-full medium:w-auto px-4 py-2 rounded-field bg-brand hover-only:opacity-90 text-on-brand text-xs font-bold flex justify-center items-center space-x-2 shadow-hairline transition-colors cursor-pointer"
               >
                 {isProcessing ? <RefreshCw className="w-4 h-4 animate-spin" /> : <Lock className="w-4 h-4" />}
                 <span>Eksekusi Penutupan Semester</span>
@@ -628,7 +628,7 @@ export const AcademicLifecycleWorkspace: React.FC = () => {
                   placeholder="Contoh: TA 2026/2027 Genap"
                   value={nextName}
                   onChange={(e) => setNextName(e.target.value)}
-                  className="w-full bg-surface-subtle border border-line rounded-field px-3 py-2 text-ink focus:bg-surface focus:outline-none focus:ring-2 focus:ring-brass/30 shadow-hairline"
+                  className="w-full bg-surface-subtle border border-line rounded-field px-3 py-2 text-ink focus:bg-surface focus:outline-none focus:ring-1 focus:ring-brand-primary shadow-hairline"
                 />
               </div>
 
@@ -645,7 +645,7 @@ export const AcademicLifecycleWorkspace: React.FC = () => {
                     required
                     value={nextStartDate}
                     onChange={(e) => setNextStartDate(e.target.value)}
-                    className="w-full bg-surface-subtle border border-line rounded-field px-3 py-2 text-ink focus:bg-surface focus:outline-none focus:ring-2 focus:ring-brass/30 shadow-hairline"
+                    className="w-full bg-surface-subtle border border-line rounded-field px-3 py-2 text-ink focus:bg-surface focus:outline-none focus:ring-1 focus:ring-brand-primary shadow-hairline"
                   />
                 </div>
                 <div>
@@ -655,7 +655,7 @@ export const AcademicLifecycleWorkspace: React.FC = () => {
                     required
                     value={nextEndDate}
                     onChange={(e) => setNextEndDate(e.target.value)}
-                    className="w-full bg-surface-subtle border border-line rounded-field px-3 py-2 text-ink focus:bg-surface focus:outline-none focus:ring-2 focus:ring-brass/30 shadow-hairline"
+                    className="w-full bg-surface-subtle border border-line rounded-field px-3 py-2 text-ink focus:bg-surface focus:outline-none focus:ring-1 focus:ring-brand-primary shadow-hairline"
                   />
                 </div>
               </div>
@@ -672,7 +672,7 @@ export const AcademicLifecycleWorkspace: React.FC = () => {
                 <button
                   type="submit"
                   disabled={isProcessing}
-                  className="w-full medium:w-auto px-4 py-2 rounded-field bg-brand hover-only:bg-surface-inset text-on-brand font-bold flex justify-center items-center space-x-2 shadow-hairline transition-colors cursor-pointer"
+                  className="w-full medium:w-auto px-4 py-2 rounded-field bg-brand hover-only:opacity-90 text-on-brand font-bold flex justify-center items-center space-x-2 shadow-hairline transition-colors cursor-pointer"
                 >
                   {isProcessing ? <RefreshCw className="w-4 h-4 animate-spin" /> : <PlusCircle className="w-4 h-4" />}
                   <span>Aktifkan Semester Baru</span>

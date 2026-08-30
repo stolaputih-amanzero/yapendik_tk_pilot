@@ -278,12 +278,12 @@ export const ProvisioningWorkspace: React.FC<{ onNavigateToOperations?: () => vo
   const currentSchoolStudents = currentSchool ? db.getStudents(currentSchool.id) : [];
 
   return (
-    <div className="space-y-6 text-ink font-sans w-full pb-[132px] expanded:pb-8" data-testid="provisioning-workspace">
+    <div className="space-y-6 text-ink font-sans w-full pb-[160px] expanded:pb-8" data-testid="provisioning-workspace">
       {/* HEADER SECTION */}
       <div className="bg-surface-subtle border-b border-line medium:rounded-card px-4 py-5 medium:p-6 w-full text-ink medium:border medium:shadow-hairline">
         <div className="flex flex-col medium:flex-row medium:items-center justify-between gap-4">
           <div>
-            <div className="flex items-center space-x-1.5 text-success text-[10px] medium:text-xs font-bold uppercase tracking-wider mb-1">
+            <div className="flex items-center space-x-1.5 text-success-deep text-[10px] medium:text-xs font-bold uppercase tracking-wider mb-1">
               <Building2 className="w-4 h-4" />
               <span>Standar Yayasan • Pengaturan Unit</span>
             </div>
@@ -299,7 +299,7 @@ export const ProvisioningWorkspace: React.FC<{ onNavigateToOperations?: () => vo
             {isSuperadmin && (
               <button
                 onClick={() => setShowCreateSchoolModal(true)}
-                className="flex justify-center items-center space-x-2 px-3 py-2 bg-brand hover-only:bg-surface-inset text-on-brand rounded-field text-xs font-bold transition-all shadow-hairline cursor-pointer"
+                className="flex justify-center items-center space-x-2 px-3 py-2 bg-brand hover-only:opacity-90 text-on-brand rounded-field text-xs font-bold transition-all shadow-hairline cursor-pointer"
               >
                 <PlusCircle className="w-4 h-4" />
                 <span>Dirikan Unit TK Baru</span>
@@ -327,7 +327,7 @@ export const ProvisioningWorkspace: React.FC<{ onNavigateToOperations?: () => vo
         </div>
 
         {/* WORKSPACE NAVIGATION TABS */}
-        <div className="flex border-b border-line mt-6 gap-2 text-xs overflow-x-auto scrollbar-hide [mask-image:linear-gradient(to_right,transparent_0,black_16px,black_calc(100%-16px),transparent_100%)]">
+        <div className="flex border-b border-line mt-6 gap-2 text-xs overflow-x-auto scrollbar-hide">
           <button
             onClick={() => setActiveTab('READINESS')}
             className={`flex items-center gap-2 pb-3 px-3 font-semibold transition-colors relative whitespace-nowrap cursor-pointer ${
@@ -582,7 +582,7 @@ export const ProvisioningWorkspace: React.FC<{ onNavigateToOperations?: () => vo
             <span className="text-xs font-mono font-bold text-ink-soft whitespace-nowrap">Total: {schools.length} Unit TK</span>
           </div>
 
-          <div className="overflow-x-auto [mask-image:linear-gradient(to_right,transparent_0,black_16px,black_calc(100%-16px),transparent_100%)]">
+          <div className="overflow-x-auto">
             <table className="w-full text-left text-xs">
               <thead className="bg-surface-subtle text-ink-soft font-bold border-b border-line">
                 <tr>
@@ -647,7 +647,7 @@ export const ProvisioningWorkspace: React.FC<{ onNavigateToOperations?: () => vo
             </div>
             <button
               onClick={() => setShowCreateClassModal(true)}
-              className="flex justify-center items-center space-x-1.5 px-3 py-2 bg-brand hover-only:bg-surface-inset text-on-brand rounded-field text-xs font-bold shadow-hairline cursor-pointer"
+              className="flex justify-center items-center space-x-1.5 px-3 py-2 bg-brand hover-only:opacity-90 text-on-brand rounded-field text-xs font-bold shadow-hairline cursor-pointer"
             >
               <PlusCircle className="w-4 h-4" />
               <span>Tambah Rombel</span>
@@ -687,7 +687,7 @@ export const ProvisioningWorkspace: React.FC<{ onNavigateToOperations?: () => vo
             </div>
             <button
               onClick={() => setShowAdmitStudentModal(true)}
-              className="flex justify-center items-center space-x-1.5 px-3 py-2 bg-brand hover-only:bg-surface-inset text-on-brand rounded-field text-xs font-bold shadow-hairline cursor-pointer"
+              className="flex justify-center items-center space-x-1.5 px-3 py-2 bg-brand hover-only:opacity-90 text-on-brand rounded-field text-xs font-bold shadow-hairline cursor-pointer"
             >
               <PlusCircle className="w-4 h-4" />
               <span>Admisi Siswa Baru</span>
@@ -699,7 +699,7 @@ export const ProvisioningWorkspace: React.FC<{ onNavigateToOperations?: () => vo
               Belum ada siswa yang diadmisikan ke unit ini.
             </div>
           ) : (
-            <div className="overflow-x-auto [mask-image:linear-gradient(to_right,transparent_0,black_16px,black_calc(100%-16px),transparent_100%)]">
+            <div className="overflow-x-auto">
               <table className="w-full text-left text-xs">
                 <thead className="bg-surface-subtle text-ink-soft font-bold border-b border-line">
                   <tr>
@@ -741,7 +741,7 @@ export const ProvisioningWorkspace: React.FC<{ onNavigateToOperations?: () => vo
           <div className="bg-surface rounded-card border border-line p-6 max-w-lg w-full shadow-floating space-y-4 text-ink">
             <div className="flex justify-between items-center pb-2 border-b border-line-soft">
               <div className="flex items-center space-x-2">
-                <Building2 className="w-5 h-5 text-brass" />
+                <Building2 className="w-5 h-5 text-brand-primary" />
                 <h3 className="font-bold text-sm text-ink">Dirikan Unit TK Yapendik Baru</h3>
               </div>
               <button
@@ -761,7 +761,7 @@ export const ProvisioningWorkspace: React.FC<{ onNavigateToOperations?: () => vo
                   onChange={e => setNewSchoolName(e.target.value)}
                   placeholder="Contoh: TK Yapendik Maranatha"
                   required
-                  className="w-full bg-surface-subtle border border-line rounded-field px-3 py-2 text-ink focus:outline-none focus:ring-2 focus:ring-brass/30 shadow-hairline"
+                  className="w-full bg-surface-subtle border border-line rounded-field px-3 py-2 text-ink focus:outline-none focus:ring-1 focus:ring-brand-primary shadow-hairline"
                 />
               </div>
 
@@ -773,7 +773,7 @@ export const ProvisioningWorkspace: React.FC<{ onNavigateToOperations?: () => vo
                   onChange={e => setNewSchoolNpsn(e.target.value)}
                   placeholder="Contoh: 20104821"
                   required
-                  className="w-full bg-surface-subtle border border-line rounded-field px-3 py-2 text-ink font-mono focus:outline-none focus:ring-2 focus:ring-brass/30 shadow-hairline whitespace-nowrap"
+                  className="w-full bg-surface-subtle border border-line rounded-field px-3 py-2 text-ink font-mono focus:outline-none focus:ring-1 focus:ring-brand-primary shadow-hairline whitespace-nowrap"
                 />
               </div>
 
@@ -784,7 +784,7 @@ export const ProvisioningWorkspace: React.FC<{ onNavigateToOperations?: () => vo
                   onChange={e => setNewSchoolAddress(e.target.value)}
                   placeholder="Jl. Pemuda No. 88"
                   rows={2}
-                  className="w-full bg-surface-subtle border border-line rounded-field px-3 py-2 text-ink focus:bg-surface focus:outline-none focus:ring-2 focus:ring-brass/30 shadow-hairline"
+                  className="w-full bg-surface-subtle border border-line rounded-field px-3 py-2 text-ink focus:bg-surface focus:outline-none focus:ring-1 focus:ring-brand-primary shadow-hairline"
                 />
               </div>
 
@@ -795,7 +795,7 @@ export const ProvisioningWorkspace: React.FC<{ onNavigateToOperations?: () => vo
                     type="text"
                     value={newSchoolCity}
                     onChange={e => setNewSchoolCity(e.target.value)}
-                    className="w-full bg-surface-subtle border border-line rounded-field px-3 py-2 text-ink focus:bg-surface focus:outline-none focus:ring-2 focus:ring-brass/30 shadow-hairline"
+                    className="w-full bg-surface-subtle border border-line rounded-field px-3 py-2 text-ink focus:bg-surface focus:outline-none focus:ring-1 focus:ring-brand-primary shadow-hairline"
                   />
                 </div>
                 <div>
@@ -805,7 +805,7 @@ export const ProvisioningWorkspace: React.FC<{ onNavigateToOperations?: () => vo
                     value={newSchoolPhone}
                     onChange={e => setNewSchoolPhone(e.target.value)}
                     placeholder="021-4712345"
-                    className="w-full bg-surface-subtle border border-line rounded-field px-3 py-2 text-ink focus:bg-surface focus:outline-none focus:ring-2 focus:ring-brass/30 shadow-hairline"
+                    className="w-full bg-surface-subtle border border-line rounded-field px-3 py-2 text-ink focus:bg-surface focus:outline-none focus:ring-1 focus:ring-brand-primary shadow-hairline"
                   />
                 </div>
               </div>
@@ -817,7 +817,7 @@ export const ProvisioningWorkspace: React.FC<{ onNavigateToOperations?: () => vo
                   value={newSchoolEmail}
                   onChange={e => setNewSchoolEmail(e.target.value)}
                   placeholder="tk03.rawamangun@yapendik.sch.id"
-                  className="w-full bg-surface-subtle border border-line rounded-field px-3 py-2 text-ink focus:bg-surface focus:outline-none focus:ring-2 focus:ring-brass/30 shadow-hairline"
+                  className="w-full bg-surface-subtle border border-line rounded-field px-3 py-2 text-ink focus:bg-surface focus:outline-none focus:ring-1 focus:ring-brand-primary shadow-hairline"
                 />
               </div>
 
@@ -831,7 +831,7 @@ export const ProvisioningWorkspace: React.FC<{ onNavigateToOperations?: () => vo
                 </button>
                 <button
                   type="submit"
-                  className="w-full medium:w-auto flex justify-center items-center px-4 py-2 bg-brand hover-only:bg-surface-inset text-on-brand font-bold rounded-field shadow-hairline transition-colors cursor-pointer"
+                  className="w-full medium:w-auto flex justify-center items-center px-4 py-2 bg-brand hover-only:opacity-90 text-on-brand font-bold rounded-field shadow-hairline transition-colors cursor-pointer"
                 >
                   Dirikan Unit TK
                 </button>
@@ -864,7 +864,7 @@ export const ProvisioningWorkspace: React.FC<{ onNavigateToOperations?: () => vo
                   onChange={e => setNewClassName(e.target.value)}
                   placeholder="Contoh: Kelompok A (Mawar Indah)"
                   required
-                  className="w-full bg-surface-subtle border border-line rounded-field px-3 py-2 text-ink focus:bg-surface focus:outline-none focus:ring-2 focus:ring-brass/30 shadow-hairline"
+                  className="w-full bg-surface-subtle border border-line rounded-field px-3 py-2 text-ink focus:bg-surface focus:outline-none focus:ring-1 focus:ring-brand-primary shadow-hairline"
                 />
               </div>
 
@@ -883,7 +883,7 @@ export const ProvisioningWorkspace: React.FC<{ onNavigateToOperations?: () => vo
                     min={1}
                     max={30}
                     required
-                    className="w-full bg-surface-subtle border border-line rounded-field px-3 py-2 text-ink focus:bg-surface focus:outline-none focus:ring-2 focus:ring-brass/30 shadow-hairline"
+                    className="w-full bg-surface-subtle border border-line rounded-field px-3 py-2 text-ink focus:bg-surface focus:outline-none focus:ring-1 focus:ring-brand-primary shadow-hairline"
                   />
                 </div>
               </div>
@@ -895,7 +895,7 @@ export const ProvisioningWorkspace: React.FC<{ onNavigateToOperations?: () => vo
                   value={newClassTeacherId}
                   onChange={e => setNewClassTeacherId(e.target.value)}
                   placeholder="Contoh: per_teacher_siti"
-                  className="w-full bg-surface-subtle border border-line rounded-field px-3 py-2 text-ink focus:bg-surface focus:outline-none focus:ring-2 focus:ring-brass/30 shadow-hairline"
+                  className="w-full bg-surface-subtle border border-line rounded-field px-3 py-2 text-ink focus:bg-surface focus:outline-none focus:ring-1 focus:ring-brand-primary shadow-hairline"
                 />
               </div>
 
@@ -909,7 +909,7 @@ export const ProvisioningWorkspace: React.FC<{ onNavigateToOperations?: () => vo
                 </button>
                 <button
                   type="submit"
-                  className="w-full medium:w-auto flex justify-center items-center px-4 py-2 bg-brand hover-only:bg-surface-inset text-on-brand font-bold rounded-field shadow-hairline transition-colors cursor-pointer"
+                  className="w-full medium:w-auto flex justify-center items-center px-4 py-2 bg-brand hover-only:opacity-90 text-on-brand font-bold rounded-field shadow-hairline transition-colors cursor-pointer"
                 >
                   Bentuk Rombel
                 </button>
@@ -944,7 +944,7 @@ export const ProvisioningWorkspace: React.FC<{ onNavigateToOperations?: () => vo
                     onChange={e => setChildFullName(e.target.value)}
                     placeholder="Contoh: Jonathan Chris Rawamangun"
                     required
-                    className="w-full bg-surface border border-line rounded-field px-3 py-2 text-ink focus:outline-none focus:ring-2 focus:ring-brass/30 shadow-hairline"
+                    className="w-full bg-surface border border-line rounded-field px-3 py-2 text-ink focus:outline-none focus:ring-1 focus:ring-brand-primary shadow-hairline"
                   />
                 </div>
 
@@ -956,7 +956,7 @@ export const ProvisioningWorkspace: React.FC<{ onNavigateToOperations?: () => vo
                       value={childPreferredName}
                       onChange={e => setChildPreferredName(e.target.value)}
                       placeholder="Jonathan"
-                      className="w-full bg-surface border border-line rounded-field px-3 py-2 text-ink focus:outline-none focus:ring-2 focus:ring-brass/30 shadow-hairline"
+                      className="w-full bg-surface border border-line rounded-field px-3 py-2 text-ink focus:outline-none focus:ring-1 focus:ring-brand-primary shadow-hairline"
                     />
                   </div>
                   <div>
@@ -980,7 +980,7 @@ export const ProvisioningWorkspace: React.FC<{ onNavigateToOperations?: () => vo
                       value={childNis}
                       onChange={e => setChildNis(e.target.value)}
                       placeholder="TK-2026-0301"
-                      className="w-full bg-surface border border-line rounded-field px-3 py-2 text-ink focus:outline-none focus:ring-2 focus:ring-brass/30 shadow-hairline"
+                      className="w-full bg-surface border border-line rounded-field px-3 py-2 text-ink focus:outline-none focus:ring-1 focus:ring-brand-primary shadow-hairline"
                     />
                   </div>
                   <div>
@@ -1008,7 +1008,7 @@ export const ProvisioningWorkspace: React.FC<{ onNavigateToOperations?: () => vo
                     onChange={e => setGuardianFullName(e.target.value)}
                     placeholder="Contoh: Hendrik Rawamangun"
                     required
-                    className="w-full bg-surface border border-line rounded-field px-3 py-2 text-ink focus:outline-none focus:ring-2 focus:ring-brass/30 shadow-hairline"
+                    className="w-full bg-surface border border-line rounded-field px-3 py-2 text-ink focus:outline-none focus:ring-1 focus:ring-brand-primary shadow-hairline"
                   />
                 </div>
 
@@ -1020,7 +1020,7 @@ export const ProvisioningWorkspace: React.FC<{ onNavigateToOperations?: () => vo
                       value={guardianPhone}
                       onChange={e => setGuardianPhone(e.target.value)}
                       placeholder="08123456789"
-                      className="w-full bg-surface border border-line rounded-field px-3 py-2 text-ink focus:outline-none focus:ring-2 focus:ring-brass/30 shadow-hairline"
+                      className="w-full bg-surface border border-line rounded-field px-3 py-2 text-ink focus:outline-none focus:ring-1 focus:ring-brand-primary shadow-hairline"
                     />
                   </div>
                   <div>
@@ -1030,7 +1030,7 @@ export const ProvisioningWorkspace: React.FC<{ onNavigateToOperations?: () => vo
                       value={guardianEmail}
                       onChange={e => setGuardianEmail(e.target.value)}
                       placeholder="hendrik@gmail.com"
-                      className="w-full bg-surface border border-line rounded-field px-3 py-2 text-ink focus:outline-none focus:ring-2 focus:ring-brass/30 shadow-hairline"
+                      className="w-full bg-surface border border-line rounded-field px-3 py-2 text-ink focus:outline-none focus:ring-1 focus:ring-brand-primary shadow-hairline"
                     />
                   </div>
                 </div>
@@ -1046,7 +1046,7 @@ export const ProvisioningWorkspace: React.FC<{ onNavigateToOperations?: () => vo
                 </button>
                 <button
                   type="submit"
-                  className="w-full medium:w-auto flex justify-center items-center px-4 py-2 bg-brand hover-only:bg-surface-inset text-on-brand font-bold rounded-field shadow-hairline transition-colors cursor-pointer"
+                  className="w-full medium:w-auto flex justify-center items-center px-4 py-2 bg-brand hover-only:opacity-90 text-on-brand font-bold rounded-field shadow-hairline transition-colors cursor-pointer"
                 >
                   Admisi &amp; Simpan Siswa
                 </button>

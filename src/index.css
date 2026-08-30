@@ -1,8 +1,3 @@
-@import "@fontsource/plus-jakarta-sans/400.css";
-@import "@fontsource/plus-jakarta-sans/500.css";
-@import "@fontsource/plus-jakarta-sans/600.css";
-@import "@fontsource/plus-jakarta-sans/700.css";
-@import "@fontsource/plus-jakarta-sans/800.css";
 @import "@fontsource/jetbrains-mono/400.css";
 @import "@fontsource/jetbrains-mono/700.css";
 
@@ -12,72 +7,71 @@
 @custom-variant dark (&:where(.dark, .dark *));
 @custom-variant hover-only (@media (hover: hover));
 
-/* ═══ RUNTIME THEME VARIABLES (switch via .dark) ═══ */
-:root {
-  --p-canvas:#F7F4ED; --p-surface:#FDFCF9; --p-surface-subtle:#EFE9DC; --p-surface-inset:#211E1A;
-  --p-ink:#211E1A; --p-ink-soft:#5C554A; --p-ink-faint:#9B9284;
-  --p-line:#E6DECD; --p-line-soft:#EEE8DA; --p-line-strong:#CFC5AE;
-  --p-brand:#211E1A; --p-on-brand:#F7F4ED; --p-brass:#A8874C; --p-brass-soft:#C9B183; --p-brick:#9C4A3C;
-  --p-success:#4B7656; --p-success-deep:#3B5C44; --p-success-tint:#EBF0EA; --p-success-line:#C9D6C6;
-  --p-warning:#8F6420; --p-warning-deep:#8A5A1D; --p-warning-tint:#F4EBDD; --p-warning-line:#E0CBA8;
-  --p-danger:#A03B33;  --p-danger-deep:#7E2D26;  --p-danger-tint:#F4E7E4;  --p-danger-line:#DFBDB7;
-  --p-info:#3E6E8E;    --p-info-deep:#2E5470;    --p-info-tint:#E8EEF2;    --p-info-line:#C2D3DD;
-  --p-lppa:#7A4E7E;    --p-lppa-deep:#5C3A60;    --p-lppa-tint:#F0E9F0;    --p-lppa-line:#D8C6D9;
-  --p-jj-tk:#C96F4A; --p-jj-sd:#4E7A5A; --p-jj-smp:#3E6E8E; --p-jj-sma:#7A4E7E;
+/* ═══ AMANAURA v4.0 — CRYSTAL SOVEREIGN (Runtime Variables) ═══ */
+:root { /* CRYSTAL DAY (System Light) */
+  --system-bg:#F2F2F7; --secondary-bg:#FFFFFF; --tertiary-bg:#E5E5EA;
+  --glass-bg:rgba(255,255,255,0.75); --inset-bg:#000000;
+  --label-primary:#000000; --label-secondary:#3C3C43; --label-tertiary:#8E8E93;
+  --separator:rgba(60,60,67,0.12); --separator-hairline:rgba(0,0,0,0.05);
+  --separator-soft:rgba(0,0,0,0.03); --separator-strong:rgba(60,60,67,0.29);
+  --brand-blue:#007AFF; --brand-blue-deep:#0055D4; --brand-blue-tint:rgba(0,122,255,0.10);
+  --brand-yellow:#FFCC00; --brand-yellow-deep:#8A6D00;
+  --on-brand:#FFFFFF; --on-accent:#000000;
+  --success:#34C759; --success-deep:#248A3D; --success-tint:#EAF7EC; --success-line:#C4E8CB;
+  --warning:#FF9500; --warning-deep:#9A5A00; --warning-tint:#FFF5E6; --warning-line:#FFD9A6;
+  --danger:#FF3B30;  --danger-deep:#C4302B;  --danger-tint:#FFECEB;  --danger-line:#FFC7C3;
+  --info:#5856D6;    --info-deep:#4644B8;    --info-tint:#F0F0FC;    --info-line:#D6D5F5;
+  --lppa:#AF52DE;    --lppa-deep:#8A3FA8;    --lppa-tint:#F8F0FC;    --lppa-line:#EBD3F2;
+  --jj-tk:#FF9500; --jj-sd:#34C759; --jj-smp:#007AFF; --jj-sma:#5856D6;
 }
-.dark { /* NIGHT TEMPLE */
-  --p-canvas:#16130F; --p-surface:#201C16; --p-surface-subtle:#2A241C; --p-surface-inset:#F7F4ED;
-  --p-ink:#F2EBDD; --p-ink-soft:#CFC5B4; --p-ink-faint:#8F867A;
-  --p-line:#3A3227; --p-line-soft:#2E2820; --p-line-strong:#55493A;
-  --p-brand:#C9A45C; --p-on-brand:#16130F; --p-brass:#C9A45C; --p-brass-soft:#8A6F3F; --p-brick:#C97C6B;
-  --p-success:#8FB79B; --p-success-deep:#B7D2B4; --p-success-tint:#232B22; --p-success-line:#3B4A3A;
-  --p-warning:#D9A85F; --p-warning-deep:#E7C088; --p-warning-tint:#2E2618; --p-warning-line:#4A3D24;
-  --p-danger:#D08578;  --p-danger-deep:#E3AC9F;  --p-danger-tint:#2E1F1C;  --p-danger-line:#4A312C;
-  --p-info:#8FB4CC;    --p-info-deep:#B4CFE0;    --p-info-tint:#1F2830;    --p-info-line:#314351;
-  --p-lppa:#B795BB;    --p-lppa-deep:#D2B8D4;    --p-lppa-tint:#291F2A;    --p-lppa-line:#433345;
-  --p-jj-tk:#E0906B; --p-jj-sd:#8FB79B; --p-jj-smp:#8FB4CC; --p-jj-sma:#B795BB;
+.dark { /* OLED NIGHT (System Dark) */
+  --system-bg:#000000; --secondary-bg:#1C1C1E; --tertiary-bg:#2C2C2E;
+  --glass-bg:rgba(28,28,30,0.75); --inset-bg:#FFFFFF;
+  --label-primary:#FFFFFF; --label-secondary:#EBEBF5; --label-tertiary:#8E8E93;
+  --separator:rgba(235,235,245,0.15); --separator-hairline:rgba(255,255,255,0.08);
+  --separator-soft:rgba(255,255,255,0.04); --separator-strong:rgba(235,235,245,0.30);
+  --brand-blue:#0A84FF; --brand-blue-deep:#64B5FF; --brand-blue-tint:rgba(10,132,255,0.16);
+  --brand-yellow:#FFD60A; --brand-yellow-deep:#FFD60A;
+  --on-brand:#FFFFFF; --on-accent:#000000;
+  --success:#30D158; --success-deep:#30D158; --success-tint:#12291A; --success-line:#2E5B3A;
+  --warning:#FF9F0A; --warning-deep:#FF9F0A; --warning-tint:#2E2415; --warning-line:#5B4423;
+  --danger:#FF453A;  --danger-deep:#FF453A;  --danger-tint:#2E1B19;  --danger-line:#5B322E;
+  --info:#5E5CE6;    --info-deep:#8A89F0;    --info-tint:#1E1E33;    --info-line:#3A396B;
+  --lppa:#BF5AF2;    --lppa-deep:#D08AF7;    --lppa-tint:#2A1B30;    --lppa-line:#4E3560;
+  --jj-tk:#FF9F0A; --jj-sd:#30D158; --jj-smp:#0A84FF; --jj-sma:#5E5CE6;
+  --shadow-luminescent:0 0 0 1.5px var(--label-primary), 0 0 16px -6px rgba(10,132,255,.28);
 }
-
-/* ═══ AMANAURA v3.0 — PADMA MODERN (Tailwind v4) ═══ */
+/* ═══ Alias Layer (Tailwind v4 @theme inline) — nama utility TIDAK berubah ═══ */
 @theme inline {
-  --color-canvas:var(--p-canvas); --color-surface:var(--p-surface);
-  --color-surface-subtle:var(--p-surface-subtle); --color-surface-inset:var(--p-surface-inset);
-  --color-ink:var(--p-ink); --color-ink-soft:var(--p-ink-soft); --color-ink-faint:var(--p-ink-faint);
-  --color-line:var(--p-line); --color-line-soft:var(--p-line-soft); --color-line-strong:var(--p-line-strong);
-  --color-brand:var(--p-brand); --color-on-brand:var(--p-on-brand);
-  --color-brass:var(--p-brass); --color-brass-soft:var(--p-brass-soft); --color-brick:var(--p-brick);
-  --color-success:var(--p-success); --color-success-deep:var(--p-success-deep);
-  --color-success-tint:var(--p-success-tint); --color-success-line:var(--p-success-line);
-  --color-warning:var(--p-warning); --color-warning-deep:var(--p-warning-deep);
-  --color-warning-tint:var(--p-warning-tint); --color-warning-line:var(--p-warning-line);
-  --color-danger:var(--p-danger); --color-danger-deep:var(--p-danger-deep);
-  --color-danger-tint:var(--p-danger-tint); --color-danger-line:var(--p-danger-line);
-  --color-info:var(--p-info); --color-info-deep:var(--p-info-deep);
-  --color-info-tint:var(--p-info-tint); --color-info-line:var(--p-info-line);
-  --color-lppa:var(--p-lppa); --color-lppa-deep:var(--p-lppa-deep);
-  --color-lppa-tint:var(--p-lppa-tint); --color-lppa-line:var(--p-lppa-line);
-  --color-jj-tk:var(--p-jj-tk); --color-jj-sd:var(--p-jj-sd); --color-jj-smp:var(--p-jj-smp); --color-jj-sma:var(--p-jj-sma);
-
-  /* Tipografi: kelahiran Indonesia + mono presisi */
-  --font-display:"Plus Jakarta Sans","Inter",system-ui,sans-serif;
-  --font-sans:"Plus Jakarta Sans","Inter",system-ui,sans-serif;
-  --font-mono:"JetBrains Mono",ui-monospace,monospace;
-
-  /* Elevasi: hairline, bukan bayangan tebal (anti-heavy) */
-  --shadow-hairline:0 1px 0 rgba(33,30,26,.05);
-  --shadow-ambient:0 1px 2px rgba(33,30,26,.04),0 4px 12px rgba(33,30,26,.03);
-  --shadow-floating:0 4px 6px -1px rgba(33,30,26,.05),0 16px 32px -8px rgba(33,30,26,.10);
-  --shadow-luminescent:0 0 0 1.5px var(--p-ink),0 0 20px -4px rgba(168,135,76,.28);
-
-  /* Radius Kanonikal (Doktrin §3.6) */
-  --radius-card:16px; --radius-field:12px; --radius-control:8px; --radius-pill:9999px;
-
-  /* MD3 Window Size Class Breakpoints */
-  --breakpoint-compact: 0px;
-  --breakpoint-medium: 600px;
-  --breakpoint-expanded: 840px;
-  --breakpoint-large: 1200px;
-  --breakpoint-extra-large: 1600px;
+  --color-canvas:var(--system-bg); --color-surface:var(--secondary-bg);
+  --color-surface-subtle:var(--tertiary-bg); --color-surface-glass:var(--glass-bg);
+  --color-surface-inset:var(--inset-bg);
+  --color-ink:var(--label-primary); --color-ink-soft:var(--label-secondary); --color-ink-faint:var(--label-tertiary);
+  --color-line:var(--separator); --color-line-hairline:var(--separator-hairline);
+  --color-line-soft:var(--separator-soft); --color-line-strong:var(--separator-strong);
+  --color-brand:var(--brand-blue); --color-brand-primary:var(--brand-blue);
+  --color-brand-deep:var(--brand-blue-deep); --color-brand-tint:var(--brand-blue-tint);
+  --color-brand-accent:var(--brand-yellow); --color-on-brand:var(--on-brand); --color-on-accent:var(--on-accent);
+  --color-success:var(--success); --color-success-deep:var(--success-deep);
+  --color-success-tint:var(--success-tint); --color-success-line:var(--success-line);
+  --color-warning:var(--warning); --color-warning-deep:var(--warning-deep);
+  --color-warning-tint:var(--warning-tint); --color-warning-line:var(--warning-line);
+  --color-danger:var(--danger); --color-danger-deep:var(--danger-deep);
+  --color-danger-tint:var(--danger-tint); --color-danger-line:var(--danger-line);
+  --color-info:var(--info); --color-info-deep:var(--info-deep);
+  --color-info-tint:var(--info-tint); --color-info-line:var(--info-line);
+  --color-lppa:var(--lppa); --color-lppa-deep:var(--lppa-deep);
+  --color-lppa-tint:var(--lppa-tint); --color-lppa-line:var(--lppa-line);
+  --color-jj-tk:var(--jj-tk); --color-jj-sd:var(--jj-sd); --color-jj-smp:var(--jj-smp); --color-jj-sma:var(--jj-sma);
+  --font-sans:-apple-system,BlinkMacSystemFont,"SF Pro Text","Inter",sans-serif;
+  --font-mono:"JetBrains Mono",SFMono-Regular,Menlo,monospace;
+  --radius-card:18px; --radius-field:12px; --radius-control:8px; --radius-pill:9999px;
+  --shadow-hairline:0 1px 0 rgba(0,0,0,.04);
+  --shadow-ambient:0 1px 2px rgba(0,0,0,.04),0 4px 12px rgba(0,0,0,.05);
+  --shadow-floating:0 4px 6px -1px rgba(0,0,0,.06),0 16px 32px -8px rgba(0,0,0,.12);
+  --shadow-luminescent:0 0 0 1.5px var(--label-primary),0 0 20px -4px rgba(0,122,255,.35);
+  --breakpoint-compact:0px; --breakpoint-medium:600px; --breakpoint-expanded:840px;
+  --breakpoint-large:1200px; --breakpoint-extra-large:1600px;
 }
 
 /* Keyframes for Amanaura Breath (4s Resting Human Pulse) */
@@ -96,14 +90,9 @@
  * CANONICAL REUSABLE UTILITIES & ERGONOMICS
  */
 @layer utilities {
-  /* Motif Nusantara (≤4% opacity — kultural-sekuler) */
-  .motif-poleng { 
-    background-image: conic-gradient(var(--p-ink) 25%, transparent 0 50%, var(--p-ink) 0 75%, transparent 0);
-    background-size: 8px 8px; 
-    opacity: .04; 
-  }
+  /* Hairline Border */
   .hairline-b { 
-    border-bottom: 1px solid var(--p-line); 
+    border-bottom: 1px solid var(--separator, rgba(60, 60, 67, 0.12)); 
   }
 
   /* Amanaura Breath Animation */
@@ -113,16 +102,16 @@
 
   /* Explicit Shadow Utilities */
   .shadow-hairline {
-    box-shadow: var(--shadow-hairline, 0 1px 0 rgba(33,30,26,.05));
+    box-shadow: var(--shadow-hairline, 0 1px 0 rgba(0, 0, 0, 0.04));
   }
   .shadow-ambient {
-    box-shadow: var(--shadow-ambient, 0 1px 2px rgba(33,30,26,.04), 0 4px 12px rgba(33,30,26,.03));
+    box-shadow: var(--shadow-ambient, 0 1px 2px rgba(0, 0, 0, 0.04), 0 4px 12px rgba(0, 0, 0, 0.05));
   }
   .shadow-floating {
-    box-shadow: var(--shadow-floating, 0 4px 6px -1px rgba(33,30,26,.05), 0 16px 32px -8px rgba(33,30,26,.10));
+    box-shadow: var(--shadow-floating, 0 4px 6px -1px rgba(0, 0, 0, 0.06), 0 16px 32px -8px rgba(0, 0, 0, 0.12));
   }
   .shadow-luminescent {
-    box-shadow: var(--shadow-luminescent, 0 0 0 1.5px var(--p-ink), 0 0 20px -4px rgba(168,135,76,.28));
+    box-shadow: var(--shadow-luminescent, 0 0 0 1.5px var(--label-primary, #000), 0 0 20px -4px rgba(0, 122, 255, 0.35));
   }
 
   /* Minimum tactile touch target (WCAG 2.5.5) */
@@ -136,7 +125,7 @@
     outline: none;
   }
   .focus-ring-safe:focus-visible {
-    box-shadow: var(--shadow-luminescent, 0 0 0 1.5px var(--p-ink), 0 0 20px -4px rgba(168,135,76,.28));
+    box-shadow: var(--shadow-luminescent, 0 0 0 1.5px var(--label-primary, #000), 0 0 20px -4px rgba(0, 122, 255, 0.35));
   }
 
   /* Scrollbar suppression utilities */
@@ -155,7 +144,7 @@
 
 ::-webkit-scrollbar { width: 14px; }
 ::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background-color: var(--p-line-strong, #CFC5AE); border-radius: 10px; border: 4px solid var(--p-surface, white); }
+::-webkit-scrollbar-thumb { background-color: var(--separator, rgba(60, 60, 67, 0.2)); border-radius: 10px; border: 4px solid var(--secondary-bg, white); }
 
 /*
  * ==============================================================================

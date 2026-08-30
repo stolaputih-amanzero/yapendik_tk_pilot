@@ -145,7 +145,7 @@ export const InstitutionalHealthDashboard: React.FC = () => {
       <div className="bg-surface-subtle border-b border-line medium:rounded-card px-4 py-5 medium:p-6 w-full text-ink medium:border medium:shadow-hairline">
         <div className="flex flex-col medium:flex-row medium:items-center justify-between gap-4">
           <div>
-            <div className="flex items-center space-x-1.5 text-success text-[10px] medium:text-xs font-bold uppercase tracking-wider mb-1">
+            <div className="flex items-center space-x-1.5 text-success-deep text-[10px] medium:text-xs font-bold uppercase tracking-wider mb-1">
               <Activity className="w-4 h-4" />
               <span>Standar Yayasan • Telemetri &amp; Mutu</span>
             </div>
@@ -218,7 +218,7 @@ export const InstitutionalHealthDashboard: React.FC = () => {
 
           <ProgressBar
             value={indicators.capacity_utilization_pct}
-            variant={indicators.capacity_utilization_pct > 100 ? 'danger' : indicators.capacity_utilization_pct >= 80 ? 'success' : 'brass'}
+            variant={indicators.capacity_utilization_pct > 100 ? 'danger' : indicators.capacity_utilization_pct >= 80 ? 'success' : 'brand'}
             trackClassName="h-2"
           />
         </div>
@@ -231,7 +231,7 @@ export const InstitutionalHealthDashboard: React.FC = () => {
               <UserCheck className="w-4 h-4 text-ink-soft" />
             </div>
             <div className={`text-2xl medium:text-3xl font-black tracking-tight font-mono ${
-              indicators.staffing_compliance ? 'text-success-deep' : 'text-brass'
+              indicators.staffing_compliance ? 'text-success-deep' : 'text-brand-primary'
             }`}>
               {indicators.staffing_compliance ? '100% Sesuai' : 'Perlu Perhatian'}
             </div>
@@ -244,7 +244,7 @@ export const InstitutionalHealthDashboard: React.FC = () => {
 
           <div className="flex items-center space-x-2 text-[10px] text-ink-soft font-mono whitespace-nowrap">
             <span>Status:</span>
-            <span className={indicators.staffing_compliance ? 'text-success-deep font-bold' : 'text-brass font-bold'}>
+            <span className={indicators.staffing_compliance ? 'text-success-deep font-bold' : 'text-brand-primary font-bold'}>
               {indicators.staffing_compliance ? 'TERPENUHI' : 'BELUM_LENGKAP'}
             </span>
           </div>
@@ -288,7 +288,7 @@ export const InstitutionalHealthDashboard: React.FC = () => {
 
           <ProgressBar
             value={indicators.curriculum_velocity_pct}
-            variant="brass"
+            variant="brand"
             trackClassName="h-2"
           />
         </div>
@@ -313,7 +313,7 @@ export const InstitutionalHealthDashboard: React.FC = () => {
                 key={idx} 
                 className="p-3 bg-surface-subtle border border-line rounded-field flex items-start space-x-3 text-xs"
               >
-                <AlertTriangle className="w-4 h-4 flex-shrink-0 text-brass mt-0.5" />
+                <AlertTriangle className="w-4 h-4 flex-shrink-0 text-brand-primary mt-0.5" />
                 <div className="flex-1">
                   <div className="flex items-center space-x-2">
                     <span className="font-mono font-bold text-ink">{ex.code}</span>
@@ -400,7 +400,7 @@ export const InstitutionalHealthDashboard: React.FC = () => {
                     </div>
                     <div>
                       <span>Eksepsi:</span>
-                      <p className={`font-bold font-mono ${itemExceptions.length > 0 ? 'text-brass' : 'text-success-deep'}`}>
+                      <p className={`font-bold font-mono ${itemExceptions.length > 0 ? 'text-brand-primary' : 'text-success-deep'}`}>
                         {itemExceptions.length} Masalah
                       </p>
                     </div>

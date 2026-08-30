@@ -31,13 +31,13 @@ export const QuickCaptureFloatingButton: React.FC<Props> = ({ onClick, pendingDr
         type="button"
         onClick={onClick}
         aria-label="Rekam Momen Belajar"
-        className="group relative flex items-center justify-center w-14 h-14 medium:w-16 medium:h-16 rounded-pill bg-brand hover-only:bg-surface-inset text-on-brand shadow-floating hover-only:scale-105 active:scale-95 transition-all duration-200 cursor-pointer border border-line-strong/80"
+        className="group relative flex items-center justify-center w-14 h-14 medium:w-16 medium:h-16 rounded-pill bg-brand-primary text-on-brand shadow-floating hover-only:scale-105 active:scale-95 transition-all duration-200 cursor-pointer border border-line-hairline"
       >
-        <Sparkles className="w-6 h-6 medium:w-7 medium:h-7 text-brass fill-brass group-hover:rotate-12 transition-transform" />
+        <Sparkles className="w-6 h-6 medium:w-7 medium:h-7 text-on-brand fill-on-brand group-hover:rotate-12 transition-transform" />
 
         {/* Pending Draft Counter Badge */}
         {pendingDraftCount > 0 && (
-          <span className="absolute top-0 right-0 w-5 h-5 medium:w-6 medium:h-6 rounded-pill bg-danger text-on-brand text-[10px] medium:text-xs font-mono font-bold whitespace-nowrap flex items-center justify-center border-2 border-brand shadow-ambient animate-bounce">
+          <span className="absolute top-0 right-0 w-5 h-5 medium:w-6 medium:h-6 rounded-pill bg-danger text-on-brand text-[10px] medium:text-xs font-mono font-bold whitespace-nowrap flex items-center justify-center border-2 border-brand-primary shadow-floating animate-bounce">
             {pendingDraftCount}
           </span>
         )}

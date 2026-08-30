@@ -1,6 +1,6 @@
 import React from 'react';
 
-export type ProgressBarVariant = 'brass' | 'success' | 'warning' | 'danger' | 'info' | 'lppa';
+export type ProgressBarVariant = 'primary' | 'brand' | 'success' | 'warning' | 'danger' | 'info' | 'lppa';
 
 export interface ProgressBarProps {
   value: number; // 0 to 100
@@ -11,7 +11,8 @@ export interface ProgressBarProps {
 }
 
 const variantFillMap: Record<ProgressBarVariant, string> = {
-  brass: 'bg-brass',
+  primary: 'bg-brand-primary',
+  brand: 'bg-brand-primary',
   success: 'bg-success',
   warning: 'bg-warning',
   danger: 'bg-danger',
@@ -21,13 +22,13 @@ const variantFillMap: Record<ProgressBarVariant, string> = {
 
 export const ProgressBar: React.FC<ProgressBarProps> = ({
   value,
-  variant = 'brass',
+  variant = 'primary',
   className = '',
   trackClassName = '',
   showLabel = false
 }) => {
   const clampedValue = Math.min(100, Math.max(0, isNaN(value) ? 0 : value));
-  const fillClass = variantFillMap[variant] || 'bg-brass';
+  const fillClass = variantFillMap[variant] || 'bg-brand-primary';
 
   return (
     <div className={`space-y-1 w-full min-w-0 ${className}`}>

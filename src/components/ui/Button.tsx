@@ -72,7 +72,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(({
       className={`
         inline-flex items-center justify-center select-none
         transition-all duration-150 active:scale-[0.98]
-        focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brass/30 focus-visible:ring-offset-2
+        focus-visible:outline-none focus-visible:shadow-luminescent
         cursor-pointer disabled:cursor-not-allowed disabled:active:scale-100
         ${variantStyles[variant]}
         ${isIconButton ? sizeStyles.icon : sizeStyles[size]}

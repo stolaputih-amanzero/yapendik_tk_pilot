@@ -283,7 +283,7 @@ export const AttendanceWorkspace: React.FC = () => {
                   <div className="mt-3 flex flex-row items-center gap-3 w-full text-xs">
                     {/* Temperature */}
                     <div className="flex items-center gap-2 bg-surface-subtle border border-line rounded-field px-2 py-1 w-28 shrink-0">
-                      <Thermometer className="w-4 h-4 text-brass" />
+                      <Thermometer className="w-4 h-4 text-brand-primary" />
                       <input
                         type="number"
                         step="0.1"

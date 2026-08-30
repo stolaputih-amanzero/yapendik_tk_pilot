@@ -9,7 +9,8 @@ const FORBIDDEN_PATTERNS = [
   { regex: /\bdivide-(?:slate|gray)-\d+/, name: 'divide-neutral-raw' },
   { regex: /\bring-(?:slate|gray)-\d+/, name: 'ring-neutral-raw' },
   { regex: /\btext-(?:red|amber|emerald|rose|green)-\d{2,3}\b/, name: 'text-color-raw' },
-  { regex: /(fill|stroke)-(red|amber|emerald|rose|green|indigo|blue|slate|gray|zinc)-\d{2,3}/, name: 'fill-stroke-color-raw' }
+  { regex: /(fill|stroke)-(red|amber|emerald|rose|green|indigo|blue|slate|gray|zinc)-\d{2,3}/, name: 'fill-stroke-color-raw' },
+  { regex: /\b(?:bg|text|border|ring|fill)-brass(?:-soft)?\b/, name: 'deprecated-brass-token' }
 ];
 
 const ALLOWED_FILES = [

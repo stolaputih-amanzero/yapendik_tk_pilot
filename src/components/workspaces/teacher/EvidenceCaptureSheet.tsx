@@ -112,8 +112,8 @@ export const EvidenceCaptureSheet: React.FC<Props> = ({
         {/* Header */}
         <div className="px-5 medium:px-6 py-4 bg-surface-subtle border-b border-line flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <div className="p-2 rounded-field bg-warning-tint text-brass border border-warning-line/80 shadow-hairline">
-              <Sparkles className="w-5 h-5 text-brass fill-brass" />
+            <div className="p-2 rounded-field bg-warning-tint text-brand-primary border border-warning-line/80 shadow-hairline">
+              <Sparkles className="w-5 h-5 text-brand-primary fill-brand-primary" />
             </div>
             <div>
               <h3 className="text-base font-bold text-ink">
@@ -232,7 +232,7 @@ export const EvidenceCaptureSheet: React.FC<Props> = ({
               placeholder="Contoh: Berhasil menyusun menara 12 balok secara mandiri dengan seimbang..."
               value={noteText}
               onChange={e => setNoteText(e.target.value)}
-              className="w-full px-3 py-2 text-xs rounded-card bg-surface-subtle border border-line focus:bg-surface focus:outline-none focus:ring-2 focus:ring-brass/30 text-ink placeholder:text-ink-faint font-medium shadow-hairline"
+              className="w-full px-3 py-2 text-xs rounded-card bg-surface-subtle border border-line focus:bg-surface focus:outline-none focus:ring-1 focus:ring-brand-primary text-ink placeholder:text-ink-faint font-medium shadow-hairline"
             />
           </div>
 
@@ -248,9 +248,9 @@ export const EvidenceCaptureSheet: React.FC<Props> = ({
             <button
               type="submit"
               disabled={isSaving || selectedStudentIds.length === 0}
-              className="w-full medium:w-auto px-6 py-2 rounded-field text-xs font-bold bg-brand hover-only:bg-surface-inset text-on-brand shadow-hairline transition-all disabled:opacity-50 cursor-pointer flex justify-center items-center gap-2 order-1 medium:order-2"
+              className="w-full medium:w-auto px-6 py-2 rounded-field text-xs font-bold bg-brand hover-only:opacity-90 text-on-brand shadow-hairline transition-all disabled:opacity-50 cursor-pointer flex justify-center items-center gap-2 order-1 medium:order-2"
             >
-              <Sparkles className="w-4 h-4 text-brass fill-brass" />
+              <Sparkles className="w-4 h-4 text-brand-primary fill-brand-primary" />
               <span>{isSaving ? 'Menyimpan...' : 'Simpan Momen Belajar'}</span>
             </button>
           </div>

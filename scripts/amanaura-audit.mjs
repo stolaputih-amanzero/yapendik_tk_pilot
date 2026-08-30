@@ -17,7 +17,10 @@ const FORBIDDEN_RULES = [
   { regex: /<(?:Button|button)[^>]*\bclassName=['"][^'"]*\btruncate\b/i, name: 'R-NO-TRUNCATE-BUTTON: Truncation on interactive button (Wajib wrap / multi-line, dilarang memotong aksi)' },
   { regex: /\b(p|px|py|m|mx|my)-\d+\.\d+\b/, name: 'R-SPACING-RHYTHM: Larangan half-step seperti p-2.5, p-3.5 (Wajib skala kanonikal)' },
   { regex: /\bw-3\.5 h-3\.5\b/, name: 'R-ICON-SIZE: Larangan icon w-3.5 h-3.5 (Wajib w-4 h-4 di dalam Button/chip)' },
-  { regex: /\\buppercase\\b(?!.*\\btracking-wider\\b)/, name: 'R-TRACKING-UPPER: Elemen dengan uppercase WAJIB tracking-wider' }
+  { regex: /\\buppercase\\b(?!.*\\btracking-wider\\b)/, name: 'R-TRACKING-UPPER: Elemen dengan uppercase WAJIB tracking-wider' },
+  { regex: /\b(motif-poleng|padma|gunungan)\b/, name: 'R-ORNAMENT: Zero-Ornament Doctrine violation (motif-poleng/padma/gunungan dilarang)' },
+  { regex: /ClassroomPulseBanner.*border-warning-line/, name: 'R-FLAT-BOX: Kotak alert border-warning-line dilarang pada banner kehadiran (Wajib divide-y divide-line-hairline)' },
+  { regex: /className=['"][^'"]*?(?<!focus-visible:)(?<!focus:)(?<!hover-only:)(?<!hover:)\bshadow-luminescent\b/, name: 'R-GLOW: shadow-luminescent tanpa prefix interaksi (Wajib focus-visible: / hover-only:)' }
 ];
 
 const ALLOWED_FILES = [
@@ -79,6 +82,11 @@ for (const filePath of allFiles) {
 
     for (const { regex, name } of FORBIDDEN_RULES) {
       if (regex.test(line)) {
+        // W-B Exemption: CanonicalAnchor closed-loop seal is the sole sanctioned ambient glow
+        if (name.includes('R-GLOW') && filePath.includes('CanonicalAnchor')) {
+          continue;
+        }
+
         violationCount++;
         const relPath = path.relative(process.cwd(), filePath);
         if (!violationsByFile[relPath]) {

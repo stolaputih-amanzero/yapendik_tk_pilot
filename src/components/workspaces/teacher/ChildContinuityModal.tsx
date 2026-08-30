@@ -198,7 +198,7 @@ export const ChildContinuityModal: React.FC<Props> = ({
         {/* HEADER BAR (Amanaura Standard Eyebrow + Title + Badge) */}
         <div className="px-4 medium:px-5 py-3 medium:py-3 border-b border-line-soft bg-surface flex items-center justify-between relative shrink-0">
           <div className="flex items-center gap-3 pr-6 medium:pr-0 min-w-0">
-            <div className="w-10 h-10 rounded-card bg-lppa-tint border border-indigo-100 text-lppa-deep flex items-center justify-center shrink-0">
+            <div className="w-10 h-10 rounded-card bg-lppa-tint border border-lppa-line text-lppa-deep flex items-center justify-center shrink-0">
               <Compass className="w-5 h-5" />
             </div>
             <div className="min-w-0">
@@ -301,7 +301,7 @@ export const ChildContinuityModal: React.FC<Props> = ({
             <div className="space-y-6">
               
               {/* Historical Context Notice */}
-              <div className="bg-lppa-tint/50 p-4 rounded-card border border-indigo-100/80 flex flex-col medium:flex-row items-start medium:items-center justify-between gap-4">
+              <div className="bg-lppa-tint/50 p-4 rounded-card border border-lppa-line flex flex-col medium:flex-row items-start medium:items-center justify-between gap-4">
                 <div className="flex items-center gap-3">
                   <ShieldCheck className="w-5 h-5 text-lppa shrink-0" />
                   <div>
@@ -329,7 +329,7 @@ export const ChildContinuityModal: React.FC<Props> = ({
                       onClick={() => setActiveElementKey(k)}
                       className={`p-3 rounded-card border text-left transition cursor-pointer ${
                         isSelected 
-                          ? 'bg-lppa-tint/70 text-ink border-2 border-indigo-600 shadow-hairline ring-2 ring-indigo-500/20' 
+                          ? 'bg-lppa-tint/70 text-ink border-2 border-lppa-line shadow-hairline ring-2 ring-lppa/20' 
                           : 'bg-surface text-ink border-line hover-only:bg-surface-subtle shadow-hairline'
                       }`}
                     >
@@ -340,7 +340,7 @@ export const ChildContinuityModal: React.FC<Props> = ({
                         </span>
                         <span className={`text-xs font-bold px-2 py-1 rounded-full border ${
                           isSelected 
-                            ? 'bg-indigo-600 text-on-brand border-indigo-600' 
+                            ? 'bg-lppa text-on-brand border-lppa-line' 
                             : 'bg-surface-subtle text-ink-soft border-line'
                         }`}>
                           {traj.current_rating}
@@ -393,7 +393,7 @@ export const ChildContinuityModal: React.FC<Props> = ({
 
                   {/* Strengths & Growth Areas */}
                   <div className="grid grid-cols-1 medium:grid-cols-2 gap-4 pt-2">
-                    <div className="bg-success-tint/50 p-4 rounded-card border border-emerald-100 space-y-2">
+                    <div className="bg-success-tint/50 p-4 rounded-card border border-success-line space-y-2">
                       <div className="text-xs font-bold text-success-deep flex items-center gap-2">
                         <CheckCircle2 className="w-4 h-4 text-success" />
                         <span>Kekuatan & Minat yang Teramati:</span>
@@ -405,7 +405,7 @@ export const ChildContinuityModal: React.FC<Props> = ({
                       </ul>
                     </div>
 
-                    <div className="bg-lppa-tint/50 p-4 rounded-card border border-purple-100 space-y-2">
+                    <div className="bg-lppa-tint/50 p-4 rounded-card border border-lppa-line space-y-2">
                       <div className="text-xs font-bold text-lppa-deep flex items-center gap-2">
                         <Lightbulb className="w-4 h-4 text-lppa" />
                         <span>Area Fokus Stimulasi Berkelanjutan:</span>
@@ -473,12 +473,12 @@ export const ChildContinuityModal: React.FC<Props> = ({
                   </div>
 
                   {/* SECTION 1: SYSTEM RECOMMENDATION */}
-                  <div className="bg-lppa-tint/50 p-4 rounded-card border border-purple-100 space-y-2.5">
+                  <div className="bg-lppa-tint/50 p-4 rounded-card border border-lppa-line space-y-2.5">
                     <div className="flex items-center gap-2 text-xs font-bold text-lppa-deep">
                       <Sparkles className="w-4 h-4 text-lppa" />
                       <span>Rekomendasi Rencana Stimulasi Bermain:</span>
                     </div>
-                    <div className="bg-surface p-3 rounded-field border border-purple-100 text-xs text-ink leading-relaxed font-normal">
+                    <div className="bg-surface p-3 rounded-field border border-lppa-line text-xs text-ink leading-relaxed font-normal">
                       "{selectedPlan.system_proposal.suggested_goal}"
                     </div>
                     <div className="text-[11px] text-lppa-deep space-y-1">
@@ -503,7 +503,7 @@ export const ChildContinuityModal: React.FC<Props> = ({
                         value={adaptedGoal}
                         onChange={e => setAdaptedGoal(e.target.value)}
                         disabled={selectedPlan.status === 'COMPLETED'}
-                        className="w-full p-3 text-xs font-medium rounded-field bg-surface-subtle border border-line text-ink focus:bg-surface focus:outline-none focus:ring-2 focus:ring-brass/30 shadow-hairline"
+                        className="w-full p-3 text-xs font-medium rounded-field bg-surface-subtle border border-line text-ink focus:bg-surface focus:outline-none focus:ring-1 focus:ring-brand-primary shadow-hairline"
                         placeholder="Sesuaikan tujuan stimulasi yang akan diimplementasikan di kelas..."
                       />
                     </div>
@@ -519,7 +519,7 @@ export const ChildContinuityModal: React.FC<Props> = ({
                           onChange={e => setPedagogicalNotes(e.target.value)}
                           disabled={selectedPlan.status === 'COMPLETED'}
                           placeholder="Contoh: Pendampingan dialog saat ananda merancang pondasi."
-                          className="w-full p-2 text-xs font-medium rounded-field bg-surface-subtle border border-line text-ink focus:bg-surface focus:outline-none focus:ring-2 focus:ring-brass/30 shadow-hairline"
+                          className="w-full p-2 text-xs font-medium rounded-field bg-surface-subtle border border-line text-ink focus:bg-surface focus:outline-none focus:ring-1 focus:ring-brand-primary shadow-hairline"
                         />
                       </div>
 
@@ -533,7 +533,7 @@ export const ChildContinuityModal: React.FC<Props> = ({
                           onChange={e => setHomePrompt(e.target.value)}
                           disabled={selectedPlan.status === 'COMPLETED'}
                           placeholder="Contoh: Ajak ananda menyusun balok bersama keluarga."
-                          className="w-full p-2 text-xs font-medium rounded-field bg-surface-subtle border border-line text-ink focus:bg-surface focus:outline-none focus:ring-2 focus:ring-brass/30 shadow-hairline"
+                          className="w-full p-2 text-xs font-medium rounded-field bg-surface-subtle border border-line text-ink focus:bg-surface focus:outline-none focus:ring-1 focus:ring-brand-primary shadow-hairline"
                         />
                       </div>
                     </div>
@@ -561,7 +561,7 @@ export const ChildContinuityModal: React.FC<Props> = ({
                       <button
                         onClick={handleConfirmDecision}
                         disabled={isProcessing}
-                        className="w-full medium:w-auto px-4 py-2 rounded-field bg-brand hover-only:bg-surface-inset text-on-brand text-xs font-bold transition flex justify-center items-center gap-2 shadow-hairline cursor-pointer disabled:opacity-50"
+                        className="w-full medium:w-auto px-4 py-2 rounded-field bg-brand hover-only:opacity-90 text-on-brand text-xs font-bold transition flex justify-center items-center gap-2 shadow-hairline cursor-pointer disabled:opacity-50"
                       >
                         <CheckCircle2 className="w-4 h-4" />
                         <span>Tetapkan & Aktifkan Rencana</span>

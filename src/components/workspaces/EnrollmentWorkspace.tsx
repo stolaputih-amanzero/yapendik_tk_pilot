@@ -44,7 +44,7 @@ export const EnrollmentWorkspace: React.FC = () => {
   }, [securityContext?.activeSchoolId, selectedClassId]);
 
   return (
-    <div className="space-y-6 pb-[132px] expanded:pb-8">
+    <div className="space-y-6 pb-[160px] expanded:pb-8">
       {/* Header */}
       <div className="bg-surface border border-line rounded-lg p-4 shadow-hairline flex flex-col medium:flex-row medium:items-center justify-between gap-4">
         <div>
@@ -114,7 +114,7 @@ export const EnrollmentWorkspace: React.FC = () => {
               </div>
 
               {/* Health and special notes */}
-              <div className="text-xs space-y-1.5 bg-warning-tint/40 p-3 rounded border border-amber-100">
+              <div className="text-xs space-y-1.5 bg-warning-tint/40 p-3 rounded border border-warning-line">
                 <div>
                   <span className="font-semibold text-ink">Catatan Alergi:</span>{' '}
                   <span className="text-ink-soft">{s.allergies || 'Tidak ada riwayat alergi'}</span>
@@ -143,7 +143,7 @@ export const EnrollmentWorkspace: React.FC = () => {
                         )}
                       </div>
                       {g.relation.isPrimaryContact && (
-                        <span className="text-[10px] px-1 py-1 rounded bg-blue-100 text-info-deep font-semibold">
+                        <span className="text-[10px] px-1 py-1 rounded bg-info-tint text-info-deep font-semibold">
                           Kontak Utama
                         </span>
                       )}

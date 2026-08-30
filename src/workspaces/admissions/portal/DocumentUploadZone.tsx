@@ -89,7 +89,7 @@ export const DocumentUploadZone: React.FC<DocumentUploadZoneProps> = ({
       default:
         return (
           <span className="px-2 py-1 text-xs font-bold rounded-full bg-warning-tint text-warning-deep border border-warning-line flex items-center gap-1">
-            <Clock className="w-4 h-4 text-brass" />
+            <Clock className="w-4 h-4 text-brand-primary" />
             <span>Menunggu Verifikasi</span>
           </span>
         );
@@ -131,7 +131,7 @@ export const DocumentUploadZone: React.FC<DocumentUploadZoneProps> = ({
                     <div>
                       <span className="text-sm font-bold text-ink block">{docDef.label}</span>
                       {docDef.required && (
-                        <span className="text-[10px] text-danger font-bold uppercase tracking-wider">*Wajib</span>
+                        <span className="text-[10px] text-danger-deep font-bold uppercase tracking-wider">*Wajib</span>
                       )}
                     </div>
                   </div>
@@ -159,7 +159,7 @@ export const DocumentUploadZone: React.FC<DocumentUploadZoneProps> = ({
                       ? 'bg-line-soft text-ink-soft'
                       : isCurrentlyUploading
                       ? 'bg-line-strong text-ink cursor-wait'
-                      : 'bg-brand hover-only:bg-surface-inset text-on-brand shadow-hairline'
+                      : 'bg-brand hover-only:opacity-90 text-on-brand shadow-hairline'
                   }`}
                   data-testid={`upload-btn-${docDef.type}`}
                 >

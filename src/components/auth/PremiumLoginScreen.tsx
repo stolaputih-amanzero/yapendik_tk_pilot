@@ -52,12 +52,12 @@ export const PremiumLoginScreen: React.FC = () => {
       {/* SISI KIRI: BRANDING & VALUE PROPOSITION PANEL (Hidden di Mobile) */}
       <div className="hidden expanded:flex expanded:w-5/12 large:w-1/2 flex-col justify-between p-12 bg-surface border-r border-line relative overflow-hidden">
         {/* Ambient background blur glows */}
-        <div className="absolute -top-24 -left-24 w-96 h-96 bg-brass/5 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute -top-24 -left-24 w-96 h-96 bg-brand-primary/5 rounded-full blur-3xl pointer-events-none" />
         <div className="absolute -bottom-24 -right-24 w-96 h-96 bg-success/5 rounded-full blur-3xl pointer-events-none" />
         <div className="absolute top-1/2 left-1/3 w-80 h-80 bg-info/5 rounded-full blur-3xl pointer-events-none" />
 
         {/* Padma Watermark Line-Art (Nusantara Soul) */}
-        <div className="absolute -right-16 -bottom-16 w-96 h-96 pointer-events-none select-none text-brass opacity-10 flex items-center justify-center">
+        <div className="absolute -right-16 -bottom-16 w-96 h-96 pointer-events-none select-none text-brand-primary opacity-10 flex items-center justify-center">
           <Flower2 className="w-full h-full stroke-[0.6]" />
         </div>
 
@@ -65,7 +65,7 @@ export const PremiumLoginScreen: React.FC = () => {
         <div className="relative z-10">
           <div className="flex items-center space-x-3 mb-6">
             <div className="w-12 h-12 rounded-card bg-surface-subtle border border-line flex items-center justify-center text-ink shadow-hairline">
-              <Building2 className="w-6 h-6 text-brass" />
+              <Building2 className="w-6 h-6 text-brand-primary" />
             </div>
             <div>
               <h1 className="text-xl font-black text-ink tracking-tight flex items-center gap-2 font-display">
@@ -79,7 +79,7 @@ export const PremiumLoginScreen: React.FC = () => {
         {/* Middle Educational Vision & Pillar Highlights */}
         <div className="relative z-10 my-auto py-8">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-surface-subtle border border-line text-ink text-xs font-semibold mb-6">
-            <Sparkles className="w-4 h-4 text-brass fill-brass" />
+            <Sparkles className="w-4 h-4 text-brand-primary fill-brand-primary" />
             <span>Fondasi Pendidikan Usia Dini Berkarakter</span>
           </div>
 
@@ -136,7 +136,7 @@ export const PremiumLoginScreen: React.FC = () => {
           {/* Mobile Branding Header (Only visible on mobile/small screens) */}
           <div className="expanded:hidden flex items-center space-x-3 mb-6">
             <div className="w-10 h-10 rounded-field bg-surface-subtle border border-line flex items-center justify-center text-ink">
-              <Building2 className="w-5 h-5 text-brass" />
+              <Building2 className="w-5 h-5 text-brand-primary" />
             </div>
             <div>
               <h1 className="text-base font-bold text-ink font-display">Yapendik School OS</h1>

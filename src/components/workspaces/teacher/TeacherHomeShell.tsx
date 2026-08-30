@@ -42,7 +42,7 @@ import { GuardianNoticeLedger } from './GuardianNoticeLedger';
 import { DailyCompletionSummary } from './DailyCompletionSummary';
 import { LearningSurface } from './LearningSurface';
 import { StudentRosterSurface } from './StudentRosterSurface';
-import { SegmentedControl, Button, Skeleton } from '../../ui';
+import { SegmentedControl, Button, Skeleton, AdaptiveDialog } from '../../ui';
 
 import { 
   CalendarDays, 
@@ -51,7 +51,10 @@ import {
   Sparkles, 
   Home, 
   Clock,
-  RefreshCw 
+  RefreshCw,
+  ChevronDown,
+  AlertTriangle,
+  FileText
 } from 'lucide-react';
 
 export const TeacherHomeShell: React.FC<{ onNavigateToCommunication?: () => void }> = ({ onNavigateToCommunication }) => {
@@ -69,6 +72,10 @@ export const TeacherHomeShell: React.FC<{ onNavigateToCommunication?: () => void
   const [isSafetyModalOpen, setIsSafetyModalOpen] = useState(false);
   const [activeSafetySignals, setActiveSafetySignals] = useState<SafetyExceptionSignal[]>([]);
   const [activeIncidents, setActiveIncidents] = useState<SafetyIncidentRecord[]>([]);
+
+  // Mobile Dialog / Drawer States (Mobile-First Architecture)
+  const [isPulseModalOpen, setIsPulseModalOpen] = useState(false);
+  const [isReconciliationModalOpen, setIsReconciliationModalOpen] = useState(false);
 
   // Modal / Drawer States
   const [isQuickCaptureOpen, setIsQuickCaptureOpen] = useState(false);
@@ -297,17 +304,28 @@ export const TeacherHomeShell: React.FC<{ onNavigateToCommunication?: () => void
     );
   }
 
+  const attendanceRate = aggregate.pulse.total_students > 0
+    ? Math.round((aggregate.pulse.present_count / aggregate.pulse.total_students) * 100)
+    : 0;
+
+  const hasHealthAlerts = aggregate.pulse.health_alerts && aggregate.pulse.health_alerts.some(
+    a => a.alert_type === 'FEVER' || (a.note && !['tidak ada', 'none', '-', 'tidak'].includes(a.note.replace(/^alergi:\s*/i, '').trim().toLowerCase()))
+  );
+
+  const activeIncidentsUnresolved = activeIncidents.filter(i => i.status !== 'RESOLVED' && i.status !== 'AUDITED_CLOSED');
+  const hasSafetyExceptions = activeSafetySignals.length > 0 || hasHealthAlerts || activeIncidentsUnresolved.length > 0;
+
   return (
-    <div className="w-full space-y-6 pb-24 expanded:pb-0 text-ink font-sans">
-      {/* Workspace Header Block (Amanaura Standard) */}
-      <div className="bg-surface-subtle border-b border-line expanded:rounded-card px-4 py-5 medium:p-6 w-full text-ink expanded:border expanded:shadow-hairline">
+    <div className="w-full pb-24 expanded:pb-0 text-ink font-sans">
+      {/* Workspace Header Section (F-1 & F-6) */}
+      <div className="px-4 medium:px-5 pt-6 pb-2 w-full text-ink">
         <div className="flex items-start justify-between gap-4">
           <div>
-            <div className="flex items-center space-x-1.5 text-brass text-[10px] medium:text-xs font-bold uppercase tracking-wider mb-1">
-              <Home className="w-4 h-4" />
+            <div className="flex items-center space-x-1.5 text-brand-deep text-xs font-semibold uppercase tracking-wider mb-1">
+              <Home className="w-4 h-4 text-brand-primary" />
               <span>Ruang Guru</span>
             </div>
-            <h1 className="text-xl medium:text-2xl font-display font-bold text-ink tracking-tight flex items-center gap-2">
+            <h1 className="text-[28px] medium:text-3xl font-bold text-ink tracking-tight flex items-center gap-2">
               Beranda Kelas
             </h1>
             <p className="text-ink-soft text-xs medium:text-sm mt-0.5">
@@ -326,7 +344,7 @@ export const TeacherHomeShell: React.FC<{ onNavigateToCommunication?: () => void
                 disabled={loading}
                 aria-label="Segarkan Data"
                 leftIcon={<RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin text-success' : ''}`} />}
-                className="rounded-field"
+                className="rounded-xl"
               />
             </div>
             {/* Desktop Refresh */}
@@ -337,7 +355,7 @@ export const TeacherHomeShell: React.FC<{ onNavigateToCommunication?: () => void
                 onClick={loadData}
                 disabled={loading}
                 leftIcon={<RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin text-success' : ''}`} />}
-                className="rounded-field"
+                className="rounded-xl"
               >
                 Segarkan Data
               </Button>
@@ -346,7 +364,7 @@ export const TeacherHomeShell: React.FC<{ onNavigateToCommunication?: () => void
         </div>
 
         {/* Surface Tab Segmented Control */}
-        <div className="mt-5 medium:mt-6">
+        <div className="mt-4 medium:mt-5">
           <SegmentedControl
             options={[
               { id: 'TODAY', label: 'Hari Ini', icon: CalendarDays },
@@ -356,96 +374,164 @@ export const TeacherHomeShell: React.FC<{ onNavigateToCommunication?: () => void
             value={activeTab}
             onChange={(val) => setActiveTab(val as 'TODAY' | 'LEARNING' | 'ROSTER')}
             size="sm"
-            className="w-full"
+            className="w-full expanded:w-fit"
           />
+        </div>
+
+        {/* STEP 1: Micro-Cockpit Capsule on Mobile (large:hidden) */}
+        <div className="mt-3 block large:hidden">
+          <button
+            type="button"
+            onClick={() => setIsPulseModalOpen(true)}
+            aria-label="Buka Rincian Status Kelas dan Jadwal Sentra"
+            className="w-full bg-surface rounded-2xl px-4 py-3 min-h-[48px] flex items-center justify-between gap-3 text-xs border border-line-hairline shadow-hairline active:scale-[0.99] transition cursor-pointer hover-only:bg-surface-subtle"
+          >
+            <div className="flex items-center gap-2 flex-wrap min-w-0">
+              {/* Presence Pill */}
+              <span className="font-mono font-bold text-success-deep flex items-center gap-1.5 whitespace-nowrap">
+                <span className="w-2 h-2 rounded-full bg-success shrink-0" />
+                <span>{aggregate.pulse.present_count}/{aggregate.pulse.total_students} Hadir</span>
+                <span className="text-ink-soft text-[11px] font-normal">({attendanceRate}%)</span>
+              </span>
+
+              {/* Message Pill */}
+              {aggregate.pulse.unread_guardian_notes > 0 && (
+                <span className="text-ink-soft flex items-center gap-1 whitespace-nowrap font-medium">
+                  • {aggregate.pulse.unread_guardian_notes} Pesan
+                </span>
+              )}
+
+              {/* C-1 Safety Exception Alert if any */}
+              {hasSafetyExceptions && (
+                <span className="px-2 py-1 rounded-full bg-danger-tint text-danger-deep font-bold text-[10px] flex items-center gap-1 whitespace-nowrap">
+                  <AlertTriangle className="w-3 h-3 text-danger shrink-0" />
+                  <span>Perhatian Medis/Alergi</span>
+                </span>
+              )}
+            </div>
+
+            <div className="flex items-center gap-1 text-ink-faint shrink-0">
+              <span className="text-[11px] font-medium hidden compact:inline">Status</span>
+              <ChevronDown className="w-4 h-4 text-ink-faint" />
+            </div>
+          </button>
         </div>
       </div>
 
-      {/* Main Content Area */}
-      <div className="px-4 expanded:px-0 large:grid large:grid-cols-[minmax(0,1fr)_380px] large:gap-6 items-start pb-[132px] expanded:pb-8">
+      {/* Main Content Area (F-1 & F-2 + Anchor 4 Spatial Rhythm) */}
+      <section className="px-4 medium:px-5 pt-4 space-y-8 large:grid large:grid-cols-[minmax(0,1fr)_380px] large:gap-8 large:space-y-0 items-start pb-[160px] expanded:pb-8">
         
         {/* Left Column (Primary Dashboard & Surfaces) */}
-        <div className="space-y-6 min-w-0">
+        <div className="space-y-8 min-w-0">
 
-      {/* Tier 1: Real-time Classroom Pulse Banner */}
-      <ClassroomPulseBanner
-        context={aggregate.context}
-        pulse={aggregate.pulse}
-        onFilterExceptionStudent={studentId => setPivotStudentId(studentId)}
-        onOpenGuardianNotices={() => {
-          if (onNavigateToCommunication) {
-            onNavigateToCommunication();
-          }
-        }}
-        onOpenSafetyModal={() => setIsSafetyModalOpen(true)}
-        activeIncidentsCount={activeIncidents.filter(i => i.status !== 'RESOLVED' && i.status !== 'AUDITED_CLOSED').length}
-      />
-
-      {/* Dynamic Operating State Rhythm Indicator */}
-      <OperatingStateIndicator
-        currentState={operatingState}
-        onStateChange={setOperatingState}
-      />
-
-      {/* Active Surface Router */}
-      {activeTab === 'TODAY' ? (
-        <div className="space-y-6">
-          <TodaySurface
-            roster={aggregate.roster}
-            onUpdateAttendanceBatch={handleUpdateAttendanceBatch}
-            onOpenChildPivot={studentId => setPivotStudentId(studentId)}
-            onQuickCaptureForChild={studentId => {
-              setQuickCaptureStudentId(studentId);
-              setIsQuickCaptureOpen(true);
-            }}
-          />
-          <div className="block large:hidden space-y-6 pt-6 border-t border-line">
-            <DailyCompletionSummary
-              isAttendanceComplete={aggregate.daily_completion.is_attendance_complete}
-              pendingEnrichmentCount={aggregate.daily_completion.pending_enrichment_count}
-              unacknowledgedNoticeCount={aggregate.daily_completion.unacknowledged_notice_count}
-              isAllClear={aggregate.daily_completion.is_all_clear}
-              onOpenEnrichmentQueue={() => setActiveTab('LEARNING')}
-            />
-            <GuardianNoticeLedger
-              notices={aggregate.guardian_notices}
-              onAcknowledgeNotice={handleAcknowledgeNotice}
-              onSendNewNotice={handleSendNewNotice}
+          {/* Desktop Full Tier 1: Real-time Classroom Pulse Banner (large:block) */}
+          <div className="hidden large:block">
+            <ClassroomPulseBanner
+              context={aggregate.context}
+              pulse={aggregate.pulse}
+              onFilterExceptionStudent={studentId => setPivotStudentId(studentId)}
+              onOpenGuardianNotices={() => {
+                if (onNavigateToCommunication) {
+                  onNavigateToCommunication();
+                }
+              }}
+              onOpenSafetyModal={() => setIsSafetyModalOpen(true)}
+              activeIncidentsCount={activeIncidentsUnresolved.length}
             />
           </div>
-        </div>
-      ) : activeTab === 'LEARNING' ? (
-        <LearningSurface
-          context={aggregate.context}
-          activities={learningActivities}
-          observations={aggregate.recent_observations}
-          onToggleActivityComplete={handleToggleActivityComplete}
-          onAddActivity={handleAddActivity}
-          onOpenEnrichment={obs => {
-            setSelectedEnrichmentObs(obs);
-            setIsEnrichmentDrawerOpen(true);
-          }}
-          onOpenQuickCapture={() => {
-            setQuickCaptureStudentId(undefined);
-            setIsQuickCaptureOpen(true);
-          }}
-        />
-      ) : (
-        <StudentRosterSurface
-          roster={aggregate.roster}
-          onOpenChildPivot={studentId => setPivotStudentId(studentId)}
-          onQuickCaptureForChild={studentId => {
-            setQuickCaptureStudentId(studentId);
-            setIsQuickCaptureOpen(true);
-          }}
-          onOpenLppaStudio={studentId => setLppaStudioStudentId(studentId)}
-          onOpenContinuityModal={studentId => setContinuityModalStudentId(studentId)}
-        />
-      )}
+
+          {/* Desktop Dynamic Operating State Rhythm Indicator (large:block) */}
+          <div className="hidden large:block">
+            <OperatingStateIndicator
+              currentState={operatingState}
+              onStateChange={setOperatingState}
+            />
+          </div>
+
+          {/* C-1 Safety Signal: Prominent Mobile Alert Badge if Health/Safety Alert Active */}
+          {hasSafetyExceptions && (
+            <div 
+              onClick={() => setIsSafetyModalOpen(true)}
+              className="block large:hidden p-3 rounded-2xl bg-danger-tint border border-danger-line text-danger-deep flex items-center justify-between text-xs font-semibold cursor-pointer shadow-hairline active:scale-[0.99] transition"
+            >
+              <div className="flex items-center gap-2">
+                <AlertTriangle className="w-4 h-4 text-danger shrink-0" />
+                <span>Peringatan Kesehatan / Alergi Siswa Aktif</span>
+              </div>
+              <span className="text-[10px] font-mono font-bold bg-surface px-2 py-1 rounded-full border border-danger-line whitespace-nowrap">
+                LIHAT DETAIL
+              </span>
+            </div>
+          )}
+
+          {/* Active Surface Router */}
+          {activeTab === 'TODAY' ? (
+            <div className="space-y-8">
+              <TodaySurface
+                roster={aggregate.roster}
+                onUpdateAttendanceBatch={handleUpdateAttendanceBatch}
+                onOpenChildPivot={studentId => setPivotStudentId(studentId)}
+                onQuickCaptureForChild={studentId => {
+                  setQuickCaptureStudentId(studentId);
+                  setIsQuickCaptureOpen(true);
+                }}
+              />
+
+              {/* STEP 2: Mobile Bottom Decoupling - Replaced huge inline dump with sleek Action Trigger */}
+              <div className="block large:hidden pt-4 border-t border-line">
+                <button
+                  type="button"
+                  onClick={() => setIsReconciliationModalOpen(true)}
+                  className="w-full bg-surface rounded-2xl min-h-[48px] p-4 flex items-center justify-between gap-3 text-xs border border-line-hairline shadow-hairline text-ink hover-only:bg-surface-subtle transition cursor-pointer active:scale-[0.99]"
+                >
+                  <div className="flex items-center gap-2">
+                    <FileText className="w-4 h-4 text-brand-primary shrink-0" />
+                    <span className="font-bold">Status Rekonsiliasi &amp; Buku Penghubung</span>
+                  </div>
+                  {aggregate.daily_completion.is_all_clear ? (
+                    <span className="px-3 py-1 rounded-full bg-success-tint text-success-deep font-bold text-[10px] font-mono whitespace-nowrap">
+                      ALL CLEAR
+                    </span>
+                  ) : (
+                    <span className="px-3 py-1 rounded-full bg-warning-tint text-warning-deep font-bold text-[10px] font-mono whitespace-nowrap">
+                      {aggregate.daily_completion.pending_enrichment_count + aggregate.daily_completion.unacknowledged_notice_count} TUGAS
+                    </span>
+                  )}
+                </button>
+              </div>
+            </div>
+          ) : activeTab === 'LEARNING' ? (
+            <LearningSurface
+              context={aggregate.context}
+              activities={learningActivities}
+              observations={aggregate.recent_observations}
+              onToggleActivityComplete={handleToggleActivityComplete}
+              onAddActivity={handleAddActivity}
+              onOpenEnrichment={obs => {
+                setSelectedEnrichmentObs(obs);
+                setIsEnrichmentDrawerOpen(true);
+              }}
+              onOpenQuickCapture={() => {
+                setQuickCaptureStudentId(undefined);
+                setIsQuickCaptureOpen(true);
+              }}
+            />
+          ) : (
+            <StudentRosterSurface
+              roster={aggregate.roster}
+              onOpenChildPivot={studentId => setPivotStudentId(studentId)}
+              onQuickCaptureForChild={studentId => {
+                setQuickCaptureStudentId(studentId);
+                setIsQuickCaptureOpen(true);
+              }}
+              onOpenLppaStudio={studentId => setLppaStudioStudentId(studentId)}
+              onOpenContinuityModal={studentId => setContinuityModalStudentId(studentId)}
+            />
+          )}
         </div>
 
         {/* Right Column (Reconciliation & Communications) */}
-        <div className="hidden large:block space-y-6">
+        <div className="hidden large:block space-y-8">
           <DailyCompletionSummary
             isAttendanceComplete={aggregate.daily_completion.is_attendance_complete}
             pendingEnrichmentCount={aggregate.daily_completion.pending_enrichment_count}
@@ -461,7 +547,7 @@ export const TeacherHomeShell: React.FC<{ onNavigateToCommunication?: () => void
             />
           </section>
         </div>
-      </div>
+      </section>
 
       {/* Floating Fast Capture Action Primitive [ Momen Cepat] */}
       <QuickCaptureFloatingButton
@@ -471,6 +557,65 @@ export const TeacherHomeShell: React.FC<{ onNavigateToCommunication?: () => void
         }}
         pendingDraftCount={aggregate.daily_completion.pending_enrichment_count}
       />
+
+      {/* Mobile AdaptiveDialog: Full Classroom Pulse & Operating Rhythm Detail */}
+      <AdaptiveDialog
+        isOpen={isPulseModalOpen}
+        onClose={() => setIsPulseModalOpen(false)}
+        title="Kondisi Kelas & Ritme Waktu"
+      >
+        <div className="p-4 space-y-6">
+          <ClassroomPulseBanner
+            context={aggregate.context}
+            pulse={aggregate.pulse}
+            onFilterExceptionStudent={studentId => {
+              setIsPulseModalOpen(false);
+              setPivotStudentId(studentId);
+            }}
+            onOpenGuardianNotices={() => {
+              setIsPulseModalOpen(false);
+              if (onNavigateToCommunication) {
+                onNavigateToCommunication();
+              }
+            }}
+            onOpenSafetyModal={() => {
+              setIsPulseModalOpen(false);
+              setIsSafetyModalOpen(true);
+            }}
+            activeIncidentsCount={activeIncidentsUnresolved.length}
+          />
+
+          <OperatingStateIndicator
+            currentState={operatingState}
+            onStateChange={setOperatingState}
+          />
+        </div>
+      </AdaptiveDialog>
+
+      {/* Mobile AdaptiveDialog: Decoupled Daily Completion Summary & Guardian Notice Ledger */}
+      <AdaptiveDialog
+        isOpen={isReconciliationModalOpen}
+        onClose={() => setIsReconciliationModalOpen(false)}
+        title="Status Rekonsiliasi & Buku Penghubung"
+      >
+        <div className="p-4 space-y-6">
+          <DailyCompletionSummary
+            isAttendanceComplete={aggregate.daily_completion.is_attendance_complete}
+            pendingEnrichmentCount={aggregate.daily_completion.pending_enrichment_count}
+            unacknowledgedNoticeCount={aggregate.daily_completion.unacknowledged_notice_count}
+            isAllClear={aggregate.daily_completion.is_all_clear}
+            onOpenEnrichmentQueue={() => {
+              setIsReconciliationModalOpen(false);
+              setActiveTab('LEARNING');
+            }}
+          />
+          <GuardianNoticeLedger
+            notices={aggregate.guardian_notices}
+            onAcknowledgeNotice={handleAcknowledgeNotice}
+            onSendNewNotice={handleSendNewNotice}
+          />
+        </div>
+      </AdaptiveDialog>
 
       {/* Modals and Slide-Over Drawers */}
       <EvidenceCaptureSheet

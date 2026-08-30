@@ -178,40 +178,39 @@ const AppContent: React.FC = () => {
         />
 
         {/* Institutional Context Ribbon (Hidden on Mobile) */}
-        <div className="hidden expanded:block bg-brand text-on-brand border-b border-line-strong px-4 medium:px-6 py-2">
-          <div className="max-w-7xl mx-auto flex flex-col medium:flex-row medium:items-center justify-between gap-2 text-xs">
+        <div className="hidden expanded:block bg-surface-subtle/60 backdrop-blur-md text-ink border-b border-line-hairline px-4 medium:px-6 py-2">
+          <div className="max-w-7xl mx-auto flex flex-col medium:flex-row medium:items-center justify-between gap-3 text-xs">
             {/* Active School Selector & Level */}
             <div className="flex items-center space-x-3">
-              <div className="flex items-center space-x-1.5 font-semibold text-on-brand">
-                <Building2 className="w-4 h-4 text-brass" />
+              <div className="flex items-center space-x-2 font-semibold text-ink">
+                <Building2 className="w-4 h-4 text-brand-primary shrink-0" />
                 {currentPersona.role === 'YAPENDIK_SUPERADMIN' ? (
-                  <div className="w-56">
+                  <div className="w-60">
                     <SelectSheet
                       value={activeSchoolId}
                       onChange={setActiveSchoolId}
                       options={schools.map(s => ({ value: s.id, label: s.name }))}
-                      className="bg-surface-inset text-brass font-bold text-xs border border-brass/40"
                     />
                   </div>
                 ) : (
-                  <span>{activeSchool?.name || 'Unit TK Yapendik'}</span>
+                  <span className="font-bold text-ink">{activeSchool?.name || 'Unit TK Yapendik'}</span>
                 )}
               </div>
-              <span className="text-line-strong">•</span>
-              <span className="text-on-brand/70 font-mono text-[11px] whitespace-nowrap">
+              <span className="text-line-soft">•</span>
+              <span className="text-ink-soft font-mono text-[11px] whitespace-nowrap">
                 NPSN: {activeSchool?.npsn || '20104821'}
               </span>
-              <span className="text-line-strong">•</span>
-              <span className="text-on-brand/90 font-medium">
+              <span className="text-line-soft">•</span>
+              <span className="text-ink font-medium">
                 T.A. 2026/2027 (Ganjil)
               </span>
             </div>
 
             {/* Persona Context Badge */}
             <div className="flex items-center space-x-2">
-              <span className="text-on-brand/70">Persona Aktif:</span>
-              <span className="font-bold text-brass">{currentPersona.name}</span>
-              <span className="px-2 py-1 rounded bg-surface-inset text-on-brand/90 border border-line-strong text-[10px] font-mono whitespace-nowrap">
+              <span className="text-ink-soft">Persona Aktif:</span>
+              <span className="font-bold text-ink">{currentPersona.name}</span>
+              <span className="px-2 py-1 rounded-full bg-surface text-ink-soft border border-line-hairline text-[10px] font-mono whitespace-nowrap shadow-hairline">
                 {currentPersona.role}
               </span>
             </div>

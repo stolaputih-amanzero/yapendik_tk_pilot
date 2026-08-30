@@ -1,0 +1,536 @@
+{
+  "timestamp": "2026-08-30T08:40:23.735Z",
+  "version": "4.0.0-crystal-sovereign",
+  "totalCaptures": 66,
+  "files": [
+    {
+      "route": "#beranda-guru",
+      "page": "Beranda Kelas & Guru",
+      "viewport": "COMPACT (390x844)",
+      "theme": "Frangipani Day",
+      "file": "beranda-guru_compact_light.png",
+      "sha256": "d156136467c7fb15"
+    },
+    {
+      "route": "#presensi",
+      "page": "B-1 Presensi Harian",
+      "viewport": "COMPACT (390x844)",
+      "theme": "Frangipani Day",
+      "file": "presensi_compact_light.png",
+      "sha256": "d156136467c7fb15"
+    },
+    {
+      "route": "#adopsi-ks",
+      "page": "A-1 Inbox Adopsi Kebijakan KS",
+      "viewport": "COMPACT (390x844)",
+      "theme": "Frangipani Day",
+      "file": "adopsi-ks_compact_light.png",
+      "sha256": "d156136467c7fb15"
+    },
+    {
+      "route": "#yayasan",
+      "page": "A-3 Foundation Console",
+      "viewport": "COMPACT (390x844)",
+      "theme": "Frangipani Day",
+      "file": "yayasan_compact_light.png",
+      "sha256": "d156136467c7fb15"
+    },
+    {
+      "route": "#percontohan",
+      "page": "A-4 Pusat Kebijakan & Spesimen",
+      "viewport": "COMPACT (390x844)",
+      "theme": "Frangipani Day",
+      "file": "spesimen-hidup_compact_light.png",
+      "sha256": "d156136467c7fb15"
+    },
+    {
+      "route": "#kerja-harian",
+      "page": "A-5 Agenda & Kerja Harian Guru",
+      "viewport": "COMPACT (390x844)",
+      "theme": "Frangipani Day",
+      "file": "kerja-harian-guru_compact_light.png",
+      "sha256": "d156136467c7fb15"
+    },
+    {
+      "route": "#observasi",
+      "page": "A-5 Detail Observasi & Anekdot",
+      "viewport": "COMPACT (390x844)",
+      "theme": "Frangipani Day",
+      "file": "catatan-observasi_compact_light.png",
+      "sha256": "d156136467c7fb15"
+    },
+    {
+      "route": "#jejak-anak",
+      "page": "Jejak Perkembangan Anak",
+      "viewport": "COMPACT (390x844)",
+      "theme": "Frangipani Day",
+      "file": "jejak-anak_compact_light.png",
+      "sha256": "d156136467c7fb15"
+    },
+    {
+      "route": "#buku-penghubung",
+      "page": "Buku Penghubung",
+      "viewport": "COMPACT (390x844)",
+      "theme": "Frangipani Day",
+      "file": "buku-penghubung_compact_light.png",
+      "sha256": "d156136467c7fb15"
+    },
+    {
+      "route": "#siklus-akademik",
+      "page": "B-4 Siklus Akademik & Semester",
+      "viewport": "COMPACT (390x844)",
+      "theme": "Frangipani Day",
+      "file": "siklus-akademik_compact_light.png",
+      "sha256": "d156136467c7fb15"
+    },
+    {
+      "route": "#uji-otorisasi",
+      "page": "B-5 Uji Otorisasi & Log Keamanan",
+      "viewport": "COMPACT (390x844)",
+      "theme": "Frangipani Day",
+      "file": "uji-otorisasi_compact_light.png",
+      "sha256": "d156136467c7fb15"
+    },
+    {
+      "route": "#beranda-guru",
+      "page": "Beranda Kelas & Guru",
+      "viewport": "COMPACT (390x844)",
+      "theme": "Night Temple",
+      "file": "beranda-guru_compact_dark.png",
+      "sha256": "8ff434d3e18d4245"
+    },
+    {
+      "route": "#presensi",
+      "page": "B-1 Presensi Harian",
+      "viewport": "COMPACT (390x844)",
+      "theme": "Night Temple",
+      "file": "presensi_compact_dark.png",
+      "sha256": "8ff434d3e18d4245"
+    },
+    {
+      "route": "#adopsi-ks",
+      "page": "A-1 Inbox Adopsi Kebijakan KS",
+      "viewport": "COMPACT (390x844)",
+      "theme": "Night Temple",
+      "file": "adopsi-ks_compact_dark.png",
+      "sha256": "8ff434d3e18d4245"
+    },
+    {
+      "route": "#yayasan",
+      "page": "A-3 Foundation Console",
+      "viewport": "COMPACT (390x844)",
+      "theme": "Night Temple",
+      "file": "yayasan_compact_dark.png",
+      "sha256": "8ff434d3e18d4245"
+    },
+    {
+      "route": "#percontohan",
+      "page": "A-4 Pusat Kebijakan & Spesimen",
+      "viewport": "COMPACT (390x844)",
+      "theme": "Night Temple",
+      "file": "spesimen-hidup_compact_dark.png",
+      "sha256": "8ff434d3e18d4245"
+    },
+    {
+      "route": "#kerja-harian",
+      "page": "A-5 Agenda & Kerja Harian Guru",
+      "viewport": "COMPACT (390x844)",
+      "theme": "Night Temple",
+      "file": "kerja-harian-guru_compact_dark.png",
+      "sha256": "8ff434d3e18d4245"
+    },
+    {
+      "route": "#observasi",
+      "page": "A-5 Detail Observasi & Anekdot",
+      "viewport": "COMPACT (390x844)",
+      "theme": "Night Temple",
+      "file": "catatan-observasi_compact_dark.png",
+      "sha256": "8ff434d3e18d4245"
+    },
+    {
+      "route": "#jejak-anak",
+      "page": "Jejak Perkembangan Anak",
+      "viewport": "COMPACT (390x844)",
+      "theme": "Night Temple",
+      "file": "jejak-anak_compact_dark.png",
+      "sha256": "8ff434d3e18d4245"
+    },
+    {
+      "route": "#buku-penghubung",
+      "page": "Buku Penghubung",
+      "viewport": "COMPACT (390x844)",
+      "theme": "Night Temple",
+      "file": "buku-penghubung_compact_dark.png",
+      "sha256": "8ff434d3e18d4245"
+    },
+    {
+      "route": "#siklus-akademik",
+      "page": "B-4 Siklus Akademik & Semester",
+      "viewport": "COMPACT (390x844)",
+      "theme": "Night Temple",
+      "file": "siklus-akademik_compact_dark.png",
+      "sha256": "8ff434d3e18d4245"
+    },
+    {
+      "route": "#uji-otorisasi",
+      "page": "B-5 Uji Otorisasi & Log Keamanan",
+      "viewport": "COMPACT (390x844)",
+      "theme": "Night Temple",
+      "file": "uji-otorisasi_compact_dark.png",
+      "sha256": "8ff434d3e18d4245"
+    },
+    {
+      "route": "#beranda-guru",
+      "page": "Beranda Kelas & Guru",
+      "viewport": "MEDIUM (768x1024)",
+      "theme": "Frangipani Day",
+      "file": "beranda-guru_medium_light.png",
+      "sha256": "e8f291411c37d8b7"
+    },
+    {
+      "route": "#presensi",
+      "page": "B-1 Presensi Harian",
+      "viewport": "MEDIUM (768x1024)",
+      "theme": "Frangipani Day",
+      "file": "presensi_medium_light.png",
+      "sha256": "e8f291411c37d8b7"
+    },
+    {
+      "route": "#adopsi-ks",
+      "page": "A-1 Inbox Adopsi Kebijakan KS",
+      "viewport": "MEDIUM (768x1024)",
+      "theme": "Frangipani Day",
+      "file": "adopsi-ks_medium_light.png",
+      "sha256": "e8f291411c37d8b7"
+    },
+    {
+      "route": "#yayasan",
+      "page": "A-3 Foundation Console",
+      "viewport": "MEDIUM (768x1024)",
+      "theme": "Frangipani Day",
+      "file": "yayasan_medium_light.png",
+      "sha256": "e8f291411c37d8b7"
+    },
+    {
+      "route": "#percontohan",
+      "page": "A-4 Pusat Kebijakan & Spesimen",
+      "viewport": "MEDIUM (768x1024)",
+      "theme": "Frangipani Day",
+      "file": "spesimen-hidup_medium_light.png",
+      "sha256": "e8f291411c37d8b7"
+    },
+    {
+      "route": "#kerja-harian",
+      "page": "A-5 Agenda & Kerja Harian Guru",
+      "viewport": "MEDIUM (768x1024)",
+      "theme": "Frangipani Day",
+      "file": "kerja-harian-guru_medium_light.png",
+      "sha256": "e8f291411c37d8b7"
+    },
+    {
+      "route": "#observasi",
+      "page": "A-5 Detail Observasi & Anekdot",
+      "viewport": "MEDIUM (768x1024)",
+      "theme": "Frangipani Day",
+      "file": "catatan-observasi_medium_light.png",
+      "sha256": "e8f291411c37d8b7"
+    },
+    {
+      "route": "#jejak-anak",
+      "page": "Jejak Perkembangan Anak",
+      "viewport": "MEDIUM (768x1024)",
+      "theme": "Frangipani Day",
+      "file": "jejak-anak_medium_light.png",
+      "sha256": "e8f291411c37d8b7"
+    },
+    {
+      "route": "#buku-penghubung",
+      "page": "Buku Penghubung",
+      "viewport": "MEDIUM (768x1024)",
+      "theme": "Frangipani Day",
+      "file": "buku-penghubung_medium_light.png",
+      "sha256": "e8f291411c37d8b7"
+    },
+    {
+      "route": "#siklus-akademik",
+      "page": "B-4 Siklus Akademik & Semester",
+      "viewport": "MEDIUM (768x1024)",
+      "theme": "Frangipani Day",
+      "file": "siklus-akademik_medium_light.png",
+      "sha256": "e8f291411c37d8b7"
+    },
+    {
+      "route": "#uji-otorisasi",
+      "page": "B-5 Uji Otorisasi & Log Keamanan",
+      "viewport": "MEDIUM (768x1024)",
+      "theme": "Frangipani Day",
+      "file": "uji-otorisasi_medium_light.png",
+      "sha256": "e8f291411c37d8b7"
+    },
+    {
+      "route": "#beranda-guru",
+      "page": "Beranda Kelas & Guru",
+      "viewport": "MEDIUM (768x1024)",
+      "theme": "Night Temple",
+      "file": "beranda-guru_medium_dark.png",
+      "sha256": "e8f291411c37d8b7"
+    },
+    {
+      "route": "#presensi",
+      "page": "B-1 Presensi Harian",
+      "viewport": "MEDIUM (768x1024)",
+      "theme": "Night Temple",
+      "file": "presensi_medium_dark.png",
+      "sha256": "e8f291411c37d8b7"
+    },
+    {
+      "route": "#adopsi-ks",
+      "page": "A-1 Inbox Adopsi Kebijakan KS",
+      "viewport": "MEDIUM (768x1024)",
+      "theme": "Night Temple",
+      "file": "adopsi-ks_medium_dark.png",
+      "sha256": "e8f291411c37d8b7"
+    },
+    {
+      "route": "#yayasan",
+      "page": "A-3 Foundation Console",
+      "viewport": "MEDIUM (768x1024)",
+      "theme": "Night Temple",
+      "file": "yayasan_medium_dark.png",
+      "sha256": "e8f291411c37d8b7"
+    },
+    {
+      "route": "#percontohan",
+      "page": "A-4 Pusat Kebijakan & Spesimen",
+      "viewport": "MEDIUM (768x1024)",
+      "theme": "Night Temple",
+      "file": "spesimen-hidup_medium_dark.png",
+      "sha256": "e8f291411c37d8b7"
+    },
+    {
+      "route": "#kerja-harian",
+      "page": "A-5 Agenda & Kerja Harian Guru",
+      "viewport": "MEDIUM (768x1024)",
+      "theme": "Night Temple",
+      "file": "kerja-harian-guru_medium_dark.png",
+      "sha256": "e8f291411c37d8b7"
+    },
+    {
+      "route": "#observasi",
+      "page": "A-5 Detail Observasi & Anekdot",
+      "viewport": "MEDIUM (768x1024)",
+      "theme": "Night Temple",
+      "file": "catatan-observasi_medium_dark.png",
+      "sha256": "e8f291411c37d8b7"
+    },
+    {
+      "route": "#jejak-anak",
+      "page": "Jejak Perkembangan Anak",
+      "viewport": "MEDIUM (768x1024)",
+      "theme": "Night Temple",
+      "file": "jejak-anak_medium_dark.png",
+      "sha256": "e8f291411c37d8b7"
+    },
+    {
+      "route": "#buku-penghubung",
+      "page": "Buku Penghubung",
+      "viewport": "MEDIUM (768x1024)",
+      "theme": "Night Temple",
+      "file": "buku-penghubung_medium_dark.png",
+      "sha256": "e8f291411c37d8b7"
+    },
+    {
+      "route": "#siklus-akademik",
+      "page": "B-4 Siklus Akademik & Semester",
+      "viewport": "MEDIUM (768x1024)",
+      "theme": "Night Temple",
+      "file": "siklus-akademik_medium_dark.png",
+      "sha256": "e8f291411c37d8b7"
+    },
+    {
+      "route": "#uji-otorisasi",
+      "page": "B-5 Uji Otorisasi & Log Keamanan",
+      "viewport": "MEDIUM (768x1024)",
+      "theme": "Night Temple",
+      "file": "uji-otorisasi_medium_dark.png",
+      "sha256": "e8f291411c37d8b7"
+    },
+    {
+      "route": "#beranda-guru",
+      "page": "Beranda Kelas & Guru",
+      "viewport": "EXPANDED (1440x900)",
+      "theme": "Frangipani Day",
+      "file": "beranda-guru_expanded_light.png",
+      "sha256": "f9dd47bd079e7c1d"
+    },
+    {
+      "route": "#presensi",
+      "page": "B-1 Presensi Harian",
+      "viewport": "EXPANDED (1440x900)",
+      "theme": "Frangipani Day",
+      "file": "presensi_expanded_light.png",
+      "sha256": "f9dd47bd079e7c1d"
+    },
+    {
+      "route": "#adopsi-ks",
+      "page": "A-1 Inbox Adopsi Kebijakan KS",
+      "viewport": "EXPANDED (1440x900)",
+      "theme": "Frangipani Day",
+      "file": "adopsi-ks_expanded_light.png",
+      "sha256": "f9dd47bd079e7c1d"
+    },
+    {
+      "route": "#yayasan",
+      "page": "A-3 Foundation Console",
+      "viewport": "EXPANDED (1440x900)",
+      "theme": "Frangipani Day",
+      "file": "yayasan_expanded_light.png",
+      "sha256": "f9dd47bd079e7c1d"
+    },
+    {
+      "route": "#percontohan",
+      "page": "A-4 Pusat Kebijakan & Spesimen",
+      "viewport": "EXPANDED (1440x900)",
+      "theme": "Frangipani Day",
+      "file": "spesimen-hidup_expanded_light.png",
+      "sha256": "f9dd47bd079e7c1d"
+    },
+    {
+      "route": "#kerja-harian",
+      "page": "A-5 Agenda & Kerja Harian Guru",
+      "viewport": "EXPANDED (1440x900)",
+      "theme": "Frangipani Day",
+      "file": "kerja-harian-guru_expanded_light.png",
+      "sha256": "f9dd47bd079e7c1d"
+    },
+    {
+      "route": "#observasi",
+      "page": "A-5 Detail Observasi & Anekdot",
+      "viewport": "EXPANDED (1440x900)",
+      "theme": "Frangipani Day",
+      "file": "catatan-observasi_expanded_light.png",
+      "sha256": "f9dd47bd079e7c1d"
+    },
+    {
+      "route": "#jejak-anak",
+      "page": "Jejak Perkembangan Anak",
+      "viewport": "EXPANDED (1440x900)",
+      "theme": "Frangipani Day",
+      "file": "jejak-anak_expanded_light.png",
+      "sha256": "f9dd47bd079e7c1d"
+    },
+    {
+      "route": "#buku-penghubung",
+      "page": "Buku Penghubung",
+      "viewport": "EXPANDED (1440x900)",
+      "theme": "Frangipani Day",
+      "file": "buku-penghubung_expanded_light.png",
+      "sha256": "f9dd47bd079e7c1d"
+    },
+    {
+      "route": "#siklus-akademik",
+      "page": "B-4 Siklus Akademik & Semester",
+      "viewport": "EXPANDED (1440x900)",
+      "theme": "Frangipani Day",
+      "file": "siklus-akademik_expanded_light.png",
+      "sha256": "f9dd47bd079e7c1d"
+    },
+    {
+      "route": "#uji-otorisasi",
+      "page": "B-5 Uji Otorisasi & Log Keamanan",
+      "viewport": "EXPANDED (1440x900)",
+      "theme": "Frangipani Day",
+      "file": "uji-otorisasi_expanded_light.png",
+      "sha256": "f9dd47bd079e7c1d"
+    },
+    {
+      "route": "#beranda-guru",
+      "page": "Beranda Kelas & Guru",
+      "viewport": "EXPANDED (1440x900)",
+      "theme": "Night Temple",
+      "file": "beranda-guru_expanded_dark.png",
+      "sha256": "f9dd47bd079e7c1d"
+    },
+    {
+      "route": "#presensi",
+      "page": "B-1 Presensi Harian",
+      "viewport": "EXPANDED (1440x900)",
+      "theme": "Night Temple",
+      "file": "presensi_expanded_dark.png",
+      "sha256": "f9dd47bd079e7c1d"
+    },
+    {
+      "route": "#adopsi-ks",
+      "page": "A-1 Inbox Adopsi Kebijakan KS",
+      "viewport": "EXPANDED (1440x900)",
+      "theme": "Night Temple",
+      "file": "adopsi-ks_expanded_dark.png",
+      "sha256": "f9dd47bd079e7c1d"
+    },
+    {
+      "route": "#yayasan",
+      "page": "A-3 Foundation Console",
+      "viewport": "EXPANDED (1440x900)",
+      "theme": "Night Temple",
+      "file": "yayasan_expanded_dark.png",
+      "sha256": "f9dd47bd079e7c1d"
+    },
+    {
+      "route": "#percontohan",
+      "page": "A-4 Pusat Kebijakan & Spesimen",
+      "viewport": "EXPANDED (1440x900)",
+      "theme": "Night Temple",
+      "file": "spesimen-hidup_expanded_dark.png",
+      "sha256": "f9dd47bd079e7c1d"
+    },
+    {
+      "route": "#kerja-harian",
+      "page": "A-5 Agenda & Kerja Harian Guru",
+      "viewport": "EXPANDED (1440x900)",
+      "theme": "Night Temple",
+      "file": "kerja-harian-guru_expanded_dark.png",
+      "sha256": "f9dd47bd079e7c1d"
+    },
+    {
+      "route": "#observasi",
+      "page": "A-5 Detail Observasi & Anekdot",
+      "viewport": "EXPANDED (1440x900)",
+      "theme": "Night Temple",
+      "file": "catatan-observasi_expanded_dark.png",
+      "sha256": "f9dd47bd079e7c1d"
+    },
+    {
+      "route": "#jejak-anak",
+      "page": "Jejak Perkembangan Anak",
+      "viewport": "EXPANDED (1440x900)",
+      "theme": "Night Temple",
+      "file": "jejak-anak_expanded_dark.png",
+      "sha256": "f9dd47bd079e7c1d"
+    },
+    {
+      "route": "#buku-penghubung",
+      "page": "Buku Penghubung",
+      "viewport": "EXPANDED (1440x900)",
+      "theme": "Night Temple",
+      "file": "buku-penghubung_expanded_dark.png",
+      "sha256": "f9dd47bd079e7c1d"
+    },
+    {
+      "route": "#siklus-akademik",
+      "page": "B-4 Siklus Akademik & Semester",
+      "viewport": "EXPANDED (1440x900)",
+      "theme": "Night Temple",
+      "file": "siklus-akademik_expanded_dark.png",
+      "sha256": "f9dd47bd079e7c1d"
+    },
+    {
+      "route": "#uji-otorisasi",
+      "page": "B-5 Uji Otorisasi & Log Keamanan",
+      "viewport": "EXPANDED (1440x900)",
+      "theme": "Night Temple",
+      "file": "uji-otorisasi_expanded_dark.png",
+      "sha256": "f9dd47bd079e7c1d"
+    }
+  ],
+  "masterBaselineHash": "5996cffd742909e42445bf23bdd47ff2"
+}

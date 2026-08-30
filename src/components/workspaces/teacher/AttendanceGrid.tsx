@@ -72,8 +72,8 @@ export const AttendanceGrid: React.FC<Props> = ({
 
   return (
     <div className="space-y-4">
-      {/* Top Toolbar: Search, Filters & Bulk Actions */}
-      <div className="flex flex-col expanded:flex-row items-stretch expanded:items-center justify-between gap-3 bg-surface p-4 medium:p-3 border-y medium:border border-line medium:rounded-card shadow-hairline -mx-4 expanded:mx-0">
+      {/* Top Toolbar: Search, Filters & Bulk Actions (Flat Fluid single-depth) */}
+      <div className="flex flex-col expanded:flex-row items-stretch expanded:items-center justify-between gap-3 bg-surface p-4 rounded-2xl shadow-hairline">
         {/* Search Bar */}
         <div className="relative flex-1 max-w-sm">
           <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-ink-faint" />
@@ -82,7 +82,7 @@ export const AttendanceGrid: React.FC<Props> = ({
             placeholder="Cari nama ananda / NIS..."
             value={searchQuery}
             onChange={e => setSearchQuery(e.target.value)}
-            className="w-full pl-9 pr-3 py-2 text-xs rounded-field bg-surface-subtle border border-line focus:outline-none focus:ring-2 focus:ring-brass/30 focus:bg-surface text-ink placeholder:text-ink-faint font-medium transition-all"
+            className="w-full pl-9 pr-3 py-2 text-xs rounded-xl bg-surface-subtle border border-line-hairline focus:outline-none focus:ring-1 focus:ring-brand-primary text-ink placeholder:text-ink-faint font-medium transition-all"
           />
         </div>
 
@@ -92,7 +92,7 @@ export const AttendanceGrid: React.FC<Props> = ({
             variant={statusFilter === 'ALL' ? 'primary' : 'secondary'}
             size="sm"
             onClick={() => setStatusFilter('ALL')}
-            className="rounded-field"
+            className="rounded-xl"
           >
             Semua ({roster.length})
           </Button>
@@ -103,12 +103,12 @@ export const AttendanceGrid: React.FC<Props> = ({
             onClick={() => setStatusFilter('UNACCOUNTED')}
             rightIcon={
               unaccountedCount > 0 ? (
-                <span className="w-4 h-4 rounded-pill text-[10px] flex items-center justify-center font-bold bg-warning text-on-brand">
+                <span className="w-4 h-4 rounded-full text-[10px] flex items-center justify-center font-bold bg-warning text-on-brand">
                   {unaccountedCount}
                 </span>
               ) : undefined
             }
-            className="rounded-field"
+            className="rounded-xl"
           >
             Belum Diisi
           </Button>
@@ -117,8 +117,8 @@ export const AttendanceGrid: React.FC<Props> = ({
             variant={statusFilter === 'ATTENTION' ? 'danger' : 'secondary'}
             size="sm"
             onClick={() => setStatusFilter('ATTENTION')}
-            leftIcon={<AlertTriangle className="w-4 h-4 text-brass" />}
-            className="rounded-field"
+            leftIcon={<AlertTriangle className="w-4 h-4 text-warning" />}
+            className="rounded-xl"
           >
             Perhatian
           </Button>
@@ -131,7 +131,7 @@ export const AttendanceGrid: React.FC<Props> = ({
             size="sm"
             onClick={handleMarkAllPresent}
             leftIcon={<CheckCheck className="w-4 h-4" />}
-            className="w-full expanded:w-auto text-xs font-semibold rounded-field cursor-pointer"
+            className="w-full expanded:w-auto text-xs font-semibold rounded-xl cursor-pointer"
           >
             Tandai Semua Hadir
           </Button>
@@ -155,7 +155,7 @@ export const AttendanceGrid: React.FC<Props> = ({
           ))}
         </div>
       ) : (
-        <div className="bg-surface border border-dashed border-line rounded-card p-10 text-center">
+        <div className="bg-surface rounded-2xl p-10 text-center shadow-hairline">
           <Users className="w-10 h-10 text-ink-faint mx-auto mb-2 opacity-60" />
           <h4 className="text-sm font-bold text-ink-soft">Tidak ada ananda yang sesuai filter</h4>
           <p className="text-xs text-ink-soft mt-1">Coba sesuaikan kata kunci pencarian atau ganti filter chip.</p>

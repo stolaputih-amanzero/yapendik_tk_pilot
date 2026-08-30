@@ -187,7 +187,7 @@ export const EnrichmentTrayDrawer: React.FC<Props> = ({
                   onClick={() => setMilestoneRating(r.key)}
                   className={`py-2 medium:py-2 px-1 rounded-field text-center transition cursor-pointer border ${
                     milestoneRating === r.key
-                      ? 'bg-indigo-600 text-on-brand border-indigo-600 font-bold shadow-ambient shadow-indigo-600/30'
+                      ? 'bg-lppa text-on-brand border-lppa-line font-bold shadow-ambient shadow-hairline'
                       : 'bg-surface-subtle border-line text-ink hover-only:bg-surface-subtle font-semibold'
                   }`}
                 >
@@ -205,7 +205,7 @@ export const EnrichmentTrayDrawer: React.FC<Props> = ({
                 type="checkbox"
                 checked={isLppaEvidence}
                 onChange={e => setIsLppaEvidence(e.target.checked)}
-                className="w-4 h-4 rounded text-lppa focus:ring-brass"
+                className="w-4 h-4 rounded text-lppa focus:ring-brand-primary/30"
               />
               <div>
                 <span className="font-bold text-lppa-deep flex items-center gap-2">
@@ -248,7 +248,7 @@ export const EnrichmentTrayDrawer: React.FC<Props> = ({
                 name="privacyChoice"
                 checked={privacyChoice === 'CONFIDENTIAL'}
                 onChange={() => setPrivacyChoice('CONFIDENTIAL')}
-                className="mt-0.5 text-brass focus:ring-amber-500"
+                className="mt-0.5 text-brand-primary focus:ring-amber-500"
               />
               <div>
                 <span className="font-bold text-warning-deep flex items-center gap-1">
@@ -273,7 +273,7 @@ export const EnrichmentTrayDrawer: React.FC<Props> = ({
             <button
               type="submit"
               disabled={isSaving}
-              className="w-full medium:w-auto px-6 py-2 rounded-field font-extrabold bg-indigo-600 hover-only:bg-indigo-500 text-on-brand shadow-ambient shadow-indigo-600/30 transition-all disabled:opacity-50 cursor-pointer flex justify-center items-center gap-2 order-1 medium:order-2"
+              className="w-full medium:w-auto px-6 py-2 rounded-field font-extrabold bg-lppa hover-only:bg-lppa text-on-brand shadow-ambient shadow-hairline transition-all disabled:opacity-50 cursor-pointer flex justify-center items-center gap-2 order-1 medium:order-2"
             >
               <Check className="w-4 h-4" />
               <span>{isSaving ? 'Menyimpan...' : 'Simpan Pengayaan'}</span>

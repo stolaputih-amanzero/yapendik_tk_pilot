@@ -17,9 +17,9 @@ export interface BadgeProps extends React.HTMLAttributes<HTMLSpanElement> {
 
 const variantStyles: Record<BadgeVariant, { container: string; dot: string; ping: string }> = {
   brand: {
-    container: 'bg-brand text-on-brand border-line-strong',
-    dot: 'bg-brass',
-    ping: 'bg-brass/60'
+    container: 'bg-brand-tint text-brand-deep border-line-hairline',
+    dot: 'bg-brand-primary',
+    ping: 'bg-brand-primary/60'
   },
   success: {
     container: 'bg-success-tint text-success-deep border-success-line',

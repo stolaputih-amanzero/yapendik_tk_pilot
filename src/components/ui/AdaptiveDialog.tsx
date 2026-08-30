@@ -96,12 +96,12 @@ export const AdaptiveDialog: React.FC<AdaptiveDialogProps> = ({
           >
             {/* Mobile Pull-Down / Drag Handle */}
             <div className="expanded:hidden pt-3 pb-1 flex justify-center shrink-0">
-              <div className="w-12 h-1.5 bg-line-strong motif-poleng rounded-full" />
+              <div className="w-12 h-1.5 bg-line-strong rounded-full" />
             </div>
 
             {/* Header */}
             {(title || description) && (
-              <div className="px-5 py-4 expanded:px-6 expanded:py-5 border-b border-line-soft flex items-start justify-between gap-4 shrink-0 bg-surface">
+              <div className="px-5 py-4 expanded:px-6 expanded:py-5 border-b border-line-hairline flex items-start justify-between gap-4 shrink-0 bg-surface">
                 <div className="space-y-1 min-w-0 flex-1">
                   {title && (
                     <h3 className="text-base expanded:text-lg font-black text-ink tracking-tight truncate">

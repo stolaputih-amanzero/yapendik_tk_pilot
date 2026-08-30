@@ -57,7 +57,7 @@ export const PrivacyShield: React.FC<PrivacyShieldProps> = ({
         title={`Data dilindungi untuk menjaga privasi anak pada kelompok observasi kecil (N = ${sampleSize} < 5).`}
       >
         <span className="text-[11px] text-ink-soft font-medium flex items-center gap-1">
-          <Lock className="w-3 h-3 text-brass shrink-0" />
+          <Lock className="w-3 h-3 text-brand-primary shrink-0" />
           <span>{metricLabel}</span>
         </span>
         <div className="flex items-center gap-2 mt-0.5">
@@ -80,7 +80,7 @@ export const PrivacyShield: React.FC<PrivacyShieldProps> = ({
       title="Selisih data populasi berisiko membuka identitas individu (Anti-Differencing FB-07)."
     >
       <span className="text-[11px] text-warning-deep font-medium flex items-center gap-1">
-        <ShieldAlert className="w-3 h-3 text-brass shrink-0" />
+        <ShieldAlert className="w-3 h-3 text-brand-primary shrink-0" />
         <span>{metricLabel}</span>
       </span>
       <div className="flex items-center gap-2 mt-0.5">

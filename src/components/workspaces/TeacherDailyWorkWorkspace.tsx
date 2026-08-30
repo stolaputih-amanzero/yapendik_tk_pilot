@@ -1,6 +1,7 @@
 /**
  * Yapendik School OS — Domain 01: Teacher Daily Work (Kerja Harian Guru)
  * Supports daily learning plans, sentra activities, steps, and teacher reflections.
+ * Canvas-Native Flat Architecture (Hukum F-7 / A-5).
  */
 
 import React, { useState, useEffect } from 'react';
@@ -13,14 +14,12 @@ import {
   Calendar, 
   Clock, 
   CheckCircle, 
-  Circle, 
   Plus, 
-  Layers, 
   BookOpen, 
-  Sparkles, 
   Check, 
   AlertCircle,
-  FileText
+  X,
+  Sparkles
 } from 'lucide-react';
 
 export const TeacherDailyWorkWorkspace: React.FC = () => {
@@ -123,49 +122,38 @@ export const TeacherDailyWorkWorkspace: React.FC = () => {
   const availableDomains: { key: DevelopmentDomain; label: string; bg: string }[] = [
     { key: 'NILAI_AGAMA_MORAL', label: 'Nilai Agama & Moral', bg: 'bg-success-tint text-success-deep' },
     { key: 'FISIK_MOTORIK', label: 'Fisik-Motorik', bg: 'bg-warning-tint text-warning-deep' },
-    { key: 'KOGNITIF', label: 'Kognitif', bg: 'bg-blue-100 text-info-deep' },
+    { key: 'KOGNITIF', label: 'Kognitif', bg: 'bg-info-tint text-info-deep' },
     { key: 'BAHASA', label: 'Bahasa', bg: 'bg-lppa-tint text-lppa-deep' },
     { key: 'SOSIAL_EMOSIONAL', label: 'Sosial-Emosional', bg: 'bg-danger-tint text-danger-deep' },
-    { key: 'SENI', label: 'Seni & Kreativitas', bg: 'bg-indigo-100 text-lppa-deep' }
+    { key: 'SENI', label: 'Seni & Kreativitas', bg: 'bg-lppa-tint text-lppa-deep' }
   ];
 
   return (
-    <div className="px-4 medium:px-6 py-6 space-y-6 overflow-x-hidden w-full max-w-full pb-[132px] expanded:pb-8">
-      {/* Workspace Context Bar */}
-      <div className="p-4 medium:p-4 bg-surface border-y medium:border border-line medium:rounded-field medium:shadow-hairline flex flex-col medium:flex-row medium:items-start justify-between gap-4 -mx-4 expanded:mx-0">
-        <div>
-          <h1 className="text-xl font-bold text-ink flex items-center gap-2">
-            <BookOpen className="w-5 h-5 text-brass" />
-            Agenda & Kerja Harian Guru (TK Pilot)
-          </h1>
-          <p className="text-xs text-ink-soft mt-1">
-            Pengorganisasian sentra kegiatan, fokus capaian perkembangan, dan catatan refleksi pedagogis.
-          </p>
-        </div>
-
-        {/* Filter selectors */}
-        <div className="flex flex-col gap-4 w-full medium:w-auto flex-1 expanded:max-w-xl">
-          <div className="flex flex-col medium:flex-row medium:items-center gap-3 w-full">
-            <div className="flex items-center justify-between w-full bg-surface-subtle border border-line rounded-field px-3 py-2 text-ink-soft text-xs">
-              <span className="text-ink-soft font-medium flex items-center gap-2"><Calendar className="w-4 h-4 text-ink-soft" /> Tanggal:</span>
-              <input
-                type="date"
-                value={selectedDate}
-                onChange={(e) => setSelectedDate(e.target.value)}
-                className="bg-transparent font-semibold text-ink outline-none text-right flex-1 cursor-pointer ml-2"
-              />
+    <div 
+      className="w-full max-w-6xl mx-auto px-4 medium:px-6 pt-6 pb-[160px] space-y-8 animate-in fade-in duration-200 text-ink"
+      data-testid="teacher-daily-work-workspace"
+    >
+      {/* 1. HERO CANVAS (R-1 Hero Canvas) */}
+      <header className="space-y-4">
+        <div className="flex flex-col medium:flex-row medium:items-start justify-between gap-4">
+          <div>
+            <div className="flex items-center gap-1.5 text-brand-deep text-xs font-bold uppercase tracking-wider mb-1">
+              <BookOpen className="w-4 h-4 text-brand-deep shrink-0" />
+              <span>Kerja Harian Guru • Pembelajaran Sentra TK</span>
             </div>
-
-            <div className="flex items-center justify-between w-full bg-surface-subtle border border-line rounded-field px-3 py-2 text-ink-soft text-xs">
-              <span className="text-ink-soft font-medium mr-2">Kelas:</span>
-              <SelectSheet value={selectedClassId} onChange={setSelectedClassId} options={classes.map(c => ({ value: c.id, label: c.name }))} />
-            </div>
+            <h1 className="text-[28px] medium:text-3xl font-bold tracking-tight text-ink leading-tight flex items-center gap-2 flex-wrap">
+              <span>Agenda &amp; Kerja Harian Guru</span>
+            </h1>
+            <p className="text-ink-soft text-sm max-w-2xl mt-1">
+              Pengorganisasian sentra kegiatan, fokus capaian perkembangan, dan catatan refleksi pedagogis harian.
+            </p>
           </div>
 
           {authResult.granted && (
             <Button
               variant="primary"
-              className="w-full medium:w-auto shadow-hairline flex justify-center"
+              size="sm"
+              className="rounded-xl text-xs font-bold shrink-0"
               onClick={() => setShowAddModal(true)}
               leftIcon={<Plus className="w-4 h-4" />}
             >
@@ -173,185 +161,208 @@ export const TeacherDailyWorkWorkspace: React.FC = () => {
             </Button>
           )}
         </div>
-      </div>
 
-      {/* Authorization banner if restricted */}
+        {/* 2. FLAT CONTROLS (R-2 Kontrol Flat) */}
+        <div className="flex flex-col medium:flex-row items-stretch medium:items-center gap-3 pt-2">
+          <div className="flex items-center justify-between bg-surface-subtle border border-line-hairline rounded-xl px-3 py-2 text-ink-soft text-xs min-h-[44px]">
+            <span className="text-ink-soft font-medium flex items-center gap-2 whitespace-nowrap">
+              <Calendar className="w-4 h-4 text-ink-soft" /> Tanggal:
+            </span>
+            <input
+              type="date"
+              value={selectedDate}
+              onChange={(e) => setSelectedDate(e.target.value)}
+              className="bg-transparent font-semibold text-ink outline-none text-right cursor-pointer ml-2"
+            />
+          </div>
+
+          <div className="min-w-[200px]">
+            <SelectSheet 
+              value={selectedClassId} 
+              onChange={setSelectedClassId} 
+              options={classes.map(c => ({ value: c.id, label: c.name }))} 
+            />
+          </div>
+        </div>
+      </header>
+
+      {/* Mode Warning */}
       {!authResult.granted && (
-        <div className="bg-warning-tint border border-warning-line rounded-lg p-3 text-xs text-warning-deep flex items-start space-x-2">
-          <AlertCircle className="w-4 h-4 text-brass shrink-0 mt-0.5" />
+        <div className="border-l-2 border-warning-line pl-3 py-2 text-xs text-warning-deep flex items-start gap-2">
+          <AlertCircle className="w-4 h-4 text-warning-deep shrink-0 mt-0.5" />
           <div>
-            <span className="font-semibold">Mode Tinjauan Terbatas:</span> {authResult.reason}
+            <span className="font-bold">Mode Tinjauan Terbatas:</span> {authResult.reason}
           </div>
         </div>
       )}
 
-      {/* Activities Grid */}
-      {activities.length === 0 ? (
-        <div className="bg-surface border-y medium:border border-line medium:rounded-lg p-10 text-center my-6 medium:shadow-hairline -mx-4 expanded:mx-0">
-          <Layers className="w-10 h-10 text-ink-faint mx-auto mb-3" />
-          <h3 className="text-sm font-semibold text-ink-soft">Belum ada agenda aktivitas untuk tanggal ini</h3>
-          <p className="text-xs text-ink-faint max-w-md mx-auto mt-1">
-            Gunakan tombol "Rencana Aktivitas Baru" di atas untuk menyusun jadwal pembelajaran sentra anak usia dini.
-          </p>
-        </div>
-      ) : (
-        <div className="flex flex-col divide-y divide-line-soft bg-surface border-y medium:border border-line medium:rounded-field medium:shadow-hairline pb-10 -mx-4 expanded:mx-0">
-          {activities.map((act) => (
-            <div 
-              key={act.id} 
-              className={`px-4 medium:px-6 py-5 hover-only:bg-surface-subtle/50 transition-colors ${
-                act.completed ? 'bg-success-tint/10' : ''
-              }`}
-            >
-              {/* Header */}
-              <div className="flex flex-col medium:flex-row medium:items-start justify-between gap-4 pb-4 border-b border-line-soft">
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center space-x-3 mb-2">
-                    <span className="text-[11px] font-mono px-2 py-1 rounded-full bg-surface-subtle text-ink-soft font-bold flex items-center gap-2 shrink-0 whitespace-nowrap">
-                      <Clock className="w-4 h-4 text-ink-faint" />
-                      {act.timeSlot}
+      {/* 3. ACTIVITIES LIST (R-3 divide-y divide-line on Canvas) */}
+      <div className="divide-y divide-line border-y border-line">
+        {activities.map((act) => (
+          <article 
+            key={act.id} 
+            className={`py-6 space-y-4 transition-colors ${
+              act.completed ? 'bg-success-tint/10 -mx-4 px-4 rounded-xl' : ''
+            }`}
+          >
+            {/* Header */}
+            <div className="flex flex-col medium:flex-row medium:items-start justify-between gap-3">
+              <div className="space-y-1">
+                <div className="flex items-center gap-2">
+                  <span className="text-xs font-mono px-3 py-1 rounded-full bg-surface-subtle text-ink-soft font-bold flex items-center gap-1.5 whitespace-nowrap border border-line-hairline">
+                    <Clock className="w-4 h-4 text-ink-faint" />
+                    {act.timeSlot}
+                  </span>
+                  {act.completed && (
+                    <span className="text-xs px-3 py-1 rounded-full bg-success-tint text-success-deep font-bold flex items-center gap-1 border border-success-line whitespace-nowrap">
+                      <Check className="w-4 h-4" />
+                      Selesai Dilaksanakan
                     </span>
-                    {act.completed && (
-                      <span className="text-[11px] px-2 py-1 rounded-full bg-success-tint text-success-deep font-bold flex items-center gap-2 shrink-0">
-                        <Check className="w-3 h-3" />
-                        Selesai Dilaksanakan
-                      </span>
-                    )}
-                  </div>
-                  <h3 className="text-base font-bold text-ink leading-snug truncate">
-                    {act.activityName}
-                  </h3>
-                  <div className="text-xs text-ink-soft mt-1 truncate">
-                    Tema: <span className="font-semibold text-ink-soft">{act.theme}</span> • {act.subTheme}
-                  </div>
+                  )}
                 </div>
+                <h3 className="text-base font-bold text-ink leading-snug pt-1">
+                  {act.activityName}
+                </h3>
+                <p className="text-xs text-ink-soft">
+                  Tema: <strong className="text-ink">{act.theme}</strong> • {act.subTheme}
+                </p>
               </div>
 
-              {/* Developmental Domains */}
-              <div className="mt-4 mb-3 flex flex-wrap gap-2">
-                {act.developmentalFocus.map(d => {
-                  const dom = availableDomains.find(ad => ad.key === d);
-                  return (
-                    <span key={d} className={`rounded-full px-2 py-1 text-[10px] font-bold ${dom?.bg || 'bg-surface-subtle'}`}>
-                      {dom?.label || d}
-                    </span>
-                  );
-                })}
-              </div>
-
-              {/* Steps and Materials */}
-              <div className="space-y-4 text-xs text-ink-soft pt-1">
-                {act.materialsNeeded.length > 0 && (
-                  <div>
-                    <span className="font-semibold text-ink block mb-1">Alat & Bahan:</span>
-                    <ul className="list-disc list-inside space-y-0.5 text-ink-soft pl-1">
-                      {act.materialsNeeded.map((m, idx) => (
-                        <li key={idx}>{m}</li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
-
-                {act.plannedSteps.length > 0 && (
-                  <div>
-                    <span className="font-semibold text-ink block mb-1">Langkah Alur Kegiatan:</span>
-                    <ol className="list-decimal list-inside space-y-1 text-ink-soft pl-1">
-                      {act.plannedSteps.map((s, idx) => (
-                        <li key={idx}>{s}</li>
-                      ))}
-                    </ol>
-                  </div>
-                )}
-
-                {/* Reflection */}
-                {act.teacherReflection && (
-                  <div className="mt-3 p-3 bg-warning-tint/60 border border-amber-100 rounded-md">
-                    <span className="font-semibold text-warning-deep text-[11px] uppercase tracking-wider tracking-wide block mb-1">
-                      Refleksi & Catatan Guru:
-                    </span>
-                    <p className="text-ink italic leading-relaxed">
-                      "{act.teacherReflection}"
-                    </p>
-                  </div>
-                )}
-              </div>
-
-              {!act.completed ? (
-                <div className="mt-4 pt-4 border-t border-line-soft flex justify-end">
-                  <Button 
-                    variant="secondary" 
-                    size="sm" 
-                    onClick={() => handleToggleComplete(act)}
-                    disabled={!authResult.granted}
-                    leftIcon={<CheckCircle className="w-4 h-4" />}
-                    className="w-full medium:w-auto flex justify-center"
-                  >
-                    Tandai Selesai
-                  </Button>
-                </div>
-              ) : null}
+              {!act.completed && (
+                <Button 
+                  variant="secondary" 
+                  size="sm" 
+                  onClick={() => handleToggleComplete(act)}
+                  disabled={!authResult.granted}
+                  leftIcon={<CheckCircle className="w-4 h-4" />}
+                  className="rounded-xl text-xs font-bold shrink-0 w-fit"
+                >
+                  Tandai Selesai
+                </Button>
+              )}
             </div>
-          ))}
-        </div>
-      )}
+
+            {/* Developmental Focus Badges */}
+            <div className="flex flex-wrap gap-2">
+              {act.developmentalFocus.map(d => {
+                const dom = availableDomains.find(ad => ad.key === d);
+                return (
+                  <span key={d} className={`rounded-full px-3 py-1 text-[10px] font-mono font-bold whitespace-nowrap ${dom?.bg || 'bg-surface-subtle'}`}>
+                    {dom?.label || d}
+                  </span>
+                );
+              })}
+            </div>
+
+            {/* Steps & Materials (R-3 flat) */}
+            <div className="grid grid-cols-1 medium:grid-cols-2 gap-4 text-xs text-ink-soft pt-1">
+              {act.materialsNeeded.length > 0 && (
+                <div className="space-y-1">
+                  <strong className="text-ink block">Alat &amp; Bahan:</strong>
+                  <ul className="list-disc list-inside space-y-0.5 pl-1">
+                    {act.materialsNeeded.map((m, idx) => (
+                      <li key={idx}>{m}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+
+              {act.plannedSteps.length > 0 && (
+                <div className="space-y-1">
+                  <strong className="text-ink block">Langkah Alur Kegiatan:</strong>
+                  <ol className="list-decimal list-inside space-y-0.5 pl-1">
+                    {act.plannedSteps.map((s, idx) => (
+                      <li key={idx}>{s}</li>
+                    ))}
+                  </ol>
+                </div>
+              )}
+            </div>
+
+            {/* Reflection Note (R-4 Footnote Etis) */}
+            {act.teacherReflection && (
+              <div className="border-l-2 border-warning-line pl-3 py-1 space-y-1 text-xs">
+                <span className="font-bold text-warning-deep block">
+                  Refleksi &amp; Catatan Guru:
+                </span>
+                <p className="text-ink italic">
+                  "{act.teacherReflection}"
+                </p>
+              </div>
+            )}
+          </article>
+        ))}
+
+        {activities.length === 0 && (
+          <div className="py-12 text-center text-ink-faint text-xs">
+            Belum ada agenda aktivitas untuk tanggal ini. Klik "Rencana Aktivitas Baru" untuk membuat jadwal.
+          </div>
+        )}
+      </div>
 
       {/* Modal Add Activity */}
       {showAddModal && (
-        <div className="fixed inset-0 bg-brand/60 backdrop-blur-xs flex items-center justify-center p-4 z-50">
-          <div className="bg-surface rounded-field shadow-floating border border-line max-w-xl w-full max-h-[90vh] overflow-y-auto p-6">
-            <h2 className="text-lg font-bold text-ink mb-4 pb-2 border-b border-line-soft">
-              Rencana Aktivitas Pembelajaran TK
-            </h2>
+        <div className="fixed inset-0 bg-brand/60 backdrop-blur-xs flex items-center justify-center p-4 z-50 animate-in fade-in duration-200">
+          <div className="bg-surface rounded-2xl shadow-floating border border-line-hairline max-w-xl w-full max-h-[90vh] overflow-y-auto p-6 text-ink">
+            <div className="flex items-center justify-between pb-3 border-b border-line mb-4">
+              <h2 className="text-base font-bold text-ink">
+                Rencana Aktivitas Pembelajaran TK
+              </h2>
+              <button onClick={() => setShowAddModal(false)} className="text-ink-soft hover-only:text-ink cursor-pointer">
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
             <form onSubmit={handleCreateActivity} className="space-y-4 text-xs">
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block font-semibold text-ink-soft mb-1">Tema Utama</label>
+                  <label className="block font-bold text-ink-soft mb-1">Tema Utama</label>
                   <input
                     type="text"
                     value={theme}
                     onChange={e => setTheme(e.target.value)}
                     required
-                    className="w-full border border-line rounded px-2 py-1 focus:ring-1 focus:ring-brass/30 outline-none"
+                    className="w-full bg-surface-subtle border border-line-hairline rounded-xl px-3 py-2 focus:ring-1 focus:ring-brand-primary outline-none"
                   />
                 </div>
                 <div>
-                  <label className="block font-semibold text-ink-soft mb-1">Sub-Tema</label>
+                  <label className="block font-bold text-ink-soft mb-1">Sub-Tema</label>
                   <input
                     type="text"
                     value={subTheme}
                     onChange={e => setSubTheme(e.target.value)}
                     required
-                    className="w-full border border-line rounded px-2 py-1 focus:ring-1 focus:ring-brass/30 outline-none"
+                    className="w-full bg-surface-subtle border border-line-hairline rounded-xl px-3 py-2 focus:ring-1 focus:ring-brand-primary outline-none"
                   />
                 </div>
               </div>
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block font-semibold text-ink-soft mb-1">Nama Aktivitas</label>
+                  <label className="block font-bold text-ink-soft mb-1">Nama Aktivitas</label>
                   <input
                     type="text"
-                    placeholder="mis. Sentra Balok: Membangun Menara Rumah"
+                    placeholder="mis. Sentra Balok: Menara"
                     value={activityName}
                     onChange={e => setActivityName(e.target.value)}
                     required
-                    className="w-full border border-line rounded px-2 py-1 focus:ring-1 focus:ring-brass/30 outline-none"
+                    className="w-full bg-surface-subtle border border-line-hairline rounded-xl px-3 py-2 focus:ring-1 focus:ring-brand-primary outline-none"
                   />
                 </div>
                 <div>
-                  <label className="block font-semibold text-ink-soft mb-1">Waktu Pelaksanaan</label>
+                  <label className="block font-bold text-ink-soft mb-1">Waktu Pelaksanaan</label>
                   <input
                     type="text"
                     value={timeSlot}
                     onChange={e => setTimeSlot(e.target.value)}
                     required
-                    className="w-full border border-line rounded px-2 py-1 focus:ring-1 focus:ring-brass/30 outline-none"
+                    className="w-full bg-surface-subtle border border-line-hairline rounded-xl px-3 py-2 focus:ring-1 focus:ring-brand-primary outline-none"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block font-semibold text-ink-soft mb-1.5">Fokus Capaian Perkembangan:</label>
+                <label className="block font-bold text-ink-soft mb-1.5">Fokus Capaian Perkembangan:</label>
                 <div className="flex flex-wrap gap-2">
                   {availableDomains.map(d => {
                     const isChecked = selectedDomains.includes(d.key);
@@ -360,10 +371,10 @@ export const TeacherDailyWorkWorkspace: React.FC = () => {
                         type="button"
                         key={d.key}
                         onClick={() => toggleDomainSelection(d.key)}
-                        className={`px-2 py-1 rounded text-[11px] font-medium border transition-colors ${
+                        className={`px-3 py-1 rounded-full text-xs font-medium border transition-colors cursor-pointer ${
                           isChecked 
                             ? 'bg-brand text-on-brand border-brand' 
-                            : 'bg-surface-subtle text-ink-soft border-line hover-only:bg-surface-subtle'
+                            : 'bg-surface-subtle text-ink-soft border-line-hairline'
                         }`}
                       >
                         {d.label}
@@ -374,41 +385,45 @@ export const TeacherDailyWorkWorkspace: React.FC = () => {
               </div>
 
               <div>
-                <label className="block font-semibold text-ink-soft mb-1">Bahan & Perlengkapan (Satu per baris):</label>
+                <label className="block font-bold text-ink-soft mb-1">Bahan &amp; Perlengkapan (Satu per baris):</label>
                 <textarea
                   rows={3}
                   value={materials}
                   onChange={e => setMaterials(e.target.value)}
-                  placeholder="Kertas gambar A3&#10;Cat warna primer non-toksik&#10;Lap pembersih"
-                  className="w-full border border-line rounded px-2 py-1 focus:ring-1 focus:ring-brass/30 outline-none"
+                  placeholder="Kertas gambar A3&#10;Cat warna primer&#10;Lap pembersih"
+                  className="w-full bg-surface-subtle border border-line-hairline rounded-xl p-3 focus:ring-1 focus:ring-brand-primary outline-none resize-none"
                 />
               </div>
 
               <div>
-                <label className="block font-semibold text-ink-soft mb-1">Langkah-Langkah Kegiatan (Satu per baris):</label>
+                <label className="block font-bold text-ink-soft mb-1">Langkah Kegiatan (Satu per baris):</label>
                 <textarea
-                  rows={4}
+                  rows={3}
                   value={steps}
                   onChange={e => setSteps(e.target.value)}
-                  placeholder="1. Pijakan sebelum main: Berdoa dan penjelasan aturan sentra&#10;2. Pijakan saat main: Eksplorasi mandiri dan stimulasi guru&#10;3. Pijakan setelah main: Membereskan mainan bersama"
-                  className="w-full border border-line rounded px-2 py-1 focus:ring-1 focus:ring-brass/30 outline-none"
+                  placeholder="1. Pijakan sebelum main&#10;2. Pijakan saat main&#10;3. Pijakan setelah main"
+                  className="w-full bg-surface-subtle border border-line-hairline rounded-xl p-3 focus:ring-1 focus:ring-brand-primary outline-none resize-none"
                 />
               </div>
 
-              <div className="flex flex-col medium:flex-row items-stretch medium:items-center justify-end gap-3 pt-4 border-t border-line-soft">
-                <button
+              <div className="flex items-center justify-end gap-2 pt-4 border-t border-line">
+                <Button
                   type="button"
+                  variant="ghost"
+                  size="sm"
                   onClick={() => setShowAddModal(false)}
-                  className="w-full medium:w-auto px-4 py-2 medium:py-1 rounded border border-line text-ink-soft hover-only:bg-surface-subtle font-medium text-center"
+                  className="rounded-xl text-xs"
                 >
                   Batal
-                </button>
-                <button
+                </Button>
+                <Button
                   type="submit"
-                  className="w-full medium:w-auto px-4 py-2 medium:py-1 rounded bg-brand text-on-brand hover-only:bg-surface-inset font-semibold text-center"
+                  variant="primary"
+                  size="sm"
+                  className="rounded-xl text-xs font-bold"
                 >
                   Simpan Rencana
-                </button>
+                </Button>
               </div>
             </form>
           </div>
@@ -417,41 +432,45 @@ export const TeacherDailyWorkWorkspace: React.FC = () => {
 
       {/* Modal Teacher Reflection */}
       {reflectionModalActivity && (
-        <div className="fixed inset-0 bg-brand/60 backdrop-blur-xs flex items-center justify-center p-4 z-50">
-          <div className="bg-surface rounded-field shadow-floating border border-line max-w-md w-full p-6 text-xs">
-            <h3 className="text-base font-bold text-ink mb-2">
+        <div className="fixed inset-0 bg-brand/60 backdrop-blur-xs flex items-center justify-center p-4 z-50 animate-in fade-in duration-200">
+          <div className="bg-surface rounded-2xl shadow-floating border border-line-hairline max-w-md w-full p-6 text-xs text-ink">
+            <h3 className="text-base font-bold text-ink mb-1">
               Refleksi Guru Setelah Pelaksanaan
             </h3>
-            <p className="text-ink-soft mb-4">
-              Aktivitas: <span className="font-semibold text-ink">{reflectionModalActivity.activityName}</span>
+            <p className="text-ink-soft mb-3">
+              Aktivitas: <strong className="text-ink">{reflectionModalActivity.activityName}</strong>
             </p>
-            <div className="space-y-3">
-              <label className="block font-semibold text-ink-soft">
-                Bagaimana respon anak-anak? Adakah anak yang memerlukan bimbingan khusus?
+            <div className="space-y-2">
+              <label className="block font-bold text-ink-soft">
+                Bagaimana respon anak-anak? Adakah yang memerlukan bimbingan khusus?
               </label>
               <textarea
                 rows={4}
                 value={reflectionText}
                 onChange={e => setReflectionText(e.target.value)}
-                placeholder="Contoh: Seluruh anak antusias berpartisipasi. Kenzo menunjukkan inisiatif membagi giliran bermain balok kepada temannya..."
-                className="w-full border border-line rounded-md p-2 outline-none focus:ring-1 focus:ring-brass/30"
+                placeholder="Contoh: Seluruh anak antusias berpartisipasi. Kenzo menunjukkan inisiatif membagi giliran bermain balok..."
+                className="w-full bg-surface-subtle border border-line-hairline rounded-xl p-3 outline-none focus:ring-1 focus:ring-brand-primary resize-none"
               />
             </div>
-            <div className="flex flex-col medium:flex-row items-stretch medium:items-center justify-end gap-3 mt-4 pt-4 border-t border-line-soft">
-              <button
+            <div className="flex items-center justify-end gap-2 mt-4 pt-4 border-t border-line">
+              <Button
                 type="button"
+                variant="ghost"
+                size="sm"
                 onClick={() => setReflectionModalActivity(null)}
-                className="w-full medium:w-auto px-4 py-2 medium:py-1 rounded border border-line text-ink-soft font-medium text-center"
+                className="rounded-xl text-xs"
               >
                 Tutup
-              </button>
-              <button
+              </Button>
+              <Button
                 type="button"
+                variant="primary"
+                size="sm"
                 onClick={handleSaveReflection}
-                className="w-full medium:w-auto px-4 py-2 medium:py-1 rounded bg-emerald-700 text-on-brand font-semibold hover-only:bg-emerald-800 text-center"
+                className="rounded-xl text-xs font-bold"
               >
-                Simpan & Tandai Selesai
-              </button>
+                Simpan &amp; Selesaikan
+              </Button>
             </div>
           </div>
         </div>

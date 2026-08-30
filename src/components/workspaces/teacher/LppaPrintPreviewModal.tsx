@@ -191,11 +191,11 @@ export const LppaPrintPreviewModal: React.FC<Props> = ({
     <div id="lppa-print-portal" className="lppa-print-modal-root fixed inset-0 z-[70] flex items-end medium:items-center justify-center p-0 medium:p-4 bg-brand/40 backdrop-blur-xs animate-in fade-in duration-200">
       
       {/* Outer Shell */}
-      <div className="lppa-modal-shell bg-surface-subtle rounded-t-3xl sm:rounded-card border-t sm:border border-line shadow-floating w-full max-w-5xl h-[90vh] sm:h-[85vh] flex flex-col overflow-hidden text-ink">
+      <div className="lppa-modal-shell bg-surface-subtle rounded-t-3xl medium:rounded-card border-t medium:border border-line shadow-floating w-full max-w-5xl h-[90vh] medium:h-[85vh] flex flex-col overflow-hidden text-ink">
         
         {/* TOP BAR: Controls (Hidden on Print) */}
-        <div className="px-5 py-4 border-b border-line bg-white flex flex-col medium:flex-row items-stretch medium:items-center justify-between gap-4 shrink-0 print:hidden relative">
-          <div className="flex items-center gap-3 pr-8 sm:pr-0">
+        <div className="px-5 py-4 border-b border-line bg-surface flex flex-col medium:flex-row items-stretch medium:items-center justify-between gap-4 shrink-0 print:hidden relative">
+          <div className="flex items-center gap-3 pr-8 medium:pr-0">
             <div className="w-10 h-10 rounded-card bg-brand text-white flex items-center justify-center font-bold text-sm shrink-0 shadow-hairline">
               <Printer className="w-5 h-5" />
             </div>
@@ -213,7 +213,7 @@ export const LppaPrintPreviewModal: React.FC<Props> = ({
             <button
               onClick={handleDownloadPdfOnTheFly}
               disabled={isGeneratingPdf}
-              className="px-4 py-2 rounded-field bg-brand hover-only:bg-surface-inset text-white font-bold text-xs flex items-center gap-2 shadow-hairline transition cursor-pointer disabled:opacity-60"
+              className="px-4 py-2 rounded-field bg-brand hover-only:opacity-90 text-white font-bold text-xs flex items-center gap-2 shadow-hairline transition cursor-pointer disabled:opacity-60"
             >
               {isGeneratingPdf ? (
                 <>

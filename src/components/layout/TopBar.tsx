@@ -57,17 +57,15 @@ export const TopBar: React.FC<TopBarProps> = ({
   const isSimulationEnabled = import.meta.env.VITE_ENABLE_SIMULATION === 'true';
 
   return (
-    <header className="bg-surface/90 backdrop-blur-md border-b border-line text-ink sticky top-0 z-40 px-4 medium:px-6 h-16 flex items-center justify-between shadow-hairline min-w-0 shrink-0 transition-colors duration-300">
+    <header className="bg-surface-glass backdrop-blur-xl border-b border-line-hairline text-ink sticky top-0 z-40 px-4 medium:px-6 h-16 flex items-center justify-between shadow-hairline min-w-0 shrink-0 transition-colors duration-300">
       {/* ZONE 1: BRAND TITLE */}
       <div className="flex items-center space-x-2.5 medium:space-x-3 shrink-0 min-w-0">
-        <div className="w-8 h-8 rounded-lg bg-surface-subtle border border-line flex items-center justify-center text-ink shrink-0">
-          <Building2 className="w-4 h-4 text-brass" />
-        </div>
+        <Building2 className="w-5 h-5 text-brand-primary shrink-0" />
         <div className="flex items-center space-x-1.5 min-w-0">
           <span className="font-bold tracking-tight text-ink text-base medium:text-lg whitespace-nowrap truncate font-display">
             Yapendik OS
           </span>
-          <span className="text-brass text-xs animate-amanaura-breath select-none shrink-0" aria-hidden="true" title="Amanaura Breath ✦">✦</span>
+          <span className="text-brand-primary text-xs animate-amanaura-breath select-none shrink-0" aria-hidden="true" title="Amanaura Breath ✦">✦</span>
         </div>
       </div>
 
@@ -78,7 +76,7 @@ export const TopBar: React.FC<TopBarProps> = ({
           <button
             onClick={onOpenSupabaseModal}
             title={supabaseConfig.statusMessage}
-            className="flex items-center space-x-1.5 px-2 py-1 rounded-lg bg-surface-subtle hover-only:bg-surface-subtle/80 border border-line text-xs font-mono text-ink-soft transition-colors whitespace-nowrap shrink-0 cursor-pointer"
+            className="flex items-center space-x-1.5 px-2 py-1 rounded-control bg-surface-subtle hover-only:bg-surface-subtle/80 border border-line-hairline text-xs font-mono text-ink-soft transition-colors whitespace-nowrap shrink-0 cursor-pointer"
           >
             <Database className={`w-4 h-4 ${supabaseConfig.isConnected ? 'text-success' : 'text-ink-faint'}`} />
             <span className="hidden medium:inline">
@@ -87,29 +85,29 @@ export const TopBar: React.FC<TopBarProps> = ({
           </button>
         )}
 
-        {/* Dark/Light Mode "Night Temple" Toggle */}
+        {/* Dark/Light Mode Toggle */}
         <button
           type="button"
           onClick={toggleTheme}
-          aria-label={isDark ? "Beralih ke Frangipani Day (Light Mode)" : "Beralih ke Night Temple (Dark Mode)"}
-          title={isDark ? "Beralih ke Frangipani Day (Light Mode)" : "Beralih ke Night Temple (Dark Mode)"}
-          className="p-2 rounded-lg bg-surface-subtle hover-only:bg-surface border border-line text-ink-soft hover-only:text-ink transition-colors cursor-pointer shrink-0"
+          aria-label={isDark ? "Beralih ke Crystal Day (Light Mode)" : "Beralih ke OLED Night (Dark Mode)"}
+          title={isDark ? "Beralih ke Crystal Day (Light Mode)" : "Beralih ke OLED Night (Dark Mode)"}
+          className="p-2 rounded-control bg-surface-subtle hover-only:bg-surface text-ink-soft hover-only:text-ink transition-colors cursor-pointer shrink-0 border border-line-hairline"
         >
           {isDark ? (
-            <Sun className="w-4 h-4 text-brass animate-in fade-in" />
+            <Sun className="w-4 h-4 text-brand-accent animate-in fade-in" />
           ) : (
             <Moon className="w-4 h-4 text-ink-soft animate-in fade-in" />
           )}
         </button>
 
-        {/* Persona Switcher Dropdown (Mobile: Clean Avatar Only | Desktop: Full Info) */}
+        {/* Persona Switcher Dropdown */}
         <div className="relative">
           <button
             onClick={() => setShowPersonaMenu(!showPersonaMenu)}
-            className="flex items-center space-x-2 p-2 medium:px-3 medium:py-1 rounded-lg bg-surface-subtle hover-only:bg-surface-subtle/80 border border-line text-left transition-colors whitespace-nowrap cursor-pointer text-ink"
+            className="flex items-center space-x-2 p-1 medium:px-3 medium:py-1 rounded-control bg-surface-subtle hover-only:bg-surface-subtle/80 border border-line-hairline text-left transition-colors whitespace-nowrap cursor-pointer text-ink"
             title={currentPersona?.name || 'Pengguna'}
           >
-            <div className="w-7 h-7 rounded-full bg-brand text-on-brand flex items-center justify-center text-xs font-bold shrink-0">
+            <div className="w-7 h-7 rounded-full bg-brand-primary text-on-brand flex items-center justify-center text-xs font-bold shrink-0">
               {currentPersona?.name.charAt(0) || 'U'}
             </div>
             <div className="text-xs hidden expanded:block leading-tight text-left min-w-0">
@@ -124,7 +122,7 @@ export const TopBar: React.FC<TopBarProps> = ({
           </button>
 
           {showPersonaMenu && (
-            <div className="absolute right-0 mt-2 w-72 medium:w-80 rounded-card shadow-floating bg-surface border border-line p-2 z-50">
+            <div className="absolute right-0 mt-2 w-72 medium:w-80 rounded-card shadow-floating bg-surface border border-line-hairline p-2 z-50">
               <div className="px-3 py-2 border-b border-line-soft mb-1">
                 <div className="text-xs font-bold text-ink uppercase tracking-wider">
                   Ganti Konteks Persona

@@ -1,9 +1,10 @@
 /**
  * Yapendik School OS — Mobile-First Zero-Navigation Omni-Bar
  * Floating Action Hub & Touch-Friendly iOS-Style App Library Sheet
+ * S-1 to S-4: Dock Declutter (Curated Chips, Scroll Collapse, Collision Deference, Quiet Mode)
  */
 
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useSecurityContext } from '../../auth/context';
 import { WorkspaceTab } from './TopBar';
 import { 
@@ -36,6 +37,7 @@ import {
 interface MobileOmniBarProps {
   activeTab: WorkspaceTab;
   onSelectTab: (tab: WorkspaceTab) => void;
+  hasPageChips?: boolean;
 }
 
 interface NavItem {
@@ -59,10 +61,15 @@ interface SmartChip {
 
 export const MobileOmniBar: React.FC<MobileOmniBarProps> = ({
   activeTab,
-  onSelectTab
+  onSelectTab,
+  hasPageChips = false
 }) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const [isScrolledDown, setIsScrolledDown] = useState(false);
+  const [isQuiet, setIsQuiet] = useState(false);
+  const quietTimerRef = useRef<NodeJS.Timeout | null>(null);
+
   const { currentPersona, securityContext } = useSecurityContext();
 
   const role = currentPersona?.role || securityContext?.role || 'TEACHER';
@@ -80,37 +87,79 @@ export const MobileOmniBar: React.FC<MobileOmniBarProps> = ({
     securityContext?.role === 'GUARDIAN' ||
     securityContext?.role === 'APPLICANT_GUARDIAN';
 
-  // 1. SMART CHIPS (Fast Shortcuts per Role)
+  // S-1: CURATED SMART CHIPS (Max 2 high-frequency shortcuts per active role)
   let smartChips: SmartChip[] = [];
 
   if (isSuperadminOrFoundation) {
     smartChips = [
-      { label: 'Statistik', tab: 'INSTITUTIONAL_HEALTH' },
-      { label: 'Kebijakan', tab: 'FOUNDATION_GOVERNANCE' },
-      { label: 'Pengaturan', tab: 'PROVISIONING' }
+      { label: 'Statistik Unit', tab: 'INSTITUTIONAL_HEALTH' },
+      { label: 'Pusat Kebijakan', tab: 'FOUNDATION_GOVERNANCE' }
     ];
   } else if (isHeadmaster) {
     smartChips = [
-      { label: 'Statistik', tab: 'INSTITUTIONAL_HEALTH' },
       { label: 'Meja PPDB', tab: 'ADMISSIONS_DESK' },
       { label: 'Standar Yayasan', tab: 'HEADMASTER_ADOPTION' }
     ];
   } else if (isGuardianOrApplicant) {
     smartChips = [
       { label: 'Buku Penghubung', tab: 'COMMUNICATION' },
-      { label: 'Portal PPDB', tab: 'ADMISSIONS_PORTAL' },
-      { label: 'Jejak Ananda', tab: 'STUDENT_JOURNEY' }
+      { label: 'Portal PPDB', tab: 'ADMISSIONS_PORTAL' }
     ];
   } else {
-    // Default: TEACHER
+    // Default: TEACHER (High-frequency pedagogical tasks only)
     smartChips = [
       { label: 'Presensi', tab: 'ATTENDANCE' },
-      { label: 'Observasi', tab: 'OBSERVATIONS' },
-      { label: 'Kerja Harian', tab: 'DAILY_WORK' }
+      { label: 'Observasi', tab: 'OBSERVATIONS' }
     ];
   }
 
-  // 2. APP LIBRARY CATEGORIES & ITEMS (Humanized Concise Copywriting)
+  // S-3: COLLISION DEFERENCE (If page has its own chip bar or is Attendance, defer dock chips)
+  const showChips = !hasPageChips && activeTab !== 'ATTENDANCE' && activeTab !== 'TEACHER_HOME';
+
+  // S-2: SCROLL-AWARE COLLAPSE LISTENER
+  useEffect(() => {
+    let lastScrollY = window.scrollY;
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+      const diff = currentScrollY - lastScrollY;
+
+      if (diff > 24 && currentScrollY > 60) {
+        setIsScrolledDown(true);
+      } else if (diff < -15 || currentScrollY <= 20) {
+        setIsScrolledDown(false);
+      }
+      lastScrollY = currentScrollY;
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  // S-4: QUIET MODE TIMER (3s inactivity => opacity-60)
+  const resetQuietTimer = () => {
+    setIsQuiet(false);
+    if (quietTimerRef.current) clearTimeout(quietTimerRef.current);
+    quietTimerRef.current = setTimeout(() => {
+      setIsQuiet(true);
+    }, 3000);
+  };
+
+  useEffect(() => {
+    resetQuietTimer();
+    const handleUserActivity = () => resetQuietTimer();
+    window.addEventListener('pointerdown', handleUserActivity, { passive: true });
+    window.addEventListener('keydown', handleUserActivity, { passive: true });
+    window.addEventListener('touchstart', handleUserActivity, { passive: true });
+
+    return () => {
+      if (quietTimerRef.current) clearTimeout(quietTimerRef.current);
+      window.removeEventListener('pointerdown', handleUserActivity);
+      window.removeEventListener('keydown', handleUserActivity);
+      window.removeEventListener('touchstart', handleUserActivity);
+    };
+  }, []);
+
+  // 2. APP LIBRARY CATEGORIES & ITEMS (Complete navigation in Menu Drawer)
   let navGroups: NavGroup[] = [];
 
   if (isSuperadminOrFoundation) {
@@ -159,13 +208,14 @@ export const MobileOmniBar: React.FC<MobileOmniBarProps> = ({
         title: 'AKADEMIK & PROMOSI',
         items: [
           { tab: 'COHORT_PROMOTION', label: 'Promosi Kelas', icon: ArrowUpRight },
-          { tab: 'GRADUATION_REGISTRY', label: 'Buku Kelulusan', icon: GraduationCap }
+          { tab: 'GRADUATION_REGISTRY', label: 'Buku Kelulusan', icon: GraduationCap },
+          { tab: 'ACADEMIC_LIFECYCLE', label: 'Tahun Ajaran', icon: Clock }
         ]
       },
       {
-        title: 'PEMANTAUAN KELAS',
+        title: 'SUPERVISI & AUDIT',
         items: [
-          { tab: 'TEACHER_HOME', label: 'Ruang Guru', icon: Home },
+          { tab: 'GOVERNANCE', label: 'Log Keamanan', icon: Shield },
           { tab: 'STUDENT_JOURNEY', label: 'Jejak Anak', icon: Sparkles }
         ]
       }
@@ -173,17 +223,16 @@ export const MobileOmniBar: React.FC<MobileOmniBarProps> = ({
   } else if (isGuardianOrApplicant) {
     navGroups = [
       {
-        title: 'ANAK SAYA',
+        title: 'PORTAL WALI MURID',
         items: [
-          { tab: 'STUDENT_JOURNEY', label: 'Jejak Ananda', icon: Sparkles },
-          { tab: 'OBSERVATIONS', label: 'Karya & Observasi', icon: Palette }
+          { tab: 'COMMUNICATION', label: 'Buku Penghubung', icon: MessageSquare },
+          { tab: 'STUDENT_JOURNEY', label: 'Jejak Ananda', icon: Sparkles }
         ]
       },
       {
-        title: 'ADMINISTRASI',
+        title: 'LAYANAN PENDAFTARAN',
         items: [
-          { tab: 'ADMISSIONS_PORTAL', label: 'Portal PPDB', icon: FileText },
-          { tab: 'COMMUNICATION', label: 'Buku Penghubung', icon: MessageSquare }
+          { tab: 'ADMISSIONS_PORTAL', label: 'Portal PPDB', icon: UserCheck }
         ]
       }
     ];
@@ -191,11 +240,11 @@ export const MobileOmniBar: React.FC<MobileOmniBarProps> = ({
     // Default: TEACHER
     navGroups = [
       {
-        title: 'RUANG KELAS',
+        title: 'KEGIATAN HARIAN KELAS',
         items: [
-          { tab: 'TEACHER_HOME', label: 'Beranda Guru', icon: Home },
-          { tab: 'DAILY_WORK', label: 'Kerja Harian', icon: ClipboardList },
-          { tab: 'ATTENDANCE', label: 'Presensi', icon: UserCheck }
+          { tab: 'TEACHER_HOME', label: 'Beranda Kelas', icon: Home },
+          { tab: 'ATTENDANCE', label: 'Presensi Harian', icon: UserCheck },
+          { tab: 'DAILY_WORK', label: 'Rencana Harian', icon: ClipboardList }
         ]
       },
       {
@@ -228,36 +277,53 @@ export const MobileOmniBar: React.FC<MobileOmniBarProps> = ({
   return (
     <>
       {/* 1. FLOATING OMNI-BAR & SMART CHIPS CONTAINER (Visible on Mobile only when collapsed) */}
-      <div className="fixed bottom-4 left-4 right-4 z-50 expanded:hidden flex flex-col gap-2 pointer-events-auto min-w-0">
-        {/* Row 1: Smart Chips Carousel */}
-        <div className="flex items-center gap-2 w-full justify-start overflow-x-auto no-scrollbar pb-0.5 min-w-0 [mask-image:linear-gradient(to_right,transparent_0,black_16px,black_calc(100%-16px),transparent_100%)]">
-          {smartChips.map(chip => {
-            const isActive = activeTab === chip.tab;
-            return (
-              <button
-                key={chip.tab}
-                type="button"
-                onClick={() => onSelectTab(chip.tab)}
-                className={`shrink-0 px-3 py-1 rounded-full text-[11px] font-semibold transition-all duration-200 flex items-center gap-2 shadow-hairline active:scale-95 cursor-pointer backdrop-blur-md whitespace-nowrap truncate border ${
-                  isActive
-                    ? 'bg-brand text-on-brand border-brand font-bold shadow-hairline'
-                    : 'bg-surface/90 hover-only:bg-surface text-ink border-line shadow-hairline'
-                }`}
-              >
-                <span>{chip.label}</span>
-              </button>
-            );
-          })}
-        </div>
+      <div 
+        className={`fixed bottom-0 left-0 right-0 z-50 expanded:hidden flex flex-col gap-1.5 pointer-events-none min-w-0 px-4 pb-4 pt-6 bg-gradient-to-t from-canvas via-canvas/85 to-transparent transition-all duration-300 motion-reduce:transition-none ${
+          isQuiet ? 'opacity-60 hover-only:opacity-100 focus-within:opacity-100' : 'opacity-100'
+        }`}
+        onPointerEnter={() => setIsQuiet(false)}
+        onFocus={() => {
+          setIsQuiet(false);
+          setIsScrolledDown(false);
+        }}
+      >
+        {/* Row 1: Smart Chips Carousel (S-1 Curated, S-2 Collapsible, S-3 Deferrable) */}
+        {showChips && smartChips.length > 0 && (
+          <div 
+            className={`flex items-center gap-2 w-full justify-center overflow-x-auto no-scrollbar pointer-events-auto transition-all duration-300 ease-out motion-reduce:transition-none ${
+              isScrolledDown ? 'max-h-0 opacity-0 overflow-hidden -my-1 scale-95' : 'max-h-12 opacity-100 pb-0.5 scale-100'
+            }`}
+          >
+            {smartChips.map(chip => {
+              const isActive = activeTab === chip.tab;
+              return (
+                <button
+                  key={chip.tab}
+                  type="button"
+                  onClick={() => onSelectTab(chip.tab)}
+                  className={`shrink-0 px-3 py-1 rounded-full text-xs font-semibold transition-all duration-200 flex items-center gap-2 shadow-hairline active:scale-95 cursor-pointer backdrop-blur-md whitespace-nowrap truncate border ${
+                    isActive
+                      ? 'bg-brand-primary text-on-brand border-brand-primary font-bold shadow-hairline'
+                      : 'bg-surface-glass hover-only:bg-surface text-ink border-line-hairline shadow-hairline'
+                  }`}
+                >
+                  <span>{chip.label}</span>
+                </button>
+              );
+            })}
+          </div>
+        )}
 
-        {/* Row 2: The Omni-Bar Capsule Trigger */}
+        {/* Row 2: The Omni-Bar Capsule Trigger (S-2 Slimmer when scrolled) */}
         <button
           type="button"
           onClick={() => setIsExpanded(true)}
-          className="w-full bg-surface/95 backdrop-blur-xl border border-line shadow-floating p-3 rounded-card flex items-center justify-between text-ink active:scale-[0.99] transition-all cursor-pointer hover-only:border-line-strong min-w-0"
+          className={`w-full bg-surface-glass backdrop-blur-xl border border-line-hairline shadow-floating rounded-2xl flex items-center justify-between text-ink active:scale-[0.99] transition-all duration-200 cursor-pointer hover-only:border-line min-w-0 pointer-events-auto ${
+            isScrolledDown ? 'py-2 px-3' : 'py-2 px-4'
+          }`}
         >
-          <div className="flex items-center space-x-2.5 min-w-0 truncate">
-            <div className="w-6 h-6 rounded-lg bg-surface-subtle border border-line flex items-center justify-center text-brass shrink-0">
+          <div className="flex items-center space-x-2 min-w-0 truncate">
+            <div className="w-6 h-6 rounded-lg bg-surface-subtle border border-line-hairline flex items-center justify-center text-brand-primary shrink-0">
               <Command className="w-4 h-4" />
             </div>
             <span className="text-xs text-ink-soft font-medium truncate">
@@ -265,11 +331,11 @@ export const MobileOmniBar: React.FC<MobileOmniBarProps> = ({
             </span>
           </div>
 
-          <div className="flex items-center space-x-1.5 text-ink-faint shrink-0 ml-2">
-            <span className="text-[10px] font-mono uppercase tracking-wider bg-surface-subtle px-2 py-1 rounded border border-line text-ink-soft font-bold whitespace-nowrap">
+          <div className="flex items-center space-x-1 text-ink-faint shrink-0 ml-2">
+            <span className="text-[10px] font-mono uppercase tracking-wider bg-surface-subtle px-2 py-1 rounded-md border border-line-hairline text-ink-soft font-bold whitespace-nowrap">
               Menu
             </span>
-            <div className="w-6 h-6 rounded-md bg-surface-subtle flex items-center justify-center text-ink-soft">
+            <div className="w-6 h-6 rounded-lg bg-surface-subtle flex items-center justify-center text-ink-soft">
               <ChevronUp className="w-4 h-4" />
             </div>
           </div>
@@ -279,20 +345,20 @@ export const MobileOmniBar: React.FC<MobileOmniBarProps> = ({
       {/* 2. APP LIBRARY BOTTOM SHEET DRAWER (When isExpanded is true) */}
       {isExpanded && (
         <div 
-          className="fixed inset-0 z-60 bg-brand/40 backdrop-blur-xs expanded:hidden flex flex-col justify-end transition-opacity duration-200"
+          className="fixed inset-0 z-60 bg-canvas/60 backdrop-blur-sm expanded:hidden flex flex-col justify-end transition-opacity duration-200"
           onClick={() => setIsExpanded(false)}
         >
           <div 
-            className="bg-surface w-full h-[85vh] rounded-t-3xl border-t border-line shadow-floating flex flex-col overflow-hidden text-ink"
+            className="bg-surface w-full h-[85vh] rounded-t-3xl shadow-floating flex flex-col overflow-hidden text-ink"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Grab Handle */}
             <div className="pt-3 pb-1 flex justify-center">
-              <div className="w-12 h-1.5 bg-line-strong motif-poleng rounded-full" />
+              <div className="w-12 h-1.5 bg-line-strong rounded-full" />
             </div>
 
             {/* Header: Search Omnibar & Close Button */}
-            <div className="p-4 border-b border-line-soft flex items-center gap-3 min-w-0">
+            <div className="p-4 border-b border-line-hairline flex items-center gap-3 min-w-0">
               <div className="relative flex-1 min-w-0">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-ink-faint">
                   <Search className="w-4 h-4" />
@@ -303,7 +369,7 @@ export const MobileOmniBar: React.FC<MobileOmniBarProps> = ({
                   placeholder="Cari modul atau menu..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full bg-surface-subtle border border-line rounded-field pl-9 pr-8 py-2 text-xs text-ink placeholder:text-ink-faint outline-none focus:border-line-strong transition-colors"
+                  className="w-full bg-surface-subtle border border-line-hairline rounded-xl pl-9 pr-8 py-2 text-xs text-ink placeholder:text-ink-faint outline-none focus:ring-1 focus:ring-brand-primary transition-colors"
                 />
                 {searchQuery && (
                   <button
@@ -318,7 +384,7 @@ export const MobileOmniBar: React.FC<MobileOmniBarProps> = ({
               <button
                 type="button"
                 onClick={() => setIsExpanded(false)}
-                className="p-2 rounded-field bg-surface-subtle hover-only:bg-surface-subtle/80 text-ink-soft transition-colors shrink-0 cursor-pointer"
+                className="p-2 rounded-xl bg-surface-subtle hover-only:bg-surface text-ink-soft transition-colors shrink-0 cursor-pointer"
                 title="Tutup"
               >
                 <X className="w-4 h-4" />
@@ -334,7 +400,7 @@ export const MobileOmniBar: React.FC<MobileOmniBarProps> = ({
               ) : (
                 filteredGroups.map((group, groupIdx) => (
                   <div key={groupIdx} className="space-y-2.5 min-w-0">
-                    <h3 className="text-[10px] font-bold text-ink-faint uppercase tracking-wider px-1 truncate">
+                    <h3 className="text-[10px] font-mono font-bold text-ink-faint uppercase tracking-wider px-1 truncate">
                       {group.title}
                     </h3>
 
@@ -351,16 +417,16 @@ export const MobileOmniBar: React.FC<MobileOmniBarProps> = ({
                               onSelectTab(item.tab);
                               setIsExpanded(false);
                             }}
-                            className={`flex flex-col items-center justify-center p-3 rounded-card transition-all duration-150 cursor-pointer active:scale-95 text-center min-w-0 border ${
+                            className={`flex flex-col items-center justify-center p-3 rounded-2xl transition-all duration-150 cursor-pointer active:scale-95 text-center min-w-0 ${
                               isActive
-                                ? 'bg-brand text-on-brand border-brand shadow-hairline'
-                                : 'bg-surface-subtle hover-only:bg-surface-subtle/80 border-line'
+                                ? 'bg-brand-primary text-on-brand shadow-hairline font-bold'
+                                : 'bg-surface-subtle hover-only:bg-surface border border-line-hairline'
                             }`}
                           >
-                            <div className={`w-11 h-11 rounded-field flex items-center justify-center mb-1.5 shadow-hairline shrink-0 ${
+                            <div className={`w-11 h-11 rounded-xl flex items-center justify-center mb-1.5 shadow-hairline shrink-0 ${
                               isActive 
-                                ? 'bg-surface-inset text-on-brand' 
-                                : 'bg-surface border border-line text-ink'
+                                ? 'bg-surface/20 text-on-brand' 
+                                : 'bg-surface text-ink shadow-hairline'
                             }`}>
                               <Icon className="w-5 h-5" />
                             </div>
@@ -385,13 +451,13 @@ export const MobileOmniBar: React.FC<MobileOmniBarProps> = ({
                     onSelectTab('PERCONTOHAN');
                     setIsExpanded(false);
                   }}
-                  className={`w-full flex items-center justify-center space-x-2 py-3 px-4 rounded-field text-xs font-semibold transition-all cursor-pointer ${
+                  className={`w-full flex items-center justify-center space-x-2 py-3 px-4 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
                     activeTab === 'PERCONTOHAN'
-                      ? 'bg-brand text-on-brand font-bold shadow-hairline'
-                      : 'bg-surface-subtle hover-only:bg-surface-subtle/80 text-ink border border-line'
+                      ? 'bg-brand-primary text-on-brand font-bold shadow-hairline'
+                      : 'bg-surface-subtle hover-only:bg-surface text-ink border border-line-hairline'
                   }`}
                 >
-                  <Sparkles className="w-4 h-4 text-brass shrink-0" />
+                  <Sparkles className="w-4 h-4 text-brand-primary shrink-0" />
                   <span className="truncate">Living Contract</span>
                 </button>
 
@@ -401,13 +467,13 @@ export const MobileOmniBar: React.FC<MobileOmniBarProps> = ({
                     onSelectTab('TESTS');
                     setIsExpanded(false);
                   }}
-                  className={`w-full flex items-center justify-center space-x-2 py-3 px-4 rounded-field text-xs font-semibold transition-all cursor-pointer ${
+                  className={`w-full flex items-center justify-center space-x-2 py-3 px-4 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
                     activeTab === 'TESTS'
-                      ? 'bg-brand text-on-brand font-bold shadow-hairline'
-                      : 'bg-surface-subtle hover-only:bg-surface-subtle/80 text-ink border border-line'
+                      ? 'bg-brand-primary text-on-brand font-bold shadow-hairline'
+                      : 'bg-surface-subtle hover-only:bg-surface text-ink border border-line-hairline'
                   }`}
                 >
-                  <FlaskConical className="w-4 h-4 text-brass shrink-0" />
+                  <FlaskConical className="w-4 h-4 text-brand-primary shrink-0" />
                   <span className="truncate">Uji Otorisasi Sistem (TESTS)</span>
                 </button>
               </div>

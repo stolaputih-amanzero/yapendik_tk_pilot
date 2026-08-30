@@ -130,7 +130,7 @@ export const ApplicationDashboard: React.FC<ApplicationDashboardProps> = ({ crea
           </p>
           <button
             onClick={() => setShowNewAppModal(true)}
-            className="w-full medium:w-auto px-6 py-3 rounded-field bg-brand hover-only:bg-surface-inset text-on-brand text-xs font-bold transition-all shadow-hairline inline-flex items-center justify-center gap-2 cursor-pointer"
+            className="w-full medium:w-auto px-6 py-3 rounded-field bg-brand hover-only:opacity-90 text-on-brand text-xs font-bold transition-all shadow-hairline inline-flex items-center justify-center gap-2 cursor-pointer"
           >
             <Plus className="w-4 h-4" />
             <span>Mulai Formulir Pendaftaran PPDB</span>
@@ -188,7 +188,7 @@ export const ApplicationDashboard: React.FC<ApplicationDashboardProps> = ({ crea
                 value={childFullName}
                 onChange={e => setChildFullName(e.target.value)}
                 required
-                className="w-full bg-surface border border-line rounded-field px-3 py-2 font-medium text-ink outline-none focus:ring-1 focus:ring-brass/30"
+                className="w-full bg-surface border border-line rounded-field px-3 py-2 font-medium text-ink outline-none focus:ring-1 focus:ring-brand-primary"
               />
             </div>
 
@@ -263,7 +263,7 @@ export const ApplicationDashboard: React.FC<ApplicationDashboardProps> = ({ crea
                   value={guardianPhone}
                   onChange={e => setGuardianPhone(e.target.value)}
                   required
-                  className="w-full bg-surface border border-line rounded-field px-3 py-2 font-medium text-ink outline-none focus:ring-1 focus:ring-brass/30"
+                  className="w-full bg-surface border border-line rounded-field px-3 py-2 font-medium text-ink outline-none focus:ring-1 focus:ring-brand-primary"
                 />
               </div>
               <div>
@@ -274,7 +274,7 @@ export const ApplicationDashboard: React.FC<ApplicationDashboardProps> = ({ crea
                   value={childNik}
                   onChange={e => setChildNik(e.target.value)}
                   maxLength={16}
-                  className="w-full bg-surface border border-line rounded-field px-3 py-2 font-medium text-ink outline-none focus:ring-1 focus:ring-brass/30"
+                  className="w-full bg-surface border border-line rounded-field px-3 py-2 font-medium text-ink outline-none focus:ring-1 focus:ring-brand-primary"
                 />
               </div>
             </div>
@@ -289,7 +289,7 @@ export const ApplicationDashboard: React.FC<ApplicationDashboardProps> = ({ crea
               </button>
               <button
                 type="submit"
-                className="w-full medium:w-auto px-5 py-2 rounded-field bg-brand text-on-brand font-bold hover-only:bg-surface-inset shadow-hairline cursor-pointer flex justify-center items-center gap-2"
+                className="w-full medium:w-auto px-5 py-2 rounded-field bg-brand text-on-brand font-bold hover-only:opacity-90 shadow-hairline cursor-pointer flex justify-center items-center gap-2"
               >
                 <Plus className="w-4 h-4" />
                 <span>Simpan & Ajukan Pendaftaran</span>
@@ -364,7 +364,7 @@ export const ApplicationDashboard: React.FC<ApplicationDashboardProps> = ({ crea
               </div>
               <span className="text-ink-faint hidden medium:inline">•</span>
               <div className="flex items-center gap-2 font-medium text-ink">
-                <Award className="w-4 h-4 text-brass shrink-0" />
+                <Award className="w-4 h-4 text-brand-primary shrink-0" />
                 <span>Tingkat: <strong className="text-ink">{classLevelDisplayName}</strong></span>
               </div>
             </div>

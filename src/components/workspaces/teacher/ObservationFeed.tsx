@@ -31,8 +31,8 @@ export const ObservationFeed: React.FC<Props> = ({
   if (observations.length === 0) {
     return (
       <div className="bg-surface border border-dashed border-line rounded-3xl p-8 medium:p-10 text-center">
-        <div className="w-12 h-12 rounded-card bg-warning-tint border border-warning-line text-brass flex items-center justify-center mx-auto mb-3 shadow-hairline">
-          <Sparkles className="w-6 h-6 fill-brass text-brass" />
+        <div className="w-12 h-12 rounded-card bg-warning-tint border border-warning-line text-brand-primary flex items-center justify-center mx-auto mb-3 shadow-hairline">
+          <Sparkles className="w-6 h-6 fill-brand-primary text-brand-primary" />
         </div>
         <h4 className="text-sm font-bold text-ink">Belum ada momen belajar tercatat hari ini</h4>
         <p className="text-xs text-ink-soft mt-1 max-w-md mx-auto">
@@ -40,9 +40,9 @@ export const ObservationFeed: React.FC<Props> = ({
         </p>
         <button
           onClick={onOpenQuickCapture}
-          className="mt-4 w-full medium:w-auto px-4 py-2 rounded-field text-xs font-bold bg-brand text-on-brand hover-only:bg-surface-inset shadow-hairline transition cursor-pointer flex justify-center items-center mx-auto gap-2"
+          className="mt-4 w-full medium:w-auto px-4 py-2 rounded-field text-xs font-bold bg-brand text-on-brand hover-only:opacity-90 shadow-hairline transition cursor-pointer flex justify-center items-center mx-auto gap-2"
         >
-          <Sparkles className="w-4 h-4 text-brass fill-brass" />
+          <Sparkles className="w-4 h-4 text-brand-primary fill-brand-primary" />
           <span>+ Rekam Momen Belajar Pertama</span>
         </button>
       </div>
@@ -54,7 +54,7 @@ export const ObservationFeed: React.FC<Props> = ({
       <div className="flex items-center justify-between">
         <h3 className="text-sm font-black text-ink flex items-center gap-2">
           <span>Linimasa Momen & Bukti Karya Hari Ini</span>
-          <span className="px-2 py-1 text-xs font-bold rounded-full bg-indigo-100 text-lppa-deep border border-lppa-line">
+          <span className="px-2 py-1 text-xs font-bold rounded-full bg-lppa-tint text-lppa-deep border border-lppa-line">
             {observations.length}
           </span>
         </h3>
@@ -71,7 +71,7 @@ export const ObservationFeed: React.FC<Props> = ({
               className={`rounded-card border transition-all duration-200 p-4 bg-surface shadow-hairline flex flex-col justify-between ${
                 isDraft
                   ? 'border-warning-line bg-warning-tint/20'
-                  : 'border-line hover-only:border-indigo-300'
+                  : 'border-line hover-only:border-lppa-line'
               }`}
             >
               <div>
@@ -81,7 +81,7 @@ export const ObservationFeed: React.FC<Props> = ({
                     {/* Teacher Initial Badge (Multi-teacher collaboration) */}
                     <div
                       title={`Pencatat: ${obs.recorded_by_name}`}
-                      className="w-7 h-7 rounded-field bg-indigo-600 text-on-brand font-bold text-[11px] flex items-center justify-center shadow-hairline"
+                      className="w-7 h-7 rounded-field bg-lppa text-on-brand font-bold text-[11px] flex items-center justify-center shadow-hairline"
                     >
                       {obs.recorded_by_initials}
                     </div>
@@ -159,7 +159,7 @@ export const ObservationFeed: React.FC<Props> = ({
 
                 <button
                   onClick={() => onOpenEnrichment(obs)}
-                  className="w-full medium:w-auto px-3 py-2 medium:py-1 rounded-field text-xs font-bold bg-lppa-tint hover-only:bg-indigo-100 text-lppa-deep border border-lppa-line transition flex justify-center items-center gap-2 cursor-pointer shadow-hairline"
+                  className="w-full medium:w-auto px-3 py-2 medium:py-1 rounded-field text-xs font-bold bg-lppa-tint hover-only:bg-lppa-tint text-lppa-deep border border-lppa-line transition flex justify-center items-center gap-2 cursor-pointer shadow-hairline"
                 >
                   <FileEdit className="w-4 h-4 text-lppa" />
                   <span>{isDraft ? 'Perkaya Narasi' : 'Edit Narasi'}</span>

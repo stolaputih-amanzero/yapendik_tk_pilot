@@ -69,17 +69,17 @@ export const ClassroomHeatmapView: React.FC<Props> = ({ schoolId, classId }) => 
     <div className="px-4 medium:px-6 py-6 space-y-6 animate-in fade-in duration-200">
       
       {/* HEADER CARD */}
-      <div className="bg-surface border-y medium:border medium:border-line medium:rounded-3xl p-4 medium:p-6 medium:shadow-hairline flex flex-col expanded:flex-row expanded:items-center justify-between gap-6 -mx-4 expanded:mx-0">
+      <div className="bg-surface border border-line-hairline rounded-2xl p-4 medium:p-6 shadow-hairline flex flex-col expanded:flex-row expanded:items-center justify-between gap-6">
         <div className="flex items-start gap-4">
-          <div className="p-3 rounded-card bg-indigo-600 text-on-brand shadow-ambient shadow-indigo-600/20">
-            <BarChart3 className="w-7 h-7" />
+          <div className="p-3 rounded-2xl bg-lppa text-on-brand shadow-hairline">
+            <BarChart3 className="w-6 h-6" />
           </div>
           <div>
             <div className="flex items-center gap-2">
               <h3 className="text-lg font-black text-ink">
                 Peta Kesiapan & Kontinuitas Perkembangan Rombel
               </h3>
-              <span className="px-2 py-1 text-xs font-black rounded-lg bg-indigo-100 text-lppa-deep border border-lppa-line">
+              <span className="px-2 py-1 text-xs font-black rounded-lg bg-lppa-tint text-lppa-deep border border-lppa-line">
                 {heatmap.class_name}
               </span>
             </div>
@@ -90,12 +90,12 @@ export const ClassroomHeatmapView: React.FC<Props> = ({ schoolId, classId }) => 
         </div>
 
         <div className="flex items-center gap-3">
-          <div className="bg-surface-subtle px-4 py-2 rounded-card border border-line text-center">
+          <div className="bg-surface-subtle px-4 py-2 rounded-xl border border-line-hairline text-center">
             <div className="text-[10px] font-bold text-ink-soft">Total Siswa</div>
             <div className="text-sm font-black text-ink">{heatmap.total_students_count} Anak</div>
           </div>
 
-          <div className="bg-success-tint px-4 py-2 rounded-card border border-success-line text-center">
+          <div className="bg-success-tint px-4 py-2 rounded-xl border border-success-line text-center">
             <div className="text-[10px] font-bold text-success-deep">Rencana Aktif</div>
             <div className="text-sm font-black text-success-deep">{heatmap.active_plans_count} Rencana</div>
           </div>
@@ -103,7 +103,7 @@ export const ClassroomHeatmapView: React.FC<Props> = ({ schoolId, classId }) => 
       </div>
 
       {/* 4 ELEMENTS DISTRIBUTION GRID */}
-      <div className="flex flex-col expanded:grid medium:grid-cols-2 divide-y divide-line-soft expanded:divide-none gap-0 medium:gap-4 -mx-4 expanded:mx-0">
+      <div className="grid grid-cols-1 medium:grid-cols-2 gap-4">
         {elementKeys.map(k => {
           const item = heatmap.element_distribution[k];
           if (!item) return null;

@@ -181,7 +181,7 @@ export const SearchableCombobox: React.FC<SearchableComboboxProps> = ({
                       )}
                     </div>
                     {isSelected && (
-                      <Check className="w-4 h-4 text-brass shrink-0" />
+                      <Check className="w-4 h-4 text-brand-primary shrink-0" />
                     )}
                   </button>
                 );
@@ -245,7 +245,7 @@ export const SearchableCombobox: React.FC<SearchableComboboxProps> = ({
                         )}
                       </div>
                       {isSelected && (
-                        <Check className="w-4 h-4 text-brass shrink-0" />
+                        <Check className="w-4 h-4 text-brand-primary shrink-0" />
                       )}
                     </button>
                   );

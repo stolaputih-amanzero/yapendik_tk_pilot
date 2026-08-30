@@ -85,11 +85,11 @@ export const SelectSheet: React.FC<SelectSheetProps> = ({
         disabled={disabled}
         onClick={() => setIsOpen(!isOpen)}
         className={`
-          w-full flex items-center justify-between gap-2 px-3 py-2
-          bg-surface-subtle border border-line rounded-field
-          text-xs medium:text-sm text-left transition-all cursor-pointer
-          ${disabled ? 'opacity-60 cursor-not-allowed bg-surface-subtle/50' : 'hover-only:bg-surface focus-visible:shadow-luminescent'}
-          ${isOpen ? 'border-line-strong bg-surface shadow-hairline' : ''}
+          w-full flex items-center justify-between gap-2 px-3 py-1.5
+          bg-surface border border-line-hairline rounded-xl
+          text-xs text-left transition-all cursor-pointer shadow-hairline
+          ${disabled ? 'opacity-60 cursor-not-allowed bg-surface-subtle/50' : 'hover-only:bg-surface-subtle focus-visible:shadow-luminescent'}
+          ${isOpen ? 'border-line-strong bg-surface-subtle' : ''}
           ${error ? 'border-danger-line' : ''}
         `.trim().replace(/\s+/g, ' ')}
       >
@@ -111,7 +111,7 @@ export const SelectSheet: React.FC<SelectSheetProps> = ({
       {isOpen && isExpandedScreen && (
         <div 
           ref={popoverRef}
-          className="absolute left-0 right-0 top-full mt-1.5 z-50 bg-surface border border-line rounded-field shadow-floating p-2 max-h-60 overflow-y-auto"
+          className="absolute left-0 right-0 top-full mt-1.5 z-50 bg-surface border border-line-hairline rounded-xl shadow-floating p-1.5 max-h-60 overflow-y-auto"
         >
           {options.map((option) => {
             const isSelected = option.value === value;
@@ -132,7 +132,7 @@ export const SelectSheet: React.FC<SelectSheetProps> = ({
                   )}
                 </div>
                 {isSelected && (
-                  <Check className="w-4 h-4 text-brass shrink-0" />
+                  <Check className="w-4 h-4 text-brand-primary shrink-0" />
                 )}
               </button>
             );
@@ -167,7 +167,7 @@ export const SelectSheet: React.FC<SelectSheetProps> = ({
                     )}
                   </div>
                   {isSelected && (
-                    <Check className="w-4 h-4 text-brass shrink-0" />
+                    <Check className="w-4 h-4 text-brand-primary shrink-0" />
                   )}
                 </button>
               );

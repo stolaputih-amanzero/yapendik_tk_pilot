@@ -91,8 +91,8 @@ export const HeadmasterAssuranceView: React.FC<Props> = ({
 
   if (loading || !data) {
     return (
-      <div className="py-16 text-center text-ink-soft pb-[132px] expanded:pb-8">
-        <div className="w-8 h-8 border-4 border-indigo-600 border-t-transparent rounded-full animate-spin mx-auto mb-3" />
+      <div className="py-16 text-center text-ink-soft pb-[160px] expanded:pb-8">
+        <div className="w-8 h-8 border-4 border-lppa-line border-t-transparent rounded-full animate-spin mx-auto mb-3" />
         <p className="text-xs font-semibold">Memuat Jaminan Operasional & Keselamatan Sekolah...</p>
       </div>
     );
@@ -174,7 +174,7 @@ export const HeadmasterAssuranceView: React.FC<Props> = ({
   return (
     <div className="px-4 medium:px-6 py-6 space-y-6 animate-fadeIn pb-12 text-ink">
       {/* Header Context */}
-      <div className="bg-surface-subtle border-y medium:border medium:border-line medium:rounded-card p-4 medium:p-6 text-ink medium:shadow-hairline flex flex-col medium:flex-row medium:items-center medium:justify-between gap-4 -mx-4 expanded:mx-0">
+      <div className="bg-surface border border-line-hairline rounded-2xl p-4 medium:p-6 text-ink shadow-hairline flex flex-col medium:flex-row medium:items-center medium:justify-between gap-4">
         <div>
           <div className="flex items-center gap-2 text-xs font-bold text-ink-soft uppercase tracking-wider">
             <ShieldAlert className="w-4 h-4 text-ink-soft" />
@@ -235,9 +235,9 @@ export const HeadmasterAssuranceView: React.FC<Props> = ({
         <div className="bg-surface border border-line p-4 rounded-field space-y-1 shadow-hairline">
           <div className="flex items-center justify-between text-ink-soft text-xs font-semibold">
             <span>Sinyal Pengecualian</span>
-            <AlertTriangle className="w-4 h-4 text-brass" />
+            <AlertTriangle className="w-4 h-4 text-brand-primary" />
           </div>
-          <div className="text-2xl font-black text-brass">
+          <div className="text-2xl font-black text-brand-primary">
             {today_assurance.active_exceptions_count}
           </div>
           <p className="text-[11px] text-ink-soft">
@@ -264,7 +264,7 @@ export const HeadmasterAssuranceView: React.FC<Props> = ({
       <div className="bg-surface border border-line rounded-card p-4 space-y-3 shadow-hairline">
         <div className="flex items-center justify-between border-b border-line-soft pb-3">
           <div className="flex items-center gap-2">
-            <AlertTriangle className="w-4 h-4 text-brass" />
+            <AlertTriangle className="w-4 h-4 text-brand-primary" />
             <h3 className="text-sm font-bold text-ink uppercase tracking-wider">
               Antrean Perhatian & Tindakan Kepala Sekolah ({needs_attention_queue.length})
             </h3>
@@ -280,11 +280,11 @@ export const HeadmasterAssuranceView: React.FC<Props> = ({
             <p className="text-xs font-medium text-ink-soft">Semua sinyal dan insiden hari ini telah ditangani.</p>
           </div>
         ) : (
-          <div className="flex flex-col divide-y divide-line-soft expanded:divide-none medium:space-y-2 -mx-5 expanded:mx-0">
+          <div className="flex flex-col space-y-2">
             {needs_attention_queue.map(item => (
               <div
                 key={item.id}
-                className="bg-surface-subtle px-5 py-4 medium:p-3 medium:rounded-field medium:border medium:border-line flex flex-col medium:flex-row medium:items-center justify-between gap-3"
+                className="bg-surface-subtle p-3 rounded-xl border border-line-hairline flex flex-col medium:flex-row medium:items-center justify-between gap-3"
               >
                 <div className="space-y-1">
                   <div className="flex items-center gap-2">
@@ -312,7 +312,7 @@ export const HeadmasterAssuranceView: React.FC<Props> = ({
                       const inc = incident_pipeline.find(i => i.incident_id === item.id);
                       if (inc) setSelectedIncidentForTriage(inc);
                     }}
-                    className="w-full medium:w-auto mt-2 medium:mt-0 px-3 py-2 medium:py-1 rounded-lg bg-brand hover-only:bg-surface-inset text-on-brand text-xs font-bold transition flex justify-center items-center gap-2 cursor-pointer shrink-0 shadow-hairline"
+                    className="w-full medium:w-auto mt-2 medium:mt-0 px-3 py-2 medium:py-1 rounded-lg bg-brand hover-only:opacity-90 text-on-brand text-xs font-bold transition flex justify-center items-center gap-2 cursor-pointer shrink-0 shadow-hairline"
                   >
                     <span>Lakukan Triage</span>
                     <ArrowRight className="w-4 h-4" />
@@ -325,7 +325,7 @@ export const HeadmasterAssuranceView: React.FC<Props> = ({
       </div>
 
       {/* PANEL 3: INCIDENT LIFECYCLE MANAGEMENT */}
-      <div className="bg-surface border border-line rounded-card p-4 space-y-4 shadow-hairline">
+      <div className="bg-surface border border-line-hairline rounded-2xl p-4 space-y-4 shadow-hairline">
         <div className="flex flex-col medium:flex-row medium:items-center justify-between gap-3 border-b border-line-soft pb-3">
           <div className="flex items-center gap-2">
             <Activity className="w-4 h-4 text-ink-soft" />
@@ -335,7 +335,7 @@ export const HeadmasterAssuranceView: React.FC<Props> = ({
           </div>
 
           {/* Filters */}
-          <div className="flex items-center gap-2 bg-surface-subtle p-1 rounded-field border border-line">
+          <div className="flex items-center gap-2 bg-surface-subtle p-1 rounded-xl border border-line-hairline">
             {(['ALL', 'DETECTED', 'TRIAGED', 'RESOLVED', 'AUDITED_CLOSED'] as const).map(f => (
               <button
                 key={f}
@@ -357,11 +357,11 @@ export const HeadmasterAssuranceView: React.FC<Props> = ({
             Tidak ada insiden dengan filter status '{incidentFilter}'.
           </div>
         ) : (
-          <div className="flex flex-col divide-y divide-line-soft expanded:divide-none medium:space-y-3 -mx-5 expanded:mx-0">
+          <div className="flex flex-col space-y-3">
             {filteredIncidents.map(inc => (
               <div
                 key={inc.incident_id}
-                className="bg-surface-subtle px-5 py-4 medium:p-4 medium:rounded-field medium:border medium:border-line space-y-3"
+                className="bg-surface-subtle p-4 rounded-xl border border-line-hairline space-y-3"
               >
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
@@ -417,7 +417,7 @@ export const HeadmasterAssuranceView: React.FC<Props> = ({
                     {inc.status === 'DETECTED' && (
                       <button
                         onClick={() => setSelectedIncidentForTriage(inc)}
-                        className="w-full medium:w-auto px-3 py-2 medium:py-1 text-xs font-bold rounded-lg bg-brand hover-only:bg-surface-inset text-on-brand cursor-pointer shadow-hairline flex justify-center items-center"
+                        className="w-full medium:w-auto px-3 py-2 medium:py-1 text-xs font-bold rounded-lg bg-brand hover-only:opacity-90 text-on-brand cursor-pointer shadow-hairline flex justify-center items-center"
                       >
                         Triage
                       </button>
@@ -522,7 +522,7 @@ export const HeadmasterAssuranceView: React.FC<Props> = ({
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="w-full medium:w-auto px-4 py-2 text-xs font-bold rounded-lg bg-brand hover-only:bg-surface-inset text-on-brand cursor-pointer shadow-hairline flex justify-center items-center"
+                  className="w-full medium:w-auto px-4 py-2 text-xs font-bold rounded-lg bg-brand hover-only:opacity-90 text-on-brand cursor-pointer shadow-hairline flex justify-center items-center"
                 >
                   {isSubmitting ? 'Menyimpan...' : 'Simpan Keputusan Triage'}
                 </button>

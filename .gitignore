@@ -6,3 +6,4 @@ coverage/
 *.log
 .env*
 !.env.example
+tests/evidence/gate-06/raw-artifacts/

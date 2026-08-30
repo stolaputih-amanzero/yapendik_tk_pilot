@@ -255,12 +255,12 @@ export const CohortPromotionWorkspace: React.FC = () => {
   const targetAyObj = academicYears.find(y => y.id === targetAyId);
 
   return (
-    <div className="space-y-6 text-ink font-sans w-full pb-[132px] expanded:pb-8" data-testid="cohort-promotion-workspace">
+    <div className="space-y-6 text-ink font-sans w-full pb-[160px] expanded:pb-8" data-testid="cohort-promotion-workspace">
       {/* Header Banner */}
       <div className="bg-surface-subtle border-b border-line medium:rounded-card px-4 py-5 medium:p-6 w-full text-ink medium:border medium:shadow-hairline">
         <div className="flex flex-col medium:flex-row medium:items-center justify-between gap-4">
           <div>
-            <div className="flex items-center space-x-1.5 text-success text-[10px] medium:text-xs font-bold uppercase tracking-wider mb-1">
+            <div className="flex items-center space-x-1.5 text-success-deep text-[10px] medium:text-xs font-bold uppercase tracking-wider mb-1">
               <Layers className="w-4 h-4" />
               <span>Standar Yayasan • Kenaikan Kelas</span>
             </div>
@@ -427,7 +427,7 @@ export const CohortPromotionWorkspace: React.FC = () => {
                 {/* Progress Bar */}
                 <ProgressBar
                   value={Math.min(100, Math.round((projectedOccupancy / (targetCapacity || 1)) * 100))}
-                  variant={isCapacityExceeded ? 'danger' : projectedOccupancy === targetCapacity ? 'warning' : 'brass'}
+                  variant={isCapacityExceeded ? 'danger' : projectedOccupancy === targetCapacity ? 'warning' : 'brand'}
                   trackClassName="h-2"
                 />
 
@@ -463,7 +463,7 @@ export const CohortPromotionWorkspace: React.FC = () => {
             <button
               onClick={() => setShowConfirmModal(true)}
               disabled={!isAuthorizedActor || selectedStudentIds.length === 0 || !targetClassId || isCapacityExceeded}
-              className="w-full py-2 rounded-field bg-brand hover-only:bg-surface-inset disabled:opacity-40 text-on-brand font-bold text-xs shadow-hairline flex items-center justify-center space-x-2 transition-all cursor-pointer"
+              className="w-full py-2 rounded-field bg-brand hover-only:opacity-90 disabled:opacity-40 text-on-brand font-bold text-xs shadow-hairline flex items-center justify-center space-x-2 transition-all cursor-pointer"
             >
               <ArrowRight className="w-4 h-4" />
               <span>Eksekusi Promosi ({selectedStudentIds.length} Siswa)</span>
@@ -531,7 +531,7 @@ export const CohortPromotionWorkspace: React.FC = () => {
                 type="button"
                 onClick={handleExecutePromotion}
                 disabled={isProcessing}
-                className="w-full medium:w-auto px-4 py-2 rounded-field bg-brand hover-only:bg-surface-inset text-on-brand text-xs font-bold flex justify-center items-center space-x-2 cursor-pointer shadow-hairline transition-colors"
+                className="w-full medium:w-auto px-4 py-2 rounded-field bg-brand hover-only:opacity-90 text-on-brand text-xs font-bold flex justify-center items-center space-x-2 cursor-pointer shadow-hairline transition-colors"
               >
                 {isProcessing ? <RefreshCw className="w-4 h-4 animate-spin" /> : <ArrowRight className="w-4 h-4" />}
                 <span>Konfirmasi Promosi</span>

@@ -1,16 +1,15 @@
 import React, { useState } from 'react';
 import { GuardianNoticeItem } from '../../../types/teacherDailyTypes';
-import { SelectSheet, Button, Badge, AutoResizeTextarea } from '../../ui';
+import { SelectSheet, Button, AutoResizeTextarea } from '../../ui';
 import { 
   MessageSquare, 
   CheckCircle2, 
   Clock, 
   Reply, 
-  AlertTriangle, 
   Send, 
   Plus, 
-  User, 
-  X 
+  X,
+  FileCheck
 } from 'lucide-react';
 
 interface Props {
@@ -35,6 +34,7 @@ export const GuardianNoticeLedger: React.FC<Props> = ({
   const [type, setType] = useState<GuardianNoticeItem['type']>('DAILY_SUMMARY');
 
   const filtered = filterUnack ? notices.filter(n => !n.acknowledged_at) : notices;
+  const unackCount = notices.filter(n => !n.acknowledged_at).length;
 
   const handleReplySubmit = async (noticeId: string) => {
     try {
@@ -56,31 +56,30 @@ export const GuardianNoticeLedger: React.FC<Props> = ({
   };
 
   return (
-    <div className="space-y-4">
-      {/* Header & Controls */}
-      <div className="flex flex-col gap-3 bg-surface p-4 rounded-card border border-line shadow-hairline mb-4">
-        {/* Baris 1: Identitas */}
-        <div className="flex items-center gap-3 shrink-0">
-          <div className="w-10 h-10 rounded-control bg-brand text-on-brand flex items-center justify-center font-bold text-sm shrink-0 shadow-hairline">
-            <MessageSquare className="w-5 h-5" />
-          </div>
-          <div className="min-w-0 flex-1">
-            <h3 className="text-base font-display font-bold text-ink tracking-tight leading-snug">
+    <div className="space-y-6">
+      {/* 1. HEADER CANVAS (Hukum F-7: Canvas-Native Hero & Actions) */}
+      <header className="space-y-4">
+        <div className="flex items-start justify-between gap-3">
+          <div>
+            <h3 className="text-xl font-bold tracking-tight text-ink">
               Buku Penghubung
             </h3>
-            <p className="text-xs text-ink-soft font-medium mt-0.5 leading-snug">
-              Kemitraan Guru & Orang Tua
+            <p className="text-xs text-ink-soft mt-0.5">
+              Jembatan komunikasi harian dan konfirmasi resmi orang tua
             </p>
+          </div>
+          <div className="text-[11px] font-mono font-medium text-ink-faint shrink-0 pt-1">
+            {notices.length} Pesan • {unackCount} Perlu Aksi
           </div>
         </div>
 
-        {/* Baris 3: Tombol aksi */}
-        <div className="flex flex-col gap-2 w-full shrink-0 mt-1 medium:mt-0">
+        {/* Action Pills Grid */}
+        <div className="grid grid-cols-2 gap-2">
           <Button
             variant={filterUnack ? 'primary' : 'secondary'}
             size="sm"
             onClick={() => setFilterUnack(!filterUnack)}
-            className="w-full text-xs font-bold justify-center rounded-field"
+            className="w-full text-xs font-bold justify-center rounded-xl min-h-[44px]"
           >
             {filterUnack ? 'Belum Dibalas' : 'Semua Pesan'}
           </Button>
@@ -90,98 +89,114 @@ export const GuardianNoticeLedger: React.FC<Props> = ({
             size="sm"
             onClick={() => setShowNewNoticeModal(true)}
             leftIcon={<Plus className="w-4 h-4 shrink-0" />}
-            className="w-full text-xs font-bold justify-center rounded-field"
+            className="w-full text-xs font-bold justify-center rounded-xl min-h-[44px]"
           >
-            Kirim Pengumuman
+            Tulis Pengumuman
           </Button>
         </div>
-      </div>
+      </header>
 
-      {/* Notices List */}
-      <div className="flex flex-col divide-y divide-line-soft bg-surface border border-line rounded-card overflow-hidden shadow-hairline">
-        {filtered.length > 0 ? (
-          filtered.map(n => {
+      {/* 2. ARTIKEL CANVAS-NATIVE (divide-y divide-line, TANPA panel bg-surface) */}
+      {filtered.length === 0 ? (
+        <div className="py-10 text-center text-ink-soft text-xs space-y-1.5 border-y border-line">
+          <FileCheck className="w-6 h-6 mx-auto text-ink-faint" />
+          <p className="font-bold text-ink">
+            {filterUnack ? 'Semua Pesan Telah Ditanggapi' : 'Belum Ada Pesan Penghubung'}
+          </p>
+          <p className="text-ink-faint text-[11px]">
+            {filterUnack 
+              ? 'Tidak ada pesan yang menunggu balasan saat ini.' 
+              : 'Gunakan tombol Tulis Pengumuman di atas untuk mengirim pesan.'}
+          </p>
+        </div>
+      ) : (
+        <div className="divide-y divide-line border-y border-line">
+          {filtered.map(n => {
             const isAck = Boolean(n.acknowledged_at);
             const isReplying = replyingNoticeId === n.id;
 
+            const typeLabel = 
+              n.type === 'DAILY_SUMMARY' ? 'Ringkasan Harian' :
+              n.type === 'HEALTH_ALERT' ? 'Pemberitahuan Kesehatan' :
+              n.type === 'CLASS_ANNOUNCEMENT' ? 'Pengumuman Kelas' :
+              n.type === 'DIRECT_NOTE' ? 'Catatan Personal' :
+              n.type.replace(/_/g, ' ');
+
             return (
-              <div
-                key={n.id}
-                className={`p-4 transition space-y-3 ${
-                  !isAck
-                    ? 'bg-warning-tint/20 hover-only:bg-warning-tint/40'
-                    : 'bg-surface hover-only:bg-surface-subtle/50'
-                }`}
-              >
-                <div className="flex flex-col medium:flex-row medium:items-start justify-between gap-3 pb-3 border-b border-line-soft">
-                  <div className="space-y-1">
-                    <div className="flex flex-wrap items-center gap-2">
-                      <Badge
-                        variant={
-                          n.type === 'HEALTH_ALERT' ? 'danger' :
-                          n.type === 'DAILY_SUMMARY' ? 'brand' : 'neutral'
-                        }
-                      >
-                        {n.type === 'HEALTH_ALERT' ? 'Peringatan Kesehatan' :
-                         n.type === 'DAILY_SUMMARY' ? 'Ringkasan Harian' :
-                         n.type === 'CLASS_ANNOUNCEMENT' ? 'Pengumuman Kelas' :
-                         n.type === 'DIRECT_NOTE' ? 'Catatan Personal' :
-                         n.type.replace(/_/g, ' ')}
-                      </Badge>
-                      {n.student_name && (
-                        <span className="text-xs font-bold text-ink bg-surface-subtle px-2 py-1 rounded-pill border border-line">
-                          Untuk: Ananda {n.student_name}
-                        </span>
-                      )}
-                    </div>
-                    <h4 className="text-base font-bold text-ink leading-snug pt-0.5">{n.title}</h4>
-                    <div className="text-[11px] text-ink-soft font-medium">
-                      Pengirim: <strong className="text-ink">{n.author_name}</strong>
-                    </div>
+              <article key={n.id} className="py-5 space-y-3">
+                {/* Baris Chip & Status Teks Polos */}
+                <div className="flex flex-wrap items-center justify-between gap-2">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <span className="bg-brand-tint text-brand-deep font-mono text-[10px] font-bold uppercase tracking-wider px-2 py-1 rounded-full">
+                      {typeLabel}
+                    </span>
+                    {n.student_name && (
+                      <span className="bg-surface-subtle text-ink-soft text-xs font-bold px-2 py-1 rounded-full">
+                        Untuk: Ananda {n.student_name}
+                      </span>
+                    )}
                   </div>
 
                   <div>
                     {isAck ? (
-                      <span className="text-xs font-bold text-success-deep bg-success-tint border border-success-line px-3 py-1 rounded-pill flex items-center gap-1 shadow-hairline">
-                        <CheckCircle2 className="w-4 h-4 text-success" /> Dikonfirmasi
+                      <span className="text-xs font-bold text-success-deep flex items-center gap-1">
+                        <CheckCircle2 className="w-4 h-4 text-success" />
+                        <span>Dikonfirmasi</span>
                       </span>
                     ) : (
-                      <span className="text-xs font-bold text-warning-deep bg-warning-tint border border-warning-line px-3 py-1 rounded-pill flex items-center gap-1 shadow-hairline">
-                        <Clock className="w-4 h-4 text-brass" /> Perlu Tanggapan
+                      <span className="text-xs font-bold text-warning-deep flex items-center gap-1">
+                        <Clock className="w-4 h-4 text-warning" />
+                        <span>Perlu Tanggapan</span>
                       </span>
                     )}
                   </div>
                 </div>
 
-                <p className="text-xs medium:text-sm text-ink leading-relaxed bg-surface-subtle/70 p-4 rounded-field border border-line font-normal">
-                  {n.content}
-                </p>
+                {/* Judul & Meta */}
+                <div>
+                  <h4 className="text-base font-bold text-ink leading-snug">
+                    {n.title}
+                  </h4>
+                  <div className="text-[11px] text-ink-faint mt-0.5">
+                    Pengirim: <strong className="text-ink-soft">{n.author_name}</strong>
+                  </div>
+                </div>
 
-                {/* Guardian or Teacher reply thread if present */}
+                {/* Hairline + Isi Pesan Teks Polos (TANPA kotak inset) */}
+                <div className="border-t border-line pt-3">
+                  <p className="text-xs medium:text-sm text-ink-soft leading-relaxed whitespace-pre-line font-normal">
+                    {n.content}
+                  </p>
+                </div>
+
+                {/* Respon Orang Tua / Balasan */}
                 {n.guardian_reply && (
-                  <div className="p-3 rounded-field bg-success-tint/50 border border-success-line text-xs space-y-1">
-                    <span className="font-bold text-success-deep flex items-center gap-1">
-                      <Reply className="w-4 h-4 text-success" /> Balasan:
+                  <div className="border-t border-line pt-3 space-y-1.5">
+                    <span className="font-bold text-success-deep text-xs flex items-center gap-1">
+                      <Reply className="w-4 h-4 text-success" />
+                      <span>Respon Orang Tua / Wali:</span>
                     </span>
-                    <p className="text-ink italic">{n.guardian_reply}</p>
+                    <p className="text-xs text-ink-soft italic leading-relaxed pl-4 border-l-2 border-success-line">
+                      "{n.guardian_reply}"
+                    </p>
                   </div>
                 )}
 
                 {/* Reply Form */}
                 {isReplying ? (
-                  <div className="pt-3 border-t border-line space-y-2.5">
+                  <div className="border-t border-line pt-3 space-y-2">
                     <AutoResizeTextarea
                       value={replyText}
                       onChange={setReplyText}
                       placeholder="Tuliskan balasan untuk orang tua..."
                       minRows={2}
                     />
-                    <div className="flex flex-col medium:flex-row items-center justify-end gap-2">
+                    <div className="flex items-center justify-end gap-2">
                       <Button
                         variant="ghost"
                         size="sm"
                         onClick={() => setReplyingNoticeId(null)}
-                        className="w-full medium:w-auto text-xs font-bold text-ink-soft rounded-field"
+                        className="text-xs font-bold text-ink-soft rounded-xl"
                       >
                         Batal
                       </Button>
@@ -190,7 +205,7 @@ export const GuardianNoticeLedger: React.FC<Props> = ({
                         size="sm"
                         onClick={() => handleReplySubmit(n.id)}
                         leftIcon={<Send className="w-4 h-4" />}
-                        className="w-full medium:w-auto rounded-field"
+                        className="rounded-xl"
                       >
                         Kirim Balasan
                       </Button>
@@ -198,40 +213,36 @@ export const GuardianNoticeLedger: React.FC<Props> = ({
                   </div>
                 ) : (
                   !isAck && (
-                    <div className="pt-2 border-t border-line-soft flex justify-end">
+                    <div className="pt-2 flex justify-end">
                       <Button
-                        variant="primary"
+                        variant="secondary"
                         size="sm"
                         onClick={() => {
                           setReplyingNoticeId(n.id);
                           setReplyText('');
                         }}
                         leftIcon={<Reply className="w-4 h-4 text-success" />}
-                        className="w-full medium:w-auto rounded-field"
+                        className="rounded-xl text-xs"
                       >
                         Tanggapi Pesan
                       </Button>
                     </div>
                   )
                 )}
-              </div>
+              </article>
             );
-          })
-        ) : (
-          <div className="p-8 text-center text-ink-soft text-xs bg-surface-subtle">
-            Tidak ada pesan penghubung yang sesuai kriteria.
-          </div>
-        )}
-      </div>
+          })}
+        </div>
+      )}
 
-      {/* Modal: New Notice */}
+      {/* 3. MODAL NEW NOTICE */}
       {showNewNoticeModal && (
-        <div className="fixed inset-0 z-50 flex items-end medium:items-center justify-center p-0 medium:p-4 bg-brand/40 backdrop-blur-xs animate-in fade-in duration-200">
-          <div className="bg-surface rounded-t-card medium:rounded-card border-t medium:border border-line shadow-floating max-w-md w-full overflow-hidden text-ink">
+        <div className="fixed inset-0 z-50 flex items-end medium:items-center justify-center p-0 medium:p-4 bg-canvas/60 backdrop-blur-sm animate-in fade-in duration-200">
+          <div className="bg-surface rounded-t-3xl medium:rounded-2xl shadow-floating max-w-md w-full overflow-hidden text-ink">
             {/* Modal Header */}
-            <div className="px-5 py-4 border-b border-line flex items-center justify-between bg-surface shrink-0">
+            <div className="px-5 py-4 border-b border-line-hairline flex items-center justify-between bg-surface shrink-0">
               <div className="flex items-center gap-2">
-                <div className="w-8 h-8 rounded-control bg-brand text-on-brand flex items-center justify-center font-bold text-xs">
+                <div className="w-8 h-8 rounded-xl bg-brand-primary text-on-brand flex items-center justify-center font-bold text-xs">
                   <MessageSquare className="w-4 h-4" />
                 </div>
                 <div>
@@ -241,7 +252,7 @@ export const GuardianNoticeLedger: React.FC<Props> = ({
               </div>
               <button
                 onClick={() => setShowNewNoticeModal(false)}
-                className="w-8 h-8 rounded-pill bg-surface-subtle hover-only:bg-line-soft text-ink-soft flex items-center justify-center transition-colors cursor-pointer shrink-0 ml-2"
+                className="w-8 h-8 rounded-full bg-surface-subtle hover-only:bg-surface text-ink-soft flex items-center justify-center transition-colors cursor-pointer shrink-0 ml-2"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -269,7 +280,7 @@ export const GuardianNoticeLedger: React.FC<Props> = ({
                   placeholder="Contoh: Info Pembawaan Bahan Daur Ulang Besok"
                   value={title}
                   onChange={e => setTitle(e.target.value)}
-                  className="w-full bg-surface border border-line rounded-field px-3 py-2 font-medium text-ink outline-none focus:ring-1 focus:ring-brass/30"
+                  className="w-full bg-surface-subtle text-ink placeholder:text-ink-faint rounded-xl min-h-[48px] px-4 py-2 font-medium border border-line-hairline outline-none focus:ring-1 focus:ring-brand-primary"
                 />
               </div>
 
@@ -280,7 +291,7 @@ export const GuardianNoticeLedger: React.FC<Props> = ({
                   placeholder="Tuliskan pesan lengkap untuk wali murid..."
                   value={content}
                   onChange={e => setContent(e.target.value)}
-                  className="w-full bg-surface border border-line rounded-field px-3 py-2 font-medium text-ink outline-none focus:ring-1 focus:ring-brass/30"
+                  className="w-full bg-surface-subtle text-ink placeholder:text-ink-faint rounded-xl p-3 font-medium border border-line-hairline outline-none focus:ring-1 focus:ring-brand-primary resize-none"
                 />
               </div>
 
@@ -289,7 +300,7 @@ export const GuardianNoticeLedger: React.FC<Props> = ({
                   variant="secondary"
                   size="sm"
                   onClick={() => setShowNewNoticeModal(false)}
-                  className="w-full medium:w-auto rounded-field"
+                  className="w-full medium:w-auto rounded-xl"
                 >
                   Batal
                 </Button>
@@ -298,7 +309,7 @@ export const GuardianNoticeLedger: React.FC<Props> = ({
                   size="sm"
                   type="submit"
                   leftIcon={<Send className="w-4 h-4" />}
-                  className="w-full medium:w-auto rounded-field"
+                  className="w-full medium:w-auto rounded-xl"
                 >
                   Kirim Pesan
                 </Button>

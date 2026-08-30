@@ -93,7 +93,7 @@ export const SupabaseSettingsModal: React.FC<SupabaseSettingsModalProps> = ({ is
 
         {!isSuperAdmin && (
           <div className="mb-4 p-3 bg-warning-tint border border-warning-line rounded-lg text-warning-deep flex items-start space-x-2">
-            <Lock className="w-4 h-4 text-brass shrink-0 mt-0.5" />
+            <Lock className="w-4 h-4 text-brand-primary shrink-0 mt-0.5" />
             <span>Konfigurasi routing database cloud dikunci oleh tata kelola institusi. Hanya Superadmin Yayasan yang dapat memodifikasi endpoint.</span>
           </div>
         )}
@@ -107,7 +107,7 @@ export const SupabaseSettingsModal: React.FC<SupabaseSettingsModalProps> = ({ is
               value={url}
               disabled={!isSuperAdmin}
               onChange={e => setUrl(e.target.value)}
-              className="w-full border border-line rounded px-2 py-1 outline-none font-mono text-xs focus:ring-1 focus:ring-brass/30 disabled:bg-surface-subtle disabled:text-ink-soft whitespace-nowrap"
+              className="w-full border border-line rounded px-2 py-1 outline-none font-mono text-xs focus:ring-1 focus:ring-brand-primary disabled:bg-surface-subtle disabled:text-ink-soft whitespace-nowrap"
             />
           </div>
 
@@ -119,7 +119,7 @@ export const SupabaseSettingsModal: React.FC<SupabaseSettingsModalProps> = ({ is
               value={anonKey}
               disabled={!isSuperAdmin}
               onChange={e => setAnonKey(e.target.value)}
-              className="w-full border border-line rounded px-2 py-1 outline-none font-mono text-xs focus:ring-1 focus:ring-brass/30 disabled:bg-surface-subtle disabled:text-ink-soft whitespace-nowrap"
+              className="w-full border border-line rounded px-2 py-1 outline-none font-mono text-xs focus:ring-1 focus:ring-brand-primary disabled:bg-surface-subtle disabled:text-ink-soft whitespace-nowrap"
             />
           </div>
 
@@ -155,7 +155,7 @@ export const SupabaseSettingsModal: React.FC<SupabaseSettingsModalProps> = ({ is
               {isSuperAdmin && (
                 <button
                   type="submit"
-                  className="w-full medium:w-auto px-4 py-2 medium:py-1 rounded bg-brand text-on-brand font-semibold hover-only:bg-surface-inset text-center"
+                  className="w-full medium:w-auto px-4 py-2 medium:py-1 rounded bg-brand text-on-brand font-semibold hover-only:opacity-90 text-center"
                 >
                   Simpan Konfigurasi
                 </button>

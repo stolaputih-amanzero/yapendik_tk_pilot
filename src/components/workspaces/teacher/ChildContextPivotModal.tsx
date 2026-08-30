@@ -65,7 +65,7 @@ export const ChildContextPivotModal: React.FC<Props> = ({
         {/* Header: Amanaura Standard Eyebrow + Title + Actions */}
         <div className="px-4 medium:px-5 py-3 medium:py-3 border-b border-line-soft bg-surface flex items-center justify-between relative shrink-0">
           <div className="flex items-center gap-3 pr-6 medium:pr-0 min-w-0">
-            <div className="w-10 h-10 rounded-card bg-lppa-tint border border-indigo-100 flex items-center justify-center text-lppa-deep font-bold text-sm shadow-hairline shrink-0">
+            <div className="w-10 h-10 rounded-card bg-lppa-tint border border-lppa-line flex items-center justify-center text-lppa-deep font-bold text-sm shadow-hairline shrink-0">
               {childData?.student.name.slice(0, 2).toUpperCase() || 'AN'}
             </div>
             <div className="min-w-0">
@@ -91,9 +91,9 @@ export const ChildContextPivotModal: React.FC<Props> = ({
             <button
               type="button"
               onClick={() => onOpenQuickCaptureForChild(studentId)}
-              className="hidden medium:flex px-3 py-1 rounded-field bg-brand hover-only:bg-surface-inset text-on-brand font-bold text-xs items-center gap-2 shadow-hairline transition cursor-pointer"
+              className="hidden medium:flex px-3 py-1 rounded-field bg-brand hover-only:opacity-90 text-on-brand font-bold text-xs items-center gap-2 shadow-hairline transition cursor-pointer"
             >
-              <Sparkles className="w-4 h-4 text-brass fill-brass" />
+              <Sparkles className="w-4 h-4 text-brand-primary fill-brand-primary" />
               <span>+ Momen Ananda</span>
             </button>
             <button
@@ -198,7 +198,7 @@ export const ChildContextPivotModal: React.FC<Props> = ({
                               {obs.milestone_rating}
                             </span>
                             {obs.is_staff_confidential ? (
-                              <Lock className="w-4 h-4 text-brass" />
+                              <Lock className="w-4 h-4 text-brand-primary" />
                             ) : obs.is_shared_with_guardian ? (
                               <Share2 className="w-4 h-4 text-teal-600" />
                             ) : null}
@@ -319,9 +319,9 @@ export const ChildContextPivotModal: React.FC<Props> = ({
           <button
             type="button"
             onClick={() => onOpenQuickCaptureForChild(studentId)}
-            className="w-full py-2 rounded-field bg-brand hover-only:bg-surface-inset text-on-brand font-bold text-xs flex justify-center items-center gap-2 shadow-hairline transition"
+            className="w-full py-2 rounded-field bg-brand hover-only:opacity-90 text-on-brand font-bold text-xs flex justify-center items-center gap-2 shadow-hairline transition"
           >
-            <Sparkles className="w-4 h-4 text-brass fill-brass" />
+            <Sparkles className="w-4 h-4 text-brand-primary fill-brand-primary" />
             <span>+ Momen Ananda</span>
           </button>
         </div>

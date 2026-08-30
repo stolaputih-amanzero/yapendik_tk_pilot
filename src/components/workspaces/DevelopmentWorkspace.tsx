@@ -236,9 +236,9 @@ export const DevelopmentWorkspace: React.FC = () => {
   };
 
   return (
-    <div className="px-4 medium:px-6 py-6 space-y-6 pb-[132px] expanded:pb-8">
+    <div className="px-4 medium:px-6 py-6 space-y-6 pb-[160px] expanded:pb-8">
       {/* Control Bar */}
-      <div className="bg-surface border-y medium:border border-line medium:rounded-lg p-4 medium:shadow-hairline flex flex-col medium:flex-row medium:items-center justify-between gap-4 -mx-4 expanded:mx-0">
+      <div className="bg-surface border border-line-hairline rounded-2xl p-4 medium:p-6 shadow-hairline flex flex-col medium:flex-row medium:items-center justify-between gap-4">
         <div>
           <h1 className="text-xl font-bold text-ink flex items-center gap-2">
             <TrendingUp className="w-5 h-5 text-success" />
@@ -268,7 +268,7 @@ export const DevelopmentWorkspace: React.FC = () => {
 
       {feedbackMessage && (
         <div className={`p-3 rounded-lg text-xs font-semibold border ${
-          feedbackMessage.type === 'success' ? 'bg-success-tint text-success-deep border-success-line' : 'bg-red-50 text-danger-deep border-red-200'
+          feedbackMessage.type === 'success' ? 'bg-success-tint text-success-deep border-success-line' : 'bg-red-50 text-danger-deep border-danger-line'
         }`}>
           {feedbackMessage.text}
         </div>
@@ -280,7 +280,7 @@ export const DevelopmentWorkspace: React.FC = () => {
           <div className="bg-brand text-on-brand p-6">
             <div className="flex flex-col medium:flex-row medium:items-center justify-between gap-4">
               <div>
-                <div className="text-xs font-mono text-brass uppercase tracking-wider tracking-widest mb-1 whitespace-nowrap">
+                <div className="text-xs font-mono text-brand-primary uppercase tracking-wider tracking-widest mb-1 whitespace-nowrap">
                   YAPENDIK SCHOOL OS — DOKUMEN RESMI LPPA
                 </div>
                 <h2 className="text-2xl font-bold">{selectedStudent.person.fullName}</h2>
@@ -295,7 +295,7 @@ export const DevelopmentWorkspace: React.FC = () => {
               {/* Status Badge & Actions (V2.1.5 RPC State Machine) */}
               <div className="flex flex-col medium:flex-row expanded:flex-wrap items-stretch medium:items-center gap-2 w-full medium:w-auto mt-4 medium:mt-0">
                 {currentStatus === 'PUBLISHED' && (
-                  <div className="w-full medium:w-auto justify-center flex items-center space-x-1.5 px-3 py-1 rounded-full bg-purple-900/80 border border-purple-400 text-purple-200 text-xs font-semibold">
+                  <div className="w-full medium:w-auto justify-center flex items-center space-x-1.5 px-3 py-1 rounded-full bg-purple-900/80 border border-lppa-line text-purple-200 text-xs font-semibold">
                     <Lock className="w-4 h-4" />
                     <span>Resmi Dipublikasikan (Terkunci)</span>
                   </div>
@@ -328,7 +328,7 @@ export const DevelopmentWorkspace: React.FC = () => {
                     <button
                       onClick={handleSaveDraft}
                       disabled={isProcessing}
-                      className="w-full medium:w-auto mt-2 medium:mt-0 flex justify-center bg-surface-inset hover-only:bg-surface-inset text-on-brand text-xs font-semibold px-3 py-2 rounded transition-colors shadow-hairline"
+                      className="w-full medium:w-auto mt-2 medium:mt-0 flex justify-center bg-surface-inset hover-only:opacity-90 text-on-brand text-xs font-semibold px-3 py-2 rounded transition-colors shadow-hairline"
                     >
                       Simpan Draf LPPA
                     </button>
@@ -386,11 +386,11 @@ export const DevelopmentWorkspace: React.FC = () => {
               Sintesis Capaian 6 Domain Perkembangan Anak
             </h3>
 
-            <div className="flex flex-col divide-y divide-line-soft expanded:divide-none medium:space-y-4 -mx-4 expanded:mx-0">
+            <div className="flex flex-col space-y-4">
               {domains.map(dom => {
                 const { count, domainObs, dominantRating } = getDomainStats(dom.key);
                 return (
-                  <div key={dom.key} className="bg-surface px-4 py-5 medium:p-4 medium:border medium:border-line medium:rounded-lg">
+                  <div key={dom.key} className="bg-surface-subtle p-4 rounded-xl border border-line-hairline">
                     <div className="flex items-start justify-between gap-3 mb-2">
                       <div>
                         <h4 className="font-bold text-ink text-sm">{dom.title}</h4>

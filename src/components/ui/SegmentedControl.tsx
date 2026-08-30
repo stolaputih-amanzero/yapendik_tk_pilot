@@ -42,7 +42,7 @@ export const SegmentedControl: React.FC<SegmentedControlProps> = ({
     <div
       role="tablist"
       className={`
-        bg-surface-subtle p-1 rounded-field flex items-center gap-1 border border-line
+        bg-surface-subtle p-1 rounded-xl flex items-center border border-line-hairline divide-x divide-line-hairline
         overflow-x-auto no-scrollbar select-none w-full expanded:w-fit
         ${className}
       `.trim().replace(/\s+/g, ' ')}
@@ -63,7 +63,7 @@ export const SegmentedControl: React.FC<SegmentedControlProps> = ({
               ${isSm ? 'px-2 medium:px-3 py-1 text-[11px] medium:text-xs' : 'px-3 medium:px-4 py-2 text-xs medium:text-sm'}
               ${
                 isActive
-                  ? 'bg-surface text-ink font-bold shadow-hairline border border-line-strong border-b-2 border-b-brass'
+                  ? 'bg-surface text-ink font-bold shadow-hairline border-b-2 border-b-brand-primary'
                   : 'text-ink-soft border border-transparent hover-only:text-ink hover-only:bg-surface/50'
               }
             `.trim().replace(/\s+/g, ' ')}

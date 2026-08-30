@@ -1,8 +1,9 @@
 /**
- * Amanaura Design System v3.0 (PADMA MODERN)
+ * Amanaura Design System v4.0 (CRYSTAL SOVEREIGN)
  * Living Contract & Architectural Specimen Workspace
  * 
  * "Dokumen = Render = Test pada Matriks 6 State"
+ * Canvas-Native Flat Architecture (Hukum F-7 / A-4).
  */
 
 import React, { useState, useEffect, useMemo } from 'react';
@@ -15,16 +16,10 @@ import {
   Smartphone, 
   Tablet, 
   Monitor, 
-  Check, 
-  Info, 
-  AlertTriangle, 
   ShieldCheck, 
   Layers, 
-  Maximize2,
   RefreshCw,
-  Search,
-  Eye,
-  Lock
+  Search
 } from 'lucide-react';
 import { 
   Button, 
@@ -128,8 +123,8 @@ const TOKEN_GROUPS: TokenGroup[] = [
     tokens: [
       { varName: '--p-brand', label: 'Brand Base' },
       { varName: '--p-on-brand', label: 'On Brand Contrast' },
-      { varName: '--p-brass', label: 'Brass Signature' },
-      { varName: '--p-brass-soft', label: 'Brass Soft' },
+      { varName: '--p-brand-primary', label: 'Brand Primary' },
+      { varName: '--p-brand-deep', label: 'Brand Deep' },
       { varName: '--p-brick', label: 'Brick Accent' },
     ]
   },
@@ -164,9 +159,11 @@ const TOKEN_GROUPS: TokenGroup[] = [
     ]
   },
   {
-    groupName: 'Jenjang Nusantara',
+    groupName: 'Jenjang Tint Tokens',
     tokens: [
-      { varName: '--p-jj-tk', label: 'Jenjang TK (Clay)' },
+      { varName: '--p-jj-kb', label: 'Jenjang KB (Sprout)' },
+      { varName: '--p-jj-tka', label: 'Jenjang TK-A (Sky)' },
+      { varName: '--p-jj-tkb', label: 'Jenjang TK-B (Amber)' },
       { varName: '--p-jj-sd', label: 'Jenjang SD (Moss)' },
       { varName: '--p-jj-smp', label: 'Jenjang SMP (River)' },
       { varName: '--p-jj-sma', label: 'Jenjang SMA (Wisteria)' },
@@ -225,109 +222,113 @@ export const LivingContractWorkspace: React.FC = () => {
   const [narrativeInput, setNarrativeInput] = useState<string>('Ananda menunjukkan fokus tinggi saat merangkai balok geometri.');
 
   return (
-    <div className="space-y-10 max-w-7xl mx-auto w-full pb-24 text-ink select-none px-4 medium:px-6">
+    <div className="w-full max-w-6xl mx-auto px-4 medium:px-6 pt-6 pb-[160px] space-y-10 animate-in fade-in duration-200 text-ink">
       
-      {/* §0 Header Kontrak */}
-      <section className="bg-surface border border-line rounded-card p-6 shadow-hairline space-y-4">
-        <div className="flex flex-col medium:flex-row medium:items-center justify-between gap-4 border-b border-line-soft pb-4">
-          <div className="space-y-1">
-            <div className="flex items-center gap-2 flex-wrap">
-              <h1 className="text-xl font-bold font-display tracking-tight text-ink flex items-center gap-2">
-                <Sparkles className="w-5 h-5 text-brass animate-amanaura-breath" />
-                <span>Header Kontrak</span>
-              </h1>
-              <Badge variant="warning" dot={true}>v3.0-RELEASE</Badge>
-              <Badge variant="neutral">PADMA MODERN</Badge>
+      {/* 1. HERO CANVAS (R-1 Hero Canvas) */}
+      <header className="space-y-4">
+        <div className="flex flex-col medium:flex-row medium:items-start justify-between gap-4">
+          <div>
+            <div className="flex items-center gap-1.5 text-brand-deep text-xs font-bold uppercase tracking-wider mb-1">
+              <Sparkles className="w-4 h-4 text-brand-deep shrink-0" />
+              <span>Sistem Desain • Spesimen Hidup</span>
             </div>
-            <p className="text-xs text-ink-soft font-medium">
-              Spesimen Hidup Verifikasi 6 State (COMPACT / MEDIUM / EXPANDED × Frangipani Day / Night Temple)
+            <h1 className="text-[28px] medium:text-3xl font-bold tracking-tight text-ink leading-tight flex items-center gap-2 flex-wrap">
+              <span>Spesimen Hidup Amanaura</span>
+              <span className="text-xs font-mono font-bold text-warning-deep bg-warning-tint px-3 py-1 rounded-full border border-warning-line">
+                v4.0 CRYSTAL SOVEREIGN
+              </span>
+            </h1>
+            <p className="text-ink-soft text-sm max-w-2xl mt-1">
+              Spesimen Hidup Verifikasi 6 State (COMPACT / MEDIUM / EXPANDED × Frangipani Day / Night Temple) &amp; Validasi Purity Token.
             </p>
           </div>
 
-          <div className="flex items-center gap-2 flex-wrap">
-            <Button variant="secondary" size="sm" onClick={toggleTheme} leftIcon={isDark ? <Sun className="w-4 h-4 text-brass" /> : <Moon className="w-4 h-4 text-brass" />}>
+          <div className="flex items-center gap-2 flex-wrap shrink-0">
+            <Button 
+              variant="secondary" 
+              size="sm" 
+              onClick={toggleTheme} 
+              className="rounded-xl text-xs font-bold"
+              leftIcon={isDark ? <Sun className="w-4 h-4 text-brand-primary" /> : <Moon className="w-4 h-4 text-brand-primary" />}
+            >
               {isDark ? 'Frangipani Day' : 'Night Temple'}
             </Button>
           </div>
         </div>
 
-        {/* Live Context Telemetry Capsule */}
-        <div className="grid grid-cols-1 medium:grid-cols-3 gap-3">
-          <div className="bg-surface-subtle p-3 rounded-field border border-line flex items-center justify-between">
+        {/* Live Context Telemetry Capsule Flat (R-2 Flat Pills) */}
+        <div className="grid grid-cols-1 medium:grid-cols-3 gap-3 pt-2">
+          <div className="bg-surface-subtle p-3 rounded-xl border border-line-hairline flex items-center justify-between">
             <div className="flex items-center gap-2">
-              {sizeClass === 'COMPACT' && <Smartphone className="w-4 h-4 text-brass" />}
-              {sizeClass === 'MEDIUM' && <Tablet className="w-4 h-4 text-brass" />}
-              {sizeClass === 'EXPANDED' && <Monitor className="w-4 h-4 text-brass" />}
+              {sizeClass === 'COMPACT' && <Smartphone className="w-4 h-4 text-brand-primary" />}
+              {sizeClass === 'MEDIUM' && <Tablet className="w-4 h-4 text-brand-primary" />}
+              {sizeClass === 'EXPANDED' && <Monitor className="w-4 h-4 text-brand-primary" />}
               <span className="text-xs font-semibold text-ink-soft">Ukuran Layar (MD3)</span>
             </div>
-            <span className="font-mono text-xs font-bold text-ink px-2 py-1 bg-surface rounded border border-line-soft whitespace-nowrap">
+            <span className="font-mono text-xs font-bold text-ink px-2 py-1 bg-surface rounded-lg border border-line-hairline whitespace-nowrap">
               {`${sizeClass} (${windowWidth}px)`}
             </span>
           </div>
 
-          <div className="bg-surface-subtle p-3 rounded-field border border-line flex items-center justify-between">
+          <div className="bg-surface-subtle p-3 rounded-xl border border-line-hairline flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <SunMoon className="w-4 h-4 text-brass shrink-0" />
+              <SunMoon className="w-4 h-4 text-brand-primary shrink-0" />
               <span className="text-xs font-semibold text-ink-soft">Tema Aktif</span>
             </div>
-            <span className="font-mono text-xs font-bold text-ink px-2 py-1 bg-surface rounded border border-line-soft whitespace-nowrap">
+            <span className="font-mono text-xs font-bold text-ink px-2 py-1 bg-surface rounded-lg border border-line-hairline whitespace-nowrap">
               {isDark ? 'NIGHT TEMPLE' : 'FRANGIPANI DAY'}
             </span>
           </div>
 
-          <div className="bg-surface-subtle p-3 rounded-field border border-line flex items-center justify-between">
+          <div className="bg-surface-subtle p-3 rounded-xl border border-line-hairline flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <MousePointer className="w-4 h-4 text-brass shrink-0" />
+              <MousePointer className="w-4 h-4 text-brand-primary shrink-0" />
               <span className="text-xs font-semibold text-ink-soft">Modalitas Input</span>
             </div>
-            <span className="font-mono text-xs font-bold text-ink px-2 py-1 bg-surface rounded border border-line-soft whitespace-nowrap">
+            <span className="font-mono text-xs font-bold text-ink px-2 py-1 bg-surface rounded-lg border border-line-hairline whitespace-nowrap">
               {modality}
             </span>
           </div>
         </div>
-      </section>
+      </header>
 
-      {/* §1 Signatures */}
-      <section className="bg-surface border border-line rounded-card p-6 shadow-hairline space-y-6">
-        <div className="border-b border-line-soft pb-3">
-          <h2 className="text-lg font-bold font-display text-ink flex items-center gap-2">
-            <span>Signatures</span>
+      {/* §1 Signatures (R-3 divide-y) */}
+      <section className="space-y-4">
+        <div className="border-b border-line pb-2">
+          <h2 className="text-base font-bold text-ink flex items-center gap-2">
+            <span>6 Tanda Tangan Arsitektural Amanaura</span>
           </h2>
-          <p className="text-xs text-ink-soft">6 Tanda Tangan Karakteristik Padma Modern</p>
+          <p className="text-xs text-ink-soft">Prinsip karakteristik desain bernyawa tanpa dekorasi buatan.</p>
         </div>
 
-        <div className="grid grid-cols-1 medium:grid-cols-2 large:grid-cols-3 gap-4">
-          {/* Signature 1: Breath */}
-          <div className="bg-surface-subtle border border-line p-4 rounded-field space-y-2">
+        <div className="grid grid-cols-1 medium:grid-cols-2 large:grid-cols-3 gap-3">
+          <div className="bg-surface-subtle border border-line-hairline p-4 rounded-xl space-y-1.5">
             <div className="flex items-center justify-between">
               <span className="text-xs font-bold text-ink">1. Amanaura Breath</span>
-              <Sparkles className="w-4 h-4 text-brass animate-amanaura-breath" />
+              <Sparkles className="w-4 h-4 text-brand-primary animate-amanaura-breath" />
             </div>
             <p className="text-xs text-ink-soft">Denyut ritmis 4 detik penanda kesiapan bernyawa.</p>
           </div>
 
-          {/* Signature 2: Luminescent Edge */}
-          <div className="bg-surface-subtle border border-line p-4 rounded-field space-y-2">
+          <div className="bg-surface-subtle border border-line-hairline p-4 rounded-xl space-y-1.5">
             <div className="flex items-center justify-between">
               <span className="text-xs font-bold text-ink">2. Luminescent Edge</span>
-              <span className="w-3 h-3 rounded-full bg-brass shadow-luminescent" />
+              <span className="w-3 h-3 rounded-full bg-brand-primary hover-only:shadow-luminescent focus-visible:shadow-luminescent" />
             </div>
             <p className="text-xs text-ink-soft">Cincin fokus berpendar kuningan anti-cincin biru browser.</p>
           </div>
 
-          {/* Signature 3: Spring Motion */}
-          <div className="bg-surface-subtle border border-line p-4 rounded-field space-y-2">
+          <div className="bg-surface-subtle border border-line-hairline p-4 rounded-xl space-y-1.5">
             <div className="flex items-center justify-between">
               <span className="text-xs font-bold text-ink">3. Spring Motion</span>
-              <Button variant="secondary" size="sm" onClick={() => setIsDialogOpen(true)}>
+              <Button variant="secondary" size="sm" onClick={() => setIsDialogOpen(true)} className="rounded-xl text-xs">
                 Buka Dialog
               </Button>
             </div>
             <p className="text-xs text-ink-soft">Fisika pegas tanpa lonjakan visual layout shift.</p>
           </div>
 
-          {/* Signature 4: Status Dot Capsule */}
-          <div className="bg-surface-subtle border border-line p-4 rounded-field space-y-2">
+          <div className="bg-surface-subtle border border-line-hairline p-4 rounded-xl space-y-1.5">
             <div className="flex items-center justify-between">
               <span className="text-xs font-bold text-ink">4. Dot Capsule</span>
               <div className="flex gap-1">
@@ -338,10 +339,9 @@ export const LivingContractWorkspace: React.FC = () => {
             <p className="text-xs text-ink-soft">Tipografi JetBrains Mono dengan titik status taktil.</p>
           </div>
 
-          {/* Signature 5: Deterministic Pastel */}
-          <div className="bg-surface-subtle border border-line p-4 rounded-field space-y-2">
+          <div className="bg-surface-subtle border border-line-hairline p-4 rounded-xl space-y-1.5">
             <div className="flex items-center justify-between">
-              <span className="text-xs font-bold text-ink">5. Pastel & Simbol</span>
+              <span className="text-xs font-bold text-ink">5. Pastel &amp; Simbol</span>
               <div className="flex items-center -space-x-2">
                 <AvatarChild name="Kenzo Pratama" id="child_01" size="sm" />
                 <AvatarChild name="Gabriel Christian" id="child_02" size="sm" />
@@ -351,41 +351,35 @@ export const LivingContractWorkspace: React.FC = () => {
             <p className="text-xs text-ink-soft">Palet pastel hangat terhitung deterministik per NIK.</p>
           </div>
 
-          {/* Signature 6: Circadian */}
-          <div className="bg-surface-subtle border border-line p-4 rounded-field space-y-2">
+          <div className="bg-surface-subtle border border-line-hairline p-4 rounded-xl space-y-1.5">
             <div className="flex items-center justify-between">
               <span className="text-xs font-bold text-ink">6. Circadian Light</span>
-              <Badge variant="lppa">Siang & Malam</Badge>
+              <Badge variant="lppa">Siang &amp; Malam</Badge>
             </div>
             <p className="text-xs text-ink-soft">Transisi Frangipani Day ke Night Temple tanpa silau.</p>
           </div>
         </div>
       </section>
 
-      {/* §2 Tokens */}
-      <section className="bg-surface border border-line rounded-card p-6 shadow-hairline space-y-6">
-        <div className="border-b border-line-soft pb-3 flex flex-col medium:flex-row medium:items-center justify-between gap-2">
-          <div>
-            <h2 className="text-lg font-bold font-display text-ink flex items-center gap-2">
-              <span>Tokens</span>
-            </h2>
-            <p className="text-xs text-ink-soft">Swatch Runtime (getComputedStyle) & Rasio Kontras terhadap Canvas ({canvasColor})</p>
-          </div>
+      {/* §2 Tokens (R-3 divide-y) */}
+      <section className="space-y-4">
+        <div className="border-b border-line pb-2">
+          <h2 className="text-base font-bold text-ink">Palet Token Kanonikal</h2>
+          <p className="text-xs text-ink-soft">Swatch Runtime (getComputedStyle) &amp; Rasio Kontras terhadap Canvas ({canvasColor})</p>
         </div>
 
-        {/* Grid Swatches */}
         <div className="space-y-6">
           {TOKEN_GROUPS.map((grp, gIdx) => (
-            <div key={gIdx} className="space-y-2.5">
+            <div key={gIdx} className="space-y-2">
               <h3 className="text-xs font-bold uppercase tracking-wider text-ink-soft">{grp.groupName}</h3>
-              <div className="grid grid-cols-2 medium:grid-cols-3 large:grid-cols-4 gap-3">
+              <div className="grid grid-cols-2 medium:grid-cols-3 large:grid-cols-4 gap-2.5">
                 {grp.tokens.map((tok, tIdx) => {
                   const hex = runtimeValues[tok.varName] || '...';
                   const contrast = calculateContrastRatio(hex, canvasColor);
                   return (
-                    <div key={tIdx} className="bg-surface-subtle border border-line rounded-field p-2 flex items-center gap-3">
+                    <div key={tIdx} className="bg-surface-subtle border border-line-hairline rounded-xl p-3 flex items-center gap-3">
                       <div 
-                        className="w-8 h-8 rounded-lg border border-line shrink-0 shadow-hairline"
+                        className="w-8 h-8 rounded-lg border border-line-hairline shrink-0 shadow-hairline"
                         style={{ backgroundColor: `var(${tok.varName})` }}
                       />
                       <div className="min-w-0 flex-1">
@@ -403,136 +397,33 @@ export const LivingContractWorkspace: React.FC = () => {
             </div>
           ))}
         </div>
-
-        {/* Typography, Radius & Shadows Specimens */}
-        <div className="border-t border-line-soft pt-6 grid grid-cols-1 medium:grid-cols-3 gap-6">
-          {/* Typography Specimen */}
-          <div className="space-y-3">
-            <h3 className="text-xs font-bold uppercase tracking-wider text-ink-soft">Tipografi Padma</h3>
-            <div className="bg-surface-subtle border border-line rounded-field p-3 space-y-2">
-              <div className="font-display font-extrabold text-xl text-ink">Plus Jakarta Sans 800</div>
-              <div className="font-display font-bold text-sm text-ink">Judul Seksi 700</div>
-              <div className="font-sans text-xs text-ink-soft">Teks bacaan instruksional santun dan proporsional.</div>
-              <div className="font-mono text-xs font-bold text-brass">JetBrains Mono 07:15 • 36.5°C</div>
-            </div>
-          </div>
-
-          {/* Radius Specimen */}
-          <div className="space-y-3">
-            <h3 className="text-xs font-bold uppercase tracking-wider text-ink-soft">Radius Dinamis</h3>
-            <div className="bg-surface-subtle border border-line rounded-field p-3 space-y-2.5">
-              <div className="p-2 bg-surface rounded-card border border-line text-xs font-semibold text-center">
-                rounded-card (12px)
-              </div>
-              <div className="p-2 bg-surface rounded-field border border-line text-xs font-semibold text-center">
-                rounded-field (8px)
-              </div>
-              <div className="p-2 bg-surface rounded-pill border border-line text-xs font-semibold text-center">
-                rounded-pill (9999px)
-              </div>
-            </div>
-          </div>
-
-          {/* Shadows Specimen */}
-          <div className="space-y-3">
-            <h3 className="text-xs font-bold uppercase tracking-wider text-ink-soft">Elevasi Kertas</h3>
-            <div className="bg-surface-subtle border border-line rounded-field p-3 space-y-2.5">
-              <div className="p-2 bg-surface rounded-field shadow-hairline border border-line text-xs text-center">
-                shadow-hairline
-              </div>
-              <div className="p-2 bg-surface rounded-field shadow-ambient border border-line text-xs text-center">
-                shadow-ambient
-              </div>
-              <div className="p-2 bg-surface rounded-field shadow-luminescent border border-line text-xs text-center font-bold text-brass">
-                shadow-luminescent
-              </div>
-            </div>
-          </div>
-        </div>
       </section>
 
-      {/* §3 Layout Laws */}
-      <section className="bg-surface border border-line rounded-card p-6 shadow-hairline space-y-6">
-        <div className="border-b border-line-soft pb-3">
-          <h2 className="text-lg font-bold font-display text-ink flex items-center gap-2">
-            <span>Layout Laws</span>
-          </h2>
-          <p className="text-xs text-ink-soft">Hukum 1 (Edge-to-Edge), Hukum 3 (3-Zona), dan Nested Radius</p>
-        </div>
-
-        <div className="grid grid-cols-1 medium:grid-cols-2 gap-6">
-          {/* Edge-to-Edge & 3-Zona Card */}
-          <div className="bg-surface border border-line rounded-card shadow-hairline divide-y divide-line-soft overflow-hidden">
-            <div className="p-4 bg-surface-subtle flex items-center justify-between">
-              <span className="text-xs font-bold text-ink">Zona 1: Header Terkunci</span>
-              <Badge variant="success">Hadir 100%</Badge>
-            </div>
-            <div className="p-4 space-y-2 bg-surface">
-              <span className="text-xs font-semibold text-ink-soft block">Zona 2: Isi Data Edge-to-Edge</span>
-              <ListItem 
-                avatar={<AvatarChild name="Kenzo Pratama" id="k1" size="sm" />}
-                title="Kenzo Pratama Santoso"
-                subtitle="NIS: 2026001 • Hadir (Suhu 36.4°C)"
-                badge={<Badge variant="success">BSB</Badge>}
-              />
-              <ListItem 
-                avatar={<AvatarChild name="Gabriel Christian" id="g1" size="sm" />}
-                title="Gabriel Christian Sihombing"
-                subtitle="NIS: 2026002 • Hadir (Suhu 36.6°C)"
-                badge={<Badge variant="warning">Alergi</Badge>}
-              />
-            </div>
-            <div className="p-3 bg-surface-subtle/60 flex items-center justify-between text-xs text-ink-soft">
-              <span>Zona 3: Ringkasan & Aksi</span>
-              <span className="font-mono text-[11px]">2 Siswa Terdata</span>
-            </div>
-          </div>
-
-          {/* Nested Radius Demonstration */}
-          <div className="p-4 bg-surface-subtle border border-line rounded-card space-y-3">
-            <div className="flex items-center justify-between">
-              <span className="text-xs font-bold text-ink">Nested Radius Law</span>
-              <span className="text-[10px] font-mono text-ink-faint">R_dalam = R_luar - Padding</span>
-            </div>
-            <p className="text-xs text-ink-soft">Kontainer luar ber-radius 12px (rounded-card) membungkus elemen dalam ber-radius 8px (rounded-field).</p>
-            <div className="p-3 bg-surface border border-line rounded-field space-y-2">
-              <div className="flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-brass" />
-                <span className="text-xs font-bold text-ink">Elemen Terdalam</span>
-              </div>
-              <p className="text-[11px] text-ink-soft">Kelengkungan sudut mengalir selaras tanpa distorsi optik.</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* §4 Components */}
-      <section className="bg-surface border border-line rounded-card p-6 shadow-hairline space-y-6">
-        <div className="border-b border-line-soft pb-3">
-          <h2 className="text-lg font-bold font-display text-ink flex items-center gap-2">
-            <span>Components</span>
-          </h2>
-          <p className="text-xs text-ink-soft">Matriks Primitif Kanonikal Amanaura v3.0</p>
+      {/* §3 Components Matrix */}
+      <section className="space-y-4">
+        <div className="border-b border-line pb-2">
+          <h2 className="text-base font-bold text-ink">Matriks Primitif Komponen</h2>
+          <p className="text-xs text-ink-soft">Uji coba interaktif tombol, kontrol pemilih, teks area, dan skeleton.</p>
         </div>
 
         {/* Buttons Matrix */}
-        <div className="space-y-3">
-          <h3 className="text-xs font-bold uppercase tracking-wider text-ink-soft">The 5 Button Laws & Varian</h3>
-          <div className="flex flex-wrap gap-3 items-center">
-            <Button variant="primary" size="md">Primary</Button>
-            <Button variant="primary" size="md" isLoading={true}>Loading</Button>
-            <Button variant="secondary" size="md">Secondary</Button>
-            <Button variant="ghost" size="md">Ghost Action</Button>
-            <Button variant="danger" size="md">Danger</Button>
-            <Button variant="primary" size="md" disabled={true}>Disabled</Button>
-            <Button variant="icon" size="icon" aria-label="Refresh Data">
-              <RefreshCw className="w-4 h-4 text-brass" />
+        <div className="space-y-2">
+          <h3 className="text-xs font-bold uppercase tracking-wider text-ink-soft">The 5 Button Laws &amp; Varian</h3>
+          <div className="flex flex-wrap gap-2 items-center">
+            <Button variant="primary" size="md" className="rounded-xl">Primary</Button>
+            <Button variant="primary" size="md" isLoading={true} className="rounded-xl">Loading</Button>
+            <Button variant="secondary" size="md" className="rounded-xl">Secondary</Button>
+            <Button variant="ghost" size="md" className="rounded-xl">Ghost Action</Button>
+            <Button variant="danger" size="md" className="rounded-xl">Danger</Button>
+            <Button variant="primary" size="md" disabled={true} className="rounded-xl">Disabled</Button>
+            <Button variant="icon" size="icon" aria-label="Refresh Data" className="rounded-xl">
+              <RefreshCw className="w-4 h-4 text-brand-primary" />
             </Button>
           </div>
         </div>
 
         {/* Inputs & Selection Controls */}
-        <div className="grid grid-cols-1 medium:grid-cols-3 gap-4 pt-2">
+        <div className="grid grid-cols-1 medium:grid-cols-3 gap-3 pt-2">
           <Input 
             label="Nama Lengkap Siswa" 
             placeholder="Ketik nama siswa..." 
@@ -582,7 +473,7 @@ export const LivingContractWorkspace: React.FC = () => {
 
             <div className="space-y-2">
               <span className="text-xs font-semibold text-ink-soft">Progress Bar (6 Varian Semantik)</span>
-              <ProgressBar value={75} variant="brass" showLabel={true} />
+              <ProgressBar value={75} variant="brand" showLabel={true} />
               <ProgressBar value={90} variant="success" />
               <ProgressBar value={45} variant="warning" />
               <ProgressBar value={20} variant="danger" />
@@ -613,172 +504,23 @@ export const LivingContractWorkspace: React.FC = () => {
         </div>
 
         {/* Trigger Toast Feedback */}
-        <div className="pt-2 flex items-center justify-between border-t border-line-soft">
+        <div className="pt-2 flex items-center justify-between border-t border-line">
           <span className="text-xs text-ink-soft">ToastHUD Feedback Capsule</span>
-          <Button variant="secondary" size="sm" onClick={() => setIsToastVisible(true)}>
+          <Button variant="secondary" size="sm" onClick={() => setIsToastVisible(true)} className="rounded-xl text-xs">
             Picu Notifikasi Toast
           </Button>
         </div>
       </section>
 
-      {/* §5 Interaksi */}
-      <section className="bg-surface border border-line rounded-card p-6 shadow-hairline space-y-6">
-        <div className="border-b border-line-soft pb-3">
-          <h2 className="text-lg font-bold font-display text-ink flex items-center gap-2">
-            <span>Interaksi</span>
-          </h2>
-          <p className="text-xs text-ink-soft">Tab Geser dengan Shader Mask & Standar Touch Target 48dp</p>
-        </div>
-
-        <div className="space-y-4">
-          {/* Edge Fade Horizontal Tabs */}
-          <div className="space-y-2">
-            <span className="text-xs font-semibold text-ink-soft">Tab Overflow dengan Edge-Fade Mask</span>
-            <div className="flex items-center gap-2 overflow-x-auto no-scrollbar pb-1 [mask-image:linear-gradient(to_right,transparent_0,black_16px,black_calc(100%-16px),transparent_100%)]">
-              {['Presensi Harian', 'Jurnal Belajar', 'Foto Karya', 'LPPA Portofolio', 'Kemitraan Ortu', 'Siklus Akademik', 'Evaluasi Sekolah'].map((tab, idx) => (
-                <div key={idx} className="shrink-0 px-4 py-2 bg-surface-subtle border border-line rounded-full text-xs font-semibold text-ink whitespace-nowrap">
-                  {tab}
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Touch Target 48dp Minimum */}
-          <div className="bg-surface-subtle border border-line p-4 rounded-field flex items-center justify-between">
-            <div>
-              <span className="text-xs font-bold text-ink block">Standar Area Sentuh 48dp</span>
-              <span className="text-[11px] text-ink-soft">Ikon w-5 terbungkus dalam wadah min-h-[48px] touch-target-min.</span>
-            </div>
-            <div className="min-h-[48px] min-w-[48px] touch-target-min flex items-center justify-center bg-surface border border-line rounded-field shadow-hairline">
-              <Sparkles className="w-5 h-5 text-brass" />
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* §6 Copywriting */}
-      <section className="bg-surface border border-line rounded-card p-6 shadow-hairline space-y-6">
-        <div className="border-b border-line-soft pb-3">
-          <h2 className="text-lg font-bold font-display text-ink flex items-center gap-2">
-            <span>Copywriting</span>
-          </h2>
-          <p className="text-xs text-ink-soft">Kamus Pendidik Santun & Larangan Jargon Mekanis (§6.2)</p>
+      {/* §4 Glass Layer Contracts */}
+      <section className="space-y-4">
+        <div className="border-b border-line pb-2">
+          <h2 className="text-base font-bold text-ink">Spesimen Glass Layer &amp; Tata Kelola Etis</h2>
+          <p className="text-xs text-ink-soft">Perisai Privasi, Dinamika Non-Kausal &amp; Audit Jangkar Kanonikal</p>
         </div>
 
         <div className="grid grid-cols-1 medium:grid-cols-2 gap-4">
-          <div className="bg-surface-subtle border border-line rounded-field p-4 space-y-2">
-            <span className="text-xs font-bold text-ink block">Batas Panjang Frasa</span>
-            <div className="space-y-1 text-xs text-ink-soft">
-              <div className="flex justify-between border-b border-line-soft py-1">
-                <span>Judul Halaman / Kartu:</span>
-                <span className="font-bold text-ink">Maksimal 2 Kata</span>
-              </div>
-              <div className="flex justify-between border-b border-line-soft py-1">
-                <span>Tombol Aksi (CTA):</span>
-                <span className="font-bold text-ink">Maksimal 3 Kata</span>
-              </div>
-              <div className="flex justify-between py-1">
-                <span>Keterangan Status:</span>
-                <span className="font-bold text-ink">1 Baris Ringkas</span>
-              </div>
-            </div>
-          </div>
-
-          <div className="bg-surface-subtle border border-line rounded-field p-4 space-y-2">
-            <span className="text-xs font-bold text-ink block">Kamus Anti-Jargon</span>
-            <div className="space-y-1.5 text-xs">
-              <div className="flex items-center justify-between text-ink-soft">
-                <span className="line-through text-danger-deep">Submit Evidence</span>
-                <span className="text-success-deep font-semibold">Simpan Dokumentasi</span>
-              </div>
-              <div className="flex items-center justify-between text-ink-soft">
-                <span className="line-through text-danger-deep">Sync LPPA Snapshot</span>
-                <span className="text-success-deep font-semibold">Terbitkan LPPA</span>
-              </div>
-              <div className="flex items-center justify-between text-ink-soft">
-                <span className="line-through text-danger-deep">Prompt Kemitraan</span>
-                <span className="text-success-deep font-semibold">Saran untuk Orang Tua</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* §7 MD3 */}
-      <section className="bg-surface border border-line rounded-card p-6 shadow-hairline space-y-6">
-        <div className="border-b border-line-soft pb-3">
-          <h2 className="text-lg font-bold font-display text-ink flex items-center gap-2">
-            <span>MD3</span>
-          </h2>
-          <p className="text-xs text-ink-soft">Sistem Window Size Classes Material Design 3</p>
-        </div>
-
-        <div className="grid grid-cols-1 medium:grid-cols-3 gap-3">
-          <div className={`p-4 rounded-field border transition-all ${sizeClass === 'COMPACT' ? 'bg-surface border-brass ring-1 ring-brass' : 'bg-surface-subtle border-line'}`}>
-            <div className="flex items-center justify-between mb-1">
-              <span className="text-xs font-bold text-ink">COMPACT</span>
-              <span className="text-[10px] font-mono text-ink-faint">&lt; 600px</span>
-            </div>
-            <p className="text-xs text-ink-soft">Edge-to-edge layout, bottom navigation bar, single column focus.</p>
-          </div>
-
-          <div className={`p-4 rounded-field border transition-all ${sizeClass === 'MEDIUM' ? 'bg-surface border-brass ring-1 ring-brass' : 'bg-surface-subtle border-line'}`}>
-            <div className="flex items-center justify-between mb-1">
-              <span className="text-xs font-bold text-ink">MEDIUM</span>
-              <span className="text-[10px] font-mono text-ink-faint">600–839px</span>
-            </div>
-            <p className="text-xs text-ink-soft">Collapsible mini-rail, adaptive single/dual column split.</p>
-          </div>
-
-          <div className={`p-4 rounded-field border transition-all ${sizeClass === 'EXPANDED' ? 'bg-surface border-brass ring-1 ring-brass' : 'bg-surface-subtle border-line'}`}>
-            <div className="flex items-center justify-between mb-1">
-              <span className="text-xs font-bold text-ink">EXPANDED</span>
-              <span className="text-[10px] font-mono text-ink-faint">≥ 840px</span>
-            </div>
-            <p className="text-xs text-ink-soft">Sidebar navigasi penuh, multi-column master-detail, max-w-7xl.</p>
-          </div>
-        </div>
-      </section>
-
-      {/* §8 Offline */}
-      <section className="bg-surface border border-line rounded-card p-6 shadow-hairline space-y-6">
-        <div className="border-b border-line-soft pb-3">
-          <h2 className="text-lg font-bold font-display text-ink flex items-center gap-2">
-            <span>Offline</span>
-          </h2>
-          <p className="text-xs text-ink-soft">Status Konektivitas & Mutasi Antrean Latar Belakang</p>
-        </div>
-
-        <div className="bg-surface-subtle border border-line p-4 rounded-field flex flex-col medium:flex-row medium:items-center justify-between gap-3">
-          <div className="flex items-center gap-3">
-            <Badge variant={isOnline ? 'success' : 'danger'} dot={true}>
-              {isOnline ? 'Terhubung' : 'Terputus'}
-            </Badge>
-            <span className="text-xs text-ink font-semibold">
-              {isOnline ? 'Sinkronisasi Otomatis Aktif' : 'Modus Luring Beroperasi'}
-            </span>
-          </div>
-
-          <div className="flex items-center gap-3 font-mono text-xs text-ink-soft">
-            <span>Antrean Mutasi: 0</span>
-            <span>•</span>
-            <span>Terakhir Sinkron: {lastSyncAt || 'Baru saja'}</span>
-          </div>
-        </div>
-      </section>
-
-      {/* §9 Glass Layer */}
-      <section className="bg-surface border border-line rounded-card p-6 shadow-hairline space-y-6">
-        <div className="border-b border-line-soft pb-3">
-          <h2 className="text-lg font-bold font-display text-ink flex items-center gap-2">
-            <span>Glass Layer</span>
-          </h2>
-          <p className="text-xs text-ink-soft">Perisai Privasi, Dinamika Non-Kausal & Audit Jangkar Kanonikal</p>
-        </div>
-
-        <div className="grid grid-cols-1 medium:grid-cols-2 gap-4">
-          {/* PrivacyShield N=3 vs N=12 */}
-          <div className="bg-surface-subtle border border-line p-4 rounded-field space-y-3">
+          <div className="bg-surface-subtle border border-line-hairline p-4 rounded-xl space-y-3">
             <span className="text-xs font-bold text-ink block">PrivacyShield (FB-07 Anti-Differencing)</span>
             <div className="space-y-3">
               <div>
@@ -789,7 +531,7 @@ export const LivingContractWorkspace: React.FC = () => {
                   metricLabel="Rasio Kemandirian"
                 />
               </div>
-              <div className="border-t border-line-soft pt-2">
+              <div className="border-t border-line-hairline pt-2">
                 <span className="text-[10px] text-ink-faint uppercase tracking-wider font-bold block mb-1">Sampel N ≥ 5 (Visible)</span>
                 <PrivacyShield 
                   exposureStatus="VISIBLE"
@@ -801,8 +543,7 @@ export const LivingContractWorkspace: React.FC = () => {
             </div>
           </div>
 
-          {/* NonCausalDelta */}
-          <div className="bg-surface-subtle border border-line p-4 rounded-field space-y-3">
+          <div className="bg-surface-subtle border border-line-hairline p-4 rounded-xl space-y-3">
             <span className="text-xs font-bold text-ink block">NonCausalDelta (H-02 Non-Causal Semantics)</span>
             <NonCausalDelta 
               baselineValue={60}
@@ -812,8 +553,7 @@ export const LivingContractWorkspace: React.FC = () => {
             />
           </div>
 
-          {/* CanonicalAnchor */}
-          <div className="bg-surface-subtle border border-line p-4 rounded-field space-y-3">
+          <div className="bg-surface-subtle border border-line-hairline p-4 rounded-xl space-y-3">
             <span className="text-xs font-bold text-ink block">CanonicalAnchor (H-06 Audit Trail)</span>
             <CanonicalAnchor 
               actionId="act_2026_demo_001"
@@ -824,13 +564,12 @@ export const LivingContractWorkspace: React.FC = () => {
             />
           </div>
 
-          {/* ForbiddenActionGate */}
-          <div className="bg-surface-subtle border border-line p-4 rounded-field space-y-3">
+          <div className="bg-surface-subtle border border-line-hairline p-4 rounded-xl space-y-3">
             <span className="text-xs font-bold text-ink block">ForbiddenActionGate (FB-06 Hard Block)</span>
             <ForbiddenActionGate 
               actionType="CLASSROOM_MUTATION"
               fallback={
-                <div className="p-3 bg-danger-tint border border-danger-line rounded-lg">
+                <div className="p-3 bg-danger-tint border border-danger-line rounded-xl">
                   <Badge variant="danger" dot={true}>HARD-BLOCK (FB-06) Mutasi Kelas Dibatasi</Badge>
                 </div>
               }
@@ -849,14 +588,14 @@ export const LivingContractWorkspace: React.FC = () => {
         description="Bunglon responsif: Bottom Sheet di Mobile & Modal di Desktop."
         footer={
           <div className="flex justify-end gap-2 w-full">
-            <Button variant="secondary" onClick={() => setIsDialogOpen(false)}>Batal</Button>
-            <Button variant="primary" onClick={() => setIsDialogOpen(false)}>Tutup</Button>
+            <Button variant="secondary" onClick={() => setIsDialogOpen(false)} className="rounded-xl">Batal</Button>
+            <Button variant="primary" onClick={() => setIsDialogOpen(false)} className="rounded-xl">Tutup</Button>
           </div>
         }
       >
         <div className="space-y-3 text-xs text-ink-soft py-2">
           <p>Dialog ini mempertahankan elevasi luminescent dan transisi pegas tanpa lonjakan visual.</p>
-          <div className="p-3 bg-surface-subtle border border-line rounded-field font-mono text-[11px] text-ink">
+          <div className="p-3 bg-surface-subtle border border-line-hairline rounded-xl font-mono text-[11px] text-ink">
             AdaptiveDialog: maxWidth=&quot;md&quot; • AmanauraSpring
           </div>
         </div>

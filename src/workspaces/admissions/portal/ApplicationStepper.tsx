@@ -106,7 +106,7 @@ export const ApplicationStepper: React.FC<ApplicationStepperProps> = ({ currentS
         title: 'Langkah 6 Selesai: Biaya Pendidikan Telah Lunas!',
         desc: 'Pembayaran uang pangkal dan formulir telah diverifikasi oleh bendahara sekolah. Berkas kini berada di Meja Kepala Sekolah untuk pengesahan pengukuhan siswa resmi.',
         bg: 'bg-surface-subtle border-line text-ink',
-        icon: <Sparkles className="w-5 h-5 text-brass shrink-0 mt-0.5" />
+        icon: <Sparkles className="w-5 h-5 text-brand-primary shrink-0 mt-0.5" />
       };
     }
     if (currentStatus === 'ENROLLED_PROMOTED') {
@@ -155,7 +155,7 @@ export const ApplicationStepper: React.FC<ApplicationStepperProps> = ({ currentS
 
       {isCancelledElsewhere && (
         <div className="mb-6 p-4 rounded-field bg-warning-tint border border-warning-line text-warning-deep text-xs flex items-start space-x-3">
-          <Info className="w-5 h-5 text-brass shrink-0 mt-0.5" />
+          <Info className="w-5 h-5 text-brand-primary shrink-0 mt-0.5" />
           <span>
             <strong>Pemberitahuan Mutasi Antar-Unit:</strong> Calon siswa telah resmi terdaftar dan diterima di unit TK Yapendik lain. Aplikasi pada unit ini otomatis ditutup secara terhormat.
           </span>
@@ -177,7 +177,7 @@ export const ApplicationStepper: React.FC<ApplicationStepperProps> = ({ currentS
         <div className="hidden expanded:block absolute top-5 left-8 right-8 z-0">
           <ProgressBar 
             value={currentIndex >= 0 ? (currentIndex / (STEP_DEFINITIONS.length - 1)) * 100 : 0} 
-            variant="brass" 
+            variant="brand" 
             trackClassName="h-1" 
           />
         </div>
@@ -203,7 +203,7 @@ export const ApplicationStepper: React.FC<ApplicationStepperProps> = ({ currentS
                     isCompleted
                       ? 'bg-success text-on-brand shadow-hairline ring-2 ring-emerald-100'
                       : isCurrent
-                      ? 'bg-brand text-on-brand ring-2 ring-brass font-extrabold shadow-hairline'
+                      ? 'bg-brand text-on-brand ring-2 ring-brand-primary font-extrabold shadow-hairline'
                       : 'bg-surface-subtle text-ink-soft border border-line'
                   }`}
                   data-testid={`step-indicator-${idx + 1}`}

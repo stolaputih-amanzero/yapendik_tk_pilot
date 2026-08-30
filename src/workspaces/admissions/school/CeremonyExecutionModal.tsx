@@ -92,7 +92,7 @@ export const CeremonyExecutionModal: React.FC<CeremonyExecutionModalProps> = ({
         {!isStatusSettled && (
           <div className="p-4 rounded-field bg-warning-tint border border-warning-line text-warning-deep text-xs space-y-1">
             <strong className="flex items-center gap-2 text-warning-deep">
-              <AlertTriangle className="w-4 h-4 text-brass shrink-0" />
+              <AlertTriangle className="w-4 h-4 text-brand-primary shrink-0" />
               Syarat Upacara Belum Terpenuhi:
             </strong>
             <p className="pl-5 leading-relaxed">
@@ -163,7 +163,7 @@ export const CeremonyExecutionModal: React.FC<CeremonyExecutionModalProps> = ({
             disabled={!canConfirm}
             className={`px-6 py-2 rounded-field text-xs font-black transition-all ${
               canConfirm
-                ? 'bg-success hover-only:bg-emerald-700 text-on-brand shadow-ambient shadow-emerald-600/20'
+                ? 'bg-success hover-only:opacity-90 text-on-brand shadow-hairline cursor-pointer'
                 : 'bg-surface-subtle text-ink-faint cursor-not-allowed border border-line'
             }`}
             data-testid="confirm-ceremony-btn"

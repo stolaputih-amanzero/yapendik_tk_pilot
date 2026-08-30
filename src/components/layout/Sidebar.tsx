@@ -201,9 +201,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
           }`}
         >
           <div
-            className="w-9 h-9 rounded-field bg-surface-subtle border border-line flex items-center justify-center text-ink shrink-0 shadow-hairline group-hover-only:bg-surface-subtle/80 group-hover-only:border-line-strong transition-all"
+            className="w-9 h-9 rounded-xl bg-surface-subtle border border-line-hairline flex items-center justify-center text-ink shrink-0 shadow-hairline group-hover-only:bg-surface-subtle/80 group-hover-only:border-line transition-all"
           >
-            <Building2 className="w-5 h-5 text-brass" />
+            <Building2 className="w-5 h-5 text-brand-primary" />
           </div>
           {!isCollapsed && (
             <div className="min-w-0 flex-1">
@@ -225,7 +225,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
         {navGroups.map((group, groupIdx) => (
           <div key={groupIdx} className="space-y-1 min-w-0">
             {isCollapsed ? (
-              groupIdx > 0 && <div className="w-7 h-px bg-line-soft mx-auto my-2" />
+              groupIdx > 0 && <div className="w-7 h-px bg-line-hairline mx-auto my-2" />
             ) : (
               <div className="text-[10px] text-ink-faint font-bold uppercase tracking-wider px-3 mb-1.5 select-none truncate">
                 {group.title}
@@ -241,25 +241,25 @@ export const Sidebar: React.FC<SidebarProps> = ({
                     type="button"
                     onClick={() => onSelectTab(item.tab)}
                     aria-label={item.label}
-                    className={`w-full flex items-center rounded-field text-xs font-medium transition-all duration-150 cursor-pointer min-w-0 relative overflow-hidden ${
+                    className={`w-full flex items-center rounded-xl text-xs font-medium transition-all duration-150 cursor-pointer min-w-0 relative overflow-hidden ${
                       isCollapsed
                         ? 'justify-center h-10 w-10 mx-auto'
                         : 'space-x-2.5 px-3 py-2 text-left'
                     } ${
                       isActive
-                        ? 'bg-brand text-on-brand font-semibold shadow-hairline'
+                        ? 'bg-brand-tint text-brand-deep font-semibold shadow-hairline border border-brand-primary/20'
                         : 'text-ink-soft hover-only:text-ink hover-only:bg-surface-subtle border border-transparent'
                     }`}
                   >
                     {isActive && (
-                      <div className="absolute left-0 top-0 bottom-0 w-1 bg-brass motif-poleng opacity-80" />
+                      <div className="absolute inset-0 bg-brand-tint rounded-xl -z-10" />
                     )}
-                    <Icon className={`w-4 h-4 shrink-0 transition-colors ${isActive ? 'text-on-brand' : 'text-ink-faint group-hover-only:text-ink'}`} />
+                    <Icon className={`w-4 h-4 shrink-0 transition-colors ${isActive ? 'text-brand-deep' : 'text-ink-faint group-hover-only:text-ink'}`} />
                     {!isCollapsed && (
                       <>
                         <span className="truncate flex-1 text-left line-clamp-1">{item.label}</span>
                         {item.badge && (
-                          <span className="text-[9px] font-mono px-1 py-1 rounded bg-surface-subtle text-ink-soft border border-line shrink-0 whitespace-nowrap">
+                          <span className="text-[9px] font-mono px-2 py-1 rounded bg-surface-subtle text-ink-soft border border-line-hairline shrink-0 whitespace-nowrap">
                             {item.badge}
                           </span>
                         )}
@@ -269,11 +269,11 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
                   {/* Sleek Tooltip for Collapsed Mode */}
                   {isCollapsed && (
-                    <div className="pointer-events-none absolute left-full top-1/2 -translate-y-1/2 ml-3.5 z-50 hidden group-hover:flex items-center">
+                    <div className="pointer-events-none absolute left-full top-1/2 -translate-y-1/2 ml-3 z-50 hidden group-hover:flex items-center">
                       <div className="bg-surface-inset text-on-brand text-xs font-medium px-2 py-1 rounded-lg shadow-floating whitespace-nowrap flex items-center space-x-1.5 border border-line-strong animate-in fade-in zoom-in-95 duration-150">
                         <span>{item.label}</span>
                         {item.badge && (
-                          <span className="text-[9px] font-mono px-1 py-0 rounded bg-brand text-brass border border-line-strong whitespace-nowrap">
+                          <span className="text-[9px] font-mono px-1 py-0 rounded bg-brand text-brand-primary border border-line-strong whitespace-nowrap">
                             {item.badge}
                           </span>
                         )}
@@ -307,7 +307,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 : 'text-ink-soft hover-only:text-ink hover-only:bg-surface border border-line'
             }`}
           >
-            <Sparkles className="w-4 h-4 shrink-0 text-brass" />
+            <Sparkles className="w-4 h-4 shrink-0 text-brand-primary" />
             {!isCollapsed && (
               <>
                 <span className="truncate flex-1 text-left line-clamp-1">Living Contract</span>
@@ -347,7 +347,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 : 'text-ink-soft hover-only:text-ink hover-only:bg-surface border border-line'
             }`}
           >
-            <FlaskConical className={`w-4 h-4 shrink-0 ${activeTab === 'TESTS' ? 'text-brass' : 'text-ink-faint'}`} />
+            <FlaskConical className={`w-4 h-4 shrink-0 ${activeTab === 'TESTS' ? 'text-brand-primary' : 'text-ink-faint'}`} />
             {!isCollapsed && (
               <>
                 <span className="truncate flex-1 text-left line-clamp-1">Uji Otorisasi</span>
@@ -363,7 +363,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
             <div className="pointer-events-none absolute left-full top-1/2 -translate-y-1/2 ml-3.5 z-50 hidden group-hover:flex items-center">
               <div className="bg-surface-inset text-on-brand text-xs font-medium px-2 py-1 rounded-lg shadow-floating whitespace-nowrap flex items-center space-x-1.5 border border-line-strong">
                 <span>Uji Otorisasi</span>
-                <span className="text-[9px] font-mono px-1 py-0 rounded bg-brand text-brass border border-line-strong whitespace-nowrap">
+                <span className="text-[9px] font-mono px-1 py-0 rounded bg-brand text-brand-primary border border-line-strong whitespace-nowrap">
                   TESTS
                 </span>
               </div>

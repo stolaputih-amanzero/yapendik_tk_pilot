@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
- * Amanaura Design System v3.0 — Doc <-> Code Token Sync CI Guard
- * Asserts that runtime tokens in doc/AMANAURA_DESIGN_SYSTEM_v3.0_RELEASE.md
+ * Amanaura Design System v4.0 (Crystal Sovereign) — Doc <-> Code Token Sync CI Guard
+ * Asserts that runtime tokens in doc/MASTER/AMANAURA_DESIGN_SYSTEM_v4.0_CRYSTAL_SOVEREIGN.md
  * match src/index.css verbatim (Light + Dark).
  */
 
@@ -13,7 +13,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const rootDir = path.resolve(__dirname, '..');
 
-const docPath = path.join(rootDir, 'doc', 'AMANAURA_DESIGN_SYSTEM_v3.0_RELEASE.md');
+const docPath = path.join(rootDir, 'doc', 'MASTER', 'AMANAURA_DESIGN_SYSTEM_v4.0_CRYSTAL_SOVEREIGN.md');
 const cssPath = path.join(rootDir, 'src', 'index.css');
 
 if (!fs.existsSync(docPath)) {
@@ -30,24 +30,24 @@ const docContent = fs.readFileSync(docPath, 'utf8');
 const cssContent = fs.readFileSync(cssPath, 'utf8');
 
 function extractTokenMap(content, blockSelector) {
-  // Find blockSelector (e.g. ":root" or ".dark")
+  // Find blockSelector (e.g. ":root" or "\\.dark")
   const blockRegex = new RegExp(`${blockSelector}\\s*(?:\\/\\*.*?\\*\\/)?\\s*\\{([^}]+)\\}`, 's');
   const match = content.match(blockRegex);
   if (!match) {
     return null;
   }
   const blockBody = match[1];
-  const tokenRegex = /(--p-[a-z0-9-]+)\s*:\s*(#[0-9a-fA-F]{3,8})/g;
+  const tokenRegex = /(--[a-z0-9-]+)\s*:\s*([^;]+);/g;
   const tokens = {};
   let m;
   while ((m = tokenRegex.exec(blockBody)) !== null) {
-    tokens[m[1]] = m[2].toUpperCase();
+    tokens[m[1]] = m[2].trim().replace(/\s+/g, '').toUpperCase();
   }
   return tokens;
 }
 
 console.log('════════════════════════════════════════════════════════════════');
-console.log('🏛️  AMANAURA DESIGN SYSTEM — DOC <-> CODE TOKEN SYNC CI GUARD');
+console.log('🏛️  AMANAURA DESIGN SYSTEM v4.0 — DOC <-> CODE TOKEN SYNC CI GUARD');
 console.log('════════════════════════════════════════════════════════════════');
 
 const codeLight = extractTokenMap(cssContent, ':root');
@@ -62,7 +62,7 @@ if (!codeLight || !codeDark) {
 }
 
 if (!docLight || !docDark) {
-  console.error('❌ ERROR: Failed to extract token blocks from doc/AMANAURA_DESIGN_SYSTEM_v3.0_RELEASE.md §2.1');
+  console.error('❌ ERROR: Failed to extract token blocks from doc/MASTER/AMANAURA_DESIGN_SYSTEM_v4.0_CRYSTAL_SOVEREIGN.md §3.1');
   process.exit(1);
 }
 
@@ -95,8 +95,8 @@ function compareTokenSets(setName, codeTokens, docTokens) {
   }
 }
 
-compareTokenSets('Light (:root / Frangipani Day)', codeLight, docLight);
-compareTokenSets('Dark (.dark / Night Temple)', codeDark, docDark);
+compareTokenSets('Light (:root / Crystal Day)', codeLight, docLight);
+compareTokenSets('Dark (.dark / OLED Night)', codeDark, docDark);
 
 console.log('\n════════════════════════════════════════════════════════════════');
 if (driftCount === 0) {

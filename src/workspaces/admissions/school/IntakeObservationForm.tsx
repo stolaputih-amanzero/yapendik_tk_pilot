@@ -118,7 +118,7 @@ export const IntakeObservationForm: React.FC<IntakeObservationFormProps> = ({
                 onChange={(e) => setGrossMotor(e.target.value)}
                 placeholder="Observasi berjalan jinjit, melompat, keseimbangan..."
                 rows={2}
-                className="w-full bg-surface-subtle border border-line rounded-lg p-2 text-ink focus:bg-surface focus:ring-2 focus:ring-brass focus:border-brass outline-none"
+                className="w-full bg-surface-subtle border border-line rounded-lg p-2 text-ink focus:bg-surface focus:ring-1 focus:ring-brand-primary focus:border-brand-primary outline-none"
               />
             </div>
 
@@ -131,7 +131,7 @@ export const IntakeObservationForm: React.FC<IntakeObservationFormProps> = ({
                 onChange={(e) => setFineMotor(e.target.value)}
                 placeholder="Genggaman krayon, meronce, meremas playdough..."
                 rows={2}
-                className="w-full bg-surface-subtle border border-line rounded-lg p-2 text-ink focus:bg-surface focus:ring-2 focus:ring-brass focus:border-brass outline-none"
+                className="w-full bg-surface-subtle border border-line rounded-lg p-2 text-ink focus:bg-surface focus:ring-1 focus:ring-brand-primary focus:border-brand-primary outline-none"
               />
             </div>
 
@@ -144,7 +144,7 @@ export const IntakeObservationForm: React.FC<IntakeObservationFormProps> = ({
                 onChange={(e) => setLanguage(e.target.value)}
                 placeholder="Kemampuan menjawab nama, menyusun kalimat sederhana..."
                 rows={2}
-                className="w-full bg-surface-subtle border border-line rounded-lg p-2 text-ink focus:bg-surface focus:ring-2 focus:ring-brass focus:border-brass outline-none"
+                className="w-full bg-surface-subtle border border-line rounded-lg p-2 text-ink focus:bg-surface focus:ring-1 focus:ring-brand-primary focus:border-brand-primary outline-none"
               />
             </div>
 
@@ -157,7 +157,7 @@ export const IntakeObservationForm: React.FC<IntakeObservationFormProps> = ({
                 onChange={(e) => setSocialEmotional(e.target.value)}
                 placeholder="Pemisahan dari orang tua, interaksi teman sebaya, BAK mandiri..."
                 rows={2}
-                className="w-full bg-surface-subtle border border-line rounded-lg p-2 text-ink focus:bg-surface focus:ring-2 focus:ring-brass focus:border-brass outline-none"
+                className="w-full bg-surface-subtle border border-line rounded-lg p-2 text-ink focus:bg-surface focus:ring-1 focus:ring-brand-primary focus:border-brand-primary outline-none"
               />
             </div>
           </div>
@@ -172,7 +172,7 @@ export const IntakeObservationForm: React.FC<IntakeObservationFormProps> = ({
               placeholder="Catatan holistik mengenai respon sensorik, ketertarikan eksplorasi anak..."
               rows={3}
               required
-              className="w-full bg-surface-subtle border border-line rounded-lg p-2 text-ink focus:bg-surface focus:ring-2 focus:ring-brass focus:border-brass outline-none"
+              className="w-full bg-surface-subtle border border-line rounded-lg p-2 text-ink focus:bg-surface focus:ring-1 focus:ring-brand-primary focus:border-brand-primary outline-none"
             />
           </div>
 
@@ -183,7 +183,7 @@ export const IntakeObservationForm: React.FC<IntakeObservationFormProps> = ({
                 id="specialNeedsFlag"
                 checked={specialNeedsFlag}
                 onChange={(e) => setSpecialNeedsFlag(e.target.checked)}
-                className="w-4 h-4 rounded border-line text-lppa focus:ring-brass"
+                className="w-4 h-4 rounded border-line text-lppa focus:ring-brand-primary/30"
               />
               <label htmlFor="specialNeedsFlag" className="text-ink font-bold cursor-pointer">
                 Kebutuhan Pendampingan Khusus / Akomodasi Belajar Individual
@@ -232,7 +232,7 @@ export const IntakeObservationForm: React.FC<IntakeObservationFormProps> = ({
               <button
                 type="submit"
                 disabled={saving}
-                className="w-full medium:w-auto px-5 py-2 medium:py-2 rounded-field bg-brand hover-only:bg-surface-inset text-on-brand font-bold shadow-hairline transition-colors"
+                className="w-full medium:w-auto px-5 py-2 medium:py-2 rounded-field bg-brand hover-only:opacity-90 text-on-brand font-bold shadow-hairline transition-colors"
                 data-testid="save-intake-btn"
               >
                 {saving ? 'Menyimpan...' : 'Simpan Observasi Intake'}

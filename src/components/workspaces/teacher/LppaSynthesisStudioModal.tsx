@@ -64,7 +64,7 @@ const ELEMENT_CONFIG: Record<LppaElementKey, { title: string; icon: React.ReactN
   },
   JATI_DIRI: {
     title: 'Jati Diri & Regulasi Emosi',
-    icon: <Compass className="w-4 h-4 text-brass" />,
+    icon: <Compass className="w-4 h-4 text-brand-primary" />,
     colorClass: 'bg-warning-tint border-warning-line text-warning-deep',
     desc: 'Regulasi emosi, kemandirian rutinitas, dan motorik kasar & halus.'
   },
@@ -327,7 +327,7 @@ export const LppaSynthesisStudioModal: React.FC<Props> = ({
         {/* TOP BAR: Studio Header (Clean & Compact) */}
         <div className="px-4 medium:px-5 py-3 medium:py-3 border-b border-line-soft bg-surface flex items-center justify-between relative shrink-0">
           <div className="flex items-center gap-3 pr-6 medium:pr-0 min-w-0">
-            <div className="w-10 h-10 rounded-card bg-lppa-tint border border-purple-100 text-lppa-deep flex items-center justify-center shrink-0">
+            <div className="w-10 h-10 rounded-card bg-lppa-tint border border-lppa-line text-lppa-deep flex items-center justify-center shrink-0">
               <Award className="w-5 h-5" />
             </div>
             <div className="min-w-0">
@@ -395,7 +395,7 @@ export const LppaSynthesisStudioModal: React.FC<Props> = ({
                 </>
               ) : (
                 <>
-                  <FileText className="w-4 h-4 text-brass" /> <span>Draf Guru (Proposal)</span>
+                  <FileText className="w-4 h-4 text-brand-primary" /> <span>Draf Guru (Proposal)</span>
                 </>
               )}
             </span>
@@ -465,7 +465,7 @@ export const LppaSynthesisStudioModal: React.FC<Props> = ({
                     onClick={() => setActiveElementKey(key)}
                     className={`w-full text-left p-3 rounded-card border transition-all cursor-pointer flex items-start gap-3 ${
                       isActive
-                        ? 'bg-surface border-2 border-indigo-600 shadow-hairline ring-2 ring-indigo-500/10'
+                        ? 'bg-surface border-2 border-lppa-line shadow-hairline ring-2 ring-lppa/10'
                         : 'bg-surface border-line hover-only:border-line hover-only:bg-surface-subtle'
                     }`}
                   >
@@ -504,7 +504,7 @@ export const LppaSynthesisStudioModal: React.FC<Props> = ({
                     value={heightInput}
                     disabled={isReadOnly}
                     onChange={e => setHeightInput(e.target.value)}
-                    className="w-full text-xs font-bold p-2 rounded-lg bg-surface-subtle border border-line text-ink focus:bg-surface focus:ring-1 focus:ring-brass/30"
+                    className="w-full text-xs font-bold p-2 rounded-lg bg-surface-subtle border border-line text-ink focus:bg-surface focus:ring-1 focus:ring-brand-primary"
                   />
                 </div>
                 <div>
@@ -514,7 +514,7 @@ export const LppaSynthesisStudioModal: React.FC<Props> = ({
                     value={weightInput}
                     disabled={isReadOnly}
                     onChange={e => setWeightInput(e.target.value)}
-                    className="w-full text-xs font-bold p-2 rounded-lg bg-surface-subtle border border-line text-ink focus:bg-surface focus:ring-1 focus:ring-brass/30"
+                    className="w-full text-xs font-bold p-2 rounded-lg bg-surface-subtle border border-line text-ink focus:bg-surface focus:ring-1 focus:ring-brand-primary"
                   />
                 </div>
                 <div>
@@ -524,7 +524,7 @@ export const LppaSynthesisStudioModal: React.FC<Props> = ({
                     value={headInput}
                     disabled={isReadOnly}
                     onChange={e => setHeadInput(e.target.value)}
-                    className="w-full text-xs font-bold p-2 rounded-lg bg-surface-subtle border border-line text-ink focus:bg-surface focus:ring-1 focus:ring-brass/30"
+                    className="w-full text-xs font-bold p-2 rounded-lg bg-surface-subtle border border-line text-ink focus:bg-surface focus:ring-1 focus:ring-brand-primary"
                   />
                 </div>
               </div>
@@ -626,7 +626,7 @@ export const LppaSynthesisStudioModal: React.FC<Props> = ({
                 </div>
 
                 {/* Proposed Synthesis Banner */}
-                <div className="p-4 rounded-card bg-lppa-tint/60 border border-purple-100 space-y-2">
+                <div className="p-4 rounded-card bg-lppa-tint/60 border border-lppa-line space-y-2">
                   <div className="flex items-center justify-between text-xs">
                     <span className="font-bold text-lppa-deep flex items-center gap-2">
                       <Sparkles className="w-4 h-4 text-lppa" /> Rekomendasi Draf Narasi:
@@ -639,7 +639,7 @@ export const LppaSynthesisStudioModal: React.FC<Props> = ({
                       <RotateCcw className="w-3 h-3" /> Salin Usulan ke Editor
                     </button>
                   </div>
-                  <p className="text-xs text-lppa-deep leading-relaxed italic bg-surface p-3 rounded-field border border-purple-100 font-medium">
+                  <p className="text-xs text-lppa-deep leading-relaxed italic bg-surface p-3 rounded-field border border-lppa-line font-medium">
                     "{currentElement.proposed_narrative}"
                   </p>
                 </div>
@@ -661,7 +661,7 @@ export const LppaSynthesisStudioModal: React.FC<Props> = ({
                     value={currentElement.teacher_final_narrative}
                     onChange={e => handleNarrativeChange(activeElementKey, e.target.value)}
                     placeholder="Tuliskan narasi perkembangan anak..."
-                    className="w-full p-3 text-xs font-medium rounded-card bg-surface border border-line text-ink focus:outline-none focus:ring-2 focus:ring-brass/30 leading-relaxed shadow-hairline"
+                    className="w-full p-3 text-xs font-medium rounded-card bg-surface border border-line text-ink focus:outline-none focus:ring-1 focus:ring-brand-primary leading-relaxed shadow-hairline"
                   />
                 </div>
 
@@ -675,7 +675,7 @@ export const LppaSynthesisStudioModal: React.FC<Props> = ({
                     disabled={isReadOnly}
                     value={currentElement.growth_recommendations}
                     onChange={e => handleGrowthRecChange(activeElementKey, e.target.value)}
-                    className="w-full p-2 text-xs font-medium rounded-field bg-surface border border-line text-ink focus:outline-none focus:ring-2 focus:ring-brass/30"
+                    className="w-full p-2 text-xs font-medium rounded-field bg-surface border border-line text-ink focus:outline-none focus:ring-1 focus:ring-brand-primary"
                   />
                 </div>
 
@@ -690,7 +690,7 @@ export const LppaSynthesisStudioModal: React.FC<Props> = ({
                     value={reflectionInput}
                     onChange={e => setReflectionInput(e.target.value)}
                     placeholder="Tuliskan apresiasi dan pesan hangat bagi ananda dan keluarga..."
-                    className="w-full p-3 text-xs font-medium rounded-field bg-surface-subtle border border-line text-ink focus:outline-none focus:ring-2 focus:ring-brass/30"
+                    className="w-full p-3 text-xs font-medium rounded-field bg-surface-subtle border border-line text-ink focus:outline-none focus:ring-1 focus:ring-brand-primary"
                   />
                 </div>
 
@@ -733,7 +733,7 @@ export const LppaSynthesisStudioModal: React.FC<Props> = ({
                 <button
                   onClick={handleSaveDraft}
                   disabled={isSaving}
-                  className="px-3 py-2 rounded-field bg-brand hover-only:bg-surface-inset text-on-brand text-xs font-bold transition flex justify-center items-center gap-2 shadow-hairline cursor-pointer disabled:opacity-50"
+                  className="px-3 py-2 rounded-field bg-brand hover-only:opacity-90 text-on-brand text-xs font-bold transition flex justify-center items-center gap-2 shadow-hairline cursor-pointer disabled:opacity-50"
                 >
                   <Save className="w-4 h-4" />
                   <span>{isSaving ? 'Menyimpan...' : 'Simpan Draf'}</span>
@@ -742,7 +742,7 @@ export const LppaSynthesisStudioModal: React.FC<Props> = ({
                 <button
                   onClick={handleSubmitForReview}
                   disabled={isSubmitting || report?.status === 'READY_FOR_REVIEW'}
-                  className="col-span-2 medium:col-span-1 px-4 py-2 rounded-field bg-indigo-600 hover-only:bg-indigo-700 text-on-brand text-xs font-bold transition flex justify-center items-center gap-2 shadow-hairline cursor-pointer disabled:opacity-50"
+                  className="col-span-2 medium:col-span-1 px-4 py-2 rounded-field bg-lppa hover-only:bg-indigo-700 text-on-brand text-xs font-bold transition flex justify-center items-center gap-2 shadow-hairline cursor-pointer disabled:opacity-50"
                 >
                   <Send className="w-4 h-4" />
                   <span>{isSubmitting ? 'Mengajukan...' : 'Ajukan ke KS'}</span>

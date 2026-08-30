@@ -196,7 +196,7 @@ export const SafetyIncidentModal: React.FC<Props> = ({
         {/* Header (Amanaura Standard Eyebrow + Title + Badge) */}
         <div className="px-5 py-4 border-b border-line-soft bg-surface flex items-start justify-between relative">
           <div className="flex items-start gap-3 pr-8 medium:pr-0">
-            <div className="w-10 h-10 rounded-card bg-danger-tint border border-rose-100 text-danger-deep flex items-center justify-center shrink-0 mt-0.5">
+            <div className="w-10 h-10 rounded-card bg-danger-tint border border-danger-line text-danger-deep flex items-center justify-center shrink-0 mt-0.5">
               <HeartPulse className="w-5 h-5" />
             </div>
             <div>
@@ -238,7 +238,7 @@ export const SafetyIncidentModal: React.FC<Props> = ({
                 : 'text-ink-soft hover-only:text-ink hover-only:bg-surface-subtle/60'
             }`}
           >
-            <AlertTriangle className="w-4 h-4 text-brass" />
+            <AlertTriangle className="w-4 h-4 text-brand-primary" />
             <span>Perhatian Aktif ({activeSignals.filter(s => !s.is_acknowledged).length})</span>
           </button>
           <button
@@ -315,8 +315,8 @@ export const SafetyIncidentModal: React.FC<Props> = ({
                       </p>
 
                       {/* Row 3: SOP Recommendation */}
-                      <div className="flex items-start gap-2 text-[11px] text-ink-soft bg-warning-tint/50 p-2 rounded-field border border-amber-100/60">
-                        <Lightbulb className="w-4 h-4 text-brass shrink-0 mt-0.5" />
+                      <div className="flex items-start gap-2 text-[11px] text-ink-soft bg-warning-tint/50 p-2 rounded-field border border-warning-line">
+                        <Lightbulb className="w-4 h-4 text-brand-primary shrink-0 mt-0.5" />
                         <div>
                           <strong className="text-warning-deep font-semibold">SOP:</strong>{' '}
                           {sig.advisory_recommendation.recommended_action}
@@ -336,12 +336,12 @@ export const SafetyIncidentModal: React.FC<Props> = ({
                             value={ackActions[sig.signal_id] || ''}
                             onChange={e => setAckActions({ ...ackActions, [sig.signal_id]: e.target.value })}
                             placeholder="Catatan tindakan penanganan (wajib diisi)..."
-                            className="flex-1 px-3 py-2 text-xs rounded-field bg-surface-subtle border border-line focus:bg-surface focus:outline-none focus:ring-2 focus:ring-brass/30 text-ink placeholder:text-ink-faint transition"
+                            className="flex-1 px-3 py-2 text-xs rounded-field bg-surface-subtle border border-line focus:bg-surface focus:outline-none focus:ring-1 focus:ring-brand-primary text-ink placeholder:text-ink-faint transition"
                           />
                           <button
                             onClick={() => handleAcknowledgeSignal(sig.signal_id)}
                             disabled={isSubmitting || !ackActions[sig.signal_id]}
-                            className="px-3 py-2 rounded-field bg-brand hover-only:bg-surface-inset disabled:opacity-40 text-on-brand text-xs font-bold transition flex items-center gap-2 shrink-0 shadow-hairline cursor-pointer"
+                            className="px-3 py-2 rounded-field bg-brand hover-only:opacity-90 disabled:opacity-40 text-on-brand text-xs font-bold transition flex items-center gap-2 shrink-0 shadow-hairline cursor-pointer"
                           >
                             <Send className="w-3 h-3" />
                             <span className="hidden medium:inline">Konfirmasi</span>
@@ -398,7 +398,7 @@ export const SafetyIncidentModal: React.FC<Props> = ({
                   value={title}
                   onChange={e => setTitle(e.target.value)}
                   placeholder="Contoh: Lutut lecet terbentur meja sentra balok"
-                  className="w-full px-3 py-2 text-xs rounded-field bg-surface-subtle border border-line text-ink focus:bg-surface focus:outline-none focus:ring-2 focus:ring-brass/30 transition"
+                  className="w-full px-3 py-2 text-xs rounded-field bg-surface-subtle border border-line text-ink focus:bg-surface focus:outline-none focus:ring-1 focus:ring-brand-primary transition"
                 />
               </div>
 
@@ -411,7 +411,7 @@ export const SafetyIncidentModal: React.FC<Props> = ({
                   value={location}
                   onChange={e => setLocation(e.target.value)}
                   placeholder="Contoh: Sentra Balok Kelas TK A"
-                  className="w-full px-3 py-2 text-xs rounded-field bg-surface-subtle border border-line text-ink focus:bg-surface focus:outline-none focus:ring-2 focus:ring-brass/30 transition"
+                  className="w-full px-3 py-2 text-xs rounded-field bg-surface-subtle border border-line text-ink focus:bg-surface focus:outline-none focus:ring-1 focus:ring-brand-primary transition"
                 />
               </div>
 
@@ -424,7 +424,7 @@ export const SafetyIncidentModal: React.FC<Props> = ({
                   onChange={e => setChronology(e.target.value)}
                   rows={3}
                   placeholder="Ceritakan kejadian faktual secara singkat, tindakan P3K awal yang telah dilakukan..."
-                  className="w-full px-3 py-2 text-xs rounded-field bg-surface-subtle border border-line text-ink focus:bg-surface focus:outline-none focus:ring-2 focus:ring-brass/30 transition"
+                  className="w-full px-3 py-2 text-xs rounded-field bg-surface-subtle border border-line text-ink focus:bg-surface focus:outline-none focus:ring-1 focus:ring-brand-primary transition"
                 />
               </div>
 
@@ -535,7 +535,7 @@ export const SafetyIncidentModal: React.FC<Props> = ({
                       )}
 
                       {inc.resolution_summary && (
-                        <div className="bg-success-tint/60 p-2 rounded-field border border-emerald-100 text-xs text-success-deep">
+                        <div className="bg-success-tint/60 p-2 rounded-field border border-success-line text-xs text-success-deep">
                           <strong>Penyelesaian ({inc.resolved_by_name}):</strong> {inc.resolution_summary}
                         </div>
                       )}

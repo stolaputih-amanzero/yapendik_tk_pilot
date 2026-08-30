@@ -42,19 +42,19 @@ export const ApplicantReviewTable: React.FC<ApplicantReviewTableProps> = ({
         );
       case 'TUITION_SETTLED':
         return (
-          <span className="px-2 py-1 text-xs font-bold rounded-full bg-blue-100 text-info-deep border border-blue-300 inline-flex items-center gap-1">
+          <span className="px-2 py-1 text-xs font-bold rounded-full bg-info-tint text-info-deep border border-info-line inline-flex items-center gap-1">
             <Sparkles className="w-3 h-3 text-info" />
             Siap Upacara (Lunas)
           </span>
         );
       case 'OFFERED_ADMISSION':
-        return <span className="px-2 py-1 text-xs font-bold rounded-full bg-indigo-100 text-lppa-deep border border-indigo-300">Ditawarkan Kursi</span>;
+        return <span className="px-2 py-1 text-xs font-bold rounded-full bg-lppa-tint text-lppa-deep border border-lppa-line">Ditawarkan Kursi</span>;
       case 'INTAKE_ASSESSED':
-        return <span className="px-2 py-1 text-xs font-bold rounded-full bg-lppa-tint text-lppa-deep border border-purple-300">Intake Selesai</span>;
+        return <span className="px-2 py-1 text-xs font-bold rounded-full bg-lppa-tint text-lppa-deep border border-lppa-line">Intake Selesai</span>;
       case 'INTAKE_SCHEDULED':
         return <span className="px-2 py-1 text-xs font-bold rounded-full bg-warning-tint text-warning-deep border border-warning-line">Jadwal Intake</span>;
       case 'DOCUMENT_VERIFIED':
-        return <span className="px-2 py-1 text-xs font-bold rounded-full bg-cyan-100 text-cyan-800 border border-cyan-300">Berkas Valid</span>;
+        return <span className="px-2 py-1 text-xs font-bold rounded-full bg-info-tint text-info-deep border border-info-line">Berkas Valid</span>;
       case 'SUBMITTED':
         return <span className="px-2 py-1 text-xs font-bold rounded-full bg-surface-subtle text-ink-soft border border-line">Berkas Masuk</span>;
       case 'CANCELLED_ENROLLED_ELSEWHERE':
@@ -70,7 +70,7 @@ export const ApplicantReviewTable: React.FC<ApplicantReviewTableProps> = ({
       <div className="bg-surface-subtle border-b border-line expanded:rounded-card px-4 py-5 medium:p-6 w-full text-ink expanded:border expanded:shadow-hairline">
         <div className="flex flex-col medium:flex-row medium:items-center justify-between gap-5">
           <div>
-            <div className="flex items-center space-x-1.5 text-success text-[10px] medium:text-xs font-bold uppercase tracking-wider mb-1">
+            <div className="flex items-center space-x-1.5 text-success-deep text-[10px] medium:text-xs font-bold uppercase tracking-wider mb-1">
               <Users className="w-4 h-4" />
               <span>Penerimaan Peserta Didik</span>
             </div>
@@ -90,7 +90,7 @@ export const ApplicantReviewTable: React.FC<ApplicantReviewTableProps> = ({
           </div>
 
           {/* Filter Pills */}
-          <div className="flex items-center space-x-1.5 overflow-x-auto pb-1 max-w-full [mask-image:linear-gradient(to_right,transparent_0,black_16px,black_calc(100%-16px),transparent_100%)]">
+          <div className="flex items-center space-x-1.5 overflow-x-auto pb-1 max-w-full">
             {[
               { id: 'ALL', label: 'Semua' },
               { id: 'SUBMITTED', label: 'Berkas Masuk' },
@@ -196,7 +196,7 @@ export const ApplicantReviewTable: React.FC<ApplicantReviewTableProps> = ({
       </div>
 
       {/* DESKTOP TABLE VIEW */}
-      <div className="hidden expanded:block overflow-x-auto border border-line rounded-field shadow-hairline [mask-image:linear-gradient(to_right,transparent_0,black_16px,black_calc(100%-16px),transparent_100%)]">
+      <div className="hidden expanded:block overflow-x-auto border border-line rounded-field shadow-hairline">
         <table className="w-full text-left text-xs">
           <thead className="bg-surface-subtle text-ink-soft border-b border-line uppercase tracking-wider font-bold">
             <tr>
@@ -261,7 +261,7 @@ export const ApplicantReviewTable: React.FC<ApplicantReviewTableProps> = ({
                         disabled={!canExecuteCeremony}
                         className={`px-3 py-1 text-xs font-bold rounded-lg transition-all ${
                           canExecuteCeremony
-                            ? 'bg-success hover-only:bg-emerald-700 text-on-brand shadow-hairline cursor-pointer'
+                            ? 'bg-success hover-only:opacity-90 text-on-brand shadow-hairline cursor-pointer'
                             : 'bg-surface-subtle text-ink-faint cursor-not-allowed border border-line'
                         }`}
                         data-testid={`ceremony-btn-${app.applicant_id}`}

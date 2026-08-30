@@ -23,7 +23,7 @@ export interface ToastHUDProps {
 
 const typeIconMap = {
   success: <CheckCircle2 className="w-4 h-4 text-success shrink-0" />,
-  warning: <AlertCircle className="w-4 h-4 text-brass shrink-0" />,
+  warning: <AlertCircle className="w-4 h-4 text-brand-primary shrink-0" />,
   info: <Info className="w-4 h-4 text-info shrink-0" />
 };
 
@@ -84,7 +84,7 @@ export const ToastHUD: React.FC<ToastHUDProps> = ({
               undoAction.onUndo();
               onClose();
             }}
-            className="flex items-center gap-1 px-2 py-1 rounded-full bg-brand hover-only:opacity-90 text-brass font-bold transition text-[11px] cursor-pointer border border-line-strong shrink-0"
+            className="flex items-center gap-1 px-2 py-1 rounded-full bg-brand hover-only:opacity-90 text-brand-primary font-bold transition text-[11px] cursor-pointer border border-line-strong shrink-0"
           >
             <RotateCcw className="w-3 h-3" />
             <span>

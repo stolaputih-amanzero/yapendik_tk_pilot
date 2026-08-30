@@ -97,7 +97,7 @@ export const StudentRosterSurface: React.FC<Props> = ({
                     title="Catat Momen untuk Anak Ini"
                     className="p-2 rounded-control bg-warning-tint hover-only:bg-warning-tint text-warning-deep border border-warning-line"
                   >
-                    <Sparkles className="w-4 h-4 text-brass fill-brass" />
+                    <Sparkles className="w-4 h-4 text-brand-primary fill-brand-primary" />
                   </Button>
                 </div>
 
@@ -111,7 +111,7 @@ export const StudentRosterSurface: React.FC<Props> = ({
                   </div>
                   <ProgressBar
                     value={student.lppa_ready_percentage}
-                    variant={isLppaReady ? 'success' : 'brass'}
+                    variant={isLppaReady ? 'success' : 'brand'}
                     trackClassName="h-2"
                   />
                   <div className="flex items-center justify-between text-[10px] text-ink-soft font-medium">
