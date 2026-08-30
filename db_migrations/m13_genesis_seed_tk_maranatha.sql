@@ -12,9 +12,37 @@ BEGIN;
 -- ============================================================================
 -- STEP 1: CLEANUP LEGACY PILOT SEED DATA
 -- Delete order respects foreign key constraints (children → parents)
+-- Immutability triggers are temporarily disabled to allow mock cleanup
 -- ============================================================================
 
--- 1.1 Clean observation records & daily attendance for legacy seed
+-- 1.0 Temporarily bypass immutability triggers for legacy pilot cleanup
+ALTER TABLE public.student_progress_reports DISABLE TRIGGER ALL;
+ALTER TABLE public.student_placement_records DISABLE TRIGGER ALL;
+ALTER TABLE public.observation_records DISABLE TRIGGER ALL;
+ALTER TABLE public.daily_attendance DISABLE TRIGGER ALL;
+
+-- 1.1 Clean dependent reports, placements, PDFs, notices, attendance, and observations
+DELETE FROM public.pdf_generation_requests 
+WHERE target_student_id IN (
+  SELECT id FROM public.students 
+  WHERE school_id IN ('sch_tk_yapendik_01', 'sch_tk_yapendik_02')
+     OR school_id IN (SELECT id FROM public.schools WHERE npsn IN ('20104821', '20108955'))
+);
+
+DELETE FROM public.student_progress_reports 
+WHERE student_id IN (
+  SELECT id FROM public.students 
+  WHERE school_id IN ('sch_tk_yapendik_01', 'sch_tk_yapendik_02')
+     OR school_id IN (SELECT id FROM public.schools WHERE npsn IN ('20104821', '20108955'))
+);
+
+DELETE FROM public.student_placement_records 
+WHERE student_id IN (
+  SELECT id FROM public.students 
+  WHERE school_id IN ('sch_tk_yapendik_01', 'sch_tk_yapendik_02')
+     OR school_id IN (SELECT id FROM public.schools WHERE npsn IN ('20104821', '20108955'))
+);
+
 DELETE FROM public.observation_records 
 WHERE school_id IN ('sch_tk_yapendik_01', 'sch_tk_yapendik_02')
    OR school_id IN (SELECT id FROM public.schools WHERE npsn IN ('20104821', '20108955'));
@@ -43,6 +71,12 @@ WHERE student_person_id IN (
 DELETE FROM public.students 
 WHERE school_id IN ('sch_tk_yapendik_01', 'sch_tk_yapendik_02')
    OR school_id IN (SELECT id FROM public.schools WHERE npsn IN ('20104821', '20108955'));
+
+-- 1.4 Re-enable triggers
+ALTER TABLE public.student_progress_reports ENABLE TRIGGER ALL;
+ALTER TABLE public.student_placement_records ENABLE TRIGGER ALL;
+ALTER TABLE public.observation_records ENABLE TRIGGER ALL;
+ALTER TABLE public.daily_attendance ENABLE TRIGGER ALL;
 
 -- 1.4 Delete teacher profiles & staff profiles
 DELETE FROM public.teacher_profiles 
