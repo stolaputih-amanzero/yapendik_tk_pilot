@@ -91,9 +91,9 @@ export const TeacherHomeShell: React.FC<{ onNavigateToCommunication?: () => void
   const [lppaStudioStudentId, setLppaStudioStudentId] = useState<string | null>(null);
   const [continuityModalStudentId, setContinuityModalStudentId] = useState<string | null>(null);
 
-  const schoolId = securityContext?.activeSchoolId || 'sch_tk_yapendik_01';
-  const classId = currentPersona?.activeClassId || 'cls_tka_01';
-  const teacherPersonId = currentPersona?.personId || 'per_teacher_siti';
+  const schoolId = securityContext?.activeSchoolId || currentPersona?.schoolId || 'sch_tk_maranatha';
+  const classId = currentPersona?.assignedClasses?.[0] || 'cls_maranatha_tka';
+  const teacherPersonId = currentPersona?.personId || 'per_teacher_erna';
 
   const loadData = async () => {
     try {
@@ -347,9 +347,27 @@ export const TeacherHomeShell: React.FC<{ onNavigateToCommunication?: () => void
               <Home className="w-4 h-4 text-brand-primary" />
               <span>Ruang Guru</span>
             </div>
-            <p className="text-ink-soft text-xs medium:text-sm mt-0.5">
-              {aggregate.class_name} • Wali Kelas: {aggregate.teacher_name || '—'}
-            </p>
+            {(() => {
+              const currentClass = db.getClasses(schoolId).find(c => c.id === classId);
+              const homeroomTeacher = currentClass?.homeroomTeacherId ? db.getPersonById(currentClass.homeroomTeacherId) : undefined;
+              const coTeacher = currentClass?.coTeacherId ? db.getPersonById(currentClass.coTeacherId) : undefined;
+              const className = aggregate?.context?.class_name || currentClass?.name || 'Kelompok A (TK A)';
+              const homeroomName = homeroomTeacher?.fullName || aggregate?.context?.teacher?.name || currentPersona?.name || 'ERNA BOYKELA R';
+
+              return (
+                <p className="text-ink-soft text-xs medium:text-sm mt-0.5 flex items-center gap-1.5 flex-wrap">
+                  <span className="font-semibold text-ink">{className}</span>
+                  <span className="text-ink-faint">•</span>
+                  <span>Wali Kelas: <strong className="text-ink font-semibold">{homeroomName}</strong></span>
+                  {coTeacher && (
+                    <>
+                      <span className="text-ink-faint">•</span>
+                      <span>Pendamping: <strong className="text-ink-soft font-medium">{coTeacher.fullName}</strong></span>
+                    </>
+                  )}
+                </p>
+              );
+            })()}
           </div>
         </div>
 
