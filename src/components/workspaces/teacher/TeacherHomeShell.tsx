@@ -356,9 +356,12 @@ export const TeacherHomeShell: React.FC<{ onNavigateToCommunication?: () => void
         />
       )}
 
+      {/* Hairline Divider between Circadian Briefing & Daily Workspace */}
+      <div className="mx-4 medium:mx-5 border-b border-line-hairline/80 mb-3" />
+
       {/* Workspace Header Section (F-1 & F-6) */}
       <div className="px-4 medium:px-5 pt-1 pb-1 w-full text-ink">
-        <div className="flex items-center justify-between gap-4">
+        <div className="flex items-start justify-between gap-4">
           {(() => {
             const currentClass = db.getClasses(schoolId).find(c => c.id === classId);
             const homeroomTeacher = currentClass?.homeroomTeacherId ? db.getPersonById(currentClass.homeroomTeacherId) : undefined;
@@ -368,17 +371,22 @@ export const TeacherHomeShell: React.FC<{ onNavigateToCommunication?: () => void
             const teacherInfoText = `Wali Kelas: ${toTitleCase(homeroomName)}${coTeacher ? ` • Pendamping: ${toTitleCase(coTeacher.fullName)}` : ''}`;
 
             return (
-              <div className="flex items-center gap-2">
-                <h2 className="text-xl medium:text-2xl font-bold text-ink leading-tight">
-                  {className}
-                </h2>
-                <span 
-                  className="text-ink-faint text-xs cursor-help inline-flex items-center p-1 rounded-full hover-only:bg-surface-subtle transition-colors" 
-                  title={teacherInfoText}
-                  aria-label={teacherInfoText}
-                >
-                  <Info className="w-3.5 h-3.5 text-ink-faint hover-only:text-ink" />
+              <div className="space-y-0.5">
+                <span className="text-[10px] font-bold uppercase tracking-widest text-ink-faint/80 block">
+                  Ruang Guru
                 </span>
+                <div className="flex items-center gap-2">
+                  <h2 className="text-xl medium:text-2xl font-bold text-ink leading-tight">
+                    {className}
+                  </h2>
+                  <span 
+                    className="text-ink-faint text-xs cursor-help inline-flex items-center p-1 rounded-full hover-only:bg-surface-subtle transition-colors" 
+                    title={teacherInfoText}
+                    aria-label={teacherInfoText}
+                  >
+                    <Info className="w-3.5 h-3.5 text-ink-faint hover-only:text-ink" />
+                  </span>
+                </div>
               </div>
             );
           })()}
