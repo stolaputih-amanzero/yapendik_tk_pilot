@@ -284,12 +284,12 @@ Untuk memastikan migrasi visual tidak memicu regresi pada **403/403 checks** Mas
 |---|---|---|---|
 | **UI & Body** | `Geist Sans` | `Inter, -apple-system, system-ui, sans-serif` | Navigasi, tombol, label formulir, teks paragraf, chips |
 | **Data & Kode** | `Geist Mono` | `JetBrains Mono, Menlo, monospace` | NISN, NIK, jam lokal, ID transaksi, REF-code, angka kuantitatif |
-| **Display & Seremonial** | `Instrument Serif` | `Playfair Display, Georgia, serif` | Sapaan Warm Briefing, kutipan Warm Echo, judul LPPA, sertifikat, layar Tutup Hari, angka finansial Yayasan |
+| **Display & Seremonial** | `Instrument Serif` | `Playfair Display, Georgia, serif` | Sapaan Warm Briefing, kutipan Warm Echo, judul LPPA, sertifikat, layar Tutup Hari, angka finansial Yayasan, Header halaman workspace (EXPANDED only) |
 
 ### Aturan Emas Tipografi:
 1. **`tabular-nums` Mutlak:** Seluruh angka di tabel, jam, presensi, dan chip wajib menggunakan `font-variant-numeric: tabular-nums` (atau utilitas `tabular-nums`).
 2. **Fluid Typography:** Menggunakan skala `clamp()` adaptif (*Senior Eye Elasticity preserved*).
-3. **Strict Allowlist Instrument Serif:** Penggunaan font serif dibatasi secara ketat hanya pada 6 konteks seremonial resmi di atas. Dilarang keras menggunakan serif pada tombol aksi, header tabel, formulir input, atau grid data operasional.
+3. **Strict Allowlist Instrument Serif:** Penggunaan font serif dibatasi secara ketat hanya pada konteks seremonial resmi dan Header halaman workspace (EXPANDED only). Dilarang keras menggunakan serif pada tombol aksi, header tabel, formulir input, atau grid data operasional.
 4. **Strategi Pemuatan Font (*Zero FOIT*):** Font dimuat secara lokal via bundle `@fontsource` dengan deklarasi CSS `font-display: swap` untuk menjamin rendering teks instan pada koneksi lambat.
 
 ---
@@ -511,6 +511,18 @@ Skrip `scripts/amanaura-audit.mjs` diperluas dengan aturan **`R-ICON-FLAT`** unt
 
 ### Rem-Based Scaling:
 Seluruh dimensi ikon menggunakan satuan rem berbasis skala kanonikal (misal: `w-[1.125rem] h-[1.125rem]` untuk $18\text{px}$) agar ikut membesar secara proporsional saat pengguna mengaktifkan fitur pembesaran teks aksesibilitas (*Senior Eye Elasticity*).
+
+---
+
+## 7.4 Hukum R-5b: Form-Row Containment (Amendemen Baris Berbobot Interaktif)
+
+Doktrin dasar Hukum F-1 / Law 1 menetapkan bahwa daftar data murni (*pure data list*) di viewport COMPACT wajib disajikan secara *edge-to-edge* dengan pembatas `divide-y divide-line`.
+
+**Amendemen R-5b (Form-Row Containment):**
+Untuk baris formulir berbobot tinggi (*form-heavy rows* yang memuat $\ge 3$ kontrol interaktif, seperti Buku Presensi Siswa dengan segmented status, stepper suhu, mood segmented, dan ghost textarea), diperbolehkan menggunakan kontainer kartu subtil:
+1. **Styling Kontainer:** `bg-surface border border-line rounded-xl` (atau `rounded-2xl` pada expanded grid), padding nyaman (`p-4`), **DILARANG menggunakan shadow dekoratif** di kanvas statis.
+2. **Tujuan Ergonomis:** Mengeliminasi kelelahan visual (*visual monotony fatigue*) akibat deretan puluhan kontrol interaktif yang berdesakan tanpa ruang napas struktural.
+3. **Pemisahan Tegas:** List data murni (tanpa multi-kontrol formulir) tetap wajib mematuhi kaidah *edge-to-edge* `divide-y divide-line`.
 
 ---
 

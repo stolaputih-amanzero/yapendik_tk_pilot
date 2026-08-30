@@ -89,8 +89,8 @@ const AppContent: React.FC = () => {
       if (saved !== null) {
         return saved === 'true';
       }
-      // On tablet screen size (768px - 1023px), collapse sidebar by default to maximize work canvas
-      return window.innerWidth >= 768 && window.innerWidth < 1024;
+      // MEDIUM screen (600px - 839px) defaults to rail icon (72px); EXPANDED (>= 840px) defaults to full sidebar (w-64)
+      return window.innerWidth >= 600 && window.innerWidth < 840;
     }
     return false;
   });

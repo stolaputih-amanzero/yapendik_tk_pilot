@@ -468,9 +468,9 @@ export const AttendanceWorkspace: React.FC = () => {
 
                     {/* Conditional Temperature & Mood Sub-Row (Rendered ONLY when status === 'HADIR') */}
                     {row.status === 'HADIR' && (
-                      <div className="flex flex-col compact:flex-row items-stretch compact:items-center gap-2 pt-1 animate-in fade-in slide-in-from-top-1 duration-150">
+                      <div className="flex flex-col gap-2 pt-1 animate-in fade-in slide-in-from-top-1 duration-150">
                         {/* Temperature Stepper [−][value °C mono][+] */}
-                        <div className={`flex items-center justify-between border rounded-field px-3 py-2 shrink-0 transition-colors ${
+                        <div className={`self-start flex items-center justify-between border rounded-field px-3 py-2 transition-colors ${
                           isFever 
                             ? 'bg-warning-tint text-warning-deep border-warning-line' 
                             : 'bg-surface border-line text-ink'
@@ -503,8 +503,8 @@ export const AttendanceWorkspace: React.FC = () => {
                           </div>
                         </div>
 
-                        {/* Arrival Mood: SegmentedControl with short labels */}
-                        <div className="flex-1 min-w-0">
+                        {/* Arrival Mood: SegmentedControl with short labels (w-full) */}
+                        <div className="w-full">
                           <SegmentedControl
                             options={moodSegments}
                             value={row.arrivalMood || 'CERIA'}
