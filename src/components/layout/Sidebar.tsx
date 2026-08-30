@@ -103,7 +103,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
         items: [
           { tab: 'HEADMASTER_ADOPTION', label: 'Kotak Kebijakan', icon: ShieldCheck },
           { tab: 'INSTITUTIONAL_HEALTH', label: 'Statistik Unit', icon: Flame },
-          { tab: 'ADMISSIONS_DESK', label: 'Meja PPDB', icon: HeartHandshake, badge: 'PPDB' }
+          { tab: 'ADMISSIONS_DESK', label: 'Meja PPDB', icon: HeartHandshake }
         ]
       },
       {
