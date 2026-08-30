@@ -474,16 +474,41 @@ export class BriefingEngineService {
     }
 
     // Guardian
+    const person = userId ? db.getPersonById(userId) : null;
+    const rels = userId ? db.getGuardianRelationships().filter(r => r.guardianPersonId === userId) : [];
+    let childPerson = rels.length > 0 ? db.getPersonById(rels[0].studentPersonId) : null;
+
+    if (!childPerson && userId) {
+      const stu = db.getStudentById(userId) || db.getStudents().find(s => s.personId === userId);
+      if (stu) {
+        childPerson = db.getPersonById(stu.personId);
+      }
+    }
+
+    const isBudi = Boolean(
+      userId && (
+        userId === 'user_parent_budi' || 
+        userId === 'per_parent_budi' || 
+        userId.toLowerCase().includes('budi') ||
+        childPerson?.preferredName?.toLowerCase().includes('kenzo')
+      )
+    );
+
     const isKayla = Boolean(
       userId && (
         userId === 'user_guard_mutiara' || 
         userId === 'per_guard_mutiara_zega' || 
         userId.toLowerCase().includes('mutiara') ||
-        userId.toLowerCase().includes('kayla')
+        userId.toLowerCase().includes('kayla') ||
+        childPerson?.preferredName?.toLowerCase().includes('kayla')
       )
     );
-    const childName = isKayla ? 'Kayla' : 'Millen';
-    const salutation = isKayla ? 'Ibu Mutiara' : 'Ibu Julen';
+
+    const childName = childPerson?.preferredName || (isKayla ? 'Kayla' : (isBudi ? 'Kenzo' : 'Millen'));
+    let salutation = person?.preferredName || (isKayla ? 'Ibu Mutiara' : (isBudi ? 'Ayah Kenzo' : 'Ibu Julen'));
+    if (!salutation && person?.fullName) {
+      salutation = (person.gender === 'MALE' ? 'Pak ' : 'Ibu ') + person.fullName.split(' ')[0];
+    }
 
     const guardianData: GuardianBriefingData = {
       role: 'GUARDIAN',
@@ -498,16 +523,16 @@ export class BriefingEngineService {
         active_phase_name: activePhase?.phase_name || 'Main Sentra'
       },
       latest_moment: {
-        moment_id: isKayla ? 'mom_kayla_01' : 'mom_millen_01',
+        moment_id: `mom_${childName.toLowerCase()}_01`,
         thumbnail_url: '/assets/moments/moment_sample.jpg',
         caption: isKayla 
           ? 'Bermain puzzle eksplorasi warna dan bentuk bersama teman di Kelompok B.'
-          : 'Bermain balok membangun jembatan bersama teman di Kelompok A.',
+          : (isBudi 
+            ? 'Bermain balok membangun menara bersama teman di Kelompok A.'
+            : `Bermain dan belajar dengan antusias bersama teman di TK Maranatha.`),
         captured_at: '09:30'
       },
-      teacher_note: isKayla
-        ? 'Kayla sangat antusias mengeksplorasi sentra motorik hari ini.'
-        : 'Millen sangat tekun dan ceria saat bernyanyi dan menyusun balok hari ini.',
+      teacher_note: `${childName} sangat ceria, tekun, dan aktif berinteraksi bersama teman dan guru hari ini.`,
       lppa_published_available: true
     };
     this.assertNonSurveillance(guardianData);

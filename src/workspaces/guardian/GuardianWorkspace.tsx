@@ -24,7 +24,7 @@ export type GuardianTab = 'Hari Ini' | 'Momen & Karya' | 'Perkembangan';
 export const GuardianWorkspace: React.FC = () => {
   const context = useSecurityContext();
   const currentPersona = context?.currentPersona;
-  const schoolId = context?.securityContext?.activeSchoolId || 'sch_tk_yapendik_01';
+  const schoolId = context?.securityContext?.activeSchoolId || 'sch_tk_maranatha';
 
   const [activeTab, setActiveTab] = useState<GuardianTab>('Hari Ini');
   const [briefingData, setBriefingData] = useState<GuardianBriefingData | null>(null);
@@ -76,7 +76,7 @@ export const GuardianWorkspace: React.FC = () => {
             </button>
             <div className="px-3 py-1 rounded-xl bg-surface-subtle border border-line-hairline flex items-center gap-1.5 text-xs text-ink font-medium">
               <User className="w-4 h-4 text-brand-primary" />
-              <span>{currentPersona?.name || 'Ayah Kenzo'}</span>
+              <span>{currentPersona?.name || 'Ibu Julen'}</span>
             </div>
           </div>
         </div>

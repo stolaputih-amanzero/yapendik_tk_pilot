@@ -17,7 +17,7 @@ export interface GuardianDevelopmentTimelineProps {
 }
 
 export const GuardianDevelopmentTimeline: React.FC<GuardianDevelopmentTimelineProps> = ({
-  childName = 'Kenzo'
+  childName = 'Millen'
 }) => {
   const [activeSemester, setActiveSemester] = useState<'GANJIL' | 'GENAP'>('GANJIL');
   const [isReportModalOpen, setIsReportModalOpen] = useState(false);

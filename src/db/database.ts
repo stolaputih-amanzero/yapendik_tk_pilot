@@ -467,9 +467,26 @@ export class DatabaseEngine {
 
       this.academicYears = this.loadOrSeed('academic_years', SEED_ACADEMIC_YEARS);
       this.classes = this.loadOrSeed('classes', SEED_CLASSES);
-      this.persons = this.loadOrSeed('persons', SEED_PERSONS);
-      this.students = this.loadOrSeed('students', SEED_STUDENTS);
-      this.guardianRelationships = this.loadOrSeed('guardian_relationships', SEED_GUARDIAN_RELATIONSHIPS);
+
+      const loadedPersons = this.loadOrSeed('persons', SEED_PERSONS);
+      const loadedStudents = this.loadOrSeed('students', SEED_STUDENTS);
+      const loadedGuardians = this.loadOrSeed('guardian_relationships', SEED_GUARDIAN_RELATIONSHIPS);
+
+      const personMap = new Map(loadedPersons.map(p => [p.id, p]));
+      SEED_PERSONS.forEach(sp => personMap.set(sp.id, { ...sp, ...(personMap.get(sp.id) || {}) }));
+      this.persons = Array.from(personMap.values());
+      this.persist('persons', this.persons);
+
+      const studentMap = new Map(loadedStudents.map(s => [s.id, s]));
+      SEED_STUDENTS.forEach(ss => studentMap.set(ss.id, { ...ss, ...(studentMap.get(ss.id) || {}) }));
+      this.students = Array.from(studentMap.values());
+      this.persist('students', this.students);
+
+      const relMap = new Map(loadedGuardians.map(r => [r.id, r]));
+      SEED_GUARDIAN_RELATIONSHIPS.forEach(sr => relMap.set(sr.id, { ...sr, ...(relMap.get(sr.id) || {}) }));
+      this.guardianRelationships = Array.from(relMap.values());
+      this.persist('guardian_relationships', this.guardianRelationships);
+
       this.milestones = this.loadOrSeed('milestones', SEED_DEVELOPMENT_MILESTONES);
       this.activities = this.loadOrSeed('activities', SEED_LEARNING_ACTIVITIES);
       this.observations = this.loadOrSeed('observations', SEED_OBSERVATIONS);
