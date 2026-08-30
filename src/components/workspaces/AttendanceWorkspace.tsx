@@ -274,9 +274,9 @@ export const AttendanceWorkspace: React.FC = () => {
   return (
     <div className="space-y-4">
       {/* 1. HEADER (COMPACT & EXPANDED ADAPTIVE) */}
-      <div className="bg-surface border-b border-line-soft px-4 pt-3 pb-3 space-y-3">
-        {/* Expanded Description Only */}
-        <div className="hidden expanded:flex expanded:items-center justify-between gap-4 pb-1">
+      <div className="bg-surface border-b border-line-soft px-4 pt-4 pb-4 space-y-4">
+        {/* Expanded Description & Desktop Save Action */}
+        <div className="hidden expanded:flex expanded:items-center justify-between gap-4 pb-2 border-b border-line-hairline">
           <div>
             <h1 className="text-xl font-bold text-ink flex items-center gap-2 font-display">
               <CalendarCheck className="w-5 h-5 text-success shrink-0" />
@@ -286,11 +286,28 @@ export const AttendanceWorkspace: React.FC = () => {
               Pencatatan kehadiran harian, pemeriksaan suhu tubuh anak, dan observasi mood kedatangan.
             </p>
           </div>
+
+          {authResult.granted && (
+            <Button
+              variant="primary"
+              size="sm"
+              disabled={!authResult.granted || isSaving || !isDirty}
+              onClick={handleSaveAll}
+              leftIcon={<Save className="w-4 h-4" />}
+              className="rounded-xl text-xs font-bold shadow-soft transition-all shrink-0"
+            >
+              {isSaving 
+                ? 'Menyimpan...' 
+                : isDirty 
+                  ? `Simpan Presensi (${totalRecorded}/${students.length})` 
+                  : 'Tersimpan'}
+            </Button>
+          )}
         </div>
 
-        {/* Control Bar: Date (Full Width) + Class SegmentedControl (Full Width Below) */}
-        <div className="space-y-2">
-          {/* Tanggal: Field SelectSheet/date, label value formatID -> "Sen, 24 Agu 2026", class font-mono tabular-nums */}
+        {/* Control Bar: Adaptive Layout for Compact & Expanded */}
+        <div className="flex flex-col expanded:flex-row items-stretch expanded:items-center gap-3">
+          {/* Tanggal: Field SelectSheet/date */}
           <div 
             onClick={() => {
               try {
@@ -299,7 +316,7 @@ export const AttendanceWorkspace: React.FC = () => {
                 dateInputRef.current?.focus();
               }
             }}
-            className="relative w-full flex items-center justify-between bg-surface border border-line hover-only:border-brand-primary rounded-xl px-3 py-2 text-xs font-medium text-ink cursor-pointer transition-all shadow-hairline group min-h-[44px]"
+            className="relative w-full expanded:w-72 flex items-center justify-between bg-surface border border-line hover-only:border-brand-primary rounded-xl px-3 py-2 text-xs font-medium text-ink cursor-pointer transition-all shadow-hairline group min-h-[44px] shrink-0"
           >
             <div className="flex items-center gap-2 min-w-0">
               <Calendar className="w-4 h-4 text-brand-primary shrink-0" />
@@ -320,8 +337,8 @@ export const AttendanceWorkspace: React.FC = () => {
             />
           </div>
 
-          {/* Kelas: SegmentedControl ['TK A','TK B'] Melebar Penuh */}
-          <div className="w-full">
+          {/* Kelas: SegmentedControl ['TK A','TK B'] */}
+          <div className="w-full expanded:w-64 shrink-0">
             <SegmentedControl
               options={classSegments}
               value={selectedClassId}
@@ -330,231 +347,235 @@ export const AttendanceWorkspace: React.FC = () => {
               className="w-full min-h-[44px]"
             />
           </div>
-        </div>
 
-        {/* Tone Band Micro-Summary & Progress: {total} Murid • {hadir} Hadir • {sakit} Sakit • {belum} Belum */}
-        <div className="bg-surface-subtle/70 px-4 py-3 rounded-xl border border-line-hairline space-y-2">
-          <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs tabular-nums text-ink-soft font-medium">
-            <span className="font-semibold text-ink">{students.length} Murid</span>
-            <span className="text-ink-faint">•</span>
-            <span className="flex items-center gap-1.5">
-              <span className="w-1.5 h-1.5 rounded-full bg-success inline-block"></span>
-              <span className="font-semibold text-success-deep">{hadirCount} Hadir</span>
-            </span>
-            {sakitCount > 0 && (
-              <>
-                <span className="text-ink-faint">•</span>
-                <span className="flex items-center gap-1.5">
-                  <span className="w-1.5 h-1.5 rounded-full bg-warning inline-block"></span>
-                  <span className="font-semibold text-warning-deep">{sakitCount} Sakit</span>
-                </span>
-              </>
-            )}
-            {izinCount > 0 && (
-              <>
-                <span className="text-ink-faint">•</span>
-                <span className="flex items-center gap-1.5">
-                  <span className="w-1.5 h-1.5 rounded-full bg-info inline-block"></span>
-                  <span className="font-semibold text-info-deep">{izinCount} Izin</span>
-                </span>
-              </>
-            )}
-            {alpaCount > 0 && (
-              <>
-                <span className="text-ink-faint">•</span>
-                <span className="flex items-center gap-1.5">
-                  <span className="w-1.5 h-1.5 rounded-full bg-danger inline-block"></span>
-                  <span className="font-semibold text-danger-deep">{alpaCount} Alpa</span>
-                </span>
-              </>
-            )}
-            {belumCount > 0 && (
-              <>
-                <span className="text-ink-faint">•</span>
-                <span className="flex items-center gap-1.5 text-ink-faint">
-                  <span className="w-1.5 h-1.5 rounded-full bg-ink-faint inline-block"></span>
-                  <span>{belumCount} Belum</span>
-                </span>
-              </>
-            )}
-          </div>
+          {/* Tone Band Micro-Summary & Progress */}
+          <div className="flex-1 min-w-0 bg-surface-subtle/70 px-4 py-2.5 rounded-xl border border-line-hairline flex flex-col justify-center gap-1.5">
+            <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs tabular-nums text-ink-soft font-medium">
+              <span className="font-semibold text-ink">{students.length} Murid</span>
+              <span className="text-ink-faint">•</span>
+              <span className="flex items-center gap-1.5">
+                <span className="w-1.5 h-1.5 rounded-full bg-success inline-block"></span>
+                <span className="font-semibold text-success-deep">{hadirCount} Hadir</span>
+              </span>
+              {sakitCount > 0 && (
+                <>
+                  <span className="text-ink-faint">•</span>
+                  <span className="flex items-center gap-1.5">
+                    <span className="w-1.5 h-1.5 rounded-full bg-warning inline-block"></span>
+                    <span className="font-semibold text-warning-deep">{sakitCount} Sakit</span>
+                  </span>
+                </>
+              )}
+              {izinCount > 0 && (
+                <>
+                  <span className="text-ink-faint">•</span>
+                  <span className="flex items-center gap-1.5">
+                    <span className="w-1.5 h-1.5 rounded-full bg-info inline-block"></span>
+                    <span className="font-semibold text-info-deep">{izinCount} Izin</span>
+                  </span>
+                </>
+              )}
+              {alpaCount > 0 && (
+                <>
+                  <span className="text-ink-faint">•</span>
+                  <span className="flex items-center gap-1.5">
+                    <span className="w-1.5 h-1.5 rounded-full bg-danger inline-block"></span>
+                    <span className="font-semibold text-danger-deep">{alpaCount} Alpa</span>
+                  </span>
+                </>
+              )}
+              {belumCount > 0 && (
+                <>
+                  <span className="text-ink-faint">•</span>
+                  <span className="flex items-center gap-1.5 text-ink-faint">
+                    <span className="w-1.5 h-1.5 rounded-full bg-ink-faint inline-block"></span>
+                    <span>{belumCount} Belum</span>
+                  </span>
+                </>
+              )}
+            </div>
 
-          {/* Thin Progress Bar (h-1 success) */}
-          <div className="w-full bg-line-soft h-1 rounded-full overflow-hidden">
-            <div 
-              className="bg-success h-full transition-all duration-300 rounded-full"
-              style={{ width: `${students.length > 0 ? Math.min(100, Math.round((totalRecorded / students.length) * 100)) : 0}%` }}
-            />
+            {/* Thin Progress Bar (h-1 success) */}
+            <div className="w-full bg-line-soft h-1 rounded-full overflow-hidden">
+              <div 
+                className="bg-success h-full transition-all duration-300 rounded-full"
+                style={{ width: `${students.length > 0 ? Math.min(100, Math.round((totalRecorded / students.length) * 100)) : 0}%` }}
+              />
+            </div>
           </div>
         </div>
       </div>
 
       {/* 2. LIST ITEM (ATTENDANCE GRID / CHILD CARD) */}
       {students.length > 0 ? (
-        <div className="flex flex-col divide-y divide-line border-b border-line pb-[160px]">
-          {students.map((s, idx) => {
-            const row = attendanceMap[s.id] || { status: 'HADIR', temperature: 36.5, arrivalMood: 'CERIA', notes: '' };
-            const isFever = row.temperature >= 37.5;
-            const statusInfo = getStatusDot(row.status);
-            const isEditingNote = activeNoteStudentId === s.id;
-            const hasNotes = Boolean(row.notes && row.notes.trim().length > 0);
+        <div className="px-4 medium:px-6 pt-2 pb-[160px]">
+          <div className="grid grid-cols-1 expanded:grid-cols-2 large:grid-cols-3 gap-4">
+            {students.map((s, idx) => {
+              const row = attendanceMap[s.id] || { status: 'HADIR', temperature: 36.5, arrivalMood: 'CERIA', notes: '' };
+              const isFever = row.temperature >= 37.5;
+              const statusInfo = getStatusDot(row.status);
+              const isEditingNote = activeNoteStudentId === s.id;
+              const hasNotes = Boolean(row.notes && row.notes.trim().length > 0);
 
-            return (
-              <div 
-                key={s.id} 
-                className="px-4 medium:px-6 py-4 flex flex-col gap-3 hover-only:bg-surface-subtle/40 transition-colors"
-              >
-                {/* Child Identity Header: Number/Dot, Avatar, Title Case Name, NIS */}
-                <div className="flex items-center gap-3 min-w-0">
-                  <div className="w-5 flex items-center justify-center shrink-0">
-                    {statusInfo ? (
-                      <span 
-                        className={`w-2.5 h-2.5 rounded-full inline-block shadow-xs ${statusInfo.bg}`} 
-                        title={statusInfo.label} 
+              return (
+                <div 
+                  key={s.id} 
+                  className="bg-surface border border-line rounded-2xl p-4 shadow-hairline flex flex-col justify-between gap-3 hover-only:border-brand-primary/40 transition-colors"
+                >
+                  <div className="space-y-3">
+                    {/* Child Identity Header: Number/Dot, Avatar, Title Case Name, NIS */}
+                    <div className="flex items-center gap-3 min-w-0">
+                      <div className="w-5 flex items-center justify-center shrink-0">
+                        {statusInfo ? (
+                          <span 
+                            className={`w-2.5 h-2.5 rounded-full inline-block shadow-xs ${statusInfo.bg}`} 
+                            title={statusInfo.label} 
+                          />
+                        ) : (
+                          <span className="text-[11px] font-mono font-bold text-ink-faint">
+                            {idx + 1}
+                          </span>
+                        )}
+                      </div>
+                      <AvatarChild
+                        name={s.person?.fullName || 'Siswa'}
+                        id={s.id}
+                        size="md"
+                        showSymbol
                       />
-                    ) : (
-                      <span className="text-[11px] font-mono font-bold text-ink-faint">
-                        {idx + 1}
-                      </span>
+                      <div className="min-w-0 flex-1">
+                        <h4 className="text-[15px] font-semibold leading-snug break-words normal-case text-ink">
+                          {toTitleCase(s.person?.fullName || 'Siswa')}
+                        </h4>
+                        <div className="flex items-center gap-2 mt-0.5">
+                          <Badge variant="neutral">
+                            NIS {s.nis || s.id}
+                          </Badge>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Status: Contained SegmentedControl (h-11, w-full) */}
+                    <div className="w-full pt-1">
+                      <SegmentedControl
+                        options={statusSegments}
+                        value={row.status}
+                        onChange={(val) => handleStatusChange(s.id, val as AttendanceStatus)}
+                        size="sm"
+                        className="w-full min-h-[44px]"
+                      />
+                    </div>
+
+                    {/* Conditional Temperature & Mood Sub-Row (Rendered ONLY when status === 'HADIR') */}
+                    {row.status === 'HADIR' && (
+                      <div className="flex flex-col compact:flex-row items-stretch compact:items-center gap-2 pt-1 animate-in fade-in slide-in-from-top-1 duration-150">
+                        {/* Temperature Stepper [−][value °C mono][+] */}
+                        <div className={`flex items-center justify-between border rounded-field px-3 py-2 shrink-0 transition-colors ${
+                          isFever 
+                            ? 'bg-warning-tint text-warning-deep border-warning-line' 
+                            : 'bg-surface border-line text-ink'
+                        }`}>
+                          <div className="flex items-center gap-2 text-xs font-semibold mr-2">
+                            <Thermometer className={`w-4 h-4 ${isFever ? 'text-warning-deep' : 'text-brand-primary'}`} />
+                            <span className="font-mono tabular-nums font-bold text-xs">
+                              {row.temperature.toFixed(1)} °C
+                            </span>
+                          </div>
+                          <div className="flex items-center gap-1">
+                            <button
+                              type="button"
+                              disabled={!authResult.granted || row.temperature <= 34.0}
+                              onClick={() => handleTempChange(s.id, Math.max(34.0, Math.round((row.temperature - 0.1) * 10) / 10))}
+                              className="w-6 h-6 rounded-md bg-surface-subtle hover-only:bg-line-soft border border-line flex items-center justify-center font-bold text-ink text-xs active:scale-95 disabled:opacity-40 cursor-pointer"
+                              title="Turunkan 0.1°C"
+                            >
+                              −
+                            </button>
+                            <button
+                              type="button"
+                              disabled={!authResult.granted || row.temperature >= 42.0}
+                              onClick={() => handleTempChange(s.id, Math.min(42.0, Math.round((row.temperature + 0.1) * 10) / 10))}
+                              className="w-6 h-6 rounded-md bg-surface-subtle hover-only:bg-line-soft border border-line flex items-center justify-center font-bold text-ink text-xs active:scale-95 disabled:opacity-40 cursor-pointer"
+                              title="Naikkan 0.1°C"
+                            >
+                              +
+                            </button>
+                          </div>
+                        </div>
+
+                        {/* Arrival Mood: SegmentedControl with short labels */}
+                        <div className="flex-1 min-w-0">
+                          <SegmentedControl
+                            options={moodSegments}
+                            value={row.arrivalMood || 'CERIA'}
+                            onChange={(val) => handleMoodChange(s.id, val)}
+                            size="sm"
+                            className="w-full min-h-[40px]"
+                          />
+                        </div>
+                      </div>
                     )}
                   </div>
-                  <AvatarChild
-                    name={s.person?.fullName || 'Siswa'}
-                    id={s.id}
-                    size="md"
-                    showSymbol
-                  />
-                  <div className="min-w-0 flex-1">
-                    <h4 className="text-[15px] font-semibold leading-snug break-words normal-case text-ink">
-                      {toTitleCase(s.person?.fullName || 'Siswa')}
-                    </h4>
-                    <div className="flex items-center gap-2 mt-0.5">
-                      <Badge variant="neutral">
-                        NIS {s.nis || s.id}
-                      </Badge>
-                    </div>
-                  </div>
-                </div>
 
-                {/* Status: Contained SegmentedControl (h-11, w-full) */}
-                <div className="w-full pt-1">
-                  <SegmentedControl
-                    options={statusSegments}
-                    value={row.status}
-                    onChange={(val) => handleStatusChange(s.id, val as AttendanceStatus)}
-                    size="sm"
-                    className="w-full min-h-[44px]"
-                  />
-                </div>
-
-                {/* Conditional Temperature & Mood Sub-Row (Rendered ONLY when status === 'HADIR') */}
-                {row.status === 'HADIR' && (
-                  <div className="flex flex-col compact:flex-row items-stretch compact:items-center gap-2 pt-1 animate-in fade-in slide-in-from-top-1 duration-150">
-                    {/* Temperature Stepper [−][value °C mono][+] */}
-                    <div className={`flex items-center justify-between border rounded-field px-3 py-2 shrink-0 transition-colors ${
-                      isFever 
-                        ? 'bg-warning-tint text-warning-deep border-warning-line' 
-                        : 'bg-surface border-line text-ink'
-                    }`}>
-                      <div className="flex items-center gap-2 text-xs font-semibold mr-2">
-                        <Thermometer className={`w-4 h-4 ${isFever ? 'text-warning-deep' : 'text-brand-primary'}`} />
-                        <span className="font-mono tabular-nums font-bold text-xs">
-                          {row.temperature.toFixed(1)} °C
+                  {/* Arrival Notes: Ghost button / Preview / AutoResizeTextarea */}
+                  <div className="w-full pt-1 border-t border-line-hairline">
+                    {isEditingNote ? (
+                      <div className="space-y-1.5 animate-in fade-in duration-150">
+                        <div className="flex items-center justify-between">
+                          <label className="text-[11px] font-semibold text-ink-soft flex items-center gap-1">
+                            <FileText className="w-4 h-4 text-brand-primary" />
+                            Catatan Kedatangan / Penjemputan
+                          </label>
+                          <button
+                            type="button"
+                            onClick={() => setActiveNoteStudentId(null)}
+                            className="text-[11px] font-semibold text-brand-primary hover-only:underline cursor-pointer"
+                          >
+                            Selesai
+                          </button>
+                        </div>
+                        <AutoResizeTextarea
+                          minRows={2}
+                          maxRows={4}
+                          autoFocus
+                          disabled={!authResult.granted}
+                          placeholder="Tulis catatan kondisi kedatangan atau penjemputan anak..."
+                          value={row.notes}
+                          onChange={(e) => handleNotesChange(s.id, e.target.value)}
+                          className="bg-surface border border-line rounded-xl text-xs text-ink placeholder:text-ink-faint focus:border-brand-primary p-3"
+                        />
+                      </div>
+                    ) : hasNotes ? (
+                      <div 
+                        onClick={() => setActiveNoteStudentId(s.id)}
+                        className="flex items-center justify-between gap-2 text-xs bg-surface-subtle hover-only:bg-surface-subtle/80 px-3 py-2 rounded-xl border border-line-soft cursor-pointer transition-colors"
+                      >
+                        <div className="flex items-center gap-2 min-w-0 flex-1">
+                          <FileText className="w-4 h-4 text-brand-primary shrink-0" />
+                          <span className="text-ink text-xs line-clamp-1 truncate font-medium">
+                            {row.notes}
+                          </span>
+                        </div>
+                        <span className="text-[10px] font-semibold text-ink-soft bg-surface border border-line-soft px-2 py-1 rounded shrink-0">
+                          Ubah
                         </span>
                       </div>
-                      <div className="flex items-center gap-1">
-                        <button
-                          type="button"
-                          disabled={!authResult.granted || row.temperature <= 34.0}
-                          onClick={() => handleTempChange(s.id, Math.max(34.0, Math.round((row.temperature - 0.1) * 10) / 10))}
-                          className="w-6 h-6 rounded-md bg-surface-subtle hover-only:bg-line-soft border border-line flex items-center justify-center font-bold text-ink text-xs active:scale-95 disabled:opacity-40 cursor-pointer"
-                          title="Turunkan 0.1°C"
-                        >
-                          −
-                        </button>
-                        <button
-                          type="button"
-                          disabled={!authResult.granted || row.temperature >= 42.0}
-                          onClick={() => handleTempChange(s.id, Math.min(42.0, Math.round((row.temperature + 0.1) * 10) / 10))}
-                          className="w-6 h-6 rounded-md bg-surface-subtle hover-only:bg-line-soft border border-line flex items-center justify-center font-bold text-ink text-xs active:scale-95 disabled:opacity-40 cursor-pointer"
-                          title="Naikkan 0.1°C"
-                        >
-                          +
-                        </button>
-                      </div>
-                    </div>
-
-                    {/* Arrival Mood: SegmentedControl with short labels */}
-                    <div className="flex-1 min-w-0">
-                      <SegmentedControl
-                        options={moodSegments}
-                        value={row.arrivalMood || 'CERIA'}
-                        onChange={(val) => handleMoodChange(s.id, val)}
-                        size="sm"
-                        className="w-full min-h-[40px]"
-                      />
-                    </div>
-                  </div>
-                )}
-
-                {/* Arrival Notes: Ghost button / Preview / AutoResizeTextarea */}
-                <div className="w-full pt-0.5">
-                  {isEditingNote ? (
-                    <div className="space-y-1.5 animate-in fade-in duration-150">
-                      <div className="flex items-center justify-between">
-                        <label className="text-[11px] font-semibold text-ink-soft flex items-center gap-1">
-                          <FileText className="w-4 h-4 text-brand-primary" />
-                          Catatan Kedatangan / Penjemputan
-                        </label>
-                        <button
-                          type="button"
-                          onClick={() => setActiveNoteStudentId(null)}
-                          className="text-[11px] font-semibold text-brand-primary hover-only:underline cursor-pointer"
-                        >
-                          Selesai
-                        </button>
-                      </div>
-                      <AutoResizeTextarea
-                        minRows={2}
-                        maxRows={4}
-                        autoFocus
+                    ) : (
+                      <button
+                        type="button"
                         disabled={!authResult.granted}
-                        placeholder="Tulis catatan kondisi kedatangan atau penjemputan anak..."
-                        value={row.notes}
-                        onChange={(e) => handleNotesChange(s.id, e.target.value)}
-                        className="bg-surface border border-line rounded-xl text-xs text-ink placeholder:text-ink-faint focus:border-brand-primary p-3"
-                      />
-                    </div>
-                  ) : hasNotes ? (
-                    <div 
-                      onClick={() => setActiveNoteStudentId(s.id)}
-                      className="flex items-center justify-between gap-2 text-xs bg-surface-subtle hover-only:bg-surface-subtle/80 px-3 py-2 rounded-xl border border-line-soft cursor-pointer transition-colors"
-                    >
-                      <div className="flex items-center gap-2 min-w-0 flex-1">
-                        <FileText className="w-4 h-4 text-brand-primary shrink-0" />
-                        <span className="text-ink text-xs line-clamp-1 truncate font-medium">
-                          {row.notes}
-                        </span>
-                      </div>
-                      <span className="text-[10px] font-semibold text-ink-soft bg-surface border border-line-soft px-2 py-1 rounded shrink-0">
-                        Ubah
-                      </span>
-                    </div>
-                  ) : (
-                    <button
-                      type="button"
-                      disabled={!authResult.granted}
-                      onClick={() => setActiveNoteStudentId(s.id)}
-                      className="w-full flex items-center justify-center gap-1.5 text-xs font-semibold text-ink-soft hover-only:text-ink py-2 px-3 rounded-xl border border-dashed border-line-soft hover-only:border-brand-primary/50 bg-surface-subtle/30 hover-only:bg-surface-subtle transition-all cursor-pointer min-h-[44px]"
-                    >
-                      <Plus className="w-4 h-4 text-brand-primary shrink-0" />
-                      <span>Catatan</span>
-                    </button>
-                  )}
+                        onClick={() => setActiveNoteStudentId(s.id)}
+                        className="w-full flex items-center justify-center gap-1.5 text-xs font-semibold text-ink-soft hover-only:text-ink py-2 px-3 rounded-xl border border-dashed border-line-soft hover-only:border-brand-primary/50 bg-surface-subtle/30 hover-only:bg-surface-subtle transition-all cursor-pointer min-h-[44px]"
+                      >
+                        <Plus className="w-4 h-4 text-brand-primary shrink-0" />
+                        <span>Catatan</span>
+                      </button>
+                    )}
+                  </div>
                 </div>
-              </div>
-            );
-          })}
+              );
+            })}
+          </div>
         </div>
       ) : (
         <div className="bg-surface rounded-card border border-dashed border-line-strong p-12 text-center text-ink-soft shadow-hairline mx-4">
@@ -564,9 +585,9 @@ export const AttendanceWorkspace: React.FC = () => {
         </div>
       )}
 
-      {/* 3. ACTION DOCK STICKY (BOTTOM FIXED) */}
+      {/* 3. ACTION DOCK STICKY (BOTTOM FIXED - COMPACT ONLY) */}
       {authResult.granted && students.length > 0 && (
-        <div className="fixed inset-x-0 bottom-[calc(env(safe-area-inset-bottom,0px)+84px)] px-4 z-40 max-w-lg mx-auto pointer-events-none">
+        <div className="expanded:hidden fixed inset-x-0 bottom-[calc(env(safe-area-inset-bottom,0px)+84px)] px-4 z-40 max-w-lg mx-auto pointer-events-none">
           <div className="pointer-events-auto shadow-floating rounded-2xl bg-surface/95 backdrop-blur-md p-2 border border-line">
             <Button
               variant="primary"

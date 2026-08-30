@@ -39,12 +39,16 @@ export const SegmentedControl: React.FC<SegmentedControlProps> = ({
     return <IconComp className="w-4 h-4 shrink-0" />;
   };
 
+  const hasExplicitWidth = className.includes('w-') || className.includes('expanded:w-') || className.includes('medium:w-');
+  const defaultWidth = hasExplicitWidth ? '' : 'w-full expanded:w-fit';
+
   return (
     <div
       role="tablist"
       className={`
         bg-surface-subtle p-1 rounded-xl flex items-center border border-line-hairline divide-x divide-line-hairline
-        overflow-x-auto no-scrollbar select-none w-full expanded:w-fit
+        overflow-x-auto no-scrollbar select-none
+        ${defaultWidth}
         ${className}
       `.trim().replace(/\s+/g, ' ')}
     >
@@ -59,7 +63,7 @@ export const SegmentedControl: React.FC<SegmentedControlProps> = ({
             aria-selected={isActive}
             onClick={() => onChange(option.id)}
             className={`
-              flex-1 min-w-0 flex items-center justify-center gap-1.5 medium:gap-2 rounded-lg font-semibold
+              flex-1 min-w-max flex items-center justify-center gap-1.5 medium:gap-2 rounded-lg font-semibold
               transition-all duration-150 cursor-pointer active:scale-[0.98]
               ${isSm ? 'px-2 medium:px-3 py-1 text-[11px] medium:text-xs' : 'px-3 medium:px-4 py-2 text-xs medium:text-sm'}
               ${
@@ -70,7 +74,7 @@ export const SegmentedControl: React.FC<SegmentedControlProps> = ({
             `.trim().replace(/\s+/g, ' ')}
           >
             {renderIcon(option.icon)}
-            <span className="truncate">{option.label}</span>
+            <span className="whitespace-nowrap">{option.label}</span>
             {option.badge !== undefined && (
               <span
                 className={`
