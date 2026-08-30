@@ -35,7 +35,6 @@ import { ChildContinuityModal } from './ChildContinuityModal';
 import { SafetyIncidentModal } from './SafetyIncidentModal';
 import { schoolSafetyAssuranceService } from '../../../services/schoolSafetyAssuranceService';
 import { SafetyExceptionSignal, SafetyIncidentRecord } from '../../../types/schoolSafetyAssuranceTypes';
-import { OfflineSyncStateIndicator } from './OfflineSyncStateIndicator';
 
 import { TodaySurface } from './TodaySurface';
 import { GuardianNoticeLedger } from './GuardianNoticeLedger';
@@ -351,35 +350,6 @@ export const TeacherHomeShell: React.FC<{ onNavigateToCommunication?: () => void
             <p className="text-ink-soft text-xs medium:text-sm mt-0.5">
               {aggregate.class_name} • Wali Kelas: {aggregate.teacher_name || '—'}
             </p>
-          </div>
-
-          <div className="flex items-center gap-2 medium:gap-3 shrink-0">
-            <OfflineSyncStateIndicator />
-            {/* Mobile Refresh */}
-            <div className="flex expanded:hidden">
-              <Button
-                variant="secondary"
-                size="sm"
-                onClick={loadData}
-                disabled={loading}
-                aria-label="Segarkan Data"
-                leftIcon={<RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin text-success' : ''}`} />}
-                className="rounded-xl"
-              />
-            </div>
-            {/* Desktop Refresh */}
-            <div className="hidden expanded:flex">
-              <Button
-                variant="secondary"
-                size="sm"
-                onClick={loadData}
-                disabled={loading}
-                leftIcon={<RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin text-success' : ''}`} />}
-                className="rounded-xl"
-              >
-                Segarkan Data
-              </Button>
-            </div>
           </div>
         </div>
 
