@@ -26,9 +26,6 @@ import {
   GraduationCap, 
   Flame, 
   Settings, 
-  FlaskConical, 
-  ChevronLeft, 
-  ChevronRight,
   ChevronDown,
   LogOut,
   Compass,
@@ -330,43 +327,6 @@ export const Sidebar: React.FC<SidebarProps> = ({
           )}
         </div>
 
-        {/* Test Suite Button */}
-        <div className="relative group min-w-0">
-          <button
-            type="button"
-            onClick={() => onSelectTab('TESTS')}
-            aria-label="Uji Otorisasi (TESTS)"
-            className={`w-full flex items-center text-xs transition-colors duration-150 cursor-pointer min-w-0 min-h-[48px] border-l-2 bg-transparent ${
-              isCollapsed
-                ? 'justify-center py-3'
-                : 'space-x-3 px-5 py-3 text-left'
-            } ${
-              activeTab === 'TESTS'
-                ? 'border-brand-primary text-ink font-semibold'
-                : 'border-transparent text-ink-soft hover-only:text-ink font-normal'
-            }`}
-          >
-            <FlaskConical className={`w-4 h-4 shrink-0 ${activeTab === 'TESTS' ? 'text-brand-primary' : 'text-ink-faint'}`} />
-            {!isCollapsed && (
-              <>
-                <span className="truncate flex-1 text-left line-clamp-1">Uji Otorisasi</span>
-                <span className="text-[10px] font-mono text-ink-faint shrink-0 whitespace-nowrap">
-                  TESTS
-                </span>
-              </>
-            )}
-          </button>
-
-          {/* Tooltip in collapsed mode */}
-          {isCollapsed && (
-            <div className="pointer-events-none absolute left-full top-1/2 -translate-y-1/2 ml-2 z-50 hidden group-hover-only:flex items-center">
-              <div className="bg-surface text-ink text-xs font-medium px-3 py-2 rounded-xl shadow-floating whitespace-nowrap flex items-center space-x-1.5 border border-line-hairline">
-                <span>Uji Otorisasi (TESTS)</span>
-              </div>
-            </div>
-          )}
-        </div>
-
         {/* Theme Toggle Button (Ivory Canvas <-> Midnight Sanctuary) */}
         <div className="relative group min-w-0">
           <button
@@ -524,26 +484,6 @@ export const Sidebar: React.FC<SidebarProps> = ({
             </div>
           )}
         </div>
-
-        {/* Sidebar Collapse Toggle Button */}
-        <button
-          type="button"
-          onClick={onToggleCollapse}
-          aria-label={isCollapsed ? "Buka Navigasi Penuh" : "Ciutkan Navigasi"}
-          title={isCollapsed ? "Buka Navigasi Penuh" : "Ciutkan Navigasi"}
-          className="w-full flex items-center px-5 py-3 text-ink-soft hover-only:text-ink bg-transparent transition-colors cursor-pointer min-h-[44px] text-xs space-x-2"
-        >
-          {isCollapsed ? (
-            <div className="w-full flex justify-center">
-              <ChevronRight className="w-4 h-4" />
-            </div>
-          ) : (
-            <div className="flex items-center space-x-2 text-xs">
-              <ChevronLeft className="w-4 h-4" />
-              <span>Ciutkan Menu</span>
-            </div>
-          )}
-        </button>
       </div>
     </aside>
   );
