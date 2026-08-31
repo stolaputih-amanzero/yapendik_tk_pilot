@@ -231,7 +231,7 @@ Sistem warna kini menggunakan arsitektur *dual-theme* (**Frangipani Day** & **Ni
   * **Gema Hangat Canonical Doctrine (WarmEchoCarousel)**: Gema Hangat pada Beranda Pendidik wajib dirender menggunakan komponen kanonikal `WarmEchoCarousel` (commit `f1f18fd`) yang selalu tampil terbuka penuh (*always open & prominently legible*) di seluruh fase sirkadian. Dilarang keras melipat atau menyembunyikan kutipan apresiasi orang tua.
   * **Horizon Handle (G-3)**: Hairline 1px (`line-soft`) melintasi layar yang terputus ±24px di tengah untuk ikon Lucide `ChevronUp` (`w-5 h-5`, `text-ink-faint`) tanpa teks label. Strip sentuh full-width `bottom-0` dengan tinggi `calc(env(safe-area-inset-bottom,0px)+48px)` (`min-h-[48px]`), `aria-label="Buka Menu Navigasi"`, tap & swipe-up gesture.
   * **Curated "MENU NAVIGASI" Sheet (G-2, G-4, G-5)**: Disentuh/swipe-up membuka sheet 4×2 squircle flat tiles dengan counter badge *brass* riil, search field di puncak sheet, dan animasi *Amanaura Spring* `{380,32,0.8}` (`max-h-[90dvh]`).
-  * **Zero Collision FAB (G-6)**: Tombol Momen Cepat (FAB ✦) ditempatkan di kanan bawah `bottom-[calc(env(safe-area-inset-bottom,0px)+48px)] right-4`, bebas tabrakan di atas garis Horizon Handle.
+  * **Purnabakti FAB / Law of Single Primary Presence (G-6)**: FAB duplikat (*QuickCaptureFloatingButton*) dipurnabaktikan secara penuh dari seluruh tata letak guru. Aksi rekam momen tetap hidup via inline CTA linimasa sirkadian dan tile "Momen Belajar" di sheet navigasi.
 * **MEDIUM (`600px – 839px`)**:
   * Menggunakan **Navigation Rail (`72px`)** di sisi kiri layar.
 * **EXPANDED (`≥ 840px`)**:
@@ -1568,5 +1568,10 @@ Untuk menjamin integritas struktural, ergonomi layar sentuh, dan kepatuhan absol
 * **v3.0.8-PATCH (2026-09-01)**:
   * **Invisible Scroll Doctrine (Invisible Mastery #8 — §5.4)**:
     * **Global Scrollbar Elimination**: Scrollbar native browser lenyap dari seluruh kontainer halaman (`scrollbar-width: none`, `::-webkit-scrollbar { width: 0; height: 0; }`).
-    * **Horizon Handle & FAB +48px (§3.4 & ADR-UX-012)**: Menghilangkan teks label "Menu" pada collapsed handle; menyematkan hairline full-bleed `line-soft` terputus chevron tengah Lucide `ChevronUp`; FAB mengambang bebas di kanan atas garis `bottom-[calc(env(safe-area-inset-bottom,0px)+48px)] right-4`.
+    * **Horizon Handle (§3.4 & ADR-UX-012)**: Menghilangkan teks label "Menu" pada collapsed handle; menyematkan hairline full-bleed `line-soft` terputus chevron tengah Lucide `ChevronUp`.
     * **CI Guard Hardening**: Menambahkan aturan `R-INVISIBLE-SCROLL` dan `R-HORIZON-PURE` pada `amanaura-audit.mjs`.
+* **v3.0.9-PATCH (2026-09-01)**:
+  * **Purnabakti FAB & Law of Single Primary Presence (ADR-UX-012 Addendum III)**:
+    * **Pensiun FAB**: Komponen `QuickCaptureFloatingButton` resmi dipensiunkan dari seluruh workspace guru untuk melenyapkan duplicate chrome dan risiko content collision.
+    * **Akses Rekam Momen Lengkap**: Aksi rekam momen belajar dipertahankan via inline contextual CTA di linimasa sirkadian (Beranda Kelas) dan tile "Momen Belajar" di sheet "MENU NAVIGASI".
+    * **CI Guard Hardening**: Mengganti `R-FAB-CANONICAL-OFFSET` dengan `R-FAB-ALLOWLIST` (allowlist kosong) pada `amanaura-audit.mjs`.

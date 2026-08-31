@@ -26,7 +26,6 @@ import { AttendanceStatus, DevelopmentDomain, MilestoneRating, LearningActivity 
 
 import { ClassroomPulseBanner } from './ClassroomPulseBanner';
 import { OperatingStateIndicator } from './OperatingStateIndicator';
-import { QuickCaptureFloatingButton } from './QuickCaptureFloatingButton';
 import { EvidenceCaptureSheet } from './EvidenceCaptureSheet';
 import { EnrichmentTrayDrawer } from './EnrichmentTrayDrawer';
 import { ChildContextPivotModal } from './ChildContextPivotModal';
@@ -523,15 +522,6 @@ export const TeacherHomeShell: React.FC<{
           </section>
         </div>
       </section>
-
-      {/* Floating Fast Capture Action Primitive [ Momen Cepat] */}
-      <QuickCaptureFloatingButton
-        onClick={() => {
-          setQuickCaptureStudentId(undefined);
-          setIsQuickCaptureOpen(true);
-        }}
-        pendingDraftCount={aggregate.daily_completion.pending_enrichment_count}
-      />
 
       {/* Mobile AdaptiveDialog: Full Classroom Pulse & Operating Rhythm Detail */}
       <AdaptiveDialog

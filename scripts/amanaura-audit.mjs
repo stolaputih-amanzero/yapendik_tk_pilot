@@ -188,17 +188,32 @@ if (fs.existsSync(OMNIBAR_FULL_PATH)) {
   }
 }
 
-const FAB_REL_PATH = path.join('src', 'components', 'workspaces', 'teacher', 'QuickCaptureFloatingButton.tsx');
-const FAB_FULL_PATH = path.resolve(FAB_REL_PATH);
-if (fs.existsSync(FAB_FULL_PATH)) {
-  const fabContent = fs.readFileSync(FAB_FULL_PATH, 'utf-8');
-  if (!fabContent.includes('bottom-[calc(env(safe-area-inset-bottom,0px)+48px)]') || !fabContent.includes('right-4')) {
+// ═══ RULE R-FAB-ALLOWLIST: ADR-UX-012 Addendum III (Law of Single Primary Presence) ═══
+// Empty allowlist: QuickCaptureFloatingButton / standalone FAB capture is retired from src/
+const allSrcFiles = [];
+function collectSrcFiles(dir) {
+  const entries = fs.readdirSync(dir, { withFileTypes: true });
+  for (const entry of entries) {
+    const full = path.join(dir, entry.name);
+    if (entry.isDirectory()) {
+      collectSrcFiles(full);
+    } else if (entry.isFile() && (full.endsWith('.tsx') || full.endsWith('.ts'))) {
+      allSrcFiles.push(full);
+    }
+  }
+}
+collectSrcFiles(path.resolve('src'));
+
+for (const filePath of allSrcFiles) {
+  const content = fs.readFileSync(filePath, 'utf-8');
+  if (content.includes('QuickCaptureFloatingButton') || /<[A-Za-z0-9]*FAB/i.test(content)) {
     violationCount++;
-    if (!violationsByFile[FAB_REL_PATH]) violationsByFile[FAB_REL_PATH] = [];
-    violationsByFile[FAB_REL_PATH].push({
+    const rel = path.relative(process.cwd(), filePath);
+    if (!violationsByFile[rel]) violationsByFile[rel] = [];
+    violationsByFile[rel].push({
       lineNum: 1,
-      line: 'QuickCaptureFloatingButton offset is not canonical +48px right-4',
-      name: 'R-FAB-CANONICAL-OFFSET: FAB must be offset bottom-[calc(env(safe-area-inset-bottom,0px)+48px)] right-4 (G-6)'
+      line: 'Deprecated FAB / QuickCaptureFloatingButton rendered or imported in src/',
+      name: 'R-FAB-ALLOWLIST: FAB is retired per Law of Single Primary Presence (ADR-UX-012 Addendum III)'
     });
   }
 }

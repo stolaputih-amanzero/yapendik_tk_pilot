@@ -53,11 +53,13 @@ ARB dan Project Owner meratifikasi transformasi arsitektural resmi:
   * **Fisika Gerak**: Animasi *Amanaura Spring* `{ stiffness: 380, damping: 32, mass: 0.8 }` (R-PHYSICS / **G-4**).
   * **Dimensi & Aksesibilitas**: `max-h-[90dvh]`, *focus trap*, listener tombol `Esc`, dan gestur *swipe-down to dismiss*.
 
-### 2.4 Amandemen Offset FAB (Floating Action Button)
+### 2.4 Purnabakti FAB (Law of Single Primary Presence)
 
-* Tombol Momen Cepat (FAB ✦) direposisi di atas garis Horizon Handle:
-  $$\text{Bottom Offset} = \text{env}(\text{safe-area-inset-bottom}, 0\text{px}) + 48\text{px}, \quad \text{Right} = 16\text{px} \ (\text{right-4})$$
-* **Zero Collision**: Horizon handle menempati dasar layar, FAB mengambang bebas di kanan atas garis (**G-6**).
+* Tombol mengambang duplikat (*QuickCaptureFloatingButton*) dipurnabaktikan secara penuh dari seluruh tata letak dan rute guru.
+* **Jalur Akses Rekam Momen Tetap Lengkap**:
+  1. **Inline Contextual CTA**: Pada Beranda Kelas, linimasa sirkadian menyediakan aksi inline `Rekam Momen →` pada fase yang relevan (Fase 4: Kegiatan Inti & Bermain Terpimpin).
+  2. **Nav-Sheet Tile**: Pada seluruh rute, sheet "MENU NAVIGASI" menyediakan tile `Momen Belajar` (2-tap) yang memicu modal rekam momen secara instan.
+* **Tepi Bawah Murni**: Tepi bawah layar kini sepenuhnya menjadi milik **Horizon Handle** tanpa elemen mengambang tambahan (**G-6**).
 
 ### 2.5 Relokasi PWA Soft Install Chip
 
@@ -79,10 +81,10 @@ ARB dan Project Owner meratifikasi transformasi arsitektural resmi:
 | **G-3** | **Icon & Touch Target Law**: Ikon wajib Lucide `ChevronUp` di tengah hairline, hit-area $\ge 48\text{dp}$, `aria-label="Buka Menu Navigasi"`, ZERO text noise. | Ditegakkan di `MobileOmniBar.tsx` |
 | **G-4** | **Sheet Ergonomics & Physics**: Patuh §7.9, Amanaura Spring `{380,32,0.8}`, `max-h-[90dvh]`, focus-trap, Esc. | Ditegakkan di `MobileOmniBar.tsx` |
 | **G-5** | **Tile Semantics & Flat Fluid**: Label $\le 2$ kata dari `routeRegistry`, badge brass hanya untuk counter riil, flat hairline tanpa shadow berat. | Ditegakkan di `MobileOmniBar.tsx` |
-| **G-6** | **Zero Collision Spatial Offset**: FAB di kanan `+48px`, Horizon Handle di dasar `bottom-0`. Zero collision terbukti matematis. | Ditegakkan di `QuickCaptureFloatingButton.tsx` |
+| **G-6** | **Law of Single Primary Presence**: FAB capture dipurnabaktikan; allowlist FAB kosong di seluruh rute guru. | Ditegakkan di `TeacherHomeShell.tsx` & `amanaura-audit.mjs` |
 | **G-7** | **Desktop Invariant**: Size class `MEDIUM` (Mini-Rail `72px`) dan `EXPANDED` (Sidebar `256px` + Linimasa Vertikal) tetap tidak berubah. | Ditegakkan di `TopBar.tsx`, `Sidebar.tsx` |
 | **G-8** | **Document & SSOT Sync**: Ratifikasi ADR-UX-012, patch §3.4 & §5.4 master docs, changelog entry. | Ditegakkan di docs |
-| **G-9** | **CI Guard Hardening**: Check `min-h-[48px]` chevron, aturan `R-HORIZON-PURE`, `R-INVISIBLE-SCROLL`, kalibrasi Zero Overlay Collision. | Ditegakkan di `amanaura-audit.mjs` |
+| **G-9** | **CI Guard Hardening**: Check `min-h-[48px]` chevron, aturan `R-HORIZON-PURE`, `R-INVISIBLE-SCROLL`, `R-FAB-ALLOWLIST`. | Ditegakkan di `amanaura-audit.mjs` |
 | **G-10** | **Hierarchical Determinism**: Sub-modul wajib menyediakan alur kembali deterministik ke Beranda Hub. | Ditegakkan di sub-surfaces |
 
 ---
@@ -101,8 +103,9 @@ ARB dan Project Owner meratifikasi transformasi arsitektural resmi:
 │  │ [Hub-and-Spoke        │     │[Rail]│ [Workspace]    │         │ (w-64 or  │ (p-6 Centered)    │       │
 │  │  Beranda Linimasa]    │     │[w-72]│ [max-w-lg]     │         │  w-18     │                   │       │
 │  │                       │     │[Icons]│                │         │  Slide)   │                   │       │
-│  │             [✦ FAB]   │     │      │                │         │           │                   │       │
-│  │        [ ⌃ Chevron ]  │     └──────┴────────────────┘         └───────────┴───────────────────┘       │
+│  │                       │     │      │                │         │           │                   │       │
+│  │ ─────── ∧ ─────────── │     │      │                │         │           │                   │       │
+│  │     Horizon Handle    │     └──────┴────────────────┘         └───────────┴───────────────────┘       │
 │  └───────────────────────┘     (Navigation Rail 72px)            (Full Collapsible Sidebar)              │
 └──────────────────────────────────────────────────────────────────────────────────────────────────────────┘
 ```
@@ -113,6 +116,13 @@ ARB dan Project Owner meratifikasi transformasi arsitektural resmi:
 
 * **Chrome Pagination (Dilenyapkan)**: Mekanisme paging visual seperti scrollbar native, Soft Load More Pill, dan Floating Position HUD dilenyapkan untuk membebaskan ruang dan menjaga estetika kanvas.
 * **Konten Ritme (Kanonikal & Dipertahankan)**: `TeacherCircadianTimeline` (linimasa ritme sirkadian 8 fase PAUD) dan `WarmEchoCarousel` (Gema Hangat) adalah *cermin hari guru* yang sarat makna pedagogis dan afirmasi emosional. Keduanya bukan mekanisme paging, melainkan konten kanonikal yang wajib tampil utuh.
+
+---
+
+## 6. Addendum III: Law of Single Primary Presence & Purnabakti FAB
+
+* **Doktrin Inti**: *"Aksi mengambang (FAB) hanya boleh eksis bila TIDAK ADA aksi inline setara di viewport yang sama."*
+* **Implementasi**: Komponen `QuickCaptureFloatingButton` resmi dipensiunkan dari seluruh workspace guru. Tepi bawah layar kini sepenuhnya murni menjadi milik Horizon Handle (satu garis, satu chevron, nol teks). CI Guard memberlakukan `R-FAB-ALLOWLIST` (allowlist kosong).
 
 ---
 *Disahkan secara konstitusional oleh Architecture Review Board (ARB) pada 1 September 2026.*

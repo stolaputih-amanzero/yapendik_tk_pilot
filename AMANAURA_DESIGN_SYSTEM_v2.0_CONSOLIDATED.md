@@ -177,7 +177,7 @@ Setiap produk yang dibangun dengan *Amanaura Design System* wajib memancarkan 6 
   * **Gema Hangat Canonical Doctrine (WarmEchoCarousel)**: Gema Hangat pada Beranda Pendidik wajib dirender menggunakan komponen kanonikal `WarmEchoCarousel` (commit `f1f18fd`) yang selalu tampil terbuka penuh (*always open & prominently legible*) di seluruh fase sirkadian. Dilarang keras melipat atau menyembunyikan kutipan apresiasi orang tua.
   * **Horizon Handle (G-3)**: Hairline 1px (`line-soft`) melintasi layar yang terputus ±24px di tengah untuk ikon Lucide `ChevronUp` (`w-5 h-5`, `text-ink-faint`) tanpa teks label. Strip sentuh full-width `bottom-0` dengan tinggi `calc(env(safe-area-inset-bottom,0px)+48px)` (`min-h-[48px]`), `aria-label="Buka Menu Navigasi"`, tap & swipe-up gesture.
   * **Curated "MENU NAVIGASI" Sheet (G-2, G-4, G-5)**: Disentuh/swipe-up membuka sheet 4×2 squircle flat tiles dengan counter badge *brass* riil, search field di puncak sheet, dan animasi *Amanaura Spring* `{380,32,0.8}` (`max-h-[90dvh]`).
-  * **Zero Collision FAB (G-6)**: Tombol Momen Cepat (FAB ✦) ditempatkan di kanan bawah `bottom-[calc(env(safe-area-inset-bottom,0px)+48px)] right-4`, bebas tabrakan di atas garis Horizon Handle.
+  * **Purnabakti FAB / Law of Single Primary Presence (G-6)**: FAB duplikat (*QuickCaptureFloatingButton*) dipurnabaktikan secara penuh dari seluruh tata letak guru. Aksi rekam momen tetap hidup via inline CTA linimasa sirkadian dan tile "Momen Belajar" di sheet navigasi.
 * **MEDIUM (`600px – 839px`)**:
   * Menggunakan **Navigation Rail (`72px`)** di sisi kiri layar.
 * **EXPANDED (`≥ 840px`)**:
