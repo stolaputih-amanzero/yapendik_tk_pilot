@@ -108,4 +108,11 @@ ARB dan Project Owner meratifikasi transformasi arsitektural resmi:
 ```
 
 ---
+
+## 5. Addendum II: Reklasifikasi Konten Ritme vs Chrome Pagination (§5.1.2)
+
+* **Chrome Pagination (Dilenyapkan)**: Mekanisme paging visual seperti scrollbar native, Soft Load More Pill, dan Floating Position HUD dilenyapkan untuk membebaskan ruang dan menjaga estetika kanvas.
+* **Konten Ritme (Kanonikal & Dipertahankan)**: `TeacherCircadianTimeline` (linimasa ritme sirkadian 8 fase PAUD) dan `WarmEchoCarousel` (Gema Hangat) adalah *cermin hari guru* yang sarat makna pedagogis dan afirmasi emosional. Keduanya bukan mekanisme paging, melainkan konten kanonikal yang wajib tampil utuh.
+
+---
 *Disahkan secara konstitusional oleh Architecture Review Board (ARB) pada 1 September 2026.*
