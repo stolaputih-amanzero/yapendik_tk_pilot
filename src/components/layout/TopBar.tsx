@@ -88,7 +88,7 @@ export const TopBar: React.FC<TopBarProps> = ({
               </span>
             )}
           </div>
-          <span className="text-[10px] text-ink-faint hidden medium:block font-medium truncate">
+          <span className="text-[10px] text-ink-faint hidden md:block font-medium truncate">
             {tabMeta.category} • {tabMeta.description}
           </span>
         </div>

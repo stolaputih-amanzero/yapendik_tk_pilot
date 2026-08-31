@@ -14,7 +14,7 @@ import {
   MilestoneRating, 
   ClassRoom 
 } from '../../domain/types';
-import { Button, AvatarChild, Badge, SelectSheet } from '../ui';
+import { Button, AvatarChild, Badge, SelectSheet, AdaptiveDialog, SearchableCombobox } from '../ui';
 import { 
   Eye, 
   Plus, 
@@ -25,6 +25,15 @@ import {
   Check,
   X
 } from 'lucide-react';
+
+const toTitleCase = (str: string): string => {
+  if (!str) return '';
+  return str
+    .toLowerCase()
+    .split(' ')
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ');
+};
 
 export const ObservationWorkspace: React.FC = () => {
   const { securityContext } = useSecurityContext();
@@ -339,173 +348,197 @@ export const ObservationWorkspace: React.FC = () => {
         </div>
       )}
 
-      {/* Modal Add Observation */}
-      {showAddModal && (
-        <div className="fixed inset-0 bg-brand/60 backdrop-blur-xs flex items-center justify-center p-4 z-50 animate-in fade-in duration-200">
-          <div className="bg-surface rounded-2xl shadow-floating border border-line-hairline max-w-xl w-full max-h-[90vh] overflow-y-auto p-6 text-xs text-ink">
-            <div className="flex items-center justify-between pb-3 border-b border-line mb-4">
-              <h2 className="text-base font-bold text-ink">
-                Perekaman Observasi &amp; Catatan Anekdot Siswa
-              </h2>
-              <button onClick={() => setShowAddModal(false)} className="text-ink-soft hover-only:text-ink cursor-pointer">
-                <X className="w-5 h-5" />
-              </button>
-            </div>
-
-            <form onSubmit={handleCreateObservation} className="space-y-4">
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <label className="block font-bold text-ink-soft mb-1">Pilih Siswa</label>
-                  <SelectSheet
-                    value={formStudentId}
-                    onChange={setFormStudentId}
-                    options={students.map(s => ({ value: s.id, label: `${s.person?.fullName || 'Siswa'} (${s.nis || s.id})` }))}
-                  />
-                </div>
-                <div>
-                  <label className="block font-bold text-ink-soft mb-1">Domain Perkembangan</label>
-                  <SelectSheet
-                    value={formDomain}
-                    onChange={(val) => setFormDomain(val as DevelopmentDomain)}
-                    options={(Object.keys(domainLabels) as DevelopmentDomain[]).map(k => ({ value: k, label: domainLabels[k].name }))}
-                  />
-                </div>
-              </div>
-
-              <div>
-                <label className="block font-bold text-ink-soft mb-1.5">Tingkat Capaian / Penilaian:</label>
-                <div className="grid grid-cols-4 gap-2">
-                  {(Object.keys(ratingBadges) as MilestoneRating[]).map(r => {
-                    const isSelected = formRating === r;
-                    const rInfo = ratingBadges[r];
-                    return (
-                      <button
-                        type="button"
-                        key={r}
-                        onClick={() => setFormRating(r)}
-                        className={`p-3 rounded-xl border text-center transition-all cursor-pointer ${
-                          isSelected 
-                            ? 'bg-brand-primary text-on-brand border-brand-primary font-bold shadow-hairline' 
-                            : 'bg-surface-subtle text-ink-soft border-line-hairline hover-only:text-ink'
-                        }`}
-                      >
-                        <div className="text-xs font-mono font-bold">{rInfo.label}</div>
-                        <div className="text-[10px] opacity-80 leading-tight mt-0.5">{rInfo.full}</div>
-                      </button>
-                    );
+      {/* Modal Add Observation (W-4, W-5, W-6, §6.1) */}
+      <AdaptiveDialog
+        isOpen={showAddModal}
+        onClose={() => setShowAddModal(false)}
+        title="Catatan Anekdot"
+        description={<span className="hidden md:inline">Perekaman observasi &amp; capaian perkembangan harian</span>}
+        maxWidth="lg"
+        footer={
+          <>
+            <Button
+              type="button"
+              variant="ghost"
+              size="sm"
+              onClick={() => setShowAddModal(false)}
+              className="rounded-xl text-xs w-full medium:w-auto"
+            >
+              Batal
+            </Button>
+            <Button
+              type="button"
+              variant="primary"
+              size="sm"
+              onClick={() => {
+                const form = document.getElementById('observation-form') as HTMLFormElement;
+                if (form) form.requestSubmit();
+              }}
+              className="rounded-xl text-xs font-bold w-full medium:w-auto"
+            >
+              Simpan Catatan Observasi
+            </Button>
+          </>
+        }
+      >
+        <form id="observation-form" onSubmit={handleCreateObservation} className="space-y-4 text-xs text-ink">
+          <div className="grid grid-cols-1 medium:grid-cols-2 gap-3">
+            <div>
+              <label className="block font-bold text-ink-soft mb-1">Pilih Siswa</label>
+              {students.length > 15 ? (
+                <SearchableCombobox
+                  value={formStudentId}
+                  onChange={setFormStudentId}
+                  options={students.map(s => {
+                    const nickname = toTitleCase(s.person?.preferredName || s.person?.fullName?.split(' ')[0] || 'Siswa');
+                    const fullName = toTitleCase(s.person?.fullName || 'Siswa');
+                    return {
+                      value: s.id,
+                      label: nickname,
+                      sublabel: `${fullName} • NIS: ${s.nis || s.id}`
+                    };
                   })}
-                </div>
-              </div>
-
-              <div>
-                <label className="block font-bold text-ink-soft mb-1">
-                  Deskripsi Peristiwa Anekdot (Faktual, Objektif, Tanpa Asumsi):
-                </label>
-                <textarea
-                  rows={3}
-                  value={formDescription}
-                  onChange={e => setFormDescription(e.target.value)}
-                  placeholder="Contoh: Saat kegiatan sentra balok, Kenzo berhasil menyusun 8 balok kayu menjadi jembatan bertingkat..."
-                  required
-                  className="w-full bg-surface-subtle border border-line-hairline rounded-xl p-3 focus:ring-1 focus:ring-brand-primary outline-none resize-none"
+                  placeholder="Pilih atau cari siswa..."
                 />
-              </div>
-
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <label className="block font-bold text-ink-soft mb-1">Pemicu / Konteks Kegiatan</label>
-                  <input
-                    type="text"
-                    placeholder="mis. Main peran dokter-pasien"
-                    value={formTrigger}
-                    onChange={e => setFormTrigger(e.target.value)}
-                    className="w-full bg-surface-subtle border border-line-hairline rounded-xl px-3 py-2 focus:ring-1 focus:ring-brand-primary outline-none"
-                  />
-                </div>
-                <div>
-                  <label className="block font-bold text-ink-soft mb-1">Reaksi / Respon Anak</label>
-                  <input
-                    type="text"
-                    placeholder="mis. Tersenyum dan menjelaskan idenya"
-                    value={formReaction}
-                    onChange={e => setFormReaction(e.target.value)}
-                    className="w-full bg-surface-subtle border border-line-hairline rounded-xl px-3 py-2 focus:ring-1 focus:ring-brand-primary outline-none"
-                  />
-                </div>
-              </div>
-
-              <div>
-                <label className="block font-bold text-ink-soft mb-1">Tindakan / Penguatan Guru</label>
-                <input
-                  type="text"
-                  placeholder="mis. Mengapresiasi dan menantang anak menambahkan tiang jembatan"
-                  value={formIntervention}
-                  onChange={e => setFormIntervention(e.target.value)}
-                  className="w-full bg-surface-subtle border border-line-hairline rounded-xl px-3 py-2 focus:ring-1 focus:ring-brand-primary outline-none"
+              ) : (
+                <SelectSheet
+                  value={formStudentId}
+                  onChange={setFormStudentId}
+                  options={students.map(s => {
+                    const nickname = toTitleCase(s.person?.preferredName || s.person?.fullName?.split(' ')[0] || 'Siswa');
+                    const fullName = toTitleCase(s.person?.fullName || 'Siswa');
+                    return {
+                      value: s.id,
+                      label: nickname,
+                      sublabel: `${fullName} • NIS: ${s.nis || s.id}`
+                    };
+                  })}
+                  placeholder="Pilih siswa..."
                 />
-              </div>
-
-              <div>
-                <label className="block font-bold text-ink-soft mb-1">Indikator Teramati (Satu per baris):</label>
-                <textarea
-                  rows={2}
-                  value={formIndicators}
-                  onChange={e => setFormIndicators(e.target.value)}
-                  placeholder="Kreativitas merancang bentuk&#10;Koordinasi motorik halus"
-                  className="w-full bg-surface-subtle border border-line-hairline rounded-xl p-3 focus:ring-1 focus:ring-brand-primary outline-none resize-none"
-                />
-              </div>
-
-              <div className="p-3 bg-surface-subtle border border-line-hairline rounded-xl space-y-2">
-                <div className="flex items-center gap-2">
-                  <input
-                    type="checkbox"
-                    id="sharedGuardian"
-                    checked={formSharedWithGuardian}
-                    onChange={e => setFormSharedWithGuardian(e.target.checked)}
-                    className="rounded text-brand-primary cursor-pointer"
-                  />
-                  <label htmlFor="sharedGuardian" className="text-ink font-medium cursor-pointer">
-                    Bagikan catatan ini kepada Orang Tua / Wali di Buku Penghubung
-                  </label>
-                </div>
-                <div className="flex items-center gap-2">
-                  <input
-                    type="checkbox"
-                    id="confidential"
-                    checked={formIsConfidential}
-                    onChange={e => setFormIsConfidential(e.target.checked)}
-                    className="rounded text-brand-primary cursor-pointer"
-                  />
-                  <label htmlFor="confidential" className="text-ink font-medium cursor-pointer">
-                    Tandai sebagai catatan rahasia internal staf (Hanya Pendidik &amp; Kepala Sekolah)
-                  </label>
-                </div>
-              </div>
-
-              <div className="flex items-center justify-end gap-2 pt-3 border-t border-line">
-                <Button
-                  type="button"
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => setShowAddModal(false)}
-                  className="rounded-xl text-xs"
-                >
-                  Batal
-                </Button>
-                <Button
-                  type="submit"
-                  variant="primary"
-                  size="sm"
-                  className="rounded-xl text-xs font-bold"
-                >
-                  Simpan Catatan Observasi
-                </Button>
-              </div>
-            </form>
+              )}
+            </div>
+            <div>
+              <label className="block font-bold text-ink-soft mb-1">Domain Perkembangan</label>
+              <SelectSheet
+                value={formDomain}
+                onChange={(val) => setFormDomain(val as DevelopmentDomain)}
+                options={(Object.keys(domainLabels) as DevelopmentDomain[]).map(k => ({ value: k, label: domainLabels[k].name }))}
+              />
+            </div>
           </div>
-        </div>
-      )}
+
+          <div>
+            <label className="block font-bold text-ink-soft mb-1.5">Tingkat Capaian / Penilaian:</label>
+            <div className="grid grid-cols-2 medium:grid-cols-4 gap-2">
+              {(Object.keys(ratingBadges) as MilestoneRating[]).map(r => {
+                const isSelected = formRating === r;
+                const rInfo = ratingBadges[r];
+                return (
+                  <button
+                    type="button"
+                    key={r}
+                    onClick={() => setFormRating(r)}
+                    className={`p-3 rounded-xl border text-center transition-all cursor-pointer ${
+                      isSelected 
+                        ? 'bg-brand-primary text-on-brand border-brand-primary font-bold shadow-hairline' 
+                        : 'bg-surface-subtle text-ink-soft border-line-hairline hover-only:text-ink'
+                    }`}
+                  >
+                    <div className="text-xs font-mono font-bold">{rInfo.label}</div>
+                    <div className="text-[10px] opacity-80 leading-tight mt-0.5">{rInfo.full}</div>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          <div>
+            <label className="block font-bold text-ink-soft mb-1">
+              Deskripsi Peristiwa Anekdot (Faktual, Objektif, Tanpa Asumsi):
+            </label>
+            <textarea
+              rows={3}
+              value={formDescription}
+              onChange={e => setFormDescription(e.target.value)}
+              placeholder="Contoh: Saat kegiatan sentra balok, Kenzo berhasil menyusun 8 balok kayu menjadi jembatan bertingkat..."
+              required
+              className="w-full bg-surface-subtle border border-line-hairline rounded-xl p-3 focus:ring-1 focus:ring-brand-primary outline-none resize-none text-xs"
+            />
+          </div>
+
+          <div className="grid grid-cols-1 medium:grid-cols-2 gap-3">
+            <div>
+              <label className="block font-bold text-ink-soft mb-1">Pemicu / Konteks Kegiatan</label>
+              <input
+                type="text"
+                placeholder="mis. Main peran dokter-pasien"
+                value={formTrigger}
+                onChange={e => setFormTrigger(e.target.value)}
+                className="w-full bg-surface-subtle border border-line-hairline rounded-xl px-3 py-2 focus:ring-1 focus:ring-brand-primary outline-none text-xs"
+              />
+            </div>
+            <div>
+              <label className="block font-bold text-ink-soft mb-1">Reaksi / Respon Anak</label>
+              <input
+                type="text"
+                placeholder="mis. Tersenyum dan menjelaskan idenya"
+                value={formReaction}
+                onChange={e => setFormReaction(e.target.value)}
+                className="w-full bg-surface-subtle border border-line-hairline rounded-xl px-3 py-2 focus:ring-1 focus:ring-brand-primary outline-none text-xs"
+              />
+            </div>
+          </div>
+
+          <div>
+            <label className="block font-bold text-ink-soft mb-1">Tindakan / Penguatan Guru</label>
+            <input
+              type="text"
+              placeholder="mis. Mengapresiasi dan menantang anak menambahkan tiang jembatan"
+              value={formIntervention}
+              onChange={e => setFormIntervention(e.target.value)}
+              className="w-full bg-surface-subtle border border-line-hairline rounded-xl px-3 py-2 focus:ring-1 focus:ring-brand-primary outline-none text-xs"
+            />
+          </div>
+
+          <div>
+            <label className="block font-bold text-ink-soft mb-1">Indikator Teramati (Satu per baris):</label>
+            <textarea
+              rows={2}
+              value={formIndicators}
+              onChange={e => setFormIndicators(e.target.value)}
+              placeholder="Kreativitas merancang bentuk&#10;Koordinasi motorik halus"
+              className="w-full bg-surface-subtle border border-line-hairline rounded-xl p-3 focus:ring-1 focus:ring-brand-primary outline-none resize-none text-xs"
+            />
+          </div>
+
+          <div className="p-3 bg-surface-subtle border border-line-hairline rounded-xl space-y-2">
+            <div className="flex items-center gap-2">
+              <input
+                type="checkbox"
+                id="sharedGuardian"
+                checked={formSharedWithGuardian}
+                onChange={e => setFormSharedWithGuardian(e.target.checked)}
+                className="rounded text-brand-primary cursor-pointer"
+              />
+              <label htmlFor="sharedGuardian" className="text-ink font-medium cursor-pointer text-xs">
+                Bagikan catatan ini kepada Orang Tua / Wali di Buku Penghubung
+              </label>
+            </div>
+            <div className="flex items-center gap-2">
+              <input
+                type="checkbox"
+                id="confidential"
+                checked={formIsConfidential}
+                onChange={e => setFormIsConfidential(e.target.checked)}
+                className="rounded text-brand-primary cursor-pointer"
+              />
+              <label htmlFor="confidential" className="text-ink font-medium cursor-pointer text-xs">
+                Tandai sebagai catatan rahasia internal staf (Hanya Pendidik &amp; Kepala Sekolah)
+              </label>
+            </div>
+          </div>
+        </form>
+      </AdaptiveDialog>
     </div>
   );
 };

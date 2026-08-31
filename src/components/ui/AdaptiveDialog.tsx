@@ -89,7 +89,7 @@ export const AdaptiveDialog: React.FC<AdaptiveDialogProps> = ({
             className={`
               relative z-10 w-full bg-surface text-ink shadow-floating
               rounded-t-3xl expanded:rounded-3xl border border-line
-              flex flex-col max-h-[88vh] expanded:max-h-[85vh] overflow-hidden
+              flex flex-col max-h-[90dvh] expanded:max-h-[85vh] overflow-hidden
               ${maxWidthMap[maxWidth]}
               ${className}
             `.trim().replace(/\s+/g, ' ')}
@@ -132,7 +132,7 @@ export const AdaptiveDialog: React.FC<AdaptiveDialogProps> = ({
 
             {/* Footer */}
             {footer && (
-              <div className="px-5 py-3 expanded:px-6 expanded:py-4 bg-surface-subtle/80 border-t border-line-soft flex flex-col-reverse medium:flex-row items-stretch medium:items-center medium:justify-end gap-2 shrink-0">
+              <div className="px-5 py-3.5 expanded:px-6 expanded:py-4 bg-surface-subtle/80 border-t border-line-soft flex flex-col-reverse medium:flex-row items-stretch medium:items-center medium:justify-end gap-2 shrink-0 pb-[calc(0.75rem+env(safe-area-inset-bottom,0px))] expanded:pb-4">
                 {footer}
               </div>
             )}
