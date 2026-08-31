@@ -43,7 +43,7 @@ export const ObservationFeed: React.FC<Props> = ({
           className="mt-4 w-full medium:w-auto px-4 py-2 rounded-field text-xs font-bold bg-brand text-on-brand hover-only:opacity-90 shadow-hairline transition cursor-pointer flex justify-center items-center mx-auto gap-2"
         >
           <Sparkles className="w-4 h-4 text-brand-primary fill-brand-primary" />
-          <span>+ Rekam Momen Belajar Pertama</span>
+          <span>Rekam Momen Belajar Pertama</span>
         </button>
       </div>
     );

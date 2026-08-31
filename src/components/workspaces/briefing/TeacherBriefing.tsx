@@ -7,6 +7,7 @@
 import React, { useState } from 'react';
 import { TeacherBriefingData } from '../../../types/briefingTypes';
 import { BriefingShell } from './BriefingShell';
+import { WarmEchoCarousel } from './WarmEchoCarousel';
 import { useClosureSound } from '../../../hooks/useClosureSound';
 import { briefingEngine } from '../../../services/BriefingEngine';
 import { CheckCircle2, Sparkles, MessageSquare, BookOpen, Clock } from 'lucide-react';
@@ -138,50 +139,24 @@ export const TeacherBriefing: React.FC<TeacherBriefingProps> = ({
         {/* CLOSURE MODE: Serene Nighttime Closure */}
         {mode === 'PENUTUP' && (
           <div className="space-y-3">
-            {closedState ? (
-              <div className="p-3 rounded-field bg-surface-subtle text-xs text-ink-soft space-y-1">
-                <div className="flex items-center gap-1.5 font-medium text-ink">
-                  <CheckCircle2 className="w-4 h-4 text-success" />
-                  <span>
-                    {closedState === 'TUNTAS'
-                      ? 'Hari tuntas sempurna. Selamat beristirahat.'
-                      : 'Catatan tersimpan tenang menemani Anda besok pagi.'}
-                  </span>
-                </div>
-                <p className="text-ink-faint pl-5">
-                  OS Yapendik beristirahat bersama Anda malam ini.
-                </p>
-              </div>
-            ) : (
-              <>
-                {/* Micro-Summary Summary Chips */}
-                <div className="flex flex-wrap items-center gap-2 text-xs text-ink-soft">
-                  <span>
-                    {closure_summary?.present_children ?? 15}/{closure_summary?.total_children ?? 15} hadir
-                  </span>
-                  <span>•</span>
-                  <span>{closure_summary?.moments_recorded ?? 3} momen</span>
-                  <span>•</span>
-                  <span>{closure_summary?.messages_replied ?? 2} pesan dibalas</span>
-                </div>
+            {/* Micro-Summary Summary Chips */}
+            <div className="flex flex-wrap items-center gap-2 text-xs text-ink-soft">
+              <span>
+                {closure_summary?.present_children ?? 15}/{closure_summary?.total_children ?? 15} hadir
+              </span>
+              <span>•</span>
+              <span>{closure_summary?.moments_recorded ?? 3} momen</span>
+              <span>•</span>
+              <span>{closure_summary?.messages_replied ?? 2} pesan dibalas</span>
+            </div>
 
-                {/* Ghost Action [Tutup Hari] (Law F-7: Flat Canvas Native) */}
-                <button
-                  type="button"
-                  onClick={handleTutupHari}
-                  disabled={isClosing}
-                  className="w-full min-h-[44px] px-4 py-3 rounded-field border border-line hover-only:bg-surface-subtle active:scale-[0.98] text-ink font-medium text-sm transition-all flex items-center justify-center gap-2 disabled:opacity-50"
-                >
-                  <CheckCircle2 className="w-4 h-4 text-ink-soft" />
-                  <span>{isClosing ? 'Menutup Hari...' : 'Tutup Hari'}</span>
-                </button>
-              </>
-            )}
+            {/* Gema Hangat: 5 Catatan Apresiasi Orang Tua Terbaru */}
+            <WarmEchoCarousel />
           </div>
         )}
 
-        {/* WARM ECHO (Signature #6 Emotional Affirmation) */}
-        {warm_echo && (
+        {/* WARM ECHO (Signature #6 Emotional Affirmation for OPERATIONAL / PRATINJAU) */}
+        {mode !== 'PENUTUP' && warm_echo && (
           <div className="mt-2">
             {/* Compact Interactive Chip Trigger */}
             <button

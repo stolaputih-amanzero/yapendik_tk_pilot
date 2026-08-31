@@ -57,8 +57,11 @@ import {
   ChevronDown,
   AlertTriangle,
   FileText,
-  Info
+  Info,
+  UserCheck
 } from 'lucide-react';
+
+import { WorkspaceTab } from '../../layout/TopBar';
 
 const getTodayDateString = (): string => {
   const d = new Date();
@@ -76,8 +79,19 @@ const toTitleCase = (str: string) => {
     .join(' ');
 };
 
-export const TeacherHomeShell: React.FC<{ onNavigateToCommunication?: () => void }> = ({ onNavigateToCommunication }) => {
+export const TeacherHomeShell: React.FC<{ 
+  onNavigateToCommunication?: () => void;
+  onNavigateTab?: (tab: WorkspaceTab) => void;
+}> = ({ onNavigateToCommunication, onNavigateTab }) => {
   const { securityContext, currentPersona } = useSecurityContext();
+
+  const handleNavigateTab = (tab: WorkspaceTab) => {
+    if (onNavigateTab) {
+      onNavigateTab(tab);
+    } else if (tab === 'COMMUNICATION' && onNavigateToCommunication) {
+      onNavigateToCommunication();
+    }
+  };
 
   const [activeTab, setActiveTab] = useState<'TODAY' | 'LEARNING' | 'ROSTER'>('TODAY');
   const [operatingState, setOperatingState] = useState<OperatingState>('WELCOME');
@@ -356,8 +370,10 @@ export const TeacherHomeShell: React.FC<{ onNavigateToCommunication?: () => void
         />
       )}
 
-      {/* Hairline Divider between Circadian Briefing & Daily Workspace */}
-      <div className="mx-4 medium:mx-5 border-b border-line-hairline/80 mb-3" />
+      {/* Amanaura Signature Warm Gradient Divider between Circadian Briefing & Daily Workspace */}
+      <div className="mx-4 medium:mx-5 my-4">
+        <div className="h-[1.5px] w-full bg-gradient-to-r from-line-strong via-accent-valor/40 to-line" />
+      </div>
 
       {/* Workspace Header Section (F-1 & F-6) */}
       <div className="px-4 medium:px-5 pt-1 pb-1 w-full text-ink">
@@ -366,67 +382,49 @@ export const TeacherHomeShell: React.FC<{ onNavigateToCommunication?: () => void
             const currentClass = db.getClasses(schoolId).find(c => c.id === classId);
             const homeroomTeacher = currentClass?.homeroomTeacherId ? db.getPersonById(currentClass.homeroomTeacherId) : undefined;
             const coTeacher = currentClass?.coTeacherId ? db.getPersonById(currentClass.coTeacherId) : undefined;
-            const className = aggregate?.context?.class_name || currentClass?.name || 'Kelompok A (TK A)';
-            const homeroomName = homeroomTeacher?.fullName || aggregate?.context?.teacher?.name || currentPersona?.name || 'ERNA BOYKELA R';
-            const teacherInfoText = `Wali Kelas: ${toTitleCase(homeroomName)}${coTeacher ? ` • Pendamping: ${toTitleCase(coTeacher.fullName)}` : ''}`;
+            const rawClassName = aggregate?.context?.class_name || currentClass?.name || 'Kelas TK A';
+            const displayClassName = rawClassName.includes('Kelompok A') ? 'Kelas TK A' : rawClassName.includes('Kelompok B') ? 'Kelas TK B' : rawClassName;
+            const homeroomName = homeroomTeacher?.fullName || aggregate?.context?.teacher?.name || currentPersona?.name || 'Erna Boykela R';
+            const coTeacherName = coTeacher?.fullName;
 
             return (
-              <div className="space-y-0.5">
-                <span className="text-[10px] font-bold uppercase tracking-widest text-ink-faint/80 block">
-                  Ruang Guru
-                </span>
-                <div className="flex items-center gap-2">
-                  <h2 className="text-xl medium:text-2xl font-bold text-ink leading-tight">
-                    {className}
-                  </h2>
-                  <span 
-                    className="text-ink-faint text-xs cursor-help inline-flex items-center p-1 rounded-full hover-only:bg-surface-subtle transition-colors" 
-                    title={teacherInfoText}
-                    aria-label={teacherInfoText}
-                  >
-                    <Info className="w-3.5 h-3.5 text-ink-faint hover-only:text-ink" />
+              <div className="space-y-2 pb-1">
+                <div className="space-y-0.5">
+                  <span className="text-[11px] font-bold uppercase tracking-wider text-brand-deep block">
+                    Jadwal Kegiatan Harian
                   </span>
+                  <h2 className="text-2xl medium:text-3xl font-bold text-ink leading-tight tracking-tight">
+                    {displayClassName}
+                  </h2>
+                </div>
+
+                {/* Info Guru & Wali Kelas (2 Baris Flat Icons) */}
+                <div className="space-y-1 pt-0.5 text-xs text-ink-soft">
+                  <div className="flex items-center gap-2">
+                    <UserCheck className="w-4 h-4 text-accent-valor shrink-0" />
+                    <span>
+                      <strong className="text-ink font-semibold">Wali Kelas:</strong> {toTitleCase(homeroomName)}
+                    </span>
+                  </div>
+                  {coTeacherName ? (
+                    <div className="flex items-center gap-2">
+                      <Users className="w-4 h-4 text-ink-faint shrink-0" />
+                      <span>
+                        <strong className="text-ink font-semibold">Guru Pendamping:</strong> {toTitleCase(coTeacherName)}
+                      </span>
+                    </div>
+                  ) : (
+                    <div className="flex items-center gap-2">
+                      <Users className="w-4 h-4 text-ink-faint shrink-0" />
+                      <span>
+                        <strong className="text-ink font-semibold">Guru Pendamping:</strong> Ibu Novita S
+                      </span>
+                    </div>
+                  )}
                 </div>
               </div>
             );
           })()}
-        </div>
-
-        {/* Surface Tab Flat Navigation (Law R-8 Flat Fluid Navigation) */}
-        <div className="mt-3">
-          <nav 
-            role="tablist" 
-            aria-label="Permukaan Beranda Guru" 
-            className="flex items-center gap-1 border-b border-line-soft w-full overflow-x-auto no-scrollbar"
-          >
-            {[
-              { id: 'TODAY', label: 'Hari Ini', icon: CalendarDays },
-              { id: 'LEARNING', label: 'Belajar & Karya', icon: Puzzle },
-              { id: 'ROSTER', label: 'Siswa & Rapor', icon: Users }
-            ].map(tab => {
-              const isActive = activeTab === tab.id;
-              const Icon = tab.icon;
-              return (
-                <button
-                  key={tab.id}
-                  role="tab"
-                  aria-selected={isActive}
-                  type="button"
-                  onClick={() => setActiveTab(tab.id as 'TODAY' | 'LEARNING' | 'ROSTER')}
-                  className={`
-                    flex items-center gap-2 py-3 px-3 medium:px-4 text-xs medium:text-sm font-semibold transition-all duration-150 cursor-pointer whitespace-nowrap -mb-px
-                    ${isActive 
-                      ? 'text-ink border-b-2 border-brand-primary font-bold' 
-                      : 'text-ink-soft hover-only:text-ink border-b-2 border-transparent hover-only:border-line'
-                    }
-                  `.trim()}
-                >
-                  <Icon className={`w-4 h-4 shrink-0 ${isActive ? 'text-brand-primary' : 'text-ink-soft'}`} />
-                  <span>{tab.label}</span>
-                </button>
-              );
-            })}
-          </nav>
         </div>
       </div>
 
@@ -470,33 +468,12 @@ export const TeacherHomeShell: React.FC<{ onNavigateToCommunication?: () => void
                   setQuickCaptureStudentId(studentId);
                   setIsQuickCaptureOpen(true);
                 }}
+                onNavigateTab={handleNavigateTab}
+                onOpenQuickCapture={() => setIsQuickCaptureOpen(true)}
                 pulse={aggregate.pulse}
                 hasSafetyExceptions={hasSafetyExceptions}
                 onOpenPulseModal={() => setIsPulseModalOpen(true)}
               />
-
-              {/* STEP 2: Mobile Bottom Decoupling - Replaced huge inline dump with sleek Action Trigger */}
-              <div className="block large:hidden pt-4 border-t border-line">
-                <button
-                  type="button"
-                  onClick={() => setIsReconciliationModalOpen(true)}
-                  className="w-full bg-surface rounded-2xl min-h-[48px] p-4 flex items-center justify-between gap-3 text-xs border border-line-hairline shadow-hairline text-ink hover-only:bg-surface-subtle transition cursor-pointer active:scale-[0.99]"
-                >
-                  <div className="flex items-center gap-2">
-                    <FileText className="w-4 h-4 text-brand-primary shrink-0" />
-                    <span className="font-bold">Status Rekonsiliasi &amp; Buku Penghubung</span>
-                  </div>
-                  {aggregate.daily_completion.is_all_clear ? (
-                    <span className="px-3 py-1 rounded-full bg-success-tint text-success-deep font-bold text-[10px] font-mono whitespace-nowrap">
-                      ALL CLEAR
-                    </span>
-                  ) : (
-                    <span className="px-3 py-1 rounded-full bg-warning-tint text-warning-deep font-bold text-[10px] font-mono whitespace-nowrap">
-                      {aggregate.daily_completion.pending_enrichment_count + aggregate.daily_completion.unacknowledged_notice_count} TUGAS
-                    </span>
-                  )}
-                </button>
-              </div>
             </div>
           ) : activeTab === 'LEARNING' ? (
             <LearningSurface

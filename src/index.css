@@ -304,6 +304,17 @@ html.dark input[type="date"]::-webkit-calendar-picker-indicator:hover {
   }
 }
 
+@keyframes amanaura-gold-breath {
+  0%, 100% {
+    box-shadow: 0 0 0 2px var(--accent-valor), 0 0 20px -2px oklch(0.75 0.14 85 / 0.35);
+    border-color: var(--accent-valor);
+  }
+  50% {
+    box-shadow: 0 0 0 1px oklch(0.75 0.14 85 / 0.25), 0 0 6px -2px oklch(0.75 0.14 85 / 0.08);
+    border-color: oklch(0.75 0.14 85 / 0.35);
+  }
+}
+
 /* 
  * CANONICAL REUSABLE UTILITIES & ERGONOMICS
  */
@@ -320,6 +331,11 @@ html.dark input[type="date"]::-webkit-calendar-picker-indicator:hover {
 
   .animate-amanaura-breath-slow {
     animation: amanaura-pulse-slow 8s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+
+  /* Amanaura Golden Breathing Border Aura */
+  .animate-gold-breath {
+    animation: amanaura-gold-breath 3.5s ease-in-out infinite;
   }
 
   /* Explicit Shadow Utilities */

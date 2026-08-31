@@ -69,9 +69,9 @@ export const BriefingShell: React.FC<BriefingShellProps> = ({
         )}
       </div>
 
-      {/* Greeting Title */}
+      {/* Greeting Title — Amanaura Signature Gold Italic Gradient */}
       <div className="flex items-baseline justify-between gap-3">
-        <h1 className="text-3xl medium:text-4xl font-serif font-normal text-ink tracking-wide leading-tight">
+        <h1 className="text-3xl medium:text-5xl font-serif italic font-normal text-transparent bg-clip-text bg-gradient-to-r from-accent-valor via-warning to-accent-valor tracking-wide leading-tight">
           {greeting}
         </h1>
       </div>

@@ -1,10 +1,5 @@
-import { SelectSheet } from '../ui';
-/**
- * Yapendik School OS — Domain 03: Student Development & LPPA (Laporan Capaian Perkembangan Anak)
- * Production-Hardened: Connected to V2.1.5 RPC State Machine (Draft -> Review -> Approve -> Publish)
- */
-
 import React, { useState, useEffect } from 'react';
+import { SelectSheet } from '../ui';
 import { db } from '../../db/database';
 import { useSecurityContext } from '../../auth/context';
 import { evaluateAuthorization } from '../../auth/authorization';
@@ -16,19 +11,26 @@ import {
   StudentProgressReport
 } from '../../domain/types';
 import { 
-  Award, 
   CheckCircle2, 
   FileText, 
-  TrendingUp, 
-  Sparkles, 
   ShieldCheck, 
-  Printer, 
-  AlertCircle,
   Clock,
   Send,
-  Lock
+  Lock,
+  AlertTriangle,
+  Heart,
+  Activity,
+  Brain,
+  MessageSquare,
+  Smile,
+  Sparkles
 } from 'lucide-react';
 
+/**
+ * Yapendik School OS — Domain 03: Student Development & LPPA (Laporan Capaian Perkembangan Anak)
+ * Aligned with Amanaura Design System v4.0 (ADR-UX-010 / ADR-UX-011) & Kurikulum Merdeka TK
+ * Production-Hardened: Connected to V2.1.5 RPC State Machine (Draft -> Review -> Approve -> Publish)
+ */
 export const DevelopmentWorkspace: React.FC = () => {
   const { securityContext } = useSecurityContext();
   const [classes, setClasses] = useState<ClassRoom[]>([]);
@@ -63,14 +65,24 @@ export const DevelopmentWorkspace: React.FC = () => {
     return db.subscribe(loadData);
   }, [securityContext?.activeSchoolId, selectedClassId]);
 
+  const activeSchoolAcademicYears = securityContext?.activeSchoolId 
+    ? db.getAcademicYears(securityContext.activeSchoolId) 
+    : [];
+  const activeAy = activeSchoolAcademicYears.find(ay => ay.isActive) || activeSchoolAcademicYears[0];
+  const academicYearId = activeAy?.id || 'ay_maranatha_2026_2027_ganjil';
+  const currentSemester = activeAy?.semester || 'GANJIL';
+
   useEffect(() => {
     if (selectedStudentId && securityContext) {
       const isGuardian = securityContext.role === 'GUARDIAN';
       const obs = db.getObservations(securityContext.activeSchoolId, selectedClassId, selectedStudentId, isGuardian);
       setObservations(obs);
 
+      const ays = db.getAcademicYears(securityContext.activeSchoolId);
+      const currAy = ays.find(a => a.isActive) || ays[0];
+
       // Load existing report
-      const rep = db.getProgressReport(selectedStudentId);
+      const rep = db.getProgressReport(selectedStudentId, currAy?.id);
       setCurrentReport(rep || null);
     }
   }, [selectedStudentId, securityContext?.activeSchoolId, selectedClassId]);
@@ -92,36 +104,48 @@ export const DevelopmentWorkspace: React.FC = () => {
     resourceSchoolId: securityContext.activeSchoolId
   }).granted : false;
 
-  const domains: { key: DevelopmentDomain; title: string; description: string }[] = [
+  const domains: { key: DevelopmentDomain; title: string; subtitle: string; description: string; icon: React.ReactNode }[] = [
     { 
       key: 'NILAI_AGAMA_MORAL', 
-      title: '1. Nilai Agama dan Moral', 
-      description: 'Mengenal Tuhan, kebiasaan berdoa, sopan santun, menghargai sesama dan alam ciptaan.' 
+      title: '1. Nilai Agama dan Budi Pekerti (NABP)', 
+      subtitle: 'Mengenal Tuhan & Sikap Kasih',
+      description: 'Mengenal Tuhan melalui ciptaan-Nya, kebiasaan berdoa harian, santun, menghargai sesama dan alam ciptaan.',
+      icon: <Heart className="w-4 h-4 text-danger" />
+    },
+    { 
+      key: 'SOSIAL_EMOSIONAL', 
+      title: '2. Jati Diri & Regulasi Emosi', 
+      subtitle: 'Kemandirian & Relasi Sosial',
+      description: 'Mengenali emosi diri, berempati, antre berbagi giliran, interaksi hangat, dan adaptasi dalam kelompok.',
+      icon: <Smile className="w-4 h-4 text-brand-primary" />
     },
     { 
       key: 'FISIK_MOTORIK', 
-      title: '2. Fisik-Motorik (Kasar & Halus)', 
-      description: 'Keseimbangan tubuh, koordinasi mata-tangan, kelincahan gerak, dan kemandirian kebersihan diri.' 
-    },
-    { 
-      key: 'KOGNITIF', 
-      title: '3. Kognitif & Pemecahan Masalah', 
-      description: 'Eksplorasi sebab-akibat, membedakan pola/bentuk/ukuran, kemampuan logika awal.' 
+      title: '3. Fisik-Motorik & Kesehatan Diri', 
+      subtitle: 'Kelincahan Gerak & Kebersihan',
+      description: 'Keseimbangan tubuh, koordinasi mata-tangan (motorik halus), kelincahan motorik kasar, dan kemandirian kebersihan diri.',
+      icon: <Activity className="w-4 h-4 text-success" />
     },
     { 
       key: 'BAHASA', 
       title: '4. Bahasa & Literasi Awal', 
-      description: 'Memahami instruksi bertahap, perbendaharaan kata, menyimak cerita, dan mengekspresikan ide.' 
+      subtitle: 'Komunikasi & Minat Buku',
+      description: 'Memahami instruksi bertahap, perbendaharaan kata, menyimak cerita, dan mengekspresikan ide dengan santun.',
+      icon: <MessageSquare className="w-4 h-4 text-info" />
     },
     { 
-      key: 'SOSIAL_EMOSIONAL', 
-      title: '5. Sosial-Emosional & Kemandirian', 
-      description: 'Mengenali emosi diri, berempati, antre berbagi giliran, dan adaptasi dalam kelompok.' 
+      key: 'KOGNITIF', 
+      title: '5. Kognitif & Nalar Pemecahan Masalah', 
+      subtitle: 'Eksplorasi Sebab-Akibat & Pola',
+      description: 'Eksplorasi sebab-akibat, membedakan pola/bentuk/ukuran, kemampuan logika awal, dan nalar kontekstual.',
+      icon: <Brain className="w-4 h-4 text-brand-accent" />
     },
     { 
       key: 'SENI', 
-      title: '6. Seni & Kreativitas', 
-      description: 'Ekspresi visual (lukis/kriya), gerak berirama, apresiasi musik dan imajinasi anak.' 
+      title: '6. Seni, Kreativitas & STEAM', 
+      subtitle: 'Ekspresi Visual, Rancang Bangun & Musik',
+      description: 'Ekspresi visual (lukis/kriya/balok), gerak berirama, apresiasi musik, imajinasi kreatif, dan eksplorasi STEAM.',
+      icon: <Sparkles className="w-4 h-4 text-lppa" />
     }
   ];
 
@@ -142,6 +166,21 @@ export const DevelopmentWorkspace: React.FC = () => {
     return { count, domainObs, dominantRating };
   };
 
+  const getRatingBadgeStyle = (rating: MilestoneRating) => {
+    switch (rating) {
+      case 'BSB':
+        return 'bg-lppa-tint text-lppa-deep border border-lppa-line';
+      case 'BSH':
+        return 'bg-success-tint text-success-deep border border-success-line';
+      case 'MB':
+        return 'bg-info-tint text-info-deep border border-info-line';
+      case 'BB':
+        return 'bg-warning-tint text-warning-deep border border-warning-line';
+      default:
+        return 'bg-surface-subtle text-ink-soft border border-line-hairline';
+    }
+  };
+
   const currentStatus = currentReport?.status || 'DRAFT';
 
   // --- V2.1.5 RPC Actions ---
@@ -150,7 +189,12 @@ export const DevelopmentWorkspace: React.FC = () => {
     if (!selectedStudent || !securityContext) return;
     setIsProcessing(true);
 
-    const reportId = currentReport?.id || `rep_${securityContext.activeSchoolId}_${selectedStudentId}_2026_ganjil`;
+    const ays = db.getAcademicYears(securityContext.activeSchoolId);
+    const currAy = ays.find(a => a.isActive) || ays[0];
+    const currAyId = currAy?.id || 'ay_maranatha_2026_2027_ganjil';
+    const currSemester = currAy?.semester || 'GANJIL';
+
+    const reportId = currentReport?.id || `rep_${securityContext.activeSchoolId}_${selectedStudentId}_${currAyId}`;
     
     const summaryNotes = domains.map(d => {
       const { dominantRating } = getDomainStats(d.key);
@@ -158,8 +202,8 @@ export const DevelopmentWorkspace: React.FC = () => {
         domain: d.key,
         rating: dominantRating,
         narrative: `Capaian Ananda pada domain ${d.title} berkembang dengan baik.`,
-        strengths: 'Menunjukkan inisiatif positif.',
-        growthFocus: 'Stimulasi berkelanjutan di rumah.'
+        strengths: 'Menunjukkan inisiatif positif dan antusiasme belajar.',
+        growthFocus: 'Stimulasi berkelanjutan dan pembiasaan positif di rumah.'
       };
     });
 
@@ -167,8 +211,8 @@ export const DevelopmentWorkspace: React.FC = () => {
       id: reportId,
       schoolId: securityContext.activeSchoolId,
       studentId: selectedStudentId,
-      academicYearId: 'ay_2026_2027_ganjil',
-      semester: 'GANJIL',
+      academicYearId: currAyId,
+      semester: currSemester,
       evaluatedByPersonId: securityContext.personId,
       evaluatedAt: new Date().toISOString(),
       summaryNotes,
@@ -208,7 +252,10 @@ export const DevelopmentWorkspace: React.FC = () => {
       alert('Hanya Kepala Sekolah yang memiliki wewenang mengesahkan Laporan LPPA.');
       return;
     }
-    const reportId = currentReport?.id || `rep_${securityContext?.activeSchoolId}_${selectedStudentId}_2026_ganjil`;
+    const ays = db.getAcademicYears(securityContext?.activeSchoolId);
+    const currAy = ays.find(a => a.isActive) || ays[0];
+    const currAyId = currAy?.id || 'ay_maranatha_2026_2027_ganjil';
+    const reportId = currentReport?.id || `rep_${securityContext?.activeSchoolId}_${selectedStudentId}_${currAyId}`;
     setIsProcessing(true);
     const res = await db.approveProgressReport(reportId, approvalNotes || 'Disahkan oleh Kepala Sekolah.');
     setIsProcessing(false);
@@ -236,183 +283,240 @@ export const DevelopmentWorkspace: React.FC = () => {
   };
 
   return (
-    <div className="px-4 medium:px-6 py-6 space-y-6 pb-[160px] expanded:pb-8">
-      {/* Control Bar */}
-      <div className="bg-surface border border-line-hairline rounded-2xl p-4 medium:p-6 shadow-hairline flex flex-col medium:flex-row medium:items-center justify-between gap-4">
-        <div>
-          <h1 className="text-xl font-bold text-ink flex items-center gap-2">
-            <TrendingUp className="w-5 h-5 text-success" />
-            Laporan Capaian Perkembangan Siswa (LPPA)
+    <div className="space-y-6 pb-36 expanded:pb-12 px-4 medium:px-6 py-6">
+      {/* Eyebrow & Title Banner (Flat Fluid F-6) with Global Academic Year & Semester */}
+      <div className="flex flex-col medium:flex-row medium:items-center justify-between gap-3 pb-3 border-b border-line-hairline">
+        <div className="space-y-0.5">
+          <div className="text-xs font-semibold uppercase tracking-wider text-brand-deep">
+            DOKUMEN RESMI LPPA • KURIKULUM MERDEKA TK
+          </div>
+          <h1 className="text-[24px] medium:text-[28px] font-bold tracking-tight text-ink">
+            Laporan Pencapaian Perkembangan Anak (LPPA)
           </h1>
-          <p className="text-xs text-ink-soft mt-1">
-            Sintesis data observasi harian menjadi rapor capaian komprehensif berstandar TK Kurikulum Merdeka.
+          <p className="text-xs medium:text-sm text-ink-soft">
+            Sintesis data observasi harian menjadi draf laporan capaian komprehensif berstandar TK Kurikulum Merdeka.
           </p>
         </div>
 
+        {/* Global Academic Year & Semester Banner */}
+        <div className="flex items-center gap-2 self-start medium:self-auto bg-surface border border-line-hairline px-3 py-1.5 rounded-full text-xs font-mono text-ink-soft shrink-0">
+          <span>T.A.: <b className="text-ink">{activeAy?.name ? activeAy.name.replace('Tahun Ajaran ', '') : '2026/2027'}</b></span>
+          <span className="text-line-soft">•</span>
+          <span>Semester: <b className="text-ink">{activeAy?.semester || 'GANJIL'}</b></span>
+        </div>
+      </div>
+
+      {/* Filter & Selector Bar (Single-Depth Tint Panel F-2 & Law 4) */}
+      <div className="bg-surface-subtle/70 border border-line-hairline rounded-2xl p-4 medium:p-5 flex flex-col medium:flex-row medium:items-center justify-between gap-4">
         <div className="flex flex-col medium:flex-row items-stretch medium:items-center gap-3 w-full medium:w-auto">
-          <div className="w-full flex justify-between items-center space-x-2 bg-surface-subtle border border-line rounded-md px-3 py-1 text-xs">
-            <span className="text-ink-soft font-medium">Kelas:</span>
-            <SelectSheet value={selectedClassId}   options={classes.map(c => ({ value: c.id, label: c.name }))} />
+          {/* Class Toggle Segmented Buttons (2 Classes) */}
+          <div className="flex items-center gap-1.5 p-1 bg-surface rounded-xl border border-line-hairline">
+            {classes.map(cls => (
+              <button
+                key={cls.id}
+                type="button"
+                onClick={() => setSelectedClassId(cls.id)}
+                className={`px-4 py-2 rounded-lg text-xs font-semibold transition-all min-h-[40px] flex items-center justify-center cursor-pointer ${
+                  selectedClassId === cls.id
+                    ? 'bg-brand text-on-brand shadow-xs'
+                    : 'text-ink-soft hover-only:text-ink hover-only:bg-surface-subtle'
+                }`}
+              >
+                {cls.name}
+              </button>
+            ))}
           </div>
 
-          <div className="w-full flex justify-between items-center space-x-2 bg-surface-subtle border border-line rounded-md px-3 py-1 text-xs">
-            <span className="text-ink-soft font-medium">Siswa:</span>
+          {/* Student Selector Dropdown (Name Only) */}
+          <div className="w-full medium:w-72 flex justify-between items-center bg-surface border border-line-hairline rounded-xl px-3 py-2 text-xs min-h-[44px]">
+            <span className="text-ink-soft font-medium mr-2">Siswa:</span>
             <SelectSheet
-    value={selectedStudentId}
-    onChange={setSelectedStudentId}
-    options={students.map(s => ({ value: s.id, label: `${s.person?.fullName || 'Siswa'} (${s.nis || s.id})` }))}
-  />
+              value={selectedStudentId}
+              onChange={setSelectedStudentId}
+              options={students.map(s => ({ value: s.id, label: s.person?.fullName || 'Siswa' }))}
+            />
           </div>
+        </div>
+
+        {/* Realtime Status Indicator */}
+        <div className="text-xs text-ink-soft font-mono flex items-center gap-2 shrink-0">
+          <span>Total Observasi: <b className="text-ink">{observations.length}</b></span>
         </div>
       </div>
 
       {feedbackMessage && (
-        <div className={`p-3 rounded-lg text-xs font-semibold border ${
-          feedbackMessage.type === 'success' ? 'bg-success-tint text-success-deep border-success-line' : 'bg-red-50 text-danger-deep border-danger-line'
+        <div className={`p-4 rounded-xl text-xs font-semibold border ${
+          feedbackMessage.type === 'success' 
+            ? 'bg-success-tint text-success-deep border-success-line' 
+            : 'bg-danger-tint text-danger-deep border-danger-line'
         }`}>
           {feedbackMessage.text}
         </div>
       )}
 
       {selectedStudent && (
-        <div className="bg-surface border border-line rounded-lg shadow-hairline overflow-hidden">
-          {/* Document Header */}
-          <div className="bg-brand text-on-brand p-6">
-            <div className="flex flex-col medium:flex-row medium:items-center justify-between gap-4">
-              <div>
-                <div className="text-xs font-mono text-brand-primary uppercase tracking-wider tracking-widest mb-1 whitespace-nowrap">
-                  DOKUMEN RESMI CAPAIAN PERKEMBANGAN (LPPA)
+        <div className="space-y-6">
+          {/* Identity & Status Ribbon (Single-Depth Tone Panel F-2) */}
+          <div className="bg-surface border border-line-hairline rounded-2xl p-5 space-y-4">
+            <div className="flex flex-col medium:flex-row medium:items-start justify-between gap-4">
+              <div className="space-y-1">
+                <div className="text-[11px] font-mono uppercase tracking-wider text-brand-deep font-semibold">
+                  Peserta Didik Terpilih
                 </div>
-                <h2 className="text-2xl font-bold">{selectedStudent.person.fullName}</h2>
-                <div className="text-xs text-ink-faint mt-1 flex flex-wrap gap-x-4 gap-y-1">
-                  <span>NISN: <b className="text-on-brand">{selectedStudent.nisn || '-'}</b></span>
-                  <span>NIS: <b className="text-on-brand">{selectedStudent.nis}</b></span>
-                  <span>Gol. Darah: <b className="text-on-brand">{selectedStudent.bloodType || '-'}</b></span>
-                  <span>Tahun Ajaran: <b className="text-on-brand">2026/2027 (Ganjil)</b></span>
+                <h2 className="text-xl medium:text-2xl font-bold text-ink">
+                  {selectedStudent.person.fullName}
+                </h2>
+                <div className="text-xs text-ink-soft font-mono flex flex-wrap gap-x-4 gap-y-1 pt-1">
+                  <span>NISN: <b className="text-ink">{selectedStudent.nisn || '-'}</b></span>
+                  <span>NIS: <b className="text-ink">{selectedStudent.nis}</b></span>
                 </div>
               </div>
 
-              {/* Status Badge & Actions (V2.1.5 RPC State Machine) */}
-              <div className="flex flex-col medium:flex-row expanded:flex-wrap items-stretch medium:items-center gap-2 w-full medium:w-auto mt-4 medium:mt-0">
+              {/* Status Badge */}
+              <div className="shrink-0 flex items-center">
                 {currentStatus === 'PUBLISHED' && (
-                  <div className="w-full medium:w-auto justify-center flex items-center space-x-1.5 px-3 py-1 rounded-full bg-purple-900/80 border border-lppa-line text-purple-200 text-xs font-semibold">
+                  <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-lppa-tint border border-lppa-line text-lppa-deep text-xs font-semibold">
                     <Lock className="w-4 h-4" />
                     <span>Resmi Dipublikasikan (Terkunci)</span>
-                  </div>
+                  </span>
                 )}
 
                 {currentStatus === 'APPROVED' && (
-                  <div className="w-full medium:w-auto justify-center flex items-center space-x-1.5 px-3 py-1 rounded-full bg-success-tint border border-success-line text-success-deep text-xs font-semibold">
+                  <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-success-tint border border-success-line text-success-deep text-xs font-semibold">
                     <ShieldCheck className="w-4 h-4" />
                     <span>Disahkan Kepala Sekolah</span>
-                  </div>
+                  </span>
                 )}
 
                 {currentStatus === 'READY_FOR_REVIEW' && (
-                  <div className="w-full medium:w-auto justify-center flex items-center space-x-1.5 px-3 py-1 rounded-full bg-warning-tint border border-warning-line text-warning-deep text-xs font-semibold">
+                  <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-warning-tint border border-warning-line text-warning-deep text-xs font-semibold">
                     <Clock className="w-4 h-4" />
                     <span>Draf Menunggu Pengesahan</span>
-                  </div>
+                  </span>
                 )}
 
                 {currentStatus === 'DRAFT' && (
-                  <div className="w-full medium:w-auto justify-center flex items-center space-x-1.5 px-3 py-1 rounded-full bg-surface-inset border border-line-strong text-ink-faint text-xs font-semibold">
-                    <FileText className="w-4 h-4" />
-                    <span>Draf Awal Guru</span>
-                  </div>
-                )}
-
-                {/* Workflow Buttons */}
-                {canEdit && currentStatus === 'DRAFT' && (
-                  <>
-                    <button
-                      onClick={handleSaveDraft}
-                      disabled={isProcessing}
-                      className="w-full medium:w-auto mt-2 medium:mt-0 flex justify-center bg-surface-inset hover-only:opacity-90 text-on-brand text-xs font-semibold px-3 py-2 rounded transition-colors shadow-hairline"
-                    >
-                      Simpan Draf LPPA
-                    </button>
-                    <button
-                      onClick={handleSubmitForReview}
-                      disabled={isProcessing}
-                      className="w-full medium:w-auto mt-2 medium:mt-0 flex justify-center bg-warning hover-only:bg-warning text-on-brand text-xs font-bold px-3 py-2 rounded transition-colors items-center space-x-1.5 shadow-hairline"
-                    >
-                      <Send className="w-4 h-4" />
-                      <span>Ajukan ke Kepala Sekolah</span>
-                    </button>
-                  </>
-                )}
-
-                {canApprove && currentStatus === 'READY_FOR_REVIEW' && (
-                  <button
-                    onClick={handleApproveReport}
-                    disabled={isProcessing}
-                    className="w-full medium:w-auto mt-2 medium:mt-0 flex justify-center bg-success hover-only:bg-success text-on-brand text-xs font-bold px-4 py-2 rounded transition-colors items-center space-x-1.5 shadow-hairline"
-                  >
-                    <CheckCircle2 className="w-4 h-4" />
-                    <span>Sahkan Laporan LPPA</span>
-                  </button>
-                )}
-
-                {canApprove && currentStatus === 'APPROVED' && (
-                  <button
-                    onClick={handlePublishReport}
-                    disabled={isProcessing}
-                    className="w-full medium:w-auto mt-2 medium:mt-0 flex justify-center bg-purple-600 hover-only:bg-purple-500 text-on-brand text-xs font-bold px-4 py-2 rounded transition-colors items-center space-x-1.5 shadow-hairline"
-                  >
-                    <Lock className="w-4 h-4" />
-                    <span>Publikasikan ke Wali Murid</span>
-                  </button>
+                  currentReport ? (
+                    <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-success-tint border border-success-line text-success-deep text-xs font-semibold">
+                      <CheckCircle2 className="w-4 h-4 text-success-deep" />
+                      <span>Draf Tersimpan</span>
+                    </span>
+                  ) : (
+                    <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-surface-subtle border border-line-hairline text-ink-soft text-xs font-semibold">
+                      <FileText className="w-4 h-4 text-ink-faint" />
+                      <span>Draf Awal Guru</span>
+                    </span>
+                  )
                 )}
               </div>
             </div>
+
+            {/* Workflow Action Buttons (Law 3 CTA Dominance & Ergonomics Floor 48dp) */}
+            <div className="pt-2 border-t border-line-hairline flex flex-col medium:flex-row items-stretch medium:items-center justify-end gap-3">
+              {canEdit && currentStatus === 'DRAFT' && (
+                <>
+                  <button
+                    onClick={handleSaveDraft}
+                    disabled={isProcessing}
+                    className="w-full medium:w-auto min-h-[48px] px-4 py-3 rounded-xl bg-surface border border-line-hairline hover-only:bg-surface-subtle text-ink text-xs font-semibold flex items-center justify-center gap-2 transition-colors active:scale-[0.99]"
+                  >
+                    <FileText className="w-4 h-4 text-ink-soft" />
+                    <span>Simpan Draf LPPA</span>
+                  </button>
+                  <button
+                    onClick={handleSubmitForReview}
+                    disabled={isProcessing}
+                    className="w-full medium:w-auto min-h-[48px] px-5 py-3 rounded-xl bg-warning text-on-brand text-xs font-bold flex items-center justify-center gap-2 transition-colors active:scale-[0.99]"
+                  >
+                    <Send className="w-4 h-4" />
+                    <span>Ajukan ke Kepala Sekolah</span>
+                  </button>
+                </>
+              )}
+
+              {canApprove && currentStatus === 'READY_FOR_REVIEW' && (
+                <button
+                  onClick={handleApproveReport}
+                  disabled={isProcessing}
+                  className="w-full medium:w-auto min-h-[48px] px-5 py-3 rounded-xl bg-success text-on-brand text-xs font-bold flex items-center justify-center gap-2 transition-colors active:scale-[0.99]"
+                >
+                  <CheckCircle2 className="w-4 h-4" />
+                  <span>Sahkan Laporan LPPA</span>
+                </button>
+              )}
+
+              {canApprove && currentStatus === 'APPROVED' && (
+                <button
+                  onClick={handlePublishReport}
+                  disabled={isProcessing}
+                  className="w-full medium:w-auto min-h-[48px] px-5 py-3 rounded-xl bg-lppa text-on-brand text-xs font-bold flex items-center justify-center gap-2 transition-colors active:scale-[0.99]"
+                >
+                  <Lock className="w-4 h-4" />
+                  <span>Publikasikan ke Wali Murid</span>
+                </button>
+              )}
+            </div>
           </div>
 
-          {/* Child Medical & Psychological Notes */}
-          <div className="bg-surface-subtle border-b border-line p-4 text-xs text-ink-soft grid grid-cols-1 medium:grid-cols-2 gap-4">
-            <div>
-              <span className="font-semibold text-ink block mb-0.5">Catatan Alergi & Medis:</span>
-              <p className="text-ink-soft">{selectedStudent.allergies || 'Tidak ada catatan alergi khusus.'}</p>
+          {/* Child Medical & Health Notes (Safety Salience F-3) */}
+          <div className="bg-surface-subtle/70 border border-line-hairline rounded-2xl p-4 medium:p-5 grid grid-cols-1 medium:grid-cols-2 gap-4 text-xs">
+            <div className="space-y-1">
+              <span className="font-semibold text-ink flex items-center gap-1.5">
+                {selectedStudent.allergies ? <AlertTriangle className="w-4 h-4 text-warning" /> : null}
+                Catatan Alergi & Medis:
+              </span>
+              <p className={selectedStudent.allergies ? 'text-warning-deep font-medium' : 'text-ink-soft'}>
+                {selectedStudent.allergies || 'Tidak ada catatan alergi khusus.'}
+              </p>
             </div>
-            <div>
-              <span className="font-semibold text-ink block mb-0.5">Karakteristik & Dukungan Belajar:</span>
-              <p className="text-ink-soft">{selectedStudent.specialNeedsNotes || 'Menunjukkan kemandirian belajar yang stabil.'}</p>
+            <div className="space-y-1">
+              <span className="font-semibold text-ink block">Karakteristik & Dukungan Belajar:</span>
+              <p className="text-ink-soft">
+                {selectedStudent.specialNeedsNotes || 'Menunjukkan kemandirian belajar yang stabil.'}
+              </p>
             </div>
           </div>
 
-          {/* Domain Review Grid */}
-          <div className="p-4 medium:p-6 space-y-6">
-            <h3 className="text-sm font-bold text-ink uppercase tracking-wider tracking-wide border-b border-line pb-2">
-              Sintesis Capaian 6 Domain Perkembangan Anak
-            </h3>
+          {/* 6 Kurikulum Merdeka TK Developmental Domains (Flat Fluid F-3 divide-y) */}
+          <div className="bg-surface border border-line-hairline rounded-2xl p-4 medium:p-6 space-y-4">
+            <div className="flex items-center justify-between pb-3 border-b border-line-hairline">
+              <h3 className="text-xs font-bold text-ink uppercase tracking-wider">
+                Sintesis 6 Domain Pencapaian Perkembangan Anak
+              </h3>
+              <span className="text-xs text-ink-faint font-mono">Kurikulum Merdeka TK</span>
+            </div>
 
-            <div className="flex flex-col space-y-4">
+            <div className="divide-y divide-line-hairline">
               {domains.map(dom => {
                 const { count, domainObs, dominantRating } = getDomainStats(dom.key);
                 return (
-                  <div key={dom.key} className="bg-surface-subtle p-4 rounded-xl border border-line-hairline">
-                    <div className="flex items-start justify-between gap-3 mb-2">
-                      <div>
-                        <h4 className="font-bold text-ink text-sm">{dom.title}</h4>
-                        <p className="text-xs text-ink-soft">{dom.description}</p>
+                  <div key={dom.key} className="py-5 first:pt-2 last:pb-2 space-y-3">
+                    <div className="flex flex-col medium:flex-row medium:items-start justify-between gap-2">
+                      <div className="space-y-0.5">
+                        <div className="flex items-center gap-2">
+                          {dom.icon}
+                          <h4 className="font-bold text-ink text-sm">{dom.title}</h4>
+                        </div>
+                        <p className="text-xs text-ink-soft pl-6">{dom.description}</p>
                       </div>
-                      <div className="text-right shrink-0">
-                        <span className="text-[11px] font-bold px-2 py-1 rounded bg-brand text-on-brand">
+
+                      <div className="flex items-center gap-2 pl-6 medium:pl-0 shrink-0">
+                        <span className={`text-[11px] font-bold px-2.5 py-1 rounded-full ${getRatingBadgeStyle(dominantRating)}`}>
                           Capaian: {dominantRating}
                         </span>
-                        <div className="text-[10px] text-ink-faint mt-1">
+                        <span className="text-[11px] text-ink-faint font-mono">
                           {count} Catatan Bukti
-                        </div>
+                        </span>
                       </div>
                     </div>
 
                     {domainObs.length > 0 ? (
-                      <div className="mt-3 bg-surface-subtle rounded-md p-3 border border-line-soft space-y-2 text-xs">
-                        <span className="font-semibold text-ink text-[11px] block">
-                          Bukti Peristiwa Terpilih:
+                      <div className="ml-6 pl-3 border-l-2 border-line-hairline space-y-2 text-xs">
+                        <span className="font-semibold text-ink text-[11px] block text-ink-soft">
+                          Bukti Observasi Terpilih:
                         </span>
                         {domainObs.map(obs => (
-                          <div key={obs.id} className="pl-2 border-l-2 border-line text-ink-soft">
+                          <div key={obs.id} className="text-ink-soft leading-relaxed">
                             <span className="font-medium text-ink">
                               [{obs.milestoneRating}] {new Date(obs.observedAt).toLocaleDateString('id-ID')}:
                             </span>{' '}
@@ -421,7 +525,7 @@ export const DevelopmentWorkspace: React.FC = () => {
                         ))}
                       </div>
                     ) : (
-                      <p className="text-xs text-ink-faint italic mt-2">
+                      <p className="text-xs text-ink-faint italic ml-6">
                         Belum ada catatan observasi spesifik pada domain ini untuk siswa terpilih.
                       </p>
                     )}
@@ -429,16 +533,16 @@ export const DevelopmentWorkspace: React.FC = () => {
                 );
               })}
             </div>
+          </div>
 
-            {/* Teacher Homeroom Narrative */}
-            <div className="mt-6 p-4 rounded-lg bg-warning-tint/50 border border-warning-line">
-              <span className="font-bold text-ink text-xs uppercase tracking-wider tracking-wide block mb-1">
-                Catatan Wali Kelas & Rekomendasi Stimulasi di Rumah:
-              </span>
-              <p className="text-xs text-ink leading-relaxed">
-                {currentReport?.homeroomFeedback || `Ananda ${selectedStudent.person.fullName} menunjukkan perkembangan sosial-emosional dan kognitif yang sangat pesat. Mampu mengekspresikan ide dengan santun dan menunjukkan empati tinggi saat kegiatan bersama teman. Disarankan orang tua di rumah terus membiasakan bercerita sebelum tidur serta memberikan stimulasi kegiatan motorik halus seperti menyusun origami dan puzzle.`}
-              </p>
-            </div>
+          {/* Teacher Homeroom Reflection (Kamus Pendidik & Tone Band F-2) */}
+          <div className="p-5 rounded-2xl bg-warning-tint/40 border border-warning-line/60 space-y-2">
+            <span className="font-bold text-warning-deep text-xs uppercase tracking-wider block">
+              Catatan Wali Kelas & Rekomendasi Stimulasi di Rumah:
+            </span>
+            <p className="text-xs text-ink leading-relaxed font-sans">
+              {currentReport?.homeroomFeedback || `Ananda ${selectedStudent.person.fullName} menunjukkan perkembangan sosial-emosional dan kognitif yang sangat pesat. Mampu mengekspresikan ide dengan santun dan menunjukkan empati tinggi saat kegiatan bersama teman. Disarankan orang tua di rumah terus membiasakan bercerita sebelum tidur serta memberikan stimulasi kegiatan motorik halus seperti menyusun origami dan puzzle.`}
+            </p>
           </div>
         </div>
       )}

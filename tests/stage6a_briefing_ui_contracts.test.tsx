@@ -158,11 +158,11 @@ async function runBriefingUITests() {
     }
   };
 
-  runCheck('TeacherBriefing [CLOSURE FLAT CTA]: Renders closure summary and ghost Tutup Hari button', () => {
+  runCheck('TeacherBriefing [CLOSURE WARM ECHO]: Renders closure summary and Warm Echo Parent Appreciation Carousel', () => {
     const html = cleanHtml(renderToString(<TeacherBriefing data={mockTeacherClosure} />));
     assert.ok(html.includes('15/15 hadir'), 'Must render attendance summary');
     assert.ok(html.includes('4 momen'), 'Must render moments count');
-    assert.ok(html.includes('Tutup Hari'), 'Must render Tutup Hari ghost action button');
+    assert.ok(html.includes('Mama Sean') || html.includes('Kelas TK A'), 'Must render parent appreciation quotes');
   });
 
   // ------------------------------------------------------------------------------

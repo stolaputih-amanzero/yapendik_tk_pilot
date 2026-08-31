@@ -106,16 +106,13 @@ export const ChildCard: React.FC<Props> = ({
               <h4 className="text-[15px] font-semibold text-ink leading-snug break-words">
                 {toTitleCase(student.name)}
               </h4>
-              <div className="flex items-center gap-2 mt-0.5 flex-wrap">
-                <Badge variant="neutral">
-                  NIS {student.nis}
-                </Badge>
-                {hasRealAllergy && (
+              {hasRealAllergy && (
+                <div className="mt-1">
                   <button
                     type="button"
                     onClick={() => setIsAllergyExpanded(!isAllergyExpanded)}
                     className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-warning-tint text-warning-deep border border-warning-line transition cursor-pointer text-left ${
-                      isAllergyExpanded ? 'w-full whitespace-normal' : 'max-w-[140px] truncate'
+                      isAllergyExpanded ? 'w-full whitespace-normal' : 'max-w-[160px] truncate'
                     }`}
                     title={student.allergies}
                     aria-label={`Alergi: ${student.allergies}`}
@@ -123,8 +120,8 @@ export const ChildCard: React.FC<Props> = ({
                     <span className="w-1.5 h-1.5 rounded-full bg-warning shrink-0" />
                     <span className="truncate flex-1">{student.allergies}</span>
                   </button>
-                )}
-              </div>
+                </div>
+              )}
             </div>
           </div>
 

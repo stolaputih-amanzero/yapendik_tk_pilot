@@ -190,9 +190,10 @@ const AppContent: React.FC = () => {
 
       {/* Main Content Column */}
       <div className="flex-1 flex flex-col min-w-0 max-h-[100dvh] overflow-y-scroll bg-canvas expanded:bg-transparent relative scrollbar-stable">
-        {/* Global Context Bar (TopBar Header) - 100% Pure Clean Context */}
+        {/* Global Context Bar (TopBar Header) - 100% Pure Clean Context with Universal Back */}
         <TopBar
           activeTab={activeTab}
+          onNavigateTab={setActiveTab}
         />
 
         {/* Institutional Context Ribbon (Hidden on Mobile) */}
@@ -237,7 +238,12 @@ const AppContent: React.FC = () => {
 
         {/* Main Workspace Surface */}
         <main className="grow shrink-0 w-full max-w-7xl mx-auto p-0 medium:p-6 pb-[180px] medium:pb-8 bg-canvas expanded:bg-transparent">
-          {activeTab === 'TEACHER_HOME' && <TeacherHomeShell onNavigateToCommunication={() => setActiveTab('COMMUNICATION')} />}
+          {activeTab === 'TEACHER_HOME' && (
+            <TeacherHomeShell 
+              onNavigateToCommunication={() => setActiveTab('COMMUNICATION')} 
+              onNavigateTab={setActiveTab}
+            />
+          )}
           {activeTab === 'DAILY_WORK' && <TeacherDailyWorkWorkspace />}
           {activeTab === 'OBSERVATIONS' && <ObservationWorkspace />}
           {activeTab === 'DEVELOPMENT' && <DevelopmentWorkspace />}

@@ -8,6 +8,7 @@
  */
 
 import React from 'react';
+import { ArrowLeft } from 'lucide-react';
 import { getTabMetadata } from '../../config/routeRegistry';
 import { useConnectionStatus, getBreathStateMeta } from '../../hooks/useConnectionStatus';
 
@@ -36,11 +37,13 @@ export type WorkspaceTab =
 
 interface TopBarProps {
   activeTab?: WorkspaceTab;
+  onNavigateTab?: (tab: WorkspaceTab) => void;
   className?: string;
 }
 
 export const TopBar: React.FC<TopBarProps> = ({
   activeTab = 'TEACHER_HOME',
+  onNavigateTab,
   className = ''
 }) => {
   const { state: connectionState, queuedMutations } = useConnectionStatus();
@@ -54,6 +57,19 @@ export const TopBar: React.FC<TopBarProps> = ({
     >
       {/* ZONE 1: CONTEXT TITLE (Dynamic Active Page) & Amanaura Breath ✦ */}
       <div className="flex items-center space-x-2.5 medium:space-x-3 shrink-0 min-w-0">
+        {activeTab !== 'TEACHER_HOME' && onNavigateTab && (
+          <button
+            type="button"
+            onClick={() => onNavigateTab('TEACHER_HOME')}
+            className="flex items-center gap-1.5 px-3 py-2 -ml-2 rounded-xl text-ink-soft hover-only:text-ink hover-only:bg-surface-subtle transition-colors min-h-[40px] text-xs font-semibold cursor-pointer group shrink-0 active:scale-95"
+            title="Kembali ke Beranda Guru"
+            aria-label="Kembali ke Beranda Guru"
+          >
+            <ArrowLeft className="w-4 h-4 transition-transform group-hover:-translate-x-0.5" />
+            <span className="hidden sm:inline">Kembali</span>
+          </button>
+        )}
+
         <div className="flex flex-col min-w-0">
           <div className="flex items-center space-x-2 min-w-0">
             <h1 className="font-bold tracking-tight text-ink text-base medium:text-lg whitespace-nowrap truncate">
