@@ -17,6 +17,14 @@
 @custom-variant dark (&:where(.dark, .dark *));
 @custom-variant hover-only (@media (hover: hover));
 
+/* ═══ AMANAURA INVISIBLE SCROLL DOCTRINE (Mastery #8) ═══ */
+html, body, #root,
+[class*="overflow-"] {
+  scrollbar-width: none;          /* Firefox */
+  -ms-overflow-style: none;       /* Edge legacy */
+}
+::-webkit-scrollbar { width: 0; height: 0; }  /* Chromium / Samsung Internet */
+
 /* ═══ AMANAURA OS × FLOW — CANONICAL TOKENS (oklch) ═══ */
 :root { /* THE IVORY CANVAS (System Light) */
   color-scheme: light;

@@ -280,8 +280,8 @@ const AppContent: React.FC = () => {
           {activeTab === 'TESTS' && <AuthorizationTestingWorkspace />}
           {activeTab === 'PERCONTOHAN' && <LivingContractWorkspace />}
 
-          {/* Scroll Clearance Cushion for Mobile Omni-Bar & FAB */}
-          <div className="h-[120px] expanded:hidden shrink-0 pointer-events-none" aria-hidden="true" />
+          {/* Scroll Clearance Cushion for Mobile Slide-Up Chevron & FAB (Reclaimed ADR-UX-012) */}
+          <div className="h-[72px] expanded:hidden shrink-0 pointer-events-none" aria-hidden="true" />
         </main>
 
         {/* Institutional Footer (Hidden on Mobile) */}
@@ -294,7 +294,7 @@ const AppContent: React.FC = () => {
         </footer>
       </div>
 
-      {/* Mobile Zero-Navigation Omni-Bar & App Library Drawer */}
+      {/* Mobile Slide-Up Chevron & Navigation Sheet (ADR-UX-012) */}
       <MobileOmniBar
         activeTab={activeTab}
         onSelectTab={setActiveTab}

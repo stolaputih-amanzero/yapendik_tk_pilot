@@ -133,27 +133,27 @@ Setiap produk yang dibangun dengan *Amanaura Design System* wajib memancarkan 6 
 
 ```text
 ┌──────────────────────────────────────────────────────────────────────────────────────────────────────────┐
-│                              AMANAURA v2.0 MD3 NAVIGATION TOPOLOGY                                       │
+│                              AMANAURA v3.0 MD3 NAVIGATION TOPOLOGY (ADR-UX-012)                          │
 │                                                                                                          │
 │  COMPACT (< 600px)             MEDIUM (600px - 839px)            EXPANDED (≥ 840px)                      │
 │  ┌───────────────────────┐     ┌───────────────────────┐         ┌───────────────────────────────┐       │
-│  │ [TopBar: Logo + ✦]    │     │ [TopBar: Brand + User]│         │ [TopBar: Brand + School + User]│      │
+│  │ [TopBar: Logo + User] │     │ [TopBar: Brand + User]│         │ [TopBar: Brand + School + User]│      │
 │  ├───────────────────────┤     ├──────┬────────────────┤         ├───────────┬───────────────────┤       │
 │  │                       │     │[Mini]│                │         │ [Sidebar] │ [Workspace Area]  │       │
-│  │ [Workspace Edge-to-   │     │[Rail]│ [Workspace]    │         │ (w-64 or  │ (p-6 Centered)    │       │
-│  │  Edge]                │     │[w-72]│ [max-w-lg]     │         │  w-18     │                   │       │
+│  │ [Hub-and-Spoke        │     │[Rail]│ [Workspace]    │         │ (w-64 or  │ (p-6 Centered)    │       │
+│  │  Beranda Linimasa]    │     │[w-72]│ [max-w-lg]     │         │  w-18     │                   │       │
 │  │                       │     │[Icons]│                │         │  Slide)   │                   │       │
-│  │ [ 📝 Pres ] [ ✨ Obs ]│     │      │                │         │           │                   │       │
-│  │ [ 🔍 Omni-Bar   MENU ]│     └──────┴────────────────┘         └───────────┴───────────────────┘       │
-│  └───────────────────────┘     (Bottom Omni-Bar fallback)                                                │
+│  │             [✦ FAB]   │     │      │                │         │           │                   │       │
+│  │        [ ⌃ Chevron ]  │     └──────┴────────────────┘         └───────────┴───────────────────┘       │
+│  └───────────────────────┘     (Navigation Rail 72px)            (Full Collapsible Sidebar)              │
 └──────────────────────────────────────────────────────────────────────────────────────────────────────────┘
 ```
-*(Catatan: Topologi ini sepenuhnya menggantikan sistem biner v1.0 dan mengacu pada ADR-UX-001 MD3 Window Size Classes).*
+*(Catatan: Topologi ini disempurnakan oleh ADR-UX-012 menggantikan model Omni-Bar dock mengambang pada COMPACT).*
 
 ### 3.2 Headbar (TopBar) — The Minimalist Horizon
 * **COMPACT (`< 600px`)**:
   * **Kiri**: Logo `Building2` + `"Yapendik OS"`.
-  * **Kanan**: Avatar Bulat Tunggal ber-badge `✦` (*Amanaura Breath*).
+  * **Kanan**: Avatar Bulat Tunggal ber-badge `✦` (*Amanaura Breath*) + Indikator Offline Status.
   * 🛑 **Dilarang**: Menampilkan metadata berat (nama panjang, gelar, NPSN, tahun ajaran, dan status database mentah) di layar ponsel.
 * **MEDIUM (`600px – 839px`)**:
   * Logo + Nama Brand + Avatar Pengguna. Dropdown Unit Sekolah disembunyikan di dalam Avatar/Profile Drawer untuk menghemat ruang horizontal.
@@ -162,24 +162,26 @@ Setiap produk yang dibangun dengan *Amanaura Design System* wajib memancarkan 6 
 
 ### 3.3 Sidebar & Mini-Rail: The Adaptive Slide
 * **EXPANDED (Full Sidebar)**:
-  * Lebar normal `w-64 bg-white border-r border-slate-200`.
+  * Lebar normal `w-64 bg-surface border-r border-line`.
   * Tombol Collapse (`«`) mengecilkan sidebar menjadi `w-18` (hanya ikon monokrom) dengan animasi geser `AmanauraSpring`.
   * *(Cross-Reference: Lihat [PART IX: REFACTORING RULES & AUDIT PROTOCOL - Law 10](#part-ix-refactoring-rules--audit-protocol)).*
 * **MEDIUM (Mini-Rail / Navigation Rail)**:
   * Sidebar otomatis bertransformasi menjadi **Mini-Rail** (`w-[72px]`) yang berlabuh di sisi kiri layar.
   * Hanya menampilkan ikon + tooltip melayang saat di-hover (jika modality `MOUSE`/`STYLUS`) atau saat tap-and-hold (jika modality `TOUCH`).
 * **COMPACT (`< 600px`)**:
-  * Sidebar lenyap dari viewport. Navigasi utama dipindahkan ke *Omni-Bar* dan *Smart Chips* di sisi bawah layar.
+  * Sidebar lenyap dari viewport. Navigasi utama berpusat pada **Beranda Hub (Hub-and-Spoke)** dan menu sekunder diakses via **Slide-Up Bottom Chevron** (ADR-UX-012).
 
-### 3.4 Mobile Centered Omni-Bar Dock & Smart Chips
+### 3.4 Mobile Slide-Up Chevron & Menu Navigasi (Hub-and-Spoke — ADR-UX-012)
 * **COMPACT (`< 600px`)**:
-  * **Smart Chips Carousel**: Rata Tengah (`flex justify-center gap-2`), menampilkan 2–3 jalan pintas tugas tercepat.
-  * **Omni-Bar Capsule**: Kapsul melayang `bg-white/95 backdrop-blur-xl border border-slate-200/80 shadow-floating` bertuliskan *"Apa fokus Anda hari ini?"*.
-  * **App Library Drawer**: Mengetuk Omni-Bar membuka laci layar penuh setinggi `85vh` dari bawah dengan animasi *spring slide-up* dan gestur *pull-down to dismiss*.
+  * **Hub-and-Spoke Invariant (G-1)**: Beranda adalah pusat komando utama. Alur harian mengalir kontekstual di Zona 2 (Linimasa Ritme Kelas). Akses ke spoke (Rencana Main, Presensi, Gema Hangat) dilakukan langsung 1-tap in-page.
+  * **Gema Hangat Canonical Doctrine (WarmEchoCarousel)**: Gema Hangat pada Beranda Pendidik wajib dirender menggunakan komponen kanonikal `WarmEchoCarousel` (commit `f1f18fd`) yang selalu tampil terbuka penuh (*always open & prominently legible*) di seluruh fase sirkadian. Dilarang keras melipat atau menyembunyikan kutipan apresiasi orang tua.
+  * **Horizon Handle (G-3)**: Hairline 1px (`line-soft`) melintasi layar yang terputus ±24px di tengah untuk ikon Lucide `ChevronUp` (`w-5 h-5`, `text-ink-faint`) tanpa teks label. Strip sentuh full-width `bottom-0` dengan tinggi `calc(env(safe-area-inset-bottom,0px)+48px)` (`min-h-[48px]`), `aria-label="Buka Menu Navigasi"`, tap & swipe-up gesture.
+  * **Curated "MENU NAVIGASI" Sheet (G-2, G-4, G-5)**: Disentuh/swipe-up membuka sheet 4×2 squircle flat tiles dengan counter badge *brass* riil, search field di puncak sheet, dan animasi *Amanaura Spring* `{380,32,0.8}` (`max-h-[90dvh]`).
+  * **Zero Collision FAB (G-6)**: Tombol Momen Cepat (FAB ✦) ditempatkan di kanan bawah `bottom-[calc(env(safe-area-inset-bottom,0px)+48px)] right-4`, bebas tabrakan di atas garis Horizon Handle.
 * **MEDIUM (`600px – 839px`)**:
-  * Omni-Bar opsional (dapat disembunyikan jika Mini-Rail telah mewakili akses cepat). Jika diaktifkan, ia menempel rapi di bawah TopBar atau menjadi Search Capsule di header.
+  * Menggunakan **Navigation Rail (`72px`)** di sisi kiri layar.
 * **EXPANDED (`≥ 840px`)**:
-  * Omni-Bar lenyap. Pencarian dan akses modul dipindahkan ke TopBar global search dan Sidebar hierarkis.
+  * Menggunakan **Full Collapsible Sidebar (`256px`)** dan TopBar global search.
 
 ### 3.5 The Container & Sectioning Doctrine
 
@@ -1238,3 +1240,10 @@ Sebelum Amanaura v2.0 disegel sebagai standar kanonikal permanen, seluruh kodeba
     * **Section 10.5**: Mendefinisikan protokol *Visual Regression Testing (VRT)*, *Accessibility & Modality Audit*, *PWA Offline Stress Test*, dan *Stage 4.5 Glass Layer Adversarial Audit*.
     * **Canonical Sealing**: Dokumen secara resmi disegel sebagai `v2.0-RELEASE`, menggantikan v1.0 dan v1.1 sebagai *Single Source of Truth* permanen.
     * **Roadmap Closure**: Menandai selesainya seluruh 12 langkah (Phase A s.d. D). Yapendik School OS kini memiliki standar UI/UX kelas enterprise yang tahan banting untuk ekosistem Tablet Android & DeX.
+* **v3.0.6-PATCH (2026-09-01)**:
+  * **ADR-UX-012 Ratification (Slide-Up Chevron Navigation & Hub-and-Spoke)**:
+    * **Section 3.1 & 3.4 Update**: Menggantikan Mobile Omni-Bar capsule dan Smart Chips carousel dengan Discrete Bottom Chevron Handle (Lucide ChevronUp, min-h-[48px], aria-label) dan "MENU NAVIGASI" slide-up sheet (Amanaura Spring {380,32,0.8}, search field di puncak, 4×2 squircle flat tiles).
+    * **FAB Repositioning**: Amandemen offset kanonikal FAB ke bottom-[calc(env(safe-area-inset-bottom,0px)+20px)] right-4 (G-6), menjamin zero collision terhadap handle tengah.
+    * **PWA Soft Install Relocation**: Merelokasi install smart chip secara permanen ke Profile Drawer dan panduan iOS TopBar (G-8, §8.1.2).
+    * **CI Guard Calibration**: Kalibrasi Zero Overlay Collisions dan penambahan validasi chevron touch floor min-h-[48px] & larangan raw glyph ⌃ (G-9).
+

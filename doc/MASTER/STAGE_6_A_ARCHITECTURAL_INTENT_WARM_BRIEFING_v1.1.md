@@ -101,7 +101,7 @@ Setiap anak komponen hidup di dalam workspace perannya masing-masing — bukan d
 * Jika ada pending tasks → CTA = tugas tertua
 * Jika semua lengkap → CTA = "Ringkasan Hari Ini"
 
-**Gema hangat:** Satu kalimat dari orang tua (Buku Penghubung) atau refleksi kualitatif guru dari hari kemarin — sisi manusiawi dari pekerjaan pedagogis.
+**Gema hangat:** Dirender menggunakan komponen kanonikal `WarmEchoCarousel` (commit `f1f18fd`) yang tampil terbuka penuh sepanjang hari — menyajikan 5 kutipan apresiasi orang tua (Buku Penghubung) dengan tanda kutip emas `“`, avatar inisial anak, navigasi geser lembut, dan animasi reaksi kasih (*Heart Pop*). Dilarang keras dilipat atau disembunyikan.
 
 ### 3.2 Kepala Sekolah — "Otoritas Mesin"
 

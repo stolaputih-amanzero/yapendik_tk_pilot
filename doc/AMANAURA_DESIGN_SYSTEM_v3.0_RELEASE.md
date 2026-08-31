@@ -1,7 +1,9 @@
 # AMANAURA DESIGN SYSTEM v3.0-RELEASE
+
 ## "PADMA MODERN" — The Warm, Tactile, and Dignified Operating Experience
 
 ### META
+
 * **Document ID:** `DOC-AMANAURA-DS-v3.0-RELEASE`
 * **Version:** `3.0-RELEASE`
 * **Governing Tier:** `LEVEL 2 — MASTER SPECIFICATION & GLOBAL PRODUCT STANDARD`
@@ -22,6 +24,7 @@
 ---
 
 ## TABLE OF CONTENTS
+
 * [PART I: PHILOSOPHY & IDENTITY](#part-i-philosophy--identity)
 * [PART II: DESIGN TOKENS ARCHITECTURE](#part-ii-design-tokens-architecture)
 * [PART III: LAYOUT & NAVIGATION SYSTEM](#part-iii-layout--navigation-system)
@@ -41,18 +44,23 @@
 ## PART I: PHILOSOPHY & IDENTITY
 
 ### 1.1 Etimologi & Identitas Filosofis
+
 **AMANAURA** lahir dari perpaduan dua nilai fundamental:
+
 * **AMAN (الأمان / Keamanan & Amanah)**: Perlindungan, ketenangan batin, rasa percaya, dan penjagaan etis tanpa rasa takut atau panik.
 * **AURA (Pancaran Kehadiran & Jiwa)**: Kehangatan materialitas, pencahayaan alami, ritme biologis, dan keanggunan visual yang membedakan produk biasa dari mahakarya berjiwa (*Living Software*).
 
 ### 1.2 Tagline Resmi
+>
 > **"The Warm, Tactile, and Dignified Operating Experience."**  
 > *(Pengalaman Operasional yang Hangat, Taktil, dan Bermartabat).*
 
 ### 1.3 Nilai Inti: *“The OS Disappears into the Day”*
+
 Amanaura menolak antarmuka yang bising, penuh warna pelangi yang menyilaukan, atau pop-up agresif. Sistem operasi ini dirancang untuk **menghilang ke dalam hari kerja**, memberikan rasa tenang (*Calm & Dignified*) bagi pendidik, pimpinan, dan keluarga, sambil menyajikan ketepatan data tingkat tinggi berlandaskan filosofi *Tri Hita Karana* (harmoni manusia–alam–sistem).
 
 ### 1.4 The 6 Amanaura Signatures (Ciri Khas & Tanda Tangan Visual)
+
 Setiap produk yang dibangun dengan *Amanaura Design System* wajib memancarkan 6 tanda tangan khas ini:
 
 ```text
@@ -89,9 +97,11 @@ Setiap produk yang dibangun dengan *Amanaura Design System* wajib memancarkan 6 
 ## PART II: DESIGN TOKENS ARCHITECTURE
 
 ### 2.1 Padma Modern Color Architecture (Light & Dark)
+
 Sistem warna kini menggunakan arsitektur *dual-theme* (**Frangipani Day** & **Night Temple**) dengan basis semantik *warm-stone* dan aksen *brass*, berlandaskan filosofi Nusantara *Tri Hita Karana*.
 
-#### Hukum Rasio 60 - 30 - 10:
+#### Hukum Rasio 60 - 30 - 10
+
 * **60% Base / Canvas & Surface**:
   * Light: Canvas `#F7F4ED`, Surface `#FFFFFF`, Surface-Subtle `#F0ECE1`.
   * Dark: Canvas `#16130F`, Surface `#211E1A`, Surface-Subtle `#2C2722`.
@@ -106,7 +116,8 @@ Sistem warna kini menggunakan arsitektur *dual-theme* (**Frangipani Day** & **Ni
   * Info / River: `#2B6CB0` / `#4299E1` (Informasi kurikulum, pengumuman).
   * LPPA / Wisteria: `#6B46C1` / `#9F7AEA` (Kurasi bukti rapor & portofolio).
 
-#### Implementasi Runtime Tokens (`src/index.css`):
+#### Implementasi Runtime Tokens (`src/index.css`)
+
 ```css
 /* ═══ RUNTIME THEME VARIABLES (switch via .dark) ═══ */
 :root {
@@ -168,73 +179,33 @@ Sistem warna kini menggunakan arsitektur *dual-theme* (**Frangipani Day** & **Ni
   /* Radius tightened */
   --radius-card:12px; --radius-field:8px; --radius-pill:9999px;
 
-  /* MD3 Window Size Class Breakpoints */
-  --breakpoint-compact: 0px;
-  --breakpoint-medium: 600px;
-  --breakpoint-expanded: 840px;
-  --breakpoint-large: 1200px;
-  --breakpoint-extra-large: 1600px;
-}
-```
-
-> **Catatan Arsitektural**: Implementasi runtime menggunakan prefix `--p-*`
-> untuk nilai runtime, yang di-alias ke `--color-*` via Tailwind v4
-> `@theme inline`. Dokumen ini mencerminkan implementasi aktual sebagai
-> Single Source of Truth.
-
-### 2.2 Dualitas Tipografi & Motif Nusantara
-* **Header & Display**: `Plus Jakarta Sans` (Kelahiran Indonesia — proporsional, geometris, modern, hangat).
-* **Data, Kode & Angka**: `JetBrains Mono` (Presisi monospaced untuk NIS, NIK, Jam, Tanggal, Suhu °C, dan Metrik).
-* **Motif Kultural Nusantara (Disiplin Anti-Heavy: $\le 4\%$ Opacity)**:
-  * **Saput Poleng (`.motif-poleng`)**: Micro-check hitam-putih taktil untuk indikator item aktif sidebar, drag handle pada `AdaptiveDialog`, dan grab bar pada `MobileOmniBar`.
-  * **Padma & Gunungan**: Watermark line-art anggun untuk layar login, empty states, dan sertifikat resmi.
-
-### 2.3 Multi-Layer Ambient Shadow (Bayangan Kertas Alami)
-```css
---shadow-ambient: 0 2px 8px rgba(33, 30, 26, 0.06), 0 1px 2px rgba(33, 30, 26, 0.04);
---shadow-floating: 0 8px 24px rgba(33, 30, 26, 0.10), 0 2px 6px rgba(33, 30, 26, 0.04);
---shadow-luminescent: 0 0 0 1.5px #211E1A, 0 0 20px -4px rgba(184, 134, 11, 0.25);
-```
-
-### 2.4 Canonical Z-Index Stacking Hierarchy
-```css
---z-workspace: 0;
---z-topbar: 40;
---z-omnibar: 50;
---z-drawer-modal: 60;
---z-toast-hud: 70;
---z-critical-shield: 80;
-```
-
----
-
-## PART III: LAYOUT & NAVIGATION SYSTEM
-
-### 3.1 Global Navigation Shell & MD3 Responsive Choreography
+  /* MD3 Window Size Class Breakp### 3.1 Global Navigation Shell & MD3 Responsive Choreography
 
 ```text
 ┌──────────────────────────────────────────────────────────────────────────────────────────────────────────┐
-│                              AMANAURA v2.0 MD3 NAVIGATION TOPOLOGY                                       │
+│                              AMANAURA v3.0 MD3 NAVIGATION TOPOLOGY (ADR-UX-012)                          │
 │                                                                                                          │
 │  COMPACT (< 600px)             MEDIUM (600px - 839px)            EXPANDED (≥ 840px)                      │
 │  ┌───────────────────────┐     ┌───────────────────────┐         ┌───────────────────────────────┐       │
-│  │ [TopBar: Logo + ✦]    │     │ [TopBar: Brand + User]│         │ [TopBar: Brand + School + User]│      │
+│  │ [TopBar: Logo + User] │     │ [TopBar: Brand + User]│         │ [TopBar: Brand + School + User]│      │
 │  ├───────────────────────┤     ├──────┬────────────────┤         ├───────────┬───────────────────┤       │
 │  │                       │     │[Mini]│                │         │ [Sidebar] │ [Workspace Area]  │       │
-│  │ [Workspace Edge-to-   │     │[Rail]│ [Workspace]    │         │ (w-64 or  │ (p-6 Centered)    │       │
-│  │  Edge]                │     │[w-72]│ [max-w-lg]     │         │  w-18     │                   │       │
+│  │ [Hub-and-Spoke        │     │[Rail]│ [Workspace]    │         │ (w-64 or  │ (p-6 Centered)    │       │
+│  │  Beranda Linimasa]    │     │[w-72]│ [max-w-lg]     │         │  w-18     │                   │       │
 │  │                       │     │[Icons]│                │         │  Slide)   │                   │       │
-│  │ [ 📝 Pres ] [ ✨ Obs ]│     │      │                │         │           │                   │       │
-│  │ [ 🔍 Omni-Bar   MENU ]│     └──────┴────────────────┘         └───────────┴───────────────────┘       │
-│  └───────────────────────┘     (Bottom Omni-Bar fallback)                                                │
+│  │             [✦ FAB]   │     │      │                │         │           │                   │       │
+│  │        [ ⌃ Chevron ]  │     └──────┴────────────────┘         └───────────┴───────────────────┘       │
+│  └───────────────────────┘     (Navigation Rail 72px)            (Full Collapsible Sidebar)              │
 └──────────────────────────────────────────────────────────────────────────────────────────────────────────┘
 ```
-*(Catatan: Topologi ini sepenuhnya menggantikan sistem biner v1.0 dan mengacu pada ADR-UX-001 MD3 Window Size Classes).*
+
+*(Catatan: Topologi ini disempurnakan oleh ADR-UX-012 menggantikan model Omni-Bar dock mengambang pada COMPACT).*
 
 ### 3.2 Headbar (TopBar) — The Minimalist Horizon
+
 * **COMPACT (`< 600px`)**:
   * **Kiri**: Logo `Building2` + `"Yapendik OS"`.
-  * **Kanan**: Avatar Bulat Tunggal ber-badge `✦` (*Amanaura Breath*).
+  * **Kanan**: Avatar Bulat Tunggal ber-badge `✦` (*Amanaura Breath*) + Indikator Offline Status.
   * 🛑 **Dilarang**: Menampilkan metadata berat (nama panjang, gelar, NPSN, tahun ajaran, dan status database mentah) di layar ponsel.
 * **MEDIUM (`600px – 839px`)**:
   * Logo + Nama Brand + Avatar Pengguna. Dropdown Unit Sekolah disembunyikan di dalam Avatar/Profile Drawer untuk menghemat ruang horizontal.
@@ -242,59 +213,73 @@ Sistem warna kini menggunakan arsitektur *dual-theme* (**Frangipani Day** & **Ni
   * Logo + Nama Brand + Dropdown Unit Sekolah + Nama & Role Pengguna + Status DB.
 
 ### 3.3 Sidebar & Mini-Rail: The Adaptive Slide
+
 * **EXPANDED (Full Sidebar)**:
-  * Lebar normal `w-64 bg-white border-r border-slate-200`.
+  * Lebar normal `w-64 bg-surface border-r border-line`.
   * Tombol Collapse (`«`) mengecilkan sidebar menjadi `w-18` (hanya ikon monokrom) dengan animasi geser `AmanauraSpring`.
   * *(Cross-Reference: Lihat [PART IX: REFACTORING RULES & AUDIT PROTOCOL - Law 10](#part-ix-refactoring-rules--audit-protocol)).*
 * **MEDIUM (Mini-Rail / Navigation Rail)**:
   * Sidebar otomatis bertransformasi menjadi **Mini-Rail** (`w-[72px]`) yang berlabuh di sisi kiri layar.
   * Hanya menampilkan ikon + tooltip melayang saat di-hover (jika modality `MOUSE`/`STYLUS`) atau saat tap-and-hold (jika modality `TOUCH`).
 * **COMPACT (`< 600px`)**:
-  * Sidebar lenyap dari viewport. Navigasi utama dipindahkan ke *Omni-Bar* dan *Smart Chips* di sisi bawah layar.
+  * Sidebar lenyap dari viewport. Navigasi utama berpusat pada **Beranda Hub (Hub-and-Spoke)** dan menu sekunder diakses via **Slide-Up Bottom Chevron** (ADR-UX-012).
 
-### 3.4 Mobile Centered Omni-Bar Dock & Smart Chips
+### 3.4 Mobile Slide-Up Chevron & Menu Navigasi (Hub-and-Spoke — ADR-UX-012)
+
 * **COMPACT (`< 600px`)**:
-  * **Smart Chips Carousel**: Rata Tengah (`flex justify-center gap-2`), menampilkan 2–3 jalan pintas tugas tercepat.
-  * **Omni-Bar Capsule**: Kapsul melayang `bg-white/95 backdrop-blur-xl border border-slate-200/80 shadow-floating` bertuliskan *"Apa fokus Anda hari ini?"*.
-  * **App Library Drawer**: Mengetuk Omni-Bar membuka laci layar penuh setinggi `85vh` dari bawah dengan animasi *spring slide-up* dan gestur *pull-down to dismiss*.
+  * **Hub-and-Spoke Invariant (G-1)**: Beranda adalah pusat komando utama. Alur harian mengalir kontekstual di Zona 2 (Linimasa Ritme Kelas). Akses ke spoke (Rencana Main, Presensi, Gema Hangat) dilakukan langsung 1-tap in-page.
+  * **Gema Hangat Canonical Doctrine (WarmEchoCarousel)**: Gema Hangat pada Beranda Pendidik wajib dirender menggunakan komponen kanonikal `WarmEchoCarousel` (commit `f1f18fd`) yang selalu tampil terbuka penuh (*always open & prominently legible*) di seluruh fase sirkadian. Dilarang keras melipat atau menyembunyikan kutipan apresiasi orang tua.
+  * **Horizon Handle (G-3)**: Hairline 1px (`line-soft`) melintasi layar yang terputus ±24px di tengah untuk ikon Lucide `ChevronUp` (`w-5 h-5`, `text-ink-faint`) tanpa teks label. Strip sentuh full-width `bottom-0` dengan tinggi `calc(env(safe-area-inset-bottom,0px)+48px)` (`min-h-[48px]`), `aria-label="Buka Menu Navigasi"`, tap & swipe-up gesture.
+  * **Curated "MENU NAVIGASI" Sheet (G-2, G-4, G-5)**: Disentuh/swipe-up membuka sheet 4×2 squircle flat tiles dengan counter badge *brass* riil, search field di puncak sheet, dan animasi *Amanaura Spring* `{380,32,0.8}` (`max-h-[90dvh]`).
+  * **Zero Collision FAB (G-6)**: Tombol Momen Cepat (FAB ✦) ditempatkan di kanan bawah `bottom-[calc(env(safe-area-inset-bottom,0px)+48px)] right-4`, bebas tabrakan di atas garis Horizon Handle.
 * **MEDIUM (`600px – 839px`)**:
-  * Omni-Bar opsional (dapat disembunyikan jika Mini-Rail telah mewakili akses cepat). Jika diaktifkan, ia menempel rapi di bawah TopBar atau menjadi Search Capsule di header.
+  * Menggunakan **Navigation Rail (`72px`)** di sisi kiri layar.
 * **EXPANDED (`≥ 840px`)**:
-  * Omni-Bar lenyap. Pencarian dan akses modul dipindahkan ke TopBar global search dan Sidebar hierarkis.
+  * Menggunakan **Full Collapsible Sidebar (`256px`)** dan TopBar global search.
 
 ### 3.5 The Container & Sectioning Doctrine
 
 #### 🛑 Hukum 1: "The Screen is the Container" (Mobile Edge-to-Edge)
+
 * Pada layar ponsel, **DILARANG** membuat kartu mengambang ber-margin (`m-4 p-4 rounded-2xl`).
 * Latar belakang layar adalah kontainernya (`w-full bg-white`). Data mengalir bebas dari tepi kiri ke kanan dan hanya dipisahkan garis bawah tipis 1px (`border-b border-slate-100`).
 * *(Cross-Reference: Lihat [PART IX: Law 1 & 2](#part-ix-refactoring-rules--audit-protocol)).*
 
 #### 🛑 Hukum 2: "Max Depth = 1" (Haram Kotak Bersarang)
+
 * Dilarang struktur: `Card > Card > Card`.
 * Pemisahan sub-data dilakukan menggunakan tipografi, spasi (`gap-4`), atau garis `divide-y`, bukan kotak bertumpuk.
 
 #### 📐 Hukum 3: The 3-Zone Card Anatomy & `divide-y`
+
 Jika sebuah kontainer desktop memiliki beberapa seksi:
+
 1. **Zona 1 (Header)**: `px-5 py-4 border-b border-slate-100` (Judul tebal + status badge).
 2. **Zona 2 (Body)**: `p-5 space-y-4` (Konten & data utama).
 3. **Zona 3 (Footer)**: `px-5 py-3 bg-slate-50/80 border-t border-slate-100` (Keterangan penutup / tombol ghost).
+
 * **Gunakan `divide-y divide-slate-100`** pada kontainer utama untuk membagi seksi secara presisi 1px edge-to-edge.
 
 #### 🛡️ Hukum 4: Workspace Tab Padding Parity (Unifikasi Kontainer Tab)
+
 * Seluruh tab sub-halaman dalam satu workspace (seperti *Inbox* dan *Riwayat*) **wajib menggunakan wrapper padding yang identik**: `px-4 sm:px-5 md:px-0`.
 * Dilarang keras mencampur tata letak *fluid edge-to-edge* di satu tab dengan *rigid boxed card padding* di tab sebelahnya.
 * *(Cross-Reference: Lihat [PART IX: Law 10](#part-ix-refactoring-rules--audit-protocol)).*
 
 #### 📏 Rumus Lengkungan Sudut (The Nested Radius Law)
+
 $$\text{Radius Dalam} = \text{Radius Luar} - \text{Padding}$$
+
 * Jika kotak luar `rounded-2xl` (16px) dengan `p-4` (16px), elemen dalam **wajib `rounded-lg` (8px)** atau `rounded-none`.
 
 #### 📐 Grid Blowout Law (Anti-Overlap Invariant §3.5 Addendum)
+
 * Kolom fraksional pada CSS Grid (`1fr`) memiliki default `min-width: auto`, yang memicu pembesaran tak terbatas (*grid blowout*) dan tabrakan antar-kolom jika konten internalnya melebar.
 * **Kewajiban**: Seluruh grid kolom fraksional **wajib** menggunakan `minmax(0, 1fr)` (misal `large:grid-cols-[minmax(0,1fr)_380px]`). Pola kaku `/grid-cols-\[1fr/` dilarang keras dan ditegakkan permanen oleh CI Rule `R-GRID`.
 * Elemen anak di dalam kolom utama wajib memiliki `min-w-0` dan grid container wajib memiliki `items-start`.
 
 ### 3.6 Radius & Bullet Doctrine (Disiplin Lengkungan & Titik Informasi)
+
 * **Hierarki Lengkungan Sudut (Kanonikal 4-Tier)**:
   * **Kartu & Seksi (`rounded-card` / 16px)**: Wadah terluar kartu utama, panel dashboard, dan modal container.
   * **Tombol, Input, & Trigger (`rounded-field` / 12px)**: Elemen interaktif sentuhan, form input, searchable combobox, trigger sheet, dan CTA.
@@ -306,6 +291,7 @@ $$\text{Radius Dalam} = \text{Radius Luar} - \text{Padding}$$
   * Karakter pemisah `•` teks **hanya diizinkan untuk micro-summary satu baris** (mis. metadata kelas dan wali kelas).
 
 ### 3.7 Stacking & Responsive Action Doctrine (Restrukturisasi Aksi Beranda)
+
 * **Klasifikasi Layout Responsif per Breakpoint**:
   * **COMPACT (`< 600px`)**:
     * Mengalir vertikal murni (*3-Tier Flow*): `[Ikon + Identitas Judul + Tanggal]` → `[Chip Kehadiran Full-Width]` → `[Aksi Grid 1-Kolom Full-Width]`.
@@ -356,15 +342,16 @@ $$\text{Radius Dalam} = \text{Radius Luar} - \text{Padding}$$
 * **CTA Dominance di Mobile**: Tombol CTA utama wajib berukuran penuh (*Full-Width*) di layar mobile: `<Button className="w-full md:w-auto mt-3 md:mt-0">`.
   * *(Cross-Reference: Lihat [PART IX: Law 3](#part-ix-refactoring-rules--audit-protocol)).*
 * **Anti-Jiggle Hardware Debounce**: Seluruh tombol secara otomatis mengunci klik ganda selama **300ms** dan menampilkan indikator loading mikro tanpa mengubah lebar fisik tombol (*Zero Width Jiggle*).
-* **Modality-Aware Touch Targets**: 
+* **Modality-Aware Touch Targets**:
   * Modality `TOUCH`: Minimum `48x48dp` (Material Design 3 standard).
   * Modality `STYLUS` / `MOUSE`: Minimum `32x32dp` diperbolehkan karena presisi kursor/pen.
   * *(Cross-Reference: Lihat [PART VII: 7.4 Input Modality Detection & S-Pen Ergonomics](#74-input-modality-detection--s-pen-ergonomics) & [7.8 Touch Targets & Samsung Ergonomics](#78-touch-targets--samsung-ergonomics)).*
-* **Ergonomic Sizing & Touch Targets**: 
+* **Ergonomic Sizing & Touch Targets**:
   * Seluruh tombol (kecuali `ICON-ONLY` yang menggunakan `w-9 h-9` / 36px khusus untuk modality Stylus/Mouse di area padat) wajib mematuhi aturan *Touch Target* minimum 48dp pada [PART VII: 7.8 Touch Targets & Samsung Ergonomics](#78-touch-targets--samsung-ergonomics).
   * Gunakan `min-h-[48px]` pada kontainer tombol untuk memastikan area sentuh yang aman.
 
 ### 4.2 Dropdown & Selection Taxonomy (The Threshold Rule)
+
 * **$\le 4$ Pilihan**: 🛑 **HARAM DROPDOWN**. Wajib `<SegmentedControl>` (Pil horizontal 1-Tap).
 * **5 s.d 15 Pilihan**: Wajib `<SelectSheet>` (Bottom Sheet picker di Mobile, popover di Desktop).
 * **$> 15$ Pilihan**: Wajib `<SearchableCombobox>` (Dropdown dengan kolom pencarian instan 150ms debounce).
@@ -375,17 +362,21 @@ $$\text{Radius Dalam} = \text{Radius Luar} - \text{Padding}$$
 ### 4.3 Modals, Sheets & Dialog Architecture
 
 #### 4.3.1 The Golden Envelope Standard (Dimensi Kanonikal)
+
 * **EXPANDED / LARGE (Desktop / Tablet Landscape)**: Menggunakan ukuran kanonikal terkunci `w-full max-w-5xl h-[85vh]` dengan `backdrop-blur-xs` dan listener tombol `ESC`.
 * **COMPACT / MEDIUM (Mobile / Tablet Portrait)**: Otomatis berubah menjadi **Bottom Sheet Drawer** `w-full max-h-[90dvh] rounded-t-3xl border-t border-slate-200`. Penggunaan `dvh` (Dynamic Viewport Height) wajib diterapkan untuk mencegah sheet tertutup keyboard virtual Android.
 * **Zero Layout Shift**: Tinggi modal terkunci stabil saat berpindah sub-tab untuk mengeliminasi lonjakan visual (*layout jiggle*).
 * *(Cross-Reference: Lihat [PART VII: 7.9 Adaptive Modals, Sheets & Dialogs](#79-adaptive-modals-sheets--dialogs) & [PART IX: Law 8](#part-ix-refactoring-rules--audit-protocol)).*
 
 #### 4.3.2 Pinned Action Anchor (Tombol Tutup Terkunci)
+
 * Tombol Tutup (`✕`) **wajib dikunci di pojok kanan atas** (`shrink-0 ml-2`) dengan z-index terproteksi, sehingga tidak pernah turun ke bawah atau menabrak teks judul pada layar sempit.
 * *(Cross-Reference: Lihat [PART IX: Law 8](#part-ix-refactoring-rules--audit-protocol)).*
 
 #### 4.3.3 The 2-Tier Header & Matching-Pill Context Ribbon
+
 Struktur tajuk modal wajib dipisahkan menjadi 2 tingkat teratur:
+
 * **Tier 1 (Header Identitas Utama)**:
   * Ikon Avatar + *Eyebrow* tema (tanpa duplikasi ikon) + Judul Utama + Kapsul Nama Siswa + Kapsul NIS + Tombol `✕` Pinned.
 * **Tier 2 (Dedicated Context Ribbon)**:
@@ -396,15 +387,18 @@ Struktur tajuk modal wajib dipisahkan menjadi 2 tingkat teratur:
 * *(Cross-Reference: Lihat [PART IX: Law 9](#part-ix-refactoring-rules--audit-protocol)).*
 
 #### 4.3.4 Mobile Anti-Stack Fatigue & Segmented Fluid Bar
+
 * Di layar ponsel (`< md`), navigasi multi-dimensi/elemen wajib otomatis bertransformasi dari sidebar vertikal desktop menjadi **tab horizontal geser (*horizontal scrollable fluid pill bar*)** (`overflow-x-auto scrollbar-hide shrink-0`).
 * *(Cross-Reference: Lihat [PART IX: Law 10](#part-ix-refactoring-rules--audit-protocol)).*
 
 #### 4.3.5 Susunan Tombol Aksi
+
 * **Desktop**: Rata Kanan (`[ Batal (Soft) ] [ Simpan (Solid) ]`).
 * **Mobile**: Grid 2x2 atau tombol Aksi Utama Full-Width di atas tombol Batal teks ghost.
 * **Dialog Bahaya**: Fokus default keyboard otomatis diarahkan ke tombol **Batal** demi keamanan data.
 
 ### 4.4 Index Pustaka Komponen Primitif (`src/components/ui/`)
+
 Pustaka komponen tunggal yang dibangun untuk mewadahi seluruh hukum arsitektur Amanaura:
 
 ```text
@@ -430,25 +424,28 @@ src/hooks/
 ```
 
 #### DEFERRED — Living Contract v2
+>
 > Komponen & hook berikut didokumentasikan dalam Amanaura v3.0-RELEASE
 > namun **DITANGGUHKAN (DEFERRED)** ke implementasi masa depan karena
 > tidak dibutuhkan oleh Halaman Percontohan v1:
 >
 > **Primitives:**
-> - `PedagogicalRatingPill.tsx` (BB/MB/BSH/BSB 1-Tap PAUD)
-> - `FocusCanvas.tsx` (Grafik peta layar penuh)
-> - `Lightbox.tsx` (Foto karya seni + Pinch-Zoom)
-> - `TermExplainer.tsx` (Ikon ⓘ penjelas istilah)
-> - `SplitPaneWorkspace.tsx` (Master-Detail layout engine)
+>
+> * `PedagogicalRatingPill.tsx` (BB/MB/BSH/BSB 1-Tap PAUD)
+> * `FocusCanvas.tsx` (Grafik peta layar penuh)
+> * `Lightbox.tsx` (Foto karya seni + Pinch-Zoom)
+> * `TermExplainer.tsx` (Ikon ⓘ penjelas istilah)
+> * `SplitPaneWorkspace.tsx` (Master-Detail layout engine)
 >
 > **Hooks:**
-> - `useInstallPrompt.ts` (PWA beforeinstallprompt capture)
+>
+> * `useInstallPrompt.ts` (PWA beforeinstallprompt capture)
 >
 > **Services:**
-> - `offlineQueue.ts` (IndexedDB Mutation Queue I/O)
+>
+> * `offlineQueue.ts` (IndexedDB Mutation Queue I/O)
 >
 > Status: Akan dibangun saat fitur PWA & interaksi lanjutan diaktifkan.
-
 
 ---
 
@@ -457,24 +454,28 @@ src/hooks/
 ### 5.1 Horizontal & Vertical Navigation Patterns
 
 #### 5.1.1 Horizontal Overflow Tabs
+
 1. **Ambient Edge Fade Shader**: Gradasi pudar di tepi kanan (`mask-image`) sebagai sinyal intuitif bahwa tab dapat digeser.
 2. **Micro-Morphing Dots**: Titik indikator di bawah tab yang berubah menjadi pil lonjong (`w-4 h-1 bg-slate-900`) mengikuti tab aktif.
 3. **Auto-Center Snap**: Mengetuk tab otomatis menggeser tab tersebut ke tengah layar (`inline: 'center'`).
 
 #### 5.1.2 Vertical Pagination
+
 1. **Soft Load More Pill**: Tombol kapsul lembut di bawah daftar (`[ ↓ Tampilkan 10 Siswa Lainnya • 17/45 ]`) menggantikan penomoran halaman kuno `[1] [2] [3]`.
 2. **Timeline Stepper**: Garis vertikal 2px dengan titik status (`● Selesai`, `● Sedang Aktif`, `○ Menunggu`).
 3. **Floating Position HUD**: Pil mengambang semi-transparan `[ 25 / 150 Data ]` saat scrolling cepat.
 
 ### 5.2 The Navigation & Back Doctrine
+
 1. **Posisi Tunggal**: Tombol Back selalu berupa lingkaran kecil di kiri atas (`ArrowLeft` `w-8 h-8 rounded-full bg-slate-100`).
 2. **Hierarchical Determinism**: Back selalu kembali ke halaman induk data (*Parent Page*), bukan riwayat acak browser `history.back()`.
 3. **Auto-Draft Shield**: Setiap ketikan form otomatis tersimpan di `localStorage`. Jika pengguna keluar tanpa sengaja, data ketikan tetap utuh saat kembali.
-4. **Mobile Gestures & OS Conflict Resolution**: 
+4. **Mobile Gestures & OS Conflict Resolution**:
    * Menutup laci/form dapat dilakukan dengan menggeser jempol ke bawah (*Swipe Down to Dismiss*).
    * Untuk navigasi *Back*, sistem menghormati gestur bawaan Android (*Edge Swipe*). Komponen UI carousel/drawer wajib menghormati **24dp Edge Exclusion Zone** agar tidak membajak gestur *Back* OS (lihat [PART VII: 7.10.1](#7101-native-android-gesture-conflict-resolution)).
 
 ### 5.3 Advanced Media, Charts & Hover Ergonomics
+
 1. **`<FocusCanvas>`**: Grafik padat (Heatmap/Statistik) memiliki tombol `Maximize2` untuk mekar menjadi kanvas layar penuh yang mendukung *pan & snap-to-touch tooltip*.
 2. **`<Lightbox>`**: Foto karya seni anak terkunci pada rasio `aspect-4/3` atau `aspect-square`, dapat disentuh untuk *Pinch-to-Zoom* layar penuh.
 3. **Hover Isolation & Modality Awareness**:
@@ -484,7 +485,8 @@ src/hooks/
    * *(Cross-Reference: Lihat [PART VII: 7.4 Input Modality Detection & S-Pen Ergonomics](#74-input-modality-detection--s-pen-ergonomics)).*
 4. **Sticky Freeze First Column**: Tabel data multi-kolom di mobile mengunci kolom Nama Siswa di sisi kiri (`sticky left-0 shadow-sm`), sementara kolom nilai lainnya dapat digeser bebas ke kanan.
 
-### 5.4 The 7 Invisible Masteries (Micro-Engineering Perfection)
+### 5.4 The 8 Invisible Masteries (Micro-Engineering Perfection)
+
 1. **Anti-Jiggle Debounce**: Perlindungan dobel-klik 300ms tanpa perubahan lebar layout.
 2. **Zero Cumulative Layout Shift (Zero-CLS)**: Dimensi minimum terkunci (`min-h-[48px]`), layar tidak pernah melompat 1px pun saat data selesai dimuat.
 3. **Silent Ghost Recovery**: Listener `document.visibilityState` yang secara otomatis menyegarkan sesi Supabase saat HP dibuka kembali setelah berjam-jam tanpa memutus ketikan form.
@@ -492,12 +494,14 @@ src/hooks/
 5. **Silent Exponential Retry & Background Sync**: Percobaan ulang koneksi dan sinkronisasi *Mutation Queue* otomatis di latar belakang (1s, 2s, 4s) oleh Service Worker saat sinyal Wi-Fi terputus sesaat, tanpa memunculkan layar error merah atau memutus ketikan form.
 6. **Emotional Affirmation & 432Hz Sound**: Ucapan penutup hari yang menenangkan dan denting akustik harmonis 432Hz saat seluruh tugas kelas tuntas.
 7. **Dynamic Viewport Harmony (`dvh`)**: Penggunaan unit `dvh` (Dynamic Viewport Height) alih-alih `vh` statis untuk mengeliminasi *layout jump* saat keyboard Android muncul, atau saat aplikasi berada dalam mode Split-Screen/Multi-Window.
+8. **Invisible Scroll (The Disappearing Scrollbar)**: Scrollbar native browser lenyap dari seluruh halaman dan container (`scrollbar-width: none`, `::-webkit-scrollbar { width: 0; height: 0; }`). Seluruh interaksi scroll mengalir murni melalui touch, mouse wheel, dan keyboard tanpa meninggalkan rel garis vertikal tepi kanan (*The OS Disappears into the Day*).
 
 ---
 
 ## PART VI: CONTENT & COPYWRITING DOCTRINE
 
 ### 6.1 Batas Kata & Kosakata Baku (Word Limits & Vocabulary)
+
 1. **Judul Halaman / Seksi**: **Maksimal 2 Kata** (Max 16 Karakter).
    * *Contoh*: `"Beranda Kelas"`, `"Meja PPDB"`, `"Statistik Unit"`, `"Adopsi Kebijakan"`.
 2. **Sub-Judul**: **Maksimal 10 Kata** (1 Kalimat Manfaat) dan **disembunyikan di layar HP** (`hidden md:block`).
@@ -509,6 +513,7 @@ src/hooks/
    * *(Cross-Reference: Lihat [PART IX: Law 5](#part-ix-refactoring-rules--audit-protocol)).*
 
 ### 6.2 Standar Kelembagaan TK & Kamus Pedagogis Anti-Jargon
+
 * **Standar Nomenklatur Lembaga**: Seluruh unit wajib menggunakan istilah **`TK`** (*Kurikulum Merdeka TK*, *TK Yapendik*), dilarang melakukan generalisasi kata `PAUD`.
 * **Pembersihan Jargon Developer ke Bahasa Pendidik**:
   * `Fast Capture` $\rightarrow$ **`Rekam Momen Belajar`**
@@ -521,6 +526,7 @@ src/hooks/
 * *(Cross-Reference: Lihat [PART IX: Law 12](#part-ix-refactoring-rules--audit-protocol)).*
 
 ### 6.3 Filter & Query Architecture (The 3 Tiers)
+
 1. **Tier 1 (Inline Quick Chips)**: 2–5 kategori, tanpa tombol "Terapkan", menyaring instan 0ms.
 2. **Tier 2 (Search Omni-Filter)**: Input teks debounced 150ms dengan tombol `[ ✕ ]` reset instan.
 3. **Tier 3 (Multi-Attribute Sheet)**: Filter kompleks dengan pemicu `[ ⚡ Filter (2) ]`, membuka Bottom Sheet dengan tombol `[ Terapkan ]` dan `[ Reset ]`.
@@ -529,6 +535,7 @@ src/hooks/
    * *(Cross-Reference: Lihat [PART IX: Law 6](#part-ix-refactoring-rules--audit-protocol)).*
 
 ### 6.4 Instant Information & Progressive Guidance
+
 1. **The 3-Second Micro-Summary**: Header ringkasan instan di atas daftar (`👥 17 Murid • 🟢 15 Hadir • ⚠️ 1 Alergi`).
 2. **Polite Dismissible Coachmarks**: Kartu petunjuk pengguna baru dengan tombol `[ Mengerti ✕ ]` yang hilang selamanya setelah ditutup.
 3. **1-Tap Term Explainer (`ⓘ`)**: Ikon mikro di samping istilah teknis yang memunculkan popover/sheet penjelasan 1 kalimat.
@@ -541,20 +548,23 @@ src/hooks/
 ### 7.1 MD3 Window Size Classes Breakpoint System
 
 #### Architectural Decision Record
+
 * **ADR-UX-001**: Evolusi dari binary breakpoint (`< 1024px` / `≥ 1024px`) ke **Material Design 3 (MD3) Window Size Classes**.
 * **Status**: **RATIFIED** (Disahkan oleh Project Owner pada `2026-08-28`).
 * **Dampak**: Menata ulang seluruh perilaku responsif tata letak Amanaura menjadi tiga kelas dinamis.
 
 #### MD3 Window Size Classes Definition
+
 Amanaura v2.0 mengadopsi Material Design 3 Window Size Classes sebagai sistem breakpoint kanonikal:
 
 | Size Class | CSS Pixels (dp) | Typical Devices | Layout Strategy |
-|:---|:---|:---|:---|
+| :--- | :--- | :--- | :--- |
 | **COMPACT** | `< 600px` | Phone portrait, Tab A9 portrait | Edge-to-edge, bottom nav, single column |
 | **MEDIUM** | `600px – 839px` | Tablet portrait (Tab S9, A9+), foldable | Adaptive single/dual column, collapsible rail |
 | **EXPANDED** | `≥ 840px` | Tablet landscape (Tab S9+), desktop, DeX | Sidebar + workspace, multi-column, master-detail |
 
 #### Tailwind CSS Integration (Tailwind v4 `@theme`)
+
 ```css
 /* AMANAURA v2.0 — MD3 Aligned Breakpoints */
 @theme {
@@ -567,8 +577,9 @@ Amanaura v2.0 mengadopsi Material Design 3 Window Size Classes sebagai sistem br
 ```
 
 #### Migration dari Binary Breakpoint ke MD3
+
 | Amanaura v1.0 Rule | v1.0 Breakpoint | v2.0 MD3 Equivalent |
-|:---|:---|:---|
+| :--- | :--- | :--- |
 | Edge-to-Edge List | `< 1024px` | COMPACT + MEDIUM |
 | Full-width CTA | `< 1024px` | COMPACT + MEDIUM |
 | Bottom Sheet Modal | `< 1024px` | COMPACT + MEDIUM |
@@ -579,6 +590,7 @@ Amanaura v2.0 mengadopsi Material Design 3 Window Size Classes sebagai sistem br
 #### Layout Behavior per Size Class
 
 **1. COMPACT (`< 600px`)**
+
 * Navigation: Bottom Smart Chips + Omni-Bar
 * Content: Edge-to-edge, single column
 * CTA: Full-width
@@ -587,6 +599,7 @@ Amanaura v2.0 mengadopsi Material Design 3 Window Size Classes sebagai sistem br
 * Padding: `px-4`
 
 **2. MEDIUM (`600px – 839px`)**
+
 * Navigation: Collapsible mini-rail (`w-[72px]`) atau bottom nav
 * Content: Edge-to-edge dengan `max-w-lg mx-auto` untuk kenyamanan membaca
 * CTA: Full-width dengan `max-w-md mx-auto`
@@ -595,6 +608,7 @@ Amanaura v2.0 mengadopsi Material Design 3 Window Size Classes sebagai sistem br
 * Padding: `px-5`
 
 **3. EXPANDED (`≥ 840px`)**
+
 * Navigation: Full sidebar (`w-64`) collapsible
 * Content: Contained workspace (`max-w-7xl mx-auto`)
 * CTA: Auto-width, right-aligned
@@ -604,6 +618,7 @@ Amanaura v2.0 mengadopsi Material Design 3 Window Size Classes sebagai sistem br
 * Master-Detail: Supported (lihat [Section 7.6 Master-Detail & Split-Pane Workspace Patterns](#76-master-detail--split-pane-workspace-patterns))
 
 **4. LARGE (`≥ 1200px`) — DeX External Monitor**
+
 * Navigation: Full sidebar + opsional secondary panel
 * Content: Multi-column workspace
 * Master-Detail: Three-pane supported
@@ -616,7 +631,7 @@ Amanaura v2.0 mengadopsi Material Design 3 Window Size Classes sebagai sistem br
 #### Target Device Specifications
 
 | Device | Screen | Physical Res | CSS Viewport (P) | CSS Viewport (L) | MD3 (P) | MD3 (L) | DeX | S-Pen |
-|:---|:---|:---|:---|:---|:---:|:---:|:---:|:---:|
+| :--- | :--- | :--- | :--- | :--- | :---: | :---: | :---: | :---: |
 | **Tab A9** | 8.7" | 1340×800 | ~533×800 | ~800×533 | COMPACT | MEDIUM | ❌ | ❌ |
 | **Tab A9+** | 11" | 1920×1200 | ~600×960 | ~960×600 | MEDIUM | EXPANDED | ❌ | ❌ |
 | **Tab S9 FE** | 10.9" | 2304×1440 | ~720×1152 | ~1152×720 | MEDIUM | EXPANDED | ✅ | ✅ |
@@ -629,6 +644,7 @@ Amanaura v2.0 mengadopsi Material Design 3 Window Size Classes sebagai sistem br
 > ⚠️ **Catatan:** CSS viewport dihitung berdasarkan `devicePixelRatio` tipikal (~2.0 untuk S series, ~1.5–2.0 untuk A series). Nilai aktual bervariasi per perangkat dan browser.
 
 #### Samsung DeX Mode Behavior
+
 Saat mode Samsung DeX aktif pada Galaxy Tab:
 
 1. **Windowing System**:
@@ -648,6 +664,7 @@ Saat mode Samsung DeX aktif pada Galaxy Tab:
 #### Target Browser & PWA Host Environment
 
 Google Chrome for Android adalah browser referensi primer untuk pengembangan dan pengujian PWA Yapendik OS:
+
 * **Primary Reference**: **Google Chrome for Android** (Standard Chromium Web Platform).
 * **Emulation & Testing**: Chrome DevTools Device Emulation (dengan preset dimensi Samsung Galaxy Tab matrix).
 * **PWA Support**: Dukungan penuh Web App Manifest, Service Worker caching, and standard Web APK / PWA install prompts.
@@ -660,6 +677,7 @@ Google Chrome for Android adalah browser referensi primer untuk pengembangan dan
 ### 7.3 Breakpoint Transition & State Preservation
 
 #### Golden Rule: State Preservation Across Size Class Changes
+
 Saat viewport berubah yang memicu transisi size class (misal: `MEDIUM` $\rightarrow$ `EXPANDED` saat memutar tablet dari portrait ke landscape, atau saat resize window di DeX):
 
 1. **SCROLL POSITION**: Wajib dipelihara (*Preserve*). Dilarang mereset posisi scroll ke puncak layar (0px).
@@ -669,6 +687,7 @@ Saat viewport berubah yang memicu transisi size class (misal: `MEDIUM` $\rightar
 5. **ANIMATION**: Lewati animasi transisi (*Skip transition animation*) saat pergantian breakpoint demi mengeliminasi *layout shift jiggle*.
 
 #### Resize Handling Implementation Pattern
+
 ```typescript
 // Debounced resize handler (150ms per Amanaura debounce philosophy)
 const DEBOUNCE_MS = 150;
@@ -700,7 +719,9 @@ function handleSizeClassChange(
 ```
 
 #### DeX Window Resize
+
 Di lingkungan Samsung DeX, jendela aplikasi dapat diubah ukurannya secara bebas oleh pengguna:
+
 * Gunakan `ResizeObserver` pada kontainer utama.
 * Terapkan debounce 150ms untuk mencegah re-render berlebihan.
 * Pertahankan seluruh state formulir dan navigasi selama proses resize.
@@ -711,17 +732,20 @@ Di lingkungan Samsung DeX, jendela aplikasi dapat diubah ukurannya secara bebas 
 ### 7.4 Input Modality Detection & S-Pen Ergonomics
 
 #### The Modality Paradigm
-Tablet Android (khususnya Samsung Galaxy Tab) adalah perangkat *hybrid*. 
+
+Tablet Android (khususnya Samsung Galaxy Tab) adalah perangkat *hybrid*.
 Satu perangkat fisik dapat menerima input dari 4 modality berbeda secara bergantian:
+
 1. **TOUCH**: Jari tangan (Coarse pointer, no hover).
 2. **STYLUS**: S-Pen (Fine pointer, hover capable, pressure sensitive).
 3. **MOUSE**: Bluetooth mouse / Trackpad / DeX mouse (Fine pointer, hover capable).
 4. **KEYBOARD**: Keyboard case / DeX keyboard (No pointer, focus-based navigation).
 
-Amanaura v2.0 **TIDAK** menggunakan breakpoint layar untuk menentukan interaksi. 
+Amanaura v2.0 **TIDAK** menggunakan breakpoint layar untuk menentukan interaksi.
 Amanaura menggunakan **Input Modality Detection** untuk menentukan *behavior* komponen.
 
 #### CSS Media Queries for Modality
+
 ```css
 /* Touch-first (Coarse) */
 @media (pointer: coarse) {
@@ -743,6 +767,7 @@ Amanaura menggunakan **Input Modality Detection** untuk menentukan *behavior* ko
 ```
 
 #### React Hook Specification: `useInputModality()`
+
 ```typescript
 type InputModality = 'TOUCH' | 'STYLUS' | 'MOUSE' | 'KEYBOARD';
 
@@ -756,40 +781,47 @@ function useInputModality(): InputModality {
 ```
 
 #### Samsung S-Pen Specific Ergonomics
+
 1. **Hover Preview**: Saat S-Pen melayang di atas elemen (`pointerType === 'pen'` + `hover`), tampilkan *tooltip* atau *preview* (misal: preview foto siswa, preview detail observasi).
 2. **Palm Rejection**: Browser menangani ini secara native. Amanaura wajib **TIDAK** menggunakan `touch-action: none` secara global yang dapat merusak palm rejection.
 3. **Precision Targets**: Saat modality = `STYLUS`, touch target minimum bisa diperkecil dari 48dp menjadi 32dp karena presisi S-Pen.
 4. **Air Command (Future)**: Placeholder untuk integrasi S-Pen button (saat ini belum didukung web API secara luas, catat sebagai *Progressive Enhancement*).
 
 #### DeX Keyboard Navigation
+
 Saat di Samsung DeX dengan keyboard fisik:
+
 1. **Focus Management**: Setiap elemen interaktif wajib memiliki *focus state* yang jelas menggunakan **Amanaura Signature #2: The Luminescent Edge** (`box-shadow: 0 0 0 1.5px #0F172A, 0 0 20px -4px rgba(245, 158, 11, 0.18)`).
 2. **Logical Tab Order**: Urutan `tabIndex` wajib mengikuti alur baca natural (kiri-kanan, atas-bawah).
 3. **Keyboard Shortcuts**:
-   - `Esc`: Menutup Modal / Bottom Sheet / Drawer.
-   - `Enter`: Submit Form / Trigger Primary CTA.
-   - `Arrow Keys`: Navigasi di dalam Dropdown / Segmented Control.
+   * `Esc`: Menutup Modal / Bottom Sheet / Drawer.
+   * `Enter`: Submit Form / Trigger Primary CTA.
+   * `Arrow Keys`: Navigasi di dalam Dropdown / Segmented Control.
 
 ---
 
 ### 7.5 Adaptive Navigation Shell Choreography
 
 #### The Navigation Transformation Matrix
+
 Saat terjadi transisi *Size Class* (misal: memutar tablet dari Portrait `MEDIUM` ke Landscape `EXPANDED`), Navigation Shell wajib bertransformasi mengikuti matriks ini tanpa kehilangan state (mengacu pada [Section 7.3 State Preservation](#73-breakpoint-transition--state-preservation)):
 
 | From \ To | COMPACT | MEDIUM | EXPANDED |
-|:---|:---|:---|:---|
+| :--- | :--- | :--- | :--- |
 | **COMPACT** | - | Omni-Bar $\rightarrow$ Mini-Rail (Fade & Slide Left) | Omni-Bar $\rightarrow$ Full Sidebar (Expand) |
 | **MEDIUM** | Mini-Rail $\rightarrow$ Omni-Bar (Slide Down) | - | Mini-Rail $\rightarrow$ Full Sidebar (Width expand `72px` $\rightarrow$ `256px`) |
 | **EXPANDED** | Full Sidebar $\rightarrow$ Omni-Bar (Collapse & Slide) | Full Sidebar $\rightarrow$ Mini-Rail (Width collapse `256px` $\rightarrow$ `72px`) | - |
 
 #### Mini-Rail (`w-[72px]`) Ergonomics for Tablet Portrait
+
 1. **Touch Modality**: Tap pada ikon Mini-Rail langsung menavigasi atau membuka *Tooltip Popover* kecil di sisi kanan ikon selama 2 detik.
 2. **Stylus/Mouse Modality**: Hover pada ikon menampilkan *Tooltip* yang persisten selama kursor berada di atasnya.
 3. **Active State**: Ikon yang aktif ditandai dengan **Signature #2: Luminescent Edge** di sisi kiri rail (garis vertikal 3px `bg-amber-500`).
 
 #### DeX Windowing Navigation Rules
+
 Di lingkungan Samsung DeX, aplikasi bisa di-resize dari ukuran `COMPACT` hingga `LARGE` secara dinamis:
+
 1. **Fluid Transition**: Gunakan CSS `transition-[width] duration-300` dengan fisika `AmanauraSpring` untuk animasi Sidebar $\leftrightarrow$ Mini-Rail.
 2. **Threshold Hysteresis**: Untuk mencegah *flickering* (berkedip) saat user menggeser border window di batas `839px` $\leftrightarrow$ `840px`, tambahkan *hysteresis buffer* 20px pada JavaScript resize observer sebelum memicu transformasi layout.
 
@@ -798,11 +830,13 @@ Di lingkungan Samsung DeX, aplikasi bisa di-resize dari ukuran `COMPACT` hingga 
 ### 7.6 Master-Detail & Split-Pane Workspace Patterns
 
 #### The Split-Pane Paradigm
+
 Pada size class `EXPANDED` ($\ge 840\text{px}$) dan `LARGE` ($\ge 1200\text{px}$), Amanaura v2.0 mengadopsi pola **Master-Detail Split-Pane** untuk alur kerja yang memerlukan inspeksi data beruntun (misal: Guru meninjau daftar siswa satu per satu untuk observasi kelas, atau Kepala Sekolah meninjau inbox adopsi kebijakan).
 
 Pola ini menghilangkan kelelahan navigasi (*navigation fatigue*) akibat siklus *click $\rightarrow$ back $\rightarrow$ click* yang berulang.
 
 #### Anatomy of a Split-Pane Workspace
+
 ```text
 ┌────────────────────────────────────────────────────────────────────────┐
 │ [TopBar: Brand + School + User Profile]                                │
@@ -822,6 +856,7 @@ Pola ini menghilangkan kelelahan navigasi (*navigation fatigue*) akibat siklus *
 ```
 
 #### Layout Rules & Proportions
+
 1. **Master Pane (Kiri)**:
    * Lebar default: `w-1/3` atau *fixed* `w-[320px]` dengan *min-width* `280px`.
    * Berisi *Edge-to-Edge List* (Hukum 1) dengan *Sticky Freeze First Column* jika diperlukan.
@@ -834,18 +869,24 @@ Pola ini menghilangkan kelelahan navigasi (*navigation fatigue*) akibat siklus *
    * Pada breakpoint `LARGE` ($\ge 1200\text{px}$), pembatas antara Master dan Detail dapat digeser (*drag-to-resize*) dengan *snap points* pada 25%, 33%, dan 50%.
 
 #### Responsive Fallback (COMPACT & MEDIUM)
+
 Split-Pane **TIDAK AKTIF** pada size class `COMPACT` dan `MEDIUM`. Sistem wajib melakukan *graceful degradation*:
+
 * **MEDIUM (Tablet Portrait)**: Master List ditampilkan penuh. Saat item di-tap, Detail View muncul sebagai **Bottom Sheet (85vh)** atau *push navigation* tergantung hierarki data.
 * **COMPACT (Phone)**: Master List ditampilkan penuh. Saat item di-tap, Detail View melakukan *push navigation* (Hierarchical Determinism) ke halaman baru.
 
 #### The "Empty State" Detail Pane
+
 Saat tidak ada item yang dipilih di Master List (misal: baru pertama kali membuka halaman di Desktop/DeX):
+
 * Detail Pane menampilkan **Interactive Onboarding Empty State** (lihat [Part VI §6.4 Instant Information & Progressive Guidance](#64-instant-information--progressive-guidance)).
 * Visual: Ilustrasi minimalis + teks *"Pilih salah satu [Siswa/Dokumen] dari daftar di samping untuk melihat detailnya."*
 * 🛑 **DILARANG** memaksa seleksi item pertama secara otomatis (*auto-select first item*) tanpa interaksi sadar pengguna, guna mencegah perubahan/aksi tidak sengaja pada formulir sensitif.
 
 #### State Preservation Across Breakpoints
+
 Mengacu pada [Section 7.3 State Preservation](#73-breakpoint-transition--state-preservation):
+
 * Jika pengguna memilih "Siswa B" di `EXPANDED` (Split-Pane), lalu memutar tablet ke Portrait (`MEDIUM`), "Siswa B" **TETAP TERPILIH** dan Detail View-nya otomatis bertransformasi menjadi Bottom Sheet yang terbuka.
 * Jika pengguna menutup Bottom Sheet di Portrait, lalu memutar kembali ke Landscape (`EXPANDED`), Detail Pane kembali ke *Empty State* (seleksi dibatalkan untuk mencegah ketidakselarasan visual).
 
@@ -854,23 +895,31 @@ Mengacu pada [Section 7.3 State Preservation](#73-breakpoint-transition--state-p
 ### 7.7 Orientation, Multi-Window & DeX Handling
 
 #### 7.7.1 Orientation Change Handling
+
 Secara default, Amanaura v2.0 mendukung orientasi dinamis (`orientation: any`) mengikuti sensor perangkat. Namun, terdapat pengecualian kontekstual:
+
 1. **Task-Specific Locks**: Saat pengguna berada di dalam alur kerja yang memerlukan fokus visual atau kamera (misal: `<Lightbox>` untuk meninjau foto karya seni anak, atau `<CameraCapture>` untuk observasi), sistem wajib mengunci orientasi (*orientation lock*) atau memaksa layout Landscape menggunakan CSS `@media (orientation: landscape)` untuk memaksimalkan ruang kerja.
 2. **Rotation State Preservation**: Mengacu pada [Section 7.3 State Preservation](#73-breakpoint-transition--state-preservation), rotasi dari Portrait (`MEDIUM`) ke Landscape (`EXPANDED`) tidak boleh mereset scroll position, form input, atau state modal.
 
 #### 7.7.2 Android Multi-Window & Split-Screen
+
 Pengguna Android sering menggunakan mode Split-Screen (misal: Yapendik OS di atas, WhatsApp di bawah).
+
 1. **Dynamic Viewport Height (`dvh`)**: 🛑 **DILARANG KERAS** menggunakan `h-screen` atau `100vh` statis untuk kontainer utama. Android OS sering mengubah tinggi viewport secara agresif saat Split-Screen atau saat keyboard virtual muncul. Wajib menggunakan unit CSS modern `h-dvh` (Dynamic Viewport Height) atau `min-h-dvh` untuk mencegah konten terpotong atau melompat.
 2. **No Unmount/Remount**: Komponen tidak boleh di-*unmount* dan di-*remount* hanya karena viewport menyusut. Gunakan CSS Media Queries dan Flexbox/Grid adaptif untuk mengatur ulang tata letak secara instan.
 3. **Graceful Degradation**: Jika Split-Screen membuat lebar jendela menyusut di bawah `600px` (COMPACT), UI wajib bertransisi mulus ke tata letak mobile (Omni-Bar & Bottom Nav) tanpa kehilangan konteks data yang sedang dibuka.
 
 #### 7.7.3 Samsung DeX Advanced Handling
+
 Lingkungan DeX memperkenalkan kompleksitas windowing desktop:
+
 1. **Freeform Window Resizing**: Jendela DeX dapat diubah ukurannya secara bebas. Gunakan `ResizeObserver` dengan *debounce* 150ms (seperti pada [Section 7.3](#73-breakpoint-transition--state-preservation)) untuk mencegah *layout thrashing* (rendering berlebihan yang memboroskan baterai).
 2. **External Monitor Hot-Plug**: Saat tablet dicolokkan ke monitor eksternal, viewport dapat melompat dari `1280px` ke `1920px+` secara instan. Sistem harus siap merender layout `LARGE` (Multi-panel / Three-pane) tanpa memuat ulang data dari server (manfaatkan cache client-side yang ada).
 
 #### 7.7.4 Safe Area Insets & Display Cutouts
+
 Tablet modern memiliki *punch-hole camera* dan *gesture navigation bar* yang memakan area layar:
+
 1. **TopBar Compensation**: TopBar wajib menghormati area kamera dengan padding dinamis: `padding-top: env(safe-area-inset-top)`.
 2. **Bottom Navigation & Omni-Bar Compensation**: Elemen di bawah layar wajib menghormati gesture bar Android atau taskbar DeX: `padding-bottom: env(safe-area-inset-bottom)`.
 3. **Landscape Cutouts**: Saat tablet diputar ke Landscape, *punch-hole camera* mungkin berada di sisi kiri atau kanan. Konten teks penting **DILARANG** diletakkan di sudut mati (*dead corners*) tanpa padding `env(safe-area-inset-left)` atau `env(safe-area-inset-right)`.
@@ -880,29 +929,36 @@ Tablet modern memiliki *punch-hole camera* dan *gesture navigation bar* yang mem
 ### 7.8 Touch Targets & Samsung Ergonomics
 
 #### 7.8.1 The 48dp Material Standard & Modality Exceptions
+
 Ukuran target sentuh bukanlah tentang ukuran visual ikon, melainkan **area hit-box** yang dapat direspons oleh sistem:
+
 1. **Modality `TOUCH` (Jari)**: Minimum **`48x48dp`** (Material Design 3 standard). Ini adalah hukum mutlak untuk mencegah *fat-finger errors*.
    * Implementasi Tailwind: Gunakan utilitas `min-h-[48px]` dan `min-w-[48px]` pada kontainer elemen interaktif (meskipun ikon SVG di dalamnya hanya `w-5 h-5`).
 2. **Modality `STYLUS` / `MOUSE`**: Minimum **`32x32dp`** diperbolehkan karena presisi kursor/S-Pen (mengacu pada [Section 7.4](#74-input-modality-detection--s-pen-ergonomics)).
 3. **Pengecualian Kepadatan Tinggi**: Pada tabel data yang sangat padat (misal: Grid Nilai Rapor), target sentuh bisa dikompresi hingga `40x40dp` asalkan memiliki *spacing* yang cukup.
 
 #### 7.8.2 Thumb Zone & Grip Ergonomics
+
 Tablet dipegang dengan cara yang berbeda dari ponsel, mempengaruhi jangkauan jempol (*Thumb Zone*):
-1. **Tablet Portrait (`MEDIUM`)**: 
+
+1. **Tablet Portrait (`MEDIUM`)**:
    * Tablet dipegang dengan dua tangan di sisi kiri dan kanan. Jempol menjangkau sisi kiri-kanan bawah.
    * **Zona Emas (Golden Zone)**: *Primary CTA*, *Smart Chips*, dan *Omni-Bar* wajib diletakkan di zona bawah (Bottom 30% layar).
    * **Zona Merah (Red Zone)**: Hindari menempatkan aksi kritis (seperti tombol *Approve* atau *Delete*) di pojok kanan atas, karena memaksa pengguna untuk melepaskan pegangan atau meregangkan tangan secara tidak nyaman.
-2. **Tablet Landscape (`EXPANDED`)**: 
+2. **Tablet Landscape (`EXPANDED`)**:
    * Tablet diletakkan di meja dengan *keyboard case*, atau dipegang mendatar.
    * **Zona Emas**: *Sidebar* (kiri) dan *Workspace Actions* (kanan atas/bawah) sangat ergonomis.
    * **Zona Merah**: Area tengah layar yang lebar sulit dijangkau dengan sentuhan jari tanpa melepaskan posisi tangan dari keyboard/tepi tablet. Gunakan *Master-Detail Split-Pane* ([Section 7.6](#76-master-detail--split-pane-workspace-patterns)) untuk mendekatkan aksi ke sisi kiri/kanan.
 
 #### 7.8.3 Touch Target Spacing & Density
+
 * Jarak minimum antar elemen interaktif yang bersebelahan (misal: ikon aksi *Edit* dan *Delete* di dalam List Item) wajib **8px** (`gap-2` atau `space-x-2`) untuk mencegah sentuhan tidak sengaja.
 * Jika ruang horizontal terbatas (misal di layar `COMPACT`), **DILARANG** memaksakan 3 ikon aksi berjajar. Gunakan *Action Menu* (Tombol 3-titik `⋮` / `<ActionMenu>`) untuk mengelompokkan aksi sekunder, menyisakan ruang untuk 1 *Primary Action* yang lebar.
 
 #### 7.8.4 List Item Ergonomics (Hukum 1 Alignment)
+
 Mengacu pada Hukum 1 (Edge-to-Edge List) dan Zero-CLS:
+
 * Setiap baris data (`<ListItem>`) yang dapat diketuk (misal: memilih siswa untuk membuka detail) atau memiliki aksi di dalamnya **WAJIB** memiliki tinggi minimum **`min-h-[56px]`** (atau padding vertikal `py-4`).
 * Tinggi 56px memberikan ruang napas yang cukup untuk teks 2 baris (`line-clamp-2`) sekaligus memenuhi standar area sentuh 48dp secara vertikal.
 
@@ -911,24 +967,32 @@ Mengacu pada Hukum 1 (Edge-to-Edge List) dan Zero-CLS:
 ### 7.9 Adaptive Modals, Sheets & Dialogs
 
 #### 7.9.1 The "Chameleon" Component: `<AdaptiveDialog>`
+
 Amanaura menggunakan satu komponen primitif tunggal (`<AdaptiveDialog>`) yang secara otomatis bermutasi wujud berdasarkan *Size Class* dan *Input Modality*:
+
 1. **COMPACT & MEDIUM (Portrait / Phone / Small Tablet)**: Berwujud **Bottom Sheet Drawer** (`h-[90vh]` atau `max-h-[90dvh]` maksimal, `rounded-t-3xl`).
 2. **EXPANDED & LARGE (Landscape / Desktop / DeX)**: Berwujud **Center Modal** (`max-w-5xl h-[85vh]`, `rounded-2xl`, dengan `backdrop-blur-xs`).
 
 #### 7.9.2 Bottom Sheet Ergonomics & Gestures
+
 Pada wujud Bottom Sheet (COMPACT/MEDIUM):
+
 1. **The Drag Handle**: Wajib menampilkan indikator visual berupa kapsul abu-abu tipis (`w-12 h-1.5 bg-slate-300 rounded-full mx-auto mt-2 mb-4`) di puncak sheet untuk mengafordansi *swipe-to-dismiss*.
 2. **Swipe-Down to Dismiss**: Pengguna dapat menutup sheet dengan menggesek ke bawah. Jika sheet berisi form yang belum disimpan (*dirty state*), sistem wajib memicu *Auto-Draft Shield* (`localStorage`) dan menampilkan *ToastHUD* `"Draf tersimpan"`, alih-alih memunculkan dialog konfirmasi yang mengganggu.
 3. **Keyboard Avoidance**: Saat keyboard virtual Android muncul, Bottom Sheet **TIDAK BOLEH** tertutup atau mendorong viewport secara liar. Gunakan `h-dvh` dinamis dan `scroll-mt` pada field input yang sedang fokus agar input tetap terlihat di atas keyboard.
 
 #### 7.9.3 Focus Trapping & DeX Keyboard Accessibility
+
 Pada wujud Center Modal (EXPANDED/LARGE) atau saat modality adalah `KEYBOARD` / `MOUSE`:
+
 1. **Focus Trap**: Fokus keyboard (`Tab` / `Shift+Tab`) wajib terperangkap (*trapped*) di dalam siklus elemen interaktif Modal. Fokus tidak boleh bocor ke elemen di belakang *backdrop*.
 2. **Initial Focus**: Saat modal terbuka, fokus default wajib diarahkan ke elemen pertama yang logis (misal: Input pertama, atau Tombol Batal jika itu adalah *Danger Dialog*).
 3. **Esc Key Listener**: Menekan tombol `Esc` pada keyboard fisik (DeX/Bluetooth) wajib menutup modal, tunduk pada aturan *dirty state* yang sama dengan *swipe-down*.
 
 #### 7.9.4 Stage 4.5 Glass Layer Integration
+
 Modal di Yapendik OS sering kali memuat komponen sensitif Stage 4.5 (seperti `<PrivacyShield />` untuk data agregat, atau `<CanonicalAnchor />` untuk `action_id`):
+
 1. **Matching-Pill Ribbon (Law 9) Preservation**: Pita konteks kapsul ganda di Tier 2 Header Modal (`bg-slate-50/60`) wajib mempertahankan rasio dan *padding*-nya. Pada COMPACT, kapsul ditumpuk vertikal (`flex-col gap-2`). Pada EXPANDED, kapsul disejajarkan (`flex-row justify-between`).
 2. **Zero PII Leakage on Render**: Transisi wujud dari Bottom Sheet ke Center Modal saat rotasi perangkat **TIDAK BOLEH** memicu *re-fetch* data atau *re-mount* yang menyebabkan *flash of unmasked PII* (kedipan data mentah sebelum `<PrivacyShield />` merender *frosted badge*). State masking wajib dipertahankan di level *context/provider*, bukan di level UI render.
 
@@ -937,19 +1001,25 @@ Modal di Yapendik OS sering kali memuat komponen sensitif Stage 4.5 (seperti `<P
 ### 7.10 Gesture, S-Pen & DeX Interaction Patterns
 
 #### 7.10.1 Native Android Gesture Conflict Resolution
+
 Android OS menggunakan gestur tepi (*edge swipes*) untuk navigasi sistem (Back/Forward). Ini sering bentrok dengan gestur UI aplikasi (seperti membuka Drawer atau menggeser Carousel):
+
 1. **The 24dp Edge Exclusion Zone**: Elemen UI yang dapat digeser secara horizontal (seperti *Smart Chips Carousel* atau *Horizontal Tabs*) **DILARANG** memanjang hingga menyentuh 24dp paling tepi dari layar kiri/kanan. Wajib ada *padding* atau *margin* agar area tepi tetap menjadi "zona tangkap" untuk gestur *Back* bawaan OS.
 2. **Drawer Swipe Affordance**: Menggesek drawer dari tepi layar (*edge-swipe to open*) sangat rentan bentrok. Amanaura lebih mengutamakan *Tap* pada tombol Menu/Omni-Bar atau *Drag Handle* fisik yang terlihat untuk membuka laci, alih-alih mengandalkan gestur tepi yang tersembunyi.
 3. **Swipe-to-Dismiss vs. OS Back**: Jika pengguna melakukan *swipe-down* pada Bottom Sheet, itu menutup Sheet. Jika pengguna melakukan *swipe-from-edge* (Back), itu juga menutup Sheet. Keduanya harus memicu *Auto-Draft Shield* yang sama (lihat [Section 7.9.2](#792-bottom-sheet-ergonomics--gestures)).
 
 #### 7.10.2 S-Pen Precision Interactions
+
 Samsung S-Pen mengubah tablet menjadi kanvas presisi. Amanaura memanfaatkan ini tanpa merusak *palm rejection*:
+
 1. **Hover States (Pen-Pointer)**: Komponen seperti `<ListItem>` atau `<Button>` akan menampilkan **Signature #2: Luminescent Edge** saat S-Pen melayang di atasnya (`pointerType === 'pen'` + `:hover`). Ini memberikan umpan balik visual sebelum pengguna menyentuh layar.
 2. **Precision Selection**: Pada tabel data yang padat (misal: *Jadwal Pelajaran* atau *Grid Nilai*), S-Pen mengizinkan *hit-box* yang lebih kecil (32dp) dan memfasilitasi seleksi teks presisi tanpa memicu *magnifier loupe* (kaca pembesar teks) yang mengganggu.
 3. **Signature & Annotation Pads**: Untuk komponen `<SignaturePad />` atau kanvas anotasi foto observasi (`<Lightbox>`), sistem wajib mendeteksi `pressure` (tekanan) dari S-Pen untuk memvariasikan ketebalan garis (*stroke-width*), memberikan pengalaman menulis natural yang bermartabat.
 
 #### 7.10.3 DeX Mouse & Trackpad Paradigms
+
 Di lingkungan DeX, Amanaura wajib berperilaku seperti aplikasi desktop *native*, bukan sekadar web yang diperbesar:
+
 1. **Right-Click Context Menus**: Menekan klik kanan (atau *tap-and-hold* pada touch) pada baris data (`<ListItem>`) atau kartu **WAJIB** memicu `<ActionMenu>` (Context Menu) tepat di posisi kursor. Ini menggantikan keharusan pengguna untuk mencari tombol "Titik Tiga" (⋮) secara visual.
 2. **Drag-and-Drop (DnD) Choreography**: Pada breakpoint `LARGE` (DeX), fitur *Drag-and-Drop* diaktifkan untuk alur kerja spasial (misal: memindahkan kartu siswa ke kelompok berbeda, atau menjadwalkan observasi di kalender).
    * **Visual Affordance**: Saat item di-*drag*, item asli menjadi semi-transparan (`opacity-50`), dan *Drop Zone* yang valid akan menyala dengan batas putus-putus hangat (`border-dashed border-amber-500 bg-amber-50/50`).
@@ -963,7 +1033,9 @@ Di lingkungan DeX, Amanaura wajib berperilaku seperti aplikasi desktop *native*,
 ### 8.1 PWA Manifest, Install UX & Samsung Internet Integration
 
 #### 8.1.1 Web App Manifest Configuration (`manifest.json`)
+
 Yapendik OS wajib dikemas sebagai PWA *standalone* agar terasa seperti aplikasi native di tablet Android:
+
 ```json
 {
   "name": "Yapendik School OS",
@@ -1006,20 +1078,26 @@ Yapendik OS wajib dikemas sebagai PWA *standalone* agar terasa seperti aplikasi 
 ```
 
 #### 8.1.2 Custom Install Promotion Choreography (Soft Install)
+
 Amanaura menolak *pop-up* agresif yang menutupi konten. Kita mencegat event `beforeinstallprompt` dari browser dan menampilkan UI instalasi yang sopan:
+
 1. **The Install Smart Chip**: Alih-alih *banner* penuh, tampilkan *Smart Chip* yang elegan di deretan *Omni-Bar* atau *Smart Chips Carousel* (lihat [Section 3.4](#34-mobile-centered-omni-bar-dock--smart-chips)): `[ ⬇️ Pasang Aplikasi ]`.
 2. **ToastHUD Fallback**: Jika pengguna menolak instalasi pertama, jangan tanyakan lagi selama 30 hari. Gunakan *ToastHUD* (Signature #4) di pojok bawah: *"Yapendik OS dapat diakses offline. [ Pasang Nanti ] [ Pasang Sekarang ]"*.
 3. **Samsung Internet Compatibility**: Di browser Samsung Internet, PWA install prompt seringkali muncul di menu bawah (hamburger menu). UI *Soft Install* kita harus tetap berfungsi dan tidak bentrok dengan UI native Samsung.
 
 #### 8.1.3 App Shortcuts (Long-Press Quick Actions)
+
 Saat pengguna menekan lama (*long-press*) ikon Yapendik OS di *Home Screen* Android, sistem wajib menampilkan 3 jalan pintas kontekstual (App Shortcuts):
+
 1. **📝 Presensi Hari Ini**: Langsung membuka halaman `/attendance` (Target: Guru Kelas).
 2. **✨ Rekam Momen Belajar**: Langsung membuka *Fast Capture Modal* (`/observations/new`) (Target: Guru Kelas).
 3. **📥 Kotak Kebijakan**: Langsung membuka *Headmaster Adoption Hub* (`/school/adoption/inbox`) (Target: Kepala Sekolah).  
 *Catatan: Ikon shortcuts wajib menggunakan aset SVG Lucide yang senada dengan desain sistem, bukan emoji.*
 
 #### 8.1.4 Privacy-First Splash Screen & Recent Apps Shield
+
 Menghormati Invarian Stage 4.5 (FB-01: Zero Individual Exposure):
+
 1. **Splash Screen**: Saat aplikasi diluncurkan dari Home Screen, OS Android akan merender *Splash Screen* berdasarkan `background_color` dan `icon` di manifest. **DILARANG KERAS** menyuntikkan HTML/CSS yang memuat data *cached* (seperti nama siswa atau foto) ke dalam *shell* awal. Splash screen hanya boleh menampilkan Logo Yapendik dan *Amanaura Breath* (✦) yang berdenyut.
 2. **Android Recent Apps Switcher**: Saat pengguna membuka *multitasking view* (Recent Apps), *thumbnail* aplikasi tidak boleh membocorkan PII (Data Pribadi Anak). Komponen `<PrivacyShield />` (Glass Layer) harus secara proaktif mendeteksi `visibilityState === 'hidden'` atau `blur` pada window dan merender *frosted glass overlay* (blur + `bg-slate-900/80`) sebelum OS sempat mengambil *screenshot* untuk Recent Apps.
 
@@ -1028,25 +1106,33 @@ Menghormati Invarian Stage 4.5 (FB-01: Zero Individual Exposure):
 Yapendik OS dirancang untuk lingkungan sekolah dengan konektivitas Wi-Fi yang fluktuatif. Arsitektur PWA wajib mengadopsi paradigma *Offline-First* yang tenang dan deterministik, tanpa pernah menampilkan layar error merah yang memicu kepanikan (*Calm & Dignified*).
 
 #### 8.2.1 Service Worker Caching Strategies
+
 Service Worker (SW) mengelola aset dan data menggunakan strategi yang berbeda berdasarkan tipe konten:
+
 1. **App Shell (HTML, CSS, JS, Fonts)**: **Cache-First**. Aset statis UI di-cache saat instalasi PWA. Aplikasi wajib langsung merender *Skeleton* atau UI dasar meskipun perangkat benar-benar offline.
 2. **Images (AvatarChild, Artwork Lightbox)**: **Stale-While-Revalidate**. Tampilkan gambar dari cache (jika ada) secara instan, lalu perbarui di latar belakang. Gunakan batas ukuran cache (misal: max 200MB) dengan strategi *LRU (Least Recently Used)*.
 3. **API Data (Rosters, Schedules, Insights)**: **Network-First with Offline Fallback**. Coba ambil dari jaringan. Jika gagal (timeout/offline), SW merender data dari *IndexedDB Offline Store*. Jika tidak ada di IndexedDB, tampilkan *Interactive Onboarding Empty State* atau *Skeleton*, 🛑 **DILARANG** menampilkan `500 Server Error` atau `Network Failed` merah.
 
 #### 8.2.2 Deterministic Offline Data Store (IndexedDB)
+
 Data yang diperlukan untuk operasi harian disimpan secara lokal menggunakan IndexedDB (melalui pustaka seperti `idb` atau `Dexie.js`):
+
 1. **Ephemeral Session Data**: Daftar siswa aktif, jadwal hari ini, dan draf observasi yang belum di-submit.
 2. **Stage 4.5 Privacy Compliance (FB-01)**: 🛑 **DILARANG KERAS** menyimpan *Child Protection Dossiers* (Tier 4) atau data medis sensitif di IndexedDB dalam bentuk *plain-text*. Data sensitif hanya boleh ada di memori sesi (RAM) dan wajib dihapus saat `visibilityState === 'hidden'` atau tab ditutup.
 3. **Read-Only Projections**: Data analitik Yayasan (LEARN domain) tidak di-cache secara offline. Jika offline, tab *Foundation Console* atau *Headmaster Adoption Hub* menampilkan *Empty State* dengan pesan: *"Memerlukan koneksi aman untuk memuat data kelembagaan."*
 
 #### 8.2.3 Offline Mutation Queue & Optimistic UI
+
 Saat pengguna melakukan aksi mutasi (misal: Mengklik "Simpan Presensi" atau "Kirim Observasi") dalam kondisi offline:
+
 1. **Optimistic UI**: UI langsung memperbarui state lokal (menampilkan status *Hadir* atau *Terkirim*) dan menampilkan **Status Dot Capsule (Kuning/Warning)**: `[ ● Menunggu Sinkronisasi ]`.
 2. **Queueing**: Payload mutasi (RPC call) disimpan ke dalam *IndexedDB Mutation Queue* dengan stempel waktu (*timestamp*) dan ID unik (*idempotency key*).
 3. **No Blocking**: Pengguna dapat melanjutkan pekerjaan berikutnya. Antrian mutasi diproses secara berurutan (*FIFO*) di latar belakang.
 
 #### 8.2.4 Background Sync & Reconciliation
+
 Mengacu pada *Invisible Mastery #5: Silent Exponential Retry & Background Sync*:
+
 1. **Event Listener**: SW mendengarkan event `sync` (Background Sync API) atau perubahan `navigator.onLine`.
 2. **Reconciliation**: Saat koneksi pulih, SW memproses *Mutation Queue*. Jika server menolak mutasi (misal: konflik data atau validasi gagal), SW tidak boleh diam-diam menghapus data. SW wajib memicu **ToastHUD** dengan tombol **5-Second Undo**: *"Gagal menyimpan Presensi: Konflik Data. [ Tinjau ]"*.
 3. **Exponential Backoff**: Jika server tidak merespons (5xx error), SW menjadwalkan ulang percobaan sinkronisasi dengan jeda eksponensial (1s, 2s, 4s, 8s) tanpa memboroskan baterai.
@@ -1104,6 +1190,7 @@ Dokumen Standar Audit & Perbaikan Layout UI/UX untuk IDE AI dan Pengembang.
 ### 9.2 Pre-Change Safety Checklist
 
 #### A. Scope Verification (WAJIB SEBELUM KODING)
+
 * [ ] **Perubahan HANYA menyentuh file `.tsx` / `.css` (JSX & styling)**?
 * [ ] **Tidak ada perubahan pada logika state** (`useState`, `useEffect`, `useReducer`, `useMemo`)?
 * [ ] **Tidak ada perubahan pada props / interface TypeScript** yang mempengaruhi komponen pemanggil/anak?
@@ -1114,6 +1201,7 @@ Dokumen Standar Audit & Perbaikan Layout UI/UX untuk IDE AI dan Pengembang.
 * [ ] **Perubahan bersifat deterministik dan dapat di-revert tanpa efek samping**?
 
 #### B. Visual & Architectural Compliance (WAJIB)
+
 * [ ] **Audit Responsif pada Breakpoint Kanonikal**: Uji tampilan pada `Mobile (< 1024px)` dan `Desktop (≥ 1024px)` *(Catatan: Mulai Step 2, dievolusikan ke MD3: COMPACT, MEDIUM, EXPANDED)*.
 * [ ] **Verifikasi Z-Index**: Mematuhi hierarki tumpukan [PART II: Z-Index Stacking Hierarchy](#24-canonical-z-index-stacking-hierarchy).
 * [ ] **Verifikasi Padding Parity**: Seluruh tab sub-halaman workspace memiliki wrapper `px-4 sm:px-5 md:px-0` (Law 10).
@@ -1122,7 +1210,8 @@ Dokumen Standar Audit & Perbaikan Layout UI/UX untuk IDE AI dan Pengembang.
 
 ### 9.3 UI/UX Only Protocol
 
-#### 🛑 DILARANG KERAS (Strictly Prohibited):
+#### 🛑 DILARANG KERAS (Strictly Prohibited)
+
 1. **State Logic**: Modifikasi logika `useState`, `useReducer`, `useEffect`, atau konteks bisnis `SecurityContext`.
 2. **API / Database**: Modifikasi pemanggilan RPC, query Supabase, atau payload contracts.
 3. **RLS Policies**: Mutasi RLS policies (Stage 4.5 sealed: FB-01 s.d. FB-07 invariants) — **ABSOLUTELY FORBIDDEN**.
@@ -1138,18 +1227,23 @@ Dokumen Standar Audit & Perbaikan Layout UI/UX untuk IDE AI dan Pengembang.
 ## PART X: GOVERNANCE & CHANGE MANAGEMENT
 
 ### 10.1 Frozen State Declaration
-Aplikasi *Yapendik School OS* saat ini berada dalam status **FROZEN (STABILISASI & AUDIT UI/UX)**. 
+
+Aplikasi *Yapendik School OS* saat ini berada dalam status **FROZEN (STABILISASI & AUDIT UI/UX)**.
+
 * **Aturan Utama**: Hanya perbaikan antarmuka pengguna (tata letak, styling, keterbacaan, ergonomi tablet/mobile) yang diizinkan.
 * **Larangan Keras**: Dilarang melakukan refactoring arsitektur database, perubahan skema SQL, mutasi trigger, atau perubahan fungsi RPC backend.
 
 ### 10.1.1 Stage 4.5 Compliance Reference
+
 Perubahan UI/UX wajib menghormati Stage 4.5 Final Closure Certification:
+
 * **348/348 automated checks PASS** (100% Zero Regression).
 * **FB-01 s.d. FB-07 invariants ENFORCED** (DB, Service, UI).
 * **H-01 s.d. H-06 hardenings GUARANTEED** (fail-closed RLS, immutable audit anchors, placement lineage).
 * **ADR-01 s.d. ADR-04 infrastructure SEALED** (idempotent migrations, zero-downtime, edge caching, cryptographic tamper detection).
 
 **Komponen The Glass Layer yang TIDAK BOLEH diubah logika bisnisnya:**
+
 * `<PrivacyShield />` (K-Anonymity Frosted Badge)
 * `<NonCausalDelta />` (Observed Association Footnote)
 * `<CanonicalAnchor />` (Immutable action_id display)
@@ -1172,13 +1266,16 @@ Perubahan UI/UX wajib menghormati Stage 4.5 Final Closure Certification:
 ```
 
 ### 10.3 Review & Approval Workflow
+
 Setiap perubahan antarmuka harus melalui 4 gerbang verifikasi:
+
 1. **Pre-Audit Analysis**: Meninjau kepatuhan komponen terhadap 12 Hukum Refactoring ([PART IX](#part-ix-refactoring-rules--audit-protocol)).
 2. **Component Refactor**: Menerapkan token Amanaura dan komponen standar dari `src/components/ui/`.
 3. **Automated & Visual Verification**: Menjalankan browser test dan test suite (`pnpm test`) untuk memastikan nol regresi logika.
 4. **Master Sign-off**: Pencatatan riwayat perubahan ke dalam log konsolidasi.
 
 ### 10.4 Version Control Strategy
+
 * `v1.0`: Master Design System Specification (Baseline).
 * `v1.1`: Refactoring Playbook (12 Laws).
 * `v2.0.1-DRAFT`: Consolidated Master Specification + MD3 Breakpoints & Samsung Device Matrix.
@@ -1199,33 +1296,41 @@ Setiap perubahan antarmuka harus melalui 4 gerbang verifikasi:
 Sebelum Amanaura v2.0 disegel sebagai standar kanonikal permanen, seluruh kodebase UI/UX wajib melewati 4 gerbang audit otomatis dan manual:
 
 #### 10.5.1 Visual Regression Testing (VRT)
+
 * **Tooling**: Playwright / Chromatic / Percy.
 * **Scope**: Setiap komponen di `src/components/ui/` dan halaman workspace utama wajib di-screenshot pada 3 breakpoint MD3 (`COMPACT`, `MEDIUM`, `EXPANDED`) dan 2 Modality (`TOUCH`, `MOUSE/STYLUS`).
 * **Baseline**: Snapshot v1.0 digunakan sebagai baseline. Regresi visual yang melanggar 12 Hukum Refactoring (misal: munculnya kartu ber-margin di mobile, atau hilangnya `divide-y`) akan memblokir *merge request*.
 
 #### 10.5.2 Accessibility (a11y) & Modality Audit
+
 * **Focus States**: Verifikasi bahwa **Signature #2: The Luminescent Edge** hadir pada seluruh elemen interaktif saat navigasi keyboard (`Tab`).
 * **Touch Targets**: Audit otomatis (misal: axe-core) untuk memastikan tidak ada area sentuh di bawah 48dp (Touch) atau 32dp (Stylus/Mouse).
 * **Color Contrast**: Memastikan rasio kontras $\ge 15:1$ untuk teks primer dan $\ge 4.5:1$ untuk teks sekunder/sinyal semantik.
 
 #### 10.5.3 PWA & Offline Resilience Audit
+
 * **Lighthouse PWA Score**: Wajib mencapai $\ge 95$ pada kategori PWA dan Best Practices.
 * **Offline Stress Test**: Mematikan jaringan (Airplane Mode) dan memverifikasi bahwa *Optimistic UI* dan *Status Dot Capsule (Kuning)* muncul dengan benar, serta *Mutation Queue* (IndexedDB) merekam aksi tanpa *crash*.
 * **Recent Apps Shield**: Verifikasi manual bahwa `<PrivacyShield />` memicu *frosted overlay* saat aplikasi di-minimize atau masuk ke Recent Apps Switcher (FB-01).
 
 #### 10.5.4 Stage 4.5 Glass Layer Adversarial Audit
+
 * Memastikan bahwa seluruh adaptasi responsif v2.0 (seperti *Split-Pane* atau *Bottom Sheet*) **TIDAK** secara tidak sengaja membocorkan PII atau menghilangkan komponen *Glass Layer* (`<PrivacyShield />`, `<NonCausalDelta />`, `<CanonicalAnchor />`, `<ForbiddenActionGate />`).
 * Menjalankan ulang *Adversarial DOM PII Scanning* (Suites 24 & 25 dari Stage 4.5) untuk membuktikan 0 NIK, 0 NIS, dan 0 Foto Anak bocor di DOM Yayasan.
 
 ### 10.6 Token Purity & Automated Enforcement (CI Gate)
+
 Untuk menjamin tidak ada regresi warna mentah (raw hardcoded colors/neutrals) yang mencemari *Night Temple* atau *Frangipani Day*, sistem memberlakukan pemeriksaan otomatis wajib:
+
 * **Script Pemeriksa**: `scripts/token-purity.mjs`
 * **Perintah CI**: `pnpm audit:tokens`
 * **Aturan Mutlak**: Scan seluruh file di `src/**/*.{tsx,ts,css}` terhadap regex terlarang (`/bg-white/`, `/bg-(slate|gray|zinc)-\d+/`, `/text-(slate|gray|zinc)-\d+/`, `/border-(slate|gray|zinc)-\d+/`, `/text-(red|amber|emerald|rose|green)-\d{2,3}/`).
 * **Status**: Wajib **PASS (0 violations)** pada setiap build dan PR merge.
 
 ### 10.7 Deep Structural Audit Protocol (10-Dimension Enforcement)
+
 Untuk menjamin integritas struktural, ergonomi layar sentuh, dan kepatuhan absolut terhadap Material Design 3 (MD3):
+
 * **Script Pemeriksa**: `scripts/amanaura-audit.mjs`
 * **Perintah CI**: `pnpm audit:amanaura`
 * **Pilar Penegakan (10 Dimensi)**:
@@ -1248,7 +1353,7 @@ Untuk menjamin integritas struktural, ergonomi layar sentuh, dan kepatuhan absol
 ### 12-Step Amanaura v2.0 Implementation Plan
 
 | Step | Title | Phase | Status |
-|:---|:---|:---|:---|
+| :--- | :--- | :--- | :--- |
 | **1** | Document Consolidation (Spec + Playbook) | A: Foundation | 🟢 COMPLETED / RATIFIED |
 | **2** | MD3 Window Size Classes & Samsung Device Matrix | A: Foundation | 🟢 COMPLETED / RATIFIED |
 | **3** | Input Modality Detection (Touch/Stylus/KB/Mouse) | A: Foundation | 🟢 COMPLETED / RATIFIED |
@@ -1284,11 +1389,11 @@ Untuk menjamin integritas struktural, ergonomi layar sentuh, dan kepatuhan absol
 ## SERTIFIKASI & STATUS OTORITATIF
 
 > **📜 PROKLAMASI RILIS KANONIKAL: AMANAURA v3.0-RELEASE**  
-> 
+>
 > Dengan selesainya *Sprint 1 s.d. Sprint 6*, dokumen **AMANAURA DESIGN SYSTEM v3.0-RELEASE (PADMA MODERN)** secara resmi menjadi **STANDAR DESAIN GLOBAL PERMANEN & KANONIKAL** untuk *Yapendik School OS*.
 >
 > Seluruh rekayasa antarmuka pengguna, arsitektur PWA, dan adaptasi Tablet Android/DeX di masa kini dan masa depan **WAJIB** tunduk pada hukum visual, token sistem Padma Modern, dan protokol audit CI `pnpm audit:tokens` & `pnpm audit:amanaura` yang termaktub di dalam v3.0-RELEASE.
->  
+> 
 > * **Status Resmi:** `v3.0-RELEASE` (CANONICAL LIVING MASTER SPECIFICATION)
 > * **Roadmap 12-Step + Sprints 1–6:** 🟢 **100% COMPLETE & SEALED**
 > * **Kepatuhan Stage 4.5 & Glass Layer:** 17/17 Integration Suites PASS, FB-01 s.d. FB-07 ENFORCED, H-01 s.d. H-06 GUARANTEED.
@@ -1450,4 +1555,18 @@ Untuk menjamin integritas struktural, ergonomi layar sentuh, dan kepatuhan absol
   * **Radius & Bullet Doctrine (§3.6)**: Menetapkan standar kelengkungan kanonikal (rounded-card, rounded-field, rounded-control, rounded-pill) dan larangan border-radius piksel arbitrer (R-RADIUS). Aturan hygiene untuk titik dekoratif dan pemisah karakter.
   * **Stacking Doctrine / Natural-Width Rule (§3.7)**: Menetapkan klasifikasi layout responsif (Compact 3-Tier Flow, Medium 2-Tier Balanced, Expanded Single Row). Larangan keras truncasi pada tombol interaktif (R-NO-TRUNCATE-BUTTON).
   * **CI Guard Hardening**: Menambahkan 3 aturan validasi Regex baru (R-SPACING-RHYTHM, R-ICON-SIZE, R-TRACKING-UPPER) pada `amanaura-audit.mjs` untuk mempertahankan kepatuhan Spacing, Iconography, dan Micro-Typography secara permanen.
-
+* **v3.0.6-PATCH (2026-09-01)**:
+  * **ADR-UX-012 Ratification (Slide-Up Chevron Navigation & Hub-and-Spoke)**:
+    * **Section 3.1 & 3.4 Update**: Menggantikan Mobile Omni-Bar capsule dan Smart Chips carousel dengan Discrete Bottom Chevron Handle (Lucide ChevronUp, min-h-[48px], aria-label) dan "MENU NAVIGASI" slide-up sheet (Amanaura Spring {380,32,0.8}, search field di puncak, 4×2 squircle flat tiles).
+    * **FAB Repositioning**: Amandemen offset kanonikal FAB ke bottom-[calc(env(safe-area-inset-bottom,0px)+20px)] right-4 (G-6), menjamin zero collision terhadap handle tengah.
+    * **PWA Soft Install Relocation**: Merelokasi install smart chip secara permanen ke Profile Drawer dan panduan iOS TopBar (G-8, §8.1.2).
+    * **CI Guard Calibration**: Kalibrasi Zero Overlay Collisions dan penambahan validasi chevron touch floor min-h-[48px] & larangan raw glyph ⌃ (G-9).
+* **v3.0.7-PATCH (2026-09-01)**:
+  * **Gema Hangat Canonical Doctrine (WarmEchoCarousel — Commit f1f18fd)**:
+    * **Section 3.4 & Gate 1 Update**: Menetapkan `WarmEchoCarousel` sebagai komponen kanonikal universal untuk Gema Hangat di Beranda Pendidik.
+    * **Always Open & Prominently Legible**: Menegakkan aturan bahwa kutipan apresiasi orang tua wajib selalu tampil terbuka penuh sepanjang hari (`PRATINJAU`, `OPERASIONAL`, `PENUTUP`), melarang pelipatan ke dalam chip kosong untuk menjaga martabat dan afirmasi emosional pendidik (Signature #6).
+* **v3.0.8-PATCH (2026-09-01)**:
+  * **Invisible Scroll Doctrine (Invisible Mastery #8 — §5.4)**:
+    * **Global Scrollbar Elimination**: Scrollbar native browser lenyap dari seluruh kontainer halaman (`scrollbar-width: none`, `::-webkit-scrollbar { width: 0; height: 0; }`).
+    * **Horizon Handle & FAB +48px (§3.4 & ADR-UX-012)**: Menghilangkan teks label "Menu" pada collapsed handle; menyematkan hairline full-bleed `line-soft` terputus chevron tengah Lucide `ChevronUp`; FAB mengambang bebas di kanan atas garis `bottom-[calc(env(safe-area-inset-bottom,0px)+48px)] right-4`.
+    * **CI Guard Hardening**: Menambahkan aturan `R-INVISIBLE-SCROLL` dan `R-HORIZON-PURE` pada `amanaura-audit.mjs`.

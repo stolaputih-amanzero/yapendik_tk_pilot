@@ -24,7 +24,7 @@ export const PremiumLoginScreen: React.FC = () => {
   const [loginError, setLoginError] = useState<string | null>(null);
   const [isLoggingIn, setIsLoggingIn] = useState(false);
 
-  const { authState, signInWithEmail } = useSecurityContext();
+  const { authState, signInWithEmail, switchPersona } = useSecurityContext();
 
   const handleRealLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -239,6 +239,16 @@ export const PremiumLoginScreen: React.FC = () => {
             >
               {isLoggingIn ? 'Memvalidasi Identitas...' : 'Masuk ke Ruang Kerja'}
             </Button>
+
+            <div className="pt-3 border-t border-line text-center">
+              <button
+                type="button"
+                onClick={() => switchPersona('user_teacher_erna')}
+                className="text-xs text-brand-primary font-semibold hover-only:underline cursor-pointer py-1"
+              >
+                Masuk Mode Simulasi Pendidik (Erna Boykela R) →
+              </button>
+            </div>
           </form>
         </div>
       </div>

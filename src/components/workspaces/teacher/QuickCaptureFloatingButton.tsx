@@ -1,10 +1,11 @@
 /**
  * Yapendik School OS — Stage 4.1 Quick Capture Floating Button (CC-06)
- * Floating action primitive [ Momen Cepat] for ultra-fast pedagogical observation trigger
+ * Floating action primitive [Momen Cepat] for ultra-fast pedagogical observation trigger
+ * ADR-UX-012 Canonical Offset: bottom-[calc(env(safe-area-inset-bottom,0px)+48px)] right-4 (Zero Collision G-6)
  */
 
 import React, { useEffect } from 'react';
-import { Sparkles, Camera } from 'lucide-react';
+import { Sparkles } from 'lucide-react';
 
 interface Props {
   onClick: () => void;
@@ -12,7 +13,7 @@ interface Props {
 }
 
 export const QuickCaptureFloatingButton: React.FC<Props> = ({ onClick, pendingDraftCount = 0 }) => {
-  // Optional keyboard shortcut listener (e.g. Ctrl + M or Shift + Space)
+  // Optional keyboard shortcut listener (e.g. Ctrl + K)
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
@@ -25,7 +26,10 @@ export const QuickCaptureFloatingButton: React.FC<Props> = ({ onClick, pendingDr
   }, [onClick]);
 
   return (
-    <div className="fixed bottom-[calc(env(safe-area-inset-bottom,0px)+92px)] right-4 expanded:bottom-6 expanded:right-6 z-40 flex items-center gap-3 pointer-events-auto">
+    <div 
+      data-testid="fab-quick-capture"
+      className="fixed bottom-[calc(env(safe-area-inset-bottom,0px)+48px)] right-4 expanded:bottom-6 expanded:right-6 z-40 flex items-center gap-3 pointer-events-auto"
+    >
       {/* Extended Floating Action Pill */}
       <button
         type="button"
@@ -39,7 +43,7 @@ export const QuickCaptureFloatingButton: React.FC<Props> = ({ onClick, pendingDr
 
         {/* Pending Draft Counter Badge */}
         {pendingDraftCount > 0 && (
-          <span className="ml-1 px-1.5 py-0.5 rounded-full bg-danger text-on-brand text-[10px] font-mono font-bold whitespace-nowrap">
+          <span className="ml-1 px-2 py-1 rounded-full bg-danger text-on-brand text-[10px] font-mono font-bold whitespace-nowrap leading-none">
             {pendingDraftCount}
           </span>
         )}

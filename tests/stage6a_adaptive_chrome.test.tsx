@@ -129,10 +129,10 @@ async function runAdaptiveChromeTests() {
     runCheck('ProfileDrawer [RENDER]: Drawer renders open in bottom-sheet DOM', () => {
       const html = renderToString(
         <SecurityContextProvider>
-          <ProfileDrawer 
+          <ProfileDrawer
             isOpen={true}
-            onClose={() => {}}
-            onSelectTab={() => {}}
+            onClose={() => { }}
+            onSelectTab={() => { }}
           />
         </SecurityContextProvider>
       );
@@ -143,10 +143,10 @@ async function runAdaptiveChromeTests() {
     runCheck('ProfileDrawer [THEME CONTROL & 432Hz]: Renders visual theme selector and audio gate toggle', () => {
       const html = renderToString(
         <SecurityContextProvider>
-          <ProfileDrawer 
+          <ProfileDrawer
             isOpen={true}
-            onClose={() => {}}
-            onSelectTab={() => {}}
+            onClose={() => { }}
+            onSelectTab={() => { }}
           />
         </SecurityContextProvider>
       );
@@ -157,10 +157,10 @@ async function runAdaptiveChromeTests() {
     runCheck('ProfileDrawer [LIVING CONTRACT ADS]: Renders Living Contract entry in drawer', () => {
       const html = renderToString(
         <SecurityContextProvider>
-          <ProfileDrawer 
+          <ProfileDrawer
             isOpen={true}
-            onClose={() => {}}
-            onSelectTab={() => {}}
+            onClose={() => { }}
+            onSelectTab={() => { }}
           />
         </SecurityContextProvider>
       );
@@ -171,10 +171,10 @@ async function runAdaptiveChromeTests() {
     runCheck('ProfileDrawer [48dp FLOOR]: PWA and Sign Out action buttons enforce 48dp floor', () => {
       const html = renderToString(
         <SecurityContextProvider>
-          <ProfileDrawer 
+          <ProfileDrawer
             isOpen={true}
-            onClose={() => {}}
-            onSelectTab={() => {}}
+            onClose={() => { }}
+            onSelectTab={() => { }}
           />
         </SecurityContextProvider>
       );
@@ -189,11 +189,11 @@ async function runAdaptiveChromeTests() {
     runCheck('Sidebar [BRAND HEADER]: Renders official "Amanaura OS ✦" platform identity', () => {
       const html = renderToString(
         <SecurityContextProvider>
-          <Sidebar 
+          <Sidebar
             activeTab="TEACHER_HOME"
-            onSelectTab={() => {}}
+            onSelectTab={() => { }}
             isCollapsed={false}
-            onToggleCollapse={() => {}}
+            onToggleCollapse={() => { }}
           />
         </SecurityContextProvider>
       );
@@ -204,11 +204,11 @@ async function runAdaptiveChromeTests() {
     runCheck('Sidebar [LAW R-8 ACTIVE]: Active link uses 2px left accent line (border-l-2 border-brand-primary)', () => {
       const html = renderToString(
         <SecurityContextProvider>
-          <Sidebar 
+          <Sidebar
             activeTab="TEACHER_HOME"
-            onSelectTab={() => {}}
+            onSelectTab={() => { }}
             isCollapsed={false}
-            onToggleCollapse={() => {}}
+            onToggleCollapse={() => { }}
           />
         </SecurityContextProvider>
       );
@@ -219,11 +219,11 @@ async function runAdaptiveChromeTests() {
     runCheck('Sidebar [LAW R-8 REST]: Inactive link uses transparent border without boxed container', () => {
       const html = renderToString(
         <SecurityContextProvider>
-          <Sidebar 
+          <Sidebar
             activeTab="TEACHER_HOME"
-            onSelectTab={() => {}}
+            onSelectTab={() => { }}
             isCollapsed={false}
-            onToggleCollapse={() => {}}
+            onToggleCollapse={() => { }}
           />
         </SecurityContextProvider>
       );
@@ -233,11 +233,11 @@ async function runAdaptiveChromeTests() {
     runCheck('Sidebar [NO THEME TOGGLE]: Theme toggle is removed from Sidebar (centralized in ProfileDrawer)', () => {
       const html = renderToString(
         <SecurityContextProvider>
-          <Sidebar 
+          <Sidebar
             activeTab="TEACHER_HOME"
-            onSelectTab={() => {}}
+            onSelectTab={() => { }}
             isCollapsed={false}
-            onToggleCollapse={() => {}}
+            onToggleCollapse={() => { }}
           />
         </SecurityContextProvider>
       );
@@ -247,11 +247,11 @@ async function runAdaptiveChromeTests() {
     runCheck('Sidebar [USER PROFILE]: Desktop Sidebar renders user persona profile trigger', () => {
       const html = renderToString(
         <SecurityContextProvider>
-          <Sidebar 
+          <Sidebar
             activeTab="TEACHER_HOME"
-            onSelectTab={() => {}}
+            onSelectTab={() => { }}
             isCollapsed={false}
-            onToggleCollapse={() => {}}
+            onToggleCollapse={() => { }}
           />
         </SecurityContextProvider>
       );
@@ -259,10 +259,24 @@ async function runAdaptiveChromeTests() {
     });
   }
 
-  // --- MODULE 5: Mobile Omni-Bar & Profile Hub ---
-  console.log('\n--- MODULE 5: Mobile Omni-Bar & Profile Integration ---');
+  // --- MODULE 5: Mobile Slide-Up Chevron & Menu Navigasi (ADR-UX-012) ---
+  console.log('\n--- MODULE 5: Mobile Slide-Up Chevron & Menu Navigasi (ADR-UX-012) ---');
   {
-    runCheck('MobileOmniBar [PROFILE DOCK TRIGGER]: Renders user avatar trigger in mobile dock', () => {
+    runCheck('MobileOmniBar [DISCRETE CHEVRON HANDLE]: Renders discrete bottom chevron handle (G-3)', () => {
+      const html = renderToString(
+        <SecurityContextProvider>
+          <MobileOmniBar
+            activeTab="TEACHER_HOME"
+            onSelectTab={() => { }}
+          />
+        </SecurityContextProvider>
+      );
+      assert.ok(html.includes('aria-label="Buka Menu Navigasi"'), 'Expected aria-label="Buka Menu Navigasi" on chevron handle');
+      assert.ok(html.includes('min-h-[48px]'), 'Expected min-h-[48px] touch floor on chevron handle');
+      assert.ok(html.includes('data-testid="mobile-chevron-handle"'), 'Expected mobile-chevron-handle testid');
+    });
+
+    runCheck('MobileOmniBar [HORIZON HANDLE PURE]: Pure hairline with center Lucide ChevronUp and ZERO text noise', () => {
       const html = renderToString(
         <SecurityContextProvider>
           <MobileOmniBar 
@@ -271,7 +285,32 @@ async function runAdaptiveChromeTests() {
           />
         </SecurityContextProvider>
       );
-      assert.ok(html.includes('aria-label="Profil &amp; Pengaturan"'), 'Expected profile trigger in MobileOmniBar dock');
+      assert.ok(html.includes('bg-line-soft'), 'Expected line-soft hairline in horizon handle');
+      assert.ok(!html.includes('>Menu<'), 'Expected zero text node (no "Menu") in handle');
+    });
+
+    runCheck('MobileOmniBar [ZERO BULKY CAPSULE]: Zero bulky "Apa fokus Anda hari ini?" capsule in collapsed dock', () => {
+      const html = renderToString(
+        <SecurityContextProvider>
+          <MobileOmniBar
+            activeTab="TEACHER_HOME"
+            onSelectTab={() => { }}
+          />
+        </SecurityContextProvider>
+      );
+      assert.ok(!html.includes('Apa fokus Anda hari ini?'), 'Did not expect bulky "Apa fokus Anda hari ini?" capsule');
+    });
+
+    runCheck('MobileOmniBar [ZERO RAW CHEVRON GLYPH]: Zero raw character "⌃" (Law 11 / G-3)', () => {
+      const html = renderToString(
+        <SecurityContextProvider>
+          <MobileOmniBar
+            activeTab="TEACHER_HOME"
+            onSelectTab={() => { }}
+          />
+        </SecurityContextProvider>
+      );
+      assert.ok(!html.includes('⌃'), 'Expected Lucide icon instead of raw glyph "⌃"');
     });
   }
 

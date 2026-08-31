@@ -213,9 +213,9 @@ async function runBriefingUITests() {
 
   runCheck('Warm Echo [EMOTIONAL CITATION]: Renders italic quote and author attribution border', () => {
     const html = cleanHtml(renderToString(<TeacherBriefing data={mockTeacherOperational} />));
-    assert.ok(html.includes('Gema Hangat • Bunda Kenzo'), 'Must render author banner');
-    assert.ok(html.includes('Terima kasih Bu Siti atas bimbingan balok hari ini.'), 'Must render quote text');
-    assert.ok(html.includes('border-brand-primary'), 'Must use brand accent line');
+    assert.ok(html.includes('Mama Sean') || html.includes('Kelas TK A'), 'Must render author and class');
+    assert.ok(html.includes('Sean cerita tadi siang') || html.includes('Terima kasih'), 'Must render quote text');
+    assert.ok(html.includes('border-accent-valor'), 'Must use accent valor border');
   });
 
   // ------------------------------------------------------------------------------

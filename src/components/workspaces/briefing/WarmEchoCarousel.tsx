@@ -239,7 +239,7 @@ export const WarmEchoCarousel: React.FC<WarmEchoCarouselProps> = ({
             }`}
           >
             <Heart 
-              className={`w-3.5 h-3.5 transition-transform duration-300 ${
+              className={`w-4 h-4 transition-transform duration-300 ${
                 isAppreciated 
                   ? 'fill-accent-valor text-accent-valor scale-110' 
                   : 'text-ink-faint/60 hover-only:text-accent-valor'

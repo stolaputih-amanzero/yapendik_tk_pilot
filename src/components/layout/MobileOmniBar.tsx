@@ -1,12 +1,17 @@
 /**
- * Yapendik School OS — Mobile-First Zero-Navigation Omni-Bar
- * Floating Action Hub & Touch-Friendly iOS-Style App Library Sheet
- * S-1 to S-4: Dock Declutter (Curated Chips, Scroll Collapse, Collision Deference, Quiet Mode)
+ * Amanaura OS × FLOW — Mobile Slide-Up Chevron & Menu Navigasi
+ * Architectural Specification: ADR-UX-012 §2, §3 & Guardrails G-1 through G-10
+ * 
+ * Hub-and-Spoke Mobile Ergonomics:
+ * - Collapsed State: Discrete Bottom Chevron Handle (Lucide ChevronUp, min-h-[48px], aria-label)
+ * - Expanded State: Curated "MENU NAVIGASI" Sheet (Amanaura Spring {380,32,0.8}, max-h-[90dvh], 4x2 Squircle Flat Grid)
+ * - Zero Collision: Chevron centered at bottom, FAB at bottom right (+20px right-4)
  */
 
 import React, { useState, useEffect, useRef } from 'react';
 import { useSecurityContext } from '../../auth/context';
 import { WorkspaceTab } from './TopBar';
+import { getTabMetadata } from '../../config/routeRegistry';
 import { 
   Search, 
   ChevronUp, 
@@ -28,9 +33,7 @@ import {
   MessageSquare, 
   Users, 
   Palette, 
-  FileText, 
   FlaskConical, 
-  Command,
   LogOut,
   LucideIcon
 } from 'lucide-react';
@@ -46,32 +49,18 @@ interface NavItem {
   tab: WorkspaceTab;
   label: string;
   icon: LucideIcon;
-  badge?: string;
-  colorClass?: string;
-}
-
-interface NavGroup {
-  title: string;
-  items: NavItem[];
-}
-
-interface SmartChip {
-  label: string;
-  tab: WorkspaceTab;
-  icon?: string;
+  badge?: number | string;
 }
 
 export const MobileOmniBar: React.FC<MobileOmniBarProps> = ({
   activeTab,
   onSelectTab,
-  onOpenProfileDrawer,
-  hasPageChips = false
+  onOpenProfileDrawer
 }) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
-  const [isScrolledDown, setIsScrolledDown] = useState(false);
-  const [isQuiet, setIsQuiet] = useState(false);
-  const quietTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const [showCoachmark, setShowCoachmark] = useState(false);
+  const touchStartYRef = useRef<number | null>(null);
 
   const { currentPersona, securityContext, signOut } = useSecurityContext();
 
@@ -90,300 +79,197 @@ export const MobileOmniBar: React.FC<MobileOmniBarProps> = ({
     securityContext?.role === 'GUARDIAN' ||
     securityContext?.role === 'APPLICANT_GUARDIAN';
 
-  // S-1: CURATED SMART CHIPS (Max 2 high-frequency shortcuts per active role)
-  let smartChips: SmartChip[] = [];
-
-  if (isSuperadminOrFoundation) {
-    smartChips = [
-      { label: 'Statistik Unit', tab: 'INSTITUTIONAL_HEALTH' },
-      { label: 'Pusat Kebijakan', tab: 'FOUNDATION_GOVERNANCE' }
-    ];
-  } else if (isHeadmaster) {
-    smartChips = [
-      { label: 'Meja PPDB', tab: 'ADMISSIONS_DESK' },
-      { label: 'Standar Yayasan', tab: 'HEADMASTER_ADOPTION' }
-    ];
-  } else if (isGuardianOrApplicant) {
-    smartChips = [
-      { label: 'Buku Penghubung', tab: 'COMMUNICATION' },
-      { label: 'Portal PPDB', tab: 'ADMISSIONS_PORTAL' }
-    ];
-  } else {
-    // Default: TEACHER (High-frequency pedagogical tasks only)
-    smartChips = [
-      { label: 'Presensi', tab: 'ATTENDANCE' },
-      { label: 'Observasi', tab: 'OBSERVATIONS' }
-    ];
-  }
-
-  // S-3: COLLISION DEFERENCE (If page has its own chip bar or is Attendance, defer dock chips)
-  const showChips = !hasPageChips && activeTab !== 'ATTENDANCE' && activeTab !== 'TEACHER_HOME';
-
-  // S-2: SCROLL-AWARE COLLAPSE LISTENER
+  // Check first-time coachmark (G-3)
   useEffect(() => {
-    let lastScrollY = window.scrollY;
-    const handleScroll = () => {
-      const currentScrollY = window.scrollY;
-      const diff = currentScrollY - lastScrollY;
-
-      if (diff > 24 && currentScrollY > 60) {
-        setIsScrolledDown(true);
-      } else if (diff < -15 || currentScrollY <= 20) {
-        setIsScrolledDown(false);
+    try {
+      const seen = localStorage.getItem('amanaura_chevron_coachmark_seen');
+      if (!seen) {
+        setShowCoachmark(true);
       }
-      lastScrollY = currentScrollY;
-    };
-
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
+    } catch {
+      // Ignore localStorage errors
+    }
   }, []);
 
-  // S-4: QUIET MODE TIMER (3s inactivity => opacity-60)
-  const resetQuietTimer = () => {
-    setIsQuiet(false);
-    if (quietTimerRef.current) clearTimeout(quietTimerRef.current);
-    quietTimerRef.current = setTimeout(() => {
-      setIsQuiet(true);
-    }, 3000);
+  const handleDismissCoachmark = () => {
+    setShowCoachmark(false);
+    try {
+      localStorage.setItem('amanaura_chevron_coachmark_seen', 'true');
+    } catch {
+      // Ignore localStorage errors
+    }
   };
 
+  const handleOpenSheet = () => {
+    handleDismissCoachmark();
+    setIsExpanded(true);
+  };
+
+  // Keyboard accessibility: Escape to dismiss expanded sheet (G-4)
   useEffect(() => {
-    resetQuietTimer();
-    const handleUserActivity = () => resetQuietTimer();
-    window.addEventListener('pointerdown', handleUserActivity, { passive: true });
-    window.addEventListener('keydown', handleUserActivity, { passive: true });
-    window.addEventListener('touchstart', handleUserActivity, { passive: true });
-
-    return () => {
-      if (quietTimerRef.current) clearTimeout(quietTimerRef.current);
-      window.removeEventListener('pointerdown', handleUserActivity);
-      window.removeEventListener('keydown', handleUserActivity);
-      window.removeEventListener('touchstart', handleUserActivity);
+    if (!isExpanded) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setIsExpanded(false);
+      }
     };
-  }, []);
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isExpanded]);
 
-  // 2. APP LIBRARY CATEGORIES & ITEMS (Complete navigation in Menu Drawer)
-  let navGroups: NavGroup[] = [];
+  // Touch gesture: Swipe-down to dismiss sheet (G-4)
+  const handleTouchStart = (e: React.TouchEvent) => {
+    touchStartYRef.current = e.touches[0].clientY;
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    if (touchStartYRef.current === null) return;
+    const currentY = e.touches[0].clientY;
+    const diff = currentY - touchStartYRef.current;
+    if (diff > 75) {
+      setIsExpanded(false);
+      touchStartYRef.current = null;
+    }
+  };
+
+  const handleTouchEnd = () => {
+    touchStartYRef.current = null;
+  };
+
+  // 4 × 2 Curated Primary Grid per Persona (G-5: Labels <= 2 words from routeRegistry)
+  let primaryItems: NavItem[] = [];
 
   if (isSuperadminOrFoundation) {
-    navGroups = [
-      {
-        title: 'PUSAT KOMANDO',
-        items: [
-          { tab: 'INSTITUTIONAL_HEALTH', label: 'Statistik Unit', icon: Activity }
-        ]
-      },
-      {
-        title: 'TATA KELOLA OPERASIONAL',
-        items: [
-          { tab: 'PROVISIONING', label: 'Pengaturan Unit', icon: Settings2 },
-          { tab: 'ACADEMIC_LIFECYCLE', label: 'Tahun Ajaran', icon: Clock },
-          { tab: 'GOVERNANCE', label: 'Log Keamanan', icon: Shield }
-        ]
-      },
-      {
-        title: 'STANDAR AKADEMIK',
-        items: [
-          { tab: 'FOUNDATION_GOVERNANCE', label: 'Pusat Kebijakan', icon: Landmark },
-          { tab: 'COHORT_PROMOTION', label: 'Promosi Kelas', icon: ArrowUpRight },
-          { tab: 'GRADUATION_REGISTRY', label: 'Buku Kelulusan', icon: GraduationCap }
-        ]
-      },
-      {
-        title: 'AUDIT LAPANGAN',
-        items: [
-          { tab: 'TEACHER_HOME', label: 'Ruang Guru', icon: Home },
-          { tab: 'STUDENT_JOURNEY', label: 'Jejak Anak', icon: Sparkles }
-        ]
-      }
+    primaryItems = [
+      { tab: 'INSTITUTIONAL_HEALTH', label: getTabMetadata('INSTITUTIONAL_HEALTH').title, icon: Activity },
+      { tab: 'FOUNDATION_GOVERNANCE', label: getTabMetadata('FOUNDATION_GOVERNANCE').title, icon: Landmark },
+      { tab: 'PROVISIONING', label: getTabMetadata('PROVISIONING').title, icon: Settings2 },
+      { tab: 'ACADEMIC_LIFECYCLE', label: getTabMetadata('ACADEMIC_LIFECYCLE').title, icon: Clock },
+      { tab: 'GOVERNANCE', label: getTabMetadata('GOVERNANCE').title, icon: Shield },
+      { tab: 'COHORT_PROMOTION', label: getTabMetadata('COHORT_PROMOTION').title, icon: ArrowUpRight },
+      { tab: 'GRADUATION_REGISTRY', label: getTabMetadata('GRADUATION_REGISTRY').title, icon: GraduationCap },
+      { tab: 'TEACHER_HOME', label: getTabMetadata('TEACHER_HOME').title, icon: Home }
     ];
   } else if (isHeadmaster) {
-    navGroups = [
-      {
-        title: 'MANAJEMEN UNIT',
-        items: [
-          { tab: 'ADMISSIONS_DESK', label: 'Meja PPDB', icon: FileCheck },
-          { tab: 'HEADMASTER_ADOPTION', label: 'Standar Yayasan', icon: CheckSquare },
-          { tab: 'INSTITUTIONAL_HEALTH', label: 'Statistik Unit', icon: Activity }
-        ]
-      },
-      {
-        title: 'AKADEMIK & PROMOSI',
-        items: [
-          { tab: 'COHORT_PROMOTION', label: 'Promosi Kelas', icon: ArrowUpRight },
-          { tab: 'GRADUATION_REGISTRY', label: 'Buku Kelulusan', icon: GraduationCap },
-          { tab: 'ACADEMIC_LIFECYCLE', label: 'Tahun Ajaran', icon: Clock }
-        ]
-      },
-      {
-        title: 'SUPERVISI & AUDIT',
-        items: [
-          { tab: 'GOVERNANCE', label: 'Log Keamanan', icon: Shield },
-          { tab: 'STUDENT_JOURNEY', label: 'Jejak Anak', icon: Sparkles }
-        ]
-      }
+    primaryItems = [
+      { tab: 'ADMISSIONS_DESK', label: getTabMetadata('ADMISSIONS_DESK').title, icon: FileCheck },
+      { tab: 'HEADMASTER_ADOPTION', label: getTabMetadata('HEADMASTER_ADOPTION').title, icon: CheckSquare },
+      { tab: 'INSTITUTIONAL_HEALTH', label: getTabMetadata('INSTITUTIONAL_HEALTH').title, icon: Activity },
+      { tab: 'COHORT_PROMOTION', label: getTabMetadata('COHORT_PROMOTION').title, icon: ArrowUpRight },
+      { tab: 'GRADUATION_REGISTRY', label: getTabMetadata('GRADUATION_REGISTRY').title, icon: GraduationCap },
+      { tab: 'ACADEMIC_LIFECYCLE', label: getTabMetadata('ACADEMIC_LIFECYCLE').title, icon: Clock },
+      { tab: 'GOVERNANCE', label: getTabMetadata('GOVERNANCE').title, icon: Shield },
+      { tab: 'STUDENT_JOURNEY', label: getTabMetadata('STUDENT_JOURNEY').title, icon: Sparkles }
     ];
   } else if (isGuardianOrApplicant) {
-    navGroups = [
-      {
-        title: 'PORTAL WALI MURID',
-        items: [
-          { tab: 'COMMUNICATION', label: 'Buku Penghubung', icon: MessageSquare },
-          { tab: 'STUDENT_JOURNEY', label: 'Jejak Ananda', icon: Sparkles }
-        ]
-      },
-      {
-        title: 'LAYANAN PENDAFTARAN',
-        items: [
-          { tab: 'ADMISSIONS_PORTAL', label: 'Portal PPDB', icon: UserCheck }
-        ]
-      }
+    primaryItems = [
+      { tab: 'GUARDIAN_WORKSPACE', label: getTabMetadata('GUARDIAN_WORKSPACE').title, icon: Home },
+      { tab: 'COMMUNICATION', label: getTabMetadata('COMMUNICATION').title, icon: MessageSquare },
+      { tab: 'STUDENT_JOURNEY', label: getTabMetadata('STUDENT_JOURNEY').title, icon: Sparkles },
+      { tab: 'ADMISSIONS_PORTAL', label: getTabMetadata('ADMISSIONS_PORTAL').title, icon: UserCheck }
     ];
   } else {
-    // Default: TEACHER
-    navGroups = [
-      {
-        title: 'KEGIATAN HARIAN KELAS',
-        items: [
-          { tab: 'TEACHER_HOME', label: 'Beranda Kelas', icon: Home },
-          { tab: 'ATTENDANCE', label: 'Presensi Harian', icon: UserCheck },
-          { tab: 'DAILY_WORK', label: 'Rencana Harian', icon: ClipboardList }
-        ]
-      },
-      {
-        title: 'AKADEMIK & OBSERVASI',
-        items: [
-          { tab: 'OBSERVATIONS', label: 'Observasi', icon: Palette },
-          { tab: 'DEVELOPMENT', label: 'Perkembangan', icon: TrendingUp },
-          { tab: 'STUDENT_JOURNEY', label: 'Jejak Anak', icon: Sparkles }
-        ]
-      },
-      {
-        title: 'KEMITRAAN',
-        items: [
-          { tab: 'COMMUNICATION', label: 'Buku Penghubung', icon: MessageSquare },
-          { tab: 'ROSTER', label: 'Data Roster', icon: Users }
-        ]
-      }
+    // Default: TEACHER (High-Frequency 4x2 Grid)
+    primaryItems = [
+      { tab: 'TEACHER_HOME', label: getTabMetadata('TEACHER_HOME').title, icon: Home },
+      { tab: 'ATTENDANCE', label: getTabMetadata('ATTENDANCE').title, icon: UserCheck },
+      { tab: 'OBSERVATIONS', label: getTabMetadata('OBSERVATIONS').title, icon: Sparkles },
+      { tab: 'DEVELOPMENT', label: getTabMetadata('DEVELOPMENT').title, icon: TrendingUp },
+      { tab: 'DAILY_WORK', label: getTabMetadata('DAILY_WORK').title, icon: ClipboardList },
+      { tab: 'COMMUNICATION', label: getTabMetadata('COMMUNICATION').title, icon: MessageSquare },
+      { tab: 'STUDENT_JOURNEY', label: getTabMetadata('STUDENT_JOURNEY').title, icon: Palette },
+      { tab: 'ROSTER', label: getTabMetadata('ROSTER').title, icon: Users }
     ];
   }
 
-  // Filter items by search query if any
-  const filteredGroups = navGroups.map(group => ({
-    ...group,
-    items: group.items.filter(item => 
-      item.label.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      group.title.toLowerCase().includes(searchQuery.toLowerCase())
-    )
-  })).filter(group => group.items.length > 0);
+  // Filter items by search query if any (G-2)
+  const filteredItems = primaryItems.filter(item => 
+    item.label.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  const handleHorizonTouchMove = (e: React.TouchEvent) => {
+    if (touchStartYRef.current === null) return;
+    const currentY = e.touches[0].clientY;
+    const diff = touchStartYRef.current - currentY;
+    if (diff > 20) {
+      handleOpenSheet();
+      touchStartYRef.current = null;
+    }
+  };
 
   return (
     <>
-      {/* 1. FLOATING OMNI-BAR & SMART CHIPS CONTAINER (Visible on Mobile only when collapsed) */}
+      {/* 1. HORIZON HANDLE (Collapsed State — ADR-UX-012 Horizon Handle / G-3) */}
       <div 
-        className={`fixed bottom-0 left-0 right-0 z-50 expanded:hidden flex flex-col gap-1.5 pointer-events-none min-w-0 px-4 pb-4 pt-6 bg-gradient-to-t from-canvas via-canvas/85 to-transparent transition-all duration-300 motion-reduce:transition-none ${
-          isQuiet ? 'opacity-60 hover-only:opacity-100 focus-within:opacity-100' : 'opacity-100'
-        }`}
-        onPointerEnter={() => setIsQuiet(false)}
-        onFocus={() => {
-          setIsQuiet(false);
-          setIsScrolledDown(false);
-        }}
+        className="fixed bottom-0 left-0 right-0 z-50 expanded:hidden flex flex-col items-center pointer-events-none pb-[calc(env(safe-area-inset-bottom,0px))]"
+        data-testid="mobile-horizon-container"
       >
-        {/* Row 1: Smart Chips Carousel (S-1 Curated, S-2 Collapsible, S-3 Deferrable) */}
-        {showChips && smartChips.length > 0 && (
+        {/* Polite 1-Time Coachmark Tooltip */}
+        {showCoachmark && (
           <div 
-            className={`flex items-center gap-2 w-full justify-center overflow-x-auto no-scrollbar pointer-events-auto transition-all duration-300 ease-out motion-reduce:transition-none ${
-              isScrolledDown ? 'max-h-0 opacity-0 overflow-hidden -my-1 scale-95' : 'max-h-12 opacity-100 pb-0.5 scale-100'
-            }`}
+            className="mb-2 pointer-events-auto px-3.5 py-1.5 rounded-full bg-surface text-ink text-[11px] font-medium border border-line shadow-floating flex items-center gap-2 animate-in fade-in slide-in-from-bottom-2 duration-300"
+            role="tooltip"
           >
-            {smartChips.map(chip => {
-              const isActive = activeTab === chip.tab;
-              return (
-                <button
-                  key={chip.tab}
-                  type="button"
-                  onClick={() => onSelectTab(chip.tab)}
-                  className={`shrink-0 px-3 py-1 rounded-full text-xs font-semibold transition-all duration-200 flex items-center gap-2 shadow-hairline active:scale-95 cursor-pointer backdrop-blur-md whitespace-nowrap truncate border ${
-                    isActive
-                      ? 'bg-brand-primary text-on-brand border-brand-primary font-bold shadow-hairline'
-                      : 'bg-surface-glass hover-only:bg-surface text-ink border-line-hairline shadow-hairline'
-                  }`}
-                >
-                  <span>{chip.label}</span>
-                </button>
-              );
-            })}
+            <span className="text-accent-valor font-bold" aria-hidden="true">✦</span>
+            <span>Usap ke atas atau ketuk untuk Menu Navigasi</span>
+            <button 
+              type="button" 
+              onClick={handleDismissCoachmark}
+              className="ml-1 text-ink-faint hover-only:text-ink cursor-pointer p-1"
+              aria-label="Tutup petunjuk"
+            >
+              <X className="w-3 h-3" />
+            </button>
           </div>
         )}
 
-        {/* Row 2: The Omni-Bar Capsule Trigger & Profile Avatar */}
-        <div className="flex items-center gap-2 w-full pointer-events-auto min-w-0">
-          <button
-            type="button"
-            onClick={() => setIsExpanded(true)}
-            className={`flex-1 bg-surface-glass backdrop-blur-xl border border-line-hairline shadow-floating rounded-2xl flex items-center justify-between text-ink active:scale-[0.99] transition-all duration-200 cursor-pointer hover-only:border-line min-w-0 ${
-              isScrolledDown ? 'py-2 px-3' : 'py-2.5 px-4'
-            }`}
-          >
-            <div className="flex items-center space-x-2 min-w-0 truncate">
-              <div className="w-6 h-6 rounded-lg bg-surface-subtle border border-line-hairline flex items-center justify-center text-brand-primary shrink-0">
-                <Command className="w-4 h-4" />
-              </div>
-              <span className="text-xs text-ink-soft font-medium truncate">
-                Apa fokus Anda hari ini?
-              </span>
-            </div>
+        {/* The Horizon Handle Strip (Hairline full-bleed broken by center Lucide ChevronUp — ZERO Text) */}
+        <button
+          type="button"
+          onClick={handleOpenSheet}
+          onTouchStart={handleTouchStart}
+          onTouchMove={handleHorizonTouchMove}
+          aria-label="Buka Menu Navigasi"
+          title="Buka Menu Navigasi"
+          data-testid="mobile-chevron-handle"
+          className="pointer-events-auto w-full min-h-[48px] h-[calc(env(safe-area-inset-bottom,0px)+48px)] flex items-center justify-center relative cursor-pointer select-none bg-surface/40 backdrop-blur-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary active:opacity-80 transition-opacity"
+        >
+          {/* Left Hairline */}
+          <span className="flex-1 h-[1px] bg-line-soft mr-3" aria-hidden="true" />
+          
+          {/* Pure Center Chevron (No text noise) */}
+          <div className="w-8 h-8 rounded-full flex items-center justify-center text-ink-faint shrink-0 bg-surface/80 border border-line-soft shadow-xs">
+            <ChevronUp className="w-5 h-5 text-ink-faint shrink-0" />
+          </div>
 
-            <div className="flex items-center space-x-1 text-ink-faint shrink-0 ml-2">
-              <span className="text-[10px] font-mono uppercase tracking-wider bg-surface-subtle px-2 py-1 rounded-md border border-line-hairline text-ink-soft font-bold whitespace-nowrap">
-                Menu
-              </span>
-              <div className="w-6 h-6 rounded-lg bg-surface-subtle flex items-center justify-center text-ink-soft">
-                <ChevronUp className="w-4 h-4" />
-              </div>
-            </div>
-          </button>
-
-          {/* Profile Trigger Button in Mobile Omnibar Dock */}
-          <button
-            type="button"
-            onClick={() => {
-              if (onOpenProfileDrawer) {
-                onOpenProfileDrawer();
-              } else {
-                setIsExpanded(true);
-              }
-            }}
-            aria-label="Profil & Pengaturan"
-            title={currentPersona?.name || 'Profil'}
-            className="h-11 w-11 rounded-2xl bg-surface-glass backdrop-blur-xl border border-line-hairline shadow-floating flex items-center justify-center text-ink shrink-0 active:scale-95 transition-all cursor-pointer relative"
-          >
-            <div className="w-7 h-7 rounded-xl bg-brand-primary text-on-brand flex items-center justify-center text-xs font-bold shadow-soft">
-              {currentPersona?.name.charAt(0) || 'U'}
-            </div>
-            <span className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-accent-valor border-2 border-surface" />
-          </button>
-        </div>
+          {/* Right Hairline */}
+          <span className="flex-1 h-[1px] bg-line-soft ml-3" aria-hidden="true" />
+        </button>
       </div>
 
-      {/* 2. APP LIBRARY BOTTOM SHEET DRAWER (When isExpanded is true) */}
+      {/* 2. CURATED "MENU NAVIGASI" SLIDE-UP SHEET (Expanded State — ADR-UX-012 §2.3 / G-2, G-4, G-5) */}
       {isExpanded && (
         <div 
-          className="fixed inset-0 z-60 bg-canvas/60 backdrop-blur-sm expanded:hidden flex flex-col justify-end transition-opacity duration-200"
+          className="fixed inset-0 z-60 bg-surface-inset/60 backdrop-blur-xs expanded:hidden flex flex-col justify-end transition-opacity duration-200"
           onClick={() => setIsExpanded(false)}
+          data-testid="nav-sheet-backdrop"
         >
           <div 
-            className="bg-surface w-full h-[85vh] rounded-t-3xl shadow-floating flex flex-col overflow-hidden text-ink"
+            className="bg-surface w-full max-h-[90dvh] rounded-t-3xl border-t border-line-hairline shadow-floating flex flex-col overflow-hidden text-ink animate-in slide-in-from-bottom duration-300 motion-reduce:duration-0"
+            style={{ transitionTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)' }}
             onClick={(e) => e.stopPropagation()}
+            onTouchStart={handleTouchStart}
+            onTouchMove={handleTouchMove}
+            onTouchEnd={handleTouchEnd}
+            data-testid="nav-sheet-content"
           >
-            {/* Grab Handle */}
-            <div className="pt-3 pb-1 flex justify-center">
+            {/* Brass Grab Handle (G-4) */}
+            <div className="pt-3 pb-1 flex justify-center shrink-0 cursor-grab">
               <div className="w-12 h-1.5 bg-line-strong rounded-full" />
             </div>
 
-            {/* Header: Search Omnibar & Close Button */}
-            <div className="p-4 border-b border-line-hairline flex items-center gap-3 min-w-0">
+            {/* Pinnacle Search Field & Pinned Close Button (G-2) */}
+            <div className="p-4 border-b border-line-hairline flex items-center gap-3 min-w-0 shrink-0">
               <div className="relative flex-1 min-w-0">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-ink-faint">
                   <Search className="w-4 h-4" />
@@ -394,12 +280,15 @@ export const MobileOmniBar: React.FC<MobileOmniBarProps> = ({
                   placeholder="Cari modul atau menu..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full bg-surface-subtle border border-line-hairline rounded-xl pl-9 pr-8 py-2 text-xs text-ink placeholder:text-ink-faint outline-none focus:ring-1 focus:ring-brand-primary transition-colors"
+                  aria-label="Cari modul atau menu"
+                  className="w-full bg-surface-subtle border border-line-hairline rounded-xl pl-9 pr-8 py-2 text-xs text-ink placeholder:text-ink-faint outline-none focus:ring-1 focus:ring-brand-primary transition-colors min-h-[40px]"
                 />
                 {searchQuery && (
                   <button
+                    type="button"
                     onClick={() => setSearchQuery('')}
-                    className="absolute inset-y-0 right-0 pr-3 flex items-center text-ink-faint hover-only:text-ink"
+                    aria-label="Hapus pencarian"
+                    className="absolute inset-y-0 right-0 pr-3 flex items-center text-ink-faint hover-only:text-ink cursor-pointer min-h-[40px] min-w-[36px] justify-center"
                   >
                     <X className="w-4 h-4" />
                   </button>
@@ -409,29 +298,30 @@ export const MobileOmniBar: React.FC<MobileOmniBarProps> = ({
               <button
                 type="button"
                 onClick={() => setIsExpanded(false)}
-                className="p-2 rounded-xl bg-surface-subtle hover-only:bg-surface text-ink-soft transition-colors shrink-0 cursor-pointer"
-                title="Tutup"
+                className="p-2 rounded-xl bg-surface-subtle hover-only:bg-surface text-ink-soft hover-only:text-ink transition-colors shrink-0 cursor-pointer min-h-[44px] min-w-[44px] flex items-center justify-center"
+                aria-label="Tutup Menu Navigasi"
+                title="Tutup Menu Navigasi"
               >
                 <X className="w-4 h-4" />
               </button>
             </div>
 
-            {/* User Profile Summary Card in Omnibar Sheet */}
+            {/* User Profile Bar Inside Sheet (Quick Switch / Identity) */}
             <div className="px-4 pt-3 shrink-0">
-              <div className="p-3.5 rounded-2xl bg-surface-subtle border border-line-hairline flex items-center justify-between gap-3">
+              <div className="p-3 rounded-2xl bg-surface-subtle border border-line-hairline flex items-center justify-between gap-3">
                 <div className="flex items-center space-x-3 min-w-0">
                   <div className="relative shrink-0">
-                    <div className="w-10 h-10 rounded-2xl bg-brand-primary text-on-brand flex items-center justify-center text-sm font-bold shadow-soft">
+                    <div className="w-9 h-9 rounded-xl bg-brand-primary text-on-brand flex items-center justify-center text-xs font-bold shadow-soft">
                       {currentPersona?.name.charAt(0) || 'U'}
                     </div>
                     <span className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-accent-valor border-2 border-surface" />
                   </div>
                   <div className="min-w-0 flex-1">
                     <div className="font-bold text-xs text-ink truncate">
-                      {currentPersona?.name}
+                      {currentPersona?.name || 'Pengguna Amanaura'}
                     </div>
                     <div className="text-[10px] text-ink-soft truncate font-mono">
-                      {currentPersona?.role}
+                      {currentPersona?.role || 'AUTH'} • {currentPersona?.schoolName || 'Unit'}
                     </div>
                   </div>
                 </div>
@@ -444,10 +334,11 @@ export const MobileOmniBar: React.FC<MobileOmniBarProps> = ({
                         setIsExpanded(false);
                         onOpenProfileDrawer();
                       }}
-                      className="px-3 py-1.5 rounded-xl bg-surface border border-line-hairline text-xs font-semibold text-ink hover-only:bg-surface-subtle transition-colors cursor-pointer min-h-[36px] flex items-center gap-1"
+                      className="px-3 py-2 rounded-xl bg-surface border border-line-hairline text-xs font-semibold text-ink hover-only:bg-surface-subtle transition-colors cursor-pointer min-h-[40px] flex items-center gap-1.5"
+                      aria-label="Buka Profil &amp; Pengaturan"
                     >
-                      <Settings2 className="w-3.5 h-3.5 text-brand-primary" />
-                      <span>Profil</span>
+                      <Settings2 className="w-4 h-4 text-brand-primary" />
+                      <span>Pengaturan</span>
                     </button>
                   )}
                   <button
@@ -456,8 +347,9 @@ export const MobileOmniBar: React.FC<MobileOmniBarProps> = ({
                       setIsExpanded(false);
                       signOut();
                     }}
-                    className="p-2 rounded-xl bg-danger-tint text-danger transition-colors cursor-pointer min-h-[36px] min-w-[36px] flex items-center justify-center"
+                    className="p-2 rounded-xl bg-danger-tint text-danger hover-only:bg-danger-tint/80 transition-colors cursor-pointer min-h-[40px] min-w-[40px] flex items-center justify-center"
                     title="Keluar dari Sesi"
+                    aria-label="Keluar dari Sesi"
                   >
                     <LogOut className="w-4 h-4" />
                   </button>
@@ -465,74 +357,82 @@ export const MobileOmniBar: React.FC<MobileOmniBarProps> = ({
               </div>
             </div>
 
-            {/* App Library Grid Content */}
-            <div className="overflow-y-auto p-4 space-y-6 flex-1 min-w-0">
-              {filteredGroups.length === 0 ? (
+            {/* 4 × 2 Squircle Flat Grid Content (G-5: Flat Fluid, hairline, no heavy shadow) */}
+            <div className="overflow-y-auto p-4 space-y-4 flex-1 min-w-0 no-scrollbar">
+              <div className="flex items-center justify-between px-1">
+                <h3 className="text-[10px] font-mono font-bold text-ink-faint uppercase tracking-wider truncate">
+                  MENU NAVIGASI
+                </h3>
+                <span className="text-[10px] text-ink-faint font-mono">
+                  {filteredItems.length} Modul
+                </span>
+              </div>
+
+              {filteredItems.length === 0 ? (
                 <div className="py-12 text-center text-ink-faint text-xs">
                   Tidak ada modul yang cocok dengan pencarian "{searchQuery}"
                 </div>
               ) : (
-                filteredGroups.map((group, groupIdx) => (
-                  <div key={groupIdx} className="space-y-2.5 min-w-0">
-                    <h3 className="text-[10px] font-mono font-bold text-ink-faint uppercase tracking-wider px-1 truncate">
-                      {group.title}
-                    </h3>
+                <div className="grid grid-cols-2 compact:grid-cols-4 gap-2.5">
+                  {filteredItems.map(item => {
+                    const Icon = item.icon;
+                    const isActive = activeTab === item.tab;
 
-                    <div className="grid grid-cols-3 medium:grid-cols-4 gap-3">
-                      {group.items.map(item => {
-                        const Icon = item.icon;
-                        const isActive = activeTab === item.tab;
+                    return (
+                      <button
+                        key={item.tab}
+                        type="button"
+                        onClick={() => {
+                          onSelectTab(item.tab);
+                          setIsExpanded(false);
+                        }}
+                        className={`relative flex flex-col items-center justify-center p-3 rounded-2xl transition-all duration-150 cursor-pointer active:scale-95 text-center min-h-[80px] min-w-0 border ${
+                          isActive
+                            ? 'bg-brand-primary text-on-brand border-brand-primary font-bold shadow-soft'
+                            : 'bg-surface-subtle hover-only:bg-surface text-ink border-line-hairline shadow-hairline'
+                        }`}
+                      >
+                        <div className={`w-10 h-10 rounded-xl flex items-center justify-center mb-1 shrink-0 ${
+                          isActive 
+                            ? 'bg-surface/20 text-on-brand' 
+                            : 'bg-surface text-brand-primary border border-line-hairline shadow-hairline'
+                        }`}>
+                          <Icon className="w-5 h-5" />
+                        </div>
+                        <span className={`text-xs leading-tight line-clamp-1 font-medium truncate w-full ${
+                          isActive ? 'text-on-brand font-bold' : 'text-ink'
+                        }`}>
+                          {item.label}
+                        </span>
 
-                        return (
-                          <button
-                            key={item.tab}
-                            type="button"
-                            onClick={() => {
-                              onSelectTab(item.tab);
-                              setIsExpanded(false);
-                            }}
-                            className={`flex flex-col items-center justify-center p-3 rounded-2xl transition-all duration-150 cursor-pointer active:scale-95 text-center min-w-0 ${
-                              isActive
-                                ? 'bg-brand-primary text-on-brand shadow-hairline font-bold'
-                                : 'bg-surface-subtle hover-only:bg-surface border border-line-hairline'
-                            }`}
-                          >
-                            <div className={`w-11 h-11 rounded-xl flex items-center justify-center mb-1.5 shadow-hairline shrink-0 ${
-                              isActive 
-                                ? 'bg-surface/20 text-on-brand' 
-                                : 'bg-surface text-ink shadow-hairline'
-                            }`}>
-                              <Icon className="w-5 h-5" />
-                            </div>
-                            <span className={`text-[11px] leading-tight line-clamp-1 font-medium truncate w-full ${
-                              isActive ? 'text-on-brand font-bold' : 'text-ink'
-                            }`}>
-                              {item.label}
-                            </span>
-                          </button>
-                        );
-                      })}
-                    </div>
-                  </div>
-                ))
+                        {/* Real Brass Counter Badge if any (G-5) */}
+                        {item.badge !== undefined && (
+                          <span className="absolute top-2 right-2 px-2 py-1 rounded-full bg-accent-valor text-on-accent text-[9px] font-mono font-bold leading-none">
+                            {item.badge}
+                          </span>
+                        )}
+                      </button>
+                    );
+                  })}
+                </div>
               )}
 
-              {/* Bottom Test & Contract Actions */}
-              <div className="pt-2 min-w-0 space-y-2">
+              {/* Bottom Ancillary Actions: Living Contract & Uji Otorisasi */}
+              <div className="pt-2 min-w-0 space-y-2 border-t border-line-hairline">
                 <button
                   type="button"
                   onClick={() => {
                     onSelectTab('PERCONTOHAN');
                     setIsExpanded(false);
                   }}
-                  className={`w-full flex items-center justify-center space-x-2 py-3 px-4 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
+                  className={`w-full flex items-center justify-center space-x-2 py-3 px-4 rounded-xl text-xs font-semibold transition-all cursor-pointer min-h-[44px] ${
                     activeTab === 'PERCONTOHAN'
-                      ? 'bg-brand-primary text-on-brand font-bold shadow-hairline'
+                      ? 'bg-brand-primary text-on-brand font-bold shadow-soft'
                       : 'bg-surface-subtle hover-only:bg-surface text-ink border border-line-hairline'
                   }`}
                 >
-                  <Sparkles className="w-4 h-4 text-brand-primary shrink-0" />
-                  <span className="truncate">Living Contract</span>
+                  <Sparkles className="w-4 h-4 text-accent-valor shrink-0" />
+                  <span className="truncate">Living Contract &amp; Token Specimen</span>
                 </button>
 
                 <button
@@ -541,9 +441,9 @@ export const MobileOmniBar: React.FC<MobileOmniBarProps> = ({
                     onSelectTab('TESTS');
                     setIsExpanded(false);
                   }}
-                  className={`w-full flex items-center justify-center space-x-2 py-3 px-4 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
+                  className={`w-full flex items-center justify-center space-x-2 py-3 px-4 rounded-xl text-xs font-semibold transition-all cursor-pointer min-h-[44px] ${
                     activeTab === 'TESTS'
-                      ? 'bg-brand-primary text-on-brand font-bold shadow-hairline'
+                      ? 'bg-brand-primary text-on-brand font-bold shadow-soft'
                       : 'bg-surface-subtle hover-only:bg-surface text-ink border border-line-hairline'
                   }`}
                 >

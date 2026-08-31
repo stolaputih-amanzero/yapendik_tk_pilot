@@ -22,7 +22,8 @@ const FORBIDDEN_RULES = [
   { regex: /ClassroomPulseBanner.*border-warning-line/, name: 'R-FLAT-BOX: Kotak alert border-warning-line dilarang pada banner kehadiran (Wajib divide-y divide-line-hairline)' },
   { regex: /className=['"][^'"]*?(?<!focus-visible:)(?<!focus:)(?<!hover-only:)(?<!hover:)\bshadow-luminescent\b/, name: 'R-GLOW: shadow-luminescent tanpa prefix interaksi (Wajib focus-visible: / hover-only:)' },
   { regex: /(?<!TK\s)(?<!Yayasan\s)\bYapendik\s+(School\s+)?OS\b/i, name: 'R-BRAND: Legacy "Yapendik OS" Brand Slot Violation (Wajib gunakan "Amanaura OS")' },
-  { regex: /\b(?:ease-spring|ease-bounce|--ease-spring|--ease-bounce)\b/, name: 'R-PHYSICS: Competing bezier spring violation (Amanaura Spring {380,32,0.8} is the sole motion physics)' }
+  { regex: /\b(?:ease-spring|ease-bounce|--ease-spring|--ease-bounce)\b/, name: 'R-PHYSICS: Competing bezier spring violation (Amanaura Spring {380,32,0.8} is the sole motion physics)' },
+  { regex: /[\u2303\u2304⌃⌄]/, name: 'R-NO-RAW-CHEVRON: Raw chevron glyph violation (Wajib Lucide ChevronUp/ChevronDown per Law 11 / G-3)' }
 ];
 
 const ALLOWED_FILES = [
@@ -69,7 +70,7 @@ for (const filePath of allFiles) {
 
   lines.forEach((line, index) => {
     const lineNum = index + 1;
-    
+
     // Ignore @media print in css
     if (filePath.endsWith('.css')) {
       if (line.includes('@media print')) inPrintBlock = true;
@@ -136,6 +137,71 @@ if (fs.existsSync(SPECIMEN_FULL_PATH)) {
   });
 }
 
+// ═══ RULE R-INVISIBLE-SCROLL: Invisible Mastery #8 (Disappear Scrollbar) ═══
+const INDEX_CSS_REL_PATH = path.join('src', 'index.css');
+const INDEX_CSS_FULL_PATH = path.resolve(INDEX_CSS_REL_PATH);
+if (fs.existsSync(INDEX_CSS_FULL_PATH)) {
+  const cssContent = fs.readFileSync(INDEX_CSS_FULL_PATH, 'utf-8');
+  if (!cssContent.includes('scrollbar-width: none') || !cssContent.includes('::-webkit-scrollbar { width: 0; height: 0; }')) {
+    violationCount++;
+    if (!violationsByFile[INDEX_CSS_REL_PATH]) violationsByFile[INDEX_CSS_REL_PATH] = [];
+    violationsByFile[INDEX_CSS_REL_PATH].push({
+      lineNum: 1,
+      line: 'src/index.css missing global invisible scroll rules',
+      name: 'R-INVISIBLE-SCROLL: Global scrollbar must disappear across all containers (Mastery #8)'
+    });
+  }
+}
+
+// ═══ RULE R-NAV-CHEVRON-CALIBRATION: ADR-UX-012 Horizon Handle & FAB Collision Check (G-3, G-6) ═══
+const OMNIBAR_REL_PATH = path.join('src', 'components', 'layout', 'MobileOmniBar.tsx');
+const OMNIBAR_FULL_PATH = path.resolve(OMNIBAR_REL_PATH);
+if (fs.existsSync(OMNIBAR_FULL_PATH)) {
+  const omniContent = fs.readFileSync(OMNIBAR_FULL_PATH, 'utf-8');
+  if (!omniContent.includes('min-h-[48px]')) {
+    violationCount++;
+    if (!violationsByFile[OMNIBAR_REL_PATH]) violationsByFile[OMNIBAR_REL_PATH] = [];
+    violationsByFile[OMNIBAR_REL_PATH].push({
+      lineNum: 1,
+      line: 'MobileOmniBar horizon handle missing min-h-[48px]',
+      name: 'R-CHEVRON-TOUCH-FLOOR: Horizon handle must enforce >= 48dp touch floor (G-3)'
+    });
+  }
+  if (!omniContent.includes('aria-label="Buka Menu Navigasi"')) {
+    violationCount++;
+    if (!violationsByFile[OMNIBAR_REL_PATH]) violationsByFile[OMNIBAR_REL_PATH] = [];
+    violationsByFile[OMNIBAR_REL_PATH].push({
+      lineNum: 1,
+      line: 'MobileOmniBar horizon handle missing aria-label="Buka Menu Navigasi"',
+      name: 'R-CHEVRON-A11Y: Horizon handle must include aria-label="Buka Menu Navigasi" (G-3)'
+    });
+  }
+  // R-HORIZON-PURE: Zero text inside handle button (no "Menu" text node)
+  if (/data-testid="mobile-chevron-handle"[^>]*>[\s\S]*?<span[^>]*>[^<]*Menu[^<]*<\/span>/i.test(omniContent)) {
+    violationCount++;
+    if (!violationsByFile[OMNIBAR_REL_PATH]) violationsByFile[OMNIBAR_REL_PATH] = [];
+    violationsByFile[OMNIBAR_REL_PATH].push({
+      lineNum: 1,
+      line: 'MobileOmniBar horizon handle contains "Menu" text node',
+      name: 'R-HORIZON-PURE: Horizon handle must be pure hairline + Lucide ChevronUp with ZERO text'
+    });
+  }
+}
+
+const FAB_REL_PATH = path.join('src', 'components', 'workspaces', 'teacher', 'QuickCaptureFloatingButton.tsx');
+const FAB_FULL_PATH = path.resolve(FAB_REL_PATH);
+if (fs.existsSync(FAB_FULL_PATH)) {
+  const fabContent = fs.readFileSync(FAB_FULL_PATH, 'utf-8');
+  if (!fabContent.includes('bottom-[calc(env(safe-area-inset-bottom,0px)+48px)]') || !fabContent.includes('right-4')) {
+    violationCount++;
+    if (!violationsByFile[FAB_REL_PATH]) violationsByFile[FAB_REL_PATH] = [];
+    violationsByFile[FAB_REL_PATH].push({
+      lineNum: 1,
+      line: 'QuickCaptureFloatingButton offset is not canonical +48px right-4',
+      name: 'R-FAB-CANONICAL-OFFSET: FAB must be offset bottom-[calc(env(safe-area-inset-bottom,0px)+48px)] right-4 (G-6)'
+    });
+  }
+}
 
 // Validate Manifest PWA Brand (R-BRAND)
 const manifestPath = path.resolve('public', 'manifest.json');

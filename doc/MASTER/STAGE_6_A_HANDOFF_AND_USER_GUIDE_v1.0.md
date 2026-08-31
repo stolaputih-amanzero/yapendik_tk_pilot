@@ -276,9 +276,20 @@ Ketika jam kepulangan sekolah telah usai (setelah pukul 14:30):
 
 ---
 
-## 2.3 Gema Hangat (Warm Echo)
+## 2.3 Gema Hangat (Warm Echo — WarmEchoCarousel)
 
-Di bagian bawah briefing harian, Anda akan menemukan kutipan singkat berisi apresiasi dari orang tua murid atau refleksi kualitatif sentra. Bagian ini hadir untuk menyiram semangat dan menegaskan makna dari setiap momen bermain yang Anda dampingi.
+Di bawah salam sirkadian Beranda Guru, sistem merender **Gema Hangat** menggunakan komponen kanonikal **`WarmEchoCarousel`** (standar commit [`f1f18fd`](https://github.com/stolaputih-amanzero/yapendik_tk_pilot/commit/f1f18fd679959429e27cbdceada2c8f5a8a8cd0a)).
+
+### 💎 Prinsip & Doktrin Desain Gema Hangat:
+1. **Terbuka Penuh Universal (*Always Open & Prominently Legible*)**:
+   - Gema Hangat **wajib tampil terbuka secara utuh** di seluruh jam operasional (`PRATINJAU`, `OPERASIONAL`, dan `PENUTUP`).
+   - Dilarang keras melipat kutipan ke dalam chip kosong (*collapsed chip*) yang menyembunyikan apresiasi orang tua.
+2. **Anatomi Visual Kanonikal**:
+   - **Grand Quote Mark (`“`)**: Tanda kutip serif emas anggun di pojok kiri atas kartu.
+   - **Avatar Inisial Anak (`SA`, `MT`, `ER`, `KA`, `CM`)**: Lingkaran pastel dengan inisial anak.
+   - **Tipografi Kutipan**: Teks kutipan miring (*italic serif*) berkehangatan tinggi dari Buku Penghubung.
+   - **Navigasi Ghost (`‹` dan `›`)**: Navigasi geser lembut dan rotasi otomatis berkala (7 detik).
+   - **Interaksi Sambut Kasih (*Heart Pop Animation*)**: Mengetuk kutipan atau tombol hati mengaktifkan reaksi hati emas (`💛 Sentra Seni & Balok`) dan animasi partikel kasih mengambang.
 
 ---
 
