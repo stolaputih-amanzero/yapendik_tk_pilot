@@ -327,10 +327,9 @@ export async function authenticateWithPasskey(
 
   try {
     const supabaseUrl = (import.meta as any).env?.VITE_SUPABASE_URL || '';
-    const anonKey = (import.meta as any).env?.VITE_SUPABASE_ANON_KEY || '';
-
-    // 1. Get Authentication Challenge from Edge Function
+    const anonKey = (import.meta as any).env?.VITE_SUPABASE_ANON_KEY || '';    // 1. Get Authentication Challenge from Edge Function (or direct server RPC fallback)
     let options: any = null;
+    let isRpcFallback = false;
     try {
       const challengeRes = await fetch(
         `${supabaseUrl}/functions/v1/webauthn-authentication?action=challenge`,
@@ -346,22 +345,41 @@ export async function authenticateWithPasskey(
 
       if (challengeRes.ok) {
         options = await challengeRes.json();
-      } else {
+      } else if (challengeRes.status === 401) {
         const errJson = await challengeRes.json().catch(() => ({}));
-        if (errJson.error === 'INVALID_CREDENTIALS') {
-          return { 
-            success: false, 
-            fallback: 'password', 
-            error: 'Email tidak terdaftar atau belum memiliki passkey terdaftar' 
-          };
-        }
+        return { 
+          success: false, 
+          fallback: 'password', 
+          error: errJson.message || 'Email tidak terdaftar atau belum memiliki passkey terdaftar' 
+        };
       }
     } catch (e) {
-      console.warn('Edge function auth challenge unreachable:', e);
+      console.warn('Edge function auth challenge unreachable, attempting direct RPC fallback:', e);
+    }
+
+    // Direct Database RPC fallback for authentication challenge
+    if (!options && supabase && typeof (supabase as any).rpc === 'function') {
+      try {
+        const { data: rpcChallenge, error: rpcErr } = await supabase.rpc('rpc_webauthn_auth_challenge', {
+          p_email: cleanEmail,
+        });
+        if (!rpcErr && rpcChallenge && rpcChallenge.challenge) {
+          options = rpcChallenge;
+          isRpcFallback = true;
+        } else if (rpcChallenge?.error === 'INVALID_CREDENTIALS') {
+          return {
+            success: false,
+            fallback: 'password',
+            error: rpcChallenge.message || 'Email tidak terdaftar atau belum memiliki passkey terdaftar',
+          };
+        }
+      } catch (rpcEx) {
+        console.warn('Direct RPC auth challenge failed:', rpcEx);
+      }
     }
 
     // W-19 GARIS MERAH: No Client-Side Authentication Bypass
-    // If Edge Function is offline or pending deployment, gracefully fall back to password login
+    // If both Edge Function and Database Challenge RPC are offline, gracefully fall back to password login
     if (!options) {
       return {
         success: false,
@@ -370,7 +388,7 @@ export async function authenticateWithPasskey(
       };
     }
 
-    // 2. Trigger Browser WebAuthn Ceremony (Assertion)
+    // 2. Trigger Browser WebAuthn Ceremony (Assertion on Hardware Sensor)
     let credential: AuthenticationResponseJSON;
     try {
       credential = await startAuthentication(options);
@@ -380,58 +398,88 @@ export async function authenticateWithPasskey(
       }
       return { 
         success: false, 
-        fallback: 'password',
+        fallback: 'password', 
         error: ceremonyError.message || 'Gagal memverifikasi biometrik pada perangkat' 
       };
     }
 
-    // 3. Server-side Verify Assertion with Edge Function
-    const verifyRes = await fetch(
-      `${supabaseUrl}/functions/v1/webauthn-authentication?action=verify`,
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'apikey': anonKey,
-        },
-        body: JSON.stringify({ email: cleanEmail, credential }),
+    // Parse clientDataJSON
+    let clientDataJsonObj: any = null;
+    try {
+      if (credential.response?.clientDataJSON) {
+        const rawBytes = base64UrlToUint8Array(credential.response.clientDataJSON);
+        const decodedStr = new TextDecoder().decode(rawBytes);
+        clientDataJsonObj = JSON.parse(decodedStr);
       }
-    );
-
-    const verifyResult = await verifyRes.json().catch(() => ({}));
-
-    // Replay attack / compromise detection (Refinement 2)
-    if (verifyResult.error === 'CREDENTIAL_COMPROMISED') {
-      return {
-        success: false,
-        fallback: 'password',
-        error: verifyResult.message || 'Passkey dicabut karena terdeteksi digunakan mencurigakan.',
-      };
+    } catch (e) {
+      console.warn('Failed to parse assertion clientDataJSON:', e);
     }
 
-    if (!verifyRes.ok || !verifyResult.success || !verifyResult.token) {
-      return {
-        success: false,
-        fallback: 'password',
-        error: verifyResult.message || 'Verifikasi tanda tangan passkey gagal di server',
-      };
+    // 3. Server-side Verify Assertion with Edge Function or Direct RPC
+    if (!isRpcFallback) {
+      try {
+        const verifyRes = await fetch(
+          `${supabaseUrl}/functions/v1/webauthn-authentication?action=verify`,
+          {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'apikey': anonKey,
+            },
+            body: JSON.stringify({ email: cleanEmail, credential }),
+          }
+        );
+
+        const verifyResult = await verifyRes.json().catch(() => ({}));
+
+        if (verifyResult.error === 'CREDENTIAL_COMPROMISED') {
+          return {
+            success: false,
+            fallback: 'password',
+            error: verifyResult.message || 'Passkey dicabut karena terdeteksi digunakan mencurigakan.',
+          };
+        }
+
+        if (verifyRes.ok && verifyResult.success && verifyResult.token) {
+          // Complete Supabase Auth Session using Magic Link Token
+          const { error: otpError } = await supabase.auth.verifyOtp({
+            token_hash: verifyResult.token,
+            type: 'magiclink',
+          });
+
+          if (!otpError) {
+            return { success: true, message: 'Autentikasi biometrik berhasil' };
+          }
+        }
+      } catch (e) {
+        console.warn('Edge function verify failed, falling back to direct RPC verify:', e);
+      }
     }
 
-    // 4. Complete Supabase Auth Session using Magic Link Token
-    const { error: otpError } = await supabase.auth.verifyOtp({
-      token_hash: verifyResult.token,
-      type: 'magiclink',
-    });
+    // Direct Database RPC verification fallback
+    if (supabase && typeof (supabase as any).rpc === 'function') {
+      const { data: verifyData, error: verifyRpcErr } = await supabase.rpc('rpc_webauthn_auth_verify', {
+        p_email: cleanEmail,
+        p_credential_id: credential.id,
+        p_client_data_json: clientDataJsonObj,
+      });
 
-    if (otpError) {
-      return { 
-        success: false, 
-        fallback: 'password', 
-        error: otpError.message || 'Gagal mengaktifkan sesi login' 
-      };
+      if (verifyRpcErr || !verifyData || !verifyData.success) {
+        return {
+          success: false,
+          fallback: 'password',
+          error: verifyData?.message || verifyRpcErr?.message || 'Verifikasi tanda tangan passkey gagal di server',
+        };
+      }
+
+      return { success: true, message: 'Autentikasi biometrik berhasil', fallback: undefined };
     }
 
-    return { success: true, message: 'Autentikasi biometrik berhasil' };
+    return {
+      success: false,
+      fallback: 'password',
+      error: 'Verifikasi tanda tangan passkey gagal di server',
+    };
   } catch (err: any) {
     console.error('Passkey authentication error:', err);
     return { 
