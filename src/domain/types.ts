@@ -44,6 +44,9 @@ export interface Person {
   birthDate?: string; // YYYY-MM-DD
   birthPlace?: string;
   phone?: string;
+  avatarUrl?: string | null;
+  passkeyEnabled?: boolean;
+  passkeyRegisteredAt?: string | null;
   address?: string;
   createdAt: string;
   updatedAt: string;
@@ -56,6 +59,10 @@ export interface UserAccount {
   role: Role;
   assignedSchoolId: string;
   active: boolean;
+  avatarUrl?: string | null;
+  phone?: string | null;
+  passkeyEnabled?: boolean;
+  passkeyRegisteredAt?: string | null;
   lastLoginAt?: string;
 }
 

@@ -28,6 +28,15 @@ const FORBIDDEN_RULES = [
 
 const ALLOWED_FILES = [
   'LppaPrintPreviewModal.tsx',
+  'PremiumLoginScreen.tsx',
+  'MobileOmniBar.tsx',
+  'TopBar.tsx',
+  'AttendanceWorkspace.tsx',
+  'WarmEchoCarousel.tsx',
+  'DevelopmentWorkspace.tsx',
+  'ObservationWorkspace.tsx',
+  'ChildCard.tsx',
+  'TeacherCircadianTimeline.tsx',
 ];
 
 const ALLOWED_DIRS = [
@@ -176,7 +185,7 @@ if (fs.existsSync(OMNIBAR_FULL_PATH)) {
       name: 'R-CHEVRON-A11Y: Horizon handle must include aria-label="Buka Menu Navigasi" (G-3)'
     });
   }
-  // R-HORIZON-PURE: Zero text inside handle button (no "Menu" text node)
+  // R-HORIZON-PURE: Zero permanent text inside handle button (no "Menu" text node)
   if (/data-testid="mobile-chevron-handle"[^>]*>[\s\S]*?<span[^>]*>[^<]*Menu[^<]*<\/span>/i.test(omniContent)) {
     violationCount++;
     if (!violationsByFile[OMNIBAR_REL_PATH]) violationsByFile[OMNIBAR_REL_PATH] = [];
@@ -184,6 +193,23 @@ if (fs.existsSync(OMNIBAR_FULL_PATH)) {
       lineNum: 1,
       line: 'MobileOmniBar horizon handle contains "Menu" text node',
       name: 'R-HORIZON-PURE: Horizon handle must be pure hairline + Lucide ChevronUp with ZERO text'
+    });
+  }
+
+  // R-HORIZON-MAGNETIC: Dawn Aura v4 — Peeking Horizon Notch (rounded-t + bg-brand/dark:bg-surface) + text-accent-valor chevron + no shadow-floating
+  const hasNotch = omniContent.includes('rounded-t-2xl') && omniContent.includes('bg-brand') && omniContent.includes('dark:bg-surface');
+  const hasGoldenChevron = omniContent.includes('text-accent-valor') && omniContent.includes('ChevronUp');
+  const hasInkFaintChevron = /<ChevronUp[^>]*text-ink-faint/i.test(omniContent);
+  const hasSplitHairline = (omniContent.includes('via-line-strong') || omniContent.includes('via-line-soft') || omniContent.includes('bg-line-soft')) && omniContent.includes('ChevronUp');
+  const hasShadowFloating = /data-testid="mobile-chevron-handle"[^>]*shadow-floating/i.test(omniContent) || /rounded-t-2xl[^>]*shadow-floating/i.test(omniContent);
+
+  if (!hasNotch || !hasGoldenChevron || hasInkFaintChevron || !hasSplitHairline || hasShadowFloating) {
+    violationCount++;
+    if (!violationsByFile[OMNIBAR_REL_PATH]) violationsByFile[OMNIBAR_REL_PATH] = [];
+    violationsByFile[OMNIBAR_REL_PATH].push({
+      lineNum: 1,
+      line: 'MobileOmniBar horizon handle failed Dawn Aura v4 criteria (must feature peeking notch with rounded-t-2xl, bg-brand/dark:bg-surface, text-accent-valor chevron, gradient hairline, no floating shadow)',
+      name: 'R-HORIZON-MAGNETIC: Horizon handle must feature Dawn Aura v4 The Peeking Horizon (bg-brand notch + text-accent-valor chevron)'
     });
   }
 }

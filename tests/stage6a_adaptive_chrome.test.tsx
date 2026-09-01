@@ -140,7 +140,7 @@ async function runAdaptiveChromeTests() {
       assert.ok(html.includes('Amanaura OS'), 'Expected "Amanaura OS" header in drawer');
     });
 
-    runCheck('ProfileDrawer [THEME CONTROL & 432Hz]: Renders visual theme selector and audio gate toggle', () => {
+    runCheck('ProfileDrawer [PROFILE HUB V2]: Full Profile Hub with photo, name card, credentials & completion action (ADR-UX-013)', () => {
       const html = renderToString(
         <SecurityContextProvider>
           <ProfileDrawer
@@ -150,36 +150,14 @@ async function runAdaptiveChromeTests() {
           />
         </SecurityContextProvider>
       );
-      assert.ok(html.includes('Tema Visual'), 'Expected Tema Visual setting');
-      assert.ok(html.includes('Denting 432Hz'), 'Expected Denting 432Hz toggle');
-    });
-
-    runCheck('ProfileDrawer [LIVING CONTRACT ADS]: Renders Living Contract entry in drawer', () => {
-      const html = renderToString(
-        <SecurityContextProvider>
-          <ProfileDrawer
-            isOpen={true}
-            onClose={() => { }}
-            onSelectTab={() => { }}
-          />
-        </SecurityContextProvider>
-      );
-      assert.ok(html.includes('Living Contract'), 'Expected Living Contract in ProfileDrawer');
-      assert.ok(html.includes('ADS'), 'Expected ADS badge in ProfileDrawer');
-    });
-
-    runCheck('ProfileDrawer [48dp FLOOR]: PWA and Sign Out action buttons enforce 48dp floor', () => {
-      const html = renderToString(
-        <SecurityContextProvider>
-          <ProfileDrawer
-            isOpen={true}
-            onClose={() => { }}
-            onSelectTab={() => { }}
-          />
-        </SecurityContextProvider>
-      );
-      assert.ok(html.includes('min-h-[48px]'), 'Expected min-h-[48px] class on drawer buttons');
-      assert.ok(html.includes('Keluar dari Sesi'), 'Expected Sign Out button');
+      assert.ok(html.includes('Profil Saya'), 'Expected Profil Saya header');
+      assert.ok(!html.includes('Tema Visual'), 'Did not expect Tema Visual in ProfileDrawer (moved to sheet footer & sidebar)');
+      assert.ok(!html.includes('Denting 432Hz'), 'Did not expect Denting 432Hz in ProfileDrawer (single control point on dashboard)');
+      assert.ok(!html.includes('Living Contract'), 'Did not expect Living Contract in ProfileDrawer');
+      assert.ok(html.includes('data-testid="btn-drawer-done"'), 'Expected done/save action in Profile Hub');
+      assert.ok(html.includes('Simpan Profil'), 'Expected Simpan Profil label in Profile Hub');
+      assert.ok(html.includes('data-testid="btn-change-photo"'), 'Expected change photo trigger in Profile Hub');
+      assert.ok(html.includes('data-testid="btn-open-namecard"'), 'Expected open namecard trigger in Profile Hub');
     });
   }
 
@@ -230,7 +208,7 @@ async function runAdaptiveChromeTests() {
       assert.ok(html.includes('border-transparent'), 'Expected border-transparent on inactive links');
     });
 
-    runCheck('Sidebar [NO THEME TOGGLE]: Theme toggle is removed from Sidebar (centralized in ProfileDrawer)', () => {
+    runCheck('Sidebar [THEME & SIGNOUT UTILITIES]: Desktop Sidebar renders Theme Visual and Sign Out utilities', () => {
       const html = renderToString(
         <SecurityContextProvider>
           <Sidebar
@@ -241,7 +219,8 @@ async function runAdaptiveChromeTests() {
           />
         </SecurityContextProvider>
       );
-      assert.ok(!html.includes('Beralih ke'), 'Did not expect theme toggle in Sidebar');
+      assert.ok(html.includes('Tema Visual'), 'Expected Theme Visual in Sidebar');
+      assert.ok(html.includes('Keluar dari Sesi'), 'Expected Keluar dari Sesi in Sidebar');
     });
 
     runCheck('Sidebar [USER PROFILE]: Desktop Sidebar renders user persona profile trigger', () => {
@@ -285,7 +264,9 @@ async function runAdaptiveChromeTests() {
           />
         </SecurityContextProvider>
       );
-      assert.ok(html.includes('bg-line-soft'), 'Expected line-soft hairline in horizon handle');
+      assert.ok(html.includes('via-line-strong') || html.includes('via-line-soft') || html.includes('bg-line-soft'), 'Expected line gradient in horizon handle');
+      assert.ok(html.includes('text-accent-valor'), 'Expected text-accent-valor golden chevron in horizon handle (Dawn Aura v4)');
+      assert.ok(html.includes('rounded-t-2xl'), 'Expected peeking notch rounded-t-2xl in horizon handle (Dawn Aura v4)');
       assert.ok(!html.includes('>Menu<'), 'Expected zero text node (no "Menu") in handle');
     });
 
@@ -311,6 +292,29 @@ async function runAdaptiveChromeTests() {
         </SecurityContextProvider>
       );
       assert.ok(!html.includes('⌃'), 'Expected Lucide icon instead of raw glyph "⌃"');
+    });
+
+    runCheck('MobileOmniBar [SINGLE SURFACE LAUNCHER]: 3x3 9-tile grid with Profil tile and utility footer rows (Addendum VIII)', () => {
+      const html = renderToString(
+        <SecurityContextProvider>
+          <MobileOmniBar
+            activeTab="TEACHER_HOME"
+            onSelectTab={() => { }}
+            initialExpanded={true}
+          />
+        </SecurityContextProvider>
+      );
+      assert.ok(html.includes('9 Modul'), 'Expected 9 Modul in header');
+      assert.ok(html.includes('Profil'), 'Expected Profil 9th tile in grid');
+      assert.ok(html.includes('grid-cols-3'), 'Expected 3-column grid');
+      assert.ok(html.includes('Tema Visual'), 'Expected Tema Visual in utility footer');
+      assert.ok(html.includes('Ivory'), 'Expected Ivory option in segmented toggle');
+      assert.ok(html.includes('Midnight'), 'Expected Midnight option in segmented toggle');
+      assert.ok(html.includes('Keluar dari Sesi'), 'Expected Keluar dari Sesi in utility footer');
+      assert.ok(html.includes('bg-danger-tint'), 'Expected danger tint on sign out row');
+      assert.ok(!html.includes('Cari modul atau menu'), 'Expected zero search input in COMPACT sheet');
+      assert.ok(!html.includes('Uji Otorisasi Sistem'), 'Expected zero TESTS row in COMPACT sheet');
+      assert.ok(!html.includes('Living Contract &amp; Token Specimen'), 'Expected zero Living Contract row in COMPACT sheet');
     });
   }
 

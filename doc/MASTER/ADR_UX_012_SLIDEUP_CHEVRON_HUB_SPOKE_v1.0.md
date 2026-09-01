@@ -125,4 +125,73 @@ ARB dan Project Owner meratifikasi transformasi arsitektural resmi:
 * **Implementasi**: Komponen `QuickCaptureFloatingButton` resmi dipensiunkan dari seluruh workspace guru. Tepi bawah layar kini sepenuhnya murni menjadi milik Horizon Handle (satu garis, satu chevron, nol teks). CI Guard memberlakukan `R-FAB-ALLOWLIST` (allowlist kosong).
 
 ---
+
+## 7. Addendum IV: Magnetic Horizon Handle v2 (Magnetic Swipe Affordance)
+
+* **Evolusi Bentuk**: Horizon Handle ditingkatkan dari garis statis sederhana menjadi **Magnetic Horizon Handle** yang menggoda sentuhan (*tempting magnetic affordance*) tanpa kembali menjadi Omni-Bar berat atau menambahkan teks label.
+* **Karakteristik & Anatomi Kanonikal**:
+  1. **Split Hairline**: Garis horizontal `bg-line-soft` terputus di tengah (`left-0 right-[calc(50%+28px)]` dan `left-[calc(50%+28px)] right-0`), menciptakan ceruk magnetik visual.
+  2. **Center Chevron Cluster**: Ikon Lucide `ChevronUp` resmi (`w-5 h-5`) dalam kapsul lingkaran halus `w-8 h-8` dengan hit area sentuh $\ge 48\text{dp}$ (`min-h-[56px]`).
+  3. **Soft Golden Glow**: Radial warm gold aura di belakang chevron (`bg-accent-valor/15 blur-xl w-12 h-6`) tanpa bayangan berat atau elevasi FAB.
+  4. **Micro-Lift Animation**: Animasi bernapas naik 2–3px lalu turun perlahan setiap 3 detik (`animate-horizon-lift`), otomatis berhenti pada mode *reduced motion* (`motion-reduce:animate-none`).
+  5. **Magnetic Swipe Affordance**: Area handle menerima gestur swipe-up vertikal ($\ge 24\text{px}$) untuk membuka lembar "MENU NAVIGASI" secara intuitif.
+  6. **Polite 1× Coachmark**: Petunjuk geser satu-kali untuk pengguna baru (`"Geser ke atas untuk menu"`), otomatis hilang setelah 3 detik dan tersimpan di `localStorage`.
+  7. **Zero Permanent Text**: Menjaga konstitusi nol teks "Menu" permanen pada collapsed dock.
+
+---
+
+## 8. Addendum V: Horizon Handle v3 & v3.1 — The Dawn Aura (Cahaya Fajar)
+
+* **Diagnosa & Filosofi**: Mengatasi kegagalan perseptual kontras di *Midnight Sanctuary* (di mana chevron pudar dan glow kecil tenggelam di layar OLED) dengan mengangkat konsep **"The Dawn Aura"** — horizon yang menyingsing di mana satu-satunya titik hangat di tepi bawah adalah chevron emas di atas kolam cahaya fajar.
+* **Anatomi Kanonikal (v3 & v3.1)**:
+  1. **Chevron Emas & Perunggu**: Ikon resmi Lucide `ChevronUp` `w-5 h-5` (`strokeWidth={2.5}`) dengan warna tema ganda: `text-valor-deep` (oklch 0.55 perunggu dalam di *Ivory Canvas*) dan `dark:text-accent-valor` (oklch 0.80 emas terang di *Midnight Sanctuary*).
+  2. **Dawn Glow Pool**: Kolam pendaran cahaya radial `w-24 h-10 rounded-full blur-lg bg-accent-valor/28 dark:bg-accent-valor/25` di belakang chevron.
+  3. **Gradient Horizon Line**: Dua hairline memakai `bg-gradient-to-r from-transparent via-line-strong dark:via-line-soft to-valor-deep/60 dark:to-accent-valor/40`.
+  4. **Breathing Sync (`amanaura-horizon-breathe`)**: Sinkronisasi napas halus antara translasi chevron (`translateY -3px`) dan kenaikan opasitas glow (`0.6 → 1`) dalam siklus harmonis 3.2s.
+  5. **First-Visit Bloom (`amanaura-horizon-bloom`)**: Pada kunjungan pertama sesi baru, pendaran mekar (`scale 0.85 → 1.15`, lift `-6px`, 900ms).
+
+---
+
+## 9. Addendum VI: Horizon Handle v4 — The Peeking Horizon (Gerbang Fajar)
+
+* **Diagnosa & Terobosan**: Glow adalah affordance mode gelap (*cahaya di kegelapan*). Pada kanvas terang, affordance terbaik datang dari **kontras dan kedalaman bentuk fisik**. Rahasia affordance swipe-up terbaik adalah memperlihatkan sedikit bibir laci yang akan ditarik (*the sheet lip preview*).
+* **Anatomi Kanonikal v4**:
+  1. **Horizon Notch (Bibir Sheet)**: Elemen `w-20 h-9 rounded-t-2xl bg-brand dark:bg-surface-subtle border-t border-x border-line-soft/50 dark:border-line/60` menempel (*flush*) di tepi bawah. Di Ivory Canvas, warna navy pekat (`bg-brand`) memberikan kontras visual mutlak ($\approx 12:1$) yang langsung mengunci fokus jempol.
+  2. **Chevron Emas Universal**: Ikon Lucide `ChevronUp` resmi (`w-5 h-5`, `strokeWidth={2.5}`) dalam balutan warna `text-accent-valor` (emas Amanaura) di kedua tema — terbaca dengan kontras $\approx 8:1$ di atas navy dan $\approx 5:1$ di atas elevated night.
+  3. **Warm Sky Canopy**: Kanopi fajar `h-14 bg-gradient-to-t from-valor-deep/25 via-accent-valor/10 to-transparent dark:from-accent-valor/20 dark:via-accent-valor/8` membentang di atas garis horizon.
+  4. **Split Hairline Horizon**: Garis gradien kiri/kanan (`to-valor-deep/60` di light, `to-accent-valor/40` di dark) menyala masuk ke arah notch.
+  5. **Magnetic Press Responsif**: Saat disentuh (`onTouchStart` / `onPointerDown`), notch terangkat sedikit (`-translate-y-1 scale-105`) dan kanopi langit menguat ke opasitas penuh.
+  6. **Micro-Lift Breathing**: Chevron bernapas halus `-3px` dalam ritme sirkadian 3.2s (`animate-horizon-breathe`), otomatis statis saat `prefers-reduced-motion`.
+  7. **Konstitusional Zero Floating FAB**: Notch menempel (*flush*) di tepi bawah kanvas tanpa `shadow-floating` atau efek melayang, mempertahankan kepatuhan penuh terhadap `R-FAB-ALLOWLIST` dan `R-HORIZON-PURE`.
+
+---
+
+## 10. Addendum VII: Sheet & Profile Hygiene — 3-Col Wrap & Role-Aware Curation
+
+* **Amandemen Guardrail G-2 (No Search di COMPACT Sheet)**:
+  * Pembukaan keyboard virtual pada form input pencarian di perangkat bergerak menyebabkan oklusi (menutupi daftar menu navigasi di bawahnya). Sesuai prinsip *Calm & Dignified*, search bar dihilangkan dari lembar COMPACT (pencarian global dialokasikan ke TopBar EXPANDED dengan keyboard fisik).
+* **Grid Kanonikal 3-Kolom & Anti-Truncation (Supersedes 4×2 Squircle)**:
+  * Grid modul dialihkan ke format `grid-cols-3 gap-3` (maksimum 3 per baris).
+  * Label modul menghapus `truncate` dan menerapkan `text-center text-xs leading-snug break-words` sehingga seluruh nama modul ditampilkan utuh (misal: "Buku Penghubung" melipat ke dua baris tanpa elipsis).
+* **Role-Aware Curation (Pembersihan Dev-Tools dari Chrome Guru)**:
+  * Modul diagnostik pengembang (*Living Contract & Token Specimen*, *Uji Otorisasi TESTS*, dan status *SHA/Cloud Sync*) ditarik dari permukaan guru di `MobileOmniBar` dan `ProfileDrawer`.
+  * Rute pengembangan tetap hidup dan dapat diakses langsung via URL (`#percontohan`, `#uji-otorisasi`).
+
+---
+
+## 11. Addendum VIII: Single-Surface Launcher — 3×3 Grid & Utility Footer
+
+* **Doktrin Tiles = Destinasi, Rows = Tindakan**:
+  * Elemen grid dialokasikan murni untuk destinasi navigasi ruang kerja.
+  * Tile ke-9 **Profil** (`CircleUser`) ditambahkan melengkapi grid menjadi format **3×3 sempurna** (8 modul utama + Profil), menghilangkan rongga asimetris.
+  * Tapping tile Profil membuka `ProfileDrawer` yang kini direduksi murni menjadi **Kartu Identitas Pengguna** (avatar, nama, role, unit sekolah).
+* **Utility Footer (Tindakan & Pengaturan Cepat)**:
+  * Di bawah grid 3×3 disematkan footer utilitas terstruktur:
+    1. **Tema Visual (Segmented Control Inline)**: Toggle `[Ivory | Midnight]` satu ketukan langsung tanpa membuka modal terpisah.
+    2. **Pasang Aplikasi (PWA / iOS Guide)**: Ditampilkan secara kondisional bila aplikasi belum terpasang.
+    3. **Keluar dari Sesi**: Diposisikan paling bawah dengan *danger tint* (`bg-danger-tint border-danger-line text-danger`) untuk mencegah ketidaksengajaan sentuhan.
+* **Single Control Point 432Hz Audio Gate**:
+  * Kontrol denting harmonis 432Hz dipusatkan secara eksklusif pada kartu beranda ritual harian pendidik, menghilangkan redundansi di Profile Drawer.
+
+---
 *Disahkan secara konstitusional oleh Architecture Review Board (ARB) pada 1 September 2026.*

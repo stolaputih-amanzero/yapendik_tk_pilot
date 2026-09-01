@@ -171,6 +171,7 @@ Untuk memastikan migrasi visual tidak memicu regresi pada **403/403 checks** Mas
   --brand-tint: oklch(0.25 0.06 260 / 0.10);
   --brand-accent: oklch(0.75 0.14 85);        /* Warm Gold (accent-valor) */
   --accent-valor: oklch(0.75 0.14 85);
+  --valor-deep: oklch(0.55 0.12 75);          /* Deep Bronze */
   --on-brand: oklch(0.985 0.005 90);          /* Warm Ivory */
   --on-accent: oklch(0.15 0.02 260);
   
@@ -232,6 +233,7 @@ Untuk memastikan migrasi visual tidak memicu regresi pada **403/403 checks** Mas
   --brand-tint: oklch(0.75 0.1 260 / 0.16);
   --brand-accent: oklch(0.80 0.15 85);        /* Bright Gold */
   --accent-valor: oklch(0.80 0.15 85);
+  --valor-deep: oklch(0.80 0.15 85);          /* Bright Gold */
   --on-brand: oklch(0.15 0.02 260);           /* Deep Midnight */
   --on-accent: oklch(0.15 0.02 260);
   
@@ -284,12 +286,12 @@ Untuk memastikan migrasi visual tidak memicu regresi pada **403/403 checks** Mas
 |---|---|---|---|
 | **UI & Body** | `Geist Sans` | `Inter, -apple-system, system-ui, sans-serif` | Navigasi, tombol, label formulir, teks paragraf, chips |
 | **Data & Kode** | `Geist Mono` | `JetBrains Mono, Menlo, monospace` | NISN, NIK, jam lokal, ID transaksi, REF-code, angka kuantitatif |
-| **Display & Seremonial** | `Instrument Serif` | `Playfair Display, Georgia, serif` | Sapaan Warm Briefing, kutipan Warm Echo, judul LPPA, sertifikat, layar Tutup Hari, angka finansial Yayasan, Header halaman workspace (EXPANDED only) |
+| **Display & Seremonial** | `Instrument Serif` | `Playfair Display, Georgia, serif` | Sapaan Warm Briefing, kutipan italic Warm Echo Carousel (§4.5), judul LPPA, sertifikat, layar Tutup Hari, angka finansial Yayasan, Header halaman workspace (EXPANDED only), Kartu nama profil pendidik (CR80 Name Card ADR-UX-013) |
 
 ### Aturan Emas Tipografi:
 1. **`tabular-nums` Mutlak:** Seluruh angka di tabel, jam, presensi, dan chip wajib menggunakan `font-variant-numeric: tabular-nums` (atau utilitas `tabular-nums`).
 2. **Fluid Typography:** Menggunakan skala `clamp()` adaptif (*Senior Eye Elasticity preserved*).
-3. **Strict Allowlist Instrument Serif:** Penggunaan font serif dibatasi secara ketat hanya pada konteks seremonial resmi dan Header halaman workspace (EXPANDED only). Dilarang keras menggunakan serif pada tombol aksi, header tabel, formulir input, atau grid data operasional.
+3. **Strict Allowlist Instrument Serif:** Penggunaan font serif dibatasi secara ketat hanya pada konteks seremonial resmi, Header halaman workspace (EXPANDED only), **kutipan italic Warm Echo Carousel** (sesuai §4.5), dan **Kartu nama digital pendidik CR80** (sesuai ADR-UX-013). Dilarang keras menggunakan serif pada tombol aksi, header tabel, formulir input, atau grid data operasional.
 4. **Strategi Pemuatan Font (*Zero FOIT*):** Font dimuat secara lokal via bundle `@fontsource` dengan deklarasi CSS `font-display: swap` untuk menjamin rendering teks instan pada koneksi lambat.
 
 ---

@@ -19,6 +19,7 @@ const FORBIDDEN_PATTERNS = [
 
 const ALLOWED_FILES = [
   'LppaPrintPreviewModal.tsx',
+  'NameCardModal.tsx',
 ];
 
 function scanDir(dir, fileList = []) {

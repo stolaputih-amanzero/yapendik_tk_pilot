@@ -1,10 +1,10 @@
 /**
  * Yapendik School OS — Premium SaaS Login & Identity Portal
- * Split-Screen Layout with Contextual Auth & Persona Simulation (Amanaura 100% Light Theme)
+ * Split-Screen Layout with Contextual Auth, Avatar Indicator & Biometric Option (ADR-UX-013)
  */
 
-import React, { useState } from 'react';
-import { useSecurityContext } from '../../auth/context';
+import React, { useState, useEffect } from 'react';
+import { useSecurityContext, GENESIS_PERSONAS } from '../../auth/context';
 import { Button } from '../ui';
 import { 
   Building2, 
@@ -15,27 +15,60 @@ import {
   Lock, 
   AlertCircle, 
   ArrowRight,
-  Flower2
+  Flower2,
+  Fingerprint,
+  CheckCircle2,
+  Info
 } from 'lucide-react';
 
 export const PremiumLoginScreen: React.FC = () => {
   const [loginEmail, setLoginEmail] = useState('');
   const [loginPassword, setLoginPassword] = useState('');
+  const [rememberMe, setRememberMe] = useState(false);
   const [loginError, setLoginError] = useState<string | null>(null);
+  const [passkeyNotice, setPasskeyNotice] = useState<string | null>(null);
   const [isLoggingIn, setIsLoggingIn] = useState(false);
 
   const { authState, signInWithEmail, switchPersona } = useSecurityContext();
+
+  // Load remember me & previous email if exists
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const savedEmail = localStorage.getItem('amanaura_remembered_email');
+      if (savedEmail) {
+        setLoginEmail(savedEmail);
+        setRememberMe(true);
+      }
+    }
+  }, []);
+
+  // Find matched persona for avatar preview based on email input
+  const matchedPersona = GENESIS_PERSONAS.find(p => 
+    loginEmail && p.email?.toLowerCase() === loginEmail.toLowerCase().trim()
+  );
 
   const handleRealLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!loginEmail || !loginPassword) return;
     setIsLoggingIn(true);
     setLoginError(null);
+    setPasskeyNotice(null);
+
+    if (rememberMe && typeof window !== 'undefined') {
+      localStorage.setItem('amanaura_remembered_email', loginEmail.trim());
+    } else if (typeof window !== 'undefined') {
+      localStorage.removeItem('amanaura_remembered_email');
+    }
+
     const res = await signInWithEmail(loginEmail, loginPassword);
     setIsLoggingIn(false);
     if (!res.success) {
       setLoginError(res.error || 'Autentikasi gagal. Periksa kembali email dan kata sandi Anda.');
     }
+  };
+
+  const handlePasskeyClick = () => {
+    setPasskeyNotice('Fitur login biometrik akan aktif penuh pada sprint berikutnya (#DW-02). Gunakan kata sandi Anda untuk saat ini.');
   };
 
   return (
@@ -124,7 +157,7 @@ export const PremiumLoginScreen: React.FC = () => {
       {/* SISI KANAN: FORM & IDENTITY PORTAL */}
       <div className="flex-1 flex flex-col justify-center items-center p-6 medium:p-10 expanded:p-12 relative">
         <div className="w-full max-w-md mx-auto bg-surface border border-line shadow-floating rounded-card p-6 medium:p-8">
-          {/* Mobile Branding Header (Only visible on mobile/small screens) */}
+          {/* Mobile Branding Header */}
           <div className="expanded:hidden flex items-center space-x-3 mb-6">
             <div className="w-10 h-10 rounded-field bg-surface-subtle border border-line flex items-center justify-center text-ink">
               <Building2 className="w-5 h-5 text-brand-primary" />
@@ -135,17 +168,44 @@ export const PremiumLoginScreen: React.FC = () => {
             </div>
           </div>
 
+          {/* User Avatar Indicator (if recognized) */}
+          <div className="mb-6 flex items-center space-x-3.5 p-3 rounded-2xl bg-surface-subtle border border-line-hairline">
+            {matchedPersona?.avatarUrl ? (
+              <img 
+                src={matchedPersona.avatarUrl} 
+                alt={matchedPersona.name}
+                className="w-12 h-12 rounded-full object-cover border border-brand-primary shrink-0 shadow-xs"
+                data-testid="login-user-avatar"
+              />
+            ) : (
+              <div 
+                className="w-12 h-12 rounded-full bg-brand-primary text-on-brand flex items-center justify-center text-base font-bold font-serif shrink-0 shadow-xs"
+                data-testid="login-user-avatar-fallback"
+              >
+                {matchedPersona ? matchedPersona.name.charAt(0) : '✦'}
+              </div>
+            )}
+            <div className="min-w-0 flex-1 text-left">
+              <h2 className="text-sm font-bold text-ink truncate">
+                {matchedPersona ? matchedPersona.name : 'Portal Akses Institusi'}
+              </h2>
+              <p className="text-[11px] text-ink-soft truncate">
+                {matchedPersona ? matchedPersona.roleTitle : 'Silakan autentikasi identitas Anda'}
+              </p>
+            </div>
+          </div>
+
           {/* Form Header */}
-          <div className="mb-6">
-            <h2 className="text-xl medium:text-2xl font-bold tracking-tight text-ink mb-1 font-display">
-              Portal Akses Institusi
+          <div className="mb-5 text-left">
+            <h2 className="text-lg font-bold tracking-tight text-ink mb-0.5 font-display">
+              Autentikasi Akun
             </h2>
             <p className="text-xs text-ink-soft font-medium">
-              Silakan autentikasi identitas Anda untuk memasuki ruang kerja Amanaura OS.
+              Masukkan kredensial resmi Yayasan Yapendik.
             </p>
           </div>
 
-          {/* spesial notices (C-13) */}
+          {/* Special Notices (C-13) */}
           {authState === 'AUTHENTICATED_NO_PERSON' && (
             <div className="bg-warning-tint border border-warning-line rounded-field p-4 mb-6 text-left text-xs">
               <div className="flex items-center space-x-2 text-warning-deep font-bold mb-1.5">
@@ -195,7 +255,7 @@ export const PremiumLoginScreen: React.FC = () => {
                 <input
                   type="email"
                   required
-                  placeholder="contoh: sherylumbas9@gmail.com"
+                  placeholder="contoh: yapendikmaranathajkt@gmail.com"
                   value={loginEmail}
                   onChange={(e) => setLoginEmail(e.target.value)}
                   className="w-full bg-surface-subtle border border-line rounded-field pl-10 pr-4 py-2.5 text-xs text-ink placeholder:text-ink-faint outline-none focus:border-brand focus:ring-1 focus:ring-brand transition-all font-medium"
@@ -222,10 +282,31 @@ export const PremiumLoginScreen: React.FC = () => {
               </div>
             </div>
 
+            {/* Remember Me Checkbox */}
+            <div className="flex items-center justify-between text-xs pt-0.5">
+              <label className="flex items-center space-x-2 cursor-pointer select-none">
+                <input
+                  type="checkbox"
+                  checked={rememberMe}
+                  onChange={(e) => setRememberMe(e.target.checked)}
+                  className="rounded border-line-hairline text-brand-primary focus:ring-brand cursor-pointer"
+                  data-testid="checkbox-remember-me"
+                />
+                <span className="text-ink-soft text-[11px]">Ingat saya di perangkat ini</span>
+              </label>
+            </div>
+
             {loginError && (
               <div className="p-3 bg-danger-tint border border-danger-line rounded-field text-danger-deep text-xs font-medium flex items-start space-x-2.5">
                 <AlertCircle className="w-4 h-4 text-danger shrink-0 mt-0.5" />
                 <div className="leading-relaxed">{loginError}</div>
+              </div>
+            )}
+
+            {passkeyNotice && (
+              <div className="p-3 bg-info-tint border border-info-line rounded-field text-info-deep text-xs font-medium flex items-start space-x-2.5" data-testid="passkey-notice">
+                <Info className="w-4 h-4 text-info shrink-0 mt-0.5" />
+                <div className="leading-relaxed">{passkeyNotice}</div>
               </div>
             )}
 
@@ -237,14 +318,25 @@ export const PremiumLoginScreen: React.FC = () => {
               rightIcon={!isLoggingIn ? <ArrowRight className="w-4 h-4" /> : undefined}
               className="w-full shadow-hairline mt-2"
             >
-              {isLoggingIn ? 'Memvalidasi Identitas...' : 'Masuk ke Ruang Kerja'}
+              {isLoggingIn ? 'Memvalidasi Identitas...' : 'Masuk dengan Kata Sandi'}
             </Button>
+
+            {/* Biometric / Passkey Login Button (#DW-02 placeholder) */}
+            <button
+              type="button"
+              onClick={handlePasskeyClick}
+              className="w-full py-3 px-4 rounded-xl bg-surface-subtle hover-only:bg-surface border border-line hover-only:border-brand-primary text-ink text-xs font-sans font-semibold flex items-center justify-center space-x-2 transition-all cursor-pointer min-h-[44px] shadow-xs"
+              data-testid="btn-login-passkey"
+            >
+              <Fingerprint className="w-4 h-4 text-brand-primary" />
+              <span>Login dengan Sidik Jari / Biometrik</span>
+            </button>
 
             <div className="pt-3 border-t border-line text-center">
               <button
                 type="button"
                 onClick={() => switchPersona('user_teacher_erna')}
-                className="text-xs text-brand-primary font-semibold hover-only:underline cursor-pointer py-1"
+                className="text-xs font-sans text-brand-primary font-semibold hover-only:underline cursor-pointer py-1"
               >
                 Masuk Mode Simulasi Pendidik (Erna Boykela R) →
               </button>
@@ -255,4 +347,5 @@ export const PremiumLoginScreen: React.FC = () => {
     </div>
   );
 };
+
 

@@ -415,7 +415,8 @@ src/components/ui/
  ├── AutoResizeTextarea.tsx  # Form observasi fluid
  ├── Skeleton.tsx            # Balok memuat berdenyut halus (Anti-Spinner) ← BARU
  ├── ToastHUD.tsx            # Notifikasi mengambang + 5-Second Undo
- └── AvatarChild.tsx         # Deterministic Pastel & Symbol Privacy
+ ├── AvatarChild.tsx         # Deterministic Pastel & Symbol Privacy
+ └── WarmEchoCarousel.tsx    # Gema Hangat: karusel kutipan ber-consent + Heart Reaction (Suite 31 M2/M4)
 
 src/hooks/
  ├── useTheme.ts             # Theme switcher (Frangipani Day ↔ Night Temple)
@@ -446,6 +447,27 @@ src/hooks/
 > * `offlineQueue.ts` (IndexedDB Mutation Queue I/O)
 >
 > Status: Akan dibangun saat fitur PWA & interaksi lanjutan diaktifkan.
+
+### 4.5 The Warm Echo Carousel Doctrine (Gema Hangat)
+Definisi: Karusel kutipan refleksi orang tua/pendidik yang memanusiakan briefing — kehangatan yang disegel tipografis, bukan metrik.
+
+Anatomi Kanonikal:
+1. Grand Quote Mark   : glyph “ Instrument Serif, accent-valor, aria-hidden, kiri-atas.
+2. Quote Body         : font-serif italic, line-clamp-3, tap untuk mekar (Zero-CLS).
+3. Author Avatar Pill : inisial 2-huruf, pastel deterministik (Signature #5).
+4. Attribution Row    : nama (font-semibold) • "Kelas TK X" (ink-faint) •
+                        kanan: Heart Reaction + Topic Tag — ikon Lucide Heart
+                        bertoken, BUKAN emoji (Law 11).
+5. Navigation Chevrons: ghost ‹ › (Lucide), hit-area ≥48dp, swipe pada TOUCH,
+                        Auto-Center Snap; lenyap bila echo ≤ 1.
+6. Luminous Heart Pop : reaksi personal satu-ketukan, fisika Amanaura Spring;
+                        tanpa agregat/leaderboard (H-07).
+
+Hukum:
+- No-Autoplay: rotasi hanya manual (Calm & Dignified).
+- Universal Availability: dirender pada PRATINJAU, OPERASIONAL, PENUTUP.
+- Privacy: kutipan ber-consent orang tua; zero PII anak (FB-01).
+- Empty State: "Belum ada gema hangat hari ini." + onboarding sopan.
 
 ---
 
@@ -540,6 +562,7 @@ src/hooks/
 2. **Polite Dismissible Coachmarks**: Kartu petunjuk pengguna baru dengan tombol `[ Mengerti ✕ ]` yang hilang selamanya setelah ditutup.
 3. **1-Tap Term Explainer (`ⓘ`)**: Ikon mikro di samping istilah teknis yang memunculkan popover/sheet penjelasan 1 kalimat.
 4. **Interactive Onboarding Empty States**: Layar data kosong otomatis berubah menjadi checklist 3 langkah awal.
+5. **Gema Hangat → §4.5**: Kutipan refleksi & afirmasi harian ber-consent (lihat [PART IV §4.5 The Warm Echo Carousel Doctrine](#45-the-warm-echo-carousel-doctrine-gema-hangat)).
 
 ---
 
@@ -1575,3 +1598,46 @@ Untuk menjamin integritas struktural, ergonomi layar sentuh, dan kepatuhan absol
     * **Pensiun FAB**: Komponen `QuickCaptureFloatingButton` resmi dipensiunkan dari seluruh workspace guru untuk melenyapkan duplicate chrome dan risiko content collision.
     * **Akses Rekam Momen Lengkap**: Aksi rekam momen belajar dipertahankan via inline contextual CTA di linimasa sirkadian (Beranda Kelas) dan tile "Momen Belajar" di sheet "MENU NAVIGASI".
     * **CI Guard Hardening**: Mengganti `R-FAB-CANONICAL-OFFSET` dengan `R-FAB-ALLOWLIST` (allowlist kosong) pada `amanaura-audit.mjs`.
+* **v3.0.10-PATCH (2026-09-01)**:
+  * **Warm Echo Carousel Canonization & Component Index Sync Guard**:
+    * **Section 4.4 & 4.5 Update**: Warm Echo Carousel ratified; §4.4+§4.5 added; R-INDEX-SYNC guard active.
+    * **Section 6.4 Cross-Reference**: Menambahkan rujukan silang Gema Hangat → §4.5 pada *Instant Information & Progressive Guidance*.
+    * **Surface 4 CI Guard**: `scripts/doc-code-sync.mjs` mengunci sinkronisasi §4.4 terhadap seluruh primitif UI dan workspace ratifikasi (`R-INDEX-SYNC`).
+  * **Magnetic Horizon Handle v2 (ADR-UX-012 Addendum IV)**:
+    * **Magnetic Swipe Affordance**: Horizon Handle ditingkatkan dengan split hairline notch, radial soft golden glow, micro-lift animation (`animate-horizon-lift`), dan 1-time swipe coachmark tanpa menambah teks permanen.
+* **v3.0.11-PATCH (2026-09-01)**:
+  * **Horizon Handle v3 — Dawn Aura Affordance (ADR-UX-012 Addendum V)**:
+    * **The Dawn Aura Ergonomics**: Horizon Handle ditingkatkan dengan golden chevron (`text-accent-valor`), kolam pendaran fajar 4× (`w-24 h-10 blur-lg bg-accent-valor/18 dark:bg-accent-valor/25`), hairline gradient menyala ke pusat (`via-line-soft to-accent-valor/40`), pernapasan sinkron 3.2s (`animate-horizon-breathe`), dan first-visit bloom 900ms (`animate-horizon-bloom`).
+    * **CI Guard Hardening**: Memperluas aturan `R-HORIZON-MAGNETIC` pada `scripts/amanaura-audit.mjs` untuk memvalidasi keberadaan golden chevron dan glow pool serta melarang penggunaan `text-ink-faint` pada chevron.
+* **v3.0.12-PATCH (2026-09-01)**:
+  * **Horizon Handle v3.1 — Ivory Calibration Micro-Patch (ADR-UX-012 Addendum V)**:
+    * **New Color Token `--valor-deep`**: Menambahkan token perunggu dalam `--valor-deep: oklch(0.55 0.12 75)` di Ivory Canvas (kontras 3:1 WCAG non-teks) dan alias bright gold `oklch(0.80 0.15 85)` di Midnight Sanctuary.
+    * **Ivory Horizon Affordance**: Mengkalibrasi chevron light ke `text-valor-deep`, gradien hairline light ke `via-line-strong to-valor-deep/60`, meningkatkan glow ke `bg-accent-valor/28`, menghapus chip putih (paritas penuh kanvas), dan menambahkan pita *sunrise tint*.
+    * **4-Surface Sync & CI Guard**: `scripts/doc-code-sync.mjs` mengunci 44 Light dan 45 Dark tokens, dan `R-HORIZON-MAGNETIC` mendukung pasangan tema `text-valor-deep` / `text-accent-valor`.
+* **v3.0.13-PATCH (2026-09-01)**:
+  * **Horizon Handle v4 — The Peeking Horizon (ADR-UX-012 Addendum VI)**:
+    * **The Peeking Notch Ergonomics**: Horizon Handle ditingkatkan dengan notch navy (`w-20 h-9 rounded-t-2xl bg-brand dark:bg-surface-subtle`) yang menempel (*flush*) di tepi bawah sebagai pratinjau bibir sheet navigasi.
+    * **Universal Golden Chevron**: Chevron emas `text-accent-valor` (`strokeWidth={2.5}`) terbaca dengan kontras mutlak 8:1 di atas navy (Light) dan 5:1 di atas elevated night (Dark).
+    * **Warm Sky Gradient Canopy**: Kanopi fajar `h-14 bg-gradient-to-t` membentang di atas garis horizon menggantikan blur pool.
+    * **CI Guard Hardening**: Memperbarui aturan `R-HORIZON-MAGNETIC` pada `scripts/amanaura-audit.mjs` untuk mengunci struktur notch dan melarang bayangan melayang (`shadow-floating`).
+* **v3.0.14-PATCH (2026-09-01)**:
+  * **Sheet & Profile Hygiene — 3-Col Wrap & Role-Aware Curation (ADR-UX-012 Addendum VII)**:
+    * **No Search in COMPACT Sheet**: Mengamandemen Guardrail G-2 untuk mencegah oklusi keyboard virtual pada navigasi mobile.
+    * **3-Column Grid with Full Label Wrap**: Mengganti 4x2 grid dengan `grid-cols-3 gap-3` dan `break-words` tanpa truncate/ellipsis (contoh: "Buku Penghubung" melipat 2 baris).
+    * **Role-Aware Curation**: Menghapus baris Living Contract, Uji Otorisasi TESTS, dan Cloud Sync SHA dari chrome guru di MobileOmniBar dan ProfileDrawer (akses langsung via URL tetap aktif).
+* **v3.0.15-PATCH (2026-09-01)**:
+  * **Single-Surface Launcher Consolidation (ADR-UX-012 Addendum VIII)**:
+    * **3×3 Perfect Grid (8 Primitives + Profil Tile)**: Tile Profil melengkapi grid menjadi 3×3 simetris, membuka ProfileDrawer sebagai kartu identitas murni.
+    * **Action-Oriented Utility Footer**: Menyematkan toggle inline Tema Visual `[Ivory | Midnight]` (SegmentedControl), Panduan Pasang PWA/iOS, dan Keluar dari Sesi (danger tint di paling bawah).
+    * **Single Control Point 432Hz Audio Gate**: Kontrol denting 432Hz dipusatkan secara eksklusif pada kartu ritual beranda pendidik.
+* **v3.0.16-PATCH (2026-09-01)**:
+  * **Profile Hub v2, CR80 Digital Name Card & Supabase User Management (ADR-UX-013)**:
+    * **Avatar & Profile Management**: Upload foto dengan Canvas 512px downscale, integrasi bucket `staff-avatars` dan dialog edit nama & masked phone (+62).
+    * **CR80 "Agung" Digital Name Card**: Kartu nama digital 85.6×54mm (landscape) dengan Instrument Serif, watermark Padma & Gunungan (≤4%), ornamen sudut brass (15%), dan QR Code terverifikasi tanpa kebocoran kredensial.
+    * **Security & Biometric Preferences**: Ganti kata sandi mandiri, passkey soft-toggle (#DW-02), doktrin email immutability, dan penghapusan panduan install statis (#DW-01).
+* **v3.0.17-PATCH (2026-09-01)**:
+  * **Persona-Aware Name Card — Guardian Family Card & Desktop Sidebar Utilities (ADR-UX-013 Addendum X)**:
+    * **Kartu Keluarga (Pickup Verification Card)**: Percabangan otomatis pada NameCardModal saat persona GUARDIAN aktif: foto/AvatarChild anak sebagai visual anchor, nama anak dalam Instrument Serif, kelas, blok orang tua/wali primer & terkait, dan kontak wali.
+    * **Privacy Shield**: Pagar privasi mutlak dengan proteksi zero NIK/NIS anak pada permukaan kartu fisik/digital.
+    * **Desktop Sidebar Chrome Completeness**: Menyematkan kontrol Tema Visual `[Ivory | Midnight]` dan Keluar dari Sesi pada bottom utility sidebar desktop, serta mereformasi aksi penutup Profile Hub menjadi *Selesai & Simpan Profil*.
+

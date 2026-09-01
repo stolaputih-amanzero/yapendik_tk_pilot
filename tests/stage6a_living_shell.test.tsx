@@ -18,6 +18,7 @@ import { renderToString } from 'react-dom/server';
 import { getBreathStateMeta, ConnectionState } from '../src/hooks/useConnectionStatus';
 import { TopBar } from '../src/components/layout/TopBar';
 import { ProfileDrawer } from '../src/components/layout/ProfileDrawer';
+import { MobileOmniBar } from '../src/components/layout/MobileOmniBar';
 import { SecurityContextProvider } from '../src/auth/context';
 
 console.log('════════════════════════════════════════════════════════════════');
@@ -141,20 +142,20 @@ async function runLivingShellTests() {
     });
   }
 
-  // --- MODULE 5: iOS Install Guide Fallback (ADR-UX-011 §5.3) ---
-  console.log('\n--- MODULE 5: Profile Drawer iOS Install Guide Fallback ---');
+  // --- MODULE 5: PWA Install Noise Removal & Deferred Guide (ADR-UX-013 #DW-01) ---
+  console.log('\n--- MODULE 5: MobileOmniBar Deferred Install Guide (#DW-01) ---');
   {
-    runCheck('Profile Drawer [INSTALL ACTIONS]: Drawer renders PWA install button', () => {
+    runCheck('MobileOmniBar [NO STATIC INSTALL NOISE]: Sheet utility footer does not render static PWA guide noise (DW-01)', () => {
       const html = renderToString(
         <SecurityContextProvider>
-          <ProfileDrawer 
-            isOpen={true}
-            onClose={() => {}}
+          <MobileOmniBar 
+            activeTab="TEACHER_HOME"
             onSelectTab={() => {}}
+            initialExpanded={true}
           />
         </SecurityContextProvider>
       );
-      assert.ok(html.includes('Panduan Pasang Aplikasi') || html.includes('Pasang di iOS') || html.includes('Pasang Aplikasi'), 'Expected install action in ProfileDrawer');
+      assert.ok(!html.includes('Panduan Pasang Aplikasi'), 'Expected static PWA guide noise deferred (DW-01)');
     });
   }
 

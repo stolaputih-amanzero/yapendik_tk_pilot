@@ -48,6 +48,7 @@ html, body, #root,
   --brand-tint: oklch(0.25 0.06 260 / 0.10);
   --brand-accent: oklch(0.75 0.14 85);        /* Warm Gold (accent-valor) */
   --accent-valor: oklch(0.75 0.14 85);
+  --valor-deep: oklch(0.55 0.12 75);          /* Deep Bronze */
   --on-brand: oklch(0.985 0.005 90);          /* Warm Ivory */
   --on-accent: oklch(0.15 0.02 260);
   
@@ -106,6 +107,7 @@ html, body, #root,
   --brand-tint: oklch(0.75 0.1 260 / 0.16);
   --brand-accent: oklch(0.80 0.15 85);        /* Bright Gold */
   --accent-valor: oklch(0.80 0.15 85);
+  --valor-deep: oklch(0.80 0.15 85);          /* Bright Gold */
   --on-brand: oklch(0.15 0.02 260);           /* Deep Midnight */
   --on-accent: oklch(0.15 0.02 260);
   
@@ -229,6 +231,7 @@ html.dark input[type="date"]::-webkit-calendar-picker-indicator:hover {
   --color-brand-tint: var(--brand-tint);
   --color-brand-accent: var(--brand-accent);
   --color-accent-valor: var(--accent-valor);
+  --color-valor-deep: var(--valor-deep);
   --color-on-brand: var(--on-brand);
   --color-on-accent: var(--on-accent);
   
@@ -323,6 +326,34 @@ html.dark input[type="date"]::-webkit-calendar-picker-indicator:hover {
   }
 }
 
+/* Keyframes for Horizon Handle Dawn Aura (3.2s Synchronized Breathing) */
+@keyframes amanaura-horizon-breathe {
+  0%, 100% {
+    transform: translateY(0);
+    opacity: 0.6;
+  }
+  50% {
+    transform: translateY(-3px);
+    opacity: 1;
+  }
+}
+
+/* Keyframes for Horizon Handle First-Visit Bloom (900ms Pedagogical Bloom) */
+@keyframes amanaura-horizon-bloom {
+  0% {
+    transform: translateY(0) scale(0.85);
+    opacity: 0.4;
+  }
+  50% {
+    transform: translateY(-6px) scale(1.15);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(0) scale(1);
+    opacity: 0.8;
+  }
+}
+
 /* 
  * CANONICAL REUSABLE UTILITIES & ERGONOMICS
  */
@@ -344,6 +375,19 @@ html.dark input[type="date"]::-webkit-calendar-picker-indicator:hover {
   /* Amanaura Golden Breathing Border Aura */
   .animate-gold-breath {
     animation: amanaura-gold-breath 3.5s ease-in-out infinite;
+  }
+
+  /* Magnetic Horizon Handle Dawn Aura */
+  .animate-horizon-breathe {
+    animation: amanaura-horizon-breathe 3.2s ease-in-out infinite;
+  }
+
+  .animate-horizon-bloom {
+    animation: amanaura-horizon-bloom 900ms cubic-bezier(0.16, 1, 0.3, 1) 1;
+  }
+
+  .animate-horizon-lift {
+    animation: amanaura-horizon-breathe 3.2s ease-in-out infinite;
   }
 
   /* Explicit Shadow Utilities */

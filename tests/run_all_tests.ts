@@ -81,8 +81,11 @@ try {
   console.log('\n▶️ [24/25] Running Stage 6-A Weight Discipline & VRT Final Suite (Suite 35)...');
   execSync('npx tsx tests/stage6a_weight_discipline_vrt.test.tsx', { stdio: 'inherit' });
 
-  console.log('\n▶️ [25/25] Running Stage 6-A Identity Hygiene & Brand Contracts Suite (Suite 36)...');
+  console.log('\n▶️ [25/26] Running Stage 6-A Identity Hygiene & Brand Contracts Suite (Suite 36)...');
   execSync('npx tsx tests/stage6a_identity_hygiene.test.tsx', { stdio: 'inherit' });
+
+  console.log('\n▶️ [26/26] Running Stage 6-A Profile Hub v2 & User Management Suite (Suite 37)...');
+  execSync('npx tsx tests/stage6a_profile_hub.test.tsx', { stdio: 'inherit' });
 
   console.log('\n════════════════════════════════════════════════════════════════');
   console.log('🎉 ALL INTEGRATION & SECURITY TEST SUITES COMPLETED SUCCESSFULLY');

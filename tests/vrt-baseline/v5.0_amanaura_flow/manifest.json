@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-08-31T22:10:41.670Z",
+  "timestamp": "2026-09-01T13:28:22.493Z",
   "version": "1.0.0-amanaura-os-flow-sealed",
   "totalCaptures": 84,
   "files": [
@@ -9,7 +9,7 @@
       "viewport": "COMPACT (390x844)",
       "theme": "Ivory Canvas",
       "file": "beranda-guru_compact_light.png",
-      "sha256": "0c445cfc5c711439"
+      "sha256": "e2aeb34c347d9ec9"
     },
     {
       "route": "#presensi",
@@ -17,7 +17,7 @@
       "viewport": "COMPACT (390x844)",
       "theme": "Ivory Canvas",
       "file": "presensi_compact_light.png",
-      "sha256": "0c445cfc5c711439"
+      "sha256": "e2aeb34c347d9ec9"
     },
     {
       "route": "#kerja-harian",
@@ -25,7 +25,7 @@
       "viewport": "COMPACT (390x844)",
       "theme": "Ivory Canvas",
       "file": "kerja-harian_compact_light.png",
-      "sha256": "0c445cfc5c711439"
+      "sha256": "e2aeb34c347d9ec9"
     },
     {
       "route": "#observasi",
@@ -33,7 +33,7 @@
       "viewport": "COMPACT (390x844)",
       "theme": "Ivory Canvas",
       "file": "observasi_compact_light.png",
-      "sha256": "0c445cfc5c711439"
+      "sha256": "e2aeb34c347d9ec9"
     },
     {
       "route": "#perkembangan",
@@ -41,7 +41,7 @@
       "viewport": "COMPACT (390x844)",
       "theme": "Ivory Canvas",
       "file": "perkembangan_compact_light.png",
-      "sha256": "0c445cfc5c711439"
+      "sha256": "e2aeb34c347d9ec9"
     },
     {
       "route": "#jejak-anak",
@@ -49,7 +49,7 @@
       "viewport": "COMPACT (390x844)",
       "theme": "Ivory Canvas",
       "file": "jejak-anak_compact_light.png",
-      "sha256": "0c445cfc5c711439"
+      "sha256": "e2aeb34c347d9ec9"
     },
     {
       "route": "#buku-penghubung",
@@ -57,7 +57,7 @@
       "viewport": "COMPACT (390x844)",
       "theme": "Ivory Canvas",
       "file": "buku-penghubung_compact_light.png",
-      "sha256": "0c445cfc5c711439"
+      "sha256": "e2aeb34c347d9ec9"
     },
     {
       "route": "#portal-keluarga",
@@ -65,7 +65,7 @@
       "viewport": "COMPACT (390x844)",
       "theme": "Ivory Canvas",
       "file": "portal-keluarga_compact_light.png",
-      "sha256": "0c445cfc5c711439"
+      "sha256": "e2aeb34c347d9ec9"
     },
     {
       "route": "#adopsi-ks",
@@ -73,7 +73,7 @@
       "viewport": "COMPACT (390x844)",
       "theme": "Ivory Canvas",
       "file": "adopsi-ks_compact_light.png",
-      "sha256": "0c445cfc5c711439"
+      "sha256": "e2aeb34c347d9ec9"
     },
     {
       "route": "#yayasan",
@@ -81,7 +81,7 @@
       "viewport": "COMPACT (390x844)",
       "theme": "Ivory Canvas",
       "file": "yayasan_compact_light.png",
-      "sha256": "0c445cfc5c711439"
+      "sha256": "e2aeb34c347d9ec9"
     },
     {
       "route": "#kesehatan-sekolah",
@@ -89,7 +89,7 @@
       "viewport": "COMPACT (390x844)",
       "theme": "Ivory Canvas",
       "file": "kesehatan-sekolah_compact_light.png",
-      "sha256": "0c445cfc5c711439"
+      "sha256": "e2aeb34c347d9ec9"
     },
     {
       "route": "#siklus-akademik",
@@ -97,7 +97,7 @@
       "viewport": "COMPACT (390x844)",
       "theme": "Ivory Canvas",
       "file": "siklus-akademik_compact_light.png",
-      "sha256": "0c445cfc5c711439"
+      "sha256": "e2aeb34c347d9ec9"
     },
     {
       "route": "#uji-otorisasi",
@@ -105,7 +105,7 @@
       "viewport": "COMPACT (390x844)",
       "theme": "Ivory Canvas",
       "file": "uji-otorisasi_compact_light.png",
-      "sha256": "0c445cfc5c711439"
+      "sha256": "e2aeb34c347d9ec9"
     },
     {
       "route": "#percontohan",
@@ -113,7 +113,7 @@
       "viewport": "COMPACT (390x844)",
       "theme": "Ivory Canvas",
       "file": "percontohan_compact_light.png",
-      "sha256": "0c445cfc5c711439"
+      "sha256": "e2aeb34c347d9ec9"
     },
     {
       "route": "#beranda-guru",
@@ -121,7 +121,7 @@
       "viewport": "COMPACT (390x844)",
       "theme": "Midnight Sanctuary",
       "file": "beranda-guru_compact_dark.png",
-      "sha256": "0c445cfc5c711439"
+      "sha256": "e2aeb34c347d9ec9"
     },
     {
       "route": "#presensi",
@@ -129,7 +129,7 @@
       "viewport": "COMPACT (390x844)",
       "theme": "Midnight Sanctuary",
       "file": "presensi_compact_dark.png",
-      "sha256": "0c445cfc5c711439"
+      "sha256": "e2aeb34c347d9ec9"
     },
     {
       "route": "#kerja-harian",
@@ -137,7 +137,7 @@
       "viewport": "COMPACT (390x844)",
       "theme": "Midnight Sanctuary",
       "file": "kerja-harian_compact_dark.png",
-      "sha256": "0c445cfc5c711439"
+      "sha256": "e2aeb34c347d9ec9"
     },
     {
       "route": "#observasi",
@@ -145,7 +145,7 @@
       "viewport": "COMPACT (390x844)",
       "theme": "Midnight Sanctuary",
       "file": "observasi_compact_dark.png",
-      "sha256": "0c445cfc5c711439"
+      "sha256": "e2aeb34c347d9ec9"
     },
     {
       "route": "#perkembangan",
@@ -153,7 +153,7 @@
       "viewport": "COMPACT (390x844)",
       "theme": "Midnight Sanctuary",
       "file": "perkembangan_compact_dark.png",
-      "sha256": "0c445cfc5c711439"
+      "sha256": "e2aeb34c347d9ec9"
     },
     {
       "route": "#jejak-anak",
@@ -161,7 +161,7 @@
       "viewport": "COMPACT (390x844)",
       "theme": "Midnight Sanctuary",
       "file": "jejak-anak_compact_dark.png",
-      "sha256": "0c445cfc5c711439"
+      "sha256": "e2aeb34c347d9ec9"
     },
     {
       "route": "#buku-penghubung",
@@ -169,7 +169,7 @@
       "viewport": "COMPACT (390x844)",
       "theme": "Midnight Sanctuary",
       "file": "buku-penghubung_compact_dark.png",
-      "sha256": "0c445cfc5c711439"
+      "sha256": "e2aeb34c347d9ec9"
     },
     {
       "route": "#portal-keluarga",
@@ -177,7 +177,7 @@
       "viewport": "COMPACT (390x844)",
       "theme": "Midnight Sanctuary",
       "file": "portal-keluarga_compact_dark.png",
-      "sha256": "0c445cfc5c711439"
+      "sha256": "e2aeb34c347d9ec9"
     },
     {
       "route": "#adopsi-ks",
@@ -185,7 +185,7 @@
       "viewport": "COMPACT (390x844)",
       "theme": "Midnight Sanctuary",
       "file": "adopsi-ks_compact_dark.png",
-      "sha256": "0c445cfc5c711439"
+      "sha256": "e2aeb34c347d9ec9"
     },
     {
       "route": "#yayasan",
@@ -193,7 +193,7 @@
       "viewport": "COMPACT (390x844)",
       "theme": "Midnight Sanctuary",
       "file": "yayasan_compact_dark.png",
-      "sha256": "0c445cfc5c711439"
+      "sha256": "e2aeb34c347d9ec9"
     },
     {
       "route": "#kesehatan-sekolah",
@@ -201,7 +201,7 @@
       "viewport": "COMPACT (390x844)",
       "theme": "Midnight Sanctuary",
       "file": "kesehatan-sekolah_compact_dark.png",
-      "sha256": "0c445cfc5c711439"
+      "sha256": "e2aeb34c347d9ec9"
     },
     {
       "route": "#siklus-akademik",
@@ -209,7 +209,7 @@
       "viewport": "COMPACT (390x844)",
       "theme": "Midnight Sanctuary",
       "file": "siklus-akademik_compact_dark.png",
-      "sha256": "0c445cfc5c711439"
+      "sha256": "e2aeb34c347d9ec9"
     },
     {
       "route": "#uji-otorisasi",
@@ -217,7 +217,7 @@
       "viewport": "COMPACT (390x844)",
       "theme": "Midnight Sanctuary",
       "file": "uji-otorisasi_compact_dark.png",
-      "sha256": "0c445cfc5c711439"
+      "sha256": "e2aeb34c347d9ec9"
     },
     {
       "route": "#percontohan",
@@ -225,7 +225,7 @@
       "viewport": "COMPACT (390x844)",
       "theme": "Midnight Sanctuary",
       "file": "percontohan_compact_dark.png",
-      "sha256": "0c445cfc5c711439"
+      "sha256": "e2aeb34c347d9ec9"
     },
     {
       "route": "#beranda-guru",
@@ -233,7 +233,7 @@
       "viewport": "MEDIUM (768x1024)",
       "theme": "Ivory Canvas",
       "file": "beranda-guru_medium_light.png",
-      "sha256": "289f4edb8f3f0c33"
+      "sha256": "72d8feb751e3aa63"
     },
     {
       "route": "#presensi",
@@ -241,7 +241,7 @@
       "viewport": "MEDIUM (768x1024)",
       "theme": "Ivory Canvas",
       "file": "presensi_medium_light.png",
-      "sha256": "289f4edb8f3f0c33"
+      "sha256": "72d8feb751e3aa63"
     },
     {
       "route": "#kerja-harian",
@@ -249,7 +249,7 @@
       "viewport": "MEDIUM (768x1024)",
       "theme": "Ivory Canvas",
       "file": "kerja-harian_medium_light.png",
-      "sha256": "289f4edb8f3f0c33"
+      "sha256": "72d8feb751e3aa63"
     },
     {
       "route": "#observasi",
@@ -257,7 +257,7 @@
       "viewport": "MEDIUM (768x1024)",
       "theme": "Ivory Canvas",
       "file": "observasi_medium_light.png",
-      "sha256": "289f4edb8f3f0c33"
+      "sha256": "72d8feb751e3aa63"
     },
     {
       "route": "#perkembangan",
@@ -265,7 +265,7 @@
       "viewport": "MEDIUM (768x1024)",
       "theme": "Ivory Canvas",
       "file": "perkembangan_medium_light.png",
-      "sha256": "289f4edb8f3f0c33"
+      "sha256": "72d8feb751e3aa63"
     },
     {
       "route": "#jejak-anak",
@@ -273,7 +273,7 @@
       "viewport": "MEDIUM (768x1024)",
       "theme": "Ivory Canvas",
       "file": "jejak-anak_medium_light.png",
-      "sha256": "289f4edb8f3f0c33"
+      "sha256": "72d8feb751e3aa63"
     },
     {
       "route": "#buku-penghubung",
@@ -281,7 +281,7 @@
       "viewport": "MEDIUM (768x1024)",
       "theme": "Ivory Canvas",
       "file": "buku-penghubung_medium_light.png",
-      "sha256": "289f4edb8f3f0c33"
+      "sha256": "72d8feb751e3aa63"
     },
     {
       "route": "#portal-keluarga",
@@ -289,7 +289,7 @@
       "viewport": "MEDIUM (768x1024)",
       "theme": "Ivory Canvas",
       "file": "portal-keluarga_medium_light.png",
-      "sha256": "289f4edb8f3f0c33"
+      "sha256": "72d8feb751e3aa63"
     },
     {
       "route": "#adopsi-ks",
@@ -297,7 +297,7 @@
       "viewport": "MEDIUM (768x1024)",
       "theme": "Ivory Canvas",
       "file": "adopsi-ks_medium_light.png",
-      "sha256": "289f4edb8f3f0c33"
+      "sha256": "72d8feb751e3aa63"
     },
     {
       "route": "#yayasan",
@@ -305,7 +305,7 @@
       "viewport": "MEDIUM (768x1024)",
       "theme": "Ivory Canvas",
       "file": "yayasan_medium_light.png",
-      "sha256": "289f4edb8f3f0c33"
+      "sha256": "72d8feb751e3aa63"
     },
     {
       "route": "#kesehatan-sekolah",
@@ -313,7 +313,7 @@
       "viewport": "MEDIUM (768x1024)",
       "theme": "Ivory Canvas",
       "file": "kesehatan-sekolah_medium_light.png",
-      "sha256": "289f4edb8f3f0c33"
+      "sha256": "72d8feb751e3aa63"
     },
     {
       "route": "#siklus-akademik",
@@ -321,7 +321,7 @@
       "viewport": "MEDIUM (768x1024)",
       "theme": "Ivory Canvas",
       "file": "siklus-akademik_medium_light.png",
-      "sha256": "289f4edb8f3f0c33"
+      "sha256": "72d8feb751e3aa63"
     },
     {
       "route": "#uji-otorisasi",
@@ -329,7 +329,7 @@
       "viewport": "MEDIUM (768x1024)",
       "theme": "Ivory Canvas",
       "file": "uji-otorisasi_medium_light.png",
-      "sha256": "289f4edb8f3f0c33"
+      "sha256": "72d8feb751e3aa63"
     },
     {
       "route": "#percontohan",
@@ -337,7 +337,7 @@
       "viewport": "MEDIUM (768x1024)",
       "theme": "Ivory Canvas",
       "file": "percontohan_medium_light.png",
-      "sha256": "289f4edb8f3f0c33"
+      "sha256": "72d8feb751e3aa63"
     },
     {
       "route": "#beranda-guru",
@@ -345,7 +345,7 @@
       "viewport": "MEDIUM (768x1024)",
       "theme": "Midnight Sanctuary",
       "file": "beranda-guru_medium_dark.png",
-      "sha256": "289f4edb8f3f0c33"
+      "sha256": "72d8feb751e3aa63"
     },
     {
       "route": "#presensi",
@@ -353,7 +353,7 @@
       "viewport": "MEDIUM (768x1024)",
       "theme": "Midnight Sanctuary",
       "file": "presensi_medium_dark.png",
-      "sha256": "289f4edb8f3f0c33"
+      "sha256": "72d8feb751e3aa63"
     },
     {
       "route": "#kerja-harian",
@@ -361,7 +361,7 @@
       "viewport": "MEDIUM (768x1024)",
       "theme": "Midnight Sanctuary",
       "file": "kerja-harian_medium_dark.png",
-      "sha256": "289f4edb8f3f0c33"
+      "sha256": "72d8feb751e3aa63"
     },
     {
       "route": "#observasi",
@@ -369,7 +369,7 @@
       "viewport": "MEDIUM (768x1024)",
       "theme": "Midnight Sanctuary",
       "file": "observasi_medium_dark.png",
-      "sha256": "289f4edb8f3f0c33"
+      "sha256": "72d8feb751e3aa63"
     },
     {
       "route": "#perkembangan",
@@ -377,7 +377,7 @@
       "viewport": "MEDIUM (768x1024)",
       "theme": "Midnight Sanctuary",
       "file": "perkembangan_medium_dark.png",
-      "sha256": "289f4edb8f3f0c33"
+      "sha256": "72d8feb751e3aa63"
     },
     {
       "route": "#jejak-anak",
@@ -385,7 +385,7 @@
       "viewport": "MEDIUM (768x1024)",
       "theme": "Midnight Sanctuary",
       "file": "jejak-anak_medium_dark.png",
-      "sha256": "289f4edb8f3f0c33"
+      "sha256": "72d8feb751e3aa63"
     },
     {
       "route": "#buku-penghubung",
@@ -393,7 +393,7 @@
       "viewport": "MEDIUM (768x1024)",
       "theme": "Midnight Sanctuary",
       "file": "buku-penghubung_medium_dark.png",
-      "sha256": "289f4edb8f3f0c33"
+      "sha256": "72d8feb751e3aa63"
     },
     {
       "route": "#portal-keluarga",
@@ -401,7 +401,7 @@
       "viewport": "MEDIUM (768x1024)",
       "theme": "Midnight Sanctuary",
       "file": "portal-keluarga_medium_dark.png",
-      "sha256": "289f4edb8f3f0c33"
+      "sha256": "72d8feb751e3aa63"
     },
     {
       "route": "#adopsi-ks",
@@ -409,7 +409,7 @@
       "viewport": "MEDIUM (768x1024)",
       "theme": "Midnight Sanctuary",
       "file": "adopsi-ks_medium_dark.png",
-      "sha256": "289f4edb8f3f0c33"
+      "sha256": "72d8feb751e3aa63"
     },
     {
       "route": "#yayasan",
@@ -417,7 +417,7 @@
       "viewport": "MEDIUM (768x1024)",
       "theme": "Midnight Sanctuary",
       "file": "yayasan_medium_dark.png",
-      "sha256": "289f4edb8f3f0c33"
+      "sha256": "72d8feb751e3aa63"
     },
     {
       "route": "#kesehatan-sekolah",
@@ -425,7 +425,7 @@
       "viewport": "MEDIUM (768x1024)",
       "theme": "Midnight Sanctuary",
       "file": "kesehatan-sekolah_medium_dark.png",
-      "sha256": "289f4edb8f3f0c33"
+      "sha256": "72d8feb751e3aa63"
     },
     {
       "route": "#siklus-akademik",
@@ -433,7 +433,7 @@
       "viewport": "MEDIUM (768x1024)",
       "theme": "Midnight Sanctuary",
       "file": "siklus-akademik_medium_dark.png",
-      "sha256": "289f4edb8f3f0c33"
+      "sha256": "72d8feb751e3aa63"
     },
     {
       "route": "#uji-otorisasi",
@@ -441,7 +441,7 @@
       "viewport": "MEDIUM (768x1024)",
       "theme": "Midnight Sanctuary",
       "file": "uji-otorisasi_medium_dark.png",
-      "sha256": "289f4edb8f3f0c33"
+      "sha256": "72d8feb751e3aa63"
     },
     {
       "route": "#percontohan",
@@ -449,7 +449,7 @@
       "viewport": "MEDIUM (768x1024)",
       "theme": "Midnight Sanctuary",
       "file": "percontohan_medium_dark.png",
-      "sha256": "289f4edb8f3f0c33"
+      "sha256": "72d8feb751e3aa63"
     },
     {
       "route": "#beranda-guru",
@@ -457,7 +457,7 @@
       "viewport": "EXPANDED (1440x900)",
       "theme": "Ivory Canvas",
       "file": "beranda-guru_expanded_light.png",
-      "sha256": "f80e4e62876f9015"
+      "sha256": "6caeb2c1fc1ae2cd"
     },
     {
       "route": "#presensi",
@@ -465,7 +465,7 @@
       "viewport": "EXPANDED (1440x900)",
       "theme": "Ivory Canvas",
       "file": "presensi_expanded_light.png",
-      "sha256": "f80e4e62876f9015"
+      "sha256": "6caeb2c1fc1ae2cd"
     },
     {
       "route": "#kerja-harian",
@@ -473,7 +473,7 @@
       "viewport": "EXPANDED (1440x900)",
       "theme": "Ivory Canvas",
       "file": "kerja-harian_expanded_light.png",
-      "sha256": "f80e4e62876f9015"
+      "sha256": "6caeb2c1fc1ae2cd"
     },
     {
       "route": "#observasi",
@@ -481,7 +481,7 @@
       "viewport": "EXPANDED (1440x900)",
       "theme": "Ivory Canvas",
       "file": "observasi_expanded_light.png",
-      "sha256": "f80e4e62876f9015"
+      "sha256": "6caeb2c1fc1ae2cd"
     },
     {
       "route": "#perkembangan",
@@ -489,7 +489,7 @@
       "viewport": "EXPANDED (1440x900)",
       "theme": "Ivory Canvas",
       "file": "perkembangan_expanded_light.png",
-      "sha256": "f80e4e62876f9015"
+      "sha256": "6caeb2c1fc1ae2cd"
     },
     {
       "route": "#jejak-anak",
@@ -497,7 +497,7 @@
       "viewport": "EXPANDED (1440x900)",
       "theme": "Ivory Canvas",
       "file": "jejak-anak_expanded_light.png",
-      "sha256": "f80e4e62876f9015"
+      "sha256": "6caeb2c1fc1ae2cd"
     },
     {
       "route": "#buku-penghubung",
@@ -505,7 +505,7 @@
       "viewport": "EXPANDED (1440x900)",
       "theme": "Ivory Canvas",
       "file": "buku-penghubung_expanded_light.png",
-      "sha256": "f80e4e62876f9015"
+      "sha256": "6caeb2c1fc1ae2cd"
     },
     {
       "route": "#portal-keluarga",
@@ -513,7 +513,7 @@
       "viewport": "EXPANDED (1440x900)",
       "theme": "Ivory Canvas",
       "file": "portal-keluarga_expanded_light.png",
-      "sha256": "f80e4e62876f9015"
+      "sha256": "6caeb2c1fc1ae2cd"
     },
     {
       "route": "#adopsi-ks",
@@ -521,7 +521,7 @@
       "viewport": "EXPANDED (1440x900)",
       "theme": "Ivory Canvas",
       "file": "adopsi-ks_expanded_light.png",
-      "sha256": "f80e4e62876f9015"
+      "sha256": "6caeb2c1fc1ae2cd"
     },
     {
       "route": "#yayasan",
@@ -529,7 +529,7 @@
       "viewport": "EXPANDED (1440x900)",
       "theme": "Ivory Canvas",
       "file": "yayasan_expanded_light.png",
-      "sha256": "f80e4e62876f9015"
+      "sha256": "6caeb2c1fc1ae2cd"
     },
     {
       "route": "#kesehatan-sekolah",
@@ -537,7 +537,7 @@
       "viewport": "EXPANDED (1440x900)",
       "theme": "Ivory Canvas",
       "file": "kesehatan-sekolah_expanded_light.png",
-      "sha256": "f80e4e62876f9015"
+      "sha256": "6caeb2c1fc1ae2cd"
     },
     {
       "route": "#siklus-akademik",
@@ -545,7 +545,7 @@
       "viewport": "EXPANDED (1440x900)",
       "theme": "Ivory Canvas",
       "file": "siklus-akademik_expanded_light.png",
-      "sha256": "f80e4e62876f9015"
+      "sha256": "6caeb2c1fc1ae2cd"
     },
     {
       "route": "#uji-otorisasi",
@@ -553,7 +553,7 @@
       "viewport": "EXPANDED (1440x900)",
       "theme": "Ivory Canvas",
       "file": "uji-otorisasi_expanded_light.png",
-      "sha256": "f80e4e62876f9015"
+      "sha256": "6caeb2c1fc1ae2cd"
     },
     {
       "route": "#percontohan",
@@ -561,7 +561,7 @@
       "viewport": "EXPANDED (1440x900)",
       "theme": "Ivory Canvas",
       "file": "percontohan_expanded_light.png",
-      "sha256": "f80e4e62876f9015"
+      "sha256": "6caeb2c1fc1ae2cd"
     },
     {
       "route": "#beranda-guru",
@@ -569,7 +569,7 @@
       "viewport": "EXPANDED (1440x900)",
       "theme": "Midnight Sanctuary",
       "file": "beranda-guru_expanded_dark.png",
-      "sha256": "f80e4e62876f9015"
+      "sha256": "6caeb2c1fc1ae2cd"
     },
     {
       "route": "#presensi",
@@ -577,7 +577,7 @@
       "viewport": "EXPANDED (1440x900)",
       "theme": "Midnight Sanctuary",
       "file": "presensi_expanded_dark.png",
-      "sha256": "f80e4e62876f9015"
+      "sha256": "6caeb2c1fc1ae2cd"
     },
     {
       "route": "#kerja-harian",
@@ -585,7 +585,7 @@
       "viewport": "EXPANDED (1440x900)",
       "theme": "Midnight Sanctuary",
       "file": "kerja-harian_expanded_dark.png",
-      "sha256": "f80e4e62876f9015"
+      "sha256": "6caeb2c1fc1ae2cd"
     },
     {
       "route": "#observasi",
@@ -593,7 +593,7 @@
       "viewport": "EXPANDED (1440x900)",
       "theme": "Midnight Sanctuary",
       "file": "observasi_expanded_dark.png",
-      "sha256": "f80e4e62876f9015"
+      "sha256": "6caeb2c1fc1ae2cd"
     },
     {
       "route": "#perkembangan",
@@ -601,7 +601,7 @@
       "viewport": "EXPANDED (1440x900)",
       "theme": "Midnight Sanctuary",
       "file": "perkembangan_expanded_dark.png",
-      "sha256": "f80e4e62876f9015"
+      "sha256": "6caeb2c1fc1ae2cd"
     },
     {
       "route": "#jejak-anak",
@@ -609,7 +609,7 @@
       "viewport": "EXPANDED (1440x900)",
       "theme": "Midnight Sanctuary",
       "file": "jejak-anak_expanded_dark.png",
-      "sha256": "f80e4e62876f9015"
+      "sha256": "6caeb2c1fc1ae2cd"
     },
     {
       "route": "#buku-penghubung",
@@ -617,7 +617,7 @@
       "viewport": "EXPANDED (1440x900)",
       "theme": "Midnight Sanctuary",
       "file": "buku-penghubung_expanded_dark.png",
-      "sha256": "f80e4e62876f9015"
+      "sha256": "6caeb2c1fc1ae2cd"
     },
     {
       "route": "#portal-keluarga",
@@ -625,7 +625,7 @@
       "viewport": "EXPANDED (1440x900)",
       "theme": "Midnight Sanctuary",
       "file": "portal-keluarga_expanded_dark.png",
-      "sha256": "f80e4e62876f9015"
+      "sha256": "6caeb2c1fc1ae2cd"
     },
     {
       "route": "#adopsi-ks",
@@ -633,7 +633,7 @@
       "viewport": "EXPANDED (1440x900)",
       "theme": "Midnight Sanctuary",
       "file": "adopsi-ks_expanded_dark.png",
-      "sha256": "f80e4e62876f9015"
+      "sha256": "6caeb2c1fc1ae2cd"
     },
     {
       "route": "#yayasan",
@@ -641,7 +641,7 @@
       "viewport": "EXPANDED (1440x900)",
       "theme": "Midnight Sanctuary",
       "file": "yayasan_expanded_dark.png",
-      "sha256": "f80e4e62876f9015"
+      "sha256": "6caeb2c1fc1ae2cd"
     },
     {
       "route": "#kesehatan-sekolah",
@@ -649,7 +649,7 @@
       "viewport": "EXPANDED (1440x900)",
       "theme": "Midnight Sanctuary",
       "file": "kesehatan-sekolah_expanded_dark.png",
-      "sha256": "f80e4e62876f9015"
+      "sha256": "6caeb2c1fc1ae2cd"
     },
     {
       "route": "#siklus-akademik",
@@ -657,7 +657,7 @@
       "viewport": "EXPANDED (1440x900)",
       "theme": "Midnight Sanctuary",
       "file": "siklus-akademik_expanded_dark.png",
-      "sha256": "f80e4e62876f9015"
+      "sha256": "6caeb2c1fc1ae2cd"
     },
     {
       "route": "#uji-otorisasi",
@@ -665,7 +665,7 @@
       "viewport": "EXPANDED (1440x900)",
       "theme": "Midnight Sanctuary",
       "file": "uji-otorisasi_expanded_dark.png",
-      "sha256": "f80e4e62876f9015"
+      "sha256": "6caeb2c1fc1ae2cd"
     },
     {
       "route": "#percontohan",
@@ -673,8 +673,8 @@
       "viewport": "EXPANDED (1440x900)",
       "theme": "Midnight Sanctuary",
       "file": "percontohan_expanded_dark.png",
-      "sha256": "f80e4e62876f9015"
+      "sha256": "6caeb2c1fc1ae2cd"
     }
   ],
-  "masterBaselineHash": "ec3b7b182cefb9be3d19b6b6529ea7db"
+  "masterBaselineHash": "0ead06d7df3473619fc0ae02fa2003b9"
 }

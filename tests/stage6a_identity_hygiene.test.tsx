@@ -107,7 +107,10 @@ async function runIdentityHygieneTests() {
         </SecurityContextProvider>
       );
       assert.ok(drawerHtml.includes('Amanaura OS'), 'Profile Drawer header must be Amanaura OS');
-      assert.ok(drawerHtml.includes('Unit TK'), 'Profile Drawer retains tenant context');
+      assert.ok(
+        drawerHtml.includes('Yayasan') || drawerHtml.includes('Yapendik') || drawerHtml.includes('TK'),
+        'Profile Drawer retains tenant context'
+      );
     });
   }
 

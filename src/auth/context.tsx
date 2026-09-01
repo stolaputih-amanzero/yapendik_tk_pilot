@@ -27,6 +27,11 @@ export interface PersonaProfile {
   guardianChildrenPersonIds: string[];
   description: string;
   isSimulation?: boolean;
+  email?: string | null;
+  phone?: string | null;
+  avatarUrl?: string | null;
+  passkeyEnabled?: boolean;
+  passkeyRegisteredAt?: string | null;
 }
 
 export const GENESIS_PERSONAS: PersonaProfile[] = [
@@ -41,7 +46,12 @@ export const GENESIS_PERSONAS: PersonaProfile[] = [
     assignedClasses: ['cls_maranatha_tka', 'cls_maranatha_tkb'],
     guardianChildrenPersonIds: [],
     description: 'Tata kelola lintas sekolah, pengawas mutu pendidikan, dan superadministrator institusi.',
-    isSimulation: true
+    isSimulation: true,
+    email: 'shirleyumbas@gmail.com',
+    phone: '+6281218641300',
+    avatarUrl: null,
+    passkeyEnabled: false,
+    passkeyRegisteredAt: null
   },
   {
     id: 'user_headmaster_sheryl',
@@ -54,7 +64,12 @@ export const GENESIS_PERSONAS: PersonaProfile[] = [
     assignedClasses: ['cls_maranatha_tka', 'cls_maranatha_tkb'],
     guardianChildrenPersonIds: [],
     description: 'Pimpinan sekolah bertanggung jawab atas kepemimpinan kurikulum, validasi LPPA, dan ritme sekolah.',
-    isSimulation: true
+    isSimulation: true,
+    email: 'sherylumbas9@gmail.com',
+    phone: '+6281218641301',
+    avatarUrl: null,
+    passkeyEnabled: false,
+    passkeyRegisteredAt: null
   },
   {
     id: 'user_teacher_erna',
@@ -67,7 +82,12 @@ export const GENESIS_PERSONAS: PersonaProfile[] = [
     assignedClasses: ['cls_maranatha_tka'],
     guardianChildrenPersonIds: [],
     description: 'Guru Inti Sentra Kurikulum Merdeka PAUD Kelompok A.',
-    isSimulation: true
+    isSimulation: true,
+    email: 'yapendikmaranathajkt@gmail.com',
+    phone: '+6281218641392',
+    avatarUrl: null,
+    passkeyEnabled: false,
+    passkeyRegisteredAt: null
   },
   {
     id: 'user_teacher_charlotha',
@@ -80,7 +100,12 @@ export const GENESIS_PERSONAS: PersonaProfile[] = [
     assignedClasses: ['cls_maranatha_tka'],
     guardianChildrenPersonIds: [],
     description: 'Guru Pendamping & Literasi Anak Usia Dini Kelompok A.',
-    isSimulation: true
+    isSimulation: true,
+    email: 'ratmalajovannca@gmail.com',
+    phone: '+6281218641303',
+    avatarUrl: null,
+    passkeyEnabled: false,
+    passkeyRegisteredAt: null
   },
   {
     id: 'user_teacher_evi',
@@ -93,7 +118,12 @@ export const GENESIS_PERSONAS: PersonaProfile[] = [
     assignedClasses: ['cls_maranatha_tkb'],
     guardianChildrenPersonIds: [],
     description: 'Guru Inti Perkembangan Motorik & Sentra Kelompok B.',
-    isSimulation: true
+    isSimulation: true,
+    email: 'taniaevi101@gmail.com',
+    phone: '+6281218641304',
+    avatarUrl: null,
+    passkeyEnabled: false,
+    passkeyRegisteredAt: null
   },
   {
     id: 'user_guard_julen',
@@ -106,7 +136,12 @@ export const GENESIS_PERSONAS: PersonaProfile[] = [
     assignedClasses: [],
     guardianChildrenPersonIds: ['per_child_millen'],
     description: 'Wali sah Ananda Jequaline Arabella (Millen) di Kelompok A.',
-    isSimulation: true
+    isSimulation: true,
+    email: 'julen.patricia@gmail.com',
+    phone: '+6281218641305',
+    avatarUrl: null,
+    passkeyEnabled: false,
+    passkeyRegisteredAt: null
   },
   {
     id: 'user_guard_mutiara',
@@ -119,7 +154,12 @@ export const GENESIS_PERSONAS: PersonaProfile[] = [
     assignedClasses: [],
     guardianChildrenPersonIds: ['per_child_kayla'],
     description: 'Wali sah Ananda Kayla Gabriella di Kelompok B.',
-    isSimulation: true
+    isSimulation: true,
+    email: 'mutiara.zega@gmail.com',
+    phone: '+6281218641306',
+    avatarUrl: null,
+    passkeyEnabled: false,
+    passkeyRegisteredAt: null
   }
 ];
 
@@ -226,6 +266,12 @@ interface SecurityContextValue {
   signInWithEmail: (email: string, password: string) => Promise<{ success: boolean; error?: string }>;
   switchPersona: (personaId: string) => Promise<void>;
   signOut: () => Promise<void>;
+  updateOwnProfile: (updates: { 
+    name?: string; 
+    phone?: string; 
+    avatarUrl?: string | null; 
+    passkeyEnabled?: boolean;
+  }) => Promise<{ success: boolean; error?: string }>;
   personas: PersonaProfile[];
   activeSchoolId: string;
   setActiveSchoolId: (schoolId: string) => void;
@@ -233,10 +279,15 @@ interface SecurityContextValue {
 
 const SecurityContextReact = createContext<SecurityContextValue | null>(null);
 
-export const SecurityContextProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+export const SecurityContextProvider: React.FC<{ children: React.ReactNode; initialPersonaId?: string }> = ({ children, initialPersonaId }) => {
   const [authenticatedUser, setAuthenticatedUser] = useState<User | null>(null);
   const [authState, setAuthState] = useState<AuthState>('LOADING');
-  const [currentPersona, setCurrentPersona] = useState<PersonaProfile | null>(null);
+  const [currentPersona, setCurrentPersona] = useState<PersonaProfile | null>(() => {
+    if (initialPersonaId) {
+      return SEED_PERSONAS.find(p => p.id === initialPersonaId) || null;
+    }
+    return null;
+  });
   const [activeSchoolId, setActiveSchoolId] = useState<string>('sch_tk_yapendik_01');
   const [isSimulationMode, setIsSimulationMode] = useState<boolean>(false);
   const isSimulationModeRef = useRef<boolean>(false);
@@ -456,7 +507,12 @@ export const SecurityContextProvider: React.FC<{ children: React.ReactNode }> = 
         assignedClasses: assignedClasses.length > 0 ? assignedClasses : (matchedSeed?.assignedClasses || []),
         guardianChildrenPersonIds: guardianChildrenPersonIds.length > 0 ? guardianChildrenPersonIds : (matchedSeed?.guardianChildrenPersonIds || []),
         description: matchedSeed?.description || `Akun terautentikasi resmi Yapendik (${resolvedRole}).`,
-        isSimulation: false
+        isSimulation: false,
+        email: session.user.email || personData?.email || matchedSeed?.email || 'yapendikmaranathajkt@gmail.com',
+        phone: personData?.phone || matchedSeed?.phone || '+6281218641392',
+        avatarUrl: personData?.avatar_url || matchedSeed?.avatarUrl || null,
+        passkeyEnabled: Boolean(personData?.passkey_enabled ?? matchedSeed?.passkeyEnabled),
+        passkeyRegisteredAt: personData?.passkey_registered_at || matchedSeed?.passkeyRegisteredAt || null
       };
 
       // Set database scope
@@ -502,8 +558,20 @@ export const SecurityContextProvider: React.FC<{ children: React.ReactNode }> = 
   };
 
   const switchPersona = async (personaId: string) => {
-    const selected = SEED_PERSONAS.find(p => p.id === personaId);
-    if (!selected) return;
+    const base = SEED_PERSONAS.find(p => p.id === personaId);
+    if (!base) return;
+
+    let selected = { ...base };
+    if (typeof window !== 'undefined') {
+      try {
+        const savedOverrides = JSON.parse(localStorage.getItem('yapendik_persona_overrides') || '{}');
+        if (savedOverrides[personaId]) {
+          selected = { ...selected, ...savedOverrides[personaId] };
+        }
+      } catch (e) {
+        console.warn('Failed to parse persona overrides', e);
+      }
+    }
 
     // Secure Session Lifecycle: Flush previous user cache
     db.purgeAllSessionCache();
@@ -515,6 +583,65 @@ export const SecurityContextProvider: React.FC<{ children: React.ReactNode }> = 
     setAuthState('AUTHENTICATED_MAPPED');
     if (selected.role !== 'YAPENDIK_SUPERADMIN') {
       setActiveSchoolId(selected.schoolId);
+    }
+  };
+
+  const updateOwnProfile = async (updates: { 
+    name?: string; 
+    phone?: string; 
+    avatarUrl?: string | null; 
+    passkeyEnabled?: boolean;
+  }): Promise<{ success: boolean; error?: string }> => {
+    try {
+      if (supabase && !isSimulationModeRef.current) {
+        if (updates.name !== undefined) {
+          const { error } = await supabase.rpc('rpc_update_own_name', { new_name: updates.name });
+          if (error) throw error;
+        }
+        if (updates.phone !== undefined) {
+          const { error } = await supabase.rpc('rpc_update_own_phone', { new_phone: updates.phone });
+          if (error) throw error;
+        }
+        if (updates.avatarUrl !== undefined) {
+          const { error } = await supabase.rpc('rpc_update_own_avatar', { new_url: updates.avatarUrl });
+          if (error) throw error;
+        }
+        if (updates.passkeyEnabled !== undefined) {
+          const { error } = await supabase.rpc('rpc_toggle_passkey_enabled', { enabled: updates.passkeyEnabled });
+          if (error) throw error;
+        }
+      }
+
+      // Update currentPersona state & local persona list
+      setCurrentPersona(prev => {
+        if (!prev) return null;
+        const updated = {
+          ...prev,
+          ...(updates.name !== undefined ? { name: updates.name } : {}),
+          ...(updates.phone !== undefined ? { phone: updates.phone } : {}),
+          ...(updates.avatarUrl !== undefined ? { avatarUrl: updates.avatarUrl } : {}),
+          ...(updates.passkeyEnabled !== undefined ? { 
+            passkeyEnabled: updates.passkeyEnabled,
+            passkeyRegisteredAt: updates.passkeyEnabled ? new Date().toISOString() : null
+          } : {})
+        };
+        // Persist simulation profile update if in simulation
+        if (typeof window !== 'undefined') {
+          try {
+            const savedOverrides = JSON.parse(localStorage.getItem('yapendik_persona_overrides') || '{}');
+            savedOverrides[prev.id] = updated;
+            localStorage.setItem('yapendik_persona_overrides', JSON.stringify(savedOverrides));
+          } catch (e) {
+            console.error('Failed to save persona override', e);
+          }
+        }
+        return updated;
+      });
+
+      return { success: true };
+    } catch (err: any) {
+      console.error('Failed to update own profile', err);
+      return { success: false, error: err.message || 'Gagal memperbarui data profil' };
     }
   };
   
@@ -557,6 +684,7 @@ export const SecurityContextProvider: React.FC<{ children: React.ReactNode }> = 
       signInWithEmail,
       switchPersona,
       signOut,
+      updateOwnProfile,
       personas: GENESIS_PERSONAS,
       activeSchoolId,
       setActiveSchoolId

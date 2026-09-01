@@ -19,7 +19,9 @@ import {
   ShieldCheck, 
   Layers, 
   RefreshCw,
-  Search
+  Search,
+  Mail,
+  Phone
 } from 'lucide-react';
 import { 
   Button, 
@@ -134,6 +136,7 @@ const TOKEN_GROUPS: TokenGroup[] = [
       { varName: '--brand-tint', label: 'Brand Tint' },
       { varName: '--brand-accent', label: 'Brand Accent (Gold)' },
       { varName: '--accent-valor', label: 'Accent Valor (Gold)' },
+      { varName: '--valor-deep', label: 'Valor Deep (Bronze Contrast)' },
       { varName: '--on-brand', label: 'On Brand Contrast' },
       { varName: '--on-accent', label: 'On Accent Contrast' },
     ]
@@ -660,6 +663,174 @@ export const LivingContractWorkspace: React.FC = () => {
             <div className="bg-surface p-5 shadow-floating rounded-xl border border-line-hairline space-y-1">
               <span className="text-xs font-bold text-ink block">Shadow Floating</span>
               <p className="text-xs text-ink-soft">Elevasi tinggi untuk Mobile Omni-Bar, FAB, dan modal dialog.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* §6 CR80 Name Card & Digital Credential Specimen (ADR-UX-013) */}
+      <section className="space-y-4">
+        <div className="border-b border-line pb-2">
+          <h2 className="text-base font-bold text-ink">Spesimen Kartu Nama Digital CR80 (ADR-UX-013)</h2>
+          <p className="text-xs text-ink-soft">Standar Kartu CR80 (85.6×54mm), Padma Watermark, Instrument Serif &amp; QR Verifikasi</p>
+        </div>
+
+        <div className="p-6 rounded-2xl bg-surface-subtle border border-line-hairline grid grid-cols-1 medium:grid-cols-2 gap-6 items-center justify-items-center">
+          {/* 1. Static CR80 Staff Card Preview */}
+          <div className="space-y-2 w-full max-w-[428px]">
+            <div className="text-[11px] font-mono font-semibold text-ink-soft uppercase tracking-wider">
+              Varian 1: Kartu Profesi Staf &amp; Guru
+            </div>
+            <div className="relative w-full aspect-[856/540] rounded-2xl bg-surface text-ink border border-line shadow-md p-5 flex flex-col justify-between overflow-hidden select-none">
+              {/* Padma Watermark */}
+              <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-5 text-brand-primary fill-current" aria-hidden="true">
+                <svg viewBox="0 0 200 200" className="w-64 h-64">
+                  <path d="M100 10 C85 45 40 70 40 120 C40 160 70 190 100 190 C130 190 160 160 160 120 C160 70 115 45 100 10 Z M100 45 C110 75 140 95 140 125 C140 150 120 170 100 170 C80 170 60 150 60 125 C60 95 90 75 100 45 Z" />
+                </svg>
+              </div>
+
+              {/* Corner flourishes */}
+              <div className="absolute top-2 left-2 w-6 h-6 text-accent-valor/20 pointer-events-none">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M2 12C2 6.477 6.477 2 12 2M2 2L6 6" /></svg>
+              </div>
+              <div className="absolute top-2 right-2 w-6 h-6 text-accent-valor/20 pointer-events-none">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M22 12C22 6.477 17.523 2 12 2M22 2L18 6" /></svg>
+              </div>
+              <div className="absolute bottom-2 left-2 w-6 h-6 text-accent-valor/20 pointer-events-none">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M2 12C2 17.523 6.477 22 12 22M2 22L6 18" /></svg>
+              </div>
+              <div className="absolute bottom-2 right-2 w-6 h-6 text-accent-valor/20 pointer-events-none">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M22 12C22 17.523 17.523 22 12 22M22 22L18 18" /></svg>
+              </div>
+
+              <div className="relative z-10 flex items-start space-x-3.5">
+                <div className="w-14 h-14 rounded-full bg-brand text-on-brand flex items-center justify-center text-lg font-bold shrink-0 border border-line-hairline shadow-xs">
+                  EB
+                </div>
+                <div className="min-w-0 flex-1">
+                  <h1 className="font-serif text-[21px] leading-tight text-ink font-normal tracking-tight truncate">
+                    ERNA BOYKELA R
+                  </h1>
+                  <div className="text-[11px] font-sans font-medium text-ink-soft leading-tight mt-0.5 truncate">
+                    Guru Kelas / Wali Kelompok A (TK A)
+                  </div>
+                  <div className="text-[10px] font-sans text-ink-faint leading-tight mt-0.5 truncate">
+                    TK YAPENDIK GPIB Cabang Maranatha
+                  </div>
+                </div>
+              </div>
+
+              <div className="relative z-10 flex items-end justify-between pt-1 border-t border-line-hairline mt-2">
+                <div className="space-y-1 text-[10px] font-sans text-ink-soft max-w-[62%]">
+                  <div className="truncate flex items-center space-x-1">
+                    <Mail className="w-3 h-3 text-ink-faint shrink-0" />
+                    <span>yapendikmaranathajkt@gmail.com</span>
+                  </div>
+                  <div className="truncate font-mono flex items-center space-x-1">
+                    <Phone className="w-3 h-3 text-ink-faint shrink-0" />
+                    <span>+6281218641392</span>
+                  </div>
+                  <div className="text-[9px] text-ink-faint italic pt-0.5">
+                    Amanaura OS ✦ • Tahun Ajaran 2026/2027
+                  </div>
+                </div>
+                <div className="flex flex-col items-center shrink-0">
+                  <div className="w-12 h-12 rounded-md bg-surface-subtle border border-line-hairline flex items-center justify-center font-mono text-[8px] text-ink-soft">
+                    QR CODE
+                  </div>
+                  <span className="text-[7.5px] font-mono text-ink-faint mt-0.5">TERVERIFIKASI</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* 2. Static CR80 Guardian Family Card Preview (Addendum X) */}
+          <div className="space-y-2 w-full max-w-[428px]">
+            <div className="text-[11px] font-mono font-semibold text-accent-valor uppercase tracking-wider">
+              Varian 2: Kartu Keluarga Wali &amp; Antar-Jemput
+            </div>
+            <div className="relative w-full aspect-[856/540] rounded-2xl bg-surface text-ink border border-line shadow-md p-5 flex flex-col justify-between overflow-hidden select-none">
+              {/* Padma Watermark */}
+              <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-5 text-brand-primary fill-current" aria-hidden="true">
+                <svg viewBox="0 0 200 200" className="w-64 h-64">
+                  <path d="M100 10 C85 45 40 70 40 120 C40 160 70 190 100 190 C130 190 160 160 160 120 C160 70 115 45 100 10 Z M100 45 C110 75 140 95 140 125 C140 150 120 170 100 170 C80 170 60 150 60 125 C60 95 90 75 100 45 Z" />
+                </svg>
+              </div>
+
+              {/* Corner flourishes */}
+              <div className="absolute top-2 left-2 w-6 h-6 text-accent-valor/20 pointer-events-none">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M2 12C2 6.477 6.477 2 12 2M2 2L6 6" /></svg>
+              </div>
+              <div className="absolute top-2 right-2 w-6 h-6 text-accent-valor/20 pointer-events-none">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M22 12C22 6.477 17.523 2 12 2M22 2L18 6" /></svg>
+              </div>
+              <div className="absolute bottom-2 left-2 w-6 h-6 text-accent-valor/20 pointer-events-none">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M2 12C2 17.523 6.477 22 12 22M2 22L6 18" /></svg>
+              </div>
+              <div className="absolute bottom-2 right-2 w-6 h-6 text-accent-valor/20 pointer-events-none">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M22 12C22 17.523 17.523 22 12 22M22 22L18 18" /></svg>
+              </div>
+
+              {/* Top Eyebrow */}
+              <div className="relative z-10 flex items-center justify-between border-b border-line-hairline pb-1 -mt-1">
+                <span className="text-[9px] font-mono font-bold text-accent-valor tracking-wider uppercase">
+                  ✦ AMANAURA OS
+                </span>
+                <span className="text-[8.5px] font-mono font-bold text-accent-valor bg-surface-subtle px-2 py-0.5 rounded-full uppercase tracking-wider border border-line-hairline">
+                  KARTU KELUARGA
+                </span>
+              </div>
+
+              <div className="relative z-10 flex items-start space-x-3.5 pt-1 flex-1">
+                {/* Visual Anchor: Child Avatar */}
+                <div className="relative w-13 h-13 rounded-2xl bg-surface-subtle border border-line-hairline text-ink flex items-center justify-center text-lg font-bold shrink-0 shadow-xs">
+                  <span className="font-serif text-xl">J</span>
+                  <span className="absolute -bottom-1 -right-1 text-xs">🌟</span>
+                </div>
+
+                <div className="min-w-0 flex-1">
+                  <h1 className="font-serif text-[19px] leading-tight text-ink font-normal tracking-tight truncate">
+                    Jequaline Arabella (Millen)
+                  </h1>
+                  <div className="text-[10px] font-sans font-semibold text-ink-soft leading-tight mt-0.5 truncate">
+                    Kelas TK A • Maranatha
+                  </div>
+
+                  <div className="pt-1.5 mt-1 border-t border-line-hairline space-y-0.5">
+                    <div className="text-[10.5px] font-sans text-ink leading-tight truncate">
+                      <span className="text-ink-soft">Orang Tua/Wali: </span>
+                      <span className="font-bold">Julen Patricia</span>
+                      <span className="text-[10px] text-ink-soft"> (Ibu Kandung)</span>
+                    </div>
+                    <div className="text-[9px] font-mono text-ink-soft leading-tight truncate">
+                      <span className="text-ink-faint">Terkait: </span>
+                      <span>Michael Maspaitella (Ayah)</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="relative z-10 flex items-end justify-between pt-1 border-t border-line-hairline mt-1">
+                <div className="space-y-0.5 text-[9.5px] font-sans text-ink-soft max-w-[62%]">
+                  <div className="truncate flex items-center space-x-1">
+                    <Mail className="w-3 h-3 text-ink-faint shrink-0" />
+                    <span className="font-mono">julen.patricia@gmail.com</span>
+                  </div>
+                  <div className="truncate font-mono flex items-center space-x-1">
+                    <Phone className="w-3 h-3 text-ink-faint shrink-0" />
+                    <span>+6281218641305</span>
+                  </div>
+                  <div className="text-[8.5px] text-ink-faint italic pt-0.5">
+                    Amanaura OS ✦ • Tahun Ajaran 2026/2027
+                  </div>
+                </div>
+                <div className="flex flex-col items-center shrink-0">
+                  <div className="w-12 h-12 rounded-md bg-surface-subtle border border-line-hairline flex items-center justify-center font-mono text-[8px] text-ink-soft">
+                    QR CODE
+                  </div>
+                  <span className="text-[7.5px] font-mono text-ink-faint mt-0.5">TERVERIFIKASI</span>
+                </div>
+              </div>
             </div>
           </div>
         </div>

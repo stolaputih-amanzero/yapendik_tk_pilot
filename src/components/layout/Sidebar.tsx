@@ -27,9 +27,13 @@ import {
   Flame, 
   Settings, 
   Compass, 
-  FileCheck2
+  FileCheck2,
+  Sun,
+  Moon,
+  LogOut
 } from 'lucide-react';
 import { useSecurityContext } from '../../auth/context';
+import { useTheme } from '../../hooks/useTheme';
 import { WorkspaceTab } from './TopBar';
 
 interface SidebarProps {
@@ -61,7 +65,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
   onOpenProfileDrawer,
   className = ''
 }) => {
-  const { currentPersona } = useSecurityContext();
+  const { currentPersona, signOut } = useSecurityContext();
+  const { isDark, toggleTheme, setTheme } = useTheme();
   const role = currentPersona?.role || 'TEACHER';
 
   // Role-Based Navigation Definition
@@ -281,9 +286,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
         ))}
       </nav>
 
-      {/* Bottom Actions: User Profile & Persona Switcher — Pure Flat Fluid Surface */}
-      <div className="border-t border-line-hairline min-w-0 transition-all space-y-0.5 py-2 bg-surface">
-        {/* User Profile Card & Persona Switcher (Desktop/Tablet) */}
+      {/* Bottom Actions: User Profile, Theme Switcher & Sign Out — Pure Flat Fluid Surface */}
+      <div className="border-t border-line-hairline min-w-0 transition-all space-y-1 py-2 bg-surface">
+        {/* 1. User Profile Card & Persona Hub Trigger */}
         <div className="relative group min-w-0">
           <button
             type="button"
@@ -295,6 +300,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 ? 'justify-center py-2 px-1'
                 : 'space-x-3 px-4 py-2 text-left'
             }`}
+            data-testid="sidebar-profile-trigger"
           >
             <div className="relative shrink-0">
               <div className="w-8 h-8 rounded-full bg-brand-primary text-on-brand flex items-center justify-center text-xs font-bold shadow-soft">
@@ -310,11 +316,101 @@ export const Sidebar: React.FC<SidebarProps> = ({
                   {currentPersona?.name}
                 </div>
                 <div className="text-[10px] text-ink-soft truncate font-mono">
-                  {currentPersona?.role}
+                  {currentPersona?.roleTitle || currentPersona?.role}
                 </div>
               </div>
             )}
           </button>
+
+          {isCollapsed && (
+            <div className="pointer-events-none absolute left-full top-1/2 -translate-y-1/2 ml-2 z-50 hidden group-hover-only:flex items-center">
+              <div className="bg-surface text-ink text-xs font-medium px-3 py-2 rounded-xl shadow-floating whitespace-nowrap border border-line-hairline animate-in fade-in zoom-in-95 duration-150">
+                <span>{currentPersona?.name || 'Profil Pengguna'}</span>
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* 2. Theme Toggle (Ivory / Midnight) */}
+        <div className="relative group min-w-0">
+          {isCollapsed ? (
+            <button
+              type="button"
+              onClick={toggleTheme}
+              aria-label={isDark ? 'Beralih ke Tema Ivory' : 'Beralih ke Tema Midnight'}
+              className="w-full flex items-center justify-center text-xs transition-colors duration-150 cursor-pointer min-w-0 min-h-[44px] text-ink-soft hover-only:text-ink hover-only:bg-surface-subtle/50"
+              data-testid="sidebar-theme-toggle"
+            >
+              {isDark ? <Sun className="w-4 h-4 text-accent-valor" /> : <Moon className="w-4 h-4 text-brand-primary" />}
+            </button>
+          ) : (
+            <div className="px-4 py-1.5 flex items-center justify-between">
+              <div className="flex items-center space-x-2 text-ink-soft">
+                {isDark ? <Moon className="w-4 h-4 text-accent-valor" /> : <Sun className="w-4 h-4 text-brand-primary" />}
+                <span className="text-xs font-medium">Tema Visual</span>
+              </div>
+              <div className="inline-flex p-0.5 rounded-lg bg-surface-subtle border border-line-hairline text-[11px]" role="radiogroup" aria-label="Pilihan Tema Visual">
+                <button
+                  type="button"
+                  onClick={() => setTheme('ivory')}
+                  className={`px-2 py-0.5 rounded text-[10px] font-medium transition-all cursor-pointer ${
+                    !isDark ? 'bg-brand-primary text-on-brand font-bold shadow-xs' : 'text-ink-soft hover-only:text-ink'
+                  }`}
+                  aria-checked={!isDark}
+                  role="radio"
+                >
+                  Ivory
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setTheme('midnight')}
+                  className={`px-2 py-0.5 rounded text-[10px] font-medium transition-all cursor-pointer ${
+                    isDark ? 'bg-brand-primary text-on-brand font-bold shadow-xs' : 'text-ink-soft hover-only:text-ink'
+                  }`}
+                  aria-checked={isDark}
+                  role="radio"
+                >
+                  Midnight
+                </button>
+              </div>
+            </div>
+          )}
+
+          {isCollapsed && (
+            <div className="pointer-events-none absolute left-full top-1/2 -translate-y-1/2 ml-2 z-50 hidden group-hover-only:flex items-center">
+              <div className="bg-surface text-ink text-xs font-medium px-3 py-2 rounded-xl shadow-floating whitespace-nowrap border border-line-hairline animate-in fade-in zoom-in-95 duration-150">
+                <span>{isDark ? 'Tema: Midnight (Klik untuk Ivory)' : 'Tema: Ivory (Klik untuk Midnight)'}</span>
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* 3. Keluar dari Sesi (Sign Out) */}
+        <div className="relative group min-w-0">
+          <button
+            type="button"
+            onClick={() => signOut()}
+            aria-label="Keluar dari Sesi"
+            className={`w-full flex items-center text-xs transition-colors duration-150 cursor-pointer min-w-0 min-h-[44px] border-l-2 border-transparent bg-transparent text-danger hover-only:bg-danger-tint/30 ${
+              isCollapsed
+                ? 'justify-center py-2 px-1'
+                : 'space-x-3 px-4 py-2 text-left'
+            }`}
+            data-testid="sidebar-signout"
+          >
+            <LogOut className="w-4 h-4 shrink-0 text-danger" />
+            {!isCollapsed && (
+              <span className="font-semibold truncate">Keluar dari Sesi</span>
+            )}
+          </button>
+
+          {isCollapsed && (
+            <div className="pointer-events-none absolute left-full top-1/2 -translate-y-1/2 ml-2 z-50 hidden group-hover-only:flex items-center">
+              <div className="bg-surface text-danger text-xs font-medium px-3 py-2 rounded-xl shadow-floating whitespace-nowrap border border-danger-line animate-in fade-in zoom-in-95 duration-150">
+                <span>Keluar dari Sesi</span>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </aside>
