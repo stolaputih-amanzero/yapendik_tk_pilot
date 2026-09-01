@@ -13,10 +13,7 @@ CREATE TABLE IF NOT EXISTS webauthn_credentials (
   device_type text CHECK (device_type IN ('platform', 'cross-platform')),
   friendly_name text,
   created_at timestamptz NOT NULL DEFAULT now(),
-  last_used_at timestamptz,
-  
-  CONSTRAINT webauthn_credentials_user_id_fkey 
-    FOREIGN KEY (user_id) REFERENCES auth.users(id) ON DELETE CASCADE
+  last_used_at timestamptz
 );
 
 -- 2. INDEX UNTUK LOOKUP CEPAT
