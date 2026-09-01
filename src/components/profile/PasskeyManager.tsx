@@ -119,7 +119,13 @@ export const PasskeyManager: React.FC<PasskeyManagerProps> = ({
     }
   };
 
+  const isAtLimit = passkeys.length >= 5;
+
   const handleAddNewPasskey = async () => {
+    if (isAtLimit) {
+      showFeedback('error', 'Batas maksimal 5 perangkat telah tercapai. Hapus perangkat lama terlebih dahulu.');
+      return;
+    }
     setIsRegistering(true);
     try {
       const res = await registerPasskey(supabase);
@@ -154,10 +160,11 @@ export const PasskeyManager: React.FC<PasskeyManagerProps> = ({
             size="sm"
             onClick={handleAddNewPasskey}
             isLoading={isRegistering}
+            disabled={isAtLimit}
             leftIcon={<Plus className="w-4 h-4" />}
             data-testid="btn-add-another-passkey"
           >
-            Daftarkan Perangkat Baru
+            {isAtLimit ? 'Batas 5/5 Tercapai' : 'Daftarkan Perangkat Baru'}
           </Button>
           <Button
             variant="primary"
@@ -170,7 +177,19 @@ export const PasskeyManager: React.FC<PasskeyManagerProps> = ({
         </div>
       }
     >
-      <div className="space-y-4 py-2">
+      <div className="space-y-4 py-4">
+        {/* Device Limit Badge */}
+        <div className="flex items-center justify-between px-1 text-xs">
+          <span className="text-ink-soft font-mono font-medium">Slot Kredensial Perangkat</span>
+          <span className={`px-2 py-1 rounded-md font-mono font-bold text-[10px] ${
+            isAtLimit 
+              ? 'bg-danger-tint text-danger-deep border border-danger-line' 
+              : 'bg-surface-subtle text-ink-soft border border-line-hairline'
+          }`}>
+            {passkeys.length}/5 Terdaftar
+          </span>
+        </div>
+
         {/* Feedback Alert */}
         {message && (
           <div 
@@ -182,6 +201,14 @@ export const PasskeyManager: React.FC<PasskeyManagerProps> = ({
             role="status"
           >
             <span>{message.text}</span>
+          </div>
+        )}
+
+        {/* Limit Warning Banner */}
+        {isAtLimit && (
+          <div className="p-3 rounded-xl bg-surface-subtle border border-line-hairline text-ink-soft text-[11px] space-y-1">
+            <span className="font-bold text-ink block">Batas Maksimal Kredensial (5/5)</span>
+            <span>Anda telah mendaftarkan 5 perangkat. Hapus perangkat lama bila ingin mendaftarkan perangkat baru.</span>
           </div>
         )}
 
@@ -213,46 +240,44 @@ export const PasskeyManager: React.FC<PasskeyManagerProps> = ({
             </Button>
           </div>
         ) : (
-          <div className="space-y-2.5 max-h-[320px] overflow-y-auto pr-1">
+          <div className="space-y-2 max-h-[320px] overflow-y-auto pr-1">
             {passkeys.map((item) => (
               <div
                 key={item.credential_id}
-                className="p-3.5 rounded-2xl bg-surface-subtle border border-line-hairline flex items-center justify-between hover-only:border-line transition-all group"
-                data-testid={`passkey-item-${item.credential_id}`}
+                className="p-3 rounded-2xl bg-surface-subtle border border-line-hairline flex items-center justify-between hover-only:border-line transition-all group"
               >
-                <div className="flex items-center space-x-3 min-w-0 flex-1">
-                  <div className="w-10 h-10 rounded-xl bg-surface border border-line flex items-center justify-center text-brand-primary shrink-0 shadow-xs">
+                <div className="flex items-center space-x-3">
+                  <div className="w-10 h-10 rounded-xl bg-brand-tint flex items-center justify-center text-brand-primary shrink-0 border border-brand-line/40">
                     {item.device_type === 'platform' ? (
-                      <Smartphone className="w-5 h-5 text-brand-primary" />
+                      <Smartphone className="w-5 h-5" />
                     ) : (
-                      <Laptop className="w-5 h-5 text-accent-valor" />
+                      <Laptop className="w-5 h-5" />
                     )}
                   </div>
-                  <div className="min-w-0 flex-1">
-                    <div className="flex items-center space-x-1.5 truncate">
-                      <span className="text-xs font-bold text-ink truncate">{item.friendly_name}</span>
-                      <span className="text-[9px] font-mono px-1.5 py-0.5 rounded-md bg-brand-primary/10 text-brand-primary shrink-0 font-semibold">
-                        {item.device_type === 'platform' ? 'Biometrik' : 'Security Key'}
+                  <div className="text-left">
+                    <div className="flex items-center space-x-2">
+                      <span className="font-bold text-xs text-ink">{item.friendly_name}</span>
+                      <span className="text-[9px] font-mono px-2 py-1 rounded-md bg-brand-primary/10 text-brand-primary shrink-0 font-semibold">
+                        Biometrik
                       </span>
                     </div>
-                    <div className="text-[10.5px] text-ink-soft flex items-center space-x-2 mt-0.5">
-                      <span>Didaftarkan: {new Date(item.created_at).toLocaleDateString('id-ID')}</span>
-                      {item.last_used_at && (
-                        <span>• Terakhir: {new Date(item.last_used_at).toLocaleDateString('id-ID')}</span>
-                      )}
+                    <div className="text-[10px] text-ink-faint mt-0.5">
+                      Terdaftar: {new Date(item.created_at).toLocaleDateString('id-ID', {
+                        day: 'numeric',
+                        month: 'short',
+                        year: 'numeric'
+                      })}
                     </div>
                   </div>
                 </div>
 
-                {/* Delete Button */}
                 <button
                   type="button"
                   onClick={() => handleDelete(item.credential_id)}
                   disabled={deletingId === item.credential_id}
-                  className="p-2 rounded-xl text-ink-faint hover-only:text-danger hover-only:bg-danger-tint transition-colors cursor-pointer ml-2 disabled:opacity-50"
+                  className="p-2 rounded-xl text-ink-faint hover:text-danger hover:bg-danger-tint transition-all cursor-pointer disabled:opacity-40"
                   aria-label={`Hapus ${item.friendly_name}`}
                   title="Hapus Passkey"
-                  data-testid={`btn-delete-passkey-${item.credential_id}`}
                 >
                   {deletingId === item.credential_id ? (
                     <Loader2 className="w-4 h-4 animate-spin text-danger" />

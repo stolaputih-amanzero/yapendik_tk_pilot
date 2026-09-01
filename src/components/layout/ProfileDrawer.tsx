@@ -551,7 +551,7 @@ export const ProfileDrawer: React.FC<ProfileDrawerProps> = ({
                       <div className="text-left">
                         <div className="flex items-center space-x-2">
                           <span className="font-bold text-ink text-xs">Login Sidik Jari / Biometrik</span>
-                          <span className={`px-2 py-0.5 rounded text-[9px] font-mono font-bold ${
+                          <span className={`px-2 py-1 rounded text-[9px] font-mono font-bold ${
                             currentPersona?.passkeyEnabled
                               ? 'bg-success-tint text-success border border-success-line'
                               : 'bg-surface border border-line text-ink-faint'
@@ -576,7 +576,7 @@ export const ProfileDrawer: React.FC<ProfileDrawerProps> = ({
                         setErrorMessage(null);
                         setActiveDialog(currentPersona?.passkeyEnabled ? 'PASSKEY_OFF' : 'PASSKEY_ON');
                       }}
-                      className={`relative inline-flex h-7 w-12 shrink-0 cursor-pointer rounded-full p-0.5 border-2 transition-all duration-200 ease-in-out focus:outline-hidden ${
+                      className={`relative inline-flex h-7 w-12 shrink-0 cursor-pointer rounded-full p-1 border-2 transition-all duration-200 ease-in-out focus:outline-hidden ${
                         currentPersona?.passkeyEnabled 
                           ? 'bg-brand-primary border-brand-primary shadow-sm ring-2 ring-brand-primary/20' 
                           : 'bg-line-strong/40 border-line-strong'
@@ -599,13 +599,13 @@ export const ProfileDrawer: React.FC<ProfileDrawerProps> = ({
                     {currentPersona?.passkeyEnabled ? (
                       <>
                         <div className="text-[11px] text-success font-medium flex items-center space-x-1.5">
-                          <ShieldCheck className="w-3.5 h-3.5" />
+                          <ShieldCheck className="w-4 h-4" />
                           <span>Login Sidik Jari Aktif</span>
                         </div>
                         <button
                           type="button"
                           onClick={() => setIsPasskeyManagerOpen(true)}
-                          className="px-3 py-1.5 rounded-xl bg-surface border border-line hover-only:bg-surface-subtle text-ink font-semibold text-xs transition-colors cursor-pointer"
+                          className="px-3 py-2 rounded-xl bg-surface border border-line hover-only:bg-surface-subtle text-ink font-semibold text-xs transition-colors cursor-pointer"
                           data-testid="btn-manage-passkeys"
                         >
                           Kelola

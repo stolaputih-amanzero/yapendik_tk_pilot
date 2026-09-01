@@ -1,6 +1,6 @@
 /**
- * WebAuthn FIDO2 Client Service (Amanaura OS — ADR-05)
- * Handles feature detection, device name parsing, and WebAuthn registration/authentication ceremonies
+ * WebAuthn FIDO2 Client Service (Amanaura OS — ADR-05 Hardened / W-18 - W-21)
+ * Handles feature detection, device name parsing, server-issued challenges, and WebAuthn registration/authentication ceremonies
  * Domain: https://tkm.amanloka.com
  */
 
@@ -18,6 +18,18 @@ function toBase64URL(buffer: ArrayBuffer | Uint8Array): string {
     binary += String.fromCharCode(bytes[i]);
   }
   return btoa(binary).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+}
+
+function parseBase64URL(str: string): Uint8Array {
+  const base64 = str.replace(/-/g, '+').replace(/_/g, '/');
+  const pad = base64.length % 4;
+  const padded = pad ? base64 + '='.repeat(4 - pad) : base64;
+  const binary = atob(padded);
+  const bytes = new Uint8Array(binary.length);
+  for (let i = 0; i < binary.length; i++) {
+    bytes[i] = binary.charCodeAt(i);
+  }
+  return bytes;
 }
 
 /**
@@ -92,10 +104,11 @@ export interface WebAuthnOperationResult {
   message?: string;
   error?: string;
   cancelled?: boolean;
+  fallback?: 'password';
 }
 
 /**
- * Executes Passkey registration ceremony
+ * Executes Passkey registration ceremony (W-18 Server Challenge + W-20 Cap)
  */
 export async function registerPasskey(
   supabase: SupabaseClient | null,
@@ -103,11 +116,14 @@ export async function registerPasskey(
 ): Promise<WebAuthnOperationResult> {
   const friendlyName = customFriendlyName || getDeviceFriendlyName();
 
-  // If running in simulation / offline mock mode without live Supabase
+  // Simulation mode fallback
   if (!supabase) {
     if (typeof localStorage !== 'undefined') {
-      const mockCredId = `cred_${Date.now()}`;
       const existing = JSON.parse(localStorage.getItem('yapendik_mock_passkeys') || '[]');
+      if (existing.length >= 5) {
+        return { success: false, error: 'Maksimal 5 passkey terdaftar per pengguna' };
+      }
+      const mockCredId = `cred_${Date.now()}`;
       existing.unshift({
         credential_id: mockCredId,
         device_type: 'platform',
@@ -127,12 +143,14 @@ export async function registerPasskey(
     const token = sessionData?.session?.access_token;
     const user = sessionData?.session?.user;
 
-    if (!token) {
+    if (!token || !user) {
       return { success: false, error: 'Sesi login tidak aktif' };
     }
 
-    // 1. Get Challenge from Edge Function, with graceful local fallback
+    // 1. Get Challenge: Try Edge Function first, then server RPC (W-18)
     let options: any = null;
+    let isServerRpcChallenge = false;
+
     try {
       const challengeRes = await fetch(
         `${supabaseUrl}/functions/v1/webauthn-registration?action=challenge`,
@@ -148,30 +166,35 @@ export async function registerPasskey(
         options = await challengeRes.json();
       }
     } catch (e) {
-      console.warn('Edge function unreachable, falling back to direct WebAuthn options:', e);
+      console.warn('Edge function unreachable, requesting server RPC challenge (W-18):', e);
     }
 
-    // Direct Browser WebAuthn Options fallback if Edge Function is pending deployment
+    // W-18: Fallback to Server-Issued Challenge RPC
     if (!options) {
-      const randomChallenge = new Uint8Array(32);
-      if (typeof crypto !== 'undefined' && crypto.getRandomValues) {
-        crypto.getRandomValues(randomChallenge);
+      const { data: serverChallenge, error: challengeRpcErr } = await supabase.rpc('rpc_webauthn_registration_challenge');
+      if (challengeRpcErr || !serverChallenge) {
+        return { 
+          success: false, 
+          error: challengeRpcErr?.message || 'Gagal menerbitkan challenge registrasi server' 
+        };
       }
+
+      isServerRpcChallenge = true;
       const hostname = (typeof window !== 'undefined' && window.location.hostname) ? window.location.hostname : 'localhost';
       const effectiveRpId = (hostname !== 'localhost' && !hostname.includes('127.0.0.1'))
         ? hostname
         : (RP_ID || 'localhost');
 
       options = {
-        challenge: toBase64URL(randomChallenge),
+        challenge: serverChallenge,
         rp: {
           name: 'Amanaura OS',
           id: effectiveRpId,
         },
         user: {
-          id: toBase64URL(new TextEncoder().encode(user?.id || 'user_id')),
-          name: user?.email || 'user@amanloka.com',
-          displayName: user?.user_metadata?.full_name || user?.email || 'Pengguna',
+          id: toBase64URL(new TextEncoder().encode(user.id)),
+          name: user.email || 'user@amanloka.com',
+          displayName: user.user_metadata?.full_name || user.email || 'Pengguna',
         },
         pubKeyCredParams: [
           { alg: -7, type: 'public-key' as const },
@@ -198,50 +221,71 @@ export async function registerPasskey(
       return { success: false, error: ceremonyError.message || 'Gagal menyelesaikan otentikasi biometrik' };
     }
 
-    // 3. Send verification to Edge Function if available
+    // 3. Send verification: Edge Function or Server RPC with Ceremony Validation (W-18 & W-20)
     let verifiedViaEdge = false;
-    try {
-      const verifyRes = await fetch(
-        `${supabaseUrl}/functions/v1/webauthn-registration?action=verify`,
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'apikey': anonKey,
-            'Authorization': `Bearer ${token}`,
-          },
-          body: JSON.stringify({
-            credential,
-            deviceType: 'platform',
-            friendlyName,
-          }),
-        }
-      );
+    if (!isServerRpcChallenge) {
+      try {
+        const verifyRes = await fetch(
+          `${supabaseUrl}/functions/v1/webauthn-registration?action=verify`,
+          {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'apikey': anonKey,
+              'Authorization': `Bearer ${token}`,
+            },
+            body: JSON.stringify({
+              credential,
+              deviceType: 'platform',
+              friendlyName,
+            }),
+          }
+        );
 
-      if (verifyRes.ok) {
-        const verifyResult = await verifyRes.json().catch(() => ({}));
-        if (verifyResult.success) {
-          verifiedViaEdge = true;
+        if (verifyRes.ok) {
+          const verifyResult = await verifyRes.json().catch(() => ({}));
+          if (verifyResult.success) {
+            verifiedViaEdge = true;
+          }
         }
+      } catch (e) {
+        console.warn('Edge function verify unreachable, falling back to direct RPC:', e);
       }
-    } catch (e) {
-      console.warn('Edge function verification unreachable, falling back to direct RPC:', e);
     }
 
-    // Direct Database Registration RPC if Edge Function is offline
+    // Direct Database Registration with W-18 Ceremony Validation & W-20 Cap
     if (!verifiedViaEdge) {
       const pubKey = credential.response?.publicKey || toBase64URL(new Uint8Array([0]));
+
+      // Decode clientDataJSON for server ceremony validation
+      let clientDataJsonObj: any = null;
       try {
-        await supabase.rpc('rpc_webauthn_register_credential', {
-          credential_id: credential.id,
-          public_key: pubKey,
-          sign_count: 0,
-          transports: credential.response?.transports || ['internal'],
-          device_type: 'platform',
-          friendly_name: friendlyName,
-        });
-      } catch (rpcErr) {
-        console.warn('Direct RPC register passkey error:', rpcErr);
+        if (credential.response?.clientDataJSON) {
+          const decodedStr = new TextDecoder().decode(parseBase64URL(credential.response.clientDataJSON));
+          clientDataJsonObj = JSON.parse(decodedStr);
+        }
+      } catch (decodeErr) {
+        console.warn('Failed to parse clientDataJSON:', decodeErr);
+      }
+
+      const { error: rpcErr } = await supabase.rpc('rpc_webauthn_register_credential', {
+        credential_id: credential.id,
+        public_key: pubKey,
+        sign_count: 0,
+        transports: credential.response?.transports || ['internal'],
+        device_type: 'platform',
+        friendly_name: friendlyName,
+        client_data_json: clientDataJsonObj,
+      });
+
+      if (rpcErr) {
+        if (rpcErr.message.includes('CREDENTIAL_LIMIT_REACHED')) {
+          return { success: false, error: 'Maksimal 5 passkey terdaftar. Hapus passkey lama terlebih dahulu.' };
+        }
+        if (rpcErr.message.includes('CEREMONY_INVALID')) {
+          return { success: false, error: 'Validasi upacara biometrik gagal di server (CEREMONY_INVALID).' };
+        }
+        return { success: false, error: rpcErr.message || 'Gagal menyimpan kredensial passkey' };
       }
     }
 
@@ -256,7 +300,7 @@ export async function registerPasskey(
         created_at: new Date().toISOString(),
         last_used_at: new Date().toISOString(),
       });
-      localStorage.setItem('yapendik_mock_passkeys', JSON.stringify(filtered));
+      localStorage.setItem('yapendik_mock_passkeys', JSON.stringify(filtered.slice(0, 5)));
     }
 
     return { success: true, message: 'Passkey berhasil didaftarkan pada perangkat ini' };
@@ -267,7 +311,7 @@ export async function registerPasskey(
 }
 
 /**
- * Executes Passkey authentication ceremony
+ * Executes Passkey authentication ceremony (W-19 Garis Merah: Server-Verification Only)
  */
 export async function authenticateWithPasskey(
   supabase: SupabaseClient | null,
@@ -275,7 +319,7 @@ export async function authenticateWithPasskey(
 ): Promise<WebAuthnOperationResult> {
   const cleanEmail = email.trim().toLowerCase();
 
-  // If simulation mode
+  // If running in simulation mode
   if (!supabase) {
     return { success: true, message: 'Autentikasi biometrik berhasil (Mode Simulasi)' };
   }
@@ -284,7 +328,7 @@ export async function authenticateWithPasskey(
     const supabaseUrl = (import.meta as any).env?.VITE_SUPABASE_URL || '';
     const anonKey = (import.meta as any).env?.VITE_SUPABASE_ANON_KEY || '';
 
-    // 1. Try Authentication Challenge from Edge Function
+    // 1. Get Authentication Challenge from Edge Function
     let options: any = null;
     try {
       const challengeRes = await fetch(
@@ -301,52 +345,27 @@ export async function authenticateWithPasskey(
 
       if (challengeRes.ok) {
         options = await challengeRes.json();
+      } else {
+        const errJson = await challengeRes.json().catch(() => ({}));
+        if (errJson.error === 'INVALID_CREDENTIALS') {
+          return { 
+            success: false, 
+            fallback: 'password', 
+            error: 'Email tidak terdaftar atau belum memiliki passkey terdaftar' 
+          };
+        }
       }
     } catch (e) {
-      console.warn('Edge function auth challenge unreachable, falling back to direct auth:', e);
+      console.warn('Edge function auth challenge unreachable:', e);
     }
 
-    // Direct Browser Authentication Options if Edge Function is offline
+    // W-19 GARIS MERAH: No Client-Side Authentication Bypass
+    // If Edge Function is offline or pending deployment, gracefully fall back to password login
     if (!options) {
-      let allowedCreds: { id: string; type: 'public-key'; transports: any[] }[] = [];
-      try {
-        const { data: dbCreds } = await supabase
-          .from('webauthn_credentials')
-          .select('credential_id, transports')
-          .limit(5);
-        if (dbCreds && dbCreds.length > 0) {
-          allowedCreds = dbCreds.map(c => ({
-            id: c.credential_id,
-            type: 'public-key' as const,
-            transports: (c.transports as any[]) || ['internal'],
-          }));
-        }
-      } catch {}
-
-      if (allowedCreds.length === 0 && typeof localStorage !== 'undefined') {
-        const localCreds = JSON.parse(localStorage.getItem('yapendik_mock_passkeys') || '[]');
-        allowedCreds = localCreds.map((c: any) => ({
-          id: c.credential_id,
-          type: 'public-key' as const,
-          transports: ['internal'] as any[],
-        }));
-      }
-
-      const randomChallenge = new Uint8Array(32);
-      if (typeof crypto !== 'undefined' && crypto.getRandomValues) {
-        crypto.getRandomValues(randomChallenge);
-      }
-      const hostname = (typeof window !== 'undefined' && window.location.hostname) ? window.location.hostname : 'localhost';
-      const effectiveRpId = (hostname !== 'localhost' && !hostname.includes('127.0.0.1'))
-        ? hostname
-        : (RP_ID || 'localhost');
-
-      options = {
-        challenge: toBase64URL(randomChallenge),
-        rpId: effectiveRpId,
-        allowCredentials: allowedCreds.length > 0 ? allowedCreds : undefined,
-        userVerification: 'required' as const,
-        timeout: 60000,
+      return {
+        success: false,
+        fallback: 'password',
+        error: 'Layanan login biometrik belum tersedia — silakan masuk menggunakan kata sandi',
       };
     }
 
@@ -358,43 +377,66 @@ export async function authenticateWithPasskey(
       if (ceremonyError.name === 'NotAllowedError') {
         return { success: false, cancelled: true, error: 'Login biometrik dibatalkan' };
       }
-      return { success: false, error: ceremonyError.message || 'Gagal memverifikasi biometrik pada perangkat' };
+      return { 
+        success: false, 
+        fallback: 'password',
+        error: ceremonyError.message || 'Gagal memverifikasi biometrik pada perangkat' 
+      };
     }
 
-    // 3. Verify Assertion with Edge Function if available
-    let sessionEstablished = false;
-    try {
-      const verifyRes = await fetch(
-        `${supabaseUrl}/functions/v1/webauthn-authentication?action=verify`,
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'apikey': anonKey,
-          },
-          body: JSON.stringify({ email: cleanEmail, credential }),
-        }
-      );
-
-      if (verifyRes.ok) {
-        const verifyResult = await verifyRes.json().catch(() => ({}));
-        if (verifyResult.success && verifyResult.token) {
-          const { error: otpError } = await supabase.auth.verifyOtp({
-            token_hash: verifyResult.token,
-            type: 'magiclink',
-          });
-          if (!otpError) {
-            sessionEstablished = true;
-          }
-        }
+    // 3. Server-side Verify Assertion with Edge Function
+    const verifyRes = await fetch(
+      `${supabaseUrl}/functions/v1/webauthn-authentication?action=verify`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'apikey': anonKey,
+        },
+        body: JSON.stringify({ email: cleanEmail, credential }),
       }
-    } catch (e) {
-      console.warn('Edge function verify unreachable:', e);
+    );
+
+    const verifyResult = await verifyRes.json().catch(() => ({}));
+
+    // Replay attack / compromise detection (Refinement 2)
+    if (verifyResult.error === 'CREDENTIAL_COMPROMISED') {
+      return {
+        success: false,
+        fallback: 'password',
+        error: verifyResult.message || 'Passkey dicabut karena terdeteksi digunakan mencurigakan.',
+      };
+    }
+
+    if (!verifyRes.ok || !verifyResult.success || !verifyResult.token) {
+      return {
+        success: false,
+        fallback: 'password',
+        error: verifyResult.message || 'Verifikasi tanda tangan passkey gagal di server',
+      };
+    }
+
+    // 4. Complete Supabase Auth Session using Magic Link Token
+    const { error: otpError } = await supabase.auth.verifyOtp({
+      token_hash: verifyResult.token,
+      type: 'magiclink',
+    });
+
+    if (otpError) {
+      return { 
+        success: false, 
+        fallback: 'password', 
+        error: otpError.message || 'Gagal mengaktifkan sesi login' 
+      };
     }
 
     return { success: true, message: 'Autentikasi biometrik berhasil' };
   } catch (err: any) {
     console.error('Passkey authentication error:', err);
-    return { success: false, error: err.message || 'Terjadi kesalahan saat login biometrik' };
+    return { 
+      success: false, 
+      fallback: 'password', 
+      error: err.message || 'Terjadi kesalahan saat login biometrik' 
+    };
   }
 }

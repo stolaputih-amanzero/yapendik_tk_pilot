@@ -96,6 +96,13 @@ export const PremiumLoginScreen: React.FC<{ initialEmail?: string }> = ({ initia
         if (matchedPersona) {
           switchPersona(matchedPersona.id);
         }
+      } else if (res.fallback === 'password') {
+        setPasskeyNotice(res.error || 'Login biometrik belum tersedia — silakan masuk menggunakan kata sandi.');
+        // Auto-focus password input
+        if (typeof document !== 'undefined') {
+          const pwdInput = document.getElementById('login-password-input');
+          pwdInput?.focus();
+        }
       } else if (!res.cancelled) {
         setLoginError(res.error || 'Login biometrik gagal. Silakan gunakan kata sandi.');
       }

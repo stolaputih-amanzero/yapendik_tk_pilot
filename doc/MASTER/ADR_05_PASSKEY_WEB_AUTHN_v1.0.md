@@ -140,11 +140,34 @@ Supabase Auth GoTrue tidak mengizinkan pembuatan sesi sembarangan melalui servic
 
 ---
 
-## 7. Pekerjaan Tertunda (*Deferred Work Items*)
+---
 
-* **#DW-03 — Passkey Recovery Codes & Secondary Backup**: Kode darurat sekali pakai (OTP emergency rescue) saat perangkat fisik hilang.
-* **#DW-04 — Cross-Device WebAuthn Credential Sync**: Penyelarasan kunci lintas platform (FIDO Alliance Hybrid / QR cross-device authentication).
+## 8. Addendum: Bootstrap Direct Registration Mode & ARB Threat Model (W-18 s.d. W-21)
+
+Dalam situasi di mana Edge Functions belum terdeploy ke infrastruktur cloud, sistem menyediakan jalur registrasi biometrik langsung (*Bootstrap Direct Registration Mode*) dengan pengerasan keamanan ketat yang disahkan oleh ARB:
+
+### 8.1 Model Ancaman & Batas Keamanan (*Threat Model*)
+1. **Owner-Only Isolation**: RPC registrasi `rpc_webauthn_register_credential` berjalan di bawah kendali `auth.uid()`. Penyerang terautentikasi hanya memiliki radius dampak pada akun miliknya sendiri (*self-account blast radius*).
+2. **Kunci Publik Non-Rahasia**: Penyimpanan public key dari klien bersifat publik dan bukan rahasia.
+
+### 8.2 Pengerasan Terverifikasi (W-18, W-20)
+* **Server-Issued Challenge (W-18)**: Challenge registrasi wajib diterbitkan oleh server melalui RPC `rpc_webauthn_registration_challenge()` (berlaku 5 menit, *single-use*).
+* **Validasi Upacara di Server (W-18)**: Server memverifikasi `client_data_json->>'type' = 'webauthn.create'`, origin yang diizinkan (`https://tkm.amanloka.com`), dan kesesuaian challenge.
+* **Credential Cap (W-20)**: Setiap pengguna dibatasi maksimal 5 passkey terdaftar (`CREDENTIAL_LIMIT_REACHED`).
+
+### 8.3 Garis Merah Autentikasi (W-19)
+> **Verifikasi assertion TIDAK BOLEH pernah terjadi di klien.**  
+> Jika Edge Function `webauthn-authentication` tidak terjangkau, login passkey jatuh lembut (*graceful fallback*) ke pesan *"Login biometrik belum tersedia — silakan masuk menggunakan kata sandi"*. Klien **dilarang keras** membuat sesi atau memalsukan verifikasi tanda tangan tanpa persetujuan server.
+
+### 8.4 Checklist Deploy Kanonikal Edge Functions
+```bash
+# Registrasi (JWT Verified)
+supabase functions deploy webauthn-registration
+
+# Autentikasi (No Verify JWT — Anon Pre-Auth)
+supabase functions deploy webauthn-authentication --no-verify-jwt
+```
 
 ---
 
-*Disahkan secara konstitusional oleh Architecture Review Board (ARB) pada 2 September 2026.*
+*Disahkan secara konstitusional oleh Architecture Review Board (ARB) pada 2 September 2026 (Ratifikasi Tambahan W-18 s.d. W-21).*

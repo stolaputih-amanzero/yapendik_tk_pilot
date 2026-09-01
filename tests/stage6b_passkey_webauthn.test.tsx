@@ -215,6 +215,73 @@ runCheck('Edge Functions [TRANSPORT FILTERING]: Filters credentials for mobile p
   assert.ok(authCode.includes('internal'), 'Must support internal biometric transport');
 });
 
+// -----------------------------------------------------------------------------
+// MODULE 5: ARB Bootstrap Hardening & W-19 Red Line Contracts
+// -----------------------------------------------------------------------------
+console.log('\n--- MODULE 5: ARB Bootstrap Hardening (W-18 s.d. W-21) ---');
+
+runCheck('Hardening [W-18 SERVER CHALLENGE RPC]: Migration defines server challenge with 5-minute expiry', () => {
+  const migrationPath = path.join(__dirname, '..', 'supabase', 'migrations', '20260902020000_webauthn_bootstrap_hardening.sql');
+  assert.ok(fs.existsSync(migrationPath), 'Expected migration 20260902020000_webauthn_bootstrap_hardening.sql');
+
+  const sql = fs.readFileSync(migrationPath, 'utf8');
+  assert.ok(sql.includes('rpc_webauthn_registration_challenge'), 'Must define rpc_webauthn_registration_challenge RPC');
+  assert.ok(sql.includes('webauthn_pending_challenge'), 'Must define webauthn_pending_challenge column');
+  assert.ok(sql.includes('webauthn_challenge_expires_at'), 'Must define webauthn_challenge_expires_at column');
+  assert.ok(sql.includes("interval '5 minutes'"), 'Challenge must expire in 5 minutes');
+});
+
+runCheck('Hardening [W-18 CEREMONY VALIDATION]: Migration enforces type, origin, and single-use challenge consumption', () => {
+  const migrationPath = path.join(__dirname, '..', 'supabase', 'migrations', '20260902020000_webauthn_bootstrap_hardening.sql');
+  const sql = fs.readFileSync(migrationPath, 'utf8');
+  assert.ok(sql.includes("'webauthn.create'"), 'Must validate webauthn.create ceremony type');
+  assert.ok(sql.includes("'https://tkm.amanloka.com'"), 'Must validate canonical production origin');
+  assert.ok(sql.includes('CEREMONY_INVALID'), 'Must raise CEREMONY_INVALID on challenge/origin mismatch');
+  assert.ok(sql.includes('webauthn_pending_challenge = NULL'), 'Must consume challenge immediately (single-use)');
+});
+
+runCheck('Hardening [W-19 RED LINE GUARD]: Zero client-side auth bypass — falls back to password when server is offline', async () => {
+  const { authenticateWithPasskey } = await import('../src/services/webauthn');
+  
+  // Mock Supabase with failing fetch to simulate offline Edge Function
+  const mockSupabase = {
+    auth: {
+      getSession: async () => ({ data: { session: null } }),
+      verifyOtp: async () => {
+        throw new Error('VERIFY_OTP_MUST_NOT_BE_CALLED_ON_CLIENT_BYPASS');
+      }
+    }
+  } as any;
+
+  // Intercept fetch to reject (offline edge function)
+  const originalFetch = globalThis.fetch;
+  globalThis.fetch = async () => {
+    throw new Error('Edge function offline');
+  };
+
+  try {
+    const res = await authenticateWithPasskey(mockSupabase, 'user@amanloka.com');
+    assert.strictEqual(res.success, false, 'Must NOT succeed client-side without server');
+    assert.strictEqual(res.fallback, 'password', 'Must gracefully fallback to password login');
+    assert.ok(res.error?.includes('kata sandi'), 'Must instruct user to use password');
+  } finally {
+    globalThis.fetch = originalFetch;
+  }
+});
+
+runCheck('Hardening [W-20 CREDENTIAL CAP]: Migration and UI enforce maximum 5 credentials per user', () => {
+  const migrationPath = path.join(__dirname, '..', 'supabase', 'migrations', '20260902020000_webauthn_bootstrap_hardening.sql');
+  const sql = fs.readFileSync(migrationPath, 'utf8');
+  assert.ok(sql.includes('CREDENTIAL_LIMIT_REACHED'), 'Must enforce CREDENTIAL_LIMIT_REACHED in database');
+  assert.ok(sql.includes('>= 5'), 'Must check count >= 5');
+
+  // Verify UI renders cap badge
+  const html = renderToString(
+    <PasskeyManager isOpen={true} onClose={() => {}} />
+  );
+  assert.ok(html.includes('/5 Terdaftar'), 'Expected /5 Terdaftar cap indicator in modal');
+});
+
 console.log('\n════════════════════════════════════════════════════════════════');
 console.log(`🏁 STAGE 6-B SUITE 38 SUMMARY: ${passedTests} PASSED, ${failedTests} FAILED (TOTAL: ${totalTests})`);
 console.log('════════════════════════════════════════════════════════════════\n');
