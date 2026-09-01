@@ -28,14 +28,18 @@ export const FoundationBriefing: React.FC<FoundationBriefingProps> = ({
   data,
   onOpenInsightsConsole
 }) => {
-  const { mode, decision_queue, loop_health, equity_signals, warm_echo } = data;
+  const mode = data?.mode || 'OPERASIONAL';
+  const decision_queue = data?.decision_queue || { insights_awaiting_decision: 0, oldest_insight_age_days: 0 };
+  const loop_health = data?.loop_health || { actions_awaiting_adoption: 0, outcomes_not_recorded: 0 };
+  const equity_signals = data?.equity_signals || { new_patterns_detected: 0, suppressed_cohorts: 0 };
+  const warm_echo = data?.warm_echo;
   const [isCompleted, setIsCompleted] = useState(false);
 
   return (
     <BriefingShell
-      greeting={data.greeting}
-      date={data.date_formatted}
-      schoolLocalTime={data.school_local_time}
+      greeting={data?.greeting || 'Selamat datang'}
+      date={data?.date_formatted || ''}
+      schoolLocalTime={data?.school_local_time || ''}
       mode={mode}
     >
       <div className="space-y-4">
@@ -50,10 +54,10 @@ export const FoundationBriefing: React.FC<FoundationBriefingProps> = ({
                   <span>Keputusan</span>
                 </div>
                 <div className="text-base font-semibold text-ink">
-                  {decision_queue.insights_awaiting_decision} Insight
+                  {decision_queue.insights_awaiting_decision ?? 0} Insight
                 </div>
                 <div className="text-[11px] text-ink-faint">
-                  Tertua {decision_queue.oldest_insight_age_days} hari
+                  Tertua {decision_queue.oldest_insight_age_days ?? 0} hari
                 </div>
               </div>
 
@@ -64,10 +68,10 @@ export const FoundationBriefing: React.FC<FoundationBriefingProps> = ({
                   <span>Kesehatan Loop</span>
                 </div>
                 <div className="text-base font-semibold text-ink">
-                  {loop_health.actions_awaiting_adoption} Adopsi
+                  {loop_health.actions_awaiting_adoption ?? 0} Adopsi
                 </div>
                 <div className="text-[11px] text-ink-faint">
-                  {loop_health.outcomes_not_recorded} refleksi tertunda
+                  {loop_health.outcomes_not_recorded ?? 0} refleksi tertunda
                 </div>
               </div>
 
@@ -78,14 +82,14 @@ export const FoundationBriefing: React.FC<FoundationBriefingProps> = ({
                   <span>Sinyal Equity</span>
                 </div>
                 <div className="text-base font-semibold text-ink">
-                  {equity_signals.new_patterns_detected} Pola
+                  {equity_signals.new_patterns_detected ?? 0} Pola
                 </div>
                 <div className="pt-0.5">
                   <PrivacyShield
-                    exposureStatus={equity_signals.suppressed_cohorts > 0 ? 'SUPPRESSED_SMALL_COHORT' : 'VISIBLE'}
+                    exposureStatus={(equity_signals.suppressed_cohorts ?? 0) > 0 ? 'SUPPRESSED_SMALL_COHORT' : 'VISIBLE'}
                     sampleSize={3}
                     metricLabel="Kohor"
-                    metricValue={equity_signals.suppressed_cohorts}
+                    metricValue={equity_signals.suppressed_cohorts ?? 0}
                   />
                 </div>
               </div>

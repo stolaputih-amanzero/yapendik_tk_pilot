@@ -164,6 +164,18 @@ export class BriefingEngineService {
 
       if (!error && data) {
         this.assertNonSurveillance(data);
+        if (role === 'FOUNDATION') {
+          const fData = data as FoundationBriefingData;
+          if (!fData.equity_signals) {
+            fData.equity_signals = { new_patterns_detected: 0, suppressed_cohorts: 0 };
+          }
+          if (!fData.decision_queue) {
+            fData.decision_queue = { insights_awaiting_decision: 0, oldest_insight_age_days: 0 };
+          }
+          if (!fData.loop_health) {
+            fData.loop_health = { actions_awaiting_adoption: 0, outcomes_not_recorded: 0 };
+          }
+        }
         return data as BriefingData;
       }
     } catch (err: any) {

@@ -247,6 +247,16 @@ BEGIN
             'loop_health', jsonb_build_object(
                 'actions_awaiting_adoption', 0,
                 'outcomes_not_recorded', 0
+            ),
+            'equity_signals', jsonb_build_object(
+                'new_patterns_detected', 0,
+                'suppressed_cohorts', 0
+            ),
+            'warm_echo', jsonb_build_object(
+                'source_type', 'HEADMASTER_NOTE',
+                'source_author', 'Kepala Sekolah TK Yapendik',
+                'quote_text', 'Bantuan material loose-parts telah aktif digunakan dalam siklus bermain.',
+                'timestamp', 'Kemarin'
             )
         );
     END IF;
