@@ -126,6 +126,12 @@ Pada ekosistem PAUD/TK, kartu identitas bagi orang tua/wali murid berfungsi gand
 - **Blok Orang Tua & Wali**: Nama wali pemegang kartu (`Orang Tua / Wali: [Nama Wali] (Relasi)`) dan daftar wali terkait (`Terkait: [Nama Wali Lain] (Relasi)`).
 - **Zona Kontak & Verifikasi (Bawah)**: Email dan nomor telepon wali (monospace), watermark Padma & Gunungan ($\le 4\%$), ornamen sudut kuningan ($15\%$), serta QR Code dengan label `TERVERIFIKASI`.
 
+### 6.4 Penutupan Watch-Items (W-16 & W-17 Micro-Patches)
+1. **W-16 — Harmonisasi Tipografi Title Case Staf**:
+   - Seluruh nama staf pada Kartu Nama Digital diformat dengan *Title Case* yang konsisten (`formatTitleCase(profile.name)` → `Erna Boykela R`), menghapus inkonsistensi ALL-CAPS dan menciptakan keharmonisan visual keluarga artefak kartu.
+2. **W-17 — Jalur Foto Anak & Graceful Fallback**:
+   - Varian Kartu Keluarga mendukung tautan foto aktual anak via `familyInfo.childAvatarUrl` yang dirender dalam squircle kanvas & DOM, dengan penanganan kesalahan otomatis (*error fallback*) ke `AvatarChild` pastel + simbol deterministik saat foto tidak tersedia atau gagal dimuat.
+
 ---
 
 *Disahkan secara konstitusional oleh Architecture Review Board (ARB) pada 1 September 2026.*

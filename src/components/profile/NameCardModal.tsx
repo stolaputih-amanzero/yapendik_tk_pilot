@@ -50,7 +50,28 @@ export interface GuardianFamilyInfo {
   relatedGuardianRelation: string;
 }
 
+/**
+ * Formats a string to Title Case while preserving standard educational initials/degrees (e.g. 'R.', 'S.Pd')
+ */
+export function formatTitleCase(str: string): string {
+  if (!str) return '';
+  return str
+    .toLowerCase()
+    .split(' ')
+    .map(word => {
+      if (!word) return '';
+      // Retain uppercase for single-letter initials or dot-abbreviations (e.g. 'R.', 'R', 'S.Pd')
+      if (/^[a-z]\.?$/i.test(word) || /^[a-z]+\.[a-z]+/i.test(word)) {
+        return word.toUpperCase();
+      }
+      return word.charAt(0).toUpperCase() + word.slice(1);
+    })
+    .join(' ');
+}
+
 export function resolveGuardianFamilyInfo(profile: PersonaProfile): GuardianFamilyInfo {
+  const customAvatar = (profile as any)?.childAvatarUrl || (profile as any)?.childAvatar || null;
+
   const isMillen = 
     profile.guardianChildrenPersonIds?.includes('per_child_millen') ||
     profile.name.toLowerCase().includes('julen') ||
@@ -60,7 +81,7 @@ export function resolveGuardianFamilyInfo(profile: PersonaProfile): GuardianFami
     return {
       childName: 'Jequaline Arabella (Millen)',
       childClass: 'Kelas TK A • Maranatha',
-      childAvatarUrl: null,
+      childAvatarUrl: customAvatar,
       childSymbol: '🌟',
       primaryGuardianName: 'Julen Patricia',
       primaryGuardianRelation: 'Ibu Kandung',
@@ -78,7 +99,7 @@ export function resolveGuardianFamilyInfo(profile: PersonaProfile): GuardianFami
     return {
       childName: 'Kayla Gabriella Zega',
       childClass: 'Kelas TK B • Maranatha',
-      childAvatarUrl: null,
+      childAvatarUrl: customAvatar,
       childSymbol: '🎈',
       primaryGuardianName: 'Mutiara Zega',
       primaryGuardianRelation: 'Ibu Kandung',
@@ -91,9 +112,9 @@ export function resolveGuardianFamilyInfo(profile: PersonaProfile): GuardianFami
   return {
     childName: 'Ananda Siswa PAUD',
     childClass: 'Kelas TK A • Maranatha',
-    childAvatarUrl: null,
+    childAvatarUrl: customAvatar,
     childSymbol: '🍀',
-    primaryGuardianName: profile.name,
+    primaryGuardianName: formatTitleCase(profile.name),
     primaryGuardianRelation: 'Wali Sah',
     relatedGuardianName: 'Keluarga Terdaftar',
     relatedGuardianRelation: 'Wali'
@@ -255,27 +276,50 @@ async function renderNameCardCanvas(profile: PersonaProfile, qrDataUrl: string):
     ctx.lineTo(1632, 120);
     ctx.stroke();
 
-    // Visual Anchor: Child Avatar Squircle
+    // Visual Anchor: Child Avatar Squircle (Photo with fallback to Pastel + Initial)
     const anchorX = 80;
     const anchorY = 160;
     const anchorSize = 190;
-    ctx.fillStyle = '#fef3c7';
-    drawRoundedRect(ctx, anchorX, anchorY, anchorSize, anchorSize, 36);
-    ctx.fill();
-    ctx.strokeStyle = '#fde68a';
-    ctx.lineWidth = 4;
-    ctx.stroke();
+    let childPhotoRendered = false;
 
-    // Child Initial in Serif
-    ctx.fillStyle = '#92400e';
-    ctx.font = 'bold 88px "Instrument Serif", Georgia, serif';
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-    ctx.fillText(familyInfo.childName.charAt(0), anchorX + anchorSize / 2, anchorY + anchorSize / 2 - 6);
+    if (familyInfo.childAvatarUrl) {
+      try {
+        const childImg = await loadImage(familyInfo.childAvatarUrl);
+        ctx.save();
+        drawRoundedRect(ctx, anchorX, anchorY, anchorSize, anchorSize, 36);
+        ctx.clip();
+        ctx.drawImage(childImg, anchorX, anchorY, anchorSize, anchorSize);
+        ctx.restore();
 
-    // Child Symbol
-    ctx.font = '40px sans-serif';
-    ctx.fillText(familyInfo.childSymbol, anchorX + anchorSize - 28, anchorY + anchorSize - 24);
+        ctx.strokeStyle = '#fde68a';
+        ctx.lineWidth = 4;
+        drawRoundedRect(ctx, anchorX, anchorY, anchorSize, anchorSize, 36);
+        ctx.stroke();
+        childPhotoRendered = true;
+      } catch (e) {
+        childPhotoRendered = false;
+      }
+    }
+
+    if (!childPhotoRendered) {
+      ctx.fillStyle = '#fef3c7';
+      drawRoundedRect(ctx, anchorX, anchorY, anchorSize, anchorSize, 36);
+      ctx.fill();
+      ctx.strokeStyle = '#fde68a';
+      ctx.lineWidth = 4;
+      ctx.stroke();
+
+      // Child Initial in Serif
+      ctx.fillStyle = '#92400e';
+      ctx.font = 'bold 88px "Instrument Serif", Georgia, serif';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(familyInfo.childName.charAt(0), anchorX + anchorSize / 2, anchorY + anchorSize / 2 - 6);
+
+      // Child Symbol
+      ctx.font = '40px sans-serif';
+      ctx.fillText(familyInfo.childSymbol, anchorX + anchorSize - 28, anchorY + anchorSize - 24);
+    }
 
     // Child Identity & Class (Anchor in Instrument Serif)
     const textStartX = 310;
@@ -403,12 +447,13 @@ async function renderNameCardCanvas(profile: PersonaProfile, qrDataUrl: string):
     // Name & Educational Identity
     const textStartX = 320;
 
-    // Person Name (Instrument Serif 22pt allowlist)
+    // Person Name (Instrument Serif 22pt allowlist in Title Case)
+    const staffDisplayName = formatTitleCase(profile.name);
     ctx.fillStyle = '#0f172a';
     ctx.font = 'normal 72px "Instrument Serif", Playfair Display, Georgia, serif';
     ctx.textAlign = 'left';
     ctx.textBaseline = 'alphabetic';
-    ctx.fillText(profile.name, textStartX, 185);
+    ctx.fillText(staffDisplayName, textStartX, 185);
 
     // Role Title (Plus Jakarta Sans)
     ctx.fillStyle = '#64748b';
@@ -483,6 +528,7 @@ export const NameCardModal: React.FC<NameCardModalProps> = ({
   const [qrDataUrl, setQrDataUrl] = useState<string>('');
   const [isGenerating, setIsGenerating] = useState<boolean>(false);
   const [statusMessage, setStatusMessage] = useState<string | null>(null);
+  const [childImgFailed, setChildImgFailed] = useState<boolean>(false);
   const cardRef = useRef<HTMLDivElement>(null);
 
   const isGuardian = profile.role === 'GUARDIAN';
@@ -683,10 +729,22 @@ export const NameCardModal: React.FC<NameCardModalProps> = ({
 
                 {/* Main Identity: Child Visual Anchor + Instrument Serif Name + Guardian Block */}
                 <div className="relative z-10 flex items-start space-x-3.5 pt-1 flex-1">
-                  {/* Visual Anchor: Child Avatar */}
-                  <div className="relative w-13 h-13 rounded-2xl bg-amber-100/90 border border-amber-300 text-amber-900 flex items-center justify-center text-lg font-bold shrink-0 shadow-xs">
-                    <span className="font-serif text-xl">{familyInfo.childName.charAt(0)}</span>
-                    <span className="absolute -bottom-1 -right-1 text-xs" aria-hidden="true">{familyInfo.childSymbol}</span>
+                  {/* Visual Anchor: Child Avatar (Photo with graceful fallback to Pastel + Initial) */}
+                  <div className="relative w-13 h-13 rounded-2xl bg-amber-100/90 border border-amber-300 text-amber-900 flex items-center justify-center text-lg font-bold shrink-0 shadow-xs overflow-hidden">
+                    {familyInfo.childAvatarUrl && !childImgFailed ? (
+                      <img 
+                        src={familyInfo.childAvatarUrl} 
+                        alt={familyInfo.childName}
+                        className="w-full h-full object-cover"
+                        onError={() => setChildImgFailed(true)}
+                        data-testid="family-card-child-photo"
+                      />
+                    ) : (
+                      <>
+                        <span className="font-serif text-xl">{familyInfo.childName.charAt(0)}</span>
+                        <span className="absolute -bottom-1 -right-1 text-xs" aria-hidden="true">{familyInfo.childSymbol}</span>
+                      </>
+                    )}
                   </div>
 
                   <div className="min-w-0 flex-1">
@@ -763,9 +821,9 @@ export const NameCardModal: React.FC<NameCardModalProps> = ({
                   )}
 
                   <div className="min-w-0 flex-1">
-                    {/* Person Name in Instrument Serif (22pt / allowlist compliant) */}
-                    <h1 className="font-serif text-[21px] leading-tight text-[#0f172a] font-normal tracking-tight truncate">
-                      {profile.name}
+                    {/* Person Name in Instrument Serif (22pt / allowlist compliant in Title Case) */}
+                    <h1 className="font-serif text-[21px] leading-tight text-[#0f172a] font-normal tracking-tight truncate" data-testid="staff-card-name">
+                      {formatTitleCase(profile.name)}
                     </h1>
                     <div className="text-[11px] font-sans font-medium text-[#64748b] leading-tight mt-0.5 truncate">
                       {profile.roleTitle || profile.role}

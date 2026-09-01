@@ -1518,5 +1518,9 @@ Untuk menjamin integritas struktural, ergonomi layar sentuh, dan kepatuhan absol
     * **Kartu Keluarga (Pickup Verification Card)**: Percabangan otomatis pada NameCardModal saat persona GUARDIAN aktif: foto/AvatarChild anak sebagai visual anchor, nama anak dalam Instrument Serif, kelas, blok orang tua/wali primer & terkait, dan kontak wali.
     * **Privacy Shield**: Pagar privasi mutlak dengan proteksi zero NIK/NIS anak pada permukaan kartu fisik/digital.
     * **Desktop Sidebar Chrome Completeness**: Menyematkan kontrol Tema Visual `[Ivory | Midnight]` dan Keluar dari Sesi pada bottom utility sidebar desktop, serta mereformasi aksi penutup Profile Hub menjadi *Selesai & Simpan Profil*.
+* **v3.0.18-PATCH (2026-09-01)**:
+  * **Title Case Typography Harmonization & Child Photo Path (W-16 & W-17 Micro-Patches)**:
+    * **W-16 (Harmonisasi Tipografi Staf)**: Seluruh nama staf pada Kartu Nama Digital diformat dengan *Title Case* yang konsisten (`formatTitleCase(profile.name)` → `Erna Boykela R`), menghapus inkonsistensi ALL-CAPS dan menciptakan keharmonisan visual keluarga artefak kartu.
+    * **W-17 (Jalur Foto Anak & Graceful Fallback)**: Varian Kartu Keluarga mendukung tautan foto aktual anak via `familyInfo.childAvatarUrl` yang dirender dalam squircle kanvas & DOM, dengan penanganan kesalahan otomatis (*error fallback*) ke `AvatarChild` pastel + simbol deterministik saat foto tidak tersedia atau gagal dimuat.
 
 

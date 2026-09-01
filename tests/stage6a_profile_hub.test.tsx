@@ -144,7 +144,7 @@ async function runProfileHubTests() {
       assert.ok(html.includes('data-testid="cr80-name-card-preview"'), 'Expected CR80 preview element');
       assert.ok(html.includes('font-serif'), 'Expected Instrument Serif class for name');
       assert.ok(html.includes('aspect-[856/540]'), 'Expected CR80 85.6x54mm aspect ratio');
-      assert.ok(html.includes('ERNA BOYKELA R'), 'Expected persona name');
+      assert.ok(html.includes('Erna Boykela R'), 'Expected persona name in Title Case');
       assert.ok(html.includes('PDF (Cetak CR80)'), 'Expected PDF format option');
       assert.ok(html.includes('PNG (Digital)'), 'Expected PNG format option');
     });
@@ -238,7 +238,7 @@ async function runProfileHubTests() {
       assert.strictEqual(nisMatches, null, 'Must contain ZERO 10-digit NIS strings in card');
     });
 
-    runCheck('NameCardModal [BRANCHING PARITY]: Staff persona continues to render staff card', () => {
+    runCheck('NameCardModal [BRANCHING PARITY & TITLE CASE W-16]: Staff persona renders staff card in Title Case', () => {
       const staffPersona = GENESIS_PERSONAS[2]; // Teacher Erna
       const html = renderToString(
         <NameCardModal
@@ -248,8 +248,37 @@ async function runProfileHubTests() {
         />
       );
       assert.ok(!html.includes('KARTU KELUARGA'), 'Staff card must NOT render KARTU KELUARGA badge');
-      assert.ok(html.includes('ERNA BOYKELA R'), 'Expected teacher name on staff card');
+      assert.ok(html.includes('Erna Boykela R'), 'Expected teacher name on staff card in Title Case');
       assert.ok(html.includes('Guru Kelas / Wali Kelompok A (TK A)'), 'Expected teacher title on staff card');
+    });
+
+    runCheck('NameCardModal [CHILD PHOTO PATH W-17]: Renders child photo when present and falls back gracefully when null', () => {
+      // 1. With photo
+      const guardianWithPhoto = {
+        ...GENESIS_PERSONAS[5],
+        childAvatarUrl: 'https://images.unsplash.com/photo-child-sample.jpg'
+      };
+      const photoHtml = renderToString(
+        <NameCardModal
+          isOpen={true}
+          onClose={() => {}}
+          profile={guardianWithPhoto}
+        />
+      );
+      assert.ok(photoHtml.includes('data-testid="family-card-child-photo"'), 'Expected child photo element when childAvatarUrl is present');
+      assert.ok(photoHtml.includes('photo-child-sample.jpg'), 'Expected image src to match childAvatarUrl');
+
+      // 2. Without photo (fallback)
+      const guardianWithoutPhoto = GENESIS_PERSONAS[5];
+      const fallbackHtml = renderToString(
+        <NameCardModal
+          isOpen={true}
+          onClose={() => {}}
+          profile={guardianWithoutPhoto}
+        />
+      );
+      assert.ok(!fallbackHtml.includes('data-testid="family-card-child-photo"'), 'Must not render img tag when childAvatarUrl is null');
+      assert.ok(fallbackHtml.includes('🌟'), 'Expected deterministic symbol in fallback avatar');
     });
   }
 

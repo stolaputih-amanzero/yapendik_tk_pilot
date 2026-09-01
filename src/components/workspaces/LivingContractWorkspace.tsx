@@ -709,7 +709,7 @@ export const LivingContractWorkspace: React.FC = () => {
                 </div>
                 <div className="min-w-0 flex-1">
                   <h1 className="font-serif text-[21px] leading-tight text-ink font-normal tracking-tight truncate">
-                    ERNA BOYKELA R
+                    Erna Boykela R
                   </h1>
                   <div className="text-[11px] font-sans font-medium text-ink-soft leading-tight mt-0.5 truncate">
                     Guru Kelas / Wali Kelompok A (TK A)
