@@ -332,3 +332,31 @@ BEGIN
   );
 END;
 $$;
+
+-- ═══════════════════════════════════════════════════════════════════════════
+-- 7. RLS POLICIES: GOVERNANCE, STAFF, & TEACHER PROFILE RESOLUTION
+-- ═══════════════════════════════════════════════════════════════════════════
+GRANT SELECT ON public.governance_profiles TO authenticated, anon;
+GRANT SELECT ON public.staff_profiles TO authenticated, anon;
+GRANT SELECT ON public.teacher_profiles TO authenticated, anon;
+
+DO $$ BEGIN
+  DROP POLICY IF EXISTS "p_governance_profiles_read_all" ON public.governance_profiles;
+  DROP POLICY IF EXISTS "p_staff_profiles_read_all" ON public.staff_profiles;
+  DROP POLICY IF EXISTS "p_teacher_profiles_read_all" ON public.teacher_profiles;
+END $$;
+
+CREATE POLICY "p_governance_profiles_read_all"
+ON public.governance_profiles FOR SELECT
+TO authenticated, anon
+USING (true);
+
+CREATE POLICY "p_staff_profiles_read_all"
+ON public.staff_profiles FOR SELECT
+TO authenticated, anon
+USING (true);
+
+CREATE POLICY "p_teacher_profiles_read_all"
+ON public.teacher_profiles FOR SELECT
+TO authenticated, anon
+USING (true);
