@@ -519,6 +519,38 @@ async function renderNameCardCanvas(profile: PersonaProfile, qrDataUrl: string):
   return canvas;
 }
 
+/**
+ * Canonical single-gateway file download trigger
+ */
+export function triggerDownload(blob: Blob, filename: string) {
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  setTimeout(() => {
+    try {
+      URL.revokeObjectURL(url);
+    } catch {}
+  }, 2000);
+}
+
+/**
+ * Human-readable slug generator for download filenames
+ */
+export function formatSlug(str: string): string {
+  if (!str) return 'User';
+  return str
+    .replace(/[^a-zA-Z0-9\s_-]/g, '')
+    .trim()
+    .split(/[\s_-]+/)
+    .filter(Boolean)
+    .map(w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase())
+    .join('-');
+}
+
 export const NameCardModal: React.FC<NameCardModalProps> = ({
   isOpen,
   onClose,
@@ -568,23 +600,30 @@ export const NameCardModal: React.FC<NameCardModalProps> = ({
     setIsGenerating(true);
     setStatusMessage(null);
 
-    const filenameBase = isGuardian && familyInfo
-      ? `kartu-keluarga-${familyInfo.childName.toLowerCase().replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '')}`
-      : `kartu-nama-${profile.name.toLowerCase().replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '')}`;
+    const baseSlug = isGuardian && familyInfo
+      ? `KartuKeluarga_${formatSlug(familyInfo.childName)}`
+      : `KartuNama_${formatSlug(profile.name)}`;
+
+    const filename = format === 'PNG' 
+      ? `${baseSlug}_Digital.png` 
+      : `${baseSlug}_CR80.pdf`;
 
     try {
       // Direct high-DPI programmatic canvas generation (Zero html2canvas quirks, guaranteed instant)
       const canvas = await renderNameCardCanvas(profile, qrDataUrl);
 
       if (format === 'PNG') {
-        const imgData = canvas.toDataURL('image/png');
-        const link = document.createElement('a');
-        link.download = `${filenameBase}.png`;
-        link.href = imgData;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        setStatusMessage(isGuardian ? 'Kartu keluarga PNG (300 DPI) berhasil diunduh.' : 'Kartu nama PNG (300 DPI) berhasil diunduh.');
+        canvas.toBlob((b) => {
+          if (!b) {
+            setStatusMessage('Gagal menyiapkan berkas gambar PNG.');
+            setIsGenerating(false);
+            return;
+          }
+          const finalBlob = new Blob([b], { type: 'image/png' });
+          triggerDownload(finalBlob, filename);
+          setStatusMessage(`${filename} berhasil diunduh.`);
+          setIsGenerating(false);
+        }, 'image/png');
       } else {
         // PDF Export: CR80 format in Landscape (85.6 mm × 54 mm)
         const imgData = canvas.toDataURL('image/jpeg', 0.98);
@@ -596,13 +635,15 @@ export const NameCardModal: React.FC<NameCardModalProps> = ({
         });
 
         pdf.addImage(imgData, 'JPEG', 0, 0, 85.6, 54);
-        pdf.save(`${filenameBase}.pdf`);
-        setStatusMessage(isGuardian ? 'Kartu keluarga PDF (standar CR80) berhasil diunduh.' : 'Kartu nama PDF (standar CR80) berhasil diunduh.');
+        const pdfBlob = pdf.output('blob');
+        const finalBlob = new Blob([pdfBlob], { type: 'application/pdf' });
+        triggerDownload(finalBlob, filename);
+        setStatusMessage(`${filename} berhasil diunduh.`);
+        setIsGenerating(false);
       }
     } catch (err: any) {
       console.error('Error generating card', err);
       setStatusMessage('Gagal membuat berkas kartu nama. Silakan coba lagi.');
-    } finally {
       setIsGenerating(false);
     }
   };

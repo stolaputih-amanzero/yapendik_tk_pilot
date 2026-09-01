@@ -282,6 +282,88 @@ async function runProfileHubTests() {
     });
   }
 
+  // --- MODULE 9: Name Card Binary & Filename Integrity (ARB Requirement) ---
+  console.log('\n--- MODULE 9: Name Card Binary & Filename Integrity ---');
+  {
+    const { formatSlug, triggerDownload } = await import('../src/components/profile/NameCardModal');
+
+    runCheck('NameCard Filename [SLUG GENERATION]: Produces clean human-readable hyphenated TitleCase slugs', () => {
+      assert.strictEqual(formatSlug('Erna Boykela R.'), 'Erna-Boykela-R');
+      assert.strictEqual(formatSlug('Jequaline Arabella (Millen)'), 'Jequaline-Arabella-Millen');
+      assert.strictEqual(formatSlug('Esther   K.  S.Pd'), 'Esther-K-Spd');
+      assert.strictEqual(formatSlug('Dr. Shirley_Patty'), 'Dr-Shirley-Patty');
+    });
+
+    runCheck('NameCard Filename [REGEX CONTRACT]: Filenames strictly match /Kartu(Nama|Keluarga)_[A-Za-z0-9-]+_(CR80\\.pdf|Digital\\.png)$/', () => {
+      const FILENAME_REGEX = /^Kartu(Nama|Keluarga)_[A-Za-z0-9-]+_(CR80\.pdf|Digital\.png)$/;
+
+      const staffPdf = `KartuNama_${formatSlug('Erna Boykela R.')}_CR80.pdf`;
+      const staffPng = `KartuNama_${formatSlug('Erna Boykela R.')}_Digital.png`;
+      const guardianPdf = `KartuKeluarga_${formatSlug('Jequaline Arabella (Millen)')}_CR80.pdf`;
+      const guardianPng = `KartuKeluarga_${formatSlug('Jequaline Arabella (Millen)')}_Digital.png`;
+
+      assert.ok(FILENAME_REGEX.test(staffPdf), `Expected staff PDF filename ${staffPdf} to match contract`);
+      assert.ok(FILENAME_REGEX.test(staffPng), `Expected staff PNG filename ${staffPng} to match contract`);
+      assert.ok(FILENAME_REGEX.test(guardianPdf), `Expected guardian PDF filename ${guardianPdf} to match contract`);
+      assert.ok(FILENAME_REGEX.test(guardianPng), `Expected guardian PNG filename ${guardianPng} to match contract`);
+      assert.ok(!FILENAME_REGEX.test('4a883903-71d2-4c83-bfda-4839ce9dd554'), 'UUID without extension must FAIL');
+    });
+
+    runCheck('Download Gateway [TRIGGER DOWNLOAD HELPER]: Sets anchor download attribute, blob MIME type, and revokes URL', () => {
+      let createdHref = '';
+      let createdDownload = '';
+      let clicked = false;
+      let removed = false;
+      let revokedUrl = '';
+
+      // Mock DOM methods for test environment
+      const origCreateElement = (globalThis as any).document?.createElement;
+      const origAppendChild = (globalThis as any).document?.body?.appendChild;
+      const origCreateObjectURL = (globalThis as any).URL?.createObjectURL;
+      const origRevokeObjectURL = (globalThis as any).URL?.revokeObjectURL;
+
+      const mockAnchor: any = {
+        set href(val: string) { createdHref = val; },
+        get href() { return createdHref; },
+        set download(val: string) { createdDownload = val; },
+        get download() { return createdDownload; },
+        click() { clicked = true; },
+        remove() { removed = true; }
+      };
+
+      (globalThis as any).document = {
+        createElement: (tag: string) => tag === 'a' ? mockAnchor : {},
+        body: {
+          appendChild: (el: any) => el,
+          removeChild: (el: any) => el
+        }
+      };
+
+      (globalThis as any).URL = {
+        createObjectURL: (blob: Blob) => `blob:http://localhost:3000/mock-uuid`,
+        revokeObjectURL: (url: string) => { revokedUrl = url; }
+      };
+
+      try {
+        const testBlob = new Blob(['%PDF-1.4 mock binary content'], { type: 'application/pdf' });
+        const targetFilename = 'KartuNama_Erna-Boykela-R_CR80.pdf';
+
+        triggerDownload(testBlob, targetFilename);
+
+        assert.strictEqual(createdDownload, targetFilename, 'Anchor download attribute MUST match target filename');
+        assert.ok(createdHref.startsWith('blob:'), 'Anchor href MUST be an object URL');
+        assert.strictEqual(clicked, true, 'Anchor click MUST be triggered');
+        assert.strictEqual(removed, true, 'Anchor element MUST be removed after click');
+        assert.strictEqual(testBlob.type, 'application/pdf', 'Blob type MUST be application/pdf');
+      } finally {
+        if (origCreateElement) (globalThis as any).document.createElement = origCreateElement;
+        if (origAppendChild) (globalThis as any).document.body.appendChild = origAppendChild;
+        if (origCreateObjectURL) (globalThis as any).URL.createObjectURL = origCreateObjectURL;
+        if (origRevokeObjectURL) (globalThis as any).URL.revokeObjectURL = origRevokeObjectURL;
+      }
+    });
+  }
+
   console.log('\n════════════════════════════════════════════════════════════════');
   console.log(`🏁 STAGE 6-A SUITE 37 SUMMARY: ${passedTests} PASSED, ${failedTests} FAILED (TOTAL: ${totalTests})`);
   console.log('════════════════════════════════════════════════════════════════\n');
