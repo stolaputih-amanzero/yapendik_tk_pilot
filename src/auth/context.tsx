@@ -291,6 +291,15 @@ export const SecurityContextProvider: React.FC<{
     if (initialPersonaId) {
       return SEED_PERSONAS.find(p => p.id === initialPersonaId) || null;
     }
+    if (typeof window !== 'undefined') {
+      try {
+        const savedPersonaId = localStorage.getItem('amanaura_active_persona');
+        if (savedPersonaId) {
+          const found = SEED_PERSONAS.find(p => p.id === savedPersonaId);
+          if (found) return found;
+        }
+      } catch {}
+    }
     return null;
   });
   const [activeSchoolId, setActiveSchoolId] = useState<string>('sch_tk_yapendik_01');
@@ -301,7 +310,12 @@ export const SecurityContextProvider: React.FC<{
   useEffect(() => {
     if (!supabase) {
       // Fallback to initial simulation check
-      setAuthState('UNAUTHENTICATED');
+      const savedPersonaId = typeof window !== 'undefined' ? localStorage.getItem('amanaura_active_persona') : null;
+      if (savedPersonaId) {
+        setAuthState('AUTHENTICATED_MAPPED');
+      } else {
+        setAuthState('UNAUTHENTICATED');
+      }
       return;
     }
 
@@ -324,6 +338,28 @@ export const SecurityContextProvider: React.FC<{
   const handleSession = async (session: any) => {
     if (!session?.user) {
       setAuthenticatedUser(null);
+      const savedPersonaId = typeof window !== 'undefined' ? localStorage.getItem('amanaura_active_persona') : null;
+      if (savedPersonaId) {
+        const base = SEED_PERSONAS.find(p => p.id === savedPersonaId);
+        if (base) {
+          let selected = { ...base };
+          try {
+            const savedOverrides = JSON.parse(localStorage.getItem('yapendik_persona_overrides') || '{}');
+            if (savedOverrides[savedPersonaId]) {
+              selected = { ...selected, ...savedOverrides[savedPersonaId] };
+            }
+          } catch {}
+          isSimulationModeRef.current = true;
+          setIsSimulationMode(true);
+          setCurrentPersona(selected);
+          setAuthState('AUTHENTICATED_MAPPED');
+          if (selected.role !== 'YAPENDIK_SUPERADMIN') {
+            setActiveSchoolId(selected.schoolId);
+          }
+          return;
+        }
+      }
+
       if (!isSimulationModeRef.current) {
         setCurrentPersona(null);
         setAuthState('UNAUTHENTICATED');
@@ -600,6 +636,12 @@ export const SecurityContextProvider: React.FC<{
     db.purgeAllSessionCache();
     db.setContextScope(selected.id, selected.schoolId);
 
+    if (typeof window !== 'undefined') {
+      try {
+        localStorage.setItem('amanaura_active_persona', personaId);
+      } catch {}
+    }
+
     isSimulationModeRef.current = true;
     setIsSimulationMode(true);
     setCurrentPersona(selected);
@@ -669,6 +711,11 @@ export const SecurityContextProvider: React.FC<{
   };
   
   const signOut = async () => {
+    if (typeof window !== 'undefined') {
+      try {
+        localStorage.removeItem('amanaura_active_persona');
+      } catch {}
+    }
     // Strict cache purge on logout
     db.purgeAllSessionCache();
     isSimulationModeRef.current = false;
