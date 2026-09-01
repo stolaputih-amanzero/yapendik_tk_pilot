@@ -14,7 +14,7 @@ CREATE OR REPLACE FUNCTION public.rpc_webauthn_registration_challenge()
 RETURNS text
 LANGUAGE plpgsql
 SECURITY DEFINER
-SET search_path = public, extensions, pg_catalog, pg_temp
+SET search_path = 'public, extensions, pg_catalog, pg_temp'
 AS $$
 DECLARE
   v_person_id text;
@@ -40,29 +40,34 @@ BEGIN
 
   v_challenge := translate(encode(v_raw_bytes, 'base64'), '+/=', '-_');
 
-  UPDATE public.persons
+  UPDATE public.persons AS p
   SET webauthn_pending_challenge = v_challenge,
       webauthn_challenge_expires_at = now() + interval '5 minutes'
-  WHERE id = v_person_id;
+  WHERE p.id = v_person_id;
 
   RETURN v_challenge;
 END;
 $$;
 
--- 3. RPC: REGISTER WEBAUTHN CREDENTIAL WITH CEREMONY VALIDATION & CAP (W-18 & W-20)
+-- 3. DROP EXISTING SIGNATURES FIRST (To permit parameter renaming)
+DROP FUNCTION IF EXISTS public.rpc_webauthn_register_credential(text, bytea, bigint, text[], text, text, jsonb);
+DROP FUNCTION IF EXISTS public.rpc_webauthn_register_credential(text, bytea, bigint, text[], text, text);
+
+-- 4. RPC: REGISTER WEBAUTHN CREDENTIAL WITH CEREMONY VALIDATION & CAP (W-18 & W-20)
+-- Uses explicit p_ prefixes to eliminate PL/pgSQL variable column ambiguity
 CREATE OR REPLACE FUNCTION public.rpc_webauthn_register_credential(
-  credential_id text,
-  public_key bytea,
-  sign_count bigint,
-  transports text[] DEFAULT '{}',
-  device_type text DEFAULT 'platform',
-  friendly_name text DEFAULT 'Passkey',
-  client_data_json jsonb DEFAULT NULL
+  p_credential_id text,
+  p_public_key bytea,
+  p_sign_count bigint DEFAULT 0,
+  p_transports text[] DEFAULT '{}',
+  p_device_type text DEFAULT 'platform',
+  p_friendly_name text DEFAULT 'Passkey',
+  p_client_data_json jsonb DEFAULT NULL
 )
 RETURNS void
 LANGUAGE plpgsql
 SECURITY DEFINER
-SET search_path = public, pg_temp
+SET search_path = 'public, extensions, pg_catalog, pg_temp'
 AS $$
 DECLARE
   v_person_id text;
@@ -85,22 +90,22 @@ BEGIN
 
   -- 2. Credential Cap Guard (W-20: Maximum 5 credentials per user)
   SELECT COUNT(*)::int INTO v_cred_count 
-  FROM public.webauthn_credentials 
-  WHERE user_id = auth.uid();
+  FROM public.webauthn_credentials AS wc
+  WHERE wc.user_id = auth.uid();
 
   -- Allow update if credential already exists, otherwise enforce limit of 5
   IF v_cred_count >= 5 AND NOT EXISTS (
-    SELECT 1 FROM public.webauthn_credentials 
-    WHERE credential_id = rpc_webauthn_register_credential.credential_id AND user_id = auth.uid()
+    SELECT 1 FROM public.webauthn_credentials AS wc
+    WHERE wc.credential_id = p_credential_id AND wc.user_id = auth.uid()
   ) THEN
     RAISE EXCEPTION 'CREDENTIAL_LIMIT_REACHED: Maksimal 5 passkey terdaftar per pengguna';
   END IF;
 
   -- 3. Ceremony Validation (W-18: Type, Origin, Freshness, Single-Use)
-  IF client_data_json IS NOT NULL THEN
-    v_client_type := client_data_json->>'type';
-    v_client_origin := client_data_json->>'origin';
-    v_client_challenge := client_data_json->>'challenge';
+  IF p_client_data_json IS NOT NULL THEN
+    v_client_type := p_client_data_json->>'type';
+    v_client_origin := p_client_data_json->>'origin';
+    v_client_challenge := p_client_data_json->>'challenge';
 
     -- Validate type
     IF v_client_type IS NULL OR v_client_type != 'webauthn.create' THEN
@@ -113,10 +118,10 @@ BEGIN
     END IF;
 
     -- Validate challenge against server-issued single-use challenge
-    SELECT webauthn_pending_challenge, webauthn_challenge_expires_at
+    SELECT p.webauthn_pending_challenge, p.webauthn_challenge_expires_at
     INTO v_pending_challenge, v_expires_at
-    FROM public.persons
-    WHERE id = v_person_id;
+    FROM public.persons AS p
+    WHERE p.id = v_person_id;
 
     IF v_pending_challenge IS NULL OR v_expires_at IS NULL THEN
       RAISE EXCEPTION 'CEREMONY_INVALID: Tidak ada challenge aktif. Silakan minta challenge baru.';
@@ -124,9 +129,9 @@ BEGIN
 
     IF now() > v_expires_at THEN
       -- Expired
-      UPDATE public.persons 
+      UPDATE public.persons AS p
       SET webauthn_pending_challenge = NULL, webauthn_challenge_expires_at = NULL 
-      WHERE id = v_person_id;
+      WHERE p.id = v_person_id;
       RAISE EXCEPTION 'CEREMONY_INVALID: Challenge registrasi telah kadaluarsa (batas waktu 5 menit)';
     END IF;
 
@@ -135,10 +140,10 @@ BEGIN
     END IF;
 
     -- Single-use: Consume challenge immediately
-    UPDATE public.persons
+    UPDATE public.persons AS p
     SET webauthn_pending_challenge = NULL,
         webauthn_challenge_expires_at = NULL
-    WHERE id = v_person_id;
+    WHERE p.id = v_person_id;
   END IF;
 
   -- 4. Store Credential (Owner-only bound to auth.uid())
@@ -153,13 +158,13 @@ BEGIN
     created_at,
     last_used_at
   ) VALUES (
-    rpc_webauthn_register_credential.credential_id,
+    p_credential_id,
     auth.uid(),
-    rpc_webauthn_register_credential.public_key,
-    COALESCE(rpc_webauthn_register_credential.sign_count, 0),
-    COALESCE(rpc_webauthn_register_credential.transports, '{}'),
-    COALESCE(rpc_webauthn_register_credential.device_type, 'platform'),
-    COALESCE(rpc_webauthn_register_credential.friendly_name, 'Passkey'),
+    p_public_key,
+    COALESCE(p_sign_count, 0),
+    COALESCE(p_transports, '{}'),
+    COALESCE(p_device_type, 'platform'),
+    COALESCE(p_friendly_name, 'Passkey'),
     now(),
     now()
   )
@@ -168,10 +173,10 @@ BEGIN
     last_used_at = now();
 
   -- 5. Mark passkey enabled on persons profile
-  UPDATE public.persons
+  UPDATE public.persons AS p
   SET passkey_enabled = true,
       passkey_registered_at = now()
-  WHERE id = v_person_id;
+  WHERE p.id = v_person_id;
 END;
 $$;
 

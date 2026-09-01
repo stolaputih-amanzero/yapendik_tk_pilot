@@ -269,13 +269,13 @@ export async function registerPasskey(
       }
 
       const { error: rpcErr } = await supabase.rpc('rpc_webauthn_register_credential', {
-        credential_id: credential.id,
-        public_key: pubKey,
-        sign_count: 0,
-        transports: credential.response?.transports || ['internal'],
-        device_type: 'platform',
-        friendly_name: friendlyName,
-        client_data_json: clientDataJsonObj,
+        p_credential_id: credential.id,
+        p_public_key: pubKey,
+        p_sign_count: 0,
+        p_transports: credential.response?.transports || ['internal'],
+        p_device_type: 'platform',
+        p_friendly_name: friendlyName,
+        p_client_data_json: clientDataJsonObj,
       });
 
       if (rpcErr) {
