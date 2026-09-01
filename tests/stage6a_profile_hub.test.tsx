@@ -145,8 +145,8 @@ async function runProfileHubTests() {
       assert.ok(html.includes('font-serif'), 'Expected Instrument Serif class for name');
       assert.ok(html.includes('aspect-[856/540]'), 'Expected CR80 85.6x54mm aspect ratio');
       assert.ok(html.includes('Erna Boykela R'), 'Expected persona name in Title Case');
-      assert.ok(html.includes('PDF (Cetak CR80)'), 'Expected PDF format option');
-      assert.ok(html.includes('PNG (Digital)'), 'Expected PNG format option');
+      assert.ok(html.includes('data-testid="format-pdf-toggle"') && html.includes('PDF'), 'Expected PDF format option');
+      assert.ok(html.includes('data-testid="format-png-toggle"') && html.includes('PNG'), 'Expected PNG format option');
     });
 
     runCheck('NameCardModal [QR PAYLOAD CANONICAL URL]: QR Code contains canonical public URL with ZERO credentials', () => {

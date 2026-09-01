@@ -32,7 +32,8 @@ import {
   ShieldCheck, 
   Check, 
   AlertCircle,
-  Loader2
+  Loader2,
+  Image as ImageIcon
 } from 'lucide-react';
 
 interface ProfileDrawerProps {
@@ -49,11 +50,12 @@ export const ProfileDrawer: React.FC<ProfileDrawerProps> = ({
   const { currentPersona, updateOwnProfile, signOut } = useSecurityContext();
   const supabase = getSupabaseClient();
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const cameraInputRef = useRef<HTMLInputElement>(null);
 
   // Modal / Dialog States
   const [isNameCardOpen, setIsNameCardOpen] = useState<boolean>(false);
   const [isPasskeyManagerOpen, setIsPasskeyManagerOpen] = useState<boolean>(false);
-  const [activeDialog, setActiveDialog] = useState<'NAME' | 'PHONE' | 'PASSWORD' | 'PASSKEY_ON' | 'PASSKEY_OFF' | null>(null);
+  const [activeDialog, setActiveDialog] = useState<'NAME' | 'PHONE' | 'PASSWORD' | 'PASSKEY_ON' | 'PASSKEY_OFF' | 'PHOTO_SOURCE' | null>(null);
 
   // Form Field States
   const [editName, setEditName] = useState<string>('');
@@ -417,19 +419,29 @@ export const ProfileDrawer: React.FC<ProfileDrawerProps> = ({
                 {/* Change Photo Button Trigger */}
                 <button
                   type="button"
-                  onClick={() => fileInputRef.current?.click()}
+                  onClick={() => setActiveDialog('PHOTO_SOURCE')}
                   disabled={isLoading}
                   className="absolute -bottom-1 -left-1 p-2 rounded-full bg-surface border border-line-hairline text-brand-primary hover-only:bg-surface-subtle shadow-xs cursor-pointer transition-colors"
                   aria-label="Pilih Foto Profil"
-                  title="Pilih Foto Profil dari Galeri / Berkas"
+                  title="Pilih Sumber Foto Profil (Kamera atau Galeri)"
                   data-testid="btn-change-photo"
                 >
                   {isLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Camera className="w-4 h-4" />}
                 </button>
+                {/* Gallery / File Manager Input */}
                 <input 
                   ref={fileInputRef}
                   type="file"
                   accept=".jpg,.jpeg,.png,.webp,image/png,image/jpeg,image/webp"
+                  className="hidden"
+                  onChange={handlePhotoSelect}
+                />
+                {/* Camera Direct Input */}
+                <input 
+                  ref={cameraInputRef}
+                  type="file"
+                  accept="image/*"
+                  capture="environment"
                   className="hidden"
                   onChange={handlePhotoSelect}
                 />
@@ -444,9 +456,8 @@ export const ProfileDrawer: React.FC<ProfileDrawerProps> = ({
                 <p className="text-xs text-ink-soft">
                   {currentPersona?.roleTitle || currentPersona?.role}
                 </p>
-                <div className="inline-flex items-start space-x-2 px-3 py-1.5 rounded-xl bg-surface text-xs font-mono text-ink-soft border border-line-hairline max-w-full text-left">
-                  <Building2 className="w-4 h-4 text-brand-primary shrink-0 mt-0.5" />
-                  <span className="break-words leading-tight">{currentPersona?.schoolName || 'Satuan Pendidikan Yapendik'}</span>
+                <div className="w-full px-3.5 py-2 rounded-xl bg-surface text-xs font-mono text-ink-soft border border-line-hairline text-justify break-words leading-relaxed">
+                  {currentPersona?.schoolName || 'TK YAPENDIK GPIB Cabang Maranatha'}
                 </div>
               </div>
             </div>
@@ -676,7 +687,12 @@ export const ProfileDrawer: React.FC<ProfileDrawerProps> = ({
             <div className="pt-2">
               <button
                 type="button"
-                onClick={onClose}
+                onClick={() => {
+                  showToast('Data profil berhasil disimpan.');
+                  setTimeout(() => {
+                    onClose();
+                  }, 450);
+                }}
                 className="w-full p-4 rounded-2xl bg-brand-primary text-on-brand hover-only:opacity-95 font-bold text-xs flex items-center justify-center space-x-2 transition-all cursor-pointer min-h-[48px] shadow-soft"
                 aria-label="Selesai dan Tutup Profil"
                 data-testid="btn-drawer-done"
@@ -894,6 +910,73 @@ export const ProfileDrawer: React.FC<ProfileDrawerProps> = ({
                 data-testid="btn-confirm-passkey-off"
               >
                 {isLoading ? 'Menonaktifkan...' : 'Nonaktifkan'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Dialog: Pilihan Sumber Foto Profil */}
+      {activeDialog === 'PHOTO_SOURCE' && (
+        <div className="fixed inset-0 z-70 bg-ink/60 backdrop-blur-xs flex items-center justify-center p-4">
+          <div className="w-full max-w-sm bg-surface rounded-3xl border border-line-soft shadow-modal p-5 space-y-4 animate-in fade-in zoom-in-95 duration-150">
+            <div className="flex items-center justify-between">
+              <h3 className="font-bold text-sm text-ink">Pilih Sumber Foto Profil</h3>
+              <button
+                type="button"
+                onClick={() => setActiveDialog(null)}
+                className="w-7 h-7 rounded-full bg-surface-subtle border border-line-hairline flex items-center justify-center text-ink-soft hover-only:text-ink cursor-pointer"
+                aria-label="Tutup Dialog Pilihan Foto"
+              >
+                <X className="w-3.5 h-3.5" />
+              </button>
+            </div>
+            <p className="text-xs text-ink-soft leading-relaxed">
+              Pilih apakah Anda ingin mengambil foto secara langsung dengan kamera atau memilih foto dari galeri / berkas perangkat Anda:
+            </p>
+            <div className="grid grid-cols-1 gap-2.5 pt-1">
+              <button
+                type="button"
+                onClick={() => {
+                  setActiveDialog(null);
+                  cameraInputRef.current?.click();
+                }}
+                className="w-full p-3.5 rounded-2xl bg-surface-subtle hover-only:bg-surface border border-line-hairline text-ink font-semibold text-xs flex items-center space-x-3 cursor-pointer transition-colors"
+                data-testid="btn-source-camera"
+              >
+                <div className="w-9 h-9 rounded-xl bg-brand-tint text-brand-primary flex items-center justify-center shrink-0">
+                  <Camera className="w-4 h-4" />
+                </div>
+                <div className="text-left">
+                  <span className="font-bold block">Buka Kamera</span>
+                  <span className="text-[11px] text-ink-soft block font-normal">Ambil foto baru secara langsung</span>
+                </div>
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setActiveDialog(null);
+                  fileInputRef.current?.click();
+                }}
+                className="w-full p-3.5 rounded-2xl bg-surface-subtle hover-only:bg-surface border border-line-hairline text-ink font-semibold text-xs flex items-center space-x-3 cursor-pointer transition-colors"
+                data-testid="btn-source-gallery"
+              >
+                <div className="w-9 h-9 rounded-xl bg-accent-tint text-accent-valor flex items-center justify-center shrink-0">
+                  <ImageIcon className="w-4 h-4" />
+                </div>
+                <div className="text-left">
+                  <span className="font-bold block">Galeri / File Manager</span>
+                  <span className="text-[11px] text-ink-soft block font-normal">Pilih foto dari berkas perangkat</span>
+                </div>
+              </button>
+            </div>
+            <div className="flex justify-end pt-1">
+              <button
+                type="button"
+                onClick={() => setActiveDialog(null)}
+                className="w-full py-2.5 rounded-xl text-xs font-medium text-ink-soft hover-only:text-ink bg-surface-subtle border border-line-hairline cursor-pointer"
+              >
+                Batal
               </button>
             </div>
           </div>
