@@ -521,9 +521,6 @@ export class DatabaseEngine {
       this.persist('audit_logs', this.auditLogs);
 
       this.progressReports = this.loadOrSeed('progress_reports', []);
-
-      // Trigger asynchronous sync from Supabase Cloud
-      this.syncFromSupabase();
     } catch (err) {
       console.error('Error initializing database engine:', err);
       this.resetToDefaults();
@@ -624,6 +621,16 @@ export class DatabaseEngine {
   public async syncFromSupabase() {
     const supabase = getSupabaseClient();
     if (!supabase || this.isSyncing) return;
+
+    try {
+      const { data: sessionData, error: sessionErr } = await supabase.auth.getSession();
+      if (sessionErr || !sessionData?.session?.user) {
+        // Unauthenticated or simulation mode - rely on local repository without triggering 401 on protected tables
+        return;
+      }
+    } catch {
+      return;
+    }
 
     this.isSyncing = true;
     try {

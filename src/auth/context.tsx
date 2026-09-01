@@ -522,6 +522,7 @@ export const SecurityContextProvider: React.FC<{
 
       // Set database scope
       db.setContextScope(session.user.id, dynamicPersona.schoolId);
+      db.syncFromSupabase();
 
       setCurrentPersona(dynamicPersona);
       setIsSimulationMode(false);
