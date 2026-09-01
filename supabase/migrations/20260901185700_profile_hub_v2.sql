@@ -43,11 +43,18 @@ CREATE POLICY "Avatar owner delete" ON storage.objects
 -- RPC 1: Update own avatar URL
 CREATE OR REPLACE FUNCTION rpc_update_own_avatar(new_url text)
 RETURNS void LANGUAGE plpgsql SECURITY DEFINER AS $$
+DECLARE
+  v_person_id text;
 BEGIN
+  v_person_id := public.get_auth_person_id();
+  IF v_person_id IS NULL THEN
+    RAISE EXCEPTION 'UNAUTHORIZED';
+  END IF;
+
   UPDATE persons 
   SET avatar_url = new_url,
       updated_at = now()
-  WHERE user_id = auth.uid();
+  WHERE id = v_person_id;
   
   IF NOT FOUND THEN 
     RAISE EXCEPTION 'PERSON_NOT_FOUND'; 
@@ -57,15 +64,22 @@ END; $$;
 -- RPC 2: Update own phone (validated regex +62 / international format)
 CREATE OR REPLACE FUNCTION rpc_update_own_phone(new_phone text)
 RETURNS void LANGUAGE plpgsql SECURITY DEFINER AS $$
+DECLARE
+  v_person_id text;
 BEGIN
   IF new_phone IS NOT NULL AND new_phone !~ '^(\+62|0)[0-9\s\-]{8,15}$' THEN
     RAISE EXCEPTION 'INVALID_PHONE_FORMAT';
   END IF;
   
+  v_person_id := public.get_auth_person_id();
+  IF v_person_id IS NULL THEN
+    RAISE EXCEPTION 'UNAUTHORIZED';
+  END IF;
+
   UPDATE persons 
   SET phone = new_phone,
       updated_at = now()
-  WHERE user_id = auth.uid();
+  WHERE id = v_person_id;
 
   IF NOT FOUND THEN 
     RAISE EXCEPTION 'PERSON_NOT_FOUND'; 
@@ -75,15 +89,22 @@ END; $$;
 -- RPC 3: Update own display name (full_name)
 CREATE OR REPLACE FUNCTION rpc_update_own_name(new_name text)
 RETURNS void LANGUAGE plpgsql SECURITY DEFINER AS $$
+DECLARE
+  v_person_id text;
 BEGIN
   IF length(trim(new_name)) < 2 OR length(new_name) > 100 THEN
     RAISE EXCEPTION 'INVALID_NAME_LENGTH';
   END IF;
   
+  v_person_id := public.get_auth_person_id();
+  IF v_person_id IS NULL THEN
+    RAISE EXCEPTION 'UNAUTHORIZED';
+  END IF;
+
   UPDATE persons 
   SET full_name = trim(new_name),
       updated_at = now()
-  WHERE user_id = auth.uid();
+  WHERE id = v_person_id;
 
   IF NOT FOUND THEN 
     RAISE EXCEPTION 'PERSON_NOT_FOUND'; 
@@ -93,12 +114,19 @@ END; $$;
 -- RPC 4: Toggle passkey enabled (soft flag only)
 CREATE OR REPLACE FUNCTION rpc_toggle_passkey_enabled(enabled boolean)
 RETURNS void LANGUAGE plpgsql SECURITY DEFINER AS $$
+DECLARE
+  v_person_id text;
 BEGIN
+  v_person_id := public.get_auth_person_id();
+  IF v_person_id IS NULL THEN
+    RAISE EXCEPTION 'UNAUTHORIZED';
+  END IF;
+
   UPDATE persons 
   SET passkey_enabled = enabled,
       passkey_registered_at = CASE WHEN enabled THEN now() ELSE NULL END,
       updated_at = now()
-  WHERE user_id = auth.uid();
+  WHERE id = v_person_id;
 
   IF NOT FOUND THEN 
     RAISE EXCEPTION 'PERSON_NOT_FOUND'; 
@@ -118,7 +146,10 @@ RETURNS TABLE (
   passkey_registered_at timestamptz
 )
 LANGUAGE plpgsql SECURITY DEFINER AS $$
+DECLARE
+  v_person_id text;
 BEGIN
+  v_person_id := public.get_auth_person_id();
   RETURN QUERY
   SELECT 
     p.full_name, 
@@ -130,8 +161,8 @@ BEGIN
     p.passkey_enabled,
     p.passkey_registered_at
   FROM persons p 
-  JOIN auth.users u ON u.id = p.user_id
-  WHERE p.user_id = auth.uid();
+  JOIN auth.users u ON u.id = auth.uid()
+  WHERE p.id = v_person_id;
 END; $$;
 
 -- Email Immutability Note:

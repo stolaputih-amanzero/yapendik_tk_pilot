@@ -113,11 +113,11 @@ BEGIN
     sign_count = EXCLUDED.sign_count,
     last_used_at = now();
 
-  -- Update persons table flag
+  -- Update persons table flag via resolved person_id
   UPDATE persons
   SET passkey_enabled = true,
       passkey_registered_at = now()
-  WHERE user_id = auth.uid();
+  WHERE id = public.get_auth_person_id();
 END; $$;
 
 -- 8. HELPER FUNCTION: Delete user's passkey (device management)
@@ -140,11 +140,12 @@ BEGIN
   END IF;
   
   -- Update passkey_enabled flag if no credentials remain
-  UPDATE persons
-  SET passkey_enabled = false,
-      passkey_registered_at = NULL
-  WHERE user_id = auth.uid()
-    AND NOT EXISTS (
-      SELECT 1 FROM webauthn_credentials WHERE user_id = auth.uid()
-    );
+  IF NOT EXISTS (
+    SELECT 1 FROM webauthn_credentials WHERE user_id = auth.uid()
+  ) THEN
+    UPDATE persons
+    SET passkey_enabled = false,
+        passkey_registered_at = NULL
+    WHERE id = public.get_auth_person_id();
+  END IF;
 END; $$;
