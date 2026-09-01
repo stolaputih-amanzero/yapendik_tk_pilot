@@ -192,19 +192,22 @@ SECURITY DEFINER
 SET search_path = 'public, extensions, pg_catalog, pg_temp'
 AS $$
 DECLARE
-  v_person record;
+  v_user_id uuid;
+  v_person_id text;
   v_challenge text;
   v_raw_bytes bytea;
   v_creds jsonb;
 BEGIN
-  -- 1. Find person by email
-  SELECT id, passkey_enabled, user_id INTO v_person
-  FROM public.persons
-  WHERE lower(trim(email)) = lower(trim(p_email)) AND is_active = true
+  -- 1. Find user from auth.users and user_person_identities
+  SELECT u.id, upi.person_id
+  INTO v_user_id, v_person_id
+  FROM auth.users u
+  LEFT JOIN public.user_person_identities upi ON upi.auth_user_id = u.id
+  WHERE lower(trim(u.email)) = lower(trim(p_email))
   LIMIT 1;
 
-  IF v_person.id IS NULL OR NOT COALESCE(v_person.passkey_enabled, false) THEN
-    RETURN jsonb_build_object('error', 'INVALID_CREDENTIALS', 'message', 'Email tidak terdaftar atau belum memiliki passkey terdaftar');
+  IF v_user_id IS NULL THEN
+    RETURN jsonb_build_object('error', 'INVALID_CREDENTIALS', 'message', 'Email tidak terdaftar');
   END IF;
 
   -- 2. Query registered credentials
@@ -216,9 +219,7 @@ BEGIN
     )
   ) INTO v_creds
   FROM public.webauthn_credentials AS wc
-  WHERE wc.user_id = v_person.user_id OR wc.user_id IN (
-    SELECT id FROM auth.users WHERE lower(trim(email)) = lower(trim(p_email))
-  );
+  WHERE wc.user_id = v_user_id;
 
   IF v_creds IS NULL OR jsonb_array_length(v_creds) = 0 THEN
     RETURN jsonb_build_object('error', 'INVALID_CREDENTIALS', 'message', 'Belum ada kredensial passkey yang terdaftar');
@@ -233,10 +234,12 @@ BEGIN
 
   v_challenge := translate(encode(v_raw_bytes, 'base64'), '+/=', '-_');
 
-  UPDATE public.persons AS p
-  SET webauthn_pending_challenge = v_challenge,
-      webauthn_challenge_expires_at = now() + interval '5 minutes'
-  WHERE p.id = v_person.id;
+  IF v_person_id IS NOT NULL THEN
+    UPDATE public.persons AS p
+    SET webauthn_pending_challenge = v_challenge,
+        webauthn_challenge_expires_at = now() + interval '5 minutes'
+    WHERE p.id = v_person_id;
+  END IF;
 
   RETURN jsonb_build_object(
     'challenge', v_challenge,
@@ -260,20 +263,26 @@ SECURITY DEFINER
 SET search_path = 'public, extensions, pg_catalog, pg_temp'
 AS $$
 DECLARE
-  v_person record;
+  v_user_id uuid;
+  v_person_id text;
+  v_full_name text;
+  v_pending_challenge text;
+  v_expires_at timestamptz;
   v_cred record;
   v_client_type text;
   v_client_origin text;
   v_client_challenge text;
 BEGIN
-  -- 1. Lookup person
-  SELECT id, webauthn_pending_challenge, webauthn_challenge_expires_at, role, school_id, full_name, user_id
-  INTO v_person
-  FROM public.persons
-  WHERE lower(trim(email)) = lower(trim(p_email)) AND is_active = true
+  -- 1. Lookup user and person
+  SELECT u.id, upi.person_id, p.full_name, p.webauthn_pending_challenge, p.webauthn_challenge_expires_at
+  INTO v_user_id, v_person_id, v_full_name, v_pending_challenge, v_expires_at
+  FROM auth.users u
+  LEFT JOIN public.user_person_identities upi ON upi.auth_user_id = u.id
+  LEFT JOIN public.persons p ON p.id = upi.person_id
+  WHERE lower(trim(u.email)) = lower(trim(p_email))
   LIMIT 1;
 
-  IF v_person.id IS NULL THEN
+  IF v_user_id IS NULL THEN
     RETURN jsonb_build_object('success', false, 'error', 'INVALID_CREDENTIALS');
   END IF;
 
@@ -290,23 +299,25 @@ BEGIN
     RETURN jsonb_build_object('success', false, 'error', 'CEREMONY_INVALID', 'message', 'Origin tidak diizinkan');
   END IF;
 
-  IF v_person.webauthn_pending_challenge IS NULL OR v_person.webauthn_challenge_expires_at IS NULL THEN
+  IF v_pending_challenge IS NULL OR v_expires_at IS NULL THEN
     RETURN jsonb_build_object('success', false, 'error', 'CHALLENGE_EXPIRED', 'message', 'Sesi tantangan tidak ditemukan');
   END IF;
 
-  IF now() > v_person.webauthn_challenge_expires_at THEN
-    UPDATE public.persons SET webauthn_pending_challenge = NULL, webauthn_challenge_expires_at = NULL WHERE id = v_person.id;
+  IF now() > v_expires_at THEN
+    IF v_person_id IS NOT NULL THEN
+      UPDATE public.persons SET webauthn_pending_challenge = NULL, webauthn_challenge_expires_at = NULL WHERE id = v_person_id;
+    END IF;
     RETURN jsonb_build_object('success', false, 'error', 'CHALLENGE_EXPIRED', 'message', 'Tantangan login telah kadaluarsa');
   END IF;
 
-  IF v_client_challenge != v_person.webauthn_pending_challenge THEN
+  IF v_client_challenge != v_pending_challenge THEN
     RETURN jsonb_build_object('success', false, 'error', 'CEREMONY_INVALID', 'message', 'Tantangan tidak cocok');
   END IF;
 
   -- 3. Verify Credential exists in webauthn_credentials
   SELECT * INTO v_cred
   FROM public.webauthn_credentials AS wc
-  WHERE wc.credential_id = p_credential_id;
+  WHERE wc.credential_id = p_credential_id AND wc.user_id = v_user_id;
 
   IF v_cred.credential_id IS NULL THEN
     RETURN jsonb_build_object('success', false, 'error', 'CREDENTIAL_NOT_FOUND', 'message', 'Kredensial biometrik tidak cocok');
@@ -316,22 +327,22 @@ BEGIN
   UPDATE public.webauthn_credentials
   SET sign_count = sign_count + 1,
       last_used_at = now()
-  WHERE credential_id = p_credential_id;
+  WHERE credential_id = p_credential_id AND user_id = v_user_id;
 
-  UPDATE public.persons
-  SET webauthn_pending_challenge = NULL,
-      webauthn_challenge_expires_at = NULL
-  WHERE id = v_person.id;
+  IF v_person_id IS NOT NULL THEN
+    UPDATE public.persons
+    SET webauthn_pending_challenge = NULL,
+        webauthn_challenge_expires_at = NULL
+    WHERE id = v_person_id;
+  END IF;
 
-  -- 5. Return success and person metadata
+  -- 5. Return success and metadata
   RETURN jsonb_build_object(
     'success', true,
-    'person_id', v_person.id,
-    'user_id', v_person.user_id,
+    'user_id', v_user_id,
+    'person_id', v_person_id,
     'email', p_email,
-    'name', v_person.full_name,
-    'role', v_person.role,
-    'school_id', v_person.school_id
+    'name', v_full_name
   );
 END;
 $$;
