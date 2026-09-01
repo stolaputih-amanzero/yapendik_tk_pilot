@@ -38,7 +38,7 @@ export const PremiumLoginScreen: React.FC<{ initialEmail?: string }> = ({ initia
   const [isLoggingIn, setIsLoggingIn] = useState(false);
   const [webAuthnSupported, setWebAuthnSupported] = useState(true);
 
-  const { authState, signInWithEmail, switchPersona } = useSecurityContext();
+  const { authState, signInWithEmail, switchPersona, updateOwnProfile } = useSecurityContext();
   const supabase = getSupabaseClient();
 
   // Load remember me & check WebAuthn platform support
@@ -95,6 +95,7 @@ export const PremiumLoginScreen: React.FC<{ initialEmail?: string }> = ({ initia
         }
         if (matchedPersona) {
           switchPersona(matchedPersona.id);
+          updateOwnProfile({ passkeyEnabled: true, passkeyRegisteredAt: new Date().toISOString() });
         }
       } else if (res.fallback === 'password') {
         setPasskeyNotice(res.error || 'Login biometrik belum tersedia — silakan masuk menggunakan kata sandi.');

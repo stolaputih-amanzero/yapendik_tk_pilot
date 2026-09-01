@@ -9,6 +9,7 @@ import { AdaptiveDialog } from '../ui/AdaptiveDialog';
 import { Button } from '../ui/Button';
 import { getSupabaseClient } from '../../db/supabaseClient';
 import { registerPasskey } from '../../services/webauthn';
+import { useSecurityContext } from '../../auth/context';
 
 export interface PasskeyItem {
   credential_id: string;
@@ -35,6 +36,15 @@ export const PasskeyManager: React.FC<PasskeyManagerProps> = ({
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
 
+  let currentPersona: any = null;
+  let updateOwnProfile: any = null;
+  try {
+    const sec = useSecurityContext();
+    currentPersona = sec?.currentPersona;
+    updateOwnProfile = sec?.updateOwnProfile;
+  } catch {
+    // Graceful fallback when rendered outside SecurityContextProvider in tests
+  }
   const supabase = getSupabaseClient();
 
   useEffect(() => {
@@ -53,8 +63,8 @@ export const PasskeyManager: React.FC<PasskeyManagerProps> = ({
     try {
       if (!supabase) {
         // Simulation mode from localStorage
-        if (typeof localStorage !== 'undefined') {
-          const stored = JSON.parse(localStorage.getItem('yapendik_mock_passkeys') || '[]');
+        if (typeof localStorage !== 'undefined' && currentPersona?.id) {
+          const stored = JSON.parse(localStorage.getItem(`yapendik_mock_passkeys_${currentPersona.id}`) || '[]');
           setPasskeys(stored);
           onPasskeyCountChange?.(stored.length);
         }
@@ -62,7 +72,9 @@ export const PasskeyManager: React.FC<PasskeyManagerProps> = ({
         return;
       }
 
-      const { data, error } = await supabase.rpc('rpc_list_user_passkeys');
+      const { data, error } = await supabase.rpc('rpc_list_user_passkeys', {
+        p_person_id: currentPersona?.personId,
+      });
       if (error) {
         throw error;
       }
@@ -70,11 +82,14 @@ export const PasskeyManager: React.FC<PasskeyManagerProps> = ({
       const items = (data as PasskeyItem[]) || [];
       setPasskeys(items);
       onPasskeyCountChange?.(items.length);
+      if (items.length > 0 && !currentPersona?.passkeyEnabled) {
+        updateOwnProfile({ passkeyEnabled: true });
+      }
     } catch (err: any) {
       console.warn('Failed to load passkeys from database:', err);
       // Fallback mock
-      if (typeof localStorage !== 'undefined') {
-        const stored = JSON.parse(localStorage.getItem('yapendik_mock_passkeys') || '[]');
+      if (typeof localStorage !== 'undefined' && currentPersona?.id) {
+        const stored = JSON.parse(localStorage.getItem(`yapendik_mock_passkeys_${currentPersona.id}`) || '[]');
         setPasskeys(stored);
         onPasskeyCountChange?.(stored.length);
       }

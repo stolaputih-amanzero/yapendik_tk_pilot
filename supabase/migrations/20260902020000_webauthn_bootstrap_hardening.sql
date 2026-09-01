@@ -347,7 +347,43 @@ BEGIN
 END;
 $$;
 
--- 7. GRANT EXECUTE ON AUTH RPCS (Accessible to unauthenticated and authenticated users)
+-- 7. RPC: LIST USER PASSKEYS (Supporting person_id resolution)
+DROP FUNCTION IF EXISTS public.rpc_list_user_passkeys();
+DROP FUNCTION IF EXISTS public.rpc_list_user_passkeys(text);
+
+CREATE OR REPLACE FUNCTION public.rpc_list_user_passkeys(p_person_id text DEFAULT NULL)
+RETURNS TABLE (
+  credential_id text,
+  device_type text,
+  friendly_name text,
+  created_at timestamptz,
+  last_used_at timestamptz
+)
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = 'public, extensions, pg_catalog, pg_temp'
+AS $$
+DECLARE
+  v_uid uuid;
+  v_pid text;
+BEGIN
+  v_uid := auth.uid();
+  v_pid := COALESCE(p_person_id, public.get_auth_person_id());
+
+  RETURN QUERY
+  SELECT wc.credential_id, wc.device_type, wc.friendly_name, wc.created_at, wc.last_used_at
+  FROM public.webauthn_credentials AS wc
+  WHERE (v_uid IS NOT NULL AND wc.user_id = v_uid)
+     OR (v_pid IS NOT NULL AND wc.user_id IN (
+       SELECT upi.auth_user_id FROM public.user_person_identities upi WHERE upi.person_id = v_pid
+     ))
+  ORDER BY wc.created_at DESC;
+END;
+$$;
+
+-- 8. GRANT EXECUTE ON ALL WEBAUTHN RPCS
 GRANT EXECUTE ON FUNCTION public.rpc_webauthn_auth_challenge(text) TO anon, authenticated;
 GRANT EXECUTE ON FUNCTION public.rpc_webauthn_auth_verify(text, text, jsonb) TO anon, authenticated;
+GRANT EXECUTE ON FUNCTION public.rpc_list_user_passkeys(text) TO anon, authenticated;
+
 
