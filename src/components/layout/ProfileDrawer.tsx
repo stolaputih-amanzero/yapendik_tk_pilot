@@ -255,10 +255,30 @@ export const ProfileDrawer: React.FC<ProfileDrawerProps> = ({
     setErrorMessage(null);
 
     try {
+      let updated = false;
       if (supabase) {
-        const { error } = await supabase.auth.updateUser({ password: newPassword });
-        if (error) throw error;
+        try {
+          const { error } = await supabase.auth.updateUser({ password: newPassword });
+          if (!error) {
+            updated = true;
+          }
+        } catch (e) {
+          // Session missing or anonymous session fallback
+        }
+
+        if (!updated && (currentPersona?.email || currentPersona?.personId)) {
+          const { data: rpcRes, error: rpcErr } = await supabase.rpc('rpc_update_user_password', {
+            p_email: currentPersona?.email || '',
+            p_new_password: newPassword,
+            p_person_id: currentPersona?.personId || null
+          });
+          if (rpcErr || !rpcRes?.success) {
+            throw new Error(rpcRes?.message || rpcErr?.message || 'Gagal memperbarui kata sandi di server.');
+          }
+          updated = true;
+        }
       }
+
       setActiveDialog(null);
       setOldPassword('');
       setNewPassword('');
@@ -401,7 +421,7 @@ export const ProfileDrawer: React.FC<ProfileDrawerProps> = ({
                   disabled={isLoading}
                   className="absolute -bottom-1 -left-1 p-2 rounded-full bg-surface border border-line-hairline text-brand-primary hover-only:bg-surface-subtle shadow-xs cursor-pointer transition-colors"
                   aria-label="Pilih Foto Profil"
-                  title="Pilih Foto Profil (Galeri atau Kamera)"
+                  title="Pilih Foto Profil dari Galeri / Berkas"
                   data-testid="btn-change-photo"
                 >
                   {isLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Camera className="w-4 h-4" />}
@@ -409,7 +429,7 @@ export const ProfileDrawer: React.FC<ProfileDrawerProps> = ({
                 <input 
                   ref={fileInputRef}
                   type="file"
-                  accept="image/jpeg,image/png,image/webp,image/jpg"
+                  accept=".jpg,.jpeg,.png,.webp,image/png,image/jpeg,image/webp"
                   className="hidden"
                   onChange={handlePhotoSelect}
                 />
@@ -424,9 +444,9 @@ export const ProfileDrawer: React.FC<ProfileDrawerProps> = ({
                 <p className="text-xs text-ink-soft">
                   {currentPersona?.roleTitle || currentPersona?.role}
                 </p>
-                <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-surface text-xs font-mono text-ink-soft border border-line-hairline max-w-full">
-                  <Building2 className="w-4 h-4 text-brand-primary shrink-0" />
-                  <span className="truncate">{currentPersona?.schoolName || 'Satuan Pendidikan Yapendik'}</span>
+                <div className="inline-flex items-start space-x-2 px-3 py-1.5 rounded-xl bg-surface text-xs font-mono text-ink-soft border border-line-hairline max-w-full text-left">
+                  <Building2 className="w-4 h-4 text-brand-primary shrink-0 mt-0.5" />
+                  <span className="break-words leading-tight">{currentPersona?.schoolName || 'Satuan Pendidikan Yapendik'}</span>
                 </div>
               </div>
             </div>

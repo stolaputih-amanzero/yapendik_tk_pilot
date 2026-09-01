@@ -27,7 +27,8 @@ import {
   FileText,
   Image as ImageIcon,
   CheckCircle2,
-  Users
+  Users,
+  ExternalLink
 } from 'lucide-react';
 
 // Canonical public URL for QR code on Name Card (Family & Staff variants)
@@ -522,19 +523,17 @@ async function renderNameCardCanvas(profile: PersonaProfile, qrDataUrl: string):
 /**
  * Canonical single-gateway file download trigger
  */
-export function triggerDownload(blob: Blob, filename: string) {
+export function triggerDownload(blob: Blob, filename: string): string {
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
   a.href = url;
   a.download = filename;
+  a.target = '_blank';
+  a.rel = 'noopener noreferrer';
   document.body.appendChild(a);
   a.click();
   a.remove();
-  setTimeout(() => {
-    try {
-      URL.revokeObjectURL(url);
-    } catch {}
-  }, 2000);
+  return url;
 }
 
 /**
@@ -560,6 +559,8 @@ export const NameCardModal: React.FC<NameCardModalProps> = ({
   const [qrDataUrl, setQrDataUrl] = useState<string>('');
   const [isGenerating, setIsGenerating] = useState<boolean>(false);
   const [statusMessage, setStatusMessage] = useState<string | null>(null);
+  const [downloadUrl, setDownloadUrl] = useState<string | null>(null);
+  const [downloadFilename, setDownloadFilename] = useState<string>('');
   const [childImgFailed, setChildImgFailed] = useState<boolean>(false);
   const cardRef = useRef<HTMLDivElement>(null);
 
@@ -620,7 +621,9 @@ export const NameCardModal: React.FC<NameCardModalProps> = ({
             return;
           }
           const finalBlob = new Blob([b], { type: 'image/png' });
-          triggerDownload(finalBlob, filename);
+          const url = triggerDownload(finalBlob, filename);
+          setDownloadUrl(url);
+          setDownloadFilename(filename);
           setStatusMessage(`${filename} berhasil diunduh.`);
           setIsGenerating(false);
         }, 'image/png');
@@ -637,7 +640,9 @@ export const NameCardModal: React.FC<NameCardModalProps> = ({
         pdf.addImage(imgData, 'JPEG', 0, 0, 85.6, 54);
         const pdfBlob = pdf.output('blob');
         const finalBlob = new Blob([pdfBlob], { type: 'application/pdf' });
-        triggerDownload(finalBlob, filename);
+        const url = triggerDownload(finalBlob, filename);
+        setDownloadUrl(url);
+        setDownloadFilename(filename);
         setStatusMessage(`${filename} berhasil diunduh.`);
         setIsGenerating(false);
       }
@@ -915,9 +920,24 @@ export const NameCardModal: React.FC<NameCardModalProps> = ({
 
         {/* Status Feedback */}
         {statusMessage && (
-          <div className="flex items-center space-x-2 text-xs text-brand-primary bg-brand-tint/60 border border-brand-line/40 rounded-xl px-3 py-2">
-            <CheckCircle2 className="w-4 h-4 shrink-0" />
-            <span>{statusMessage}</span>
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 text-xs text-brand-primary bg-brand-tint border border-brand-line/50 rounded-2xl px-4 py-3">
+            <div className="flex items-center space-x-2">
+              <CheckCircle2 className="w-4 h-4 shrink-0" />
+              <span className="font-semibold">{statusMessage}</span>
+            </div>
+            {downloadUrl && (
+              <a
+                href={downloadUrl}
+                download={downloadFilename}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-lg bg-brand-primary text-on-brand font-bold text-xs hover-only:opacity-90 shadow-xs cursor-pointer transition-all self-end sm:self-auto"
+                data-testid="btn-open-preview"
+              >
+                <ExternalLink className="w-3.5 h-3.5" />
+                <span>Buka / Pratinjau</span>
+              </a>
+            )}
           </div>
         )}
 

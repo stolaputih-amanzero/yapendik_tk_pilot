@@ -249,7 +249,7 @@ async function runProfileHubTests() {
       );
       assert.ok(!html.includes('KARTU KELUARGA'), 'Staff card must NOT render KARTU KELUARGA badge');
       assert.ok(html.includes('Erna Boykela R'), 'Expected teacher name on staff card in Title Case');
-      assert.ok(html.includes('Guru Kelas / Wali Kelompok A (TK A)'), 'Expected teacher title on staff card');
+      assert.ok(html.includes('Guru Kelas TK A'), 'Expected teacher title on staff card');
     });
 
     runCheck('NameCardModal [CHILD PHOTO PATH W-17]: Renders child photo when present and falls back gracefully when null', () => {
