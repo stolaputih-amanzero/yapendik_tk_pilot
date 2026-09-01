@@ -110,8 +110,8 @@ export const ProfileDrawer: React.FC<ProfileDrawerProps> = ({
     e.target.value = '';
 
     // Validate MIME type
-    if (!['image/jpeg', 'image/png'].includes(file.type)) {
-      setErrorMessage('Format gambar harus JPG atau PNG.');
+    if (!['image/jpeg', 'image/png', 'image/webp'].includes(file.type)) {
+      setErrorMessage('Format gambar harus JPG, PNG, atau WEBP.');
       return;
     }
 
@@ -400,8 +400,8 @@ export const ProfileDrawer: React.FC<ProfileDrawerProps> = ({
                   onClick={() => fileInputRef.current?.click()}
                   disabled={isLoading}
                   className="absolute -bottom-1 -left-1 p-2 rounded-full bg-surface border border-line-hairline text-brand-primary hover-only:bg-surface-subtle shadow-xs cursor-pointer transition-colors"
-                  aria-label="Ganti Foto Profil"
-                  title="Ganti Foto Profil (JPG/PNG max 2MB)"
+                  aria-label="Pilih Foto Profil"
+                  title="Pilih Foto Profil (Galeri atau Kamera)"
                   data-testid="btn-change-photo"
                 >
                   {isLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Camera className="w-4 h-4" />}
@@ -409,23 +409,22 @@ export const ProfileDrawer: React.FC<ProfileDrawerProps> = ({
                 <input 
                   ref={fileInputRef}
                   type="file"
-                  accept="image/jpeg,image/png"
-                  capture="environment"
+                  accept="image/jpeg,image/png,image/webp,image/jpg"
                   className="hidden"
                   onChange={handlePhotoSelect}
                 />
               </div>
 
-              <div className="flex-1 text-center medium:text-left min-w-0 space-y-2">
-                <div className="flex items-center justify-center medium:justify-between">
-                  <h1 className="font-bold text-lg text-ink truncate">
+              <div className="flex-1 text-center medium:text-left min-w-0 w-full space-y-2">
+                <div className="flex items-center justify-center medium:justify-start">
+                  <h1 className="font-bold text-base medium:text-lg text-ink break-words text-center medium:text-left leading-snug w-full">
                     {currentPersona?.name || 'Pengguna Amanaura'}
                   </h1>
                 </div>
                 <p className="text-xs text-ink-soft">
                   {currentPersona?.roleTitle || currentPersona?.role}
                 </p>
-                <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-surface text-xs font-mono text-ink-soft border border-line-hairline">
+                <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-surface text-xs font-mono text-ink-soft border border-line-hairline max-w-full">
                   <Building2 className="w-4 h-4 text-brand-primary shrink-0" />
                   <span className="truncate">{currentPersona?.schoolName || 'Satuan Pendidikan Yapendik'}</span>
                 </div>
@@ -442,9 +441,9 @@ export const ProfileDrawer: React.FC<ProfileDrawerProps> = ({
                 
                 {/* Nama Lengkap Row */}
                 <div className="p-4 flex items-center justify-between space-x-3">
-                  <div className="space-y-1 min-w-0">
+                  <div className="space-y-1 min-w-0 flex-1">
                     <span className="text-[10px] font-mono text-ink-faint block">NAMA LENGKAP</span>
-                    <span className="font-semibold text-ink truncate block">
+                    <span className="font-semibold text-ink break-words block leading-snug">
                       {currentPersona?.name || '-'}
                     </span>
                   </div>

@@ -53,8 +53,8 @@ async function runProfileHubTests() {
         </SecurityContextProvider>
       );
       assert.ok(html.includes('data-testid="btn-change-photo"'), 'Expected btn-change-photo trigger');
-      assert.ok(html.includes('accept="image/jpeg,image/png"'), 'Expected JPEG/PNG accept filter');
-      assert.ok(html.includes('capture="environment"'), 'Expected camera capture attribute');
+      assert.ok(html.includes('type="file"'), 'Expected file input for photo selection');
+      assert.ok(html.includes('image/jpeg') && html.includes('image/png'), 'Expected JPEG/PNG accept filter');
     });
 
     runCheck('Profile Hub [AVATAR FALLBACK]: Renders initials when avatarUrl is null', () => {
