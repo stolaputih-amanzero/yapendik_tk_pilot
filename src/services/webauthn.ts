@@ -32,6 +32,8 @@ function parseBase64URL(str: string): Uint8Array {
   return bytes;
 }
 
+export const base64UrlToUint8Array = parseBase64URL;
+
 /**
  * Checks if browser supports basic WebAuthn (PublicKeyCredential)
  */
@@ -407,8 +409,7 @@ export async function authenticateWithPasskey(
     let clientDataJsonObj: any = null;
     try {
       if (credential.response?.clientDataJSON) {
-        const rawBytes = base64UrlToUint8Array(credential.response.clientDataJSON);
-        const decodedStr = new TextDecoder().decode(rawBytes);
+        const decodedStr = new TextDecoder().decode(parseBase64URL(credential.response.clientDataJSON));
         clientDataJsonObj = JSON.parse(decodedStr);
       }
     } catch (e) {
