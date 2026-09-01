@@ -6,7 +6,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSecurityContext, GENESIS_PERSONAS } from '../../auth/context';
 import { getSupabaseClient } from '../../db/supabaseClient';
-import { authenticateWithPasskey, isPlatformAuthenticatorAvailable } from '../../services/webauthn';
+import { authenticateWithPasskey, isPlatformAuthenticatorAvailable, isWebAuthnSupported } from '../../services/webauthn';
 import { Button } from '../ui';
 import { 
   Building2, 
