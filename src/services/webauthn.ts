@@ -113,6 +113,7 @@ export async function registerPasskey(
 
   try {
     const supabaseUrl = (import.meta as any).env?.VITE_SUPABASE_URL || '';
+    const anonKey = (import.meta as any).env?.VITE_SUPABASE_ANON_KEY || '';
     const { data: sessionData } = await supabase.auth.getSession();
     const token = sessionData?.session?.access_token;
 
@@ -125,7 +126,8 @@ export async function registerPasskey(
       `${supabaseUrl}/functions/v1/webauthn-registration?action=challenge`,
       {
         headers: {
-          Authorization: `Bearer ${token}`,
+          'apikey': anonKey,
+          'Authorization': `Bearer ${token}`,
         },
       }
     );
@@ -155,7 +157,8 @@ export async function registerPasskey(
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
+          'apikey': anonKey,
+          'Authorization': `Bearer ${token}`,
         },
         body: JSON.stringify({
           credential,
@@ -193,13 +196,17 @@ export async function authenticateWithPasskey(
 
   try {
     const supabaseUrl = (import.meta as any).env?.VITE_SUPABASE_URL || '';
+    const anonKey = (import.meta as any).env?.VITE_SUPABASE_ANON_KEY || '';
 
     // 1. Get Authentication Challenge from Edge Function
     const challengeRes = await fetch(
       `${supabaseUrl}/functions/v1/webauthn-authentication?action=challenge`,
       {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          'apikey': anonKey,
+        },
         body: JSON.stringify({ email: cleanEmail }),
       }
     );
@@ -227,7 +234,10 @@ export async function authenticateWithPasskey(
       `${supabaseUrl}/functions/v1/webauthn-authentication?action=verify`,
       {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          'apikey': anonKey,
+        },
         body: JSON.stringify({ email: cleanEmail, credential }),
       }
     );
