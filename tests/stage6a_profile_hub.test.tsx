@@ -150,7 +150,7 @@ async function runProfileHubTests() {
     });
 
     runCheck('NameCardModal [QR PAYLOAD CANONICAL URL]: QR Code contains canonical public URL with ZERO credentials', () => {
-      assert.ok(/^https:\/\/yapendik-tk-pilot\.vercel\.app\/?$/.test(APP_PUBLIC_URL), 'APP_PUBLIC_URL must match canonical Vercel deployment');
+      assert.ok(/^https:\/\/tkm\.amanloka\.com\/?$/.test(APP_PUBLIC_URL), 'APP_PUBLIC_URL must match canonical domain https://tkm.amanloka.com');
       assert.ok(!/token|session|password|secret|key|auth|jwt/i.test(APP_PUBLIC_URL), 'Must NOT contain any sensitive credential tokens');
       assert.ok(!/[?&](token|session|password)=/i.test(APP_PUBLIC_URL), 'Must NOT have credential parameters');
     });

@@ -90,7 +90,7 @@ Doktrin tipografi Amanaura Design System §3.3 diperluas secara resmi untuk menc
 4. **Kartu Nama Digital Pendidik & Kartu Keluarga (CR80 Profile & Family Name Card)**
 
 ### 4.6 Kebijakan URL Kanonikal QR (QR Canonical URL Policy)
-QR Code pada Kartu Nama Digital Staf dan Kartu Keluarga Wali memuat URL publik aplikasi (`https://yapendik-tk-pilot.vercel.app/`) sebagai gerbang scannable terverifikasi. Konfigurasi ini mendukung fleksibilitas dua lapis melalui variabel lingkungan `VITE_APP_URL` dengan fallback ke domain hosting staging. Saat aplikasi beralih ke domain produksi institusi (`yapendik.sch.id`), kartu baru otomatis mengikuti domain baru via `VITE_APP_URL`, sedangkan kartu yang telah dicetak sebelumnya tetap valid melalui pengalihan (*301 redirect*).
+QR Code pada Kartu Nama Digital Staf dan Kartu Keluarga Wali memuat URL publik aplikasi (`https://tkm.amanloka.com`) sebagai gerbang scannable terverifikasi. Konfigurasi ini mendukung fleksibilitas dua lapis melalui variabel lingkungan `VITE_APP_URL` dengan fallback ke domain produksi kanonikal. Saat aplikasi beralih ke domain produksi institusi (`yapendik.sch.id`), kartu baru otomatis mengikuti domain baru via `VITE_APP_URL`, sedangkan kartu yang telah dicetak sebelumnya tetap valid melalui pengalihan (*301 redirect*).
 
 ---
 

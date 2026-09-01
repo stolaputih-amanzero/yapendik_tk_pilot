@@ -31,7 +31,7 @@ import {
 } from 'lucide-react';
 
 // Canonical public URL for QR code on Name Card (Family & Staff variants)
-export const APP_PUBLIC_URL = (import.meta as any).env?.VITE_APP_URL || 'https://yapendik-tk-pilot.vercel.app/';
+export const APP_PUBLIC_URL = (import.meta as any).env?.VITE_APP_URL || 'https://tkm.amanloka.com';
 
 interface NameCardModalProps {
   isOpen: boolean;
