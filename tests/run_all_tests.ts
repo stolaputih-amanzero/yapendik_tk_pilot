@@ -84,8 +84,11 @@ try {
   console.log('\n▶️ [25/26] Running Stage 6-A Identity Hygiene & Brand Contracts Suite (Suite 36)...');
   execSync('npx tsx tests/stage6a_identity_hygiene.test.tsx', { stdio: 'inherit' });
 
-  console.log('\n▶️ [26/26] Running Stage 6-A Profile Hub v2 & User Management Suite (Suite 37)...');
+  console.log('\n▶️ [26/27] Running Stage 6-A Profile Hub v2 & User Management Suite (Suite 37)...');
   execSync('npx tsx tests/stage6a_profile_hub.test.tsx', { stdio: 'inherit' });
+
+  console.log('\n▶️ [27/27] Running Stage 6-B Passkey WebAuthn Integration Suite (Suite 38)...');
+  execSync('npx tsx tests/stage6b_passkey_webauthn.test.tsx', { stdio: 'inherit' });
 
   console.log('\n════════════════════════════════════════════════════════════════');
   console.log('🎉 ALL INTEGRATION & SECURITY TEST SUITES COMPLETED SUCCESSFULLY');

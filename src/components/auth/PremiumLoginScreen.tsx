@@ -5,6 +5,8 @@
 
 import React, { useState, useEffect } from 'react';
 import { useSecurityContext, GENESIS_PERSONAS } from '../../auth/context';
+import { getSupabaseClient } from '../../db/supabaseClient';
+import { authenticateWithPasskey, isPlatformAuthenticatorAvailable } from '../../services/webauthn';
 import { Button } from '../ui';
 import { 
   Building2, 
@@ -21,17 +23,25 @@ import {
   Info
 } from 'lucide-react';
 
-export const PremiumLoginScreen: React.FC = () => {
-  const [loginEmail, setLoginEmail] = useState('');
+export const PremiumLoginScreen: React.FC<{ initialEmail?: string }> = ({ initialEmail = '' }) => {
+  const [loginEmail, setLoginEmail] = useState(() => {
+    if (initialEmail) return initialEmail;
+    if (typeof localStorage !== 'undefined') {
+      return localStorage.getItem('amanaura_remembered_email') || '';
+    }
+    return '';
+  });
   const [loginPassword, setLoginPassword] = useState('');
-  const [rememberMe, setRememberMe] = useState(false);
+  const [rememberMe, setRememberMe] = useState(() => Boolean(initialEmail || (typeof localStorage !== 'undefined' && localStorage.getItem('amanaura_remembered_email'))));
   const [loginError, setLoginError] = useState<string | null>(null);
   const [passkeyNotice, setPasskeyNotice] = useState<string | null>(null);
   const [isLoggingIn, setIsLoggingIn] = useState(false);
+  const [webAuthnSupported, setWebAuthnSupported] = useState(true);
 
   const { authState, signInWithEmail, switchPersona } = useSecurityContext();
+  const supabase = getSupabaseClient();
 
-  // Load remember me & previous email if exists
+  // Load remember me & check WebAuthn platform support
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const savedEmail = localStorage.getItem('amanaura_remembered_email');
@@ -39,6 +49,7 @@ export const PremiumLoginScreen: React.FC = () => {
         setLoginEmail(savedEmail);
         setRememberMe(true);
       }
+      setWebAuthnSupported(isWebAuthnSupported());
     }
   }, []);
 
@@ -67,8 +78,32 @@ export const PremiumLoginScreen: React.FC = () => {
     }
   };
 
-  const handlePasskeyClick = () => {
-    setPasskeyNotice('Fitur login biometrik akan aktif penuh pada sprint berikutnya (#DW-02). Gunakan kata sandi Anda untuk saat ini.');
+  const handlePasskeyLogin = async () => {
+    if (!loginEmail) {
+      setLoginError('Masukkan email Anda terlebih dahulu untuk memulai login biometrik.');
+      return;
+    }
+    setIsLoggingIn(true);
+    setLoginError(null);
+    setPasskeyNotice(null);
+
+    try {
+      const res = await authenticateWithPasskey(supabase, loginEmail);
+      if (res.success) {
+        if (rememberMe && typeof window !== 'undefined') {
+          localStorage.setItem('amanaura_remembered_email', loginEmail.trim());
+        }
+        if (matchedPersona) {
+          switchPersona(matchedPersona.id);
+        }
+      } else if (!res.cancelled) {
+        setLoginError(res.error || 'Login biometrik gagal. Silakan gunakan kata sandi.');
+      }
+    } catch (err: any) {
+      setLoginError(err.message || 'Terjadi kesalahan saat otentikasi biometrik.');
+    } finally {
+      setIsLoggingIn(false);
+    }
   };
 
   return (
@@ -310,27 +345,38 @@ export const PremiumLoginScreen: React.FC = () => {
               </div>
             )}
 
+            {/* Dynamic Passkey / Biometric Login Button (#DW-02 / ADR-05) */}
+            {webAuthnSupported && (
+              <>
+                <button
+                  type="button"
+                  onClick={handlePasskeyLogin}
+                  disabled={isLoggingIn}
+                  className="w-full py-3 px-4 rounded-xl bg-surface-subtle hover-only:bg-surface border border-brand-line/60 hover-only:border-brand-primary text-ink text-xs font-sans font-semibold flex items-center justify-center space-x-2 transition-all cursor-pointer min-h-[44px] shadow-xs disabled:opacity-50"
+                  data-testid="btn-login-passkey"
+                >
+                  <Fingerprint className="w-4 h-4 text-brand-primary" />
+                  <span>Login dengan Sidik Jari / Biometrik</span>
+                </button>
+
+                <div className="flex items-center gap-3 my-1">
+                  <div className="flex-1 h-px bg-line" />
+                  <span className="text-[11px] text-ink-faint font-medium">atau</span>
+                  <div className="flex-1 h-px bg-line" />
+                </div>
+              </>
+            )}
+
             <Button
               type="submit"
               variant="primary"
               size="lg"
               isLoading={isLoggingIn}
               rightIcon={!isLoggingIn ? <ArrowRight className="w-4 h-4" /> : undefined}
-              className="w-full shadow-hairline mt-2"
+              className="w-full shadow-hairline mt-1"
             >
               {isLoggingIn ? 'Memvalidasi Identitas...' : 'Masuk dengan Kata Sandi'}
             </Button>
-
-            {/* Biometric / Passkey Login Button (#DW-02 placeholder) */}
-            <button
-              type="button"
-              onClick={handlePasskeyClick}
-              className="w-full py-3 px-4 rounded-xl bg-surface-subtle hover-only:bg-surface border border-line hover-only:border-brand-primary text-ink text-xs font-sans font-semibold flex items-center justify-center space-x-2 transition-all cursor-pointer min-h-[44px] shadow-xs"
-              data-testid="btn-login-passkey"
-            >
-              <Fingerprint className="w-4 h-4 text-brand-primary" />
-              <span>Login dengan Sidik Jari / Biometrik</span>
-            </button>
 
             <div className="pt-3 border-t border-line text-center">
               <button

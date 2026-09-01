@@ -279,10 +279,15 @@ interface SecurityContextValue {
 
 const SecurityContextReact = createContext<SecurityContextValue | null>(null);
 
-export const SecurityContextProvider: React.FC<{ children: React.ReactNode; initialPersonaId?: string }> = ({ children, initialPersonaId }) => {
+export const SecurityContextProvider: React.FC<{ 
+  children: React.ReactNode; 
+  initialPersonaId?: string; 
+  overridePersona?: PersonaProfile;
+}> = ({ children, initialPersonaId, overridePersona }) => {
   const [authenticatedUser, setAuthenticatedUser] = useState<User | null>(null);
   const [authState, setAuthState] = useState<AuthState>('LOADING');
   const [currentPersona, setCurrentPersona] = useState<PersonaProfile | null>(() => {
+    if (overridePersona) return overridePersona;
     if (initialPersonaId) {
       return SEED_PERSONAS.find(p => p.id === initialPersonaId) || null;
     }

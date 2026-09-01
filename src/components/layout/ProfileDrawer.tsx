@@ -15,6 +15,8 @@ import React, { useState, useRef } from 'react';
 import { useSecurityContext } from '../../auth/context';
 import { getSupabaseClient } from '../../db/supabaseClient';
 import { NameCardModal } from '../profile/NameCardModal';
+import { PasskeyManager } from '../profile/PasskeyManager';
+import { registerPasskey } from '../../services/webauthn';
 import { 
   X, 
   Building2, 
@@ -50,6 +52,7 @@ export const ProfileDrawer: React.FC<ProfileDrawerProps> = ({
 
   // Modal / Dialog States
   const [isNameCardOpen, setIsNameCardOpen] = useState<boolean>(false);
+  const [isPasskeyManagerOpen, setIsPasskeyManagerOpen] = useState<boolean>(false);
   const [activeDialog, setActiveDialog] = useState<'NAME' | 'PHONE' | 'PASSWORD' | 'PASSKEY_ON' | 'PASSKEY_OFF' | null>(null);
 
   // Form Field States
@@ -245,8 +248,26 @@ export const ProfileDrawer: React.FC<ProfileDrawerProps> = ({
   };
 
   // ----------------------------------------------------
-  // 4. Passkey Soft-Toggle Handler (#DW-02)
+  // 4. Passkey WebAuthn Handler (#DW-02 / ADR-05)
   // ----------------------------------------------------
+  const handleRegisterPasskey = async () => {
+    setIsLoading(true);
+    setErrorMessage(null);
+    try {
+      const res = await registerPasskey(supabase);
+      if (res.success) {
+        await updateOwnProfile({ passkeyEnabled: true });
+        showToast(res.message || 'Passkey biometrik berhasil didaftarkan');
+      } else if (!res.cancelled) {
+        setErrorMessage(res.error || 'Gagal mendaftarkan passkey');
+      }
+    } catch (err: any) {
+      setErrorMessage(err.message || 'Gagal mendaftarkan passkey');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const handleConfirmPasskeyToggle = async (enable: boolean) => {
     setIsLoading(true);
     setErrorMessage(null);
@@ -496,56 +517,89 @@ export const ProfileDrawer: React.FC<ProfileDrawerProps> = ({
                   <span className="text-xs text-brand-primary font-bold">Atur</span>
                 </button>
 
-                {/* Login Sidik Jari / Passkey Soft Toggle */}
-                <div className="w-full p-4 rounded-2xl bg-surface-subtle border border-line flex items-center justify-between text-xs min-h-[52px]">
-                  <div className="flex items-center space-x-3 pr-2">
-                    <div className="w-9 h-9 rounded-xl bg-brand-tint flex items-center justify-center shrink-0 border border-brand-line/40">
-                      <Fingerprint className="w-5 h-5 text-brand-primary shrink-0" />
-                    </div>
-                    <div className="text-left">
-                      <div className="flex items-center space-x-2">
-                        <span className="font-bold text-ink text-xs">Login Sidik Jari / Biometrik</span>
-                        <span className={`px-2 py-0.5 rounded text-[9px] font-mono font-bold ${
-                          currentPersona?.passkeyEnabled
-                            ? 'bg-success-tint text-success border border-success-line'
-                            : 'bg-surface border border-line text-ink-faint'
-                        }`}>
-                          {currentPersona?.passkeyEnabled ? 'AKTIF' : 'PASSKEY'}
+                {/* Login Sidik Jari / Passkey Section (#DW-02 / ADR-05) */}
+                <div className="w-full p-4 rounded-2xl bg-surface-subtle border border-line space-y-3">
+                  <div className="flex items-center justify-between text-xs">
+                    <div className="flex items-center space-x-3 pr-2">
+                      <div className="w-9 h-9 rounded-xl bg-brand-tint flex items-center justify-center shrink-0 border border-brand-line/40">
+                        <Fingerprint className="w-5 h-5 text-brand-primary shrink-0" />
+                      </div>
+                      <div className="text-left">
+                        <div className="flex items-center space-x-2">
+                          <span className="font-bold text-ink text-xs">Login Sidik Jari / Biometrik</span>
+                          <span className={`px-2 py-0.5 rounded text-[9px] font-mono font-bold ${
+                            currentPersona?.passkeyEnabled
+                              ? 'bg-success-tint text-success border border-success-line'
+                              : 'bg-surface border border-line text-ink-faint'
+                          }`}>
+                            {currentPersona?.passkeyEnabled ? 'AKTIF' : 'PASSKEY'}
+                          </span>
+                        </div>
+                        <span className="text-[11px] text-ink-soft block mt-0.5">
+                          {currentPersona?.passkeyEnabled
+                            ? 'Login Sidik Jari Aktif'
+                            : 'Nonaktif (Login menggunakan kata sandi)'}
                         </span>
                       </div>
-                      <span className="text-[11px] text-ink-soft block mt-0.5">
-                        {currentPersona?.passkeyEnabled
-                          ? 'Aktif (Preferensi biometrik tersimpan)'
-                          : 'Nonaktif (Login menggunakan kata sandi)'}
-                      </span>
                     </div>
+
+                    {/* High-Contrast Tactile Toggle Switch */}
+                    <button
+                      type="button"
+                      role="switch"
+                      aria-checked={Boolean(currentPersona?.passkeyEnabled)}
+                      onClick={() => {
+                        setErrorMessage(null);
+                        setActiveDialog(currentPersona?.passkeyEnabled ? 'PASSKEY_OFF' : 'PASSKEY_ON');
+                      }}
+                      className={`relative inline-flex h-7 w-12 shrink-0 cursor-pointer rounded-full p-0.5 border-2 transition-all duration-200 ease-in-out focus:outline-hidden ${
+                        currentPersona?.passkeyEnabled 
+                          ? 'bg-brand-primary border-brand-primary shadow-sm ring-2 ring-brand-primary/20' 
+                          : 'bg-line-strong/40 border-line-strong'
+                      }`}
+                      data-testid="toggle-passkey-switch"
+                      aria-label="Toggle login sidik jari"
+                    >
+                      <span 
+                        className={`pointer-events-none inline-block h-5 w-5 transform rounded-full shadow-md transition duration-200 ease-in-out ${
+                          currentPersona?.passkeyEnabled 
+                            ? 'translate-x-5 bg-on-brand' 
+                            : 'translate-x-0 bg-ink-soft'
+                        }`} 
+                      />
+                    </button>
                   </div>
 
-                  {/* High-Contrast Tactile Toggle Switch */}
-                  <button
-                    type="button"
-                    role="switch"
-                    aria-checked={Boolean(currentPersona?.passkeyEnabled)}
-                    onClick={() => {
-                      setErrorMessage(null);
-                      setActiveDialog(currentPersona?.passkeyEnabled ? 'PASSKEY_OFF' : 'PASSKEY_ON');
-                    }}
-                    className={`relative inline-flex h-7 w-12 shrink-0 cursor-pointer rounded-full p-0.5 border-2 transition-all duration-200 ease-in-out focus:outline-hidden ${
-                      currentPersona?.passkeyEnabled 
-                        ? 'bg-brand-primary border-brand-primary shadow-sm ring-2 ring-brand-primary/20' 
-                        : 'bg-line-strong/40 border-line-strong'
-                    }`}
-                    data-testid="toggle-passkey-switch"
-                    aria-label="Toggle login sidik jari"
-                  >
-                    <span 
-                      className={`pointer-events-none inline-block h-5 w-5 transform rounded-full shadow-md transition duration-200 ease-in-out ${
-                        currentPersona?.passkeyEnabled 
-                          ? 'translate-x-5 bg-on-brand' 
-                          : 'translate-x-0 bg-ink-soft'
-                      }`} 
-                    />
-                  </button>
+                  {/* Action row: Daftarkan Passkey or Kelola */}
+                  <div className="pt-2 border-t border-line-hairline flex items-center justify-between">
+                    {currentPersona?.passkeyEnabled ? (
+                      <>
+                        <div className="text-[11px] text-success font-medium flex items-center space-x-1.5">
+                          <ShieldCheck className="w-3.5 h-3.5" />
+                          <span>Login Sidik Jari Aktif</span>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => setIsPasskeyManagerOpen(true)}
+                          className="px-3 py-1.5 rounded-xl bg-surface border border-line hover-only:bg-surface-subtle text-ink font-semibold text-xs transition-colors cursor-pointer"
+                          data-testid="btn-manage-passkeys"
+                        >
+                          Kelola
+                        </button>
+                      </>
+                    ) : (
+                      <button
+                        type="button"
+                        onClick={handleRegisterPasskey}
+                        disabled={isLoading}
+                        className="w-full py-2 px-3 rounded-xl bg-brand-primary text-on-brand hover-only:opacity-95 font-bold text-xs flex items-center justify-center space-x-2 transition-all cursor-pointer shadow-xs disabled:opacity-50"
+                        data-testid="btn-register-passkey"
+                      >
+                        <Fingerprint className="w-4 h-4" />
+                        <span>Daftarkan Passkey</span>
+                      </button>
+                    )}
+                  </div>
                 </div>
 
                 {/* Unduh Kartu Nama Digital (Staf) / Unduh Kartu Keluarga (Wali) */}
@@ -810,6 +864,19 @@ export const ProfileDrawer: React.FC<ProfileDrawerProps> = ({
           profile={currentPersona}
         />
       )}
+
+      {/* Passkey / Biometric Credential Manager Modal */}
+      <PasskeyManager
+        isOpen={isPasskeyManagerOpen}
+        onClose={() => setIsPasskeyManagerOpen(false)}
+        onPasskeyCountChange={async (count) => {
+          if (count === 0 && currentPersona?.passkeyEnabled) {
+            await updateOwnProfile({ passkeyEnabled: false });
+          } else if (count > 0 && !currentPersona?.passkeyEnabled) {
+            await updateOwnProfile({ passkeyEnabled: true });
+          }
+        }}
+      />
     </>
   );
 };

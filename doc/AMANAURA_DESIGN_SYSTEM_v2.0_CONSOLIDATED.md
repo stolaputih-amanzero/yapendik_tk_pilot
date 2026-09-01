@@ -1522,5 +1522,10 @@ Untuk menjamin integritas struktural, ergonomi layar sentuh, dan kepatuhan absol
   * **Title Case Typography Harmonization & Child Photo Path (W-16 & W-17 Micro-Patches)**:
     * **W-16 (Harmonisasi Tipografi Staf)**: Seluruh nama staf pada Kartu Nama Digital diformat dengan *Title Case* yang konsisten (`formatTitleCase(profile.name)` → `Erna Boykela R`), menghapus inkonsistensi ALL-CAPS dan menciptakan keharmonisan visual keluarga artefak kartu.
     * **W-17 (Jalur Foto Anak & Graceful Fallback)**: Varian Kartu Keluarga mendukung tautan foto aktual anak via `familyInfo.childAvatarUrl` yang dirender dalam squircle kanvas & DOM, dengan penanganan kesalahan otomatis (*error fallback*) ke `AvatarChild` pastel + simbol deterministik saat foto tidak tersedia atau gagal dimuat.
+* **v3.0.19-PATCH (2026-09-02)**:
+  * **Passkey WebAuthn / FIDO2 Biometric Authentication Engine (ADR-05 / #DW-02)**:
+    * **WebAuthn Credential Infrastructure**: Migrasi skema `webauthn_credentials`, RLS owner-only isolation, dan 5 Security Definer RPCs (`rpc_user_has_passkey`, `rpc_user_passkey_count`, `rpc_list_user_passkeys`, `rpc_delete_user_passkey`, `rpc_webauthn_register_credential`).
+    * **Backend Edge Functions & Defense**: Implementasi `webauthn-registration` dan `webauthn-authentication` dengan verifikasi `@simplewebauthn/server` (v13.3.3), Relying Party ID `tkm.amanloka.com`, sign count replay attack detection, generic user enumeration prevention, dan native magic link session creation.
+    * **Profile Hub & Login Screen Integration**: Modal `PasskeyManager` untuk manajemen multi-perangkat (friendly device names, delete keys), tombol "Daftarkan Passkey" dan status "Login Sidik Jari Aktif" pada Profile Hub, serta tombol dinamis "Login dengan Sidik Jari" + divider "atau" pada Login Portal.
 
 
