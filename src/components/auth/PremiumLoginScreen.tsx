@@ -385,16 +385,6 @@ export const PremiumLoginScreen: React.FC<{ initialEmail?: string }> = ({ initia
             >
               {isLoggingIn ? 'Memvalidasi Identitas...' : 'Masuk dengan Kata Sandi'}
             </Button>
-
-            <div className="pt-3 border-t border-line text-center">
-              <button
-                type="button"
-                onClick={() => switchPersona('user_teacher_erna')}
-                className="text-xs font-sans text-brand-primary font-semibold hover-only:underline cursor-pointer py-1"
-              >
-                Masuk Mode Simulasi Pendidik (Erna Boykela R) →
-              </button>
-            </div>
           </form>
         </div>
       </div>
