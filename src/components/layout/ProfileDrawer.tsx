@@ -11,7 +11,7 @@
  * 6. Ergonomics: Danger-tinted Sign Out and 48dp touch floor
  */
 
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useSecurityContext } from '../../auth/context';
 import { getSupabaseClient } from '../../db/supabaseClient';
 import { NameCardModal } from '../profile/NameCardModal';
@@ -66,6 +66,30 @@ export const ProfileDrawer: React.FC<ProfileDrawerProps> = ({
   const [toastMessage, setToastMessage] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (isOpen) {
+      if (typeof localStorage !== 'undefined') {
+        const local = JSON.parse(localStorage.getItem('yapendik_mock_passkeys') || '[]');
+        if (local.length > 0 && !currentPersona?.passkeyEnabled) {
+          updateOwnProfile({ passkeyEnabled: true });
+        }
+      }
+      if (supabase && currentPersona?.id) {
+        supabase
+          .from('webauthn_credentials')
+          .select('credential_id')
+          .eq('user_id', currentPersona.id)
+          .limit(1)
+          .then(({ data }) => {
+            if (data && data.length > 0 && !currentPersona?.passkeyEnabled) {
+              updateOwnProfile({ passkeyEnabled: true });
+            }
+          })
+          .catch(() => {});
+      }
+    }
+  }, [isOpen]);
 
   if (!isOpen) return null;
 

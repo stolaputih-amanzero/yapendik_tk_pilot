@@ -499,8 +499,27 @@ export const SecurityContextProvider: React.FC<{
         }
       }
 
-      // Build dynamic persona profile using resolved role and matched seed info
+      // 3.5 Check if user has registered passkeys in webauthn_credentials or database
+      let hasActivePasskey = Boolean(personData?.passkey_enabled);
+      try {
+        const { data: creds } = await supabase
+          .from('webauthn_credentials')
+          .select('credential_id')
+          .eq('user_id', session.user.id)
+          .limit(1);
+        if (creds && creds.length > 0) {
+          hasActivePasskey = true;
+        }
+      } catch (e) {
+        console.warn('Failed to query webauthn_credentials:', e);
+      }
 
+      if (!hasActivePasskey && typeof localStorage !== 'undefined') {
+        const local = JSON.parse(localStorage.getItem('yapendik_mock_passkeys') || '[]');
+        if (local.length > 0) hasActivePasskey = true;
+      }
+
+      // Build dynamic persona profile using resolved role and matched seed info
       const dynamicPersona: PersonaProfile = {
         id: session.user.id,
         name: fullName,
@@ -516,8 +535,8 @@ export const SecurityContextProvider: React.FC<{
         email: session.user.email || personData?.email || matchedSeed?.email || 'yapendikmaranathajkt@gmail.com',
         phone: personData?.phone || matchedSeed?.phone || '+6281218641392',
         avatarUrl: personData?.avatar_url || matchedSeed?.avatarUrl || null,
-        passkeyEnabled: Boolean(personData?.passkey_enabled ?? matchedSeed?.passkeyEnabled),
-        passkeyRegisteredAt: personData?.passkey_registered_at || matchedSeed?.passkeyRegisteredAt || null
+        passkeyEnabled: hasActivePasskey,
+        passkeyRegisteredAt: personData?.passkey_registered_at || matchedSeed?.passkeyRegisteredAt || (hasActivePasskey ? new Date().toISOString() : null)
       };
 
       // Set database scope
