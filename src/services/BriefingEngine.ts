@@ -159,7 +159,8 @@ export class BriefingEngineService {
       const supabase = getSupabaseClient();
       const { data, error } = await supabase.rpc('rpc_get_briefing_data', {
         p_role: role,
-        p_school_id: schoolId
+        p_school_id: schoolId,
+        p_person_id: userId || null
       });
 
       if (!error && data) {
@@ -176,6 +177,23 @@ export class BriefingEngineService {
             fData.loop_health = { actions_awaiting_adoption: 0, outcomes_not_recorded: 0 };
           }
         }
+
+        // Personalize greeting if backend returned generic "Pendidik"
+        if (data.greeting && (data.greeting.includes('Pendidik') || data.greeting.includes('Selamat pagi,') || data.greeting.includes('Hari ini selesai,'))) {
+          if (userId) {
+            const isCharlotha = userId.toLowerCase().includes('charlotha') || userId.toLowerCase().includes('jovannca');
+            const isEvi = userId.toLowerCase().includes('evi');
+            const isDiana = userId.toLowerCase().includes('diana');
+            const isSiti = userId.toLowerCase().includes('siti');
+            const isErna = userId.toLowerCase().includes('erna');
+            
+            let name = isCharlotha ? 'Bu Charlotha' : (isEvi ? 'Bu Evi' : (isDiana ? 'Bu Diana' : (isSiti ? 'Bu Siti' : (isErna ? 'Bu Erna' : ''))));
+            if (name) {
+              data.greeting = mode === 'PENUTUP' ? `Hari ini selesai, ${name}.` : `Selamat pagi, ${name}`;
+            }
+          }
+        }
+
         return data as BriefingData;
       }
     } catch (err: any) {
@@ -354,7 +372,7 @@ export class BriefingEngineService {
       } else if (isEvi) {
         teacherSalutation = 'Bu Evi';
       } else if (isCharlotha) {
-        teacherSalutation = 'Bu Jovannca';
+        teacherSalutation = 'Bu Charlotha';
       } else if (isDiana) {
         teacherSalutation = 'Bu Diana';
       } else if (isSiti) {

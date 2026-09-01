@@ -84,7 +84,8 @@ ALTER TABLE public.closure_ritual_ledger ENABLE ROW LEVEL SECURITY;
 -- ═══════════════════════════════════════════════════════════════════════════
 CREATE OR REPLACE FUNCTION public.rpc_get_briefing_data(
     p_role TEXT,
-    p_school_id TEXT
+    p_school_id TEXT,
+    p_person_id TEXT DEFAULT NULL
 )
 RETURNS JSONB
 LANGUAGE plpgsql
@@ -100,6 +101,8 @@ DECLARE
     v_mode TEXT := 'OPERASIONAL';
     v_greeting TEXT;
     v_caller_name TEXT := 'Pendidik';
+    v_pref_name TEXT;
+    v_full_name TEXT;
     v_result JSONB;
     v_pending_attendance INT := 0;
     v_pending_drafts INT := 0;
@@ -110,9 +113,17 @@ DECLARE
     v_pending_lppa INT := 0;
     v_child RECORD;
 BEGIN
-    v_caller_person_id := public.get_auth_person_id();
+    v_caller_person_id := COALESCE(p_person_id, public.get_auth_person_id());
     IF v_caller_person_id IS NOT NULL THEN
-        SELECT full_name INTO v_caller_name FROM public.persons WHERE id = v_caller_person_id;
+        SELECT preferred_name, full_name INTO v_pref_name, v_full_name 
+        FROM public.persons 
+        WHERE id = v_caller_person_id;
+
+        IF v_pref_name IS NOT NULL THEN
+            v_caller_name := v_pref_name;
+        ELSIF v_full_name IS NOT NULL THEN
+            v_caller_name := 'Bu ' || split_part(v_full_name, ' ', 1);
+        END IF;
     END IF;
 
     SELECT * INTO v_rhythm FROM public.school_rhythm_configs
@@ -370,3 +381,6 @@ CREATE POLICY "p_teacher_profiles_read_all"
 ON public.teacher_profiles FOR SELECT
 TO authenticated, anon
 USING (true);
+
+GRANT EXECUTE ON FUNCTION public.rpc_get_briefing_data(TEXT, TEXT, TEXT) TO authenticated, anon;
+
