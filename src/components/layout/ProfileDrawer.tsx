@@ -456,8 +456,8 @@ export const ProfileDrawer: React.FC<ProfileDrawerProps> = ({
                 <p className="text-xs text-ink-soft">
                   {currentPersona?.roleTitle || currentPersona?.role}
                 </p>
-                <div className="w-full px-3.5 py-2 rounded-xl bg-surface text-xs font-mono text-ink-soft border border-line-hairline text-justify break-words leading-relaxed">
-                  {currentPersona?.schoolName || 'TK YAPENDIK GPIB Cabang Maranatha'}
+                <div className="w-full px-3.5 py-2 rounded-xl bg-surface text-xs font-mono text-ink-soft border border-line-hairline text-center break-words leading-relaxed">
+                  {(currentPersona?.schoolName || 'TK YAPENDIK GPIB Cabang Maranatha').trim()}
                 </div>
               </div>
             </div>

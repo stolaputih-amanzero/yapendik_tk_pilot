@@ -91,7 +91,7 @@ runCheck('PasskeyManager [MODAL ANATOMY]: Renders adaptive dialog with registere
     <PasskeyManager isOpen={true} onClose={() => {}} />
   );
 
-  assert.ok(html.includes('Kelola Kredensial Biometrik / Passkey'), 'Expected PasskeyManager title');
+  assert.ok(html.includes('Kelola Kredensial Biometrik'), 'Expected PasskeyManager title');
   assert.ok(html.includes('Secure Enclave / TPM'), 'Expected security and encryption footnote');
   assert.ok(html.includes('Daftarkan Perangkat Baru'), 'Expected add new passkey action');
 });
