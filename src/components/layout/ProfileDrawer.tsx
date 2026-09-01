@@ -69,12 +69,6 @@ export const ProfileDrawer: React.FC<ProfileDrawerProps> = ({
 
   useEffect(() => {
     if (isOpen) {
-      if (typeof localStorage !== 'undefined') {
-        const local = JSON.parse(localStorage.getItem('yapendik_mock_passkeys') || '[]');
-        if (local.length > 0 && !currentPersona?.passkeyEnabled) {
-          updateOwnProfile({ passkeyEnabled: true });
-        }
-      }
       if (supabase && currentPersona?.id) {
         supabase
           .from('webauthn_credentials')
@@ -82,14 +76,22 @@ export const ProfileDrawer: React.FC<ProfileDrawerProps> = ({
           .eq('user_id', currentPersona.id)
           .limit(1)
           .then(({ data }) => {
-            if (data && data.length > 0 && !currentPersona?.passkeyEnabled) {
-              updateOwnProfile({ passkeyEnabled: true });
+            const hasCreds = Boolean(data && data.length > 0);
+            if (hasCreds !== Boolean(currentPersona?.passkeyEnabled)) {
+              updateOwnProfile({ passkeyEnabled: hasCreds });
             }
           })
           .catch(() => {});
+      } else if (!supabase && typeof localStorage !== 'undefined' && currentPersona?.id) {
+        // Scoped to specific simulation persona ID
+        const local = JSON.parse(localStorage.getItem(`yapendik_mock_passkeys_${currentPersona.id}`) || '[]');
+        const hasCreds = local.length > 0;
+        if (hasCreds !== Boolean(currentPersona?.passkeyEnabled)) {
+          updateOwnProfile({ passkeyEnabled: hasCreds });
+        }
       }
     }
-  }, [isOpen]);
+  }, [isOpen, currentPersona?.id]);
 
   if (!isOpen) return null;
 

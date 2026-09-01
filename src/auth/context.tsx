@@ -499,8 +499,8 @@ export const SecurityContextProvider: React.FC<{
         }
       }
 
-      // 3.5 Check if user has registered passkeys in webauthn_credentials or database
-      let hasActivePasskey = Boolean(personData?.passkey_enabled);
+      // 3.5 Check if user has registered passkeys in webauthn_credentials table
+      let hasActivePasskey = false;
       try {
         const { data: creds } = await supabase
           .from('webauthn_credentials')
@@ -509,14 +509,12 @@ export const SecurityContextProvider: React.FC<{
           .limit(1);
         if (creds && creds.length > 0) {
           hasActivePasskey = true;
+        } else {
+          hasActivePasskey = Boolean(personData?.passkey_enabled);
         }
       } catch (e) {
         console.warn('Failed to query webauthn_credentials:', e);
-      }
-
-      if (!hasActivePasskey && typeof localStorage !== 'undefined') {
-        const local = JSON.parse(localStorage.getItem('yapendik_mock_passkeys') || '[]');
-        if (local.length > 0) hasActivePasskey = true;
+        hasActivePasskey = Boolean(personData?.passkey_enabled);
       }
 
       // Build dynamic persona profile using resolved role and matched seed info

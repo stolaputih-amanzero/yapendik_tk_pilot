@@ -289,9 +289,10 @@ export async function registerPasskey(
       }
     }
 
-    // Cache locally for instant UI responsiveness
-    if (typeof localStorage !== 'undefined') {
-      const existing = JSON.parse(localStorage.getItem('yapendik_mock_passkeys') || '[]');
+    // Cache locally for instant UI responsiveness scoped to user ID
+    if (typeof localStorage !== 'undefined' && user?.id) {
+      const storageKey = `yapendik_mock_passkeys_${user.id}`;
+      const existing = JSON.parse(localStorage.getItem(storageKey) || '[]');
       const filtered = existing.filter((p: any) => p.credential_id !== credential.id);
       filtered.unshift({
         credential_id: credential.id,
@@ -300,7 +301,7 @@ export async function registerPasskey(
         created_at: new Date().toISOString(),
         last_used_at: new Date().toISOString(),
       });
-      localStorage.setItem('yapendik_mock_passkeys', JSON.stringify(filtered.slice(0, 5)));
+      localStorage.setItem(storageKey, JSON.stringify(filtered.slice(0, 5)));
     }
 
     return { success: true, message: 'Passkey berhasil didaftarkan pada perangkat ini' };

@@ -14,11 +14,12 @@ CREATE OR REPLACE FUNCTION public.rpc_webauthn_registration_challenge()
 RETURNS text
 LANGUAGE plpgsql
 SECURITY DEFINER
-SET search_path = public, pg_temp
+SET search_path = public, extensions, pg_catalog, pg_temp
 AS $$
 DECLARE
   v_person_id text;
   v_challenge text;
+  v_raw_bytes bytea;
 BEGIN
   IF auth.uid() IS NULL THEN
     RAISE EXCEPTION 'UNAUTHORIZED: Sesi otentikasi diperlukan untuk meminta challenge registrasi';
@@ -30,7 +31,14 @@ BEGIN
   END IF;
 
   -- Generate cryptographically random 32-byte challenge encoded in base64url
-  v_challenge := translate(encode(gen_random_bytes(32), 'base64'), '+/=', '-_');
+  -- Resilient to any extension schema configuration (built-in sha256 + gen_random_uuid)
+  BEGIN
+    v_raw_bytes := extensions.gen_random_bytes(32);
+  EXCEPTION WHEN OTHERS THEN
+    v_raw_bytes := sha256((gen_random_uuid()::text || clock_timestamp()::text || random()::text)::bytea);
+  END;
+
+  v_challenge := translate(encode(v_raw_bytes, 'base64'), '+/=', '-_');
 
   UPDATE public.persons
   SET webauthn_pending_challenge = v_challenge,
