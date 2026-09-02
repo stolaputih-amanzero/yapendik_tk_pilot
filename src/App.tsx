@@ -48,7 +48,7 @@ const TAB_TO_HASH: Record<WorkspaceTab, string> = {
   ROSTER: 'data-roster',
   GOVERNANCE: 'evaluasi-sekolah',
   INSTITUTIONAL_HEALTH: 'kesehatan-sekolah',
-  HEADMASTER_ADOPTION: 'adopsi-ks',
+  HEADMASTER_ADOPTION: 'beranda-sekolah',
   FOUNDATION_GOVERNANCE: 'yayasan',
   ADMISSIONS_PORTAL: 'portal-ppdb',
   ADMISSIONS_DESK: 'meja-ppdb',
@@ -61,14 +61,17 @@ const TAB_TO_HASH: Record<WorkspaceTab, string> = {
   PERCONTOHAN: 'percontohan'
 };
 
-const HASH_TO_TAB: Record<string, WorkspaceTab> = Object.entries(TAB_TO_HASH).reduce(
-  (acc, [tab, hash]) => {
-    acc[hash] = tab as WorkspaceTab;
-    acc[tab.toLowerCase().replace(/_/g, '-')] = tab as WorkspaceTab;
-    return acc;
-  },
-  {} as Record<string, WorkspaceTab>
-);
+const HASH_TO_TAB: Record<string, WorkspaceTab> = {
+  ...Object.entries(TAB_TO_HASH).reduce(
+    (acc, [tab, hash]) => {
+      acc[hash] = tab as WorkspaceTab;
+      acc[tab.toLowerCase().replace(/_/g, '-')] = tab as WorkspaceTab;
+      return acc;
+    },
+    {} as Record<string, WorkspaceTab>
+  ),
+  'adopsi-ks': 'HEADMASTER_ADOPTION'
+};
 
 const getInitialTab = (): WorkspaceTab => {
   if (typeof window !== 'undefined' && window.location.hash) {
@@ -258,7 +261,7 @@ const AppContent: React.FC = () => {
           {activeTab === 'COHORT_PROMOTION' && <CohortPromotionWorkspace />}
           {activeTab === 'GRADUATION_REGISTRY' && <GraduationRegistryWorkspace />}
           {activeTab === 'FOUNDATION_GOVERNANCE' && <FoundationLayout />}
-          {activeTab === 'HEADMASTER_ADOPTION' && <HeadmasterAdoptionLayout />}
+          {activeTab === 'HEADMASTER_ADOPTION' && <HeadmasterAdoptionLayout onNavigateTab={setActiveTab} />}
           {activeTab === 'GUARDIAN_WORKSPACE' && <GuardianWorkspace />}
           {activeTab === 'ADMISSIONS_PORTAL' && (
             <ApplicationDashboard 

@@ -28,6 +28,7 @@ import {
   Settings, 
   Compass, 
   FileCheck2,
+  LayoutDashboard,
   Sun,
   Moon,
   LogOut
@@ -104,7 +105,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
       {
         title: 'Kepemimpinan Sekolah',
         items: [
-          { tab: 'HEADMASTER_ADOPTION', label: getRouteLabel('HEADMASTER_ADOPTION', role), icon: ShieldCheck },
+          { tab: 'HEADMASTER_ADOPTION', label: getRouteLabel('HEADMASTER_ADOPTION', role), icon: LayoutDashboard },
           { tab: 'INSTITUTIONAL_HEALTH', label: getRouteLabel('INSTITUTIONAL_HEALTH', role), icon: Flame },
           { tab: 'ADMISSIONS_DESK', label: getRouteLabel('ADMISSIONS_DESK', role), icon: HeartHandshake }
         ]

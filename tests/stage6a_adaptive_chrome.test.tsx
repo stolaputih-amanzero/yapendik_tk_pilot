@@ -68,10 +68,10 @@ async function runAdaptiveChromeTests() {
       assert.ok(meta.title.length <= 16, 'Title must be <= 16 chars');
     });
 
-    runCheck('Route Registry [HEADMASTER]: Resolves to "Kotak Kebijakan" (<= 2 words)', () => {
+    runCheck('Route Registry [HEADMASTER]: Resolves to "Beranda Sekolah" (<= 2 words)', () => {
       const meta = getTabMetadata('HEADMASTER_ADOPTION');
-      assert.equal(meta.title, 'Kotak Kebijakan');
-      assert.equal(meta.category, 'Manajemen Unit');
+      assert.equal(meta.title, 'Beranda Sekolah');
+      assert.equal(meta.category, 'Pusat Komando');
       assert.ok(meta.title.split(' ').length <= 2, 'Title must be <= 2 words');
       assert.ok(meta.title.length <= 16, 'Title must be <= 16 chars');
     });

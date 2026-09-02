@@ -40,9 +40,15 @@ export const HeadmasterBriefing: React.FC<HeadmasterBriefingProps> = ({
                   <span>Rekonsiliasi</span>
                 </div>
                 <div className="text-base font-semibold text-ink">
-                  {reconciliation.classes_complete}/{reconciliation.classes_total}
+                  {reconciliation.classes_complete === 0 ? (
+                    <span className="text-xs font-medium text-ink-soft">Menunggu</span>
+                  ) : (
+                    `${reconciliation.classes_complete}/${reconciliation.classes_total}`
+                  )}
                 </div>
-                <div className="text-[11px] text-ink-faint">Kelas tuntas</div>
+                <div className="text-[11px] text-ink-faint">
+                  {reconciliation.classes_complete === 0 ? 'Wali kelas absen' : 'Kelas tuntas'}
+                </div>
               </div>
 
               {/* 2. Antrean Otoritas */}
@@ -69,6 +75,14 @@ export const HeadmasterBriefing: React.FC<HeadmasterBriefingProps> = ({
                 <div className="text-[11px] text-ink-faint">Buku penghubung</div>
               </div>
             </div>
+
+            {/* Progressive Guidance for 06:30 Morning Calm (Amanaura Part VI §6.4) */}
+            {reconciliation.classes_complete === 0 && authority_queue.pending_lppa_approvals === 0 && (
+              <div className="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-surface-subtle border border-line-hairline text-xs text-ink-soft animate-in fade-in">
+                <span className="w-2 h-2 rounded-full bg-ink-faint shrink-0" />
+                <span>Menunggu rekonsiliasi presensi pagi dari Wali Kelas...</span>
+              </div>
+            )}
 
             {/* Dominant Primary Action */}
             <button

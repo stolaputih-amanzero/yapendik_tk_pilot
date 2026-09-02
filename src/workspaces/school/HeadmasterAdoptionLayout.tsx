@@ -30,15 +30,29 @@ import {
   ShieldCheck, 
   Scale, 
   Sparkles,
-  Layers
+  Layers,
+  TrendingUp,
+  HeartHandshake,
+  UserCog,
+  CalendarCheck2,
+  Activity,
+  ArrowRight,
+  LayoutDashboard
 } from 'lucide-react';
 import { HeadmasterBriefing } from '../../components/workspaces/briefing/HeadmasterBriefing';
 import { HeadmasterBriefingData } from '../../types/briefingTypes';
 import { briefingEngine } from '../../services/BriefingEngine';
+import { WorkspaceTab } from '../../components/layout/TopBar';
 
 export type AdoptionView = 'INBOX' | 'RESPONSES';
 
-export const HeadmasterAdoptionLayout: React.FC = () => {
+export interface HeadmasterAdoptionLayoutProps {
+  onNavigateTab?: (tab: WorkspaceTab) => void;
+}
+
+export const HeadmasterAdoptionLayout: React.FC<HeadmasterAdoptionLayoutProps> = ({
+  onNavigateTab
+}) => {
   const { currentPersona, securityContext, activeSchoolId } = useSecurityContext();
   const schoolId = activeSchoolId || securityContext?.activeSchoolId || 'sch_tk_menteng_01';
 
@@ -173,97 +187,316 @@ export const HeadmasterAdoptionLayout: React.FC = () => {
     }
   };
 
+  const handleNavigate = (tab: WorkspaceTab) => {
+    if (onNavigateTab) {
+      onNavigateTab(tab);
+    } else {
+      const hash = tab.toLowerCase().replace(/_/g, '-');
+      window.location.hash = `#${hash}`;
+    }
+  };
+
   return (
     <div 
-      className="w-full max-w-6xl mx-auto px-4 medium:px-6 pt-4 pb-[160px] space-y-6 animate-in fade-in duration-200 text-ink"
+      className="w-full max-w-6xl mx-auto px-4 medium:px-6 pt-4 pb-[160px] divide-y divide-line animate-in fade-in duration-200 text-ink"
       data-testid="headmaster-adoption-hub"
     >
-      {/* Stage 6-A The Warm Briefing Header */}
-      {briefingData && (
-        <HeadmasterBriefing
-          data={briefingData}
-          onOpenAuthorityQueue={() => setActiveView('INBOX')}
-        />
-      )}
+      {/* ─────────────────────────────────────────────────────────────
+          ZONA 1: SIRKADIAN GREETING & MICRO-SUMMARY (Hero Banner)
+          ───────────────────────────────────────────────────────────── */}
+      <section className="pb-8">
+        {briefingData && (
+          <HeadmasterBriefing
+            data={briefingData}
+            onOpenAuthorityQueue={() => handleNavigate('DEVELOPMENT')}
+          />
+        )}
+      </section>
 
-      {/* 1. HERO CANVAS (R-1 Hero Canvas) */}
-      <header className="space-y-4">
-        <div className="flex flex-col medium:flex-row medium:items-start justify-between gap-4">
-          <div>
-            <div className="flex items-center gap-1.5 text-brand-deep text-xs font-bold uppercase tracking-wider mb-1">
-              <Building2 className="w-4 h-4 text-brand-deep shrink-0" />
-              <span>Standar Yayasan • Adopsi Kebijakan Unit</span>
-            </div>
-            <h1 className="text-[28px] medium:text-3xl font-bold tracking-tight text-ink leading-tight flex items-center gap-2 flex-wrap">
-              <span>Adopsi Kebijakan</span>
-              <span className="text-xs font-normal text-success-deep flex items-center gap-1">
-                <ShieldCheck className="w-4 h-4 text-success" />
-                <span>Otonomi Sekolah (FB-03)</span>
-              </span>
-            </h1>
-            <p className="text-ink-soft text-sm max-w-2xl mt-1">
-              Ruang kerja Kepala Sekolah untuk menerima dukungan Yayasan, mencatat penyesuaian lokal, dan merekam refleksi kualitatif dampak pembelajaran.
+      {/* ─────────────────────────────────────────────────────────────
+          ZONA 2: PUSAT AKSI KEPEMIMPINAN (Quick Launchpad / Smart Chips)
+          ───────────────────────────────────────────────────────────── */}
+      <section className="py-8 space-y-4">
+        <div className="flex items-center justify-between">
+          <div className="space-y-1">
+            <span className="text-[11px] font-bold uppercase tracking-wider text-accent-valor block">
+              Pusat Komando Satuan
+            </span>
+            <h2 className="text-xl medium:text-2xl font-bold text-ink leading-tight tracking-tight flex items-center gap-2">
+              <LayoutDashboard className="w-6 h-6 text-accent-valor shrink-0" />
+              <span>Aksi Cepat Kepemimpinan</span>
+            </h2>
+            <p className="text-xs text-ink-soft">
+              Pintasan langsung ke antrean pengesahan, verifikasi penerimaan, dan data induk sekolah.
             </p>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5">
+          {/* Card 1: Verifikasi LPPA */}
+          <button
+            type="button"
+            onClick={() => handleNavigate('DEVELOPMENT')}
+            className="p-4 rounded-2xl bg-surface border border-line hover:border-accent-valor/50 transition-all text-left shadow-hairline group cursor-pointer active:scale-[0.98]"
+          >
+            <div className="flex items-center justify-between mb-3">
+              <div className="w-10 h-10 rounded-xl bg-brand/10 border border-brand/20 flex items-center justify-center text-brand">
+                <TrendingUp className="w-5 h-5" />
+              </div>
+              <span className="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-accent-valor/10 text-accent-valor border border-accent-valor/20">
+                {briefingData?.authority_queue?.pending_lppa_approvals ?? 3} Antre
+              </span>
+            </div>
+            <h3 className="font-bold text-sm text-ink group-hover:text-accent-valor transition-colors">
+              Verifikasi LPPA
+            </h3>
+            <p className="text-xs text-ink-soft mt-1 leading-snug">
+              Tinjau draf narasi &amp; stempel pengesahan rapor anak.
+            </p>
+          </button>
+
+          {/* Card 2: Meja PPDB */}
+          <button
+            type="button"
+            onClick={() => handleNavigate('ADMISSIONS_DESK')}
+            className="p-4 rounded-2xl bg-surface border border-line hover:border-accent-valor/50 transition-all text-left shadow-hairline group cursor-pointer active:scale-[0.98]"
+          >
+            <div className="flex items-center justify-between mb-3">
+              <div className="w-10 h-10 rounded-xl bg-accent-valor/10 border border-accent-valor/20 flex items-center justify-center text-accent-valor">
+                <HeartHandshake className="w-5 h-5" />
+              </div>
+              <span className="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-surface-subtle text-ink-soft border border-line">
+                2 Berkas
+              </span>
+            </div>
+            <h3 className="font-bold text-sm text-ink group-hover:text-accent-valor transition-colors">
+              Meja PPDB
+            </h3>
+            <p className="text-xs text-ink-soft mt-1 leading-snug">
+              Verifikasi kelengkapan berkas calon peserta didik.
+            </p>
+          </button>
+
+          {/* Card 3: Direktori PTK */}
+          <button
+            type="button"
+            onClick={() => handleNavigate('ROSTER')}
+            className="p-4 rounded-2xl bg-surface border border-line hover:border-accent-valor/50 transition-all text-left shadow-hairline group cursor-pointer active:scale-[0.98]"
+          >
+            <div className="flex items-center justify-between mb-3">
+              <div className="w-10 h-10 rounded-xl bg-surface-subtle border border-line-hairline flex items-center justify-center text-ink">
+                <UserCog className="w-5 h-5 text-accent-valor" />
+              </div>
+              <span className="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-success-tint text-success-deep border border-success-line">
+                4 Pendidik
+              </span>
+            </div>
+            <h3 className="font-bold text-sm text-ink group-hover:text-accent-valor transition-colors">
+              Direktori PTK
+            </h3>
+            <p className="text-xs text-ink-soft mt-1 leading-snug">
+              Buku induk pendidik, spesialisasi, &amp; data kontak.
+            </p>
+          </button>
+
+          {/* Card 4: Presensi Harian Unit */}
+          <button
+            type="button"
+            onClick={() => handleNavigate('ATTENDANCE')}
+            className="p-4 rounded-2xl bg-surface border border-line hover:border-accent-valor/50 transition-all text-left shadow-hairline group cursor-pointer active:scale-[0.98]"
+          >
+            <div className="flex items-center justify-between mb-3">
+              <div className="w-10 h-10 rounded-xl bg-success-tint border border-success-line flex items-center justify-center text-success-deep">
+                <CalendarCheck2 className="w-5 h-5 text-success" />
+              </div>
+              <span className="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-success-tint text-success-deep border border-success-line">
+                94% Hadir
+              </span>
+            </div>
+            <h3 className="font-bold text-sm text-ink group-hover:text-accent-valor transition-colors">
+              Presensi Harian
+            </h3>
+            <p className="text-xs text-ink-soft mt-1 leading-snug">
+              Pantau rekapitulasi kehadiran TK A &amp; TK B hari ini.
+            </p>
+          </button>
+        </div>
+      </section>
+
+      {/* ─────────────────────────────────────────────────────────────
+          ZONA 3: DENYUT KESEHATAN UNIT (Institutional Health Telemetry)
+          ───────────────────────────────────────────────────────────── */}
+      <section className="py-8 space-y-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+          <div className="space-y-1">
+            <span className="text-[11px] font-bold uppercase tracking-wider text-accent-valor block">
+              Telemetri &amp; Vitalitas Satuan
+            </span>
+            <h2 className="text-xl medium:text-2xl font-bold text-ink leading-tight tracking-tight flex items-center gap-2">
+              <Activity className="w-6 h-6 text-accent-valor shrink-0" />
+              <span>Denyut Kesehatan Unit</span>
+            </h2>
           </div>
 
           <button
-            onClick={refreshData}
-            disabled={isLoading}
-            className="flex items-center gap-2 px-3 py-2 rounded-xl bg-surface-subtle hover-only:bg-surface-subtle/80 text-ink-soft border border-line-hairline text-xs font-semibold transition-colors shrink-0 cursor-pointer"
-            title="Segarkan Data"
+            type="button"
+            onClick={() => handleNavigate('INSTITUTIONAL_HEALTH')}
+            className="inline-flex items-center gap-1.5 text-xs font-semibold text-accent-valor hover:underline cursor-pointer"
           >
-            <RefreshCw className={`w-4 h-4 ${isLoading ? 'animate-spin text-brand-primary' : ''}`} />
-            <span>Segarkan Data</span>
+            <span>Buka Statistik Unit Lengkap</span>
+            <ArrowRight className="w-3.5 h-3.5" />
           </button>
         </div>
 
-        {/* 2. NAVIGATION PILLS FLAT (R-2 Kontrol Flat) */}
-        <div className="flex items-center gap-2 overflow-x-auto pb-1 pt-2">
-          <button
-            onClick={() => setActiveView('INBOX')}
-            className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all whitespace-nowrap cursor-pointer ${
-              activeView === 'INBOX'
-                ? 'bg-brand-primary text-on-brand shadow-hairline'
-                : 'bg-surface-subtle text-ink-soft hover-only:text-ink border border-line-hairline'
-            }`}
-            data-testid="tab-inbox"
-          >
-            <Inbox className="w-4 h-4" />
-            <span>Inbox Inisiatif</span>
-            {actions.length > 0 && (
-              <span className={`px-2 py-1 rounded-full text-[10px] font-mono font-bold whitespace-nowrap ${
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {/* Telemetry 1: Keterisian & Rombel */}
+          <div className="p-4 rounded-2xl bg-surface border border-line space-y-2.5 shadow-hairline">
+            <div className="flex items-center justify-between text-xs text-ink-soft">
+              <span className="font-medium">Kapasitas &amp; Rombel</span>
+              <span className="font-mono text-success-deep font-bold">100% Terisi</span>
+            </div>
+            <div className="text-2xl font-bold text-ink font-mono">
+              17 <span className="text-xs font-sans font-normal text-ink-soft">Murid Aktif</span>
+            </div>
+            <div className="text-xs text-ink-soft space-y-1 pt-1 border-t border-line-hairline">
+              <div className="flex justify-between">
+                <span>Kelas TK A (4-5 Thn):</span>
+                <span className="font-medium text-ink">9 Anak</span>
+              </div>
+              <div className="flex justify-between">
+                <span>Kelas TK B (5-6 Thn):</span>
+                <span className="font-medium text-ink">8 Anak</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Telemetry 2: Rasio Pendidik */}
+          <div className="p-4 rounded-2xl bg-surface border border-line space-y-2.5 shadow-hairline">
+            <div className="flex items-center justify-between text-xs text-ink-soft">
+              <span className="font-medium">Rasio Pendidik &amp; Murid</span>
+              <span className="px-2 py-0.5 rounded-full text-[10px] font-mono bg-success-tint text-success-deep border border-success-line">
+                Sangat Prima
+              </span>
+            </div>
+            <div className="text-2xl font-bold text-ink font-mono">
+              1 : 4.25 <span className="text-xs font-sans font-normal text-ink-soft">Guru : Murid</span>
+            </div>
+            <div className="text-xs text-ink-soft space-y-1 pt-1 border-t border-line-hairline">
+              <div className="flex justify-between">
+                <span>Standar PAUD Nasional:</span>
+                <span className="font-medium text-ink">Maks. 1 : 15</span>
+              </div>
+              <div className="flex justify-between">
+                <span>Total PTK Bertugas:</span>
+                <span className="font-medium text-ink">4 Pendidik</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Telemetry 3: Periode & Kalender */}
+          <div className="p-4 rounded-2xl bg-surface border border-line space-y-2.5 shadow-hairline">
+            <div className="flex items-center justify-between text-xs text-ink-soft">
+              <span className="font-medium">Kalender &amp; Semester</span>
+              <span className="font-mono text-accent-valor font-bold">Ganjil</span>
+            </div>
+            <div className="text-2xl font-bold text-ink font-mono">
+              2026/2027 <span className="text-xs font-sans font-normal text-ink-soft">Tahun Ajaran</span>
+            </div>
+            <div className="text-xs text-ink-soft space-y-1 pt-1 border-t border-line-hairline">
+              <div className="flex justify-between">
+                <span>Status Siklus Akademik:</span>
+                <span className="font-medium text-success-deep">Aktif Berjalan</span>
+              </div>
+              <div className="flex justify-between">
+                <span>Batas Pengesahan LPPA:</span>
+                <span className="font-medium text-ink">20 Desember 2026</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ─────────────────────────────────────────────────────────────
+          ZONA 4: KEDAULATAN & ADOPSI (FB-03: Yayasan Support Context)
+          ───────────────────────────────────────────────────────────── */}
+      <section className="pt-8 space-y-6">
+        <header className="space-y-4">
+          <div className="flex flex-col medium:flex-row medium:items-start justify-between gap-4">
+            <div>
+              <div className="flex items-center gap-1.5 text-brand-deep text-xs font-bold uppercase tracking-wider mb-1">
+                <Building2 className="w-4 h-4 text-brand-deep shrink-0" />
+                <span>Kemitraan Yayasan • Kedaulatan Satuan</span>
+              </div>
+              <h2 className="text-xl medium:text-2xl font-bold tracking-tight text-ink leading-tight flex items-center gap-2 flex-wrap">
+                <span>Adopsi Kebijakan</span>
+                <span className="text-xs font-normal text-success-deep flex items-center gap-1">
+                  <ShieldCheck className="w-4 h-4 text-success" />
+                  <span>Otonomi Sekolah (FB-03)</span>
+                </span>
+              </h2>
+              <p className="text-ink-soft text-xs medium:text-sm max-w-2xl mt-1 leading-relaxed">
+                Ruang kerja Kepala Sekolah untuk menerima dukungan Yayasan, mencatat penyesuaian lokal, dan merekam refleksi kualitatif dampak pembelajaran.
+              </p>
+            </div>
+
+            <button
+              onClick={refreshData}
+              disabled={isLoading}
+              className="flex items-center gap-2 px-3 py-2 rounded-xl bg-surface-subtle hover-only:bg-surface-subtle/80 text-ink-soft border border-line-hairline text-xs font-semibold transition-colors shrink-0 cursor-pointer"
+              title="Segarkan Data"
+            >
+              <RefreshCw className={`w-4 h-4 ${isLoading ? 'animate-spin text-brand-primary' : ''}`} />
+              <span>Segarkan Data</span>
+            </button>
+          </div>
+
+          {/* Navigation Pills Flat (R-2) */}
+          <div className="flex items-center gap-2 overflow-x-auto pb-1 pt-2">
+            <button
+              onClick={() => setActiveView('INBOX')}
+              className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all whitespace-nowrap cursor-pointer ${
                 activeView === 'INBOX'
-                  ? 'bg-on-brand/20 text-on-brand'
-                  : 'bg-surface-subtle text-ink-soft'
-              }`}>
-                {actions.length}
-              </span>
-            )}
-          </button>
+                  ? 'bg-brand-primary text-on-brand shadow-hairline'
+                  : 'bg-surface-subtle text-ink-soft hover-only:text-ink border border-line-hairline'
+              }`}
+              data-testid="tab-inbox"
+            >
+              <Inbox className="w-4 h-4" />
+              <span>Inbox Inisiatif</span>
+              {actions.length > 0 && (
+                <span className={`px-2 py-1 rounded-full text-[10px] font-mono font-bold whitespace-nowrap ${
+                  activeView === 'INBOX'
+                    ? 'bg-on-brand/20 text-on-brand'
+                    : 'bg-surface-subtle text-ink-soft'
+                }`}>
+                  {actions.length}
+                </span>
+              )}
+            </button>
 
-          <button
-            onClick={() => setActiveView('RESPONSES')}
-            className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all whitespace-nowrap cursor-pointer ${
-              activeView === 'RESPONSES'
-                ? 'bg-brand-primary text-on-brand shadow-hairline'
-                : 'bg-surface-subtle text-ink-soft hover-only:text-ink border border-line-hairline'
-            }`}
-            data-testid="tab-responses"
-          >
-            <CheckCircle2 className="w-4 h-4" />
-            <span>Riwayat &amp; Refleksi</span>
-            {adoptions.length > 0 && (
-              <span className={`px-2 py-1 rounded-full text-[10px] font-mono font-bold whitespace-nowrap ${
+            <button
+              onClick={() => setActiveView('RESPONSES')}
+              className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all whitespace-nowrap cursor-pointer ${
                 activeView === 'RESPONSES'
-                  ? 'bg-on-brand/20 text-on-brand'
-                  : 'bg-surface-subtle text-ink-soft'
-              }`}>
-                {adoptions.length}
-              </span>
-            )}
-          </button>
-        </div>
-      </header>
+                  ? 'bg-brand-primary text-on-brand shadow-hairline'
+                  : 'bg-surface-subtle text-ink-soft hover-only:text-ink border border-line-hairline'
+              }`}
+              data-testid="tab-responses"
+            >
+              <CheckCircle2 className="w-4 h-4" />
+              <span>Riwayat &amp; Refleksi</span>
+              {adoptions.length > 0 && (
+                <span className={`px-2 py-1 rounded-full text-[10px] font-mono font-bold whitespace-nowrap ${
+                  activeView === 'RESPONSES'
+                    ? 'bg-on-brand/20 text-on-brand'
+                    : 'bg-surface-subtle text-ink-soft'
+                }`}>
+                  {adoptions.length}
+                </span>
+              )}
+            </button>
+          </div>
+        </header>
 
       {/* Success Notification */}
       {successMessage && (
@@ -485,6 +718,7 @@ export const HeadmasterAdoptionLayout: React.FC = () => {
           </div>
         </div>
       )}
+      </section>
     </div>
   );
 };

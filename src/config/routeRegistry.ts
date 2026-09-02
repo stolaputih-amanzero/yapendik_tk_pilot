@@ -108,11 +108,11 @@ export const ROUTE_REGISTRY: Record<WorkspaceTab, TabMetadata> = {
   },
   HEADMASTER_ADOPTION: {
     id: 'HEADMASTER_ADOPTION',
-    title: 'Kotak Kebijakan',
-    shortTitle: 'Kotak Kebijakan',
-    category: 'Manajemen Unit',
-    description: 'Konfigurasi ritme sekolah dan ratifikasi laporan LPPA.',
-    hash: 'adopsi-ks'
+    title: 'Beranda Sekolah',
+    shortTitle: 'Beranda Sekolah',
+    category: 'Pusat Komando',
+    description: 'Kokpit kepemimpinan, rekonsiliasi sirkadian, dan kedaulatan sekolah.',
+    hash: 'beranda-sekolah'
   },
   FOUNDATION_GOVERNANCE: {
     id: 'FOUNDATION_GOVERNANCE',

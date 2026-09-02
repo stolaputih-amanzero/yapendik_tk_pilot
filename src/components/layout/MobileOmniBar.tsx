@@ -28,6 +28,7 @@ import {
   HeartHandshake, 
   CalendarCheck2, 
   GraduationCap, 
+  LayoutDashboard,
   Home, 
   Sparkles, 
   TrendingUp, 
@@ -186,7 +187,7 @@ export const MobileOmniBar: React.FC<MobileOmniBarProps> = ({
     ];
   } else if (isHeadmaster) {
     primaryItems = [
-      { tab: 'HEADMASTER_ADOPTION', label: getRouteLabel('HEADMASTER_ADOPTION', role), icon: ShieldCheck },
+      { tab: 'HEADMASTER_ADOPTION', label: getRouteLabel('HEADMASTER_ADOPTION', role), icon: LayoutDashboard },
       { tab: 'INSTITUTIONAL_HEALTH', label: getRouteLabel('INSTITUTIONAL_HEALTH', role), icon: Flame },
       { tab: 'ADMISSIONS_DESK', label: getRouteLabel('ADMISSIONS_DESK', role), icon: HeartHandshake },
       { tab: 'DEVELOPMENT', label: getRouteLabel('DEVELOPMENT', role), icon: TrendingUp },

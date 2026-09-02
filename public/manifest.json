@@ -17,6 +17,12 @@
   ],
   "shortcuts": [
     {
+      "name": "Beranda Sekolah",
+      "short_name": "Sekolah",
+      "description": "Kokpit komando & rekonsiliasi harian sekolah",
+      "url": "/#beranda-sekolah"
+    },
+    {
       "name": "Beranda Kelas",
       "short_name": "Beranda",
       "description": "Pusat komando sirkadian ruang kelas",
