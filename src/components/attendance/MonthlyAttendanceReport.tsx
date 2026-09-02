@@ -9,6 +9,7 @@ import { useSecurityContext } from '../../auth/context';
 import { 
   AvatarChild, 
   SegmentedControl, 
+  SegmentedControlOption,
   Button 
 } from '../ui';
 import { 
@@ -136,9 +137,10 @@ export const MonthlyAttendanceReport: React.FC<MonthlyAttendanceReportProps> = (
   const perfectAttendanceCount = studentMetrics.filter(s => s.percentage === 100 && totalEffectiveDays > 0).length;
   const needsAttentionCount = studentMetrics.filter(s => s.percentage < 85 && totalEffectiveDays > 0).length;
 
-  const classSegments = classes.map(c => ({
+  const classSegments: SegmentedControlOption[] = classes.map(c => ({
     id: c.id,
-    label: c.name.includes('A') ? 'TK A' : c.name.includes('B') ? 'TK B' : c.name
+    label: c.name.includes('A') ? 'Kelas TK A' : c.name.includes('B') ? 'Kelas TK B' : c.name,
+    activeClassName: 'bg-brand text-on-brand font-bold shadow-sm ring-1 ring-brand/50'
   }));
 
   const handlePrint = () => {

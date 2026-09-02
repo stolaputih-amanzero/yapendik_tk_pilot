@@ -632,8 +632,7 @@ export const SecurityContextProvider: React.FC<{
       }
     }
 
-    // Secure Session Lifecycle: Flush previous user cache
-    db.purgeAllSessionCache();
+    // Context Scope Transition: switch active persona without wiping shared school data
     db.setContextScope(selected.id, selected.schoolId);
 
     if (typeof window !== 'undefined') {

@@ -8,7 +8,7 @@ import React, { useState, useEffect } from 'react';
 import { db } from '../../db/database';
 import { useSecurityContext } from '../../auth/context';
 import { LearningActivity, ClassRoom, WeeklyPlan } from '../../domain/types';
-import { Button, SegmentedControl, Badge } from '../ui';
+import { Button, SegmentedControl, SegmentedControlOption, Badge } from '../ui';
 import { 
   CalendarRange, 
   ChevronLeft, 
@@ -158,9 +158,10 @@ export const WeeklyPlanningWorkspace: React.FC<Props> = ({
     setShowThemeModal(false);
   };
 
-  const classSegments = classes.map(c => ({
+  const classSegments: SegmentedControlOption[] = classes.map(c => ({
     id: c.id,
-    label: c.name
+    label: c.name.includes('A') ? 'Kelas TK A' : c.name.includes('B') ? 'Kelas TK B' : c.name,
+    activeClassName: 'bg-brand text-on-brand font-bold shadow-sm ring-1 ring-brand/50'
   }));
 
   const currentTheme = weeklyPlan?.weeklyTheme || 'Lingkunganku / Sekolah & Rumahku';

@@ -16,6 +16,8 @@ import {
 } from '../../../types/lppaReportingTypes';
 import { lppaReportingService } from '../../../services/lppaReportingService';
 import { MilestoneRating } from '../../../domain/types';
+import { PedagogicalRatingPill } from '../../ui/PedagogicalRatingPill';
+import { validateNarrative, generateAppreciativeNarrative } from '../../../services/lppaNarrativeEngine';
 import { LppaPrintPreviewModal } from './LppaPrintPreviewModal';
 import { 
   Award, 
@@ -152,6 +154,20 @@ export const LppaSynthesisStudioModal: React.FC<Props> = ({
           requested_by_name: teacherName,
           role: 'TEACHER'
         });
+
+        // Check Auto-Draft Shield (localStorage) per Amanaura Part V §5.2
+        try {
+          const draftKey = `lppa_draft_${studentId}_${semester}`;
+          const cachedDraft = localStorage.getItem(draftKey);
+          if (cachedDraft) {
+            const parsed = JSON.parse(cachedDraft);
+            if (parsed.elements) {
+              synthesized.elements = { ...synthesized.elements, ...parsed.elements };
+            }
+            if (parsed.reflection) synthesized.homeroom_teacher_reflection = parsed.reflection;
+          }
+        } catch {}
+
         setReport(synthesized);
         setHeightInput(String(synthesized.physical_growth.height_cm || '107'));
         setWeightInput(String(synthesized.physical_growth.weight_kg || '18.5'));
@@ -165,6 +181,23 @@ export const LppaSynthesisStudioModal: React.FC<Props> = ({
       setIsSynthesizing(false);
     }
   };
+
+  // Auto-Draft Shield (localStorage) per Amanaura Part V §5.2
+  useEffect(() => {
+    if (report && report.status === 'DRAFT' && studentId) {
+      try {
+        const draftKey = `lppa_draft_${studentId}_${semester}`;
+        localStorage.setItem(draftKey, JSON.stringify({
+          elements: report.elements,
+          reflection: reflectionInput,
+          height: heightInput,
+          weight: weightInput,
+          head: headInput,
+          savedAt: new Date().toISOString()
+        }));
+      } catch {}
+    }
+  }, [report, reflectionInput, heightInput, weightInput, headInput, studentId, semester]);
 
   const handleReSynthesize = async () => {
     if (!confirm('Hasilkan ulang proposal draf dari bukti observasi? Draf narasi yang belum tersimpan akan diperbarui.')) {
@@ -552,23 +585,15 @@ export const LppaSynthesisStudioModal: React.FC<Props> = ({
                     </div>
                   </div>
 
-                  {/* Rating Selector */}
+                  {/* Rating Selector using PedagogicalRatingPill */}
                   <div className="flex items-center gap-2 self-start medium:self-auto">
                     <span className="text-xs font-semibold text-ink-soft mr-1">Rating:</span>
-                    {(['BB', 'MB', 'BSH', 'BSB'] as MilestoneRating[]).map(r => (
-                      <button
-                        key={r}
-                        disabled={isReadOnly}
-                        onClick={() => handleRatingChange(activeElementKey, r)}
-                        className={`px-3 py-1 text-xs font-bold rounded-lg border transition cursor-pointer ${
-                          currentElement.rating_summary === r
-                            ? 'bg-brand text-on-brand border-brand shadow-hairline'
-                            : 'bg-surface text-ink-soft border-line hover-only:bg-surface-subtle'
-                        }`}
-                      >
-                        {r}
-                      </button>
-                    ))}
+                    <PedagogicalRatingPill
+                      value={currentElement.rating_summary}
+                      onChange={(r) => handleRatingChange(activeElementKey, r)}
+                      isReadOnly={isReadOnly}
+                      showLabel={false}
+                    />
                   </div>
                 </div>
 
@@ -592,11 +617,16 @@ export const LppaSynthesisStudioModal: React.FC<Props> = ({
                           className="bg-surface p-3 rounded-card border border-line shadow-hairline flex items-start gap-3"
                         >
                           {ev.photo_url ? (
-                            <img
-                              src={ev.photo_url}
-                              alt="Bukti foto"
-                              className="w-16 h-16 rounded-field object-cover border border-line shrink-0"
-                            />
+                            <div className="relative shrink-0 overflow-hidden rounded-field border border-line">
+                              <img
+                                src={ev.photo_url}
+                                alt="Bukti foto"
+                                className="w-16 h-16 object-cover"
+                              />
+                              <div className="absolute inset-x-0 bottom-0 bg-ink/80 text-on-brand text-[7px] font-mono text-center py-0.5 truncate px-0.5">
+                                PORTOFOLIO KARYA
+                              </div>
+                            </div>
                           ) : (
                             <div className="w-16 h-16 rounded-field bg-lppa-tint border border-lppa-line flex items-center justify-center text-lppa-deep shrink-0">
                               <Camera className="w-6 h-6" />
@@ -644,16 +674,33 @@ export const LppaSynthesisStudioModal: React.FC<Props> = ({
                   </p>
                 </div>
 
-                {/* Teacher Final Narrative Editor */}
+                {/* Teacher Final Narrative Editor with Anti-Jargon & Template Support */}
                 <div className="space-y-2">
                   <div className="flex items-center justify-between">
                     <label className="text-xs font-bold text-ink flex items-center gap-2">
                       <FileText className="w-4 h-4 text-lppa" />
                       <span>Narasi Reflektif Akhir Guru (Akan Dicetak di Rapor)</span>
                     </label>
-                    <span className="text-[11px] text-ink-soft font-medium">
-                      Guru adalah pengarang utama
-                    </span>
+                    <div className="flex items-center gap-2">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const narrative = generateAppreciativeNarrative({
+                            studentName,
+                            elementKey: activeElementKey,
+                            rating: currentElement.rating_summary || 'BSH'
+                          });
+                          handleNarrativeChange(activeElementKey, narrative);
+                        }}
+                        disabled={isReadOnly}
+                        className="text-[11px] font-bold text-brand-primary hover-only:underline inline-flex items-center gap-1 cursor-pointer"
+                      >
+                        <Sparkles className="w-3.5 h-3.5" /> Draf Kamus Keluarga
+                      </button>
+                      <span className="text-[11px] text-ink-soft font-medium">
+                        Guru pengarang utama
+                      </span>
+                    </div>
                   </div>
                   <textarea
                     rows={4}
@@ -663,6 +710,22 @@ export const LppaSynthesisStudioModal: React.FC<Props> = ({
                     placeholder="Tuliskan narasi perkembangan anak..."
                     className="w-full p-3 text-xs font-medium rounded-card bg-surface border border-line text-ink focus:outline-none focus:ring-1 focus:ring-brand-primary leading-relaxed shadow-hairline"
                   />
+                  {/* Anti-Jargon Enforcer Alert (Hukum 12) */}
+                  {(() => {
+                    const check = validateNarrative(currentElement.teacher_final_narrative);
+                    if (!check.valid) {
+                      return (
+                        <div className="p-2.5 rounded-xl bg-warning-tint border border-warning-line text-warning-deep text-xs flex items-center gap-2">
+                          <AlertCircle className="w-4 h-4 shrink-0 text-warning" />
+                          <span>
+                            <strong>Perhatian (Hukum 12 Anti-Jargon):</strong> Ditemukan istilah evaluasi kaku/komparatif:{' '}
+                            <span className="underline font-bold">{check.violations.join(', ')}</span>. Mohon gunakan bahasa perkembangan apresiatif.
+                          </span>
+                        </div>
+                      );
+                    }
+                    return null;
+                  })()}
                 </div>
 
                 {/* Recommendations */}

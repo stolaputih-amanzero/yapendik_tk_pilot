@@ -16,4 +16,4 @@ export * from './ProgressBar';
 export * from './SelectSheet';
 export * from './SearchableCombobox';
 export * from './Skeleton';
-
+export * from './PedagogicalRatingPill';

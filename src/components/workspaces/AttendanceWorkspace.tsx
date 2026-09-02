@@ -77,9 +77,12 @@ export const AttendanceWorkspace: React.FC = () => {
   const { securityContext } = useSecurityContext();
   const dateInputRef = useRef<HTMLInputElement>(null);
   const saveTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const currentDateRef = useRef<string>(getTodayDateString());
 
   const [classes, setClasses] = useState<ClassRoom[]>([]);
-  const [selectedClassId, setSelectedClassId] = useState<string>('cls_maranatha_tka');
+  const [selectedClassId, setSelectedClassId] = useState<string>(() => {
+    return securityContext?.assignedClasses?.[0] || 'cls_maranatha_tka';
+  });
   const [selectedDate, setSelectedDate] = useState<string>(getTodayDateString);
   const [students, setStudents] = useState<any[]>([]);
   const [attendanceMap, setAttendanceMap] = useState<Record<string, {
@@ -95,12 +98,46 @@ export const AttendanceWorkspace: React.FC = () => {
   const [isSaving, setIsSaving] = useState(false);
   const [showToast, setShowToast] = useState(false);
 
+  // Midnight Auto-Rollover & Visibility Sync
+  useEffect(() => {
+    const checkDateRollover = () => {
+      const today = getTodayDateString();
+      if (today !== currentDateRef.current) {
+        currentDateRef.current = today;
+        setSelectedDate(today);
+      }
+    };
+
+    const interval = setInterval(checkDateRollover, 60000);
+    const handleVisibility = () => {
+      if (document.visibilityState === 'visible') {
+        checkDateRollover();
+      }
+    };
+    document.addEventListener('visibilitychange', handleVisibility);
+
+    return () => {
+      clearInterval(interval);
+      document.removeEventListener('visibilitychange', handleVisibility);
+    };
+  }, []);
+
+  // Update selected class if user context changes
+  useEffect(() => {
+    if (securityContext?.assignedClasses && securityContext.assignedClasses.length > 0) {
+      if (!securityContext.assignedClasses.includes(selectedClassId)) {
+        setSelectedClassId(securityContext.assignedClasses[0]);
+      }
+    }
+  }, [securityContext?.assignedClasses]);
+
   const loadData = () => {
     if (!securityContext) return;
     const clsList = db.getClasses(securityContext.activeSchoolId);
     setClasses(clsList);
     if (clsList.length > 0 && !clsList.some(c => c.id === selectedClassId)) {
-      setSelectedClassId(clsList[0].id);
+      const preferred = clsList.find(c => securityContext.assignedClasses?.includes(c.id));
+      setSelectedClassId(preferred ? preferred.id : clsList[0].id);
     }
     const studentList = db.getStudents(securityContext.activeSchoolId, selectedClassId);
     setStudents(studentList);
@@ -274,22 +311,53 @@ export const AttendanceWorkspace: React.FC = () => {
   };
 
   const statusSegments: SegmentedControlOption[] = [
-    { id: 'HADIR', label: 'Hadir', activeClassName: 'bg-success text-on-brand shadow-hairline' },
-    { id: 'SAKIT', label: 'Sakit', activeClassName: 'bg-warning text-on-brand shadow-hairline' },
-    { id: 'IZIN', label: 'Izin', activeClassName: 'bg-info text-on-brand shadow-hairline' },
-    { id: 'ALPA', label: 'Alpa', activeClassName: 'bg-danger text-on-brand shadow-hairline' }
+    { id: 'HADIR', label: 'Hadir', activeClassName: 'bg-emerald-600 dark:bg-emerald-500 text-white font-bold shadow-sm ring-1 ring-emerald-700/60' },
+    { id: 'SAKIT', label: 'Sakit', activeClassName: 'bg-amber-500 dark:bg-amber-600 text-white font-bold shadow-sm ring-1 ring-amber-700/60' },
+    { id: 'IZIN', label: 'Izin', activeClassName: 'bg-sky-600 dark:bg-sky-500 text-white font-bold shadow-sm ring-1 ring-sky-700/60' },
+    { id: 'ALPA', label: 'Alpa', activeClassName: 'bg-rose-600 dark:bg-rose-500 text-white font-bold shadow-sm ring-1 ring-rose-700/60' }
   ];
 
-  const classSegments = classes.map(c => ({
+  const classSegments: SegmentedControlOption[] = classes.map(c => ({
     id: c.id,
-    label: c.name.includes('A') ? 'TK A' : c.name.includes('B') ? 'TK B' : c.name
+    label: c.name.includes('A') ? 'Kelas TK A' : c.name.includes('B') ? 'Kelas TK B' : c.name,
+    activeClassName: 'bg-brand text-on-brand font-bold shadow-sm ring-1 ring-brand/50'
   }));
 
-  const moodButtons: { id: 'CERIA' | 'TENANG' | 'GELISAH' | 'MENANGIS'; label: string; emoji: string }[] = [
-    { id: 'CERIA', label: 'Ceria', emoji: '😊' },
-    { id: 'TENANG', label: 'Stabil', emoji: '😐' },
-    { id: 'GELISAH', label: 'Lesu', emoji: '🙁' },
-    { id: 'MENANGIS', label: 'Rewel', emoji: '😭' }
+  const moodButtons: { 
+    id: 'CERIA' | 'TENANG' | 'GELISAH' | 'MENANGIS'; 
+    label: string; 
+    emoji: string;
+    activeClassName: string;
+    inactiveBadgeClassName: string;
+  }[] = [
+    { 
+      id: 'CERIA', 
+      label: 'Ceria', 
+      emoji: '😊', 
+      activeClassName: 'bg-success-tint text-success-deep border-success-line ring-1 ring-success font-bold',
+      inactiveBadgeClassName: 'hover-only:bg-success-tint/50'
+    },
+    { 
+      id: 'TENANG', 
+      label: 'Stabil', 
+      emoji: '😐', 
+      activeClassName: 'bg-info-tint text-info-deep border-info-line ring-1 ring-info font-bold',
+      inactiveBadgeClassName: 'hover-only:bg-info-tint/50'
+    },
+    { 
+      id: 'GELISAH', 
+      label: 'Lesu', 
+      emoji: '🙁', 
+      activeClassName: 'bg-warning-tint text-warning-deep border-warning-line ring-1 ring-warning font-bold',
+      inactiveBadgeClassName: 'hover-only:bg-warning-tint/50'
+    },
+    { 
+      id: 'MENANGIS', 
+      label: 'Rewel', 
+      emoji: '😭', 
+      activeClassName: 'bg-danger-tint text-danger-deep border-danger-line ring-1 ring-danger font-bold',
+      inactiveBadgeClassName: 'hover-only:bg-danger-tint/50'
+    }
   ];
 
   // Live Micro-Summary Counts
@@ -325,29 +393,29 @@ export const AttendanceWorkspace: React.FC = () => {
             </div>
 
             {/* In-Context View Switcher (Law 11 Compliant: Zero Emoji Clutter) */}
-            <div className="inline-flex p-0.5 rounded-xl bg-surface-subtle border border-line">
+            <div className="inline-flex p-1 rounded-xl bg-surface-subtle border border-line gap-1 select-none">
               <button
                 type="button"
                 onClick={() => setActiveMode('DAILY')}
-                className={`min-h-[34px] px-3 py-1 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer ${
+                className={`min-h-[34px] px-3.5 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer ${
                   activeMode === 'DAILY'
-                    ? 'bg-surface text-ink shadow-hairline border border-line'
-                    : 'text-ink-soft hover-only:text-ink'
+                    ? 'bg-brand text-on-brand font-bold shadow-sm ring-1 ring-brand/50'
+                    : 'text-ink-soft hover-only:text-ink hover-only:bg-surface/50'
                 }`}
               >
-                <CalendarCheck className="w-3.5 h-3.5 text-accent-valor" />
+                <CalendarCheck className={`w-3.5 h-3.5 ${activeMode === 'DAILY' ? 'text-on-brand' : 'text-accent-valor'}`} />
                 <span>Presensi Harian</span>
               </button>
               <button
                 type="button"
                 onClick={() => setActiveMode('MONTHLY')}
-                className={`min-h-[34px] px-3 py-1 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer ${
+                className={`min-h-[34px] px-3.5 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer ${
                   activeMode === 'MONTHLY'
-                    ? 'bg-surface text-ink shadow-hairline border border-line'
-                    : 'text-ink-soft hover-only:text-ink'
+                    ? 'bg-brand text-on-brand font-bold shadow-sm ring-1 ring-brand/50'
+                    : 'text-ink-soft hover-only:text-ink hover-only:bg-surface/50'
                 }`}
               >
-                <BarChart3 className="w-3.5 h-3.5 text-accent-valor" />
+                <BarChart3 className={`w-3.5 h-3.5 ${activeMode === 'MONTHLY' ? 'text-on-brand' : 'text-accent-valor'}`} />
                 <span>Rekap Bulanan</span>
               </button>
             </div>
@@ -453,7 +521,7 @@ export const AttendanceWorkspace: React.FC = () => {
 
           {/* Class Switcher & Metrics in One Line */}
           <div className="flex items-center gap-3 overflow-x-auto">
-            <div className="w-44 shrink-0">
+            <div className="w-56 shrink-0">
               <SegmentedControl
                 options={classSegments}
                 value={selectedClassId}
@@ -606,24 +674,31 @@ export const AttendanceWorkspace: React.FC = () => {
                   <div className="flex items-center justify-end gap-2 flex-1 min-w-0">
                     {row.status === 'HADIR' ? (
                       <>
-                        {/* Mini Mood Pill Selector */}
-                        <div className="flex items-center bg-surface-subtle border border-line rounded-lg p-0.5 shrink-0 animate-in fade-in duration-150">
-                          {moodButtons.map((m) => (
-                            <button
-                              key={m.id}
-                              type="button"
-                              disabled={!canEdit}
-                              onClick={() => handleMoodChange(s.id, m.id)}
-                              className={`px-1.5 py-0.5 rounded text-xs transition-colors cursor-pointer ${
-                                row.arrivalMood === m.id
-                                  ? 'bg-surface font-semibold text-ink shadow-hairline border border-line'
-                                  : 'text-ink-faint hover-only:text-ink'
-                              }`}
-                              title={m.label}
-                            >
-                              <span className="text-sm">{m.emoji}</span>
-                            </button>
-                          ))}
+                        {/* Mini Mood Pill Selector with High Visibility */}
+                        <div className="flex items-center bg-surface-subtle border border-line rounded-lg p-0.5 shrink-0 gap-0.5 animate-in fade-in duration-150">
+                          {moodButtons.map((m) => {
+                            const isSelected = row.arrivalMood === m.id;
+                            return (
+                              <button
+                                key={m.id}
+                                type="button"
+                                disabled={!canEdit}
+                                onClick={() => handleMoodChange(s.id, m.id)}
+                                className={`flex items-center gap-1 px-1.5 py-1 rounded-md text-xs transition-all cursor-pointer select-none border ${
+                                  isSelected
+                                    ? `${m.activeClassName} shadow-hairline scale-[1.02]`
+                                    : `border-transparent text-ink-soft opacity-60 hover-only:opacity-100 ${m.inactiveBadgeClassName}`
+                                }`}
+                                title={`Kondisi Kedatangan: ${m.label}`}
+                                aria-label={`Mood ${m.label}`}
+                              >
+                                <span className="text-sm leading-none">{m.emoji}</span>
+                                <span className={`text-[11px] leading-none ${isSelected ? 'font-bold' : 'font-medium hidden large:inline'}`}>
+                                  {m.label}
+                                </span>
+                              </button>
+                            );
+                          })}
                         </div>
 
                         {/* Compact Temperature Stepper */}

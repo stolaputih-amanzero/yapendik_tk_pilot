@@ -50,7 +50,7 @@ const CACHE_ROOT_PREFIX = 'yapendik_os_v3_genesis_';
 // MAPPER HELPERS (CamelCase Domain Object <-> SnakeCase Supabase Table)
 // ==============================================================================
 
-const mappers = {
+export const mappers = {
   school: {
     toDb: (s: School) => ({
       id: s.id,
@@ -317,19 +317,25 @@ const mappers = {
       temperature_celsius: a.temperatureCelsius || null,
       arrival_mood: a.arrivalMood || null
     }),
-    fromDb: (row: any): DailyAttendanceEntry => ({
-      id: row.id,
-      schoolId: row.school_id,
-      classId: row.class_id,
-      studentId: row.student_id,
-      date: row.date,
-      status: row.status,
-      notes: row.notes || undefined,
-      recordedByPersonId: row.recorded_by_person_id || '',
-      recordedAt: row.recorded_at,
-      temperatureCelsius: row.temperature_celsius ? Number(row.temperature_celsius) : undefined,
-      arrivalMood: row.arrival_mood || undefined
-    })
+    fromDb: (row: any): DailyAttendanceEntry => {
+      let dateStr = row.date || '';
+      if (typeof dateStr === 'string' && dateStr.includes('T')) {
+        dateStr = dateStr.split('T')[0];
+      }
+      return {
+        id: row.id,
+        schoolId: row.school_id,
+        classId: row.class_id,
+        studentId: row.student_id,
+        date: dateStr,
+        status: row.status,
+        notes: row.notes || undefined,
+        recordedByPersonId: row.recorded_by_person_id || '',
+        recordedAt: row.recorded_at,
+        temperatureCelsius: row.temperature_celsius ? Number(row.temperature_celsius) : undefined,
+        arrivalMood: row.arrival_mood || undefined
+      };
+    }
   },
   notice: {
     toDb: (n: GuardianNotice) => ({
@@ -448,17 +454,38 @@ export class DatabaseEngine {
   private listeners: Set<() => void> = new Set();
   private isSyncing: boolean = false;
 
+  private realtimeChannel: any = null;
+
   constructor() {
     this.initialize();
   }
 
   public setContextScope(userId: string, schoolId: string) {
+    const schoolChanged = this.currentSchoolId !== schoolId;
     this.currentUserId = userId;
     this.currentSchoolId = schoolId;
-    this.initialize();
+    if (schoolChanged || this.attendance.length === 0) {
+      this.initialize();
+    }
+    this.initRealtimeSubscriptions();
   }
 
   private getScopedKey(tableName: string): string {
+    // Shared school operational tables (attendance, observations, notices, progress_reports, students, classes, schools, academic_years, milestones)
+    if (
+      tableName === 'attendance' ||
+      tableName === 'observations' ||
+      tableName === 'notices' ||
+      tableName === 'progress_reports' ||
+      tableName === 'students' ||
+      tableName === 'classes' ||
+      tableName === 'schools' ||
+      tableName === 'academic_years' ||
+      tableName === 'milestones'
+    ) {
+      return `${CACHE_ROOT_PREFIX}s_${this.currentSchoolId}_${tableName}`;
+    }
+    // Persona/user-scoped tables (audit logs, activities, private observations, notices)
     return `${CACHE_ROOT_PREFIX}u_${this.currentUserId}_s_${this.currentSchoolId}_${tableName}`;
   }
 
@@ -583,6 +610,7 @@ export class DatabaseEngine {
    * Secure Session Purge: Clears all Yapendik-scoped data on logout / account switch.
    */
   public purgeAllSessionCache() {
+    this.cleanupRealtimeSubscriptions();
     const storage = this.getStorage();
     const keysToRemove: string[] = [];
     for (let i = 0; i < storage.length; i++) {
@@ -617,6 +645,195 @@ export class DatabaseEngine {
 
   private notify() {
     this.listeners.forEach(l => l());
+  }
+
+  // ==============================================================================
+  // SUPABASE REALTIME SUBSCRIPTION (LIVE CO-TEACHING REPLICATION)
+  // ==============================================================================
+
+  public initRealtimeSubscriptions() {
+    const supabase = getSupabaseClient();
+    if (!supabase) return;
+
+    if (this.realtimeChannel) {
+      try {
+        supabase.removeChannel(this.realtimeChannel);
+      } catch {}
+      this.realtimeChannel = null;
+    }
+
+    try {
+      this.realtimeChannel = supabase
+        .channel('school-realtime-sync')
+        .on(
+          'postgres_changes',
+          {
+            event: '*',
+            schema: 'public',
+            table: 'daily_attendance'
+          },
+          (payload: any) => {
+            this.handleAttendanceRealtimeEvent(payload);
+          }
+        )
+        .on(
+          'postgres_changes',
+          {
+            event: '*',
+            schema: 'public',
+            table: 'observation_records'
+          },
+          (payload: any) => {
+            this.handleObservationRealtimeEvent(payload);
+          }
+        )
+        .on(
+          'postgres_changes',
+          {
+            event: '*',
+            schema: 'public',
+            table: 'guardian_notices'
+          },
+          (payload: any) => {
+            this.handleNoticeRealtimeEvent(payload);
+          }
+        )
+        .on(
+          'postgres_changes',
+          {
+            event: '*',
+            schema: 'public',
+            table: 'student_progress_reports'
+          },
+          (payload: any) => {
+            this.handleReportRealtimeEvent(payload);
+          }
+        )
+        .subscribe((status: string) => {
+          if (status === 'SUBSCRIBED') {
+            console.log('📡 Supabase Realtime connected for daily_attendance, observation_records, guardian_notices & student_progress_reports');
+          }
+        });
+    } catch (e) {
+      console.warn('Failed to subscribe to realtime updates:', e);
+    }
+  }
+
+  public cleanupRealtimeSubscriptions() {
+    const supabase = getSupabaseClient();
+    if (supabase && this.realtimeChannel) {
+      try {
+        supabase.removeChannel(this.realtimeChannel);
+      } catch {}
+      this.realtimeChannel = null;
+    }
+  }
+
+  private handleAttendanceRealtimeEvent(payload: any) {
+    if (!payload) return;
+    const { eventType, new: newRow, old: oldRow } = payload;
+
+    if (eventType === 'INSERT' || eventType === 'UPDATE') {
+      if (!newRow) return;
+      const entry = mappers.attendance.fromDb(newRow);
+      // Only retain in memory if matching active school
+      if (entry.schoolId && entry.schoolId !== this.currentSchoolId) return;
+
+      const idx = this.attendance.findIndex(
+        a => a.schoolId === entry.schoolId &&
+             a.classId === entry.classId &&
+             a.studentId === entry.studentId &&
+             a.date === entry.date
+      );
+
+      if (idx >= 0) {
+        this.attendance[idx] = entry;
+      } else {
+        this.attendance = [entry, ...this.attendance];
+      }
+      this.persist('attendance', this.attendance);
+      this.notify();
+    } else if (eventType === 'DELETE') {
+      if (!oldRow?.id) return;
+      this.attendance = this.attendance.filter(a => a.id !== oldRow.id);
+      this.persist('attendance', this.attendance);
+      this.notify();
+    }
+  }
+
+  private handleObservationRealtimeEvent(payload: any) {
+    if (!payload) return;
+    const { eventType, new: newRow, old: oldRow } = payload;
+
+    if (eventType === 'INSERT' || eventType === 'UPDATE') {
+      if (!newRow) return;
+      const entry = mappers.observation.fromDb(newRow);
+      if (entry.schoolId && entry.schoolId !== this.currentSchoolId) return;
+
+      const idx = this.observations.findIndex(o => o.id === entry.id);
+      if (idx >= 0) {
+        this.observations[idx] = entry;
+      } else {
+        this.observations = [entry, ...this.observations];
+      }
+      this.persist('observations', this.observations);
+      this.notify();
+    } else if (eventType === 'DELETE') {
+      if (!oldRow?.id) return;
+      this.observations = this.observations.filter(o => o.id !== oldRow.id);
+      this.persist('observations', this.observations);
+      this.notify();
+    }
+  }
+
+  private handleNoticeRealtimeEvent(payload: any) {
+    if (!payload) return;
+    const { eventType, new: newRow, old: oldRow } = payload;
+
+    if (eventType === 'INSERT' || eventType === 'UPDATE') {
+      if (!newRow) return;
+      const entry = mappers.notice.fromDb(newRow);
+      if (entry.schoolId && entry.schoolId !== this.currentSchoolId) return;
+
+      const idx = this.notices.findIndex(n => n.id === entry.id);
+      if (idx >= 0) {
+        this.notices[idx] = entry;
+      } else {
+        this.notices = [entry, ...this.notices];
+      }
+      this.persist('notices', this.notices);
+      this.notify();
+    } else if (eventType === 'DELETE') {
+      if (!oldRow?.id) return;
+      this.notices = this.notices.filter(n => n.id !== oldRow.id);
+      this.persist('notices', this.notices);
+      this.notify();
+    }
+  }
+
+  private handleReportRealtimeEvent(payload: any) {
+    if (!payload) return;
+    const { eventType, new: newRow, old: oldRow } = payload;
+
+    if (eventType === 'INSERT' || eventType === 'UPDATE') {
+      if (!newRow) return;
+      const entry = mappers.report.fromDb(newRow);
+      if (entry.schoolId && entry.schoolId !== this.currentSchoolId) return;
+
+      const idx = this.progressReports.findIndex(r => r.id === entry.id);
+      if (idx >= 0) {
+        this.progressReports[idx] = entry;
+      } else {
+        this.progressReports = [entry, ...this.progressReports];
+      }
+      this.persist('progress_reports', this.progressReports);
+      this.notify();
+    } else if (eventType === 'DELETE') {
+      if (!oldRow?.id) return;
+      this.progressReports = this.progressReports.filter(r => r.id !== oldRow.id);
+      this.persist('progress_reports', this.progressReports);
+      this.notify();
+    }
   }
 
   // ==============================================================================
@@ -707,9 +924,14 @@ export class DatabaseEngine {
         this.observations = observationsRes.data.map(mappers.observation.fromDb);
         this.persist('observations', this.observations);
       }
-      if (attendanceRes.data && attendanceRes.data.length > 0) {
-        this.attendance = attendanceRes.data.map(mappers.attendance.fromDb);
-        this.persist('attendance', this.attendance);
+      if (attendanceRes.error) {
+        console.warn('⚠️ Supabase attendance query error / RLS block:', attendanceRes.error.message);
+      } else if (attendanceRes.data) {
+        console.log(`📊 Supabase attendance synced: ${attendanceRes.data.length} records`);
+        if (attendanceRes.data.length > 0) {
+          this.attendance = attendanceRes.data.map(mappers.attendance.fromDb);
+          this.persist('attendance', this.attendance);
+        }
       }
       if (noticesRes.data && noticesRes.data.length > 0) {
         this.notices = noticesRes.data.map(mappers.notice.fromDb);
@@ -725,6 +947,7 @@ export class DatabaseEngine {
       }
 
       console.log('✅ Supabase sync completed successfully.');
+      this.initRealtimeSubscriptions();
       this.notify();
     } catch (err) {
       console.warn('⚠️ Supabase sync encountered an issue, running with local cache:', err);
@@ -1211,6 +1434,52 @@ export class DatabaseEngine {
     return newObs;
   }
 
+  public saveObservationBatch(
+    records: ObservationRecord[],
+    authorName: string,
+    userId: string,
+    role: any
+  ): ObservationRecord[] {
+    if (!records || records.length === 0) return [];
+
+    // Deduplicate against existing in-memory observations
+    const newMap = new Map(this.observations.map(o => [o.id, o]));
+    records.forEach(r => {
+      newMap.set(r.id, r);
+    });
+    this.observations = Array.from(newMap.values());
+    this.persist('observations', this.observations);
+
+    // Sync single batch to Supabase Cloud
+    const supabase = getSupabaseClient();
+    if (supabase) {
+      const dbRows = records.map(mappers.observation.toDb);
+      supabase.from('observation_records')
+        .insert(dbRows)
+        .then(({ error }) => {
+          if (error) {
+            console.error('Supabase error batch inserting observations:', error);
+          } else {
+            console.log(`📊 Supabase observation batch inserted: ${records.length} records`);
+          }
+        });
+    }
+
+    this.recordAudit({
+      schoolId: records[0].schoolId,
+      userId,
+      personName: authorName,
+      role,
+      action: 'BATCH_CREATE_OBSERVATION',
+      resource: 'STUDENT_OBSERVATION',
+      resourceId: records.map(r => r.id).join(','),
+      details: `Merekam batch observasi untuk ${records.length} siswa (Domain: ${records[0].domain})`
+    });
+
+    this.notify();
+    return records;
+  }
+
   public updateObservation(updatedObs: ObservationRecord): boolean {
     let found = false;
     this.observations = this.observations.map(o => {
@@ -1315,6 +1584,62 @@ export class DatabaseEngine {
       (!n.classId || !classId || n.classId === classId) &&
       (!n.studentId || !studentId || n.studentId === studentId)
     );
+  }
+
+  /**
+   * Stage 6 Gate 5: Contextual Projection Filter for Buku Penghubung
+   * Enforces FB-01 Child Privacy: Guardians ONLY read notices for their own children + class announcements.
+   * Enforces Tier-3 Medical Data Protection: HEALTH_ALERT expires after 24 hours.
+   */
+  public getNoticesForContext(
+    context: any, 
+    classId?: string, 
+    studentId?: string
+  ): GuardianNotice[] {
+    if (!context) return [];
+    const schoolId = context.activeSchoolId || this.currentSchoolId;
+    const now = Date.now();
+    const TWENTY_FOUR_HOURS_MS = 24 * 60 * 60 * 1000;
+
+    return this.notices.filter(n => {
+      if (n.schoolId !== schoolId) return false;
+      if (classId && n.classId && n.classId !== classId) return false;
+      if (studentId && n.studentId && n.studentId !== studentId) return false;
+
+      // Tier-3 Medical Expiry: HEALTH_ALERT expired after 24 hours
+      if (n.type === 'HEALTH_ALERT') {
+        const createdTime = new Date(n.createdAt).getTime();
+        if (now - createdTime > TWENTY_FOUR_HOURS_MS) {
+          return false;
+        }
+      }
+
+      // Contextual Projection Filter (FB-01 Child Privacy Protection)
+      if (context.role === 'GUARDIAN') {
+        // Class announcements are visible to all parents in the class
+        if (n.type === 'CLASS_ANNOUNCEMENT') {
+          return !classId || !n.classId || n.classId === classId;
+        }
+        // Direct notices: strictly verify target student belongs to guardian's linked children
+        if (!n.studentId) return true;
+        const student = this.students.find(s => s.id === n.studentId);
+        if (!student) return false;
+        const linkedPersonIds: string[] = context.guardianChildrenPersonIds || [];
+        return linkedPersonIds.includes(student.personId);
+      }
+
+      if (context.role === 'TEACHER') {
+        // Teacher sees notices within assigned classes
+        if (!n.classId) return true;
+        const assigned: string[] = context.assignedClasses || [];
+        if (assigned.length > 0) {
+          return assigned.includes(n.classId);
+        }
+      }
+
+      // Supervisory roles (HEADMASTER, GOVERNANCE, SUPERADMIN) see all notices for unit
+      return true;
+    });
   }
 
   public addNotice(
@@ -1431,6 +1756,69 @@ export class DatabaseEngine {
       (!academicYearId || r.academicYearId === academicYearId) &&
       (!semester || r.semester === semester)
     );
+  }
+
+  /**
+   * Stage 6 Gate 6: Contextual Projection Filter for Rapor LPPA
+   * Enforces FB-01 & FB-04 Authority Boundary:
+   * - Guardians ONLY see reports for their children with status APPROVED or PUBLISHED (never unverified DRAFT).
+   * - Teachers see reports for their assigned classes.
+   * - Headmasters/Supervisors see all reports in the school for verification/ratification.
+   */
+  public getReportsForContext(
+    context: any,
+    classId?: string,
+    studentId?: string,
+    semester?: string
+  ): StudentProgressReport[] {
+    if (!context) return [];
+    const schoolId = context.activeSchoolId || this.currentSchoolId;
+
+    return this.progressReports.filter(r => {
+      if (r.schoolId !== schoolId) return false;
+      if (studentId && r.studentId !== studentId) return false;
+      if (semester && r.semester !== semester) return false;
+
+      // FB-01 & FB-04 Authority Boundary for Guardians
+      if (context.role === 'GUARDIAN') {
+        // Must be approved or published (never unverified draft)
+        if (r.status !== 'APPROVED' && r.status !== 'PUBLISHED') return false;
+        // Must be their child
+        const student = this.students.find(s => s.id === r.studentId);
+        if (!student) return false;
+        const linkedPersonIds: string[] = context.guardianChildrenPersonIds || [];
+        return linkedPersonIds.includes(student.personId);
+      }
+
+      // Teacher Boundary: assigned classes
+      if (context.role === 'TEACHER') {
+        if (classId) {
+          const student = this.students.find(s => s.id === r.studentId);
+          if (student && student.currentClassId !== classId) return false;
+        }
+        if (context.assignedClasses && context.assignedClasses.length > 0) {
+          const student = this.students.find(s => s.id === r.studentId);
+          if (student && student.currentClassId) {
+            return context.assignedClasses.includes(student.currentClassId);
+          }
+        }
+      }
+
+      // Supervisory roles (HEADMASTER, YAPENDIK_SUPERADMIN, GOVERNANCE) see all
+      return true;
+    });
+  }
+
+  public saveProgressReport(report: StudentProgressReport): StudentProgressReport {
+    const idx = this.progressReports.findIndex(r => r.id === report.id);
+    if (idx >= 0) {
+      this.progressReports[idx] = report;
+    } else {
+      this.progressReports = [report, ...this.progressReports];
+    }
+    this.persist('progress_reports', this.progressReports);
+    this.notify();
+    return report;
   }
 
   public async saveProgressReportDraft(report: StudentProgressReport): Promise<{ success: boolean; error?: string }> {

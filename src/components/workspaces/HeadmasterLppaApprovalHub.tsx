@@ -154,6 +154,40 @@ export const HeadmasterLppaApprovalHub: React.FC<Props> = ({
     }
   };
 
+  const handleRejectSingle = async (reportDoc: LppaReportDocument, notes: string) => {
+    if (!isAuthorized) {
+      setFeedback({ type: 'error', message: 'Hanya Kepala Sekolah yang berhak meminta perbaikan rapor.' });
+      return;
+    }
+    if (!notes || !notes.trim()) {
+      setFeedback({ type: 'error', message: 'Catatan masukan perbaikan wajib diisi oleh Kepala Sekolah.' });
+      return;
+    }
+    setIsProcessing(true);
+    setFeedback(null);
+    try {
+      await lppaReportingService.rejectLppaReport({
+        report_id: reportDoc.id,
+        school_id: schoolId,
+        reviewer_person_id: currentPersona?.personId || 'per_hm_marlina',
+        reviewer_name: currentPersona?.name || 'Marlina Simanjuntak, M.Pd',
+        role: currentPersona?.role || 'HEADMASTER',
+        headmaster_feedback: notes.trim()
+      });
+
+      setFeedback({
+        type: 'success',
+        message: `Rapor Ananda ${reportDoc.student_name} telah dikembalikan ke Guru Kelas untuk revisi.`
+      });
+      setSelectedReport(null);
+      await loadReports();
+    } catch (err: any) {
+      setFeedback({ type: 'error', message: err?.message || 'Gagal mengembalikan rapor.' });
+    } finally {
+      setIsProcessing(false);
+    }
+  };
+
   const handlePublishSingle = async (reportDoc: LppaReportDocument) => {
     if (!isAuthorized) {
       setFeedback({ type: 'error', message: 'Hanya Kepala Sekolah yang berhak mempublikasikan rapor.' });
@@ -631,31 +665,46 @@ export const HeadmasterLppaApprovalHub: React.FC<Props> = ({
                 </Button>
               </div>
 
-              {isAuthorized && selectedReport.status !== 'APPROVED' && selectedReport.status !== 'PUBLISHED' && (
-                <Button
-                  variant="primary"
-                  size="sm"
-                  onClick={() => handleApproveSingle(selectedReport)}
-                  disabled={isProcessing}
-                  className="rounded-xl text-xs font-bold"
-                >
-                  <CheckCircle2 className="w-4 h-4" />
-                  <span>Sahkan &amp; Beri Cap Persetujuan</span>
-                </Button>
-              )}
+              <div className="flex items-center gap-2 flex-wrap">
+                {isAuthorized && selectedReport.status === 'READY_FOR_REVIEW' && (
+                  <Button
+                    variant="danger"
+                    size="sm"
+                    onClick={() => handleRejectSingle(selectedReport, approvalNotes)}
+                    disabled={isProcessing}
+                    className="rounded-xl text-xs font-bold"
+                  >
+                    <AlertCircle className="w-4 h-4" />
+                    <span>Minta Revisi Guru</span>
+                  </Button>
+                )}
 
-              {isAuthorized && selectedReport.status === 'APPROVED' && (
-                <Button
-                  variant="primary"
-                  size="sm"
-                  onClick={() => handlePublishSingle(selectedReport)}
-                  disabled={isProcessing}
-                  className="rounded-xl text-xs font-bold"
-                >
-                  <Sparkles className="w-4 h-4" />
-                  <span>Publikasikan ke Orang Tua</span>
-                </Button>
-              )}
+                {isAuthorized && selectedReport.status !== 'APPROVED' && selectedReport.status !== 'PUBLISHED' && (
+                  <Button
+                    variant="primary"
+                    size="sm"
+                    onClick={() => handleApproveSingle(selectedReport)}
+                    disabled={isProcessing}
+                    className="rounded-xl text-xs font-bold"
+                  >
+                    <CheckCircle2 className="w-4 h-4" />
+                    <span>Sahkan &amp; Beri Cap Persetujuan</span>
+                  </Button>
+                )}
+
+                {isAuthorized && selectedReport.status === 'APPROVED' && (
+                  <Button
+                    variant="primary"
+                    size="sm"
+                    onClick={() => handlePublishSingle(selectedReport)}
+                    disabled={isProcessing}
+                    className="rounded-xl text-xs font-bold"
+                  >
+                    <Sparkles className="w-4 h-4" />
+                    <span>Publikasikan ke Orang Tua</span>
+                  </Button>
+                )}
+              </div>
             </div>
 
           </div>

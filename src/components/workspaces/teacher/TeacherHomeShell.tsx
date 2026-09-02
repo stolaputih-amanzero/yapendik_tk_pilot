@@ -211,6 +211,8 @@ export const TeacherHomeShell: React.FC<{
     quickTags: PAUDQuickTag[];
     initialNote: string;
     mediaUrl?: string;
+    domain?: DevelopmentDomain;
+    milestoneRating?: MilestoneRating;
   }) => {
     await teacherDailyWorkService.captureQuickObservation({
       school_id: schoolId,
@@ -219,6 +221,8 @@ export const TeacherHomeShell: React.FC<{
       quick_tags: payload.quickTags,
       initial_note: payload.initialNote,
       media_url: payload.mediaUrl,
+      domain: payload.domain,
+      milestone_rating: payload.milestoneRating,
       recorded_by_person_id: teacherPersonId,
       recorded_by_name: currentPersona?.name || 'Ibu Guru',
       role: currentPersona?.role || 'TEACHER'

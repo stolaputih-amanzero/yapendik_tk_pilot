@@ -79,7 +79,7 @@ export const GuardianNoticeLedger: React.FC<Props> = ({
             variant={filterUnack ? 'primary' : 'secondary'}
             size="sm"
             onClick={() => setFilterUnack(!filterUnack)}
-            className="w-full text-xs font-bold justify-center rounded-xl min-h-[44px]"
+            className="w-full text-xs font-bold justify-center rounded-xl min-h-[48px]"
           >
             {filterUnack ? 'Belum Dibalas' : 'Semua Pesan'}
           </Button>
@@ -89,7 +89,7 @@ export const GuardianNoticeLedger: React.FC<Props> = ({
             size="sm"
             onClick={() => setShowNewNoticeModal(true)}
             leftIcon={<Plus className="w-4 h-4 shrink-0" />}
-            className="w-full text-xs font-bold justify-center rounded-xl min-h-[44px]"
+            className="w-full text-xs font-bold justify-center rounded-xl min-h-[48px] bg-brand text-on-brand"
           >
             Tulis Pengumuman
           </Button>

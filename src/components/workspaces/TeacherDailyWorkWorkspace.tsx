@@ -9,7 +9,7 @@ import { db } from '../../db/database';
 import { useSecurityContext } from '../../auth/context';
 import { evaluateAuthorization } from '../../auth/authorization';
 import { LearningActivity, DevelopmentDomain, ClassRoom } from '../../domain/types';
-import { Button, SegmentedControl, ToastHUD } from '../ui';
+import { Button, SegmentedControl, SegmentedControlOption, ToastHUD } from '../ui';
 import { 
   BookOpen, 
   Calendar, 
@@ -244,9 +244,10 @@ export const TeacherDailyWorkWorkspace: React.FC = () => {
   const canEdit = authResult.granted;
   const isToday = selectedDate === getTodayDateString();
 
-  const classSegments = classes.map(c => ({
+  const classSegments: SegmentedControlOption[] = classes.map(c => ({
     id: c.id,
-    label: c.name
+    label: c.name.includes('A') ? 'Kelas TK A' : c.name.includes('B') ? 'Kelas TK B' : c.name,
+    activeClassName: 'bg-brand text-on-brand font-bold shadow-sm ring-1 ring-brand/50'
   }));
 
   // Apply Quick Template

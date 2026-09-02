@@ -290,7 +290,7 @@ const AppContent: React.FC = () => {
           <div className="max-w-7xl mx-auto flex items-center space-x-2 w-full">
             <span className="font-semibold text-ink">Amanaura OS</span>
             <span>—</span>
-            <span>Make It Simple • Keep It Future-Proof • Child-Centered</span>
+            <span>The OS truly disappears into the day.</span>
           </div>
         </footer>
       </div>

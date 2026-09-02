@@ -16,7 +16,7 @@ import {
   EnrichObservationNarrativeCommand,
   AcknowledgeGuardianNoticeCommand
 } from '../types/teacherDailyTypes';
-import { DailyAttendanceEntry, ObservationRecord } from '../domain/types';
+import { DailyAttendanceEntry, ObservationRecord, DevelopmentDomain, MilestoneRating } from '../domain/types';
 
 export class TeacherDailyWorkService {
   constructor() {
@@ -91,51 +91,65 @@ export class TeacherDailyWorkService {
 
   /**
    * Command 2: Capture Quick Observation in Real-Time (< 15 seconds)
+   * Multi-Student Atomic Batch Ingestion compliant with FB-01 & Stage 4.5 Frozen State
    */
   public async captureQuickObservation(
     command: CaptureQuickObservationCommand,
     isReplay = false
-  ): Promise<{ success: boolean; observation_id: string }> {
+  ): Promise<{ success: boolean; observation_id: string; recorded_count: number }> {
     this.validateSemesterOpen(command.school_id);
 
-    // Invariant Offline-01: Ensure client-generated UUID v4 exists
-    const obsId = command.id || `obs_${offlineSyncQueueService.generateUUID()}`;
-
-    if (typeof navigator !== 'undefined' && !navigator.onLine && !isReplay) {
-      offlineSyncQueueService.enqueue('CAPTURE_OBSERVATION', { ...command, id: obsId });
+    if (!command.target_student_ids || command.target_student_ids.length === 0) {
+      throw new Error('VALIDATION_FAILED: Minimal 1 ananda harus dipilih untuk rekam observasi.');
     }
 
-    // Default fast capture attributes
-    const targetStudentId = command.target_student_ids[0] || '';
-    const domain = command.domain || 'KOGNITIF';
-    const milestone = command.milestone_rating || 'BSH';
+    // Single shared capture ID for the group activity moment
+    const captureId = command.id || `cap_${offlineSyncQueueService.generateUUID()}`;
 
-    const newObs: ObservationRecord = {
-      id: obsId,
+    // Privacy-Preserving Offline Queue (Safe Option B: No plain-text image persisted to storage)
+    if (typeof navigator !== 'undefined' && !navigator.onLine && !isReplay) {
+      offlineSyncQueueService.enqueue('CAPTURE_OBSERVATION', { 
+        ...command, 
+        media_url: undefined, // Strip plain-text image data from persistent offline store
+        id: captureId 
+      });
+    }
+
+    const domain: DevelopmentDomain = command.domain || 'KOGNITIF';
+    const milestone: MilestoneRating = command.milestone_rating || 'BSH';
+    const nowIso = new Date().toISOString();
+
+    // Create 1 deterministic ObservationRecord per selected child
+    const batchRecords: ObservationRecord[] = command.target_student_ids.map(studentId => ({
+      id: `obs_${captureId}_${studentId}`,
       schoolId: command.school_id,
       classId: command.class_id,
-      studentId: targetStudentId,
+      studentId,
       observerPersonId: command.recorded_by_person_id,
-      observedAt: new Date().toISOString(),
+      observedAt: nowIso,
       domain,
       anecdoteDescription: command.initial_note || 'Momen cepat bermain di sentra.',
       milestoneRating: milestone,
-      indicatorsObserved: command.quick_tags,
+      indicatorsObserved: command.quick_tags || [],
       photoEvidenceUrl: command.media_url,
       isConfidentialToStaff: true, // Default safe draft
       sharedWithGuardian: false,
-      createdAt: new Date().toISOString()
-    };
+      createdAt: nowIso
+    }));
 
-    // Store in db engine
-    db.addObservation(
-      newObs,
+    // Atomically save batch to database engine
+    db.saveObservationBatch(
+      batchRecords,
       command.recorded_by_name,
       command.recorded_by_person_id,
       command.role
     );
 
-    return { success: true, observation_id: obsId };
+    return { 
+      success: true, 
+      observation_id: batchRecords[0].id,
+      recorded_count: batchRecords.length 
+    };
   }
 
   /**

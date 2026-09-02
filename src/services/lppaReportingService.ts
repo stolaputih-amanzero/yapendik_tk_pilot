@@ -398,6 +398,56 @@ export class LppaReportingService {
   }
 
   /**
+   * Command 4.5: Reject / Return LPPA for Revision (Kepala Sekolah -> Guru)
+   * Enforces State Machine: Transitions READY_FOR_REVIEW back to DRAFT with mandatory feedback.
+   */
+  public async rejectLppaReport(command: {
+    report_id: string;
+    school_id: string;
+    reviewer_person_id: string;
+    reviewer_name: string;
+    role: string;
+    headmaster_feedback: string;
+  }): Promise<{ success: boolean }> {
+    this.validateSemesterOpen(command.school_id);
+
+    if (command.role !== 'HEADMASTER' && command.role !== 'YAPENDIK_SUPERADMIN') {
+      throw new Error('UNAUTHORIZED: Hanya Kepala Sekolah yang berhak meminta revisi rapor LPPA.');
+    }
+    if (!command.headmaster_feedback || !command.headmaster_feedback.trim()) {
+      throw new Error('VALIDATION_ERROR: Catatan masukan revisi Kepala Sekolah wajib diisi.');
+    }
+
+    const report = db.getProgressReports(command.school_id).find(r => r.id === command.report_id);
+    if (!report) {
+      throw new Error('REPORT_NOT_FOUND: Rapor tidak ditemukan.');
+    }
+    if (report.status === 'PUBLISHED') {
+      throw new Error('IMMUTABLE_ERROR: Rapor yang telah dipublikasikan tidak dapat dikembalikan ke draf.');
+    }
+
+    const updated = {
+      ...report,
+      status: 'DRAFT' as const,
+      homeroomFeedback: `Catatan Revisi KS: ${command.headmaster_feedback}`
+    };
+    db.saveProgressReport(updated);
+
+    db.recordAudit({
+      schoolId: command.school_id,
+      userId: command.reviewer_person_id,
+      personName: command.reviewer_name,
+      role: command.role as any,
+      action: 'REVISE_PROGRESS_REPORT',
+      resource: 'STUDENT_DEVELOPMENT',
+      resourceId: command.report_id,
+      details: `Kepala Sekolah meminta perbaikan rapor LPPA '${command.report_id}'. Catatan: ${command.headmaster_feedback}`
+    });
+
+    return { success: true };
+  }
+
+  /**
    * Command 5: Publish LPPA Report to Parent Portal
    */
   public async publishLppaReport(

@@ -87,8 +87,20 @@ try {
   console.log('\n▶️ [26/27] Running Stage 6-A Profile Hub v2 & User Management Suite (Suite 37)...');
   execSync('npx tsx tests/stage6a_profile_hub.test.tsx', { stdio: 'inherit' });
 
-  console.log('\n▶️ [27/27] Running Stage 6-B Passkey WebAuthn Integration Suite (Suite 38)...');
+  console.log('\n▶️ [27/28] Running Stage 6-B Passkey WebAuthn Integration Suite (Suite 38)...');
   execSync('npx tsx tests/stage6b_passkey_webauthn.test.tsx', { stdio: 'inherit' });
+
+  console.log('\n▶️ [28/29] Running Co-Teaching Attendance Replication & Live Sync Suite (Suite 39)...');
+  execSync('npx tsx tests/coteaching_attendance_sync.test.ts', { stdio: 'inherit' });
+
+  console.log('\n▶️ [29/30] Running Stage 6 Gate 4 Fast Capture Observation & Visual Evidence Wall Suite (Suite 40)...');
+  execSync('npx tsx tests/fast_capture_observation.test.ts', { stdio: 'inherit' });
+
+  console.log('\n▶️ [30/31] Running Stage 6 Gate 5 Buku Penghubung & Home-School Connection Suite (Suite 41)...');
+  execSync('npx tsx tests/buku_penghubung_communication.test.ts', { stdio: 'inherit' });
+
+  console.log('\n▶️ [31/31] Running Stage 6 Gate 6 Rapor LPPA Reporting & Synthesis Suite (Suite 42)...');
+  execSync('npx tsx tests/stage6_gate6_lppa_reporting.test.ts', { stdio: 'inherit' });
 
   console.log('\n════════════════════════════════════════════════════════════════');
   console.log('🎉 ALL INTEGRATION & SECURITY TEST SUITES COMPLETED SUCCESSFULLY');
