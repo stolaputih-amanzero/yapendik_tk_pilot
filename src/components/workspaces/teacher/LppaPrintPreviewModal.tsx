@@ -261,7 +261,7 @@ export const LppaPrintPreviewModal: React.FC<Props> = ({
                 {record.school_name}
               </h1>
               <p className="text-xs text-ink-soft font-medium">
-                Jl. Pegangsaan Barat No. 12, Menteng, Jakarta Pusat • NPSN: {record.school_npsn}
+                NPSN: {record.school_npsn || '—'}
               </p>
               <div className="pt-2">
                 <div className="inline-block border-y-2 border-slate-900 py-1 px-6">

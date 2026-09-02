@@ -771,7 +771,7 @@ export const ProvisioningWorkspace: React.FC<{ onNavigateToOperations?: () => vo
                   type="text"
                   value={newSchoolNpsn}
                   onChange={e => setNewSchoolNpsn(e.target.value)}
-                  placeholder="Contoh: 20104821"
+                  placeholder="Contoh: 69820291"
                   required
                   className="w-full bg-surface-subtle border border-line rounded-field px-3 py-2 text-ink font-mono focus:outline-none focus:ring-1 focus:ring-brand-primary shadow-hairline whitespace-nowrap"
                 />

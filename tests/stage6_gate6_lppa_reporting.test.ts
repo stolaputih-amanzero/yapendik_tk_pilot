@@ -117,8 +117,8 @@ export async function runTests() {
     const approveRes = await lppaReportingService.approveLppaReport({
       report_id: draft.id,
       school_id: schoolId,
-      approved_by_person_id: 'per_hm_marlina',
-      approved_by_name: 'Marlina Simanjuntak, M.Pd',
+      approved_by_person_id: 'per_headmaster_sheryl',
+      approved_by_name: 'SHERYL Y N UMBAS, S.IKOM, M.PD',
       role: 'HEADMASTER'
     });
     assert.ok(approveRes.success, 'Failed to approve report');
@@ -130,8 +130,8 @@ export async function runTests() {
     const publishRes = await lppaReportingService.publishLppaReport({
       report_id: draft.id,
       school_id: schoolId,
-      published_by_person_id: 'per_hm_marlina',
-      published_by_name: 'Marlina Simanjuntak, M.Pd',
+      published_by_person_id: 'per_headmaster_sheryl',
+      published_by_name: 'SHERYL Y N UMBAS, S.IKOM, M.PD',
       role: 'HEADMASTER'
     });
     assert.ok(publishRes.success, 'Failed to publish report');
@@ -166,8 +166,8 @@ export async function runTests() {
       await lppaReportingService.rejectLppaReport({
         report_id: reportId,
         school_id: schoolId,
-        reviewer_person_id: 'per_hm_marlina',
-        reviewer_name: 'Marlina Simanjuntak',
+        reviewer_person_id: 'per_headmaster_sheryl',
+        reviewer_name: 'SHERYL Y N UMBAS, S.IKOM, M.PD',
         role: 'HEADMASTER',
         headmaster_feedback: ''
       });
@@ -180,8 +180,8 @@ export async function runTests() {
     const rejectRes = await lppaReportingService.rejectLppaReport({
       report_id: reportId,
       school_id: schoolId,
-      reviewer_person_id: 'per_hm_marlina',
-      reviewer_name: 'Marlina Simanjuntak',
+      reviewer_person_id: 'per_headmaster_sheryl',
+      reviewer_name: 'SHERYL Y N UMBAS, S.IKOM, M.PD',
       role: 'HEADMASTER',
       headmaster_feedback: 'Mohon perjelas capaian anak saat kegiatan di Sentra Balok.'
     });

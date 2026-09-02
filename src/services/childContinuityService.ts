@@ -130,7 +130,7 @@ export class ChildContinuityService {
         semester: r.semester,
         published_at: r.evaluatedAt,
         official_report_number: `042/LPPA-TK-YPD/${r.semester}/${new Date(r.evaluatedAt).getFullYear()}`,
-        homeroom_teacher_name: 'Siti Rahmawati, S.Pd',
+        homeroom_teacher_name: (r.evaluatedByPersonId ? db.getPersonById(r.evaluatedByPersonId)?.fullName : undefined) || '—',
         element_ratings: elementRatings,
         growth_recommendations_summary: growthRecommendations,
         strengths_snapshot: strengths.length > 0 ? strengths : ['Aktif dan bersemangat dalam eksplorasi main.']

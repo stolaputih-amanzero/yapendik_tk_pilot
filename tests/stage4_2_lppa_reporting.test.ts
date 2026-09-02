@@ -43,8 +43,8 @@ export async function runStage42LppaReportingTests() {
 
   const teacherPersonId = 'per_teacher_siti';
   const teacherName = 'Siti Rahmawati, S.Pd';
-  const headmasterPersonId = 'per_hm_marlina';
-  const headmasterName = 'Marlina Simanjuntak, M.Pd';
+  const headmasterPersonId = 'per_headmaster_sheryl';
+  const headmasterName = 'SHERYL Y N UMBAS, S.IKOM, M.PD';
 
   const students = db.getStudents(schoolId, classId);
   const kenzo = students[0];

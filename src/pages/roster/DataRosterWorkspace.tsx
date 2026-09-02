@@ -2,6 +2,7 @@ import React, { useEffect, useState, useMemo } from 'react';
 import {
   Users,
   UserCheck,
+  UserCog,
   GraduationCap,
   FilterX,
 } from 'lucide-react';
@@ -15,6 +16,8 @@ import type { ClassRecord, ClassWithDetails } from '../../types/class';
 import { RosterSearchBar } from '../../components/roster/RosterSearchBar';
 import { GenderFilter, GenderFilterValue } from '../../components/roster/GenderFilter';
 import { StudentListItem } from '../../components/roster/StudentListItem';
+import { PtkDirectoryView } from '../../components/roster/PtkDirectoryView';
+import { db } from '../../db/database';
 
 // ═══════════════════════════════════════════════════════════════════
 // SIGNATURE #1: Amanaura Breath (✦)
@@ -39,6 +42,10 @@ export default function DataRosterWorkspace() {
   // Search & Filter States
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [genderFilter, setGenderFilter] = useState<GenderFilterValue>('ALL');
+  const [activeView, setActiveView] = useState<'STUDENTS' | 'PTK'>('STUDENTS');
+
+  const ptkList = useMemo(() => db.getPTKDirectory('sch_tk_maranatha'), []);
+  const currentSchool = useMemo(() => db.getSchoolById('sch_tk_maranatha'), []);
 
   // ═══════════════════════════════════════════════════════════════
   // LOAD: Kelas aktif + detail roster
@@ -163,25 +170,81 @@ export default function DataRosterWorkspace() {
   return (
     <div className="w-full px-4 medium:px-5 pt-1 space-y-6 pb-[160px] expanded:pb-8 text-ink font-sans animate-in fade-in duration-200">
       {/* ────────────────────────────────────────────────────
-          HEADER SEKSI — Typographic Rhythm Parity with Beranda Kelas
+          HEADER SEKSI DENGAN IN-CONTEXT VIEW SWITCHER
           ───────────────────────────────────────────────────── */}
-      <div className="space-y-1">
-        <span className="text-[11px] font-bold uppercase tracking-wider text-accent-valor block">
-          Administrasi &amp; Rombongan Belajar
-        </span>
-        <h2 className="text-2xl medium:text-3xl font-bold text-ink leading-tight tracking-tight flex items-center gap-2">
-          <Users className="w-7 h-7 text-accent-valor shrink-0" />
-          <span>Data Induk Siswa &amp; Orang Tua / Wali</span>
-        </h2>
-        <p className="text-xs medium:text-sm text-ink-soft leading-relaxed max-w-3xl mt-1">
-          Daftar seluruh anak didik aktif, nomor induk kependudukan (NIK/NISN), data kesehatan, dan kontak orang tua/wali resmi.
-        </p>
+      <div className="flex flex-col medium:flex-row medium:items-center justify-between gap-4">
+        <div className="space-y-1">
+          <span className="text-[11px] font-bold uppercase tracking-wider text-accent-valor block">
+            Administrasi &amp; Sumber Daya Sekolah
+          </span>
+          <h2 className="text-2xl medium:text-3xl font-bold text-ink leading-tight tracking-tight flex items-center gap-2">
+            {activeView === 'STUDENTS' ? (
+              <>
+                <Users className="w-7 h-7 text-accent-valor shrink-0" />
+                <span>Data Induk Siswa &amp; Orang Tua / Wali</span>
+              </>
+            ) : (
+              <>
+                <UserCog className="w-7 h-7 text-accent-valor shrink-0" />
+                <span>Buku Induk Pendidik &amp; Tenaga Kependidikan (PTK)</span>
+              </>
+            )}
+          </h2>
+          <p className="text-xs medium:text-sm text-ink-soft leading-relaxed max-w-3xl mt-1">
+            {activeView === 'STUDENTS'
+              ? 'Daftar seluruh anak didik aktif, nomor induk kependudukan (NIK/NISN), data kesehatan, dan kontak orang tua/wali resmi.'
+              : 'Direktori resmi pendidik, kualifikasi sentra, penugasan rombongan belajar, dan data kepegawaian.'}
+          </p>
+        </div>
+
+        {/* In-Context View Switcher */}
+        <div
+          className="inline-flex p-1 rounded-xl bg-surface-subtle border border-line w-full medium:w-auto shadow-hairline shrink-0"
+          role="tablist"
+          aria-label="Pilihan Tampilan Data"
+        >
+          <button
+            type="button"
+            role="tab"
+            aria-selected={activeView === 'STUDENTS'}
+            onClick={() => setActiveView('STUDENTS')}
+            className={`flex-1 medium:flex-none min-h-[48px] px-4 py-2 rounded-lg text-xs medium:text-sm font-bold transition-all cursor-pointer flex items-center justify-center gap-2 ${
+              activeView === 'STUDENTS'
+                ? 'bg-brand text-on-brand shadow-sm'
+                : 'text-ink-soft hover-only:text-ink hover-only:bg-surface'
+            }`}
+          >
+            <Users className="w-4 h-4" />
+            <span>Data Murid</span>
+          </button>
+          <button
+            type="button"
+            role="tab"
+            aria-selected={activeView === 'PTK'}
+            onClick={() => setActiveView('PTK')}
+            className={`flex-1 medium:flex-none min-h-[48px] px-4 py-2 rounded-lg text-xs medium:text-sm font-bold transition-all cursor-pointer flex items-center justify-center gap-2 ${
+              activeView === 'PTK'
+                ? 'bg-brand text-on-brand shadow-sm'
+                : 'text-ink-soft hover-only:text-ink hover-only:bg-surface'
+            }`}
+          >
+            <UserCog className="w-4 h-4" />
+            <span>Direktori PTK</span>
+          </button>
+        </div>
       </div>
 
-      {/* ─────────────────────────────────────────────────────
-          TIER 2: PILIHAN TAB KELAS & KONTEKS GURU (Compact Tab Strip)
-          ───────────────────────────────────────────────────── */}
-      <div className="space-y-3">
+      {activeView === 'PTK' ? (
+        <PtkDirectoryView
+          ptkList={ptkList}
+          schoolName={currentSchool?.name || 'TK YAPENDIK GPIB Cabang Maranatha'}
+        />
+      ) : (
+        <div className="space-y-6">
+          {/* ─────────────────────────────────────────────────────
+              TIER 2: PILIHAN TAB KELAS & KONTEKS GURU (Compact Tab Strip)
+              ───────────────────────────────────────────────────── */}
+          <div className="space-y-3">
         {/* Tab Pilihan Kelas — Label di Baris 1, Range Umur di Baris 2 */}
         {activeClasses.length > 0 && (
           <div
@@ -295,6 +358,8 @@ export default function DataRosterWorkspace() {
           >
             Reset Filter
           </button>
+        </div>
+      )}
         </div>
       )}
     </div>

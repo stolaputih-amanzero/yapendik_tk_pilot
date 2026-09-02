@@ -218,7 +218,7 @@ const AppContent: React.FC = () => {
               </div>
               <span className="text-line-soft">•</span>
               <span className="text-ink-soft font-mono text-[11px] whitespace-nowrap">
-                NPSN: {activeSchool?.npsn || '20104821'}
+                NPSN: {activeSchool?.npsn || '—'}
               </span>
               <span className="text-line-soft">•</span>
               <span className="text-ink font-medium">

@@ -9,6 +9,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useSecurityContext } from '../../auth/context';
+import { db } from '../../db/database';
 import { institutionalLearningService } from '../../services/institutionalLearningService';
 import { 
   InstitutionalActionRecord,
@@ -110,8 +111,8 @@ export const HeadmasterAdoptionLayout: React.FC = () => {
         action_id: selectedAction.action_id,
         action_type: selectedAction.action_type,
         school_id: schoolId,
-        headmaster_person_id: currentPersona?.personId || 'per_headmaster_esther',
-        headmaster_name: currentPersona?.name || 'Dra. Esther Nugroho, M.Pd',
+        headmaster_person_id: currentPersona?.personId || db.getHeadmaster(schoolId)?.id || 'per_headmaster_sheryl',
+        headmaster_name: currentPersona?.name || db.getHeadmaster(schoolId)?.fullName || '—',
         adoption_status: adoptionStatus,
         local_context_adaptation_notes: adaptationNotes || 'Adopsi kebijakan sesuai jadwal pembelajaran sentra unit.',
         action_timeline: '2026-08-16 s.d. 2026-11-20',
@@ -152,8 +153,8 @@ export const HeadmasterAdoptionLayout: React.FC = () => {
           },
           statistical_nature: 'OBSERVED_EMPIRICAL_ASSOCIATION',
           human_reflective_interpretation: qualitativeReflection,
-          recorded_by_person_id: currentPersona?.personId || 'per_headmaster_esther',
-          recorded_by_name: currentPersona?.name || 'Dra. Esther Nugroho, M.Pd',
+          recorded_by_person_id: currentPersona?.personId || db.getHeadmaster(schoolId)?.id || 'per_headmaster_sheryl',
+          recorded_by_name: currentPersona?.name || db.getHeadmaster(schoolId)?.fullName || '—',
           recorded_at: new Date().toISOString()
         };
 

@@ -135,8 +135,8 @@ export const HeadmasterLppaApprovalHub: React.FC<Props> = ({
       await lppaReportingService.approveLppaReport({
         report_id: reportDoc.id,
         school_id: schoolId,
-        approved_by_person_id: currentPersona?.personId || 'per_hm_marlina',
-        approved_by_name: currentPersona?.name || 'Marlina Simanjuntak, M.Pd',
+        approved_by_person_id: currentPersona?.personId || db.getHeadmaster(schoolId)?.id || '—',
+        approved_by_name: currentPersona?.name || db.getHeadmaster(schoolId)?.fullName || '—',
         role: currentPersona?.role || 'HEADMASTER'
       });
 
@@ -169,8 +169,8 @@ export const HeadmasterLppaApprovalHub: React.FC<Props> = ({
       await lppaReportingService.rejectLppaReport({
         report_id: reportDoc.id,
         school_id: schoolId,
-        reviewer_person_id: currentPersona?.personId || 'per_hm_marlina',
-        reviewer_name: currentPersona?.name || 'Marlina Simanjuntak, M.Pd',
+        reviewer_person_id: currentPersona?.personId || db.getHeadmaster(schoolId)?.id || '—',
+        reviewer_name: currentPersona?.name || db.getHeadmaster(schoolId)?.fullName || '—',
         role: currentPersona?.role || 'HEADMASTER',
         headmaster_feedback: notes.trim()
       });
@@ -199,8 +199,8 @@ export const HeadmasterLppaApprovalHub: React.FC<Props> = ({
       await lppaReportingService.publishLppaReport({
         report_id: reportDoc.id,
         school_id: schoolId,
-        published_by_person_id: currentPersona?.personId || 'per_hm_marlina',
-        published_by_name: currentPersona?.name || 'Marlina Simanjuntak, M.Pd',
+        published_by_person_id: currentPersona?.personId || db.getHeadmaster(schoolId)?.id || '—',
+        published_by_name: currentPersona?.name || db.getHeadmaster(schoolId)?.fullName || '—',
         role: currentPersona?.role || 'HEADMASTER'
       });
 
@@ -229,8 +229,8 @@ export const HeadmasterLppaApprovalHub: React.FC<Props> = ({
         await lppaReportingService.approveLppaReport({
           report_id: r.id,
           school_id: schoolId,
-          approved_by_person_id: currentPersona?.personId || 'per_hm_marlina',
-          approved_by_name: currentPersona?.name || 'Marlina Simanjuntak, M.Pd',
+          approved_by_person_id: currentPersona?.personId || db.getHeadmaster(schoolId)?.id || '—',
+          approved_by_name: currentPersona?.name || db.getHeadmaster(schoolId)?.fullName || '—',
           role: currentPersona?.role || 'HEADMASTER'
         });
       }
@@ -259,8 +259,8 @@ export const HeadmasterLppaApprovalHub: React.FC<Props> = ({
         await lppaReportingService.publishLppaReport({
           report_id: r.id,
           school_id: schoolId,
-          published_by_person_id: currentPersona?.personId || 'per_hm_marlina',
-          published_by_name: currentPersona?.name || 'Marlina Simanjuntak, M.Pd',
+          published_by_person_id: currentPersona?.personId || db.getHeadmaster(schoolId)?.id || '—',
+          published_by_name: currentPersona?.name || db.getHeadmaster(schoolId)?.fullName || '—',
           role: currentPersona?.role || 'HEADMASTER'
         });
       }
@@ -716,13 +716,17 @@ export const HeadmasterLppaApprovalHub: React.FC<Props> = ({
         <LppaPrintPreviewModal
           isOpen={Boolean(previewReport)}
           onClose={() => setPreviewReport(null)}
-          record={lppaReportingService.toCanonicalPublishedRecord(
-            previewReport,
-            'TK Yapendik 01 Menteng',
-            '20104821',
-            'Kelompok A (Usia 4-5 Tahun)',
-            'Siti Rahmawati, S.Pd',
-          )}
+          record={(() => {
+            const meta = db.getOfficialSchoolMetadata(schoolId, previewReport.class_id);
+            return lppaReportingService.toCanonicalPublishedRecord(
+              previewReport,
+              meta.schoolName,
+              meta.schoolNpsn,
+              meta.className !== '—' ? meta.className : previewReport.class_name,
+              meta.homeroomTeacherName,
+              meta.headmasterName !== '—' ? meta.headmasterName : (currentPersona?.name || '—')
+            );
+          })()}
         />
       )}
     </div>

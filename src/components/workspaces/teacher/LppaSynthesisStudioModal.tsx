@@ -15,6 +15,7 @@ import {
   LppaElementNarrativeDraft 
 } from '../../../types/lppaReportingTypes';
 import { lppaReportingService } from '../../../services/lppaReportingService';
+import { db } from '../../../db/database';
 import { MilestoneRating } from '../../../domain/types';
 import { PedagogicalRatingPill } from '../../ui/PedagogicalRatingPill';
 import { validateNarrative, generateAppreciativeNarrative } from '../../../services/lppaNarrativeEngine';
@@ -822,14 +823,17 @@ export const LppaSynthesisStudioModal: React.FC<Props> = ({
         <LppaPrintPreviewModal
           isOpen={showPrintPreview}
           onClose={() => setShowPrintPreview(false)}
-          record={lppaReportingService.toCanonicalPublishedRecord(
-            report,
-            'TK Yapendik 01 Menteng',
-            '20104821',
-            'Kelompok A (Usia 4-5 Tahun)',
-            teacherName,
-            'Dra. Esther Nugroho, M.Pd'
-          )}
+          record={(() => {
+            const meta = db.getOfficialSchoolMetadata(schoolId, report.class_id);
+            return lppaReportingService.toCanonicalPublishedRecord(
+              report,
+              meta.schoolName,
+              meta.schoolNpsn,
+              meta.className !== '—' ? meta.className : report.class_name,
+              teacherName || meta.homeroomTeacherName,
+              meta.headmasterName
+            );
+          })()}
         />
       )}
     </div>

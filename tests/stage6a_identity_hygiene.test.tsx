@@ -20,6 +20,7 @@ import { renderToString } from 'react-dom/server';
 import { PremiumLoginScreen } from '../src/components/auth/PremiumLoginScreen';
 import { ProfileDrawer } from '../src/components/layout/ProfileDrawer';
 import { SecurityContextProvider } from '../src/auth/context';
+import { db } from '../src/db/database';
 
 console.log('════════════════════════════════════════════════════════════════');
 console.log('🧪 STAGE 6-A IDENTITY HYGIENE & BRAND CONTRACTS (SUITE 36)');
@@ -133,6 +134,75 @@ async function runIdentityHygieneTests() {
       const appContent = fs.readFileSync(appPath, 'utf8');
       assert.ok(appContent.includes('Memuat Konteks Identitas Amanaura OS...'), 'App loading screen uses Amanaura OS');
       assert.ok(!appContent.includes('Memuat Konteks Identitas Yapendik OS...'), 'Zero legacy loading screen');
+    });
+  }
+
+  // --- MODULE 7: Official Seal & Human Identity Hygiene (ARB Ruling 2026-09-03) ---
+  console.log('\n--- MODULE 7: Official Seal & Human Identity Hygiene (Zero Forbidden Literals) ---');
+  {
+    runCheck('Forbidden Literals [ZERO LEAKAGE]: Scan src/components/ and src/services/ for legacy mocks', () => {
+      const forbiddenStrings = ['Marlina', 'Simanjuntak', 'Erna Susanti', '20104821'];
+      const targetDirs = [
+        path.resolve(process.cwd(), 'src', 'components'),
+        path.resolve(process.cwd(), 'src', 'services'),
+        path.resolve(process.cwd(), 'src', 'workspaces')
+      ];
+
+      function scanDir(dir: string) {
+        if (!fs.existsSync(dir)) return;
+        const entries = fs.readdirSync(dir, { withFileTypes: true });
+        for (const entry of entries) {
+          const fullPath = path.join(dir, entry.name);
+          if (entry.isDirectory()) {
+            scanDir(fullPath);
+          } else if (entry.isFile() && (entry.name.endsWith('.ts') || entry.name.endsWith('.tsx'))) {
+            const content = fs.readFileSync(fullPath, 'utf8');
+            for (const forbidden of forbiddenStrings) {
+              assert.ok(
+                !content.includes(forbidden),
+                `Forbidden string "${forbidden}" detected in production file: ${fullPath}`
+              );
+            }
+          }
+        }
+      }
+
+      for (const d of targetDirs) {
+        scanDir(d);
+      }
+    });
+
+    runCheck('Canonical Authority [DB RESOLUTION]: getOfficialSchoolMetadata resolves authentic Headmaster & NPSN', () => {
+      const meta = db.getOfficialSchoolMetadata('sch_tk_maranatha', 'cls_maranatha_tka');
+      
+      assert.equal(meta.schoolName, 'TK YAPENDIK GPIB Cabang Maranatha', 'Must resolve official school name');
+      assert.equal(meta.schoolNpsn, '69820291', 'Must resolve authentic canonical NPSN 69820291');
+      assert.equal(meta.headmasterName, 'SHERYL Y N UMBAS, S.IKOM, M.PD', 'Must resolve canonical Headmaster Sheryl');
+      assert.equal(meta.headmasterPersonId, 'per_headmaster_sheryl', 'Must resolve canonical Headmaster person ID');
+      assert.equal(meta.homeroomTeacherName, 'ERNA BOYKELA R', 'Must resolve authentic Homeroom Teacher Erna Boykela');
+      assert.equal(meta.className, 'Kelas TK A', 'Must resolve authentic Class TK A');
+    });
+
+    runCheck('PTK Directory [READ-ONLY PROJECTION]: getPTKDirectory returns 4 authentic school PTK members', () => {
+      const ptkList = db.getPTKDirectory('sch_tk_maranatha');
+      
+      assert.equal(ptkList.length, 4, 'Must return exactly 4 PTK members for TK Maranatha');
+      const headmaster = ptkList.find((p: any) => p.role === 'HEADMASTER');
+      assert.ok(headmaster, 'Must have Headmaster');
+      assert.equal(headmaster.fullName, 'SHERYL Y N UMBAS, S.IKOM, M.PD');
+      assert.equal(headmaster.employmentType, 'TETAP');
+      
+      const tkaWali = ptkList.find((p: any) => p.role === 'TEACHER' && p.assignedClassName === 'Kelas TK A');
+      assert.ok(tkaWali, 'Must have Wali Kelas TK A');
+      assert.equal(tkaWali.fullName, 'ERNA BOYKELA R');
+      
+      const tkaPendamping = ptkList.find((p: any) => p.role === 'ASSISTANT_TEACHER');
+      assert.ok(tkaPendamping, 'Must have Pendamping TK A');
+      assert.equal(tkaPendamping.fullName, 'CHARLOTHA JOVANNCA BLANDINNA R');
+      
+      const tkbWali = ptkList.find((p: any) => p.role === 'TEACHER' && p.assignedClassName === 'Kelas TK B');
+      assert.ok(tkbWali, 'Must have Wali Kelas TK B');
+      assert.equal(tkbWali.fullName, 'EVI TANIA');
     });
   }
 

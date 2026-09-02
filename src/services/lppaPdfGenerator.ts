@@ -111,13 +111,13 @@ export function generateAndDownloadLppaPdf(record: CanonicalPublishedLppaRecord)
 
   doc.setFontSize(14);
   doc.setTextColor(15, 23, 42);
-  doc.text(record.school_name || 'TK YAPENDIK 01 MENTENG', pageWidth / 2, currentY, { align: 'center' });
+  doc.text(record.school_name || '—', pageWidth / 2, currentY, { align: 'center' });
   currentY += 4.5;
 
   doc.setFont('Helvetica', 'normal');
   doc.setFontSize(7.5);
   doc.setTextColor(100, 116, 139);
-  doc.text(`Jl. Pegangsaan Barat No. 12, Menteng, Jakarta Pusat • NPSN: ${record.school_npsn || '20104821'}`, pageWidth / 2, currentY, { align: 'center' });
+  doc.text(`NPSN: ${record.school_npsn || '—'}`, pageWidth / 2, currentY, { align: 'center' });
   currentY += 3;
 
   // Kop Divider Double Lines

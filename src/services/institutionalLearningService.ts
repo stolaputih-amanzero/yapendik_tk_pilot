@@ -125,8 +125,8 @@ export class InstitutionalLearningService {
       action_id: 'act_2026_q1_curriculum_support_01',
       action_type: 'SUPPORT_INITIATIVE',
       school_id: 'sch_tk_yapendik_01',
-      headmaster_person_id: 'per_headmaster_esther',
-      headmaster_name: 'Dra. Esther Nugroho, M.Pd',
+      headmaster_person_id: 'per_headmaster_sheryl',
+      headmaster_name: 'SHERYL Y N UMBAS, S.IKOM, M.PD',
       adoption_status: 'ADOPTED_IN_PRACTICE',
       local_context_adaptation_notes: 'Diterapkan pada rotasi sentra balok hari Selasa dan Kamis kelompok TK A.',
       action_timeline: '2026-08-16 s.d. 2026-11-20',
@@ -161,8 +161,8 @@ export class InstitutionalLearningService {
       },
       statistical_nature: 'OBSERVED_EMPIRICAL_ASSOCIATION',
       human_reflective_interpretation: 'Pendidik mengamati interaksi verbal anak meningkat selama bermain balok kayu.',
-      recorded_by_person_id: 'per_headmaster_esther',
-      recorded_by_name: 'Dra. Esther Nugroho, M.Pd',
+      recorded_by_person_id: 'per_headmaster_sheryl',
+      recorded_by_name: 'SHERYL Y N UMBAS, S.IKOM, M.PD',
       recorded_at: '2026-08-20T11:00:00Z'
     };
     this.outcomes.set(sampleOutcome.outcome_id, sampleOutcome);

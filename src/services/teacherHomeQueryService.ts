@@ -52,7 +52,7 @@ export class TeacherHomeQueryService {
     const schools = db.getSchools();
     const currentSchool = schools.find(s => s.id === schoolId) || schools[0] || {
       id: schoolId,
-      name: 'TK Yapendik 01 Menteng'
+      name: '—'
     };
 
     const schoolClasses = db.getClasses(schoolId);
@@ -73,8 +73,8 @@ export class TeacherHomeQueryService {
 
     const teacherPerson = db.getPersonById(teacherPersonId) || {
       id: teacherPersonId,
-      fullName: 'Ibu Siti Rahmawati',
-      preferredName: 'Bu Siti'
+      fullName: 'Guru Kelas',
+      preferredName: 'Guru'
     };
 
     const initials = teacherPerson.fullName

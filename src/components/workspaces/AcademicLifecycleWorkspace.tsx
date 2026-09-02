@@ -241,7 +241,7 @@ export const AcademicLifecycleWorkspace: React.FC = () => {
               <span>Tata Kelola Tahun Ajaran &amp; Semester</span>
             </h1>
             <p className="hidden expanded:block text-ink-soft text-xs mt-1 max-w-2xl">
-              {school?.name || 'TK Yapendik Menteng'} • NPSN: {school?.npsn || '20104821'} • Rekonsiliasi rapor LPPA 100% dan pembekuan arsip resmi.
+              {school?.name || '—'} • NPSN: {school?.npsn || '—'} • Rekonsiliasi rapor LPPA 100% dan pembekuan arsip resmi.
             </p>
           </div>
 
@@ -365,8 +365,8 @@ export const AcademicLifecycleWorkspace: React.FC = () => {
       {activeSubTab === 'ASSURANCE' && (
         <HeadmasterAssuranceView
           schoolId={activePeriod?.school_id || currentSchoolId}
-          headmasterPersonId={securityContext?.personId || 'per_hm_esther'}
-          headmasterName={securityContext?.userEmail || 'Dra. Esther Nugroho, M.Pd'}
+          headmasterPersonId={securityContext?.personId || db.getHeadmaster(currentSchoolId)?.id || '—'}
+          headmasterName={db.getHeadmaster(currentSchoolId)?.fullName || '—'}
           role={securityContext?.role || 'HEADMASTER'}
         />
       )}

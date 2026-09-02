@@ -588,11 +588,11 @@ export class LppaReportingService {
    */
   public toCanonicalPublishedRecord(
     doc: LppaReportDocument,
-    schoolName = 'TK Yapendik 01 Menteng',
-    schoolNpsn = '20104821',
-    className = 'Kelompok A (Usia 4-5 Tahun)',
-    teacherName = 'Siti Rahmawati, S.Pd',
-    headmasterName = 'Dra. Esther Nugroho, M.Pd'
+    schoolName = '—',
+    schoolNpsn = '—',
+    className = '—',
+    teacherName = '—',
+    headmasterName = '—'
   ): CanonicalPublishedLppaRecord {
     const nowIso = new Date().toISOString();
     const cleanId = doc.id.replace(/[^a-zA-Z0-9_]/g, '_');
@@ -626,7 +626,7 @@ export class LppaReportingService {
       semester: doc.semester,
       publication_metadata: {
         published_at: nowIso,
-        published_by_person_id: 'per_headmaster_esther',
+        published_by_person_id: doc.approved_by_person_id || 'per_headmaster_sheryl',
         published_by_name: headmasterName,
         published_by_role: 'HEADMASTER',
         official_report_number: `042/LPPA-TK-YPD/${doc.semester}/${new Date().getFullYear()}`,

@@ -435,14 +435,14 @@ export const StudentJourneyTimeline: React.FC<{ initialStudentId?: string }> = (
                             onClick={async () => {
                               const fullDoc = await lppaReportingService.getLppaReport(matchedLppa.report_id, currentSchoolId);
                               if (fullDoc) {
-                                const currentSchool = db.getSchoolById(currentSchoolId);
+                                const meta = db.getOfficialSchoolMetadata(currentSchoolId, plc.class_id);
                                 const canonical = lppaReportingService.toCanonicalPublishedRecord(
                                   fullDoc,
-                                  currentSchool?.name || 'TK Yapendik Maranatha',
-                                  currentSchool?.npsn || '20104821',
+                                  meta.schoolName,
+                                  meta.schoolNpsn,
                                   plc.class_name,
-                                  'Erna Susanti, S.Pd',
-                                  'Marlina Simanjuntak, M.Pd'
+                                  meta.homeroomTeacherName,
+                                  meta.headmasterName
                                 );
                                 setPreviewRecord(canonical);
                               }

@@ -27,6 +27,26 @@ import {
   WeeklyPlan
 } from '../domain/types';
 
+export interface PtkProfileItem {
+  id: string;
+  profileId: string;
+  fullName: string;
+  preferredName: string;
+  role: 'HEADMASTER' | 'TEACHER' | 'ASSISTANT_TEACHER';
+  roleDisplay: string;
+  assignedClassId?: string;
+  assignedClassName: string;
+  specialization: string;
+  employmentType: 'TETAP' | 'KONTRAK' | 'HONORER';
+  joinDate: string;
+  isActive: boolean;
+  nuptk?: string;
+  nationalIdNumber?: string;
+  phone?: string;
+  email?: string;
+  address?: string;
+}
+
 import {
   SEED_SCHOOLS,
   SEED_ACADEMIC_YEARS,
@@ -1022,6 +1042,136 @@ export class DatabaseEngine {
 
   public getPersonById(personId: string): Person | undefined {
     return this.persons.find(p => p.id === personId);
+  }
+
+  public getHeadmaster(schoolId: string): Person | undefined {
+    const school = this.getSchoolById(schoolId);
+    if (school?.headmasterPersonId) {
+      const p = this.getPersonById(school.headmasterPersonId);
+      if (p) return p;
+    }
+    return this.persons.find(p => p.id === 'per_headmaster_sheryl') || SEED_PERSONS.find(p => p.id === 'per_headmaster_sheryl');
+  }
+
+  public getHomeroomTeacherForClass(classId: string): Person | undefined {
+    const cls = this.getClassById(classId);
+    if (cls?.homeroomTeacherId) {
+      return this.getPersonById(cls.homeroomTeacherId);
+    }
+    return undefined;
+  }
+
+  public getCoTeacherForClass(classId: string): Person | undefined {
+    const cls = this.getClassById(classId);
+    if (cls?.coTeacherId) {
+      return this.getPersonById(cls.coTeacherId);
+    }
+    return undefined;
+  }
+
+  public getOfficialSchoolMetadata(schoolId: string, classId?: string) {
+    const school = this.getSchoolById(schoolId);
+    const headmaster = this.getHeadmaster(schoolId);
+    const cls = classId ? this.getClassById(classId) : undefined;
+    const homeroom = classId ? this.getHomeroomTeacherForClass(classId) : undefined;
+    const coTeacher = classId ? this.getCoTeacherForClass(classId) : undefined;
+
+    return {
+      schoolName: school?.name || '—',
+      schoolNpsn: school?.npsn || '—',
+      headmasterName: headmaster?.fullName || '—',
+      headmasterPersonId: headmaster?.id || '—',
+      className: cls?.name || '—',
+      homeroomTeacherName: homeroom?.fullName || '—',
+      homeroomTeacherPersonId: homeroom?.id || '—',
+      coTeacherName: coTeacher?.fullName || '—',
+      coTeacherPersonId: coTeacher?.id || '—'
+    };
+  }
+
+  public getPTKDirectory(schoolId: string): PtkProfileItem[] {
+    const effectiveSchoolId = schoolId || 'sch_tk_maranatha';
+    const classes = this.getClasses(effectiveSchoolId);
+    const headmasterPerson = this.getHeadmaster(effectiveSchoolId);
+
+    const ptkList: PtkProfileItem[] = [];
+
+    // 1. Kepala Sekolah
+    if (headmasterPerson) {
+      ptkList.push({
+        id: headmasterPerson.id,
+        profileId: 'staff_prof_sheryl',
+        fullName: headmasterPerson.fullName,
+        preferredName: headmasterPerson.preferredName || 'Ibu Sheryl',
+        role: 'HEADMASTER',
+        roleDisplay: 'Kepala Sekolah',
+        assignedClassName: 'Semua Rombel (Supervisi)',
+        specialization: 'Manajemen PAUD & Kepemimpinan Kurikulum',
+        employmentType: 'TETAP',
+        joinDate: '2026-07-01',
+        isActive: true,
+        nuptk: headmasterPerson.nationalIdNumber || '3171034909940005',
+        nationalIdNumber: headmasterPerson.nationalIdNumber || '3171034909940005',
+        phone: headmasterPerson.phone || '081219748487',
+        email: 'sherylumbas9@gmail.com',
+        address: headmasterPerson.address || 'JL. BALADEWA NO. 32, TANAH TINGGI JAKARTA PUSAT'
+      });
+    }
+
+    // 2. Guru Kelas & Pendamping dari Rombel
+    classes.forEach(c => {
+      if (c.homeroomTeacherId) {
+        const p = this.getPersonById(c.homeroomTeacherId);
+        if (p && !ptkList.some(item => item.id === p.id)) {
+          ptkList.push({
+            id: p.id,
+            profileId: `tch_prof_${p.id.replace('per_teacher_', '')}`,
+            fullName: p.fullName,
+            preferredName: p.preferredName || 'Ibu Guru',
+            role: 'TEACHER',
+            roleDisplay: 'Wali Kelas',
+            assignedClassId: c.id,
+            assignedClassName: c.name,
+            specialization: c.ageGroup === 'TK_A_4_5' ? 'Guru Sentra Kurikulum Merdeka PAUD' : 'Guru Sentra & Motorik',
+            employmentType: 'TETAP',
+            joinDate: '2026-07-01',
+            isActive: true,
+            nuptk: p.nationalIdNumber || '',
+            nationalIdNumber: p.nationalIdNumber || '',
+            phone: p.phone || '',
+            email: p.id === 'per_teacher_erna' ? 'yapendikmaranathajkt@gmail.com' : 'evitania@gmail.com',
+            address: p.address || 'Jakarta'
+          });
+        }
+      }
+
+      if (c.coTeacherId) {
+        const p = this.getPersonById(c.coTeacherId);
+        if (p && !ptkList.some(item => item.id === p.id)) {
+          ptkList.push({
+            id: p.id,
+            profileId: `tch_prof_${p.id.replace('per_teacher_', '')}`,
+            fullName: p.fullName,
+            preferredName: p.preferredName || 'Ibu Guru',
+            role: 'ASSISTANT_TEACHER',
+            roleDisplay: 'Guru Pendamping',
+            assignedClassId: c.id,
+            assignedClassName: c.name,
+            specialization: 'Pendamping Kelas & Literasi',
+            employmentType: 'TETAP',
+            joinDate: '2026-07-01',
+            isActive: true,
+            nuptk: p.nationalIdNumber || '',
+            nationalIdNumber: p.nationalIdNumber || '',
+            phone: p.phone || '',
+            email: 'ratmalajovannca@gmail.com',
+            address: p.address || 'Jakarta'
+          });
+        }
+      }
+    });
+
+    return ptkList;
   }
 
   public getStudents(schoolId: string, classId?: string): (StudentProfile & { person: Person; guardians: { relation: GuardianRelationship; person: Person }[] })[] {

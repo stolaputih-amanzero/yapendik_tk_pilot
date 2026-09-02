@@ -581,7 +581,7 @@ export class SchoolSafetyAssuranceService {
         school_name: schoolName,
         academic_year_name: activeAy?.name || '2025/2026',
         semester: (activeAy?.semester as any) || 'GANJIL',
-        headmaster_name: 'Dra. Esther Nugroho, M.Pd',
+        headmaster_name: db.getHeadmaster(schoolId)?.fullName || '—',
         is_semester_closed: !activeAy?.isActive
       },
       today_assurance: {
