@@ -23,7 +23,8 @@ import {
   GuardianNotice,
   AuditLogEntry,
   StudentProgressReport,
-  SchoolReadinessResult
+  SchoolReadinessResult,
+  WeeklyPlan
 } from '../domain/types';
 
 import {
@@ -440,6 +441,7 @@ export class DatabaseEngine {
   private notices: GuardianNotice[] = [];
   private auditLogs: AuditLogEntry[] = [];
   private progressReports: StudentProgressReport[] = [];
+  private weeklyPlans: WeeklyPlan[] = [];
   
   private currentUserId: string = 'anonymous';
   private currentSchoolId: string = 'sch_tk_yapendik_01';
@@ -523,6 +525,7 @@ export class DatabaseEngine {
       this.persist('audit_logs', this.auditLogs);
 
       this.progressReports = this.loadOrSeed('progress_reports', []);
+      this.weeklyPlans = this.loadOrSeed('weekly_plans', []);
     } catch (err) {
       console.error('Error initializing database engine:', err);
       this.resetToDefaults();
@@ -1079,6 +1082,80 @@ export class DatabaseEngine {
     }
 
     this.notify();
+  }
+
+  public getLearningActivitiesRange(schoolId: string, classId: string, startDate: string, endDate: string): LearningActivity[] {
+    return this.activities.filter(a =>
+      a.schoolId === schoolId &&
+      a.classId === classId &&
+      a.date >= startDate &&
+      a.date <= endDate
+    );
+  }
+
+  public getWeeklyPlan(schoolId: string, classId: string, weekStartDate: string): WeeklyPlan | undefined {
+    return this.weeklyPlans.find(p =>
+      p.schoolId === schoolId &&
+      p.classId === classId &&
+      p.weekStartDate === weekStartDate
+    );
+  }
+
+  public saveWeeklyPlan(plan: Omit<WeeklyPlan, 'id' | 'createdAt' | 'updatedAt'> & { id?: string }): WeeklyPlan {
+    const now = new Date().toISOString();
+    const existingIndex = this.weeklyPlans.findIndex(p =>
+      p.schoolId === plan.schoolId &&
+      p.classId === plan.classId &&
+      p.weekStartDate === plan.weekStartDate
+    );
+
+    let savedPlan: WeeklyPlan;
+    if (existingIndex >= 0) {
+      savedPlan = {
+        ...this.weeklyPlans[existingIndex],
+        ...plan,
+        updatedAt: now
+      };
+      this.weeklyPlans[existingIndex] = savedPlan;
+    } else {
+      savedPlan = {
+        ...plan,
+        id: plan.id || `wp_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`,
+        createdAt: now,
+        updatedAt: now
+      };
+      this.weeklyPlans = [savedPlan, ...this.weeklyPlans];
+    }
+
+    this.persist('weekly_plans', this.weeklyPlans);
+
+    const supabase = getSupabaseClient();
+    if (supabase) {
+      supabase.from('weekly_plans')
+        .upsert({
+          id: savedPlan.id,
+          school_id: savedPlan.schoolId,
+          class_id: savedPlan.classId,
+          teacher_person_id: savedPlan.teacherPersonId,
+          academic_year_id: savedPlan.academicYearId,
+          semester: savedPlan.semester,
+          week_number: savedPlan.weekNumber,
+          week_start_date: savedPlan.weekStartDate,
+          week_end_date: savedPlan.weekEndDate,
+          weekly_theme: savedPlan.weeklyTheme,
+          weekly_subtheme: savedPlan.weeklySubtheme,
+          status: savedPlan.status,
+          notes: savedPlan.notes || null,
+          created_at: savedPlan.createdAt,
+          updated_at: savedPlan.updatedAt
+        })
+        .then(({ error }) => {
+          if (error) console.error('Supabase error upserting weekly plan:', error);
+        });
+    }
+
+    this.notify();
+    return savedPlan;
   }
 
   // ----------------------------------------------------

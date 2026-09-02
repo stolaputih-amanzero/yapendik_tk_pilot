@@ -185,6 +185,26 @@ export interface LearningActivity {
   completed: boolean;
 }
 
+export interface WeeklyPlan {
+  id: string;
+  schoolId: string;
+  classId: string;
+  teacherPersonId: string;
+  academicYearId: string;
+  semester: 'GANJIL' | 'GENAP';
+  weekNumber: number;
+  weekStartDate: string; // YYYY-MM-DD (Monday)
+  weekEndDate: string; // YYYY-MM-DD (Friday)
+  weeklyTheme: string;
+  weeklySubtheme: string;
+  status: 'DRAFT' | 'SUBMITTED' | 'APPROVED';
+  notes?: string;
+  createdAt: string;
+  updatedAt: string;
+  approvedBy?: string;
+  approvedAt?: string;
+}
+
 // ----------------------------------------------------
 // 5. OBSERVATION & EVIDENCE (TK PILOT HEARTBEAT)
 // ----------------------------------------------------
