@@ -225,11 +225,21 @@ export async function fetchClassRoster(
           }
         }
 
+        const localStudents = getLocalStudentsForClass(classId);
+        const localStudentMap = new Map(localStudents.map(ls => [ls.id, ls]));
+
         let mappedStudents: StudentWithGuardians[] = (studentsData || []).map((s: any) => {
           const person = Array.isArray(s.person) ? s.person[0] : s.person;
-          const studentGuardians = guardiansByStudentPersonId.get(s.person_id) || [];
-          const localStudent = db.getStudentById(s.id);
-          const resolvedPhoto = s.photo_url || person?.avatar_url || localStudent?.photoUrl || undefined;
+          let studentGuardians = guardiansByStudentPersonId.get(s.person_id) || [];
+          const localStudent = localStudentMap.get(s.id);
+
+          // 🌟 FAIL-SAFE GUARDIANS: Jika Supabase mengembalikan relasi kosong, gunakan relasi lokal
+          if (studentGuardians.length === 0 && localStudent?.guardians && localStudent.guardians.length > 0) {
+            studentGuardians = localStudent.guardians;
+          }
+
+          // 🌟 HYBRID PHOTO RESOLUTION
+          const resolvedPhoto = s.photo_url || person?.avatar_url || localStudent?.photo_url || undefined;
 
           return {
             id: s.id,
@@ -306,7 +316,7 @@ export async function fetchClassRoster(
 }
 
 // ═══════════════════════════════════════════════════════════════
-// QUERY 3: Update Foto Siswa (Supabase Storage + DB + Local Persist)
+// QUERY 3: Update Foto Siswa (Supabase Storage + RPC + DB + Local Persist)
 // ═══════════════════════════════════════════════════════════════
 export async function updateStudentPhoto(
   studentId: string,
@@ -339,24 +349,31 @@ export async function updateStudentPhoto(
         }
       }
 
-      // 1. Update tabel students di Supabase
-      await supabase
-        .from('students')
-        .update({ photo_url: finalPhotoUrl || null })
-        .eq('id', studentId);
+      // 1. Panggil RPC rpc_update_student_photo (SECURITY DEFINER)
+      const { error: rpcError } = await supabase.rpc('rpc_update_student_photo', {
+        p_student_id: studentId,
+        p_photo_url: finalPhotoUrl || null,
+      });
 
-      // 2. Update tabel persons jika terhubung
-      const { data: stRow } = await supabase
-        .from('students')
-        .select('person_id')
-        .eq('id', studentId)
-        .single();
-
-      if (stRow?.person_id) {
+      // 2. Direct update fallback jika RPC belum dieksekusi
+      if (rpcError) {
         await supabase
-          .from('persons')
-          .update({ avatar_url: finalPhotoUrl || null })
-          .eq('id', stRow.person_id);
+          .from('students')
+          .update({ photo_url: finalPhotoUrl || null })
+          .eq('id', studentId);
+
+        const { data: stRow } = await supabase
+          .from('students')
+          .select('person_id')
+          .eq('id', studentId)
+          .single();
+
+        if (stRow?.person_id) {
+          await supabase
+            .from('persons')
+            .update({ avatar_url: finalPhotoUrl || null })
+            .eq('id', stRow.person_id);
+        }
       }
     } catch (e) {
       console.warn('Error updating student photo in Supabase:', e);
