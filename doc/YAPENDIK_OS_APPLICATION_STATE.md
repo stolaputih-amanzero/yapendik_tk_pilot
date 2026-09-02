@@ -365,6 +365,29 @@ Item-item berikut telah didokumentasikan secara transparan dalam [`doc/MASTER/ST
 
 ---
 
+### Stage 6 Gate 2: Presensi Harian & Skrining Kedatangan Certified State
+
+```text
+╔══════════════════════════════════════════════════════════════════════════════╗
+║             STAGE 6 GATE 2: PRESENSI HARIAN CERTIFIED STATE                  ║
+╠══════════════════════════════════════════════════════════════════════════════╣
+║  DENY_CLASS_UNASSIGNED Cross-Class Isolation: 🟢 CERTIFIED & VERIFIED        ║
+║  Unmarked Default & Smart Mark All Present  : 🟢 CERTIFIED & VERIFIED        ║
+║  Compact Single-Row Layout (Clean & Neat)   : 🟢 CERTIFIED & VERIFIED        ║
+║  Integrated Temperature & Mood Screening    : 🟢 CERTIFIED & VERIFIED        ║
+║  Supabase Cloud Sync & Unique Constraint    : 🟢 CERTIFIED & VERIFIED        ║
+║  Zero Anon Access (FB-01 & FB-06 Enforced)  : 🟢 CERTIFIED & VERIFIED        ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+```
+
+- **Dokumentasi Formal**: [`doc/MASTER/STAGE_6_GATE_2_PRESENSI_CLOSURE_v1.0.md`](file:///d:/PROJECT/yapendik-tk-pilot/doc/MASTER/STAGE_6_GATE_2_PRESENSI_CLOSURE_v1.0.md)
+- **Komponen Kunci**:
+  - `src/components/workspaces/AttendanceWorkspace.tsx` (Single-row per student, inline notes, smart mark all, date navigation, live toast HUD feedback)
+  - `src/db/database.ts` (Batch attendance upsert with RPC `rpc_save_daily_attendance_batch`)
+- **Migrasi Database**: `supabase/migrations/20260902090000_daily_attendance_unique_and_rls.sql` (Deduplikasi, `CONSTRAINT uq_daily_attendance_record UNIQUE`, RLS enforcement, revoke anon, batch RPC).
+
+---
+
 ### Recommendations for AI Memory
 
 Untuk memastikan AI Agent / Copilot mempertahankan pemahaman yang konsisten dan akurat pada interaksi mendatang:

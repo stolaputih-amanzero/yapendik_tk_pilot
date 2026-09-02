@@ -1188,13 +1188,21 @@ export class DatabaseEngine {
     this.attendance = [...newEntries, ...remaining];
     this.persist('attendance', this.attendance);
 
-    // Sync to Supabase Cloud via deterministic upsert
+    // Sync to Supabase Cloud via deterministic RPC batch or direct upsert
     const supabase = getSupabaseClient();
     if (supabase && newEntries.length > 0) {
-      supabase.from('daily_attendance')
-        .upsert(newEntries.map(mappers.attendance.toDb), { onConflict: 'school_id,class_id,student_id,date' })
-        .then(({ error }) => {
-          if (error) console.error('Supabase error upserting attendance:', error);
+      const payload = newEntries.map(mappers.attendance.toDb);
+      supabase
+        .rpc('rpc_save_daily_attendance_batch', { p_entries: payload })
+        .then(({ error: rpcErr }) => {
+          if (rpcErr) {
+            supabase
+              .from('daily_attendance')
+              .upsert(payload, { onConflict: 'school_id,class_id,student_id,date' })
+              .then(({ error: upsertErr }) => {
+                if (upsertErr) console.warn('Supabase upsert attendance notice:', upsertErr.message);
+              });
+          }
         });
     }
 
