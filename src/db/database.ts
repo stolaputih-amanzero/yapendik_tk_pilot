@@ -1161,6 +1161,15 @@ export class DatabaseEngine {
     );
   }
 
+  public getAttendanceRange(schoolId: string, classId: string, startDate: string, endDate: string): DailyAttendanceEntry[] {
+    return this.attendance.filter(a => 
+      a.schoolId === schoolId && 
+      a.classId === classId && 
+      a.date >= startDate && 
+      a.date <= endDate
+    );
+  }
+
   public saveAttendanceBatch(
     entries: Omit<DailyAttendanceEntry, 'id' | 'recordedAt'>[],
     authorName: string,

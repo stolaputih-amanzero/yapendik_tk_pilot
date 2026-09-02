@@ -24,15 +24,17 @@ import {
   CalendarCheck, 
   Calendar, 
   ChevronLeft, 
-  ChevronRight,
+  ChevronRight, 
   Thermometer, 
   Save, 
-  Users,
-  CheckCheck,
-  FileText,
-  ShieldAlert,
-  X
+  Users, 
+  CheckCheck, 
+  FileText, 
+  ShieldAlert, 
+  X,
+  BarChart3
 } from 'lucide-react';
+import { MonthlyAttendanceReport } from '../attendance/MonthlyAttendanceReport';
 
 const getTodayDateString = (): string => {
   const d = new Date();
@@ -88,6 +90,7 @@ export const AttendanceWorkspace: React.FC = () => {
   }>>({});
   
   const [activeNoteStudentId, setActiveNoteStudentId] = useState<string | null>(null);
+  const [activeMode, setActiveMode] = useState<'DAILY' | 'MONTHLY'>('DAILY');
   const [isDirty, setIsDirty] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [showToast, setShowToast] = useState(false);
@@ -306,66 +309,101 @@ export const AttendanceWorkspace: React.FC = () => {
           1. HEADER BAR (CLEAN, NEAT & UNCLUTTERED)
           ═══════════════════════════════════════════════════════════ */}
       <div className="bg-surface border-b border-line px-4 medium:px-6 py-4 space-y-3">
-        {/* Row 1: Title + Quick Actions */}
+        {/* Row 1: Title + In-Context Mode Switcher + Action Buttons */}
         <div className="flex flex-wrap items-center justify-between gap-3">
-          <div>
-            <h1 className="font-display text-lg medium:text-xl font-bold text-ink flex items-center gap-2">
-              <CalendarCheck className="w-5 h-5 text-accent-valor shrink-0" />
-              <span>Buku Presensi Siswa</span>
-            </h1>
-            <p className="text-xs text-ink-soft">
-              Pencatatan kehadiran harian dan skrining kedatangan anak didik.
-            </p>
-          </div>
+          <div className="flex items-center gap-4 flex-wrap">
+            <div>
+              <h1 className="font-display text-lg medium:text-xl font-bold text-ink flex items-center gap-2">
+                <CalendarCheck className="w-5 h-5 text-accent-valor shrink-0" />
+                <span>Buku Presensi Siswa</span>
+              </h1>
+              <p className="text-xs text-ink-soft">
+                {activeMode === 'DAILY' 
+                  ? 'Pencatatan kehadiran harian dan skrining kedatangan anak didik.' 
+                  : 'Rekapitulasi dan persentase kehadiran bulanan siswa.'}
+              </p>
+            </div>
 
-          {/* Action Buttons */}
-          <div className="flex items-center gap-2">
-            {canEdit && (
+            {/* In-Context View Switcher (Law 11 Compliant: Zero Emoji Clutter) */}
+            <div className="inline-flex p-0.5 rounded-xl bg-surface-subtle border border-line">
               <button
                 type="button"
-                onClick={handleMarkAllPresent}
-                className={`min-h-[38px] px-3.5 py-1.5 rounded-xl border text-xs font-bold flex items-center gap-2 cursor-pointer transition-all shadow-hairline ${
-                  allPresent
-                    ? 'bg-success-tint/60 text-success-deep border-success-line'
-                    : 'bg-success text-on-brand hover-only:bg-success-deep border-transparent shadow-soft active:scale-95'
+                onClick={() => setActiveMode('DAILY')}
+                className={`min-h-[34px] px-3 py-1 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer ${
+                  activeMode === 'DAILY'
+                    ? 'bg-surface text-ink shadow-hairline border border-line'
+                    : 'text-ink-soft hover-only:text-ink'
                 }`}
-                title="Tandai seluruh siswa di kelas ini hadir"
               >
-                <CheckCheck className="w-4 h-4" />
-                <span>{allPresent ? `Semua Hadir (${students.length})` : 'Tandai Semua Hadir'}</span>
+                <CalendarCheck className="w-3.5 h-3.5 text-accent-valor" />
+                <span>Presensi Harian</span>
               </button>
-            )}
-
-            {canEdit && (
-              <Button
-                variant="primary"
-                size="sm"
-                disabled={!canEdit || isSaving || !isDirty}
-                onClick={handleSaveAll}
-                leftIcon={<Save className="w-4 h-4" />}
-                className="rounded-xl text-xs font-bold shadow-soft min-h-[38px]"
+              <button
+                type="button"
+                onClick={() => setActiveMode('MONTHLY')}
+                className={`min-h-[34px] px-3 py-1 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer ${
+                  activeMode === 'MONTHLY'
+                    ? 'bg-surface text-ink shadow-hairline border border-line'
+                    : 'text-ink-soft hover-only:text-ink'
+                }`}
               >
-                {isSaving 
-                  ? 'Menyimpan...' 
-                  : isDirty 
-                    ? `Simpan Presensi (${recordedCount}/${students.length})` 
-                    : recordedCount > 0 ? 'Tersimpan' : 'Belum Tersimpan'}
-              </Button>
-            )}
+                <BarChart3 className="w-3.5 h-3.5 text-accent-valor" />
+                <span>Rekap Bulanan</span>
+              </button>
+            </div>
           </div>
+
+          {/* Action Buttons (Active only in Daily Mode) */}
+          {activeMode === 'DAILY' && (
+            <div className="flex items-center gap-2">
+              {canEdit && (
+                <button
+                  type="button"
+                  onClick={handleMarkAllPresent}
+                  className={`min-h-[38px] px-3.5 py-1.5 rounded-xl border text-xs font-bold flex items-center gap-2 cursor-pointer transition-all shadow-hairline ${
+                    allPresent
+                      ? 'bg-success-tint/60 text-success-deep border-success-line'
+                      : 'bg-success text-on-brand hover-only:bg-success-deep border-transparent shadow-soft active:scale-95'
+                  }`}
+                  title="Tandai seluruh siswa di kelas ini hadir"
+                >
+                  <CheckCheck className="w-4 h-4" />
+                  <span>{allPresent ? `Semua Hadir (${students.length})` : 'Tandai Semua Hadir'}</span>
+                </button>
+              )}
+
+              {canEdit && (
+                <Button
+                  variant="primary"
+                  size="sm"
+                  disabled={!canEdit || isSaving || !isDirty}
+                  onClick={handleSaveAll}
+                  leftIcon={<Save className="w-4 h-4" />}
+                  className="rounded-xl text-xs font-bold shadow-soft min-h-[38px]"
+                >
+                  {isSaving 
+                    ? 'Menyimpan...' 
+                    : isDirty 
+                      ? `Simpan Presensi (${recordedCount}/${students.length})` 
+                      : recordedCount > 0 ? 'Tersimpan' : 'Belum Tersimpan'}
+                </Button>
+              )}
+            </div>
+          )}
         </div>
 
-        {/* Row 2: Date Selector with Navigation + Class Switcher + Summary Pills */}
-        <div className="flex flex-col medium:flex-row items-stretch medium:items-center justify-between gap-3 pt-2 border-t border-line-soft">
-          {/* Date Picker with Prev / Next Navigation */}
-          <div className="flex items-center gap-1.5">
-            <button
-              type="button"
-              onClick={() => setSelectedDate(shiftDate(selectedDate, -1))}
-              className="w-9 h-9 rounded-xl bg-surface border border-line hover-only:bg-surface-subtle flex items-center justify-center text-ink-soft hover-only:text-ink cursor-pointer shrink-0"
-              title="Hari Sebelumnya"
-              aria-label="Hari Sebelumnya"
-            >
+        {/* Row 2: Daily Navigation (Only in Daily Mode) */}
+        {activeMode === 'DAILY' && (
+          <div className="flex flex-col medium:flex-row items-stretch medium:items-center justify-between gap-3 pt-2 border-t border-line-soft">
+            {/* Date Picker with Prev / Next Navigation */}
+            <div className="flex items-center gap-1.5">
+              <button
+                type="button"
+                onClick={() => setSelectedDate(shiftDate(selectedDate, -1))}
+                className="w-9 h-9 rounded-xl bg-surface border border-line hover-only:bg-surface-subtle flex items-center justify-center text-ink-soft hover-only:text-ink cursor-pointer shrink-0"
+                title="Hari Sebelumnya"
+                aria-label="Hari Sebelumnya"
+              >
               <ChevronLeft className="w-4 h-4" />
             </button>
 
@@ -461,28 +499,41 @@ export const AttendanceWorkspace: React.FC = () => {
             </div>
           </div>
         </div>
+      )}
       </div>
 
       {/* ═══════════════════════════════════════════════════════════
-          SECURITY FIRST: DENY_CLASS_UNASSIGNED READ-ONLY BANNER
+          2. BODY: MONTHLY REPORT OR DAILY ATTENDANCE
           ═══════════════════════════════════════════════════════════ */}
-      {!canEdit && (
-        <div className="mx-4 medium:mx-6 bg-surface border border-warning-line/60 rounded-xl p-3.5 flex items-center justify-between gap-3 shadow-hairline animate-in fade-in duration-150">
-          <div className="flex items-center gap-2.5 min-w-0">
-            <ShieldAlert className="w-4 h-4 text-warning-deep shrink-0" />
-            <p className="text-xs text-ink leading-relaxed">
-              <strong className="font-semibold text-warning-deep">Mode Hanya Baca (Read-Only):</strong> Anda tidak ditugaskan sebagai pendidik di rombel ini. Pencatatan kehadiran dan skrining kedatangan hanya dapat dilakukan oleh wali kelas bersangkutan.
-            </p>
-          </div>
-          <span className="shrink-0 px-2.5 py-1 rounded-full text-[10px] font-mono font-bold bg-warning-tint text-warning-deep border border-warning-line">
-            READ ONLY
-          </span>
-        </div>
-      )}
+      {activeMode === 'MONTHLY' ? (
+        <MonthlyAttendanceReport
+          selectedClassId={selectedClassId}
+          onClassChange={setSelectedClassId}
+          classes={classes}
+          onSwitchToDaily={() => setActiveMode('DAILY')}
+        />
+      ) : (
+        <>
+          {/* ═══════════════════════════════════════════════════════════
+              SECURITY FIRST: DENY_CLASS_UNASSIGNED READ-ONLY BANNER
+              ═══════════════════════════════════════════════════════════ */}
+          {!canEdit && (
+            <div className="mx-4 medium:mx-6 bg-surface border border-warning-line/60 rounded-xl p-3.5 flex items-center justify-between gap-3 shadow-hairline animate-in fade-in duration-150">
+              <div className="flex items-center gap-2.5 min-w-0">
+                <ShieldAlert className="w-4 h-4 text-warning-deep shrink-0" />
+                <p className="text-xs text-ink leading-relaxed">
+                  <strong className="font-semibold text-warning-deep">Mode Hanya Baca (Read-Only):</strong> Anda tidak ditugaskan sebagai pendidik di rombel ini. Pencatatan kehadiran dan skrining kedatangan hanya dapat dilakukan oleh wali kelas bersangkutan.
+                </p>
+              </div>
+              <span className="shrink-0 px-2.5 py-1 rounded-full text-[10px] font-mono font-bold bg-warning-tint text-warning-deep border border-warning-line">
+                READ ONLY
+              </span>
+            </div>
+          )}
 
-      {/* ═══════════════════════════════════════════════════════════
-          2. NEAT COMPACT ROWS (1 ROW PER STUDENT)
-          ═══════════════════════════════════════════════════════════ */}
+          {/* ═══════════════════════════════════════════════════════════
+              2. NEAT COMPACT ROWS (1 ROW PER STUDENT)
+              ═══════════════════════════════════════════════════════════ */}
       {students.length > 0 ? (
         <div className="px-4 medium:px-6 space-y-2">
           {students.map((s, idx) => {
@@ -705,6 +756,8 @@ export const AttendanceWorkspace: React.FC = () => {
             </Button>
           </div>
         </div>
+      )}
+        </>
       )}
 
       {/* ToastHUD Feedback */}
