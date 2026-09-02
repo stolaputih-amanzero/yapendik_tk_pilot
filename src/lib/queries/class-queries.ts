@@ -228,6 +228,8 @@ export async function fetchClassRoster(
         let mappedStudents: StudentWithGuardians[] = (studentsData || []).map((s: any) => {
           const person = Array.isArray(s.person) ? s.person[0] : s.person;
           const studentGuardians = guardiansByStudentPersonId.get(s.person_id) || [];
+          const localStudent = db.getStudentById(s.id);
+          const resolvedPhoto = s.photo_url || person?.avatar_url || localStudent?.photoUrl || undefined;
 
           return {
             id: s.id,
@@ -243,7 +245,7 @@ export async function fetchClassRoster(
             address: person?.address || 'Jakarta',
             class_id: classId,
             status: 'Aktif',
-            photo_url: s.photo_url || person?.avatar_url || undefined,
+            photo_url: resolvedPhoto,
             guardians: studentGuardians,
           };
         });
