@@ -172,7 +172,8 @@ const mappers = {
       allergies: s.allergies || null,
       special_needs_notes: s.specialNeedsNotes || null,
       enrollment_date: s.enrollmentDate || null,
-      status: s.status
+      status: s.status,
+      photo_url: s.photoUrl || null
     }),
     fromDb: (row: any): StudentProfile => ({
       id: row.id,
@@ -185,7 +186,8 @@ const mappers = {
       allergies: row.allergies || undefined,
       specialNeedsNotes: row.special_needs_notes || undefined,
       enrollmentDate: row.enrollment_date || '',
-      status: row.status
+      status: row.status,
+      photoUrl: row.photo_url || undefined
     })
   },
   guardianRelationship: {
@@ -483,7 +485,7 @@ export class DatabaseEngine {
       const studentMap = new Map(loadedStudents.map(s => [s.id, s]));
       SEED_STUDENTS.forEach(ss => {
         const existing = studentMap.get(ss.id) || {};
-        studentMap.set(ss.id, { ...existing, ...ss });
+        studentMap.set(ss.id, { ...ss, ...existing });
       });
       this.students = Array.from(studentMap.values());
       this.persist('students', this.students);
@@ -854,6 +856,18 @@ export class DatabaseEngine {
       updatedAt: new Date().toISOString()
     };
     return { ...student, person };
+  }
+
+  public updateStudentPhoto(studentId: string, photoUrl: string) {
+    const studentIdx = this.students.findIndex(s => s.id === studentId);
+    if (studentIdx >= 0) {
+      this.students[studentIdx] = {
+        ...this.students[studentIdx],
+        photoUrl: photoUrl
+      };
+      this.persist('students', this.students);
+      this.notify();
+    }
   }
 
   public getGuardianRelationships(): GuardianRelationship[] {

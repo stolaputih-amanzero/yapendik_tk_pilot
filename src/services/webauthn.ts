@@ -5,7 +5,7 @@
  */
 
 import { startRegistration, startAuthentication } from '@simplewebauthn/browser';
-import type { RegistrationResponseJSON, AuthenticationResponseJSON } from '@simplewebauthn/types';
+import type { RegistrationResponseJSON, AuthenticationResponseJSON } from '@simplewebauthn/server';
 import type { SupabaseClient } from '@supabase/supabase-js';
 
 export const RP_ID = (import.meta as any).env?.VITE_WEBAUTHN_RP_ID || 'tkm.amanloka.com';

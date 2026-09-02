@@ -10,6 +10,7 @@ export interface AvatarChildProps {
   id?: string;
   size?: 'sm' | 'md' | 'lg';
   showSymbol?: boolean;
+  uniformColor?: boolean;
   className?: string;
 }
 
@@ -60,11 +61,14 @@ export const AvatarChild: React.FC<AvatarChildProps> = ({
   id,
   size = 'md',
   showSymbol = true,
+  uniformColor = false,
   className = ''
 }) => {
   const seed = id || name || 'default';
   const index = hashString(seed) % pastelPalette.length;
-  const theme = pastelPalette[index];
+  const theme = uniformColor
+    ? { bg: 'bg-brand/10 text-brand-deep border-brand/25', symbol: '' }
+    : pastelPalette[index];
   const sizeConfig = sizeMap[size];
   const initials = getInitials(name);
 
@@ -73,14 +77,14 @@ export const AvatarChild: React.FC<AvatarChildProps> = ({
       <div
         className={`
           ${sizeConfig.container} ${theme.bg}
-          border font-black flex items-center justify-center tracking-tight shadow-hairline
+          border font-bold flex items-center justify-center tracking-tight shadow-hairline
         `.trim().replace(/\s+/g, ' ')}
         title={name}
       >
         {initials}
       </div>
 
-      {showSymbol && (
+      {showSymbol && !uniformColor && (
         <span
           className={`
             absolute ${sizeConfig.symbolSize}

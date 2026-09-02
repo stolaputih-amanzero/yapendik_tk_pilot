@@ -16,6 +16,7 @@ import { DevelopmentWorkspace } from './components/workspaces/DevelopmentWorkspa
 import { AttendanceWorkspace } from './components/workspaces/AttendanceWorkspace';
 import { CommunicationWorkspace } from './components/workspaces/CommunicationWorkspace';
 import { EnrollmentWorkspace } from './components/workspaces/EnrollmentWorkspace';
+import DataRosterWorkspace from './pages/roster/DataRosterWorkspace';
 import { SchoolReviewWorkspace } from './components/workspaces/SchoolReviewWorkspace';
 import { AuthorizationTestingWorkspace } from './components/workspaces/AuthorizationTestingWorkspace';
 import { LivingContractWorkspace } from './components/workspaces/LivingContractWorkspace';
@@ -250,7 +251,7 @@ const AppContent: React.FC = () => {
           {activeTab === 'STUDENT_JOURNEY' && <StudentJourneyTimeline />}
           {activeTab === 'ATTENDANCE' && <AttendanceWorkspace />}
           {activeTab === 'COMMUNICATION' && <CommunicationWorkspace />}
-          {activeTab === 'ROSTER' && <EnrollmentWorkspace />}
+          {activeTab === 'ROSTER' && <DataRosterWorkspace />}
           {activeTab === 'GOVERNANCE' && <SchoolReviewWorkspace />}
           {activeTab === 'INSTITUTIONAL_HEALTH' && <InstitutionalHealthDashboard />}
           {activeTab === 'ACADEMIC_LIFECYCLE' && <AcademicLifecycleWorkspace />}

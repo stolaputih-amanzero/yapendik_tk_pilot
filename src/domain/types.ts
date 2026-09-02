@@ -142,6 +142,7 @@ export interface StudentProfile {
   specialNeedsNotes?: string;
   enrollmentDate: string;
   status: 'ACTIVE' | 'GRADUATED' | 'TRANSFERRED' | 'INACTIVE';
+  photoUrl?: string;
 }
 
 export interface GuardianRelationship {

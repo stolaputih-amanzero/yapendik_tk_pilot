@@ -72,12 +72,14 @@ export const ProfileDrawer: React.FC<ProfileDrawerProps> = ({
   useEffect(() => {
     if (isOpen && currentPersona) {
       if (supabase && currentPersona.personId) {
-        supabase
-          .from('persons')
-          .select('passkey_enabled')
-          .eq('id', currentPersona.personId)
-          .maybeSingle()
-          .then(({ data: pData }) => {
+        Promise.resolve(
+          supabase
+            .from('persons')
+            .select('passkey_enabled')
+            .eq('id', currentPersona.personId)
+            .single()
+        )
+          .then(({ data: pData }: any) => {
             if (pData?.passkey_enabled !== undefined && pData.passkey_enabled !== currentPersona.passkeyEnabled) {
               updateOwnProfile({ passkeyEnabled: Boolean(pData.passkey_enabled) });
             }
