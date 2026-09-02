@@ -93,9 +93,9 @@ export class StudentTrajectoryService {
     const lppaHistory: LppaHistoryItem[] = studentReports.map(r => ({
       report_id: r.id,
       academic_year_id: r.academicYearId,
-      semester: 'GANJIL',
+      semester: (r.semester as 'GANJIL' | 'GENAP') || 'GANJIL',
       status: r.status as any,
-      headmaster_approval_date: r.status === 'APPROVED' || r.status === 'PUBLISHED' ? '2026-12-15' : null,
+      headmaster_approval_date: r.headmasterApprovalDate || (r.status === 'APPROVED' || r.status === 'PUBLISHED' ? r.evaluatedAt : null),
       homeroom_feedback: r.homeroomFeedback || (r as any).reflectionNote || 'Anak menunjukkan perkembangan motorik dan sosial yang sangat baik.'
     }));
 

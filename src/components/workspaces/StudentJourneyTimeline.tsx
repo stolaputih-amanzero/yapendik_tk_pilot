@@ -133,21 +133,21 @@ export const StudentJourneyTimeline: React.FC<{ initialStudentId?: string }> = (
   const selectedStudentMeta = studentsList.find(s => s.id === selectedStudentId);
 
   return (
-    <div className="w-full max-w-5xl mx-auto px-4 medium:px-6 pt-6 pb-[160px] space-y-8 animate-in fade-in duration-200 text-ink">
+    <div className="w-full max-w-5xl mx-auto px-4 medium:px-6 pt-6 pb-[160px] space-y-8 animate-in fade-in duration-200 text-ink overflow-x-hidden">
       
       {/* 1. HERO CANVAS (Hukum F-7: Tanpa kartu panel pembungkus) */}
       <header className="space-y-4">
-        <div className="flex items-start justify-between gap-4">
-          <div>
+        <div className="flex items-start justify-between gap-3">
+          <div className="min-w-0 flex-1">
             {/* J-4: Eyebrow text-brand-deep kanonikal */}
             <div className="flex items-center gap-1.5 text-brand-deep text-xs font-bold uppercase tracking-wider mb-1">
               <Compass className="w-4 h-4 text-brand-deep shrink-0" />
               <span>Rekam Jejak Siswa</span>
             </div>
-            <h1 className="text-[28px] medium:text-3xl font-bold text-ink tracking-tight leading-tight">
-              Linimasa & Kurva Rekam Jejak Perkembangan Anak
+            <h1 className="text-xl sm:text-2xl medium:text-3xl font-bold text-ink tracking-tight leading-snug break-words">
+              Linimasa &amp; Kurva Rekam Jejak Perkembangan Anak
             </h1>
-            <p className="text-ink-soft text-sm max-w-prose mt-1">
+            <p className="text-ink-soft text-xs sm:text-sm max-w-prose mt-1 leading-relaxed">
               Rekonstruksi perjalanan historis multi-tahun anak dari awal penempatan rombel hingga kelulusan resmi.
             </p>
           </div>
@@ -155,18 +155,18 @@ export const StudentJourneyTimeline: React.FC<{ initialStudentId?: string }> = (
           <button
             onClick={loadTrajectory}
             disabled={refreshing}
-            className="flex items-center justify-center p-2 rounded-xl text-ink-soft hover-only:text-ink hover-only:bg-surface-subtle transition-colors shrink-0 cursor-pointer"
+            className="min-w-[48px] min-h-[48px] flex items-center justify-center p-2 rounded-xl text-ink-soft hover-only:text-ink hover-only:bg-surface-subtle transition-colors shrink-0 cursor-pointer"
             title="Segarkan Data"
           >
-            <RefreshCw className={`w-4 h-4 ${refreshing ? 'animate-spin text-brand-primary' : ''}`} />
+            <RefreshCw className={`w-5 h-5 ${refreshing ? 'animate-spin text-brand-primary' : ''}`} />
           </button>
         </div>
 
         {/* 2. SELECTOR ANAK (Kontrol flat langsung di canvas) */}
         {studentsList.length > 1 && (
-          <div className="w-full max-w-md bg-surface-subtle rounded-xl min-h-[52px] px-3 py-2 flex items-center justify-between gap-3 text-xs">
+          <div className="w-full max-w-md bg-surface-subtle rounded-xl min-h-[52px] p-2.5 flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 text-xs border border-line-hairline">
             <span className="text-ink-soft font-medium shrink-0">Pilih Profil Anak:</span>
-            <div className="flex-1">
+            <div className="w-full sm:flex-1">
               <SelectSheet
                 value={selectedStudentId || ''}
                 onChange={setSelectedStudentId}
@@ -195,15 +195,15 @@ export const StudentJourneyTimeline: React.FC<{ initialStudentId?: string }> = (
           {/* 3. BLOK IDENTITAS SISWA (Left Column - 4 Cols) */}
           <div className="expanded:col-span-4 space-y-6">
             {/* Profil Avatar & Nama */}
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-3 min-w-0">
               <div className="w-12 h-12 rounded-xl bg-surface-subtle border border-line-hairline flex items-center justify-center text-ink-soft font-bold text-lg shrink-0">
                 <Baby className="w-6 h-6" />
               </div>
-              <div className="min-w-0">
-                <h3 className="text-lg font-bold text-ink tracking-tight truncate">
+              <div className="min-w-0 flex-1">
+                <h3 className="text-base sm:text-lg font-bold text-ink tracking-tight truncate">
                   {selectedStudentMeta?.name || 'Profil Siswa'}
                 </h3>
-                <p className="text-xs text-ink-faint font-mono whitespace-nowrap">
+                <p className="text-xs text-ink-faint font-mono truncate">
                   NIS: {trajectory.nis || '—'}
                 </p>
               </div>
@@ -211,23 +211,23 @@ export const StudentJourneyTimeline: React.FC<{ initialStudentId?: string }> = (
 
             {/* J-2: Stat Lembaga sebagai baris divide-y divide-line langsung di canvas */}
             <div className="divide-y divide-line border-y border-line text-xs">
-              <div className="py-3 flex items-center justify-between text-ink-soft">
+              <div className="py-2.5 sm:py-3 flex flex-wrap items-center justify-between gap-2 text-ink-soft">
                 <span>Status Lembaga:</span>
                 <span className={`font-mono text-[10px] font-bold uppercase tracking-wider px-3 py-1 rounded-full ${
                   trajectory.current_status === 'GRADUATED' 
                     ? 'bg-lppa-tint text-lppa-deep border border-lppa-line' 
                     : 'bg-success-tint text-success-deep border border-success-line'
                 }`}>
-                  {trajectory.current_status}
+                  {trajectory.current_status === 'ACTIVE' ? 'Aktif' : trajectory.current_status === 'GRADUATED' ? 'Lulus' : trajectory.current_status}
                 </span>
               </div>
-              <div className="py-3 flex items-center justify-between text-ink-soft">
+              <div className="py-2.5 sm:py-3 flex flex-wrap items-center justify-between gap-2 text-ink-soft">
                 <span>Total Periode Penempatan:</span>
                 <span className="font-mono font-bold text-ink">
                   {trajectory.placement_lineage.length} Semester
                 </span>
               </div>
-              <div className="py-3 flex items-center justify-between text-ink-soft">
+              <div className="py-2.5 sm:py-3 flex flex-wrap items-center justify-between gap-2 text-ink-soft">
                 <span>Laporan LPPA Terbit:</span>
                 <span className="font-mono font-bold text-ink">
                   {trajectory.lppa_history.length} Laporan
@@ -241,26 +241,26 @@ export const StudentJourneyTimeline: React.FC<{ initialStudentId?: string }> = (
                 <ShieldCheck className="w-4 h-4 text-success shrink-0" />
                 <span>Jaminan Privasi Keluarga (C-11)</span>
               </div>
-              <p className="text-xs text-ink-soft leading-relaxed">
+              <p className="text-xs text-ink-soft leading-relaxed break-words">
                 Rekam jejak longitudinal anak dilindungi secara kriptografis dan hanya dapat diakses oleh Orang Tua/Wali Sah terdaftar serta staf pendidik berwenang.
               </p>
             </div>
           </div>
 
           {/* 5. KURVA LINIMASA & LINIMASA PENEMPATAN (Right Column - 8 Cols) */}
-          <div className="expanded:col-span-8 space-y-8">
+          <div className="expanded:col-span-8 space-y-8 min-w-0">
             
             {/* Header Kurva Linimasa */}
-            <div className="flex items-center justify-between gap-3 border-b border-line pb-3">
+            <div className="flex flex-wrap items-center justify-between gap-3 border-b border-line pb-3">
               <div>
                 <span className="text-xs font-bold text-brand-deep uppercase tracking-wider">
                   Kurva Linimasa
                 </span>
-                <h2 className="text-xl font-bold text-ink mt-0.5">
-                  Riwayat Penempatan & Rapor Perkembangan
+                <h2 className="text-lg sm:text-xl font-bold text-ink mt-0.5">
+                  Riwayat Penempatan &amp; Rapor Perkembangan
                 </h2>
               </div>
-              <span className="text-xs text-ink-soft font-mono bg-surface-subtle px-3 py-1 rounded-full border border-line-hairline whitespace-nowrap">
+              <span className="text-xs text-ink-soft font-mono bg-surface-subtle px-3 py-1 rounded-full border border-line-hairline shrink-0">
                 Riwayat Akademik Resmi
               </span>
             </div>
@@ -268,9 +268,9 @@ export const StudentJourneyTimeline: React.FC<{ initialStudentId?: string }> = (
             {/* 6. KEMITRAAN TUMBUH KEMBANG DI RUMAH (Home-School Growth Bridge) */}
             {homePlans.length > 0 && (
               <section className="space-y-4">
-                <div className="flex items-center justify-between gap-2 border-b border-line pb-3">
+                <div className="flex flex-wrap items-center justify-between gap-2 border-b border-line pb-3">
                   <div className="flex items-center gap-2">
-                    <div className="p-2 rounded-xl bg-brand-tint text-brand-deep">
+                    <div className="p-2 rounded-xl bg-brand-tint text-brand-deep shrink-0">
                       <HeartHandshake className="w-4 h-4" />
                     </div>
                     <div>
@@ -280,7 +280,7 @@ export const StudentJourneyTimeline: React.FC<{ initialStudentId?: string }> = (
                       </p>
                     </div>
                   </div>
-                  <span className="text-[10px] font-bold px-2 py-1 rounded-full bg-surface-subtle text-ink-soft border border-line-hairline">
+                  <span className="text-[10px] font-bold px-2 py-1 rounded-full bg-surface-subtle text-ink-soft border border-line-hairline shrink-0">
                     Non-Authoritative
                   </span>
                 </div>
@@ -294,7 +294,7 @@ export const StudentJourneyTimeline: React.FC<{ initialStudentId?: string }> = (
                           <span className="text-[10px] font-bold text-brand-deep uppercase tracking-wider">
                             Saran Stimulasi dari Ibu Guru ({plan.target_element_key.replace('_', ' ')}):
                           </span>
-                          <p className="text-xs text-ink font-medium mt-1 leading-relaxed">
+                          <p className="text-xs text-ink font-medium mt-1 leading-relaxed break-words">
                             "{plan.home_school_extension?.home_activity_prompt}"
                           </p>
                         </div>
@@ -302,10 +302,10 @@ export const StudentJourneyTimeline: React.FC<{ initialStudentId?: string }> = (
                         {isAck ? (
                           <div className="border-l-2 border-success-line pl-3 py-1 space-y-1">
                             <div className="flex items-center gap-1.5 text-xs font-bold text-success-deep">
-                              <CheckCircle2 className="w-4 h-4 text-success" />
+                              <CheckCircle2 className="w-4 h-4 text-success shrink-0" />
                               <span>Terkonfirmasi oleh Orang Tua ({new Date(plan.home_school_extension?.parent_acknowledged_at || '').toLocaleDateString('id-ID')})</span>
                             </div>
-                            <p className="text-xs text-ink-soft italic">
+                            <p className="text-xs text-ink-soft italic break-words">
                               "{plan.home_school_extension?.parent_reflection_notes}"
                             </p>
                           </div>
@@ -314,13 +314,13 @@ export const StudentJourneyTimeline: React.FC<{ initialStudentId?: string }> = (
                             <label className="text-xs font-medium text-ink-soft">
                               Catatan Respon / Refleksi Keluarga:
                             </label>
-                            <div className="flex flex-col medium:flex-row items-stretch medium:items-center gap-2">
+                            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
                               <input
                                 type="text"
                                 value={reflectionInput[plan.plan_id] || ''}
                                 onChange={e => setReflectionInput({ ...reflectionInput, [plan.plan_id]: e.target.value })}
                                 placeholder="Ceritakan aktivitas bermain bersama anak di rumah..."
-                                className="flex-1 px-3 py-2 text-xs rounded-xl bg-surface-subtle border border-line-hairline text-ink placeholder:text-ink-faint focus:outline-none focus:ring-1 focus:ring-brand-primary"
+                                className="min-h-[48px] flex-1 px-3 py-2 text-xs rounded-xl bg-surface-subtle border border-line-hairline text-ink placeholder:text-ink-faint focus:outline-none focus:ring-1 focus:ring-brand-primary"
                               />
                               <Button
                                 variant="primary"
@@ -328,7 +328,7 @@ export const StudentJourneyTimeline: React.FC<{ initialStudentId?: string }> = (
                                 onClick={() => handleSendHomeReflection(plan.plan_id)}
                                 disabled={isSubmitting || !reflectionInput[plan.plan_id]}
                                 leftIcon={<Send className="w-4 h-4" />}
-                                className="w-full medium:w-auto text-xs font-bold rounded-xl"
+                                className="min-h-[48px] w-full sm:w-auto text-xs font-bold rounded-xl"
                               >
                                 Kirim
                               </Button>
@@ -343,16 +343,16 @@ export const StudentJourneyTimeline: React.FC<{ initialStudentId?: string }> = (
             )}
 
             {/* 5. TIMELINE STEPPER KANONIKAL §5.1.2 (border-l-2 vertikal langsung di canvas) */}
-            <div className="relative pl-6 space-y-8 border-l-2 border-line">
+            <div className="relative pl-6 space-y-8 border-l-2 border-line ml-3 sm:ml-4">
               {trajectory.placement_lineage.map((plc) => {
                 const matchedLppa = trajectory.lppa_history.find(
                   l => l.academic_year_id === plc.academic_year_id && l.semester === plc.semester
                 );
 
                 return (
-                  <article key={plc.placement_id} className="relative group space-y-3">
-                    {/* Node Dot (Status Indicator) */}
-                    <div className={`absolute -left-[31px] top-1 w-4 h-4 rounded-full border-2 bg-canvas flex items-center justify-center ${
+                  <article key={plc.placement_id} className="relative space-y-3">
+                    {/* Node Dot (Centered on border-l-2) */}
+                    <div className={`absolute -left-[33px] top-1 w-4 h-4 rounded-full border-2 bg-surface flex items-center justify-center ${
                       plc.placement_status === 'COMPLETED'
                         ? 'border-lppa-line'
                         : plc.placement_status === 'ACTIVE'
@@ -365,20 +365,20 @@ export const StudentJourneyTimeline: React.FC<{ initialStudentId?: string }> = (
                     </div>
 
                     {/* Milestone Header */}
-                    <div className="flex flex-col medium:flex-row medium:items-center justify-between gap-2">
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                       <div>
-                        <div className="flex items-center space-x-2">
-                          <span className="text-base font-bold font-mono text-ink">
-                            {plc.academic_year_name} ({plc.semester})
+                        <div className="flex flex-wrap items-center gap-2">
+                          <span className="text-sm sm:text-base font-bold font-mono text-ink">
+                            {plc.academic_year_name} ({plc.semester === 'GANJIL' ? 'Semester Ganjil' : 'Semester Genap'})
                           </span>
-                          <span className={`px-3 py-1 rounded-full text-[10px] font-mono font-bold uppercase tracking-wider ${
+                          <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold uppercase tracking-wider ${
                             plc.placement_status === 'COMPLETED'
                               ? 'bg-lppa-tint text-lppa-deep border border-lppa-line'
                               : plc.placement_status === 'ACTIVE'
                               ? 'bg-success-tint text-success-deep border border-success-line'
                               : 'bg-surface-subtle text-ink-soft border border-line-hairline'
                           }`}>
-                            {plc.placement_status}
+                            {plc.placement_status === 'ACTIVE' ? 'Aktif' : plc.placement_status === 'COMPLETED' ? 'Selesai' : plc.placement_status}
                           </span>
                         </div>
                         <p className="text-sm text-ink-soft font-semibold mt-0.5">
@@ -386,14 +386,14 @@ export const StudentJourneyTimeline: React.FC<{ initialStudentId?: string }> = (
                         </p>
                       </div>
 
-                      <div className="text-xs font-mono text-ink-faint whitespace-nowrap">
+                      <div className="text-xs font-mono text-ink-faint">
                         {plc.entry_date} s.d. {plc.exit_date || 'Sekarang'}
                       </div>
                     </div>
 
                     {/* Promotion or Exit Remarks */}
                     {plc.promotion_remarks && (
-                      <p className="text-xs text-ink-soft italic py-1 pl-3 border-l-2 border-line">
+                      <p className="text-xs text-ink-soft italic py-1 pl-3 border-l-2 border-line break-words">
                         {plc.promotion_remarks}
                       </p>
                     )}
@@ -401,30 +401,30 @@ export const StudentJourneyTimeline: React.FC<{ initialStudentId?: string }> = (
                     {/* LPPA Report Section for this period (Canvas-Native) */}
                     {matchedLppa ? (
                       <div className="border-t border-line pt-3 space-y-2 text-xs">
-                        <div className="flex items-center justify-between">
+                        <div className="flex flex-wrap items-center justify-between gap-2">
                           <div className="flex items-center space-x-2 text-ink font-semibold">
-                            <BookOpen className="w-4 h-4 text-lppa" />
+                            <BookOpen className="w-4 h-4 text-lppa shrink-0" />
                             <span>Laporan Capaian Perkembangan Anak (LPPA)</span>
                           </div>
-                          <span className={`px-2 py-1 rounded-full text-[10px] font-mono font-bold uppercase tracking-wider ${
+                          <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold uppercase tracking-wider ${
                             matchedLppa.status === 'PUBLISHED'
                               ? 'bg-lppa-tint text-lppa-deep border border-lppa-line'
                               : 'bg-success-tint text-success-deep border border-success-line'
                           }`}>
-                            {matchedLppa.status}
+                            {matchedLppa.status === 'PUBLISHED' ? 'Telah Terbit' : matchedLppa.status === 'APPROVED' ? 'Disahkan' : matchedLppa.status}
                           </span>
                         </div>
 
                         {matchedLppa.homeroom_feedback && (
-                          <p className="text-ink-soft text-xs italic py-1 pl-3 border-l-2 border-line">
+                          <p className="text-ink-soft text-xs italic py-1 pl-3 border-l-2 border-line break-words">
                             "{matchedLppa.homeroom_feedback}"
                           </p>
                         )}
 
-                        <div className="flex flex-col medium:flex-row medium:items-center justify-between gap-2 pt-2">
+                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-2">
                           {matchedLppa.headmaster_approval_date ? (
-                            <div className="flex items-center space-x-1.5 text-xs text-ink-soft font-mono whitespace-nowrap">
-                              <CheckCircle2 className="w-4 h-4 text-success" />
+                            <div className="flex items-center space-x-1.5 text-xs text-ink-soft font-mono">
+                              <CheckCircle2 className="w-4 h-4 text-success shrink-0" />
                               <span>Disahkan Kepala Sekolah • {new Date(matchedLppa.headmaster_approval_date).toLocaleDateString('id-ID')}</span>
                             </div>
                           ) : <div />}
@@ -435,26 +435,27 @@ export const StudentJourneyTimeline: React.FC<{ initialStudentId?: string }> = (
                             onClick={async () => {
                               const fullDoc = await lppaReportingService.getLppaReport(matchedLppa.report_id, currentSchoolId);
                               if (fullDoc) {
+                                const currentSchool = db.getSchoolById(currentSchoolId);
                                 const canonical = lppaReportingService.toCanonicalPublishedRecord(
                                   fullDoc,
-                                  'TK Yapendik 01 Menteng',
-                                  '20104821',
+                                  currentSchool?.name || 'TK Yapendik Maranatha',
+                                  currentSchool?.npsn || '20104821',
                                   plc.class_name,
-                                  'Siti Rahmawati, S.Pd',
-                                  'Dra. Esther Nugroho, M.Pd'
+                                  'Erna Susanti, S.Pd',
+                                  'Marlina Simanjuntak, M.Pd'
                                 );
                                 setPreviewRecord(canonical);
                               }
                             }}
                             leftIcon={<Printer className="w-4 h-4" />}
-                            className="w-full medium:w-auto text-xs font-bold rounded-xl"
+                            className="min-h-[48px] w-full sm:w-auto text-xs font-bold rounded-xl"
                           >
                             Buka Rapor Resmi (PDF)
                           </Button>
                         </div>
                       </div>
                     ) : (
-                      <div className="text-xs text-ink-faint italic">
+                      <div className="text-xs text-ink-faint italic py-1">
                         Belum ada laporan perkembangan LPPA yang diterbitkan untuk semester ini.
                       </div>
                     )}
