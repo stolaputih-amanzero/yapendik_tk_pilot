@@ -311,7 +311,7 @@ export async function fetchClassRoster(
 export async function updateStudentPhoto(
   studentId: string,
   photoUrl: string
-): Promise<boolean> {
+): Promise<string> {
   const supabase = getSupabaseClient();
   let finalPhotoUrl = photoUrl;
 
@@ -365,5 +365,5 @@ export async function updateStudentPhoto(
 
   // Session & Local Storage Persistent update
   db.updateStudentPhoto(studentId, finalPhotoUrl);
-  return true;
+  return finalPhotoUrl;
 }

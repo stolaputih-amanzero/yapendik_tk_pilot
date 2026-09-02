@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   ChevronDown,
   ChevronUp,
@@ -66,6 +66,11 @@ export const StudentListItem: React.FC<StudentListItemProps> = ({
   const [isExpanded, setIsExpanded] = useState<boolean>(false);
   const [showPhotoModal, setShowPhotoModal] = useState<boolean>(false);
   const [showPhotoPreview, setShowPhotoPreview] = useState<boolean>(false);
+  const [imgError, setImgError] = useState<boolean>(false);
+
+  useEffect(() => {
+    setImgError(false);
+  }, [student.photo_url]);
 
   const birthDate = new Date(student.birth_date).toLocaleDateString('id-ID', {
     year: 'numeric',
@@ -74,10 +79,11 @@ export const StudentListItem: React.FC<StudentListItemProps> = ({
   });
 
   const handleSavePhoto = async (newPhotoUrl: string) => {
+    student.photo_url = newPhotoUrl || undefined;
+    setImgError(false);
     if (onUpdatePhoto) {
       await onUpdatePhoto(student.id, newPhotoUrl);
     }
-    student.photo_url = newPhotoUrl;
   };
 
   return (
@@ -109,10 +115,11 @@ export const StudentListItem: React.FC<StudentListItemProps> = ({
           aria-label={`Lihat foto ${student.full_name}`}
           className="shrink-0 relative cursor-pointer rounded-field overflow-hidden focus:outline-none focus-visible:ring-2 focus-visible:ring-brand"
         >
-          {student.photo_url ? (
+          {student.photo_url && !imgError ? (
             <img
               src={student.photo_url}
               alt={student.full_name}
+              onError={() => setImgError(true)}
               className="w-10 h-10 rounded-field object-cover border border-line shadow-hairline hover-only:opacity-90 transition-opacity"
             />
           ) : (
@@ -319,10 +326,11 @@ export const StudentListItem: React.FC<StudentListItemProps> = ({
             </div>
 
             <div className="py-2 flex justify-center">
-              {student.photo_url ? (
+              {student.photo_url && !imgError ? (
                 <img
                   src={student.photo_url}
                   alt={student.full_name}
+                  onError={() => setImgError(true)}
                   className="w-48 h-48 rounded-2xl object-cover border border-line shadow-md mx-auto"
                 />
               ) : (

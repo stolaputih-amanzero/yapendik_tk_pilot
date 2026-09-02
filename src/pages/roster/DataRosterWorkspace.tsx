@@ -83,13 +83,13 @@ export default function DataRosterWorkspace() {
   };
 
   const handleUpdateStudentPhoto = async (studentId: string, photoUrl: string) => {
-    await updateStudentPhoto(studentId, photoUrl);
+    const savedUrl = await updateStudentPhoto(studentId, photoUrl);
     setRoster((prev) => {
       if (!prev) return null;
       return {
         ...prev,
         students: prev.students.map((s) =>
-          s.id === studentId ? { ...s, photo_url: photoUrl } : s
+          s.id === studentId ? { ...s, photo_url: savedUrl || undefined } : s
         ),
       };
     });
