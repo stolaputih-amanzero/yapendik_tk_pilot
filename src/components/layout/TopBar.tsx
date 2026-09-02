@@ -9,8 +9,9 @@
 
 import React from 'react';
 import { ArrowLeft } from 'lucide-react';
-import { getTabMetadata } from '../../config/routeRegistry';
+import { getTabMetadata, getRouteLabel } from '../../config/routeRegistry';
 import { useConnectionStatus, getBreathStateMeta } from '../../hooks/useConnectionStatus';
+import { useSecurityContext } from '../../auth/context';
 
 export type WorkspaceTab = 
   | 'TEACHER_HOME'
@@ -46,8 +47,10 @@ export const TopBar: React.FC<TopBarProps> = ({
   onNavigateTab,
   className = ''
 }) => {
+  const { currentPersona } = useSecurityContext();
   const { state: connectionState, queuedMutations } = useConnectionStatus();
   const tabMeta = getTabMetadata(activeTab);
+  const pageTitle = getRouteLabel(activeTab, currentPersona?.role);
   const breathMeta = getBreathStateMeta(connectionState, queuedMutations);
 
   return (
@@ -73,7 +76,7 @@ export const TopBar: React.FC<TopBarProps> = ({
         <div className="flex flex-col min-w-0">
           <div className="flex items-center space-x-2 min-w-0">
             <h1 className="font-bold tracking-tight text-ink text-base medium:text-lg whitespace-nowrap truncate">
-              {tabMeta.title}
+              {pageTitle}
             </h1>
             <span 
               className={`${breathMeta.colorClass} text-xs ${breathMeta.animationClass} select-none shrink-0`} 

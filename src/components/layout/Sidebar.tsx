@@ -35,6 +35,7 @@ import {
 import { useSecurityContext } from '../../auth/context';
 import { useTheme } from '../../hooks/useTheme';
 import { WorkspaceTab } from './TopBar';
+import { getRouteLabel } from '../../config/routeRegistry';
 
 interface SidebarProps {
   activeTab: WorkspaceTab;
@@ -77,24 +78,24 @@ export const Sidebar: React.FC<SidebarProps> = ({
       {
         title: 'Console Yayasan',
         items: [
-          { tab: 'FOUNDATION_GOVERNANCE', label: 'Console Yayasan', icon: Building2 },
-          { tab: 'INSTITUTIONAL_HEALTH', label: 'Statistik Unit', icon: Flame },
-          { tab: 'GOVERNANCE', label: 'Audit Tata Kelola', icon: ShieldCheck }
+          { tab: 'FOUNDATION_GOVERNANCE', label: getRouteLabel('FOUNDATION_GOVERNANCE', role), icon: Building2 },
+          { tab: 'INSTITUTIONAL_HEALTH', label: getRouteLabel('INSTITUTIONAL_HEALTH', role), icon: Flame },
+          { tab: 'GOVERNANCE', label: getRouteLabel('GOVERNANCE', role), icon: ShieldCheck }
         ]
       },
       {
         title: 'Akademik & PPDB',
         items: [
-          { tab: 'ACADEMIC_LIFECYCLE', label: 'Tahun Ajaran', icon: Compass },
-          { tab: 'COHORT_PROMOTION', label: 'Kenaikan Kelas', icon: GraduationCap },
-          { tab: 'GRADUATION_REGISTRY', label: 'Buku Induk', icon: FileCheck2 },
-          { tab: 'ADMISSIONS_PORTAL', label: 'Portal PPDB', icon: HeartHandshake }
+          { tab: 'ACADEMIC_LIFECYCLE', label: getRouteLabel('ACADEMIC_LIFECYCLE', role), icon: Compass },
+          { tab: 'COHORT_PROMOTION', label: getRouteLabel('COHORT_PROMOTION', role), icon: GraduationCap },
+          { tab: 'GRADUATION_REGISTRY', label: getRouteLabel('GRADUATION_REGISTRY', role), icon: FileCheck2 },
+          { tab: 'ADMISSIONS_PORTAL', label: getRouteLabel('ADMISSIONS_PORTAL', role), icon: HeartHandshake }
         ]
       },
       {
         title: 'Administrasi',
         items: [
-          { tab: 'PROVISIONING', label: 'Kesiapan Unit', icon: Settings }
+          { tab: 'PROVISIONING', label: getRouteLabel('PROVISIONING', role), icon: Settings }
         ]
       }
     ];
@@ -103,25 +104,25 @@ export const Sidebar: React.FC<SidebarProps> = ({
       {
         title: 'Kepemimpinan Sekolah',
         items: [
-          { tab: 'HEADMASTER_ADOPTION', label: 'Kotak Kebijakan', icon: ShieldCheck },
-          { tab: 'INSTITUTIONAL_HEALTH', label: 'Statistik Unit', icon: Flame },
-          { tab: 'ADMISSIONS_DESK', label: 'Meja PPDB', icon: HeartHandshake }
+          { tab: 'HEADMASTER_ADOPTION', label: getRouteLabel('HEADMASTER_ADOPTION', role), icon: ShieldCheck },
+          { tab: 'INSTITUTIONAL_HEALTH', label: getRouteLabel('INSTITUTIONAL_HEALTH', role), icon: Flame },
+          { tab: 'ADMISSIONS_DESK', label: getRouteLabel('ADMISSIONS_DESK', role), icon: HeartHandshake }
         ]
       },
       {
         title: 'Akademik & Observasi',
         items: [
-          { tab: 'DEVELOPMENT', label: 'Verifikasi LPPA', icon: TrendingUp },
-          { tab: 'STUDENT_JOURNEY', label: 'Jejak Anak', icon: Sparkles },
-          { tab: 'ROSTER', label: 'Data Roster', icon: Users }
+          { tab: 'DEVELOPMENT', label: getRouteLabel('DEVELOPMENT', role), icon: TrendingUp },
+          { tab: 'STUDENT_JOURNEY', label: getRouteLabel('STUDENT_JOURNEY', role), icon: Sparkles },
+          { tab: 'ROSTER', label: getRouteLabel('ROSTER', role), icon: Users }
         ]
       },
       {
         title: 'Tata Kelola',
         items: [
-          { tab: 'ACADEMIC_LIFECYCLE', label: 'Tahun Ajaran', icon: Compass },
-          { tab: 'COHORT_PROMOTION', label: 'Kenaikan Kelas', icon: GraduationCap },
-          { tab: 'GRADUATION_REGISTRY', label: 'Buku Induk', icon: FileCheck2 }
+          { tab: 'ACADEMIC_LIFECYCLE', label: getRouteLabel('ACADEMIC_LIFECYCLE', role), icon: Compass },
+          { tab: 'COHORT_PROMOTION', label: getRouteLabel('COHORT_PROMOTION', role), icon: GraduationCap },
+          { tab: 'GRADUATION_REGISTRY', label: getRouteLabel('GRADUATION_REGISTRY', role), icon: FileCheck2 }
         ]
       }
     ];
@@ -130,7 +131,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
       {
         title: 'Layanan PPDB',
         items: [
-          { tab: 'ADMISSIONS_PORTAL', label: 'Pendaftaran PPDB', icon: HeartHandshake }
+          { tab: 'ADMISSIONS_PORTAL', label: getRouteLabel('ADMISSIONS_PORTAL', role), icon: HeartHandshake }
         ]
       }
     ];
@@ -139,16 +140,16 @@ export const Sidebar: React.FC<SidebarProps> = ({
       {
         title: 'Portal Keluarga',
         items: [
-          { tab: 'GUARDIAN_WORKSPACE', label: 'Portal Keluarga', icon: Home },
-          { tab: 'COMMUNICATION', label: 'Buku Penghubung', icon: MessageSquare },
-          { tab: 'DEVELOPMENT', label: 'Perkembangan Ananda', icon: TrendingUp },
-          { tab: 'STUDENT_JOURNEY', label: 'Jejak Anak', icon: Sparkles }
+          { tab: 'GUARDIAN_WORKSPACE', label: getRouteLabel('GUARDIAN_WORKSPACE', role), icon: Home },
+          { tab: 'COMMUNICATION', label: getRouteLabel('COMMUNICATION', role), icon: MessageSquare },
+          { tab: 'DEVELOPMENT', label: getRouteLabel('DEVELOPMENT', role), icon: TrendingUp },
+          { tab: 'STUDENT_JOURNEY', label: getRouteLabel('STUDENT_JOURNEY', role), icon: Sparkles }
         ]
       },
       {
         title: 'Layanan Sekolah',
         items: [
-          { tab: 'ADMISSIONS_PORTAL', label: 'Pendaftaran PPDB', icon: HeartHandshake }
+          { tab: 'ADMISSIONS_PORTAL', label: getRouteLabel('ADMISSIONS_PORTAL', role), icon: HeartHandshake }
         ]
       }
     ];
@@ -158,24 +159,24 @@ export const Sidebar: React.FC<SidebarProps> = ({
       {
         title: 'Ruang Kelas',
         items: [
-          { tab: 'TEACHER_HOME', label: 'Beranda Kelas', icon: Home },
-          { tab: 'ATTENDANCE', label: 'Presensi Harian', icon: CalendarCheck2 },
-          { tab: 'DAILY_WORK', label: 'Jurnal Harian', icon: Clock }
+          { tab: 'TEACHER_HOME', label: getRouteLabel('TEACHER_HOME', role), icon: Home },
+          { tab: 'ATTENDANCE', label: getRouteLabel('ATTENDANCE', role), icon: CalendarCheck2 },
+          { tab: 'DAILY_WORK', label: getRouteLabel('DAILY_WORK', role), icon: Clock }
         ]
       },
       {
         title: 'Akademik & Observasi',
         items: [
-          { tab: 'OBSERVATIONS', label: 'Momen Belajar', icon: Palette },
-          { tab: 'DEVELOPMENT', label: 'Rapor LPPA', icon: TrendingUp },
-          { tab: 'STUDENT_JOURNEY', label: 'Jejak Anak', icon: Sparkles }
+          { tab: 'OBSERVATIONS', label: getRouteLabel('OBSERVATIONS', role), icon: Palette },
+          { tab: 'DEVELOPMENT', label: getRouteLabel('DEVELOPMENT', role), icon: TrendingUp },
+          { tab: 'STUDENT_JOURNEY', label: getRouteLabel('STUDENT_JOURNEY', role), icon: Sparkles }
         ]
       },
       {
         title: 'Kemitraan & Roster',
         items: [
-          { tab: 'COMMUNICATION', label: 'Buku Penghubung', icon: MessageSquare },
-          { tab: 'ROSTER', label: 'Data Roster', icon: Users }
+          { tab: 'COMMUNICATION', label: getRouteLabel('COMMUNICATION', role), icon: MessageSquare },
+          { tab: 'ROSTER', label: getRouteLabel('ROSTER', role), icon: Users }
         ]
       }
     ];

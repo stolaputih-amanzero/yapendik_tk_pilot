@@ -15,6 +15,7 @@ export interface TabMetadata {
   category: string;
   description: string;
   hash: string;
+  contextualTitles?: Partial<Record<string, string>>;
 }
 
 export const ROUTE_REGISTRY: Record<WorkspaceTab, TabMetadata> = {
@@ -48,12 +49,19 @@ export const ROUTE_REGISTRY: Record<WorkspaceTab, TabMetadata> = {
     shortTitle: 'Rapor LPPA',
     category: 'Akademik',
     description: 'Laporan Perkembangan Profil Anak dan capaian tumbuh kembang.',
-    hash: 'perkembangan'
+    hash: 'perkembangan',
+    contextualTitles: {
+      HEADMASTER: 'Verifikasi LPPA',
+      GUARDIAN: 'Perkembangan Ananda',
+      PARENT_BUDI: 'Perkembangan Ananda',
+      TEACHER: 'Rapor LPPA',
+      ASSISTANT_TEACHER: 'Rapor LPPA'
+    }
   },
   ATTENDANCE: {
     id: 'ATTENDANCE',
-    title: 'Presensi',
-    shortTitle: 'Presensi',
+    title: 'Presensi Harian',
+    shortTitle: 'Presensi Harian',
     category: 'Ruang Kelas',
     description: 'Pencatatan kehadiran harian dan pemantauan ketidakhadiran.',
     hash: 'presensi'
@@ -84,8 +92,8 @@ export const ROUTE_REGISTRY: Record<WorkspaceTab, TabMetadata> = {
   },
   GOVERNANCE: {
     id: 'GOVERNANCE',
-    title: 'Log Keamanan',
-    shortTitle: 'Log Keamanan',
+    title: 'Audit Tata Kelola',
+    shortTitle: 'Audit Tata Kelola',
     category: 'Tata Kelola',
     description: 'Audit jejak kanonikal dan pemantauan integritas institusi.',
     hash: 'evaluasi-sekolah'
@@ -120,7 +128,12 @@ export const ROUTE_REGISTRY: Record<WorkspaceTab, TabMetadata> = {
     shortTitle: 'Portal PPDB',
     category: 'Penerimaan',
     description: 'Pendaftaran peserta didik baru dan pemantauan status berkas.',
-    hash: 'portal-ppdb'
+    hash: 'portal-ppdb',
+    contextualTitles: {
+      APPLICANT: 'Pendaftaran PPDB',
+      GUARDIAN: 'Pendaftaran PPDB',
+      PARENT_BUDI: 'Pendaftaran PPDB'
+    }
   },
   ADMISSIONS_DESK: {
     id: 'ADMISSIONS_DESK',
@@ -148,24 +161,24 @@ export const ROUTE_REGISTRY: Record<WorkspaceTab, TabMetadata> = {
   },
   COHORT_PROMOTION: {
     id: 'COHORT_PROMOTION',
-    title: 'Promosi Kelas',
-    shortTitle: 'Promosi Kelas',
+    title: 'Kenaikan Kelas',
+    shortTitle: 'Kenaikan Kelas',
     category: 'Akademik',
     description: 'Proses penentuan kenaikan kelompok bermain dan kelas TK.',
     hash: 'kenaikan-kelas'
   },
   GRADUATION_REGISTRY: {
     id: 'GRADUATION_REGISTRY',
-    title: 'Buku Kelulusan',
-    shortTitle: 'Buku Kelulusan',
+    title: 'Buku Induk',
+    shortTitle: 'Buku Induk',
     category: 'Akademik',
     description: 'Penerbitan surat tanda tamat belajar dan arsip kelulusan.',
     hash: 'kelulusan'
   },
   PROVISIONING: {
     id: 'PROVISIONING',
-    title: 'Pengaturan Unit',
-    shortTitle: 'Pengaturan Unit',
+    title: 'Kesiapan Unit',
+    shortTitle: 'Kesiapan Unit',
     category: 'Tata Kelola',
     description: 'Manajemen hak akses, akun pendidik, dan profil institusi.',
     hash: 'manajemen-pengguna'
@@ -198,3 +211,16 @@ export function getTabMetadata(tab: string | WorkspaceTab): TabMetadata {
     hash: String(tab).toLowerCase().replace(/_/g, '-')
   };
 }
+
+/**
+ * Returns contextual route label tailored to user role, strictly respecting
+ * the Amanaura Law (<= 2 words, max 16 chars).
+ */
+export function getRouteLabel(tab: string | WorkspaceTab, role?: string): string {
+  const meta = getTabMetadata(tab);
+  if (role && meta.contextualTitles && meta.contextualTitles[role]) {
+    return meta.contextualTitles[role]!;
+  }
+  return meta.title;
+}
+

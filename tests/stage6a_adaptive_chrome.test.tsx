@@ -16,7 +16,7 @@ import { TopBar, WorkspaceTab } from '../src/components/layout/TopBar';
 import { ProfileDrawer } from '../src/components/layout/ProfileDrawer';
 import { Sidebar } from '../src/components/layout/Sidebar';
 import { MobileOmniBar } from '../src/components/layout/MobileOmniBar';
-import { ROUTE_REGISTRY, getTabMetadata } from '../src/config/routeRegistry';
+import { ROUTE_REGISTRY, getTabMetadata, getRouteLabel } from '../src/config/routeRegistry';
 import { SecurityContextProvider } from '../src/auth/context';
 
 console.log('════════════════════════════════════════════════════════════════');
@@ -74,6 +74,22 @@ async function runAdaptiveChromeTests() {
       assert.equal(meta.category, 'Manajemen Unit');
       assert.ok(meta.title.split(' ').length <= 2, 'Title must be <= 2 words');
       assert.ok(meta.title.length <= 16, 'Title must be <= 16 chars');
+    });
+
+    runCheck('Route Registry [HARMONIZED CANONICALS]: Verifies unified Indonesian terminology', () => {
+      assert.equal(getRouteLabel('COHORT_PROMOTION'), 'Kenaikan Kelas');
+      assert.equal(getRouteLabel('GRADUATION_REGISTRY'), 'Buku Induk');
+      assert.equal(getRouteLabel('ATTENDANCE'), 'Presensi Harian');
+      assert.equal(getRouteLabel('GOVERNANCE'), 'Audit Tata Kelola');
+      assert.equal(getRouteLabel('PROVISIONING'), 'Kesiapan Unit');
+    });
+
+    runCheck('Route Registry [CONTEXTUAL LABELS]: Resolves role-tailored titles for DEVELOPMENT', () => {
+      assert.equal(getRouteLabel('DEVELOPMENT', 'HEADMASTER'), 'Verifikasi LPPA');
+      assert.equal(getRouteLabel('DEVELOPMENT', 'GUARDIAN'), 'Perkembangan Ananda');
+      assert.equal(getRouteLabel('DEVELOPMENT', 'TEACHER'), 'Rapor LPPA');
+      assert.equal(getRouteLabel('ADMISSIONS_PORTAL', 'APPLICANT'), 'Pendaftaran PPDB');
+      assert.equal(getRouteLabel('ADMISSIONS_PORTAL', 'YAPENDIK_SUPERADMIN'), 'Portal PPDB');
     });
 
     runCheck('Route Registry [FALLBACK]: Gracefully handles unknown tabs with fallback', () => {
@@ -315,6 +331,23 @@ async function runAdaptiveChromeTests() {
       assert.ok(!html.includes('Cari modul atau menu'), 'Expected zero search input in COMPACT sheet');
       assert.ok(!html.includes('Uji Otorisasi Sistem'), 'Expected zero TESTS row in COMPACT sheet');
       assert.ok(!html.includes('Living Contract &amp; Token Specimen'), 'Expected zero Living Contract row in COMPACT sheet');
+    });
+
+    runCheck('MobileOmniBar [HEADMASTER MOBILE PARITY]: Renders "Verifikasi LPPA" and "Data Roster" in mobile sheet', () => {
+      const html = renderToString(
+        <SecurityContextProvider initialPersonaId="user_headmaster_sheryl">
+          <MobileOmniBar
+            activeTab="HEADMASTER_ADOPTION"
+            onSelectTab={() => { }}
+            initialExpanded={true}
+          />
+        </SecurityContextProvider>
+      );
+      assert.ok(html.includes('Verifikasi LPPA'), 'Expected "Verifikasi LPPA" in Headmaster mobile menu');
+      assert.ok(html.includes('Data Roster'), 'Expected "Data Roster" in Headmaster mobile menu');
+      assert.ok(html.includes('Kenaikan Kelas'), 'Expected "Kenaikan Kelas" in Headmaster mobile menu');
+      assert.ok(html.includes('Buku Induk'), 'Expected "Buku Induk" in Headmaster mobile menu');
+      assert.ok(!html.includes('Audit Tata Kelola'), 'Did not expect Audit Tata Kelola in Headmaster mobile menu');
     });
   }
 

@@ -13,23 +13,23 @@ import { useSecurityContext } from '../../auth/context';
 import { useTheme } from '../../hooks/useTheme';
 import { useInstallPrompt } from '../../hooks/useInstallPrompt';
 import { WorkspaceTab } from './TopBar';
-import { getTabMetadata } from '../../config/routeRegistry';
+import { getRouteLabel, getTabMetadata } from '../../config/routeRegistry';
 import { 
   ChevronUp, 
   X, 
   Activity, 
-  Settings2, 
+  Settings, 
   Clock, 
-  Shield, 
-  Landmark, 
-  ArrowUpRight, 
+  ShieldCheck, 
+  Building2, 
+  Flame, 
+  Compass, 
+  FileCheck2, 
+  HeartHandshake, 
+  CalendarCheck2, 
   GraduationCap, 
   Home, 
   Sparkles, 
-  FileCheck, 
-  CheckSquare, 
-  ClipboardList, 
-  UserCheck, 
   TrendingUp, 
   MessageSquare, 
   Users, 
@@ -169,52 +169,61 @@ export const MobileOmniBar: React.FC<MobileOmniBarProps> = ({
     touchStartYRef.current = null;
   };
 
-  // 3×3 Curated Primary Grid per Persona (ADR-UX-012 Addendum VIII)
+  // Curated Primary Grid per Persona matching Desktop Sidebar
   let primaryItems: NavItem[] = [];
 
   if (isSuperadminOrFoundation) {
     primaryItems = [
-      { tab: 'INSTITUTIONAL_HEALTH', label: getTabMetadata('INSTITUTIONAL_HEALTH').title, icon: Activity },
-      { tab: 'FOUNDATION_GOVERNANCE', label: getTabMetadata('FOUNDATION_GOVERNANCE').title, icon: Landmark },
-      { tab: 'PROVISIONING', label: getTabMetadata('PROVISIONING').title, icon: Settings2 },
-      { tab: 'ACADEMIC_LIFECYCLE', label: getTabMetadata('ACADEMIC_LIFECYCLE').title, icon: Clock },
-      { tab: 'GOVERNANCE', label: getTabMetadata('GOVERNANCE').title, icon: Shield },
-      { tab: 'COHORT_PROMOTION', label: getTabMetadata('COHORT_PROMOTION').title, icon: ArrowUpRight },
-      { tab: 'GRADUATION_REGISTRY', label: getTabMetadata('GRADUATION_REGISTRY').title, icon: GraduationCap },
-      { tab: 'TEACHER_HOME', label: getTabMetadata('TEACHER_HOME').title, icon: Home },
+      { tab: 'FOUNDATION_GOVERNANCE', label: getRouteLabel('FOUNDATION_GOVERNANCE', role), icon: Building2 },
+      { tab: 'INSTITUTIONAL_HEALTH', label: getRouteLabel('INSTITUTIONAL_HEALTH', role), icon: Flame },
+      { tab: 'GOVERNANCE', label: getRouteLabel('GOVERNANCE', role), icon: ShieldCheck },
+      { tab: 'ACADEMIC_LIFECYCLE', label: getRouteLabel('ACADEMIC_LIFECYCLE', role), icon: Compass },
+      { tab: 'COHORT_PROMOTION', label: getRouteLabel('COHORT_PROMOTION', role), icon: GraduationCap },
+      { tab: 'GRADUATION_REGISTRY', label: getRouteLabel('GRADUATION_REGISTRY', role), icon: FileCheck2 },
+      { tab: 'ADMISSIONS_PORTAL', label: getRouteLabel('ADMISSIONS_PORTAL', role), icon: HeartHandshake },
+      { tab: 'PROVISIONING', label: getRouteLabel('PROVISIONING', role), icon: Settings },
       { isProfile: true, label: 'Profil', icon: CircleUser }
     ];
   } else if (isHeadmaster) {
     primaryItems = [
-      { tab: 'ADMISSIONS_DESK', label: getTabMetadata('ADMISSIONS_DESK').title, icon: FileCheck },
-      { tab: 'HEADMASTER_ADOPTION', label: getTabMetadata('HEADMASTER_ADOPTION').title, icon: CheckSquare },
-      { tab: 'INSTITUTIONAL_HEALTH', label: getTabMetadata('INSTITUTIONAL_HEALTH').title, icon: Activity },
-      { tab: 'COHORT_PROMOTION', label: getTabMetadata('COHORT_PROMOTION').title, icon: ArrowUpRight },
-      { tab: 'GRADUATION_REGISTRY', label: getTabMetadata('GRADUATION_REGISTRY').title, icon: GraduationCap },
-      { tab: 'ACADEMIC_LIFECYCLE', label: getTabMetadata('ACADEMIC_LIFECYCLE').title, icon: Clock },
-      { tab: 'GOVERNANCE', label: getTabMetadata('GOVERNANCE').title, icon: Shield },
-      { tab: 'STUDENT_JOURNEY', label: getTabMetadata('STUDENT_JOURNEY').title, icon: Sparkles },
+      { tab: 'HEADMASTER_ADOPTION', label: getRouteLabel('HEADMASTER_ADOPTION', role), icon: ShieldCheck },
+      { tab: 'INSTITUTIONAL_HEALTH', label: getRouteLabel('INSTITUTIONAL_HEALTH', role), icon: Flame },
+      { tab: 'ADMISSIONS_DESK', label: getRouteLabel('ADMISSIONS_DESK', role), icon: HeartHandshake },
+      { tab: 'DEVELOPMENT', label: getRouteLabel('DEVELOPMENT', role), icon: TrendingUp },
+      { tab: 'STUDENT_JOURNEY', label: getRouteLabel('STUDENT_JOURNEY', role), icon: Sparkles },
+      { tab: 'ROSTER', label: getRouteLabel('ROSTER', role), icon: Users },
+      { tab: 'ACADEMIC_LIFECYCLE', label: getRouteLabel('ACADEMIC_LIFECYCLE', role), icon: Compass },
+      { tab: 'COHORT_PROMOTION', label: getRouteLabel('COHORT_PROMOTION', role), icon: GraduationCap },
+      { tab: 'GRADUATION_REGISTRY', label: getRouteLabel('GRADUATION_REGISTRY', role), icon: FileCheck2 },
       { isProfile: true, label: 'Profil', icon: CircleUser }
     ];
   } else if (isGuardianOrApplicant) {
-    primaryItems = [
-      { tab: 'GUARDIAN_WORKSPACE', label: getTabMetadata('GUARDIAN_WORKSPACE').title, icon: Home },
-      { tab: 'COMMUNICATION', label: getTabMetadata('COMMUNICATION').title, icon: MessageSquare },
-      { tab: 'STUDENT_JOURNEY', label: getTabMetadata('STUDENT_JOURNEY').title, icon: Sparkles },
-      { tab: 'ADMISSIONS_PORTAL', label: getTabMetadata('ADMISSIONS_PORTAL').title, icon: UserCheck },
-      { isProfile: true, label: 'Profil', icon: CircleUser }
-    ];
+    if (role === 'APPLICANT' || securityContext?.role === 'APPLICANT_GUARDIAN') {
+      primaryItems = [
+        { tab: 'ADMISSIONS_PORTAL', label: getRouteLabel('ADMISSIONS_PORTAL', role), icon: HeartHandshake },
+        { isProfile: true, label: 'Profil', icon: CircleUser }
+      ];
+    } else {
+      primaryItems = [
+        { tab: 'GUARDIAN_WORKSPACE', label: getRouteLabel('GUARDIAN_WORKSPACE', role), icon: Home },
+        { tab: 'COMMUNICATION', label: getRouteLabel('COMMUNICATION', role), icon: MessageSquare },
+        { tab: 'DEVELOPMENT', label: getRouteLabel('DEVELOPMENT', role), icon: TrendingUp },
+        { tab: 'STUDENT_JOURNEY', label: getRouteLabel('STUDENT_JOURNEY', role), icon: Sparkles },
+        { tab: 'ADMISSIONS_PORTAL', label: getRouteLabel('ADMISSIONS_PORTAL', role), icon: HeartHandshake },
+        { isProfile: true, label: 'Profil', icon: CircleUser }
+      ];
+    }
   } else {
-    // Default: TEACHER (3×3 Perfect Grid: 8 Curated Primitives + Profil)
+    // Default: TEACHER (8 Curated Primitives + Profil)
     primaryItems = [
-      { tab: 'TEACHER_HOME', label: getTabMetadata('TEACHER_HOME').title, icon: Home },
-      { tab: 'ATTENDANCE', label: getTabMetadata('ATTENDANCE').title, icon: UserCheck },
-      { tab: 'OBSERVATIONS', label: getTabMetadata('OBSERVATIONS').title, icon: Sparkles },
-      { tab: 'DEVELOPMENT', label: getTabMetadata('DEVELOPMENT').title, icon: TrendingUp },
-      { tab: 'DAILY_WORK', label: getTabMetadata('DAILY_WORK').title, icon: ClipboardList },
-      { tab: 'COMMUNICATION', label: getTabMetadata('COMMUNICATION').title, icon: MessageSquare },
-      { tab: 'STUDENT_JOURNEY', label: getTabMetadata('STUDENT_JOURNEY').title, icon: Palette },
-      { tab: 'ROSTER', label: getTabMetadata('ROSTER').title, icon: Users },
+      { tab: 'TEACHER_HOME', label: getRouteLabel('TEACHER_HOME', role), icon: Home },
+      { tab: 'ATTENDANCE', label: getRouteLabel('ATTENDANCE', role), icon: CalendarCheck2 },
+      { tab: 'DAILY_WORK', label: getRouteLabel('DAILY_WORK', role), icon: Clock },
+      { tab: 'OBSERVATIONS', label: getRouteLabel('OBSERVATIONS', role), icon: Palette },
+      { tab: 'DEVELOPMENT', label: getRouteLabel('DEVELOPMENT', role), icon: TrendingUp },
+      { tab: 'STUDENT_JOURNEY', label: getRouteLabel('STUDENT_JOURNEY', role), icon: Sparkles },
+      { tab: 'COMMUNICATION', label: getRouteLabel('COMMUNICATION', role), icon: MessageSquare },
+      { tab: 'ROSTER', label: getRouteLabel('ROSTER', role), icon: Users },
       { isProfile: true, label: 'Profil', icon: CircleUser }
     ];
   }
