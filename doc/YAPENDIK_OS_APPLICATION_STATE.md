@@ -341,13 +341,38 @@ Item-item berikut telah didokumentasikan secara transparan dalam [`doc/MASTER/ST
 
 ---
 
+### Stage 6 Gate 1: Data Roster & Student Identity State
+
+```text
+╔══════════════════════════════════════════════════════════════════════════════╗
+║              STAGE 6 GATE 1: DATA ROSTER CERTIFIED STATE                     ║
+╠══════════════════════════════════════════════════════════════════════════════╣
+║  Roster & Class Switching (TK A / TK B)     : 🟢 CERTIFIED & VERIFIED        ║
+║  Student Photo Storage Engine (Supabase)    : 🟢 CERTIFIED & VERIFIED        ║
+║  Parent / Guardian Fallback Relations       : 🟢 CERTIFIED & VERIFIED        ║
+║  Cross-Class Directory Visibility (School)  : 🟢 CERTIFIED & VERIFIED        ║
+║  Master Data Edit Restriction (Headmaster)  : 🟢 CERTIFIED & VERIFIED        ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+```
+
+- **Dokumentasi Formal**: [`doc/MASTER/STAGE_6_GATE_1_DATA_ROSTER_CLOSURE_v1.0.md`](file:///d:/PROJECT/yapendik-tk-pilot/doc/MASTER/STAGE_6_GATE_1_DATA_ROSTER_CLOSURE_v1.0.md)
+- **Komponen Kunci**:
+  - `src/pages/roster/DataRosterWorkspace.tsx`
+  - `src/components/roster/StudentListItem.tsx` (Avatar 1 warna, Preview Dialog, Full Address, Guardian Links)
+  - `src/components/roster/StudentPhotoUpload.tsx` (Kamera, Unggah, Reset Default)
+  - `src/lib/queries/class-queries.ts` (Hybrid Cache-First, RPC photo update, Guardian fallback)
+- **Migrasi Database**: `20260902040000` s.d. `20260902080000` (termasuk RPC `rpc_update_student_photo` & Storage Bucket `student-photos` public).
+
+---
+
 ### Recommendations for AI Memory
 
 Untuk memastikan AI Agent / Copilot mempertahankan pemahaman yang konsisten dan akurat pada interaksi mendatang:
 
 1. **Jadikan [`rules.md`](file:///d:/PROJECT/yapendik-tk-pilot/rules.md) sebagai Hirarki Otoritas Utama**: AI adalah *Implementation Agent (Level 6)*, bukan *Architecture Authority*. Modifikasi pada area FROZEN wajib melalui ADR.
-2. **Pertahankan Integritas 234 Existing Checks**: Setiap perubahan kode wajib lulus `npm run lint` (0 errors) dan `npm test` (234/234 pass).
-3. **Patuhi Pemisahan Siklus Hidup H-01**: `InstitutionalActionRecord` adalah identity anchor (`action_id`). State machine operasional hidup di `SupportPayload` dan `DirectivePayload`, bukan di action root.
-4. **Terapkan Penegakan Privasi FB-07 ($K_{\min} = 5$) & Anti-Differencing**: Jangan pernah menampilkan data agregat untuk kelompok $< 5$ anak atau kelompok dengan selisih irisan $< 5$ anak ke level Yayasan.
-5. **Kunci Otoritas Sekolah (FB-03 & FB-06)**: Yayasan tidak memiliki hak mutasi kanonikal terhadap presensi, observasi, atau penilaian siswa di sekolah.
-6. **Gunakan Kosakata Tata Kelola Baku**: `FROZEN`, `LIVING`, `VERIFIED`, `NOT VERIFIED`, `BLOCKED`, `GOVERNANCE STOP`.
+2. **Pertahankan Integritas 234 Existing Checks & Token Purity**: Setiap perubahan kode wajib lulus `pnpm run lint` (0 errors) dan `node scripts/token-purity.mjs` (0 violations).
+3. **Patuhi Pemisahan Hak Akses Guru**: Guru memiliki hak baca (*Read*) direktori seluruh siswa satu sekolah di Data Roster (`auth_shares_school_with`), namun mutasi asesmen/presensi/LPPA terikat pada kelas tugas masing-masing (`DENY_CLASS_UNASSIGNED`).
+4. **Patuhi Pemisahan Siklus Hidup H-01**: `InstitutionalActionRecord` adalah identity anchor (`action_id`). State machine operasional hidup di `SupportPayload` dan `DirectivePayload`, bukan di action root.
+5. **Terapkan Penegakan Privasi FB-07 ($K_{\min} = 5$) & Anti-Differencing**: Jangan pernah menampilkan data agregat untuk kelompok $< 5$ anak atau kelompok dengan selisih irisan $< 5$ anak ke level Yayasan.
+6. **Kunci Otoritas Sekolah (FB-03 & FB-06)**: Yayasan tidak memiliki hak mutasi kanonikal terhadap presensi, observasi, atau penilaian siswa di sekolah.
+7. **Gunakan Kosakata Tata Kelola Baku**: `FROZEN`, `LIVING`, `VERIFIED`, `NOT VERIFIED`, `BLOCKED`, `GOVERNANCE STOP`.
