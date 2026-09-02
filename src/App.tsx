@@ -260,7 +260,7 @@ const AppContent: React.FC = () => {
           {activeTab === 'ACADEMIC_LIFECYCLE' && <AcademicLifecycleWorkspace />}
           {activeTab === 'COHORT_PROMOTION' && <CohortPromotionWorkspace />}
           {activeTab === 'GRADUATION_REGISTRY' && <GraduationRegistryWorkspace />}
-          {activeTab === 'FOUNDATION_GOVERNANCE' && <FoundationLayout />}
+          {activeTab === 'FOUNDATION_GOVERNANCE' && <FoundationLayout onNavigateTab={setActiveTab} />}
           {activeTab === 'HEADMASTER_ADOPTION' && <HeadmasterAdoptionLayout onNavigateTab={setActiveTab} />}
           {activeTab === 'GUARDIAN_WORKSPACE' && <GuardianWorkspace />}
           {activeTab === 'ADMISSIONS_PORTAL' && (

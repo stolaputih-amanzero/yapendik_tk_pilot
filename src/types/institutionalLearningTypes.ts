@@ -151,6 +151,12 @@ export interface DerivedAnalyticalPattern {
   computed_metric_value?: number; // number | undefined (Undefined if exposure_status !== 'VISIBLE')
   pattern_status: PatternLifecycleStatus;
   detected_at: string;
+  curriculum_domain?: string;
+  pattern_name?: string;
+  statistical_significance?: string;
+  description?: string;
+  sample_size_classes?: number;
+  confidence_score?: number;
 }
 
 /**

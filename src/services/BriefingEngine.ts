@@ -491,20 +491,11 @@ export class BriefingEngineService {
 
     if (role === 'FOUNDATION') {
       const person = userId ? db.getPersonById(userId) : null;
-      const isAndreas = Boolean(
-        userId && (
-          userId === 'user_superadmin_yapendik' ||
-          userId === 'per_superadmin_andreas' ||
-          userId.toLowerCase().includes('andreas')
-        )
-      );
       let foundationSalutation = 'Ibu Shirley';
-      if (isAndreas) {
-        foundationSalutation = 'Pak Andreas';
-      } else if (person?.preferredName) {
+      if (person?.preferredName) {
         foundationSalutation = person.preferredName;
       } else if (person?.fullName) {
-        foundationSalutation = 'Ibu ' + person.fullName.split(' ')[0];
+        foundationSalutation = person.fullName.includes('SHIRLEY') ? 'Ibu Shirley' : ('Ibu ' + person.fullName.split(' ')[0]);
       }
 
       const foundationData: FoundationBriefingData = {
@@ -528,7 +519,7 @@ export class BriefingEngineService {
         },
         warm_echo: {
           source_type: 'HEADMASTER_NOTE',
-          source_author: isAndreas ? 'Kepala Sekolah TK Menteng' : 'Kepala Sekolah TK Maranatha',
+          source_author: 'Kepala Sekolah TK Maranatha',
           quote_text: 'Bantuan material loose-parts telah aktif digunakan dalam 4 siklus bermain.',
           timestamp: 'Kemarin'
         }
