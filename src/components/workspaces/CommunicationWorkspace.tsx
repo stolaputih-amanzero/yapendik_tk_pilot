@@ -172,7 +172,7 @@ export const CommunicationWorkspace: React.FC = () => {
   // Empty State if teacher has no assigned classes (ARB Directive #5)
   if (!isGuardian && !hasSupervisoryPrivilege && assignedClasses.length === 0) {
     return (
-      <div className="w-full max-w-4xl mx-auto px-4 py-20 text-center space-y-4" data-testid="communication-workspace">
+      <div className="w-full space-y-4 py-16 text-center" data-testid="communication-workspace">
         <div className="w-16 h-16 rounded-3xl bg-surface-subtle border border-line flex items-center justify-center mx-auto text-ink-soft shadow-hairline">
           <MessageSquare className="w-8 h-8 text-ink-soft" />
         </div>
@@ -188,7 +188,7 @@ export const CommunicationWorkspace: React.FC = () => {
 
   return (
     <div 
-      className="w-full max-w-4xl mx-auto px-4 medium:px-6 pt-6 pb-[140px] space-y-7 animate-in fade-in duration-200 text-ink"
+      className="w-full space-y-6 animate-in fade-in duration-200 text-ink"
       data-testid="communication-workspace"
     >
       {/* 1. Header Hero Canvas */}

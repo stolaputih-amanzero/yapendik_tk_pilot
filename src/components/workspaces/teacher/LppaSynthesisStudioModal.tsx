@@ -806,7 +806,7 @@ export const LppaSynthesisStudioModal: React.FC<Props> = ({
                 <button
                   onClick={handleSubmitForReview}
                   disabled={isSubmitting || report?.status === 'READY_FOR_REVIEW'}
-                  className="col-span-2 medium:col-span-1 px-4 py-2 rounded-field bg-lppa hover-only:bg-indigo-700 text-on-brand text-xs font-bold transition flex justify-center items-center gap-2 shadow-hairline cursor-pointer disabled:opacity-50"
+                  className="col-span-2 medium:col-span-1 px-4 py-2 rounded-field bg-lppa hover-only:opacity-90 text-on-brand text-xs font-bold transition flex justify-center items-center gap-2 shadow-hairline cursor-pointer disabled:opacity-50"
                 >
                   <Send className="w-4 h-4" />
                   <span>{isSubmitting ? 'Mengajukan...' : 'Ajukan ke KS'}</span>

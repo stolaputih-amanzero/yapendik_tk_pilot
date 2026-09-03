@@ -63,7 +63,7 @@ export const CanonicalAnchor: React.FC<CanonicalAnchorProps> = ({
   return (
     <div 
       className={`inline-flex items-center gap-2 px-2 py-1 rounded-field border bg-surface-subtle/90 text-xs whitespace-nowrap ${
-        isClosedLoop ? 'border-success-line bg-success-tint/40 shadow-hairline ring-1 ring-emerald-400/30' : 'border-line'
+        isClosedLoop ? 'border-success-line bg-success-tint/40 shadow-hairline ring-1 ring-success-line/30' : 'border-line'
       } ${className}`}
       data-testid="canonical-anchor-badge"
     >

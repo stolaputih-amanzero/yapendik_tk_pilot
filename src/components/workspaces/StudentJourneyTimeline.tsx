@@ -19,7 +19,8 @@ import { childContinuityService } from '../../services/childContinuityService';
 import { LearningStimulationPlan } from '../../types/childContinuityTypes';
 import { LppaPrintPreviewModal } from './teacher/LppaPrintPreviewModal';
 import { CanonicalPublishedLppaRecord } from '../../types/lppaReportingTypes';
-import { SelectSheet, Button } from '../ui';
+import { admissionsService } from '../../services/admissionsService';
+import { SelectSheet, Button, AvatarChild } from '../ui';
 import { 
   Compass, 
   ShieldCheck, 
@@ -38,13 +39,63 @@ export const StudentJourneyTimeline: React.FC<{ initialStudentId?: string }> = (
   const currentSchoolId = securityContext?.activeSchoolId || 'sch_tk_yapendik_01';
   const isGuardian = currentPersona?.role === 'PARENT_BUDI' || securityContext?.role === 'GUARDIAN';
 
-  const [studentsList, setStudentsList] = useState<Array<{ id: string; name: string; nis: string; status: string }>>([]);
-  const [selectedStudentId, setSelectedStudentId] = useState<string>(initialStudentId || '');
-  const [trajectory, setTrajectory] = useState<StudentLongitudinalTrajectory | null>(null);
+  const [studentsList, setStudentsList] = useState<Array<{ id: string; name: string; nis: string; status: string }>>(() => {
+    if (isGuardian && securityContext?.guardianChildrenPersonIds) {
+      const guardianStudents = db.getStudents(currentSchoolId)
+        .filter(s => securityContext.guardianChildrenPersonIds?.includes(s.personId));
+      return guardianStudents.map(s => {
+        const p = db.getPersonById(s.personId);
+        return { id: s.id, name: p?.fullName || 'Anak Anda', nis: s.nis, status: s.status };
+      });
+    }
+    return [];
+  });
+  const [selectedStudentId, setSelectedStudentId] = useState<string>(() => {
+    if (initialStudentId) return initialStudentId;
+    if (isGuardian && securityContext?.guardianChildrenPersonIds) {
+      const guardianStudents = db.getStudents(currentSchoolId)
+        .filter(s => securityContext.guardianChildrenPersonIds?.includes(s.personId));
+      if (guardianStudents.length > 0) return guardianStudents[0].id;
+    }
+    return '';
+  });
+  const [trajectory, setTrajectory] = useState<StudentLongitudinalTrajectory | null>(() => {
+    if (initialStudentId) {
+      const student = db.getStudentById(initialStudentId);
+      if (student) {
+        const academicYears = db.getAcademicYears(student.schoolId);
+        const activePeriod = academicYears.find(a => a.isActive) || academicYears[0];
+        const currentClass = student.currentClassId ? db.getClassById(student.currentClassId) : null;
+        return {
+          student_id: student.id,
+          school_id: student.schoolId,
+          nis: student.nis,
+          current_status: student.status as any,
+          current_class_id: student.currentClassId,
+          placement_lineage: [
+            {
+              placement_id: 'plc_' + student.id + '_2026_ganjil',
+              academic_year_id: activePeriod?.id || 'ay_tk1_2026_ganjil',
+              academic_year_name: activePeriod?.name || 'T.A. 2026/2027',
+              semester: activePeriod?.semester || 'GANJIL',
+              class_id: student.currentClassId || 'cls_tka_01',
+              class_name: currentClass?.name || 'Kelompok TK A',
+              entry_date: student.enrollmentDate || '2026-07-15',
+              exit_date: null,
+              placement_status: student.status === 'GRADUATED' ? 'COMPLETED' : 'ACTIVE',
+              promotion_remarks: null
+            }
+          ],
+          lppa_history: []
+        };
+      }
+    }
+    return null;
+  });
   const [homePlans, setHomePlans] = useState<LearningStimulationPlan[]>([]);
   const [reflectionInput, setReflectionInput] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState<boolean>(() => !initialStudentId);
   const [refreshing, setRefreshing] = useState(false);
   const [errorFeedback, setErrorFeedback] = useState<TranslatedGovernanceError | null>(null);
   const [previewRecord, setPreviewRecord] = useState<CanonicalPublishedLppaRecord | null>(null);
@@ -162,8 +213,8 @@ export const StudentJourneyTimeline: React.FC<{ initialStudentId?: string }> = (
           </button>
         </div>
 
-        {/* 2. SELECTOR ANAK (Kontrol flat langsung di canvas) */}
-        {studentsList.length > 1 && (
+        {/* 2. SELECTOR ANAK ATAU IDENTITY BADGE HANGAT (Direktif G-3) */}
+        {studentsList.length > 1 ? (
           <div className="w-full max-w-md bg-surface-subtle rounded-xl min-h-[52px] p-2.5 flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 text-xs border border-line-hairline">
             <span className="text-ink-soft font-medium shrink-0">Pilih Profil Anak:</span>
             <div className="w-full sm:flex-1">
@@ -174,7 +225,14 @@ export const StudentJourneyTimeline: React.FC<{ initialStudentId?: string }> = (
               />
             </div>
           </div>
-        )}
+        ) : isGuardian && selectedStudentMeta ? (
+          <div className="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full bg-surface-subtle border border-line-hairline text-xs font-semibold text-ink shadow-hairline" data-testid="warm-child-identity-badge">
+            <AvatarChild name={selectedStudentMeta.name} id={selectedStudentId} size="sm" showSymbol={false} />
+            <span>Ananda {selectedStudentMeta.name}</span>
+            <span className="text-line-soft">•</span>
+            <span className="text-ink-soft font-mono">Kelas: {trajectory?.placement_lineage?.[0]?.class_name || 'TK A'}</span>
+          </div>
+        ) : null}
       </header>
 
       {/* Error / Privacy Boundary Warning */}
@@ -196,9 +254,11 @@ export const StudentJourneyTimeline: React.FC<{ initialStudentId?: string }> = (
           <div className="expanded:col-span-4 space-y-6">
             {/* Profil Avatar & Nama */}
             <div className="flex items-center gap-3 min-w-0">
-              <div className="w-12 h-12 rounded-xl bg-surface-subtle border border-line-hairline flex items-center justify-center text-ink-soft font-bold text-lg shrink-0">
-                <Baby className="w-6 h-6" />
-              </div>
+              <AvatarChild 
+                name={selectedStudentMeta?.name || 'Siswa'} 
+                id={selectedStudentId} 
+                size="lg" 
+              />
               <div className="min-w-0 flex-1">
                 <h3 className="text-base sm:text-lg font-bold text-ink tracking-tight truncate">
                   {selectedStudentMeta?.name || 'Profil Siswa'}
@@ -344,6 +404,70 @@ export const StudentJourneyTimeline: React.FC<{ initialStudentId?: string }> = (
 
             {/* 5. TIMELINE STEPPER KANONIKAL §5.1.2 (border-l-2 vertikal langsung di canvas) */}
             <div className="relative pl-6 space-y-8 border-l-2 border-line ml-3 sm:ml-4">
+              {/* MILE ZERO: INTAKE & OBSERVASI AWAL PENERIMAAN (ADR-05 CONTINUUM) */}
+              {(() => {
+                const baseline = admissionsService.getPromotedBaselineSnapshotByStudentId(selectedStudentId);
+                if (!baseline) return null;
+
+                return (
+                  <article className="relative space-y-2.5 pb-2" data-testid="mile-zero-node">
+                    {/* Node Dot: Centered on border-l-2 */}
+                    <div className="absolute -left-[33px] top-1 w-4 h-4 rounded-full border-2 border-brand-primary bg-surface flex items-center justify-center shadow-hairline">
+                      <div className="w-1.5 h-1.5 rounded-full bg-brand-primary" />
+                    </div>
+
+                    {/* Milestone Header */}
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
+                      <div className="flex flex-wrap items-center gap-2">
+                        <span className="text-sm sm:text-base font-bold font-mono text-ink">
+                          Mile Zero — Observasi Awal &amp; Intake Penerimaan
+                        </span>
+                        <span className="px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold uppercase tracking-wider bg-brand-tint text-brand-deep border border-brand-line">
+                          Inception Anchor
+                        </span>
+                      </div>
+                      <span className="text-xs font-mono text-ink-faint">
+                        Tanggal: {baseline.intake_observation_date || 'Awal Pendaftaran'}
+                      </span>
+                    </div>
+
+                    {/* Observasi Kualitatif & Rekomendasi Jenjang */}
+                    <p className="text-xs text-ink-soft leading-relaxed italic">
+                      "{baseline.qualitative_intake_notes || 'Observasi awal kesiapan belajar anak saat admisi resmi.'}"
+                    </p>
+
+                    {/* Domain Tumbuh Kembang Baseline (Tipografi Bersih Tanpa Box Bersarang) */}
+                    {baseline.developmental_domains && (
+                      <div className="pt-2 divide-y divide-line-soft text-xs">
+                        {Object.entries(baseline.developmental_domains).map(([domain, notes]) => (
+                          <div key={domain} className="py-1.5 flex flex-col sm:flex-row sm:items-start gap-1 sm:gap-4">
+                            <span className="font-semibold text-ink-soft sm:w-48 shrink-0 capitalize">
+                              {domain.replace(/_/g, ' ')}:
+                            </span>
+                            <span className="text-ink font-medium leading-relaxed">
+                              {String(notes)}
+                            </span>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+
+                    {/* Rekomendasi Penempatan Awal */}
+                    <div className="pt-1 flex items-center gap-2 text-xs text-ink-soft">
+                      <span className="font-semibold">Rekomendasi Rombel Awal:</span>
+                      <span className="font-mono font-bold text-ink">
+                        {baseline.recommended_class_level?.replace('_', ' ') || 'TK A'}
+                      </span>
+                      {baseline.special_learning_needs_flag && (
+                        <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-warning-tint text-warning-deep border border-warning-line">
+                          Perlu Perhatian Khusus
+                        </span>
+                      )}
+                    </div>
+                  </article>
+                );
+              })()}
+
               {trajectory.placement_lineage.map((plc) => {
                 const matchedLppa = trajectory.lppa_history.find(
                   l => l.academic_year_id === plc.academic_year_id && l.semester === plc.semester

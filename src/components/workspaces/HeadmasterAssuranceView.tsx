@@ -425,7 +425,7 @@ export const HeadmasterAssuranceView: React.FC<Props> = ({
                     {inc.status === 'RESOLVED' && (
                       <button
                         onClick={() => setSelectedIncidentForAudit(inc)}
-                        className="w-full medium:w-auto px-3 py-2 medium:py-1 text-xs font-bold rounded-lg bg-success hover-only:bg-emerald-700 text-on-brand flex justify-center items-center gap-1 cursor-pointer shadow-hairline"
+                        className="w-full medium:w-auto px-3 py-2 medium:py-1 text-xs font-bold rounded-lg bg-success hover-only:opacity-90 text-on-brand flex justify-center items-center gap-1 cursor-pointer shadow-hairline"
                       >
                         <FileCheck2 className="w-4 h-4" />
                         <span>Audit & Tutup Kasus</span>
@@ -575,7 +575,7 @@ export const HeadmasterAssuranceView: React.FC<Props> = ({
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="w-full medium:w-auto px-4 py-2 text-xs font-bold rounded-lg bg-success hover-only:bg-emerald-700 text-on-brand cursor-pointer shadow-hairline flex justify-center items-center"
+                  className="w-full medium:w-auto px-4 py-2 text-xs font-bold rounded-lg bg-success hover-only:opacity-90 text-on-brand cursor-pointer shadow-hairline flex justify-center items-center"
                 >
                   {isSubmitting ? 'Menutup...' : 'Tutup Kasus Permanen'}
                 </button>

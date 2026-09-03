@@ -17,6 +17,7 @@ import { GuardianBriefing } from '../../components/workspaces/briefing/GuardianB
 import { GuardianMomentsGallery } from './GuardianMomentsGallery';
 import { GuardianDevelopmentTimeline } from './GuardianDevelopmentTimeline';
 import { SegmentedControl } from '../../components/ui';
+import { db } from '../../db/database';
 import { Heart, Camera, BookOpen, User, RefreshCw } from 'lucide-react';
 
 export type GuardianTab = 'Hari Ini' | 'Momen & Karya' | 'Perkembangan';
@@ -50,73 +51,76 @@ export const GuardianWorkspace: React.FC = () => {
     loadData();
   }, [schoolId, currentPersona?.personId, currentPersona?.id]);
 
-  const childName = briefingData?.child_name || 'Millen';
+  // Dynamic Identity Binding (FB-01 & Direktif G-3)
+  const childPersonId = context?.securityContext?.guardianChildrenPersonIds?.[0];
+  const childPerson = childPersonId ? db.getPersonById(childPersonId) : null;
+  const childStudent = childPersonId ? db.getStudents(schoolId).find(s => s.personId === childPersonId) : null;
+  const childName = childPerson?.preferredName || childPerson?.fullName?.split(' ')[0] || briefingData?.child_name || 'Ananda';
+  const guardianDisplayName = currentPersona?.name || context?.securityContext?.personName || 'Wali Murid';
 
   return (
-    <div className="w-full min-h-[100dvh] bg-canvas text-ink pb-24 expanded:pb-8 font-sans animate-in fade-in duration-200">
-      <main className="max-w-4xl mx-auto px-4 medium:px-6 py-6 space-y-6">
-        {/* Top Family Header Bar */}
-        <div className="flex items-center justify-between pb-3 border-b border-line-hairline">
-          <div className="flex items-center gap-2 text-xs text-brand-deep font-semibold">
-            <Heart className="w-4 h-4 text-brand-primary" />
-            <span>Portal Keluarga • TK Yapendik</span>
-          </div>
-
-          <div className="flex items-center gap-2">
-            <button
-              type="button"
-              onClick={loadData}
-              disabled={isLoading}
-              className="p-2 rounded-xl bg-surface-subtle hover-only:bg-line-soft text-ink-soft text-xs transition-colors touch-target-min flex items-center gap-1.5"
-              aria-label="Segarkan Kabar"
-              title="Segarkan Kabar"
-            >
-              <RefreshCw className={`w-4 h-4 ${isLoading ? 'animate-spin text-brand-primary' : ''}`} />
-              <span className="hidden compact:inline">Segarkan</span>
-            </button>
-            <div className="px-3 py-1 rounded-xl bg-surface-subtle border border-line-hairline flex items-center gap-1.5 text-xs text-ink font-medium">
-              <User className="w-4 h-4 text-brand-primary" />
-              <span>{currentPersona?.name || 'Ibu Julen'}</span>
-            </div>
-          </div>
+    <div className="w-full space-y-6 text-ink font-sans animate-in fade-in duration-200" data-testid="guardian-workspace">
+      {/* Top Family Header Bar */}
+      <div className="flex items-center justify-between pb-3 border-b border-line-hairline">
+        <div className="flex items-center gap-2 text-xs text-brand-deep font-semibold">
+          <Heart className="w-4 h-4 text-brand-primary" />
+          <span>Portal Keluarga • TK Yapendik</span>
         </div>
 
-        {/* Tab Navigation Segmented Control */}
-        <div>
-          <SegmentedControl
-            options={[
-              { id: 'Hari Ini', label: 'Hari Ini', icon: Heart },
-              { id: 'Momen & Karya', label: 'Momen & Karya', icon: Camera },
-              { id: 'Perkembangan', label: 'Perkembangan', icon: BookOpen }
-            ]}
-            value={activeTab}
-            onChange={(val) => setActiveTab(val as GuardianTab)}
-            size="md"
-            className="w-full"
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
+            onClick={loadData}
+            disabled={isLoading}
+            className="p-2 rounded-xl bg-surface-subtle hover-only:bg-line-soft text-ink-soft text-xs transition-colors touch-target-min flex items-center gap-1.5 cursor-pointer"
+            aria-label="Segarkan Kabar"
+            title="Segarkan Kabar"
+          >
+            <RefreshCw className={`w-4 h-4 ${isLoading ? 'animate-spin text-brand-primary' : ''}`} />
+            <span className="hidden compact:inline">Segarkan</span>
+          </button>
+          <div className="px-3 py-1 rounded-xl bg-surface-subtle border border-line-hairline flex items-center gap-1.5 text-xs text-ink font-medium">
+            <User className="w-4 h-4 text-brand-primary" />
+            <span>{guardianDisplayName}</span>
+          </div>
+        </div>
+      </div>
+
+      {/* Tab Navigation Segmented Control */}
+      <div>
+        <SegmentedControl
+          options={[
+            { id: 'Hari Ini', label: 'Hari Ini', icon: Heart },
+            { id: 'Momen & Karya', label: 'Momen & Karya', icon: Camera },
+            { id: 'Perkembangan', label: 'Perkembangan', icon: BookOpen }
+          ]}
+          value={activeTab}
+          onChange={(val) => setActiveTab(val as GuardianTab)}
+          size="md"
+          className="w-full"
+        />
+      </div>
+
+      {/* Tab 1: Hari Ini (The Warm Briefing Surat Sore) */}
+      {activeTab === 'Hari Ini' && briefingData && (
+        <div className="space-y-4">
+          <GuardianBriefing
+            data={briefingData}
+            onViewMoments={() => setActiveTab('Momen & Karya')}
+            onViewDevelopment={() => setActiveTab('Perkembangan')}
           />
         </div>
+      )}
 
-        {/* Tab 1: Hari Ini (The Warm Briefing Surat Sore) */}
-        {activeTab === 'Hari Ini' && briefingData && (
-          <div className="space-y-4">
-            <GuardianBriefing
-              data={briefingData}
-              onViewMoments={() => setActiveTab('Momen & Karya')}
-              onViewDevelopment={() => setActiveTab('Perkembangan')}
-            />
-          </div>
-        )}
+      {/* Tab 2: Momen & Karya */}
+      {activeTab === 'Momen & Karya' && (
+        <GuardianMomentsGallery childName={childName} />
+      )}
 
-        {/* Tab 2: Momen & Karya */}
-        {activeTab === 'Momen & Karya' && (
-          <GuardianMomentsGallery childName={childName} />
-        )}
-
-        {/* Tab 3: Perkembangan & LPPA */}
-        {activeTab === 'Perkembangan' && (
-          <GuardianDevelopmentTimeline childName={childName} />
-        )}
-      </main>
+      {/* Tab 3: Perkembangan & LPPA */}
+      {activeTab === 'Perkembangan' && (
+        <GuardianDevelopmentTimeline childName={childName} studentId={childStudent?.id} />
+      )}
     </div>
   );
 };

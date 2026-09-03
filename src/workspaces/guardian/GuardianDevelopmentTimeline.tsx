@@ -60,15 +60,18 @@ export const GuardianDevelopmentTimeline: React.FC<GuardianDevelopmentTimelinePr
     return () => document.removeEventListener('visibilitychange', handleVisibilityChange);
   }, []);
 
-  // Resolve Child info
-  const schoolId = securityContext?.activeSchoolId || 'sch_tk_yapendik_01';
+  // Resolve Child info safely (FB-01 Zero PII Leakage)
+  const schoolId = securityContext?.activeSchoolId || 'sch_tk_maranatha';
   const allStudents = db.getStudents(schoolId);
+  const childPersonIds = securityContext?.guardianChildrenPersonIds || [];
   const matchedStudent = propStudentId 
     ? allStudents.find(s => s.id === propStudentId)
-    : allStudents.find(s => s.id === 'stu_millen_01') || allStudents[0];
+    : childPersonIds.length > 0 
+    ? allStudents.find(s => childPersonIds.includes(s.personId))
+    : undefined;
 
-  const resolvedChildName = propChildName || matchedStudent?.person?.fullName || matchedStudent?.person?.preferredName || 'Millen';
-  const resolvedStudentId = propStudentId || matchedStudent?.id || 'stu_millen_01';
+  const resolvedChildName = propChildName || matchedStudent?.person?.preferredName || matchedStudent?.person?.fullName || 'Ananda';
+  const resolvedStudentId = propStudentId || matchedStudent?.id || '';
 
   // FB-01 & FB-04: Only retrieve APPROVED or PUBLISHED reports for this child
   const effectiveContext = securityContext || {

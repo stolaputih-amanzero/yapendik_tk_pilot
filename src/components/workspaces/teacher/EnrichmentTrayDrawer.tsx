@@ -248,7 +248,7 @@ export const EnrichmentTrayDrawer: React.FC<Props> = ({
                 name="privacyChoice"
                 checked={privacyChoice === 'CONFIDENTIAL'}
                 onChange={() => setPrivacyChoice('CONFIDENTIAL')}
-                className="mt-0.5 text-brand-primary focus:ring-amber-500"
+                className="mt-0.5 text-brand-primary focus:ring-warning"
               />
               <div>
                 <span className="font-bold text-warning-deep flex items-center gap-1">

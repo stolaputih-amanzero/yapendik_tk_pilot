@@ -549,7 +549,7 @@ export const ChildContinuityModal: React.FC<Props> = ({
                           value={completionReflection}
                           onChange={e => setCompletionReflection(e.target.value)}
                           placeholder="Tuliskan bukti pengamatan ketercapaian tujuan anak..."
-                          className="w-full p-2 text-xs font-medium rounded-field bg-surface border border-success-line text-ink focus:outline-none focus:ring-2 focus:ring-emerald-500 shadow-hairline"
+                          className="w-full p-2 text-xs font-medium rounded-field bg-surface border border-success-line text-ink focus:outline-none focus:ring-2 focus:ring-success shadow-hairline"
                         />
                       </div>
                     )}

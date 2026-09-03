@@ -220,7 +220,7 @@ export const AcademicLifecycleWorkspace: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="p-8 flex flex-col items-center justify-center min-h-[400px] text-ink-faint pb-[160px] expanded:pb-8">
+      <div className="p-8 flex flex-col items-center justify-center min-h-[400px] text-ink-faint">
         <RefreshCw className="w-8 h-8 animate-spin text-brand-primary mb-3" />
         <p className="text-sm font-medium">Memuat Status Siklus Akademik & Rekonsiliasi...</p>
       </div>
@@ -230,11 +230,11 @@ export const AcademicLifecycleWorkspace: React.FC = () => {
   return (
     <div className="space-y-6 text-ink font-sans w-full" data-testid="academic-lifecycle-workspace">
       {/* Header Banner */}
-      <div className="bg-surface border-b border-line medium:rounded-card px-4 py-5 medium:p-6 w-full text-ink medium:border medium:shadow-hairline">
+      <div className="bg-surface-subtle border-b border-line medium:rounded-card px-4 py-5 medium:p-6 w-full text-ink medium:border medium:shadow-hairline">
         <div className="flex flex-col medium:flex-row medium:items-center justify-between gap-4">
           <div>
-            <div className="flex items-center space-x-1.5 text-brand-deep text-[10px] medium:text-xs font-bold uppercase tracking-wider mb-1">
-              <Calendar className="w-4 h-4 text-brand-deep shrink-0" />
+            <div className="flex items-center space-x-1.5 text-success-deep text-[10px] medium:text-xs font-bold uppercase tracking-wider mb-1">
+              <Calendar className="w-4 h-4 text-success-deep shrink-0" />
               <span>Standar Yayasan • Tahun Ajaran &amp; Semester</span>
             </div>
             <h1 className="text-xl font-bold tracking-tight text-ink flex items-center gap-2">
@@ -245,11 +245,11 @@ export const AcademicLifecycleWorkspace: React.FC = () => {
             </p>
           </div>
 
-          <div className="flex flex-col medium:flex-row items-stretch medium:items-center gap-2 w-full medium:w-auto">
+          <div className="flex flex-col medium:flex-row items-stretch medium:items-center gap-2.5 w-full medium:w-auto shrink-0">
             <button
               onClick={loadLifecycleData}
               disabled={refreshing}
-              className="px-3 py-2 rounded-field bg-surface hover-only:bg-surface-subtle text-ink-soft border border-line text-xs font-semibold flex justify-center items-center space-x-2 transition-all shadow-hairline cursor-pointer"
+              className="px-3.5 py-2 rounded-field bg-surface hover-only:bg-surface-subtle text-ink-soft border border-line text-xs font-semibold flex justify-center items-center space-x-2 transition-all shadow-hairline whitespace-nowrap shrink-0 cursor-pointer"
             >
               <RefreshCw className={`w-4 h-4 ${refreshing ? 'animate-spin text-ink-soft' : ''}`} />
               <span>Segarkan Data</span>
@@ -258,7 +258,7 @@ export const AcademicLifecycleWorkspace: React.FC = () => {
             {isAuthorizedActor && activePeriod?.lifecycle_status === 'CLOSED' && (
               <button
                 onClick={() => setShowInitModal(true)}
-                className="px-4 py-2 rounded-field bg-brand hover-only:opacity-90 text-on-brand font-bold text-xs shadow-hairline flex justify-center items-center space-x-2 transition-all cursor-pointer"
+                className="px-4 py-2 rounded-field bg-brand hover-only:opacity-90 text-on-brand font-bold text-xs shadow-hairline flex justify-center items-center space-x-2 transition-all whitespace-nowrap shrink-0 cursor-pointer"
               >
                 <PlusCircle className="w-4 h-4" />
                 <span>Buka Semester Baru</span>

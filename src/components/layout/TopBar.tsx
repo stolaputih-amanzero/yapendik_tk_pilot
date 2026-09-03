@@ -9,7 +9,7 @@
 
 import React from 'react';
 import { ArrowLeft } from 'lucide-react';
-import { getTabMetadata, getRouteLabel } from '../../config/routeRegistry';
+import { getTabMetadata, getRouteLabel, getPersonaHomeTab } from '../../config/routeRegistry';
 import { useConnectionStatus, getBreathStateMeta } from '../../hooks/useConnectionStatus';
 import { useSecurityContext } from '../../auth/context';
 
@@ -53,6 +53,10 @@ export const TopBar: React.FC<TopBarProps> = ({
   const pageTitle = getRouteLabel(activeTab, currentPersona?.role);
   const breathMeta = getBreathStateMeta(connectionState, queuedMutations);
 
+  const homeTab = getPersonaHomeTab(currentPersona?.role);
+  const isAtHome = activeTab === homeTab;
+  const homeTitle = getRouteLabel(homeTab, currentPersona?.role);
+
   return (
     <header 
       data-testid="topbar"
@@ -60,13 +64,13 @@ export const TopBar: React.FC<TopBarProps> = ({
     >
       {/* ZONE 1: CONTEXT TITLE (Dynamic Active Page) & Amanaura Breath ✦ */}
       <div className="flex items-center space-x-2.5 medium:space-x-3 shrink-0 min-w-0">
-        {activeTab !== 'TEACHER_HOME' && onNavigateTab && (
+        {!isAtHome && onNavigateTab && (
           <button
             type="button"
-            onClick={() => onNavigateTab('TEACHER_HOME')}
+            onClick={() => onNavigateTab(homeTab)}
             className="flex items-center gap-1.5 px-3 py-2 -ml-2 rounded-xl text-ink-soft hover-only:text-ink hover-only:bg-surface-subtle transition-colors min-h-[40px] text-xs font-semibold cursor-pointer group shrink-0 active:scale-95"
-            title="Kembali ke Beranda Guru"
-            aria-label="Kembali ke Beranda Guru"
+            title={`Kembali ke ${homeTitle}`}
+            aria-label={`Kembali ke ${homeTitle}`}
           >
             <ArrowLeft className="w-4 h-4 transition-transform group-hover:-translate-x-0.5" />
             <span className="hidden medium:inline">Kembali</span>

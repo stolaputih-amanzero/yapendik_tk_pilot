@@ -242,7 +242,7 @@ export const GraduationRegistryWorkspace: React.FC = () => {
   const selectedClassObj = tkbClasses.find(c => c.id === selectedClassId);
 
   return (
-    <div className="space-y-6 text-ink font-sans w-full pb-[160px] expanded:pb-8" data-testid="graduation-registry-workspace">
+    <div className="space-y-6 text-ink font-sans w-full" data-testid="graduation-registry-workspace">
       {/* Header Banner */}
       <div className="bg-surface-subtle border-b border-line medium:rounded-card px-4 py-5 medium:p-6 w-full text-ink medium:border medium:shadow-hairline">
         <div className="flex flex-col medium:flex-row medium:items-center justify-between gap-4">
@@ -259,11 +259,11 @@ export const GraduationRegistryWorkspace: React.FC = () => {
             </p>
           </div>
 
-          <div className="flex flex-col medium:flex-row items-stretch medium:items-center gap-2 w-full medium:w-auto">
+          <div className="flex flex-col medium:flex-row items-stretch medium:items-center gap-2.5 w-full medium:w-auto shrink-0">
             <button
               onClick={loadClassesAndAlumni}
               disabled={loading}
-              className="px-3 py-2 rounded-field bg-surface hover-only:bg-surface-subtle text-ink-soft border border-line text-xs font-semibold flex justify-center items-center space-x-2 transition-all shadow-hairline cursor-pointer"
+              className="px-3.5 py-2 rounded-field bg-surface hover-only:bg-surface-subtle text-ink-soft border border-line text-xs font-semibold flex justify-center items-center space-x-2 transition-all shadow-hairline whitespace-nowrap shrink-0 cursor-pointer"
             >
               <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin text-ink-soft' : ''}`} />
               <span>Segarkan Data</span>

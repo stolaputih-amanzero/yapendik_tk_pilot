@@ -504,7 +504,7 @@ export const SafetyIncidentModal: React.FC<Props> = ({
                                 value={resolutionNote}
                                 onChange={e => setResolutionNote(e.target.value)}
                                 placeholder="Tindakan penyelesaian dan kondisi akhir ananda..."
-                                className="w-full px-3 py-2 text-xs rounded-field bg-surface-subtle border border-line text-ink focus:bg-surface focus:outline-none focus:ring-2 focus:ring-emerald-600 transition"
+                                className="w-full px-3 py-2 text-xs rounded-field bg-surface-subtle border border-line text-ink focus:bg-surface focus:outline-none focus:ring-2 focus:ring-success transition"
                               />
                               <div className="flex items-center justify-end gap-2">
                                 <button

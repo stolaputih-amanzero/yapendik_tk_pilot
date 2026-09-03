@@ -31,10 +31,12 @@ import { FoundationLayout } from './workspaces/foundation/FoundationLayout';
 import { HeadmasterAdoptionLayout } from './workspaces/school/HeadmasterAdoptionLayout';
 import { ApplicationDashboard } from './workspaces/admissions/portal/ApplicationDashboard';
 import { HeadmasterAdmissionsDesk } from './workspaces/admissions/school/HeadmasterAdmissionsDesk';
+import { FoundationAdmissionsTelemetryView } from './workspaces/admissions/foundation/FoundationAdmissionsTelemetryView';
 import { GuardianWorkspace } from './workspaces/guardian/GuardianWorkspace';
+import { GuardianDevelopmentTimeline } from './workspaces/guardian/GuardianDevelopmentTimeline';
 import { SupabaseSettingsModal } from './components/workspaces/SupabaseSettingsModal';
 import { db } from './db/database';
-import { Building2 } from 'lucide-react';
+import { Building2, User } from 'lucide-react';
 import { SelectSheet } from './components/ui';
 
 const TAB_TO_HASH: Record<WorkspaceTab, string> = {
@@ -114,9 +116,20 @@ const AppContent: React.FC = () => {
   const activeSchool = securityContext ? db.getSchoolById(securityContext.activeSchoolId) : null;
   const schools = db.getSchools();
 
+  const isGuardianPersona = currentPersona?.role === 'GUARDIAN' || currentPersona?.role === 'PARENT_BUDI';
+  const guardianChildStudent = React.useMemo(() => {
+    if (!isGuardianPersona) return null;
+    const childPersonIds = currentPersona?.guardianChildrenPersonIds || securityContext?.guardianChildrenPersonIds || [];
+    if (childPersonIds.length === 0) return null;
+    const schoolStudents = db.getStudents(activeSchoolId || 'sch_tk_maranatha');
+    return schoolStudents.find(s => childPersonIds.includes(s.personId)) || null;
+  }, [isGuardianPersona, currentPersona?.guardianChildrenPersonIds, securityContext?.guardianChildrenPersonIds, activeSchoolId]);
+
   React.useEffect(() => {
     if (currentPersona?.role === 'APPLICANT') {
-      setActiveTab('ADMISSIONS_PORTAL');
+      if (activeTab !== 'ADMISSIONS_PORTAL') {
+        setActiveTab('ADMISSIONS_PORTAL');
+      }
     } else if (currentPersona?.role === 'GUARDIAN') {
       if (activeTab === 'TEACHER_HOME' || activeTab === 'DAILY_WORK' || activeTab === 'ATTENDANCE' || activeTab === 'INSTITUTIONAL_HEALTH' || activeTab === 'HEADMASTER_ADOPTION' || activeTab === 'FOUNDATION_GOVERNANCE') {
         setActiveTab('GUARDIAN_WORKSPACE');
@@ -125,16 +138,16 @@ const AppContent: React.FC = () => {
       if (activeTab === 'TEACHER_HOME' || activeTab === 'DAILY_WORK' || activeTab === 'ATTENDANCE' || activeTab === 'GUARDIAN_WORKSPACE') {
         setActiveTab('HEADMASTER_ADOPTION');
       }
-    } else if (currentPersona?.role === 'YAPENDIK_SUPERADMIN') {
-      if (activeTab === 'TEACHER_HOME' || activeTab === 'DAILY_WORK' || activeTab === 'ATTENDANCE' || activeTab === 'GUARDIAN_WORKSPACE') {
+    } else if (currentPersona?.role === 'YAPENDIK_SUPERADMIN' || currentPersona?.role === 'FOUNDATION_DIRECTOR') {
+      if (activeTab === 'TEACHER_HOME' || activeTab === 'DAILY_WORK' || activeTab === 'ATTENDANCE' || activeTab === 'OBSERVATIONS' || activeTab === 'COMMUNICATION' || activeTab === 'GUARDIAN_WORKSPACE' || activeTab === 'HEADMASTER_ADOPTION') {
         setActiveTab('FOUNDATION_GOVERNANCE');
       }
-    } else if (currentPersona?.role === 'TEACHER') {
-      if (activeTab === 'HEADMASTER_ADOPTION' || activeTab === 'FOUNDATION_GOVERNANCE' || activeTab === 'GUARDIAN_WORKSPACE' || activeTab === 'ADMISSIONS_PORTAL') {
+    } else if (currentPersona?.role === 'TEACHER' || currentPersona?.role === 'ASSISTANT_TEACHER') {
+      if (activeTab === 'HEADMASTER_ADOPTION' || activeTab === 'FOUNDATION_GOVERNANCE' || activeTab === 'GUARDIAN_WORKSPACE' || activeTab === 'ADMISSIONS_PORTAL' || activeTab === 'ADMISSIONS_DESK' || activeTab === 'PROVISIONING') {
         setActiveTab('TEACHER_HOME');
       }
     }
-  }, [currentPersona?.role, currentPersona?.id]);
+  }, [currentPersona?.role, currentPersona?.id, activeTab]);
 
   // 1. Listen for browser Back/Forward (hashchange)
   React.useEffect(() => {
@@ -241,7 +254,7 @@ const AppContent: React.FC = () => {
         </div>
 
         {/* Main Workspace Surface */}
-        <main className="grow shrink-0 w-full max-w-7xl mx-auto p-0 medium:p-6 pb-[180px] medium:pb-8 bg-canvas expanded:bg-transparent">
+        <main className="grow shrink-0 w-full max-w-7xl mx-auto px-4 py-4 medium:p-6 pb-[180px] medium:pb-8 bg-canvas expanded:bg-transparent">
           {activeTab === 'TEACHER_HOME' && (
             <TeacherHomeShell 
               onNavigateToCommunication={() => setActiveTab('COMMUNICATION')} 
@@ -250,7 +263,28 @@ const AppContent: React.FC = () => {
           )}
           {activeTab === 'DAILY_WORK' && <TeacherDailyWorkWorkspace />}
           {activeTab === 'OBSERVATIONS' && <ObservationWorkspace />}
-          {activeTab === 'DEVELOPMENT' && <DevelopmentWorkspace />}
+          {activeTab === 'DEVELOPMENT' && (
+            isGuardianPersona ? (
+              guardianChildStudent ? (
+                <GuardianDevelopmentTimeline 
+                  studentId={guardianChildStudent.id} 
+                  schoolId={activeSchoolId || guardianChildStudent.schoolId || 'sch_tk_maranatha'} 
+                />
+              ) : (
+                <div className="p-8 text-center bg-surface border border-line rounded-card shadow-hairline space-y-3" data-testid="guardian-empty-child-state">
+                  <div className="w-12 h-12 rounded-full bg-surface-subtle text-ink-soft flex items-center justify-center mx-auto border border-line">
+                    <User className="w-6 h-6 text-ink-soft" />
+                  </div>
+                  <h3 className="text-base font-bold text-ink">Belum Ada Data Ananda Terhubung</h3>
+                  <p className="text-xs text-ink-soft max-w-md mx-auto leading-relaxed">
+                    Belum ada data siswa ananda yang terhubung secara resmi ke akun wali ini. Silakan hubungi administrasi sekolah untuk pengaitan data murid.
+                  </p>
+                </div>
+              )
+            ) : (
+              <DevelopmentWorkspace />
+            )
+          )}
           {activeTab === 'STUDENT_JOURNEY' && <StudentJourneyTimeline />}
           {activeTab === 'ATTENDANCE' && <AttendanceWorkspace />}
           {activeTab === 'COMMUNICATION' && <CommunicationWorkspace />}
@@ -264,11 +298,24 @@ const AppContent: React.FC = () => {
           {activeTab === 'HEADMASTER_ADOPTION' && <HeadmasterAdoptionLayout onNavigateTab={setActiveTab} />}
           {activeTab === 'GUARDIAN_WORKSPACE' && <GuardianWorkspace />}
           {activeTab === 'ADMISSIONS_PORTAL' && (
-            <ApplicationDashboard 
-              creatorUid={currentPersona?.id || 'usr_guest_applicant'} 
-              personId={currentPersona?.personId || 'per_guest_applicant'}
-              guardianName={currentPersona?.name || 'Orang Tua Calon Siswa'}
-            />
+            (currentPersona?.role === 'YAPENDIK_SUPERADMIN' || currentPersona?.role === 'FOUNDATION_DIRECTOR') ? (
+              <FoundationAdmissionsTelemetryView />
+            ) : currentPersona?.role === 'HEADMASTER' ? (
+              <HeadmasterAdmissionsDesk
+                schoolId={activeSchoolId || 'sch_tk_yapendik_01'}
+                headmasterContext={{
+                  personId: currentPersona.id,
+                  role: currentPersona.role,
+                  activeSchoolId: activeSchoolId || 'sch_tk_yapendik_01'
+                }}
+              />
+            ) : (
+              <ApplicationDashboard 
+                creatorUid={currentPersona?.id || 'usr_guest_applicant'} 
+                personId={currentPersona?.personId || 'per_guest_applicant'}
+                guardianName={currentPersona?.name || 'Orang Tua Calon Siswa'}
+              />
+            )
           )}
           {activeTab === 'ADMISSIONS_DESK' && (
             <HeadmasterAdmissionsDesk

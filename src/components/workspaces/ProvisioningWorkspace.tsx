@@ -1,4 +1,4 @@
-import { SelectSheet } from '../ui';
+import { SelectSheet, SegmentedControl, AdaptiveDialog } from '../ui';
 /**
  * Yapendik School OS — Stage 2: Provisioning & Institutional Readiness Workspace
  * 
@@ -277,8 +277,15 @@ export const ProvisioningWorkspace: React.FC<{ onNavigateToOperations?: () => vo
   const currentSchoolClasses = currentSchool ? db.getClasses(currentSchool.id) : [];
   const currentSchoolStudents = currentSchool ? db.getStudents(currentSchool.id) : [];
 
+  const tabOptions = [
+    { id: 'READINESS', label: 'Diagnostik (6 Gates)', icon: ShieldCheck },
+    ...(isSuperadmin ? [{ id: 'SCHOOL_REGISTRY', label: `Matriks Cabang (${schools.length})`, icon: SchoolIcon }] : []),
+    { id: 'CLASSROOM_SETUP', label: `Struktur Rombel (${currentSchoolClasses.length})`, icon: Layers },
+    { id: 'STUDENT_ADMISSION', label: `Admisi Siswa (${currentSchoolStudents.length})`, icon: Users }
+  ];
+
   return (
-    <div className="space-y-6 text-ink font-sans w-full pb-[160px] expanded:pb-8" data-testid="provisioning-workspace">
+    <div className="space-y-6 text-ink font-sans w-full" data-testid="provisioning-workspace">
       {/* HEADER SECTION */}
       <div className="bg-surface-subtle border-b border-line medium:rounded-card px-4 py-5 medium:p-6 w-full text-ink medium:border medium:shadow-hairline">
         <div className="flex flex-col medium:flex-row medium:items-center justify-between gap-4">
@@ -295,81 +302,39 @@ export const ProvisioningWorkspace: React.FC<{ onNavigateToOperations?: () => vo
             </p>
           </div>
 
-          <div className="flex flex-col medium:flex-row items-stretch medium:items-center gap-2 w-full medium:w-auto">
+          <div className="flex flex-col medium:flex-row items-stretch medium:items-center gap-2.5 w-full medium:w-auto shrink-0">
             {isSuperadmin && (
               <button
                 onClick={() => setShowCreateSchoolModal(true)}
-                className="flex justify-center items-center space-x-2 px-3 py-2 bg-brand hover-only:opacity-90 text-on-brand rounded-field text-xs font-bold transition-all shadow-hairline cursor-pointer"
+                className="flex justify-center items-center space-x-2 px-3.5 py-2 bg-brand hover-only:opacity-90 text-on-brand rounded-field text-xs font-bold transition-all shadow-hairline whitespace-nowrap shrink-0 cursor-pointer"
               >
                 <PlusCircle className="w-4 h-4" />
                 <span>Dirikan Unit TK Baru</span>
               </button>
             )}
 
-            {/* Unit Selector */}
-            <div className="flex justify-between items-center bg-surface border border-line rounded-field px-3 py-1 shadow-hairline">
-              <span className="text-xs font-semibold text-ink-soft mr-2">Unit:</span>
-              <div className="w-72">
-                <SelectSheet
-                  value={currentSchool?.id || selectedSchoolId}
-                  onChange={(val) => {
-                    setSelectedSchoolId(val);
-                    if (isSuperadmin) setActiveSchoolId(val);
-                  }}
-                  options={schools.map(s => ({
-                    value: s.id,
-                    label: `${s.name} (${readinessMap[s.id]?.status === 'FULLY_READY' ? 'Siap Operasional' : 'Perlu Kelengkapan'})`
-                  }))}
-                />
-              </div>
+            {/* Status Kesiapan Unit Ringkas (Read-Only Context Badge) */}
+            <div className="flex items-center space-x-2 px-3 py-2 rounded-field bg-surface border border-line shadow-hairline text-xs font-bold text-ink shrink-0">
+              <Building2 className="w-4 h-4 text-brand-primary shrink-0" />
+              <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold border whitespace-nowrap ${
+                currentReadiness?.isReady
+                  ? 'bg-success-tint border-success-line text-success-deep'
+                  : 'bg-warning-tint border-warning-line text-warning-deep'
+              }`}>
+                {currentReadiness?.isReady ? 'Siap Operasional (6/6 Gates)' : 'Perlu Kelengkapan'}
+              </span>
             </div>
           </div>
         </div>
+      </div>
 
-        {/* WORKSPACE NAVIGATION TABS */}
-        <div className="flex border-b border-line mt-6 gap-2 text-xs overflow-x-auto scrollbar-hide">
-          <button
-            onClick={() => setActiveTab('READINESS')}
-            className={`flex items-center gap-2 pb-3 px-3 font-semibold transition-colors relative whitespace-nowrap cursor-pointer ${
-              activeTab === 'READINESS' ? 'text-ink border-b-2 border-brand' : 'text-ink-soft hover-only:text-ink'
-            }`}
-          >
-            <ShieldCheck className="w-4 h-4" />
-            <span>Diagnostik Kesiapan (6 Gates)</span>
-          </button>
-
-          {isSuperadmin && (
-            <button
-              onClick={() => setActiveTab('SCHOOL_REGISTRY')}
-              className={`flex items-center gap-2 pb-3 px-3 font-semibold transition-colors relative whitespace-nowrap cursor-pointer ${
-                activeTab === 'SCHOOL_REGISTRY' ? 'text-ink border-b-2 border-brand' : 'text-ink-soft hover-only:text-ink'
-              }`}
-            >
-              <SchoolIcon className="w-4 h-4" />
-              <span>Matriks Seluruh Cabang ({schools.length})</span>
-            </button>
-          )}
-
-          <button
-            onClick={() => setActiveTab('CLASSROOM_SETUP')}
-            className={`flex items-center gap-2 pb-3 px-3 font-semibold transition-colors relative whitespace-nowrap cursor-pointer ${
-              activeTab === 'CLASSROOM_SETUP' ? 'text-ink border-b-2 border-brand' : 'text-ink-soft hover-only:text-ink'
-            }`}
-          >
-            <Layers className="w-4 h-4" />
-            <span>Struktur Rombel ({currentSchoolClasses.length})</span>
-          </button>
-
-          <button
-            onClick={() => setActiveTab('STUDENT_ADMISSION')}
-            className={`flex items-center gap-2 pb-3 px-3 font-semibold transition-colors relative whitespace-nowrap cursor-pointer ${
-              activeTab === 'STUDENT_ADMISSION' ? 'text-ink border-b-2 border-brand' : 'text-ink-soft hover-only:text-ink'
-            }`}
-          >
-            <Users className="w-4 h-4" />
-            <span>Admisi Siswa ({currentSchoolStudents.length})</span>
-          </button>
-        </div>
+      {/* STANDALONE SUB-TAB BAR (Hukum 3 & 10, Directive A-5) */}
+      <div className="w-full overflow-x-auto scrollbar-hide select-none">
+        <SegmentedControl
+          value={activeTab}
+          onChange={(val) => setActiveTab(val as any)}
+          options={tabOptions}
+        />
       </div>
 
       {/* FEEDBACK ALERT */}
@@ -386,20 +351,20 @@ export const ProvisioningWorkspace: React.FC<{ onNavigateToOperations?: () => vo
       {activeTab === 'READINESS' && currentSchool && currentReadiness && (
         <div className="space-y-6">
           {/* TOP READINESS BANNER */}
-          <div className={`p-6 rounded-field border shadow-hairline ${
+          <div className={`p-6 rounded-card border shadow-hairline ${
             currentReadiness.isReady 
-              ? 'bg-success-tint/90 border-success-line' 
-              : 'bg-warning-tint/90 border-warning-line'
+              ? 'bg-surface border-success-line' 
+              : 'bg-surface border-warning-line'
           }`}>
             <div className="flex flex-col medium:flex-row medium:items-center justify-between gap-4">
               <div>
                 <div className="flex items-center space-x-2 mb-2">
-                  <span className={`text-xs font-mono font-bold px-2 py-1 rounded border ${
-                    currentReadiness.isReady ? 'bg-surface border-success-line text-success-deep' : 'bg-surface border-warning-line text-warning-deep'
+                  <span className={`text-xs font-mono font-bold px-2.5 py-1 rounded-full border ${
+                    currentReadiness.isReady ? 'bg-surface-subtle border-success-line text-success-deep' : 'bg-surface-subtle border-warning-line text-warning-deep'
                   }`}>
                     NPSN: {currentSchool.npsn}
                   </span>
-                  <span className={`text-xs font-mono font-bold px-2 py-1 rounded border ${
+                  <span className={`text-xs font-mono font-bold px-2.5 py-1 rounded-full border ${
                     currentReadiness.isReady ? 'bg-success-tint border-success-line text-success-deep' : 'bg-warning-tint border-warning-line text-warning-deep'
                   }`}>
                     Status Hukum: {currentSchool.status || 'ACTIVE'}
@@ -412,15 +377,15 @@ export const ProvisioningWorkspace: React.FC<{ onNavigateToOperations?: () => vo
               </div>
 
               <div className="flex flex-col medium:items-end">
-                <div className={`px-4 py-2 rounded-lg text-xs font-mono font-bold uppercase tracking-wider flex items-center space-x-2 shadow-hairline ${
+                <div className={`px-3.5 py-1.5 rounded-full text-xs font-mono font-bold uppercase tracking-wider flex items-center space-x-2 border shadow-hairline ${
                   currentReadiness.isReady
-                    ? 'bg-emerald-700 text-on-brand'
-                    : 'bg-warning text-on-brand'
+                    ? 'bg-success-tint border-success-line text-success-deep'
+                    : 'bg-warning-tint border-warning-line text-warning-deep'
                 }`}>
-                  <span className={`w-2.5 h-2.5 rounded-full ${currentReadiness.isReady ? 'bg-emerald-300 animate-pulse' : 'bg-amber-200'}`}></span>
-                  <span>KESIAPAN OPERASIONAL: {currentReadiness.status}</span>
+                  <span className={`w-2 h-2 rounded-full ${currentReadiness.isReady ? 'bg-success animate-pulse' : 'bg-warning'}`}></span>
+                  <span>KESIAPAN: {currentReadiness.status}</span>
                 </div>
-                <span className={`text-xs font-bold mt-1.5 ${currentReadiness.isReady ? 'text-success-deep' : 'text-warning-deep'}`}>
+                <span className={`text-xs font-bold mt-2 ${currentReadiness.isReady ? 'text-success-deep' : 'text-warning-deep'}`}>
                   Gerbang Terpenuhi: {Object.values(currentReadiness.gates).filter(Boolean).length} / 6
                 </span>
               </div>
@@ -428,7 +393,7 @@ export const ProvisioningWorkspace: React.FC<{ onNavigateToOperations?: () => vo
 
             {/* CALL TO ACTION BUTTON */}
             {currentReadiness.isReady ? (
-              <div className="mt-6 pt-4 border-t border-success-line flex flex-col medium:flex-row medium:items-center justify-between gap-3">
+              <div className="mt-6 pt-4 border-t border-line flex flex-col medium:flex-row medium:items-center justify-between gap-3">
                 <div className="text-xs text-success-deep font-medium flex items-center space-x-2">
                   <Sparkles className="w-4 h-4 text-success-deep shrink-0" />
                   <span>Institusi telah memenuhi seluruh syarat kanonikal. Modul operasional harian Stage 1 aktif sepenuhnya.</span>
@@ -436,7 +401,7 @@ export const ProvisioningWorkspace: React.FC<{ onNavigateToOperations?: () => vo
                 {onNavigateToOperations && (
                   <button
                     onClick={onNavigateToOperations}
-                    className="w-full medium:w-auto flex justify-center items-center space-x-2 px-4 py-2 medium:py-2 bg-emerald-700 hover-only:bg-emerald-800 text-on-brand font-bold text-xs rounded-lg transition-all shadow-hairline shrink-0 cursor-pointer"
+                    className="w-full medium:w-auto flex justify-center items-center space-x-2 px-4 py-2 bg-success hover-only:opacity-90 text-on-brand font-bold text-xs rounded-field transition-all shadow-hairline shrink-0 cursor-pointer"
                   >
                     <span>Masuk ke Operasional Harian Sekolah</span>
                     <ArrowRight className="w-4 h-4" />
@@ -444,7 +409,7 @@ export const ProvisioningWorkspace: React.FC<{ onNavigateToOperations?: () => vo
                 )}
               </div>
             ) : (
-              <div className="mt-6 pt-4 border-t border-warning-line">
+              <div className="mt-6 pt-4 border-t border-line">
                 <div className="text-xs text-warning-deep mb-2 font-bold flex items-center space-x-2">
                   <AlertCircle className="w-4 h-4 text-warning-deep shrink-0" />
                   <span>Item yang Masih Menghalangi Kesiapan Operasional (Blockers):</span>
@@ -459,7 +424,7 @@ export const ProvisioningWorkspace: React.FC<{ onNavigateToOperations?: () => vo
           </div>
           <div className="grid grid-cols-1 medium:grid-cols-2 expanded:grid-cols-3 gap-4">
             {/* Gate 1 */}
-            <div className={`p-4 medium:p-4 rounded-card border bg-surface shadow-hairline transition-all ${currentReadiness.gates.gate1_legalActive ? 'border-success-line ring-1 ring-emerald-500/10' : 'border-line'}`}>
+            <div className={`p-4 medium:p-4 rounded-card border bg-surface shadow-hairline transition-all ${currentReadiness.gates.gate1_legalActive ? 'border-success-line ring-1 ring-success-line/20' : 'border-line'}`}>
               <div className="flex items-center justify-between mb-1.5">
                 <span className="text-xs font-bold text-ink">Gate 1: Status Hukum Legal</span>
                 {currentReadiness.gates.gate1_legalActive ? <CheckCircle2 className="w-4 h-4 text-success" /> : <XCircle className="w-4 h-4 text-danger" />}
@@ -473,7 +438,7 @@ export const ProvisioningWorkspace: React.FC<{ onNavigateToOperations?: () => vo
             </div>
 
             {/* Gate 2 */}
-            <div className={`p-4 medium:p-4 rounded-card border bg-surface shadow-hairline transition-all ${currentReadiness.gates.gate2_academicYear ? 'border-success-line ring-1 ring-emerald-500/10' : 'border-line'}`}>
+            <div className={`p-4 medium:p-4 rounded-card border bg-surface shadow-hairline transition-all ${currentReadiness.gates.gate2_academicYear ? 'border-success-line ring-1 ring-success-line/20' : 'border-line'}`}>
               <div className="flex items-center justify-between mb-1.5">
                 <span className="text-xs font-bold text-ink">Gate 2: Tahun Ajaran</span>
                 {currentReadiness.gates.gate2_academicYear ? <CheckCircle2 className="w-4 h-4 text-success" /> : <XCircle className="w-4 h-4 text-danger" />}
@@ -489,7 +454,7 @@ export const ProvisioningWorkspace: React.FC<{ onNavigateToOperations?: () => vo
             </div>
 
             {/* Gate 3 */}
-            <div className={`p-4 medium:p-4 rounded-card border bg-surface shadow-hairline transition-all ${currentReadiness.gates.gate3_academicPeriod ? 'border-success-line ring-1 ring-emerald-500/10' : 'border-line'}`}>
+            <div className={`p-4 medium:p-4 rounded-card border bg-surface shadow-hairline transition-all ${currentReadiness.gates.gate3_academicPeriod ? 'border-success-line ring-1 ring-success-line/20' : 'border-line'}`}>
               <div className="flex items-center justify-between mb-1.5">
                 <span className="text-xs font-bold text-ink">Gate 3: Periode/Semester</span>
                 {currentReadiness.gates.gate3_academicPeriod ? <CheckCircle2 className="w-4 h-4 text-success" /> : <XCircle className="w-4 h-4 text-danger" />}
@@ -505,7 +470,7 @@ export const ProvisioningWorkspace: React.FC<{ onNavigateToOperations?: () => vo
             </div>
 
             {/* Gate 4 */}
-            <div className={`p-4 medium:p-4 rounded-card border bg-surface shadow-hairline transition-all ${currentReadiness.gates.gate4_headmaster ? 'border-success-line ring-1 ring-emerald-500/10' : 'border-line'}`}>
+            <div className={`p-4 medium:p-4 rounded-card border bg-surface shadow-hairline transition-all ${currentReadiness.gates.gate4_headmaster ? 'border-success-line ring-1 ring-success-line/20' : 'border-line'}`}>
               <div className="flex items-center justify-between mb-1.5">
                 <span className="text-xs font-bold text-ink">Gate 4: Kepala Sekolah</span>
                 {currentReadiness.gates.gate4_headmaster ? <CheckCircle2 className="w-4 h-4 text-success" /> : <XCircle className="w-4 h-4 text-danger" />}
@@ -521,7 +486,7 @@ export const ProvisioningWorkspace: React.FC<{ onNavigateToOperations?: () => vo
             </div>
 
             {/* Gate 5 */}
-            <div className={`p-4 medium:p-4 rounded-card border bg-surface shadow-hairline transition-all ${currentReadiness.gates.gate5_staffedClassroom ? 'border-success-line ring-1 ring-emerald-500/10' : 'border-line'}`}>
+            <div className={`p-4 medium:p-4 rounded-card border bg-surface shadow-hairline transition-all ${currentReadiness.gates.gate5_staffedClassroom ? 'border-success-line ring-1 ring-success-line/20' : 'border-line'}`}>
               <div className="flex items-center justify-between mb-1.5">
                 <span className="text-xs font-bold text-ink">Gate 5: Rombel &amp; Guru</span>
                 {currentReadiness.gates.gate5_staffedClassroom ? <CheckCircle2 className="w-4 h-4 text-success" /> : <XCircle className="w-4 h-4 text-danger" />}
@@ -537,7 +502,7 @@ export const ProvisioningWorkspace: React.FC<{ onNavigateToOperations?: () => vo
             </div>
 
             {/* Gate 6 */}
-            <div className={`p-4 medium:p-4 rounded-card border bg-surface shadow-hairline transition-all ${currentReadiness.gates.gate6_placedStudents ? 'border-success-line ring-1 ring-emerald-500/10' : 'border-line'}`}>
+            <div className={`p-4 medium:p-4 rounded-card border bg-surface shadow-hairline transition-all ${currentReadiness.gates.gate6_placedStudents ? 'border-success-line ring-1 ring-success-line/20' : 'border-line'}`}>
               <div className="flex items-center justify-between mb-1.5">
                 <span className="text-xs font-bold text-ink">Gate 6: Penempatan Siswa</span>
                 {currentReadiness.gates.gate6_placedStudents ? <CheckCircle2 className="w-4 h-4 text-success" /> : <XCircle className="w-4 h-4 text-danger" />}
@@ -637,12 +602,12 @@ export const ProvisioningWorkspace: React.FC<{ onNavigateToOperations?: () => vo
         </div>
       )}
 
-      {/* TAB 3: CLASSROOM SETUP */}
+      {/* TAB 3: CLASSROOM SETUP (Flattened - Depth = 1 per Directive A-3) */}
       {activeTab === 'CLASSROOM_SETUP' && currentSchool && (
-        <div className="bg-surface border border-line rounded-card p-4 medium:p-4 shadow-hairline space-y-4">
-          <div className="flex flex-col medium:flex-row medium:items-center justify-between gap-3 border-b border-line-soft pb-3">
+        <div className="bg-surface border border-line rounded-card overflow-hidden shadow-hairline">
+          <div className="p-4 border-b border-line-soft bg-surface-subtle flex flex-col medium:flex-row medium:items-center justify-between gap-3">
             <div>
-              <h3 className="text-sm font-bold text-ink">Daftar Rombongan Belajar (Rombel) Aktif</h3>
+              <h3 className="text-xs font-bold text-ink">Daftar Rombongan Belajar (Rombel) Aktif</h3>
               <p className="text-xs text-ink-soft">Unit: {currentSchool.name}</p>
             </div>
             <button
@@ -655,21 +620,27 @@ export const ProvisioningWorkspace: React.FC<{ onNavigateToOperations?: () => vo
           </div>
 
           {currentSchoolClasses.length === 0 ? (
-            <div className="p-8 text-center border border-dashed border-line rounded-card text-ink-faint text-xs shadow-hairline">
+            <div className="p-8 text-center text-ink-faint text-xs">
               Belum ada rombel yang dibentuk untuk unit ini. Silakan tambahkan rombel baru.
             </div>
           ) : (
-            <div className="grid grid-cols-1 medium:grid-cols-2 gap-4">
+            <div className="divide-y divide-line-soft">
               {currentSchoolClasses.map(c => (
-                <div key={c.id} className="p-4 bg-surface-subtle/70 border border-line rounded-field space-y-2">
-                  <div className="flex items-center justify-between">
-                    <span className="font-bold text-ink text-sm">{c.name}</span>
-                    <span className="text-xs font-mono font-bold px-2 py-1 rounded-full bg-surface text-ink border border-line whitespace-nowrap">
+                <div key={c.id} className="p-4 hover-only:bg-surface-subtle/60 transition-colors flex flex-col medium:flex-row medium:items-center justify-between gap-3 min-h-[56px]">
+                  <div className="space-y-1">
+                    <div className="flex items-center space-x-2">
+                      <span className="font-bold text-ink text-sm">{c.name}</span>
+                      <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-surface-subtle text-ink-soft border border-line whitespace-nowrap">
+                        {c.ageGroup === 'TK_A_4_5' ? '4-5 Tahun (TK A)' : '5-6 Tahun (TK B)'}
+                      </span>
+                    </div>
+                    <div className="text-xs font-mono text-ink-soft">Wali Kelas: {c.homeroomTeacherId || 'Belum ditugaskan'}</div>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <span className="text-xs font-mono font-bold px-2.5 py-1 rounded-full bg-surface text-ink border border-line shadow-hairline whitespace-nowrap">
                       Kapasitas: {c.capacity} anak
                     </span>
                   </div>
-                  <div className="text-xs text-ink-soft font-medium">Kelompok Usia: {c.ageGroup === 'TK_A_4_5' ? '4-5 Tahun (TK A)' : '5-6 Tahun (TK B)'}</div>
-                  <div className="text-xs font-mono text-ink-soft whitespace-nowrap">Wali Kelas: {c.homeroomTeacherId || 'Belum ditugaskan'}</div>
                 </div>
               ))}
             </div>
@@ -677,12 +648,12 @@ export const ProvisioningWorkspace: React.FC<{ onNavigateToOperations?: () => vo
         </div>
       )}
 
-      {/* TAB 4: STUDENT ADMISSION */}
+      {/* TAB 4: STUDENT ADMISSION (Flattened per Directive A-3) */}
       {activeTab === 'STUDENT_ADMISSION' && currentSchool && (
-        <div className="bg-surface border border-line rounded-card p-4 medium:p-4 shadow-hairline space-y-4">
-          <div className="flex flex-col medium:flex-row medium:items-center justify-between gap-3 border-b border-line-soft pb-3">
+        <div className="bg-surface border border-line rounded-card overflow-hidden shadow-hairline">
+          <div className="p-4 border-b border-line-soft bg-surface-subtle flex flex-col medium:flex-row medium:items-center justify-between gap-3">
             <div>
-              <h3 className="text-sm font-bold text-ink">Daftar Siswa Terdaftar &amp; Penempatan Rombel</h3>
+              <h3 className="text-xs font-bold text-ink">Daftar Siswa Terdaftar &amp; Penempatan Rombel</h3>
               <p className="text-xs text-ink-soft">Unit: {currentSchool.name}</p>
             </div>
             <button
@@ -695,7 +666,7 @@ export const ProvisioningWorkspace: React.FC<{ onNavigateToOperations?: () => vo
           </div>
 
           {currentSchoolStudents.length === 0 ? (
-            <div className="p-8 text-center border border-dashed border-line rounded-card text-ink-faint text-xs shadow-hairline">
+            <div className="p-8 text-center text-ink-faint text-xs">
               Belum ada siswa yang diadmisikan ke unit ini.
             </div>
           ) : (
@@ -703,11 +674,11 @@ export const ProvisioningWorkspace: React.FC<{ onNavigateToOperations?: () => vo
               <table className="w-full text-left text-xs">
                 <thead className="bg-surface-subtle text-ink-soft font-bold border-b border-line">
                   <tr>
-                    <th className="py-2 px-3">NIS</th>
-                    <th className="py-2 px-3">Nama Siswa</th>
-                    <th className="py-2 px-3">Rombel Penempatan</th>
-                    <th className="py-2 px-3">Tgl Masuk</th>
-                    <th className="py-2 px-3">Status</th>
+                    <th className="py-2.5 px-3">NIS</th>
+                    <th className="py-2.5 px-3">Nama Siswa</th>
+                    <th className="py-2.5 px-3">Rombel Penempatan</th>
+                    <th className="py-2.5 px-3">Tgl Masuk</th>
+                    <th className="py-2.5 px-3">Status</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-line-soft">
@@ -716,12 +687,12 @@ export const ProvisioningWorkspace: React.FC<{ onNavigateToOperations?: () => vo
                     const cl = db.getClassById(st.currentClassId);
                     return (
                       <tr key={st.id} className="hover-only:bg-surface-subtle/80 transition-colors">
-                        <td className="py-2 px-3 font-mono font-bold text-ink">{st.nis}</td>
-                        <td className="py-2 px-3 font-bold text-ink">{p?.fullName || st.personId}</td>
-                        <td className="py-2 px-3 font-semibold text-ink-soft">{cl?.name || st.currentClassId}</td>
-                        <td className="py-2 px-3 text-ink-soft">{st.enrollmentDate}</td>
-                        <td className="py-2 px-3">
-                          <span className="px-2 py-1 rounded-full bg-success-tint text-success-deep border border-success-line text-xs font-mono font-bold whitespace-nowrap">
+                        <td className="py-2.5 px-3 font-mono font-bold text-ink">{st.nis}</td>
+                        <td className="py-2.5 px-3 font-bold text-ink">{p?.fullName || st.personId}</td>
+                        <td className="py-2.5 px-3 font-semibold text-ink-soft">{cl?.name || st.currentClassId}</td>
+                        <td className="py-2.5 px-3 text-ink-soft">{st.enrollmentDate}</td>
+                        <td className="py-2.5 px-3">
+                          <span className="px-2 py-0.5 rounded-full bg-success-tint text-success-deep border border-success-line text-xs font-mono font-bold whitespace-nowrap">
                             {(st.status as string) === 'ENROLLED' ? 'TERDAFTAR' : st.status}
                           </span>
                         </td>
@@ -735,326 +706,357 @@ export const ProvisioningWorkspace: React.FC<{ onNavigateToOperations?: () => vo
         </div>
       )}
 
-      {/* MODAL 1: CREATE SCHOOL */}
-      {showCreateSchoolModal && isSuperadmin && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-brand/50 backdrop-blur-xs">
-          <div className="bg-surface rounded-card border border-line p-6 max-w-lg w-full shadow-floating space-y-4 text-ink">
-            <div className="flex justify-between items-center pb-2 border-b border-line-soft">
-              <div className="flex items-center space-x-2">
-                <Building2 className="w-5 h-5 text-brand-primary" />
-                <h3 className="font-bold text-sm text-ink">Dirikan Unit TK Yapendik Baru</h3>
-              </div>
-              <button
-                onClick={() => setShowCreateSchoolModal(false)}
-                className="text-ink-faint hover-only:text-ink transition-colors cursor-pointer"
-              >
-                <X className="w-4 h-4" />
-              </button>
+      {/* MODAL 1: CREATE SCHOOL (AdaptiveDialog - Directive A-4) */}
+      <AdaptiveDialog
+        isOpen={showCreateSchoolModal && isSuperadmin}
+        onClose={() => setShowCreateSchoolModal(false)}
+        maxWidth="md"
+        title={
+          <div className="space-y-1">
+            <div className="flex items-center space-x-2">
+              <Building2 className="w-5 h-5 text-brand-primary shrink-0" />
+              <span>Dirikan Unit TK Yapendik Baru</span>
+            </div>
+            <div className="flex flex-wrap items-center gap-1.5 pt-1 text-[11px] font-mono">
+              <span className="px-2 py-0.5 rounded-full bg-surface-subtle text-ink-soft border border-line">
+                Standar Kanonikal Yayasan
+              </span>
+              <span className="px-2 py-0.5 rounded-full bg-brand-tint text-brand-deep border border-brand/20 font-bold">
+                TA 2026/2027
+              </span>
+            </div>
+          </div>
+        }
+        description="Pendaftaran identitas unit baru ke dalam registri kanonikal yayasan."
+      >
+        <form onSubmit={handleCreateSchool} className="space-y-3.5 text-xs">
+          <div>
+            <label className="block text-ink-soft mb-1 font-semibold">Nama Resmi Unit Sekolah</label>
+            <input
+              type="text"
+              value={newSchoolName}
+              onChange={e => setNewSchoolName(e.target.value)}
+              placeholder="Contoh: TK Yapendik Maranatha"
+              required
+              className="w-full bg-surface-subtle border border-line rounded-field px-3 py-2 text-ink focus:outline-none focus:ring-1 focus:ring-brand-primary shadow-hairline"
+            />
+          </div>
+
+          <div>
+            <label className="block text-ink-soft mb-1 font-semibold">NPSN (Nomor Pokok Sekolah Nasional)</label>
+            <input
+              type="text"
+              value={newSchoolNpsn}
+              onChange={e => setNewSchoolNpsn(e.target.value)}
+              placeholder="Contoh: 69820291"
+              required
+              className="w-full bg-surface-subtle border border-line rounded-field px-3 py-2 text-ink font-mono focus:outline-none focus:ring-1 focus:ring-brand-primary shadow-hairline whitespace-nowrap"
+            />
+          </div>
+
+          <div>
+            <label className="block text-ink-soft mb-1 font-semibold">Alamat Lengkap Unit</label>
+            <textarea
+              value={newSchoolAddress}
+              onChange={e => setNewSchoolAddress(e.target.value)}
+              placeholder="Jl. Pemuda No. 88"
+              rows={2}
+              className="w-full bg-surface-subtle border border-line rounded-field px-3 py-2 text-ink focus:bg-surface focus:outline-none focus:ring-1 focus:ring-brand-primary shadow-hairline"
+            />
+          </div>
+
+          <div className="grid grid-cols-2 gap-2">
+            <div>
+              <label className="block text-ink-soft mb-1 font-semibold">Kota</label>
+              <input
+                type="text"
+                value={newSchoolCity}
+                onChange={e => setNewSchoolCity(e.target.value)}
+                className="w-full bg-surface-subtle border border-line rounded-field px-3 py-2 text-ink focus:bg-surface focus:outline-none focus:ring-1 focus:ring-brand-primary shadow-hairline"
+              />
+            </div>
+            <div>
+              <label className="block text-ink-soft mb-1 font-semibold">Telepon</label>
+              <input
+                type="text"
+                value={newSchoolPhone}
+                onChange={e => setNewSchoolPhone(e.target.value)}
+                placeholder="021-4712345"
+                className="w-full bg-surface-subtle border border-line rounded-field px-3 py-2 text-ink focus:bg-surface focus:outline-none focus:ring-1 focus:ring-brand-primary shadow-hairline"
+              />
+            </div>
+          </div>
+
+          <div>
+            <label className="block text-ink-soft mb-1 font-semibold">Email Unit</label>
+            <input
+              type="email"
+              value={newSchoolEmail}
+              onChange={e => setNewSchoolEmail(e.target.value)}
+              placeholder="tk03.rawamangun@yapendik.sch.id"
+              className="w-full bg-surface-subtle border border-line rounded-field px-3 py-2 text-ink focus:bg-surface focus:outline-none focus:ring-1 focus:ring-brand-primary shadow-hairline"
+            />
+          </div>
+
+          <div className="flex flex-col medium:flex-row justify-end gap-2 pt-3 border-t border-line-soft">
+            <button
+              type="button"
+              onClick={() => setShowCreateSchoolModal(false)}
+              className="w-full medium:w-auto px-4 py-2 bg-surface-subtle text-ink-soft font-bold rounded-field hover-only:bg-line-soft transition-colors cursor-pointer text-center"
+            >
+              Batal
+            </button>
+            <button
+              type="submit"
+              className="w-full medium:w-auto flex justify-center items-center px-4 py-2 bg-brand hover-only:opacity-90 text-on-brand font-bold rounded-field shadow-hairline transition-colors cursor-pointer"
+            >
+              Dirikan Unit TK
+            </button>
+          </div>
+        </form>
+      </AdaptiveDialog>
+
+      {/* MODAL 2: CREATE CLASSROOM (AdaptiveDialog - Directive A-4) */}
+      <AdaptiveDialog
+        isOpen={showCreateClassModal}
+        onClose={() => setShowCreateClassModal(false)}
+        maxWidth="md"
+        title={
+          <div className="space-y-1">
+            <div className="flex items-center space-x-2">
+              <Layers className="w-5 h-5 text-brand-primary shrink-0" />
+              <span>Bentuk Rombongan Belajar (Rombel)</span>
+            </div>
+            <div className="flex flex-wrap items-center gap-1.5 pt-1 text-[11px] font-mono">
+              <span className="px-2 py-0.5 rounded-full bg-surface-subtle text-ink-soft border border-line">
+                Unit: {currentSchool?.name}
+              </span>
+              <span className="px-2 py-0.5 rounded-full bg-brand-tint text-brand-deep border border-brand/20 font-bold">
+                Semester Ganjil
+              </span>
+            </div>
+          </div>
+        }
+        description="Penetapan kelompok rombel belajar baru dan penugasan wali kelas."
+      >
+        <form onSubmit={handleCreateClass} className="space-y-3 text-xs">
+          <div>
+            <label className="block text-ink-soft mb-1 font-semibold">Nama Rombel</label>
+            <input
+              type="text"
+              value={newClassName}
+              onChange={e => setNewClassName(e.target.value)}
+              placeholder="Contoh: Kelompok A (Mawar Indah)"
+              required
+              className="w-full bg-surface-subtle border border-line rounded-field px-3 py-2 text-ink focus:bg-surface focus:outline-none focus:ring-1 focus:ring-brand-primary shadow-hairline"
+            />
+          </div>
+
+          <div className="grid grid-cols-2 gap-2">
+            <div>
+              <label className="block text-ink-soft mb-1 font-semibold">Kelompok Usia</label>
+              <SelectSheet
+                value={newClassAgeGroup}
+                onChange={(val) => setNewClassAgeGroup(val as any)}
+                options={[
+                  { value: "TK_A_4_5", label: "4-5 Tahun (TK A)" },
+                  { value: "TK_B_5_6", label: "5-6 Tahun (TK B)" }
+                ]}
+              />
             </div>
 
-            <form onSubmit={handleCreateSchool} className="space-y-3.5 text-xs">
+            <div>
+              <label className="block text-ink-soft mb-1 font-semibold">Kapasitas Maksimal</label>
+              <input
+                type="number"
+                value={newClassCapacity}
+                onChange={e => setNewClassCapacity(Number(e.target.value))}
+                min={1}
+                max={30}
+                required
+                className="w-full bg-surface-subtle border border-line rounded-field px-3 py-2 text-ink focus:bg-surface focus:outline-none focus:ring-1 focus:ring-brand-primary shadow-hairline"
+              />
+            </div>
+          </div>
+
+          <div>
+            <label className="block text-ink-soft mb-1 font-semibold">Guru Wali Kelas (Opsional)</label>
+            <input
+              type="text"
+              value={newClassTeacherId}
+              onChange={e => setNewClassTeacherId(e.target.value)}
+              placeholder="Contoh: per_teacher_siti"
+              className="w-full bg-surface-subtle border border-line rounded-field px-3 py-2 text-ink focus:bg-surface focus:outline-none focus:ring-1 focus:ring-brand-primary shadow-hairline"
+            />
+          </div>
+
+          <div className="flex flex-col medium:flex-row justify-end gap-2 pt-3 border-t border-line-soft">
+            <button
+              type="button"
+              onClick={() => setShowCreateClassModal(false)}
+              className="w-full medium:w-auto px-4 py-2 bg-surface-subtle text-ink-soft font-bold rounded-field hover-only:bg-line-soft transition-colors cursor-pointer text-center"
+            >
+              Batal
+            </button>
+            <button
+              type="submit"
+              className="w-full medium:w-auto flex justify-center items-center px-4 py-2 bg-brand hover-only:opacity-90 text-on-brand font-bold rounded-field shadow-hairline transition-colors cursor-pointer"
+            >
+              Bentuk Rombel
+            </button>
+          </div>
+        </form>
+      </AdaptiveDialog>
+
+      {/* MODAL 3: ADMIT & PLACE STUDENT (AdaptiveDialog & Flattened per Directives A-3 & A-4) */}
+      <AdaptiveDialog
+        isOpen={showAdmitStudentModal}
+        onClose={() => setShowAdmitStudentModal(false)}
+        maxWidth="lg"
+        title={
+          <div className="space-y-1">
+            <div className="flex items-center space-x-2">
+              <Users className="w-5 h-5 text-brand-primary shrink-0" />
+              <span>Admisi &amp; Penempatan Siswa Baru</span>
+            </div>
+            <div className="flex flex-wrap items-center gap-1.5 pt-1 text-[11px] font-mono">
+              <span className="px-2 py-0.5 rounded-full bg-surface-subtle text-ink-soft border border-line">
+                Unit: {currentSchool?.name}
+              </span>
+              <span className="px-2 py-0.5 rounded-full bg-success-tint text-success-deep border border-success-line font-bold">
+                Registrasi Resmi
+              </span>
+            </div>
+          </div>
+        }
+        description="Pencatatan data induk siswa, penetapan rombel kelas, dan hubungan wali sah."
+      >
+        <form onSubmit={handleAdmitStudent} className="space-y-4 text-xs">
+          {/* Section 1: Data Induk Anak (Flattened - Depth = 1) */}
+          <div className="space-y-3">
+            <div className="flex items-center space-x-2 pb-1.5 border-b border-line-soft">
+              <span className="font-bold text-ink text-xs uppercase tracking-wider">1. Data Induk Anak</span>
+            </div>
+            <div>
+              <label className="block text-ink-soft mb-1 font-semibold">Nama Lengkap Anak</label>
+              <input
+                type="text"
+                value={childFullName}
+                onChange={e => setChildFullName(e.target.value)}
+                placeholder="Contoh: Jonathan Chris Rawamangun"
+                required
+                className="w-full bg-surface-subtle border border-line rounded-field px-3 py-2 text-ink focus:bg-surface focus:outline-none focus:ring-1 focus:ring-brand-primary shadow-hairline"
+              />
+            </div>
+
+            <div className="grid grid-cols-2 gap-2">
               <div>
-                <label className="block text-ink-soft mb-1 font-semibold">Nama Resmi Unit Sekolah</label>
+                <label className="block text-ink-soft mb-1 font-semibold">Nama Panggilan</label>
                 <input
                   type="text"
-                  value={newSchoolName}
-                  onChange={e => setNewSchoolName(e.target.value)}
-                  placeholder="Contoh: TK Yapendik Maranatha"
-                  required
-                  className="w-full bg-surface-subtle border border-line rounded-field px-3 py-2 text-ink focus:outline-none focus:ring-1 focus:ring-brand-primary shadow-hairline"
-                />
-              </div>
-
-              <div>
-                <label className="block text-ink-soft mb-1 font-semibold">NPSN (Nomor Pokok Sekolah Nasional)</label>
-                <input
-                  type="text"
-                  value={newSchoolNpsn}
-                  onChange={e => setNewSchoolNpsn(e.target.value)}
-                  placeholder="Contoh: 69820291"
-                  required
-                  className="w-full bg-surface-subtle border border-line rounded-field px-3 py-2 text-ink font-mono focus:outline-none focus:ring-1 focus:ring-brand-primary shadow-hairline whitespace-nowrap"
-                />
-              </div>
-
-              <div>
-                <label className="block text-ink-soft mb-1 font-semibold">Alamat Lengkap Unit</label>
-                <textarea
-                  value={newSchoolAddress}
-                  onChange={e => setNewSchoolAddress(e.target.value)}
-                  placeholder="Jl. Pemuda No. 88"
-                  rows={2}
+                  value={childPreferredName}
+                  onChange={e => setChildPreferredName(e.target.value)}
+                  placeholder="Jonathan"
                   className="w-full bg-surface-subtle border border-line rounded-field px-3 py-2 text-ink focus:bg-surface focus:outline-none focus:ring-1 focus:ring-brand-primary shadow-hairline"
                 />
               </div>
-
-              <div className="grid grid-cols-2 gap-2">
-                <div>
-                  <label className="block text-ink-soft mb-1 font-semibold">Kota</label>
-                  <input
-                    type="text"
-                    value={newSchoolCity}
-                    onChange={e => setNewSchoolCity(e.target.value)}
-                    className="w-full bg-surface-subtle border border-line rounded-field px-3 py-2 text-ink focus:bg-surface focus:outline-none focus:ring-1 focus:ring-brand-primary shadow-hairline"
-                  />
-                </div>
-                <div>
-                  <label className="block text-ink-soft mb-1 font-semibold">Telepon</label>
-                  <input
-                    type="text"
-                    value={newSchoolPhone}
-                    onChange={e => setNewSchoolPhone(e.target.value)}
-                    placeholder="021-4712345"
-                    className="w-full bg-surface-subtle border border-line rounded-field px-3 py-2 text-ink focus:bg-surface focus:outline-none focus:ring-1 focus:ring-brand-primary shadow-hairline"
-                  />
-                </div>
-              </div>
-
               <div>
-                <label className="block text-ink-soft mb-1 font-semibold">Email Unit</label>
+                <label className="block text-ink-soft mb-1 font-semibold">Jenis Kelamin</label>
+                <SelectSheet
+                  value={childGender}
+                  onChange={setChildGender}
+                  options={[
+                    { value: 'MALE', label: 'Laki-Laki' },
+                    { value: 'FEMALE', label: 'Perempuan' }
+                  ]}
+                />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-2">
+              <div>
+                <label className="block text-ink-soft mb-1 font-semibold">NIS</label>
+                <input
+                  type="text"
+                  value={childNis}
+                  onChange={e => setChildNis(e.target.value)}
+                  placeholder="TK-2026-0301"
+                  className="w-full bg-surface-subtle border border-line rounded-field px-3 py-2 text-ink font-mono focus:bg-surface focus:outline-none focus:ring-1 focus:ring-brand-primary shadow-hairline whitespace-nowrap"
+                />
+              </div>
+              <div>
+                <label className="block text-ink-soft mb-1 font-semibold">Rombel Penempatan</label>
+                <SelectSheet
+                  value={targetClassId}
+                  onChange={setTargetClassId}
+                  placeholder="Pilih Rombel..."
+                  options={[
+                    { value: '', label: 'Pilih Rombel...' },
+                    ...currentSchoolClasses.map(c => ({ value: c.id, label: `${c.name} (${c.capacity} anak)` }))
+                  ]}
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Section 2: Data Orang Tua / Wali (Flattened - Depth = 1) */}
+          <div className="space-y-3 pt-3 border-t border-line-soft">
+            <div className="flex items-center space-x-2 pb-1.5 border-b border-line-soft">
+              <span className="font-bold text-ink text-xs uppercase tracking-wider">2. Data Orang Tua / Wali</span>
+            </div>
+            <div>
+              <label className="block text-ink-soft mb-1 font-semibold">Nama Lengkap Orang Tua</label>
+              <input
+                type="text"
+                value={guardianFullName}
+                onChange={e => setGuardianFullName(e.target.value)}
+                placeholder="Contoh: Hendrik Rawamangun"
+                required
+                className="w-full bg-surface-subtle border border-line rounded-field px-3 py-2 text-ink focus:bg-surface focus:outline-none focus:ring-1 focus:ring-brand-primary shadow-hairline"
+              />
+            </div>
+
+            <div className="grid grid-cols-2 gap-2">
+              <div>
+                <label className="block text-ink-soft mb-1 font-semibold">Telepon / WhatsApp</label>
+                <input
+                  type="text"
+                  value={guardianPhone}
+                  onChange={e => setGuardianPhone(e.target.value)}
+                  placeholder="08123456789"
+                  className="w-full bg-surface-subtle border border-line rounded-field px-3 py-2 text-ink focus:bg-surface focus:outline-none focus:ring-1 focus:ring-brand-primary shadow-hairline"
+                />
+              </div>
+              <div>
+                <label className="block text-ink-soft mb-1 font-semibold">Email Orang Tua</label>
                 <input
                   type="email"
-                  value={newSchoolEmail}
-                  onChange={e => setNewSchoolEmail(e.target.value)}
-                  placeholder="tk03.rawamangun@yapendik.sch.id"
+                  value={guardianEmail}
+                  onChange={e => setGuardianEmail(e.target.value)}
+                  placeholder="hendrik@gmail.com"
                   className="w-full bg-surface-subtle border border-line rounded-field px-3 py-2 text-ink focus:bg-surface focus:outline-none focus:ring-1 focus:ring-brand-primary shadow-hairline"
                 />
               </div>
-
-              <div className="flex flex-col medium:flex-row justify-end gap-2 pt-3 border-t border-line-soft">
-                <button
-                  type="button"
-                  onClick={() => setShowCreateSchoolModal(false)}
-                  className="w-full medium:w-auto px-4 py-2 bg-surface-subtle text-ink-soft font-bold rounded-field hover-only:bg-line-soft transition-colors cursor-pointer text-center"
-                >
-                  Batal
-                </button>
-                <button
-                  type="submit"
-                  className="w-full medium:w-auto flex justify-center items-center px-4 py-2 bg-brand hover-only:opacity-90 text-on-brand font-bold rounded-field shadow-hairline transition-colors cursor-pointer"
-                >
-                  Dirikan Unit TK
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
-
-      {/* MODAL 2: CREATE CLASSROOM */}
-      {showCreateClassModal && (
-        <div className="fixed inset-0 bg-brand/40 backdrop-blur-xs z-50 flex items-center justify-center p-4">
-          <div className="bg-surface border border-line rounded-card max-w-md w-full p-4 medium:p-6 shadow-floating space-y-4">
-            <div className="flex items-center justify-between pb-3 border-b border-line-soft">
-              <h3 className="text-base font-bold text-ink">Bentuk Rombongan Belajar (Rombel)</h3>
-              <button
-                onClick={() => setShowCreateClassModal(false)}
-                className="w-8 h-8 rounded-full bg-surface-subtle hover-only:bg-line-soft text-ink-soft flex items-center justify-center transition-colors cursor-pointer shrink-0"
-              >
-                <X className="w-4 h-4" />
-              </button>
             </div>
-
-            <form onSubmit={handleCreateClass} className="space-y-3 text-xs">
-              <div>
-                <label className="block text-ink-soft mb-1 font-semibold">Nama Rombel</label>
-                <input
-                  type="text"
-                  value={newClassName}
-                  onChange={e => setNewClassName(e.target.value)}
-                  placeholder="Contoh: Kelompok A (Mawar Indah)"
-                  required
-                  className="w-full bg-surface-subtle border border-line rounded-field px-3 py-2 text-ink focus:bg-surface focus:outline-none focus:ring-1 focus:ring-brand-primary shadow-hairline"
-                />
-              </div>
-
-              <div className="grid grid-cols-2 gap-2">
-                <div>
-                  <label className="block text-ink-soft mb-1 font-semibold">Kelompok Usia</label>
-                  <SelectSheet value={newClassAgeGroup} onChange={(val) => setNewClassAgeGroup(val as any)} options={[{ value: "TK_A_4_5", label: "4-5 Tahun (TK A)" }, { value: "TK_B_5_6", label: "5-6 Tahun (TK B)" }]} />
-                </div>
-
-                <div>
-                  <label className="block text-ink-soft mb-1 font-semibold">Kapasitas Maksimal</label>
-                  <input
-                    type="number"
-                    value={newClassCapacity}
-                    onChange={e => setNewClassCapacity(Number(e.target.value))}
-                    min={1}
-                    max={30}
-                    required
-                    className="w-full bg-surface-subtle border border-line rounded-field px-3 py-2 text-ink focus:bg-surface focus:outline-none focus:ring-1 focus:ring-brand-primary shadow-hairline"
-                  />
-                </div>
-              </div>
-
-              <div>
-                <label className="block text-ink-soft mb-1 font-semibold">Guru Wali Kelas (Opsional)</label>
-                <input
-                  type="text"
-                  value={newClassTeacherId}
-                  onChange={e => setNewClassTeacherId(e.target.value)}
-                  placeholder="Contoh: per_teacher_siti"
-                  className="w-full bg-surface-subtle border border-line rounded-field px-3 py-2 text-ink focus:bg-surface focus:outline-none focus:ring-1 focus:ring-brand-primary shadow-hairline"
-                />
-              </div>
-
-              <div className="flex flex-col medium:flex-row justify-end gap-2 pt-3 border-t border-line-soft">
-                <button
-                  type="button"
-                  onClick={() => setShowCreateClassModal(false)}
-                  className="w-full medium:w-auto px-4 py-2 bg-surface-subtle text-ink-soft font-bold rounded-field hover-only:bg-line-soft transition-colors cursor-pointer text-center"
-                >
-                  Batal
-                </button>
-                <button
-                  type="submit"
-                  className="w-full medium:w-auto flex justify-center items-center px-4 py-2 bg-brand hover-only:opacity-90 text-on-brand font-bold rounded-field shadow-hairline transition-colors cursor-pointer"
-                >
-                  Bentuk Rombel
-                </button>
-              </div>
-            </form>
           </div>
-        </div>
-      )}
 
-      {/* MODAL 3: ADMIT & PLACE STUDENT */}
-      {showAdmitStudentModal && (
-        <div className="fixed inset-0 bg-brand/40 backdrop-blur-xs z-50 flex items-center justify-center p-4 overflow-y-auto">
-          <div className="bg-surface border border-line rounded-card max-w-lg w-full p-4 medium:p-6 shadow-floating space-y-4 my-8">
-            <div className="flex items-center justify-between pb-3 border-b border-line-soft">
-              <h3 className="text-base font-bold text-ink">Admisi &amp; Penempatan Siswa Baru</h3>
-              <button
-                onClick={() => setShowAdmitStudentModal(false)}
-                className="w-8 h-8 rounded-full bg-surface-subtle hover-only:bg-line-soft text-ink-soft flex items-center justify-center transition-colors cursor-pointer shrink-0"
-              >
-                <X className="w-4 h-4" />
-              </button>
-            </div>
-
-            <form onSubmit={handleAdmitStudent} className="space-y-3 text-xs">
-              <div className="p-3 bg-surface-subtle rounded-field border border-line space-y-2.5">
-                <span className="font-bold text-ink text-xs uppercase tracking-wider">1. Data Induk Anak</span>
-                <div>
-                  <label className="block text-ink-soft mb-1 font-semibold">Nama Lengkap Anak</label>
-                  <input
-                    type="text"
-                    value={childFullName}
-                    onChange={e => setChildFullName(e.target.value)}
-                    placeholder="Contoh: Jonathan Chris Rawamangun"
-                    required
-                    className="w-full bg-surface border border-line rounded-field px-3 py-2 text-ink focus:outline-none focus:ring-1 focus:ring-brand-primary shadow-hairline"
-                  />
-                </div>
-
-                <div className="grid grid-cols-2 gap-2">
-                  <div>
-                    <label className="block text-ink-soft mb-1 font-semibold">Nama Panggilan</label>
-                    <input
-                      type="text"
-                      value={childPreferredName}
-                      onChange={e => setChildPreferredName(e.target.value)}
-                      placeholder="Jonathan"
-                      className="w-full bg-surface border border-line rounded-field px-3 py-2 text-ink focus:outline-none focus:ring-1 focus:ring-brand-primary shadow-hairline"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-ink-soft mb-1 font-semibold">Jenis Kelamin</label>
-                    <SelectSheet
-                      value={childGender}
-                      onChange={setChildGender}
-                      options={[
-                        { value: 'MALE', label: 'Laki-Laki' },
-                        { value: 'FEMALE', label: 'Perempuan' }
-                      ]}
-                    />
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-2 gap-2">
-                  <div>
-                    <label className="block text-ink-soft mb-1 font-semibold">NIS</label>
-                    <input
-                      type="text"
-                      value={childNis}
-                      onChange={e => setChildNis(e.target.value)}
-                      placeholder="TK-2026-0301"
-                      className="w-full bg-surface border border-line rounded-field px-3 py-2 text-ink focus:outline-none focus:ring-1 focus:ring-brand-primary shadow-hairline"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-ink-soft mb-1 font-semibold">Rombel Penempatan</label>
-                    <SelectSheet
-                      value={targetClassId}
-                      onChange={setTargetClassId}
-                      placeholder="Pilih Rombel..."
-                      options={[
-                        { value: '', label: 'Pilih Rombel...' },
-                        ...currentSchoolClasses.map(c => ({ value: c.id, label: `${c.name} (${c.capacity} anak)` }))
-                      ]}
-                    />
-                  </div>
-                </div>
-              </div>
-
-              <div className="p-3 bg-surface-subtle rounded-field border border-line space-y-2.5">
-                <span className="font-bold text-ink text-xs uppercase tracking-wider">2. Data Orang Tua / Wali</span>
-                <div>
-                  <label className="block text-ink-soft mb-1 font-semibold">Nama Lengkap Orang Tua</label>
-                  <input
-                    type="text"
-                    value={guardianFullName}
-                    onChange={e => setGuardianFullName(e.target.value)}
-                    placeholder="Contoh: Hendrik Rawamangun"
-                    required
-                    className="w-full bg-surface border border-line rounded-field px-3 py-2 text-ink focus:outline-none focus:ring-1 focus:ring-brand-primary shadow-hairline"
-                  />
-                </div>
-
-                <div className="grid grid-cols-2 gap-2">
-                  <div>
-                    <label className="block text-ink-soft mb-1 font-semibold">Telepon / WhatsApp</label>
-                    <input
-                      type="text"
-                      value={guardianPhone}
-                      onChange={e => setGuardianPhone(e.target.value)}
-                      placeholder="08123456789"
-                      className="w-full bg-surface border border-line rounded-field px-3 py-2 text-ink focus:outline-none focus:ring-1 focus:ring-brand-primary shadow-hairline"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-ink-soft mb-1 font-semibold">Email Orang Tua</label>
-                    <input
-                      type="email"
-                      value={guardianEmail}
-                      onChange={e => setGuardianEmail(e.target.value)}
-                      placeholder="hendrik@gmail.com"
-                      className="w-full bg-surface border border-line rounded-field px-3 py-2 text-ink focus:outline-none focus:ring-1 focus:ring-brand-primary shadow-hairline"
-                    />
-                  </div>
-                </div>
-              </div>
-
-              <div className="flex flex-col medium:flex-row justify-end gap-2 pt-3 border-t border-line-soft">
-                <button
-                  type="button"
-                  onClick={() => setShowAdmitStudentModal(false)}
-                  className="w-full medium:w-auto px-4 py-2 bg-surface-subtle text-ink-soft font-bold rounded-field hover-only:bg-line-soft transition-colors cursor-pointer text-center"
-                >
-                  Batal
-                </button>
-                <button
-                  type="submit"
-                  className="w-full medium:w-auto flex justify-center items-center px-4 py-2 bg-brand hover-only:opacity-90 text-on-brand font-bold rounded-field shadow-hairline transition-colors cursor-pointer"
-                >
-                  Admisi &amp; Simpan Siswa
-                </button>
-              </div>
-            </form>
+          <div className="flex flex-col medium:flex-row justify-end gap-2 pt-3 border-t border-line-soft">
+            <button
+              type="button"
+              onClick={() => setShowAdmitStudentModal(false)}
+              className="w-full medium:w-auto px-4 py-2 bg-surface-subtle text-ink-soft font-bold rounded-field hover-only:bg-line-soft transition-colors cursor-pointer text-center"
+            >
+              Batal
+            </button>
+            <button
+              type="submit"
+              className="w-full medium:w-auto flex justify-center items-center px-4 py-2 bg-brand hover-only:opacity-90 text-on-brand font-bold rounded-field shadow-hairline transition-colors cursor-pointer"
+            >
+              Admisi &amp; Simpan Siswa
+            </button>
           </div>
-        </div>
-      )}
+        </form>
+      </AdaptiveDialog>
     </div>
   );
 };

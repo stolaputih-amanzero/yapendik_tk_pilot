@@ -60,8 +60,9 @@ async function runFoundationCockpitTests() {
       const students = db.getStudents('sch_tk_maranatha');
       const foundNames: string[] = [];
       for (const student of students) {
-        if (html.includes(student.fullName)) {
-          foundNames.push(student.fullName);
+        const studentName = student.person?.fullName;
+        if (studentName && html.includes(studentName)) {
+          foundNames.push(studentName);
         }
       }
       assert.equal(foundNames.length, 0, `Student names leaked into Foundation DOM: ${foundNames.join(', ')}`);

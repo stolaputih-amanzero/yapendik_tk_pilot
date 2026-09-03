@@ -311,10 +311,10 @@ export const AttendanceWorkspace: React.FC = () => {
   };
 
   const statusSegments: SegmentedControlOption[] = [
-    { id: 'HADIR', label: 'Hadir', activeClassName: 'bg-emerald-600 dark:bg-emerald-500 text-white font-bold shadow-sm ring-1 ring-emerald-700/60' },
-    { id: 'SAKIT', label: 'Sakit', activeClassName: 'bg-amber-500 dark:bg-amber-600 text-white font-bold shadow-sm ring-1 ring-amber-700/60' },
-    { id: 'IZIN', label: 'Izin', activeClassName: 'bg-sky-600 dark:bg-sky-500 text-white font-bold shadow-sm ring-1 ring-sky-700/60' },
-    { id: 'ALPA', label: 'Alpa', activeClassName: 'bg-rose-600 dark:bg-rose-500 text-white font-bold shadow-sm ring-1 ring-rose-700/60' }
+    { id: 'HADIR', label: 'Hadir', activeClassName: 'bg-success text-on-brand font-bold shadow-sm ring-1 ring-success-line' },
+    { id: 'SAKIT', label: 'Sakit', activeClassName: 'bg-warning text-on-brand font-bold shadow-sm ring-1 ring-warning-line' },
+    { id: 'IZIN', label: 'Izin', activeClassName: 'bg-info text-on-brand font-bold shadow-sm ring-1 ring-info-line' },
+    { id: 'ALPA', label: 'Alpa', activeClassName: 'bg-danger text-on-brand font-bold shadow-sm ring-1 ring-danger-line' }
   ];
 
   const classSegments: SegmentedControlOption[] = classes.map(c => ({

@@ -3,8 +3,8 @@ import { ProspectiveChildApplicant, AdmissionsDocument, ClassLevel, Gender, Guar
 import { admissionsService } from '../../../services/admissionsService';
 import { ApplicationStepper } from './ApplicationStepper';
 import { DocumentUploadZone } from './DocumentUploadZone';
-import { SegmentedControl, SelectSheet, Input } from '../../../components/ui';
-import { User, Phone, Mail, School, Award, FileText, CheckCircle2, Plus, X, Users, Baby, Calendar } from 'lucide-react';
+import { SegmentedControl, SelectSheet, Input, AdaptiveDialog } from '../../../components/ui';
+import { User, Phone, Mail, School, Award, FileText, CheckCircle2, Plus, X, Users, Baby, Calendar, Building2, GraduationCap } from 'lucide-react';
 
 interface ApplicationDashboardProps {
   creatorUid: string;
@@ -119,7 +119,7 @@ export const ApplicationDashboard: React.FC<ApplicationDashboardProps> = ({ crea
 
   if (!selectedApp) {
     return (
-      <div className="px-4 medium:px-6 py-6 space-y-6 max-w-7xl mx-auto">
+      <div className="w-full space-y-6 text-ink">
         <div className="p-10 text-center bg-surface border border-line rounded-card shadow-hairline">
           <div className="w-16 h-16 rounded-card bg-surface-subtle text-ink flex items-center justify-center mx-auto mb-4 border border-line">
             <FileText className="w-8 h-8" />
@@ -158,151 +158,176 @@ export const ApplicationDashboard: React.FC<ApplicationDashboardProps> = ({ crea
     : 'TPA / Penitipan Anak';
 
   function renderNewAppModal() {
+    const targetUnitName = targetSchoolId === 'sch_tk_yapendik_01' ? 'TK Yapendik 01 Menteng' : 'TK Yapendik 02 Kebayoran';
+
+    const dialogHeader = (
+      <div className="space-y-3">
+        {/* Tier 1: Identity */}
+        <div className="flex items-center space-x-3">
+          <div className="w-10 h-10 rounded-full bg-brand text-on-brand flex items-center justify-center font-bold text-sm shrink-0 shadow-hairline">
+            <Baby className="w-5 h-5" />
+          </div>
+          <div className="min-w-0 flex-1">
+            <h2 className="text-lg font-bold text-ink tracking-tight truncate">
+              Formulir Pendaftaran Calon Siswa Baru
+            </h2>
+            <p className="text-xs text-ink-soft">
+              Penerimaan Peserta Didik Baru (PPDB) TK Yapendik
+            </p>
+          </div>
+        </div>
+
+        {/* Tier 2: Context Ribbon (Hukum 9 Matching-Pill Context Ribbon) */}
+        <div className="flex flex-wrap items-center gap-2 pt-1">
+          <span className="inline-flex items-center space-x-1.5 px-3 py-1 rounded-full bg-surface-subtle border border-line text-[11px] font-medium text-ink-soft">
+            <Building2 className="w-4 h-4 text-brand-primary shrink-0" />
+            <span>{targetUnitName}</span>
+          </span>
+          <span className="inline-flex items-center space-x-1.5 px-3 py-1 rounded-full bg-surface-subtle border border-line text-[11px] font-medium text-ink-soft">
+            <Calendar className="w-4 h-4 text-brand-secondary shrink-0" />
+            <span>T.A. 2026/2027 • Ganjil</span>
+          </span>
+          <span className="inline-flex items-center space-x-1.5 px-3 py-1 rounded-full bg-brand-tint border border-brand-line text-[11px] font-bold text-brand-deep">
+            <GraduationCap className="w-4 h-4 text-brand-primary shrink-0" />
+            <span>Jenjang: {targetClassLevel.replace('_', ' ')}</span>
+          </span>
+        </div>
+      </div>
+    );
+
     return (
-      <div className="fixed inset-0 z-50 flex items-end medium:items-center justify-center p-0 medium:p-4 bg-brand/40 backdrop-blur-xs animate-in fade-in duration-200">
-        <div className="bg-surface rounded-t-3xl medium:rounded-card border-t medium:border border-line shadow-floating max-w-lg w-full overflow-hidden text-ink">
-          <div className="px-5 py-4 border-b border-line flex items-center justify-between bg-surface shrink-0">
-            <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-field bg-brand text-on-brand flex items-center justify-center font-bold text-xs">
-                <Baby className="w-4 h-4" />
-              </div>
-              <div>
-                <h3 className="text-sm font-bold text-ink">Formulir Pendaftaran Siswa Baru</h3>
-                <p className="text-[11px] text-ink-soft">Penerimaan Peserta Didik Baru (PPDB) TK Yapendik</p>
-              </div>
-            </div>
+      <AdaptiveDialog
+        isOpen={showNewAppModal}
+        onClose={() => setShowNewAppModal(false)}
+        title={dialogHeader}
+        description="Pengisian berkas pendaftaran awal peserta didik baru."
+        maxWidth="lg"
+        footer={
+          <div className="flex flex-col sm:flex-row items-center justify-end gap-2 w-full">
             <button
+              type="button"
               onClick={() => setShowNewAppModal(false)}
-              className="w-8 h-8 rounded-full bg-surface-subtle hover-only:bg-line-soft text-ink-soft flex items-center justify-center transition-colors cursor-pointer shrink-0 ml-2"
+              className="w-full sm:w-auto px-4 py-2 rounded-field border border-line text-ink-soft text-xs font-bold hover-only:bg-surface-subtle cursor-pointer"
             >
-              <X className="w-4 h-4" />
+              Batal
+            </button>
+            <button
+              type="button"
+              onClick={handleCreateNewApplication}
+              className="w-full sm:w-auto px-5 py-2 rounded-field bg-brand text-on-brand text-xs font-bold hover-only:opacity-90 shadow-hairline cursor-pointer flex justify-center items-center gap-2"
+            >
+              <Plus className="w-4 h-4" />
+              <span>Simpan &amp; Ajukan Pendaftaran</span>
             </button>
           </div>
+        }
+      >
+        <form onSubmit={handleCreateNewApplication} className="space-y-4 text-xs max-h-[90dvh] overflow-y-auto py-1">
+          <div>
+            <label className="block font-bold text-ink-soft mb-1">Nama Lengkap Calon Siswa *</label>
+            <input
+              type="text"
+              placeholder="Contoh: Timothy Andreas Pandjaitan"
+              value={childFullName}
+              onChange={e => setChildFullName(e.target.value)}
+              required
+              className="w-full bg-surface border border-line rounded-field px-3 py-2 font-medium text-ink outline-none focus:ring-1 focus:ring-brand-primary"
+            />
+          </div>
 
-          <form onSubmit={handleCreateNewApplication} className="p-4 medium:p-6 space-y-4 text-xs max-h-[75vh] overflow-y-auto">
+          <div className="space-y-3">
+            <div className="grid grid-cols-1 medium:grid-cols-2 gap-3">
+              <div>
+                <label className="block font-bold text-ink-soft mb-1 text-xs">Jenis Kelamin</label>
+                <SegmentedControl
+                  value={childGender}
+                  onChange={val => setChildGender(val as Gender)}
+                  options={[
+                    { id: 'L', label: 'Laki-Laki' },
+                    { id: 'P', label: 'Perempuan' }
+                  ]}
+                />
+              </div>
+              <Input
+                label="Tanggal Lahir"
+                type="date"
+                value={childDob}
+                onChange={e => setChildDob(e.target.value)}
+                required
+              />
+            </div>
+
+            <div className="grid grid-cols-1 medium:grid-cols-2 gap-3">
+              <SelectSheet
+                label="Unit TK Pilihan"
+                value={targetSchoolId}
+                onChange={setTargetSchoolId}
+                options={[
+                  { value: 'sch_tk_yapendik_01', label: 'TK Yapendik 01 Menteng' },
+                  { value: 'sch_tk_yapendik_02', label: 'TK Yapendik 02 Kebayoran' }
+                ]}
+              />
+              
+              <div>
+                <label className="block font-bold text-ink-soft mb-1 text-xs">Tingkat Kelas</label>
+                <SegmentedControl
+                  value={targetClassLevel}
+                  onChange={val => setTargetClassLevel(val as ClassLevel)}
+                  options={[
+                    { id: 'TK_A', label: 'TK A' },
+                    { id: 'TK_B', label: 'TK B' },
+                    { id: 'KB', label: 'KB' },
+                    { id: 'TPA', label: 'TPA' }
+                  ]}
+                />
+              </div>
+            </div>
+
             <div>
-              <label className="block font-bold text-ink-soft mb-1">Nama Lengkap Calon Siswa *</label>
+              <label className="block font-bold text-ink-soft mb-1 text-xs">Hubungan Wali</label>
+              <SegmentedControl
+                value={relationshipType}
+                onChange={val => setRelationshipType(val as GuardianRelationshipType)}
+                options={[
+                  { id: 'AYAH', label: 'Ayah Kandung' },
+                  { id: 'IBU', label: 'Ibu Kandung' },
+                  { id: 'WALI_HUKUM', label: 'Wali Hukum' }
+                ]}
+              />
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div>
+              <label className="block font-bold text-ink-soft mb-1">Nomor WhatsApp Wali</label>
               <input
-                type="text"
-                placeholder="Contoh: Timothy Andreas Pandjaitan"
-                value={childFullName}
-                onChange={e => setChildFullName(e.target.value)}
+                type="tel"
+                placeholder="0812xxxxxxx"
+                value={guardianPhone}
+                onChange={e => setGuardianPhone(e.target.value)}
                 required
                 className="w-full bg-surface border border-line rounded-field px-3 py-2 font-medium text-ink outline-none focus:ring-1 focus:ring-brand-primary"
               />
             </div>
-
-            <div className="space-y-3">
-              <div className="grid grid-cols-1 medium:grid-cols-2 gap-3">
-                <div>
-                  <label className="block font-bold text-ink-soft mb-1 text-xs">Jenis Kelamin</label>
-                  <SegmentedControl
-                    value={childGender}
-                    onChange={val => setChildGender(val as Gender)}
-                    options={[
-                      { id: 'L', label: 'Laki-Laki' },
-                      { id: 'P', label: 'Perempuan' }
-                    ]}
-                  />
-                </div>
-                <Input
-                  label="Tanggal Lahir"
-                  type="date"
-                  value={childDob}
-                  onChange={e => setChildDob(e.target.value)}
-                  required
-                />
-              </div>
-
-              <div className="grid grid-cols-1 medium:grid-cols-2 gap-3">
-                <SelectSheet
-                  label="Unit TK Pilihan"
-                  value={targetSchoolId}
-                  onChange={setTargetSchoolId}
-                  options={[
-                    { value: 'sch_tk_yapendik_01', label: 'TK Yapendik 01 Menteng' },
-                    { value: 'sch_tk_yapendik_02', label: 'TK Yapendik 02 Kebayoran' }
-                  ]}
-                />
-                
-                <div>
-                  <label className="block font-bold text-ink-soft mb-1 text-xs">Tingkat Kelas</label>
-                  <SegmentedControl
-                    value={targetClassLevel}
-                    onChange={val => setTargetClassLevel(val as ClassLevel)}
-                    options={[
-                      { id: 'TK_A', label: 'TK A' },
-                      { id: 'TK_B', label: 'TK B' },
-                      { id: 'KB', label: 'KB' },
-                      { id: 'TPA', label: 'TPA' }
-                    ]}
-                  />
-                </div>
-              </div>
-
-              <div>
-                <label className="block font-bold text-ink-soft mb-1 text-xs">Hubungan Wali</label>
-                <SegmentedControl
-                  value={relationshipType}
-                  onChange={val => setRelationshipType(val as GuardianRelationshipType)}
-                  options={[
-                    { id: 'AYAH', label: 'Ayah Kandung' },
-                    { id: 'IBU', label: 'Ibu Kandung' },
-                    { id: 'WALI_HUKUM', label: 'Wali Hukum' }
-                  ]}
-                />
-              </div>
+            <div>
+              <label className="block font-bold text-ink-soft mb-1">NIK Anak (Opsional)</label>
+              <input
+                type="text"
+                placeholder="16 digit NIK"
+                value={childNik}
+                onChange={e => setChildNik(e.target.value)}
+                maxLength={16}
+                className="w-full bg-surface border border-line rounded-field px-3 py-2 font-medium text-ink outline-none focus:ring-1 focus:ring-brand-primary font-mono"
+              />
             </div>
-
-            <div className="grid grid-cols-2 gap-3">
-              <div>
-                <label className="block font-bold text-ink-soft mb-1">Nomor WhatsApp Wali</label>
-                <input
-                  type="tel"
-                  placeholder="0812xxxxxxx"
-                  value={guardianPhone}
-                  onChange={e => setGuardianPhone(e.target.value)}
-                  required
-                  className="w-full bg-surface border border-line rounded-field px-3 py-2 font-medium text-ink outline-none focus:ring-1 focus:ring-brand-primary"
-                />
-              </div>
-              <div>
-                <label className="block font-bold text-ink-soft mb-1">NIK Anak (Opsional)</label>
-                <input
-                  type="text"
-                  placeholder="16 digit NIK"
-                  value={childNik}
-                  onChange={e => setChildNik(e.target.value)}
-                  maxLength={16}
-                  className="w-full bg-surface border border-line rounded-field px-3 py-2 font-medium text-ink outline-none focus:ring-1 focus:ring-brand-primary"
-                />
-              </div>
-            </div>
-
-            <div className="flex flex-col medium:flex-row items-center justify-end gap-2 pt-3 border-t border-line-soft">
-              <button
-                type="button"
-                onClick={() => setShowNewAppModal(false)}
-                className="w-full medium:w-auto px-4 py-2 rounded-field border border-line text-ink-soft font-bold hover-only:bg-surface-subtle cursor-pointer"
-              >
-                Batal
-              </button>
-              <button
-                type="submit"
-                className="w-full medium:w-auto px-5 py-2 rounded-field bg-brand text-on-brand font-bold hover-only:opacity-90 shadow-hairline cursor-pointer flex justify-center items-center gap-2"
-              >
-                <Plus className="w-4 h-4" />
-                <span>Simpan & Ajukan Pendaftaran</span>
-              </button>
-            </div>
-          </form>
-        </div>
-      </div>
+          </div>
+        </form>
+      </AdaptiveDialog>
     );
   }
 
   return (
-    <div className="px-4 medium:px-6 py-6 space-y-6 max-w-7xl mx-auto" data-testid="application-dashboard">
+    <div className="w-full space-y-6 text-ink" data-testid="application-dashboard">
       {/* Multiple Applicant Switcher Pill Bar */}
       {applications.length > 1 && (
         <div className="bg-surface border border-line rounded-card p-3 shadow-hairline flex flex-col medium:flex-row medium:items-center justify-between gap-2">

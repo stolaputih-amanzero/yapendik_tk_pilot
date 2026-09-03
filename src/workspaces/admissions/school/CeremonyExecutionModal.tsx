@@ -1,8 +1,20 @@
+/**
+ * Yapendik School OS — Stage 7 Gate 2
+ * The Enrollment Ceremony Modal (ADR-05 & Hukum 8 Adaptive Dialog)
+ * 
+ * Strict Governance & Ergonomics:
+ * - Hukum 8: AdaptiveDialog migration (Bottom sheet on mobile, centered on desktop)
+ * - Hukum 9: 2-Tier Header (Matching-Pill Context Ribbon)
+ * - Precondition check: applicant.status === 'TUITION_SETTLED'
+ * - Authority Confirmation: Manual typed name match verification
+ */
+
 import React, { useState } from 'react';
 import { ProspectiveChildApplicant, EnrollmentCeremonyResult } from '../../../types/admissionsTypes';
 import { admissionsService } from '../../../services/admissionsService';
+import { AdaptiveDialog } from '../../../components/ui/AdaptiveDialog';
 import { SelectSheet, Input } from '../../../components/ui';
-import { GraduationCap, ShieldCheck, AlertTriangle, CheckCircle2, X } from 'lucide-react';
+import { GraduationCap, ShieldCheck, AlertTriangle, Building2, Calendar, Sparkles } from 'lucide-react';
 
 interface CeremonyExecutionModalProps {
   applicant: ProspectiveChildApplicant;
@@ -55,44 +67,96 @@ export const CeremonyExecutionModal: React.FC<CeremonyExecutionModalProps> = ({
     ? 'TK Yapendik 02 Kebayoran'
     : applicant.target_school_id;
 
+  const initials = applicant.child_full_name
+    .split(' ')
+    .slice(0, 2)
+    .map(w => w[0])
+    .join('')
+    .toUpperCase();
+
+  // Tier 1 & Tier 2 Header (Hukum 9 Matching-Pill Context Ribbon)
+  const dialogHeader = (
+    <div className="space-y-3">
+      {/* Tier 1: Identity */}
+      <div className="flex items-center space-x-3">
+        <div className="w-10 h-10 rounded-full bg-brand text-on-brand flex items-center justify-center font-bold text-sm shrink-0 shadow-hairline">
+          {initials}
+        </div>
+        <div className="min-w-0 flex-1">
+          <h2 className="text-lg font-bold text-ink tracking-tight truncate">
+            {applicant.child_full_name}
+          </h2>
+          <p className="text-xs text-ink-soft font-mono">
+            NIK: {applicant.child_nik}
+          </p>
+        </div>
+      </div>
+
+      {/* Tier 2: Context Ribbon */}
+      <div className="flex flex-wrap items-center gap-2 pt-1">
+        <span className="inline-flex items-center space-x-1.5 px-3 py-1 rounded-full bg-surface-subtle border border-line text-[11px] font-medium text-ink-soft">
+          <Building2 className="w-4 h-4 text-brand-primary shrink-0" />
+          <span>{schoolDisplayName}</span>
+        </span>
+        <span className="inline-flex items-center space-x-1.5 px-3 py-1 rounded-full bg-surface-subtle border border-line text-[11px] font-medium text-ink-soft">
+          <Calendar className="w-4 h-4 text-brand-secondary shrink-0" />
+          <span>T.A. 2026/2027 • Ganjil</span>
+        </span>
+        <span className="inline-flex items-center space-x-1.5 px-3 py-1 rounded-full bg-success-tint border border-success-line text-[11px] font-bold text-success-deep">
+          <GraduationCap className="w-4 h-4 text-success shrink-0" />
+          <span>Jenjang: {applicant.target_class_level.replace('_', ' ')}</span>
+        </span>
+      </div>
+    </div>
+  );
+
   return (
-    <div className="fixed inset-0 z-50 bg-brand/60 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto" data-testid="ceremony-execution-modal">
-      <div className="w-full max-w-2xl bg-surface border border-line rounded-3xl shadow-floating p-6 medium:p-8 space-y-6">
-        {/* Header */}
-        <div className="text-center space-y-2 border-b border-line-soft pb-6 relative">
+    <AdaptiveDialog
+      isOpen={true}
+      onClose={onClose}
+      title={dialogHeader}
+      description="ADR-05: The Enrollment Ceremony — Pengukuhan Kedaulatan Kepala Sekolah"
+      maxWidth="xl"
+      footer={
+        <div className="flex items-center justify-between w-full">
           <button
             type="button"
             onClick={onClose}
-            className="absolute top-0 right-0 p-2 text-ink-faint hover-only:text-ink-soft rounded-lg hover-only:bg-surface-subtle transition-colors"
+            className="px-4 py-2 rounded-field bg-surface hover-only:bg-surface-subtle text-ink-soft border border-line font-bold text-xs transition-colors cursor-pointer"
           >
-            <X className="w-5 h-5" />
+            Batal
           </button>
 
-          <div className="w-16 h-16 rounded-card bg-success-tint text-success-deep border border-success-line flex items-center justify-center text-3xl mx-auto shadow-hairline">
-            
-          </div>
-          <span className="px-3 py-1 text-xs font-mono font-bold rounded-full bg-success-tint text-success-deep border border-success-line inline-block whitespace-nowrap">
-            ADR-05: The Enrollment Ceremony (Otoritas Penuh Kepala Sekolah)
-          </span>
-          <h2 className="text-2xl font-black text-ink tracking-tight">
-            Upacara Pengukuhan Status Siswa Resmi
-          </h2>
-          <p className="text-xs text-ink-soft max-w-lg mx-auto leading-relaxed">
-            Proses akhir untuk meresmikan pendaftar menjadi siswa aktif di sistem Amanaura OS.
-          </p>
+          <button
+            type="button"
+            onClick={handleExecuteCeremony}
+            disabled={!canConfirm}
+            className={`px-5 py-2 rounded-field text-xs font-bold transition-all flex items-center space-x-1.5 ${
+              canConfirm
+                ? 'bg-success hover-only:opacity-90 text-on-brand shadow-hairline cursor-pointer'
+                : 'bg-surface-subtle text-ink-faint cursor-not-allowed border border-line'
+            }`}
+            data-testid="confirm-ceremony-btn"
+            aria-disabled={!canConfirm}
+          >
+            <Sparkles className="w-4 h-4" />
+            <span>{executing ? 'Mengukuhkan Status Siswa...' : 'Konfirmasi Promosi Resmi'}</span>
+          </button>
         </div>
-
+      }
+    >
+      <div className="space-y-4 text-ink font-sans py-2" data-testid="ceremony-execution-modal">
         {errorMsg && (
           <div className="p-4 rounded-field bg-danger-tint border border-danger-line text-danger-deep text-xs flex items-center space-x-3">
-            <AlertTriangle className="w-5 h-5 text-danger shrink-0" />
+            <AlertTriangle className="w-4 h-4 text-danger shrink-0" />
             <span>{errorMsg}</span>
           </div>
         )}
 
         {!isStatusSettled && (
           <div className="p-4 rounded-field bg-warning-tint border border-warning-line text-warning-deep text-xs space-y-1">
-            <strong className="flex items-center gap-2 text-warning-deep">
-              <AlertTriangle className="w-4 h-4 text-brand-primary shrink-0" />
+            <strong className="flex items-center gap-1.5 font-bold">
+              <AlertTriangle className="w-4 h-4 text-warning shrink-0" />
               Syarat Upacara Belum Terpenuhi:
             </strong>
             <p className="pl-5 leading-relaxed">
@@ -102,28 +166,25 @@ export const CeremonyExecutionModal: React.FC<CeremonyExecutionModalProps> = ({
           </div>
         )}
 
-        {/* Details Grid */}
-        <div className="grid grid-cols-2 gap-4 p-4 rounded-card bg-surface-subtle border border-line text-xs">
+        {/* Details Summary */}
+        <div className="grid grid-cols-1 medium:grid-cols-2 gap-3 p-4 rounded-field bg-surface-subtle border border-line-soft text-xs">
           <div>
-            <span className="text-ink-soft block mb-0.5 font-medium">Nama Lengkap Anak</span>
-            <strong className="text-ink text-sm font-black">{applicant.child_full_name}</strong>
+            <span className="text-ink-soft block text-[10px] font-bold uppercase tracking-wider">Wali / Orang Tua</span>
+            <span className="text-ink font-semibold mt-0.5 block">{applicant.guardian_full_name} ({applicant.guardian_relationship_type})</span>
+            <span className="text-ink-faint font-mono text-[11px]">{applicant.guardian_phone_number}</span>
           </div>
           <div>
-            <span className="text-ink-soft block mb-0.5 font-medium">NIK Calon Siswa</span>
-            <span className="text-ink font-mono font-bold">{applicant.child_nik}</span>
-          </div>
-          <div>
-            <span className="text-ink-soft block mb-0.5 font-medium">Wali / Orang Tua</span>
-            <span className="text-ink font-bold">{applicant.guardian_full_name} ({applicant.guardian_relationship_type})</span>
-          </div>
-          <div>
-            <span className="text-ink-soft block mb-0.5 font-medium">Unit Sekolah Penyelenggara</span>
-            <span className="text-info-deep font-bold">{schoolDisplayName}</span>
+            <span className="text-ink-soft block text-[10px] font-bold uppercase tracking-wider">Status Keuangan</span>
+            <span className={`inline-block mt-0.5 px-2 py-0.5 rounded-full text-[10px] font-mono font-bold border ${
+              isStatusSettled ? 'bg-success-tint border-success-line text-success-deep' : 'bg-warning-tint border-warning-line text-warning-deep'
+            }`}>
+              {isStatusSettled ? 'LUNAS (TUITION_SETTLED)' : applicant.status}
+            </span>
           </div>
         </div>
 
-        {/* Inputs */}
-        <div className="space-y-4 text-xs">
+        {/* Form Inputs */}
+        <div className="space-y-4 text-xs pt-1">
           <SelectSheet
             label="Penempatan Rombel Kanonikal (student_placement_records)"
             value={targetClassId}
@@ -142,37 +203,11 @@ export const CeremonyExecutionModal: React.FC<CeremonyExecutionModalProps> = ({
             value={confirmChildName}
             onChange={(e) => setConfirmChildName(e.target.value)}
             placeholder={applicant.child_full_name}
-            hint="Mencegah kekeliruan pengukuhan identitas hukum anak."
+            hint="Mencegah kekeliruan mutasi identitas hukum anak ke buku induk aktif."
             data-testid="confirm-child-name-input"
           />
         </div>
-
-        {/* Actions */}
-        <div className="flex items-center justify-between pt-4 border-t border-line-soft">
-          <button
-            type="button"
-            onClick={onClose}
-            className="px-5 py-2 rounded-field bg-surface-subtle hover-only:bg-line-soft text-ink-soft font-bold text-xs transition-colors"
-          >
-            Batal
-          </button>
-
-          <button
-            type="button"
-            onClick={handleExecuteCeremony}
-            disabled={!canConfirm}
-            className={`px-6 py-2 rounded-field text-xs font-black transition-all ${
-              canConfirm
-                ? 'bg-success hover-only:opacity-90 text-on-brand shadow-hairline cursor-pointer'
-                : 'bg-surface-subtle text-ink-faint cursor-not-allowed border border-line'
-            }`}
-            data-testid="confirm-ceremony-btn"
-            aria-disabled={!canConfirm}
-          >
-            {executing ? 'Mengukuhkan Status Siswa...' : 'Konfirmasi Promosi Resmi  '}
-          </button>
-        </div>
       </div>
-    </div>
+    </AdaptiveDialog>
   );
 };

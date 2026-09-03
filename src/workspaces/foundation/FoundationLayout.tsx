@@ -58,6 +58,11 @@ export const FoundationLayout: React.FC<FoundationLayoutProps> = ({
   const context = useSecurityContext();
   const currentPersona = context?.currentPersona;
   const [activeView, setActiveView] = useState<FoundationView>(initialView);
+  const [selectedProjectionTab, setSelectedProjectionTab] = useState<'CURRICULUM' | 'SENTRA' | 'INTAKE'>('CURRICULUM');
+  const [curriculumPatterns, setCurriculumPatterns] = useState<DerivedAnalyticalPattern[]>([]);
+  const [sentraPatterns, setSentraPatterns] = useState<DerivedAnalyticalPattern[]>([]);
+  const [intakePatterns, setIntakePatterns] = useState<DerivedAnalyticalPattern[]>([]);
+  const [anomalyPatterns, setAnomalyPatterns] = useState<DerivedAnalyticalPattern[]>([]);
   const [patterns, setPatterns] = useState<DerivedAnalyticalPattern[]>(() => institutionalLearningService.listPatterns());
   const [insights, setInsights] = useState<InstitutionalInsight[]>(() => institutionalLearningService.listInsights());
   const [actions, setActions] = useState<InstitutionalActionRecord[]>(() => institutionalLearningService.listActions());
@@ -66,6 +71,7 @@ export const FoundationLayout: React.FC<FoundationLayoutProps> = ({
   const [briefingData, setBriefingData] = useState<FoundationBriefingData | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isInitiativeModalOpen, setIsInitiativeModalOpen] = useState(false);
+  const [modalInitialData, setModalInitialData] = useState<any>(undefined);
 
   // Closed-loop status mapping
   const [closedLoopStatus, setClosedLoopStatus] = useState<Record<string, boolean>>({});
@@ -73,7 +79,10 @@ export const FoundationLayout: React.FC<FoundationLayoutProps> = ({
   const refreshData = async () => {
     setIsLoading(true);
     try {
-      const pList = await institutionalLearningService.deriveCurriculumDomainDistribution('ay_2026_2027');
+      const currList = await institutionalLearningService.deriveCurriculumDomainDistribution('ay_2026_2027');
+      const sentraList = await institutionalLearningService.deriveSentraEngagementProjection('ay_2026_2027');
+      const intakeList = await institutionalLearningService.deriveIntakeReadinessProjection('ay_2026_2027');
+      const anomalies = await institutionalLearningService.detectPedagogicalAnomalies('ay_2026_2027');
       const iList = institutionalLearningService.listInsights();
       const aList = institutionalLearningService.listActions();
 
@@ -86,7 +95,11 @@ export const FoundationLayout: React.FC<FoundationLayoutProps> = ({
       const adList = institutionalLearningService.listAdoptions();
       const oList = institutionalLearningService.listOutcomes();
 
-      setPatterns(pList);
+      setCurriculumPatterns(currList);
+      setSentraPatterns(sentraList);
+      setIntakePatterns(intakeList);
+      setAnomalyPatterns(anomalies);
+      setPatterns([...currList, ...sentraList, ...intakeList]);
       setInsights(iList);
       setActions(aList);
       setAdoptions(adList);
@@ -127,7 +140,7 @@ export const FoundationLayout: React.FC<FoundationLayoutProps> = ({
   return (
     <ForbiddenActionGate>
       <div 
-        className="w-full max-w-6xl mx-auto px-4 medium:px-6 pt-4 pb-[160px] divide-y divide-line animate-in fade-in duration-200 text-ink"
+        className="w-full divide-y divide-line animate-in fade-in duration-200 text-ink"
         data-testid="foundation-governance-console"
       >
         {/* ─────────────────────────────────────────────────────────────
@@ -161,19 +174,22 @@ export const FoundationLayout: React.FC<FoundationLayoutProps> = ({
             </div>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {/* Card 1: Terbitkan Inisiatif */}
             <button
               type="button"
-              onClick={() => setIsInitiativeModalOpen(true)}
-              className="p-4 rounded-2xl bg-surface border border-line hover:border-brand-primary/50 transition-all text-left shadow-hairline group cursor-pointer active:scale-[0.98]"
+              onClick={() => {
+                setModalInitialData(undefined);
+                setIsInitiativeModalOpen(true);
+              }}
+              className="p-4 rounded-2xl bg-surface border border-line hover-only:border-brand-primary/50 transition-all text-left shadow-hairline group cursor-pointer active:scale-[0.98]"
               data-testid="btn-create-initiative"
             >
               <div className="flex items-center justify-between mb-3">
                 <div className="w-10 h-10 rounded-xl bg-brand/10 border border-brand/20 flex items-center justify-center text-brand">
                   <Plus className="w-5 h-5" />
                 </div>
-                <span className="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-brand-tint text-brand-deep border border-brand/20">
+                <span className="px-2.5 py-1 rounded-full text-[10px] font-mono font-bold bg-brand-tint text-brand-deep border border-brand/20">
                   Aksi Baru
                 </span>
               </div>
@@ -189,13 +205,13 @@ export const FoundationLayout: React.FC<FoundationLayoutProps> = ({
             <button
               type="button"
               onClick={() => handleNavigate('GOVERNANCE')}
-              className="p-4 rounded-2xl bg-surface border border-line hover:border-brand-primary/50 transition-all text-left shadow-hairline group cursor-pointer active:scale-[0.98]"
+              className="p-4 rounded-2xl bg-surface border border-line hover-only:border-brand-primary/50 transition-all text-left shadow-hairline group cursor-pointer active:scale-[0.98]"
             >
               <div className="flex items-center justify-between mb-3">
                 <div className="w-10 h-10 rounded-xl bg-surface-subtle border border-line flex items-center justify-center text-ink">
                   <ShieldCheck className="w-5 h-5 text-success" />
                 </div>
-                <span className="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-success-tint text-success-deep border border-success-line">
+                <span className="px-2.5 py-1 rounded-full text-[10px] font-mono font-bold bg-success-tint text-success-deep border border-success-line">
                   Audit Log
                 </span>
               </div>
@@ -211,13 +227,13 @@ export const FoundationLayout: React.FC<FoundationLayoutProps> = ({
             <button
               type="button"
               onClick={() => handleNavigate('PROVISIONING')}
-              className="p-4 rounded-2xl bg-surface border border-line hover:border-brand-primary/50 transition-all text-left shadow-hairline group cursor-pointer active:scale-[0.98]"
+              className="p-4 rounded-2xl bg-surface border border-line hover-only:border-brand-primary/50 transition-all text-left shadow-hairline group cursor-pointer active:scale-[0.98]"
             >
               <div className="flex items-center justify-between mb-3">
                 <div className="w-10 h-10 rounded-xl bg-surface-subtle border border-line flex items-center justify-center text-ink">
                   <Settings className="w-5 h-5 text-brand-primary" />
                 </div>
-                <span className="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-surface-subtle text-ink-soft border border-line">
+                <span className="px-2.5 py-1 rounded-full text-[10px] font-mono font-bold bg-surface-subtle text-ink-soft border border-line">
                   Kesiapan Unit
                 </span>
               </div>
@@ -233,13 +249,13 @@ export const FoundationLayout: React.FC<FoundationLayoutProps> = ({
             <button
               type="button"
               onClick={() => handleNavigate('ADMISSIONS_PORTAL')}
-              className="p-4 rounded-2xl bg-surface border border-line hover:border-brand-primary/50 transition-all text-left shadow-hairline group cursor-pointer active:scale-[0.98]"
+              className="p-4 rounded-2xl bg-surface border border-line hover-only:border-brand-primary/50 transition-all text-left shadow-hairline group cursor-pointer active:scale-[0.98]"
             >
               <div className="flex items-center justify-between mb-3">
                 <div className="w-10 h-10 rounded-xl bg-accent-valor/10 border border-accent-valor/20 flex items-center justify-center text-accent-valor">
                   <HeartHandshake className="w-5 h-5" />
                 </div>
-                <span className="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-accent-valor/10 text-accent-valor border border-accent-valor/20">
+                <span className="px-2.5 py-1 rounded-full text-[10px] font-mono font-bold bg-accent-valor/10 text-accent-valor border border-accent-valor/20">
                   PPDB Jaringan
                 </span>
               </div>
@@ -429,33 +445,131 @@ export const FoundationLayout: React.FC<FoundationLayoutProps> = ({
           {/* VIEW 1: MULTI-SCHOOL PROJECTIONS (R-3 & R-4) */}
           {activeView === 'PROJECTIONS' && (
             <div className="space-y-6" data-testid="foundation-projections-view">
+              {/* Alert: Deteksi Anomali / Peluang Pedagogis Otomatis (H-02 Human-in-the-Loop) */}
+              {anomalyPatterns.length > 0 && (
+                <div className="p-4 rounded-card bg-brand-tint border border-brand-line text-ink space-y-2.5 shadow-hairline" data-testid="pedagogical-anomaly-alert">
+                  <div className="flex items-center justify-between flex-wrap gap-2">
+                    <div className="flex items-center gap-2 font-bold text-xs text-brand-deep">
+                      <Lightbulb className="w-4 h-4 text-brand-primary shrink-0" />
+                      <span>Deteksi Peluang Penguatan Pedagogis Otomatis (H-02 Non-Causal &amp; Human-in-the-Loop)</span>
+                    </div>
+                    <span className="text-[10px] font-mono font-bold px-2.5 py-1 rounded-full bg-surface text-ink-soft border border-line">
+                      {anomalyPatterns.length} Pola Terdeteksi
+                    </span>
+                  </div>
+                  <p className="text-xs text-ink-soft leading-relaxed">
+                    Sistem mendeteksi indikasi kebutuhan bantuan fasilitas atau pengayaan pada unit binaan. Silakan telaah pola di bawah dan tentukan tindak lanjut kelembagaan tanpa determinisme sepihak.
+                  </p>
+                </div>
+              )}
+
+              {/* Subtab Selector for Projections */}
+              <div className="flex items-center gap-2 border-b border-line pb-2 overflow-x-auto">
+                <button
+                  type="button"
+                  onClick={() => setSelectedProjectionTab('CURRICULUM')}
+                  className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition-all cursor-pointer whitespace-nowrap ${
+                    selectedProjectionTab === 'CURRICULUM'
+                      ? 'bg-surface text-ink shadow-hairline border border-line font-bold'
+                      : 'text-ink-soft hover-only:text-ink'
+                  }`}
+                  data-testid="subtab-curriculum"
+                >
+                  Kurikulum Merdeka (PAUD)
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setSelectedProjectionTab('SENTRA')}
+                  className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition-all cursor-pointer whitespace-nowrap ${
+                    selectedProjectionTab === 'SENTRA'
+                      ? 'bg-surface text-ink shadow-hairline border border-line font-bold'
+                      : 'text-ink-soft hover-only:text-ink'
+                  }`}
+                  data-testid="subtab-sentra"
+                >
+                  Dinamika Sentra Belajar
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setSelectedProjectionTab('INTAKE')}
+                  className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition-all cursor-pointer whitespace-nowrap ${
+                    selectedProjectionTab === 'INTAKE'
+                      ? 'bg-surface text-ink shadow-hairline border border-line font-bold'
+                      : 'text-ink-soft hover-only:text-ink'
+                  }`}
+                  data-testid="subtab-intake"
+                >
+                  Kesiapan Masuk Siswa Baru (PPDB Mile Zero)
+                </button>
+              </div>
+
+              {/* Projections Content List */}
               <div className="divide-y divide-line border-y border-line">
-                {patterns.map((pat) => (
+                {(selectedProjectionTab === 'CURRICULUM' ? curriculumPatterns : selectedProjectionTab === 'SENTRA' ? sentraPatterns : intakePatterns).map((pat) => (
                   <article 
                     key={pat.pattern_id}
                     className="py-5 space-y-3"
+                    data-testid="projection-pattern-item"
                   >
                     <div className="flex flex-wrap items-start justify-between gap-2">
                       <div className="space-y-1">
-                        <span className="text-[10px] font-mono uppercase tracking-wider px-3 py-1 rounded-full bg-surface-subtle text-ink-soft border border-line-hairline font-bold whitespace-nowrap">
-                          {pat.curriculum_domain || 'DOMAIN'}
-                        </span>
+                        <div className="flex items-center gap-2">
+                          <span className="text-[10px] font-mono uppercase tracking-wider px-3 py-1 rounded-full bg-surface-subtle text-ink-soft border border-line-hairline font-bold whitespace-nowrap">
+                            {pat.curriculum_domain || 'DOMAIN'}
+                          </span>
+                          <span className="text-xs font-mono text-ink-faint">
+                            {pat.pattern_id}
+                          </span>
+                        </div>
                         <h3 className="font-bold text-ink text-base pt-1">
                           {pat.pattern_name || pat.pattern_id}
                         </h3>
                       </div>
-                      <span className="text-xs font-mono font-bold text-success-deep bg-success-tint px-3 py-1 rounded-full border border-success-line whitespace-nowrap">
-                        {pat.statistical_significance || 'Signifikan'}
-                      </span>
+
+                      {/* Privacy Shield / Metric Pill (FB-07 K-Anonymity) */}
+                      {pat.exposure_status === 'VISIBLE' && pat.computed_metric_value !== undefined ? (
+                        <div className="flex items-center gap-2">
+                          <span className="text-sm font-bold font-mono text-ink">
+                            {pat.computed_metric_value.toFixed(1)}%
+                          </span>
+                          <span className="text-xs font-mono font-bold text-success-deep bg-success-tint px-3 py-1 rounded-full border border-success-line whitespace-nowrap">
+                            {pat.statistical_significance || 'Signifikan'}
+                          </span>
+                        </div>
+                      ) : (
+                        <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-surface-subtle text-ink-faint border border-line text-[11px] font-mono" data-testid="privacy-shield-suppressed">
+                          <ShieldCheck className="w-4 h-4 text-ink-faint" />
+                          <span>Kohor Terlindungi (K &lt; 5)</span>
+                        </div>
+                      )}
                     </div>
 
                     <p className="text-xs medium:text-sm text-ink-soft leading-relaxed">
                       {pat.description || 'Pola capaian teramati pada kelompok kegiatan main bermakna.'}
                     </p>
 
-                    <div className="pt-2 flex items-center justify-between text-xs text-ink-faint font-mono">
-                      <span>Sampel: {pat.sample_size_classes || 2} Rombel ({pat.cohort_size} Siswa)</span>
-                      <span>Tingkat Kepastian: {pat.confidence_score ? `${(pat.confidence_score * 100).toFixed(0)}%` : '95%'}</span>
+                    <div className="pt-2 flex flex-wrap items-center justify-between gap-2 text-xs text-ink-faint font-mono">
+                      <span>Sampel: {pat.sample_size_classes || 2} Rombel ({pat.cohort_size} Siswa Terdaftar)</span>
+                      
+                      {/* Action Prefill Trigger (Human-in-the-Loop) */}
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setModalInitialData({
+                            actionType: 'SUPPORT_INITIATIVE',
+                            title: `Fasilitasi Pendukung: ${pat.pattern_name}`,
+                            policyIntent: `Tindak lanjut telaah Yayasan atas temuan: ${pat.description}`,
+                            resourceDetails: `Penyaluran sarana & pembimbingan guru untuk ${pat.pattern_name}.`,
+                            initiativeType: 'LEARNING_MATERIALS'
+                          });
+                          setIsInitiativeModalOpen(true);
+                        }}
+                        className="px-3 py-1.5 rounded-xl bg-surface-subtle hover-only:bg-surface border border-line text-xs font-bold text-ink transition-colors cursor-pointer flex items-center gap-1.5"
+                        data-testid="btn-action-from-pattern"
+                      >
+                        <Sparkles className="w-4 h-4 text-brand-primary" />
+                        <span>Tindak Lanjuti dengan Inisiatif</span>
+                      </button>
                     </div>
                   </article>
                 ))}
@@ -515,6 +629,27 @@ export const FoundationLayout: React.FC<FoundationLayoutProps> = ({
                         <p className="text-ink-soft">{ins.decision_record.recommended_action_type} • {ins.decision_record.governance_notes}</p>
                       </div>
                     )}
+
+                    <div className="pt-2 flex items-center justify-end">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setModalInitialData({
+                            actionType: 'SUPPORT_INITIATIVE',
+                            title: `Tindak Lanjut: ${ins.title}`,
+                            policyIntent: ins.empirical_observation || (ins as any).narrative_summary || ins.title,
+                            resourceDetails: ins.decision_record?.decision_rationale || 'Alokasi materi bantuan kelembagaan terstandar.',
+                            initiativeType: 'LEARNING_MATERIALS'
+                          });
+                          setIsInitiativeModalOpen(true);
+                        }}
+                        className="px-3 py-1.5 rounded-xl bg-surface-subtle hover-only:bg-surface border border-line text-xs font-bold text-ink transition-colors cursor-pointer flex items-center gap-1.5"
+                        data-testid="btn-action-from-insight"
+                      >
+                        <Sparkles className="w-4 h-4 text-brand-primary" />
+                        <span>Terbitkan Inisiatif dari Wawasan Ini</span>
+                      </button>
+                    </div>
                   </article>
                 ))}
 
@@ -538,10 +673,13 @@ export const FoundationLayout: React.FC<FoundationLayoutProps> = ({
                 <div className="flex items-center gap-3">
                   <button
                     type="button"
-                    onClick={() => setIsInitiativeModalOpen(true)}
-                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-brand-primary hover:bg-brand-deep text-on-brand text-xs font-bold transition-all shadow-hairline cursor-pointer"
+                    onClick={() => {
+                      setModalInitialData(undefined);
+                      setIsInitiativeModalOpen(true);
+                    }}
+                    className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-brand-primary hover-only:bg-brand-deep text-on-brand text-xs font-bold transition-all shadow-hairline cursor-pointer"
                   >
-                    <Plus className="w-3.5 h-3.5" />
+                    <Plus className="w-4 h-4" />
                     <span>Inisiatif Baru</span>
                   </button>
                   <span className="text-xs text-ink-faint font-mono">{actions.length} Inisiatif</span>
@@ -652,11 +790,15 @@ export const FoundationLayout: React.FC<FoundationLayoutProps> = ({
           )}
         </section>
 
-        {/* Modal Inisiatif Baru */}
+        {/* Modal Inisiatif Baru (AdaptiveDialog ber-2-Tier Ribbon) */}
         <InitiativeCreatorModal
           isOpen={isInitiativeModalOpen}
-          onClose={() => setIsInitiativeModalOpen(false)}
+          onClose={() => {
+            setIsInitiativeModalOpen(false);
+            setModalInitialData(undefined);
+          }}
           onInitiativeCreated={handleInitiativeCreated}
+          initialData={modalInitialData}
         />
       </div>
     </ForbiddenActionGate>

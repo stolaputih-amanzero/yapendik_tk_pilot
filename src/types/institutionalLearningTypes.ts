@@ -60,7 +60,9 @@ export type DecisionMakerRole = 'FOUNDATION_DIRECTOR' | 'FOUNDATION_TRUSTEE' | '
 export type PatternSourceProjection = 
   | 'CURRICULUM_DOMAIN_DISTRIBUTION' 
   | 'SAFETY_INTEGRITY_INDEX' 
-  | 'ATTENDANCE_STABILITY';
+  | 'ATTENDANCE_STABILITY'
+  | 'SENTRA_ENGAGEMENT_AFFINITY'
+  | 'PPDB_INTAKE_READINESS';
 
 export type InsightCategory = 
   | 'PEDAGOGICAL_EQUITY' 

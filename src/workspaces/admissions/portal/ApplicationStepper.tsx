@@ -201,7 +201,7 @@ export const ApplicationStepper: React.FC<ApplicationStepperProps> = ({ currentS
                 <div 
                   className={`w-9 h-9 rounded-full flex items-center justify-center font-bold text-xs mb-1.5 transition-all ${
                     isCompleted
-                      ? 'bg-success text-on-brand shadow-hairline ring-2 ring-emerald-100'
+                      ? 'bg-success text-on-brand shadow-hairline ring-2 ring-success-line'
                       : isCurrent
                       ? 'bg-brand text-on-brand ring-2 ring-brand-primary font-extrabold shadow-hairline'
                       : 'bg-surface-subtle text-ink-soft border border-line'

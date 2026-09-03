@@ -102,8 +102,17 @@ try {
   console.log('\n▶️ [31/32] Running Stage 6 Gate 6 Rapor LPPA Reporting & Synthesis Suite (Suite 42)...');
   execSync('npx tsx tests/stage6_gate6_lppa_reporting.test.ts', { stdio: 'inherit' });
 
-  console.log('\n▶️ [32/32] Running Stage 7 Gate 1 The Foundation Stewardship Cockpit Suite (Suite 43)...');
+  console.log('\n▶️ [32/33] Running Stage 7 Gate 1 The Foundation Stewardship Cockpit Suite (Suite 43)...');
   execSync('npx tsx tests/stage7_gate1_foundation_cockpit.test.tsx', { stdio: 'inherit' });
+
+  console.log('\n▶️ [33/34] Running Stage 7 Gate 2 Admissions & Enrollment Continuum Suite (Suite 44)...');
+  execSync('npx tsx tests/stage7_gate2_admissions_loop.test.tsx', { stdio: 'inherit' });
+
+  console.log('\n▶️ [34/35] Running Guardian Persona Harmonization Suite (Suite 45)...');
+  execSync('npx tsx tests/guardian_persona_harmonization.test.tsx', { stdio: 'inherit' });
+
+  console.log('\n▶️ [35/35] Running Stage 7 Gate 3 Foundation LEARN Live Activation Suite (Suite 46)...');
+  execSync('npx tsx tests/stage7_gate3_foundation_learn.test.tsx', { stdio: 'inherit' });
 
   console.log('\n════════════════════════════════════════════════════════════════');
   console.log('🎉 ALL INTEGRATION & SECURITY TEST SUITES COMPLETED SUCCESSFULLY');

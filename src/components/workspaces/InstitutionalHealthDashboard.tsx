@@ -158,14 +158,16 @@ export const InstitutionalHealthDashboard: React.FC = () => {
             </p>
           </div>
 
-          <div className="flex flex-col medium:flex-row items-stretch medium:items-center gap-2 w-full medium:w-auto">
+          <div className="flex flex-col medium:flex-row items-stretch medium:items-center gap-2.5 w-full medium:w-auto shrink-0">
             {/* Superadmin Unit Switcher */}
             {isSuperadmin && schools.length > 1 && (
-              <SelectSheet value={currentSchoolId}   options={schools.map(s => ({ value: s.id, label: s.name }))} />
+              <div className="w-full medium:w-56 shrink-0">
+                <SelectSheet value={currentSchoolId} options={schools.map(s => ({ value: s.id, label: s.name }))} />
+              </div>
             )}
 
             {/* Health Status Pill */}
-            <div className={`px-3 py-1 rounded-full border text-xs font-bold flex items-center justify-center space-x-2 ${currentBadge.bg}`}>
+            <div className={`px-3.5 py-1 rounded-full border text-xs font-bold flex items-center justify-center space-x-2 whitespace-nowrap shrink-0 ${currentBadge.bg}`}>
               <span className={`w-2 h-2 rounded-full ${currentBadge.dot}`}></span>
               <span>{currentBadge.label}</span>
             </div>
@@ -173,7 +175,7 @@ export const InstitutionalHealthDashboard: React.FC = () => {
             <button
               onClick={loadTelemetry}
               disabled={refreshing}
-              className="px-3 py-2 rounded-field bg-surface hover-only:bg-surface-subtle text-ink-soft border border-line text-xs font-semibold flex justify-center items-center space-x-2 transition-all shadow-hairline cursor-pointer"
+              className="px-3.5 py-2 rounded-field bg-surface hover-only:bg-surface-subtle text-ink-soft border border-line text-xs font-semibold flex justify-center items-center space-x-2 transition-all shadow-hairline whitespace-nowrap shrink-0 cursor-pointer"
               title="Segarkan Data"
             >
               <RefreshCw className={`w-4 h-4 ${refreshing ? 'animate-spin text-ink-soft' : ''}`} />

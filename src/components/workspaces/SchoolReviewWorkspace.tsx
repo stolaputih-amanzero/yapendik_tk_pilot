@@ -61,10 +61,10 @@ export const SchoolReviewWorkspace: React.FC = () => {
             </p>
           </div>
 
-          <div className="flex flex-col medium:flex-row items-stretch medium:items-center gap-2 w-full medium:w-auto">
+          <div className="flex flex-col medium:flex-row items-stretch medium:items-center gap-2.5 w-full medium:w-auto shrink-0">
             <button
               onClick={handleResetDatabase}
-              className="px-3 py-2 rounded-field bg-surface hover-only:bg-surface-subtle text-ink-soft border border-line text-xs font-semibold flex justify-center items-center space-x-2 transition-all shadow-hairline cursor-pointer"
+              className="px-3.5 py-2 rounded-field bg-surface hover-only:bg-surface-subtle text-ink-soft border border-line text-xs font-semibold flex justify-center items-center space-x-2 transition-all shadow-hairline whitespace-nowrap shrink-0 cursor-pointer"
             >
               <RotateCcw className="w-4 h-4 text-ink-soft" />
               <span>Reset ke Seed Fixture Default</span>

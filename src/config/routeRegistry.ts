@@ -130,6 +130,7 @@ export const ROUTE_REGISTRY: Record<WorkspaceTab, TabMetadata> = {
     description: 'Pendaftaran peserta didik baru dan pemantauan status berkas.',
     hash: 'portal-ppdb',
     contextualTitles: {
+      HEADMASTER: 'Meja PPDB',
       APPLICANT: 'Pendaftaran PPDB',
       GUARDIAN: 'Pendaftaran PPDB',
       PARENT_BUDI: 'Pendaftaran PPDB'
@@ -222,5 +223,29 @@ export function getRouteLabel(tab: string | WorkspaceTab, role?: string): string
     return meta.contextualTitles[role]!;
   }
   return meta.title;
+}
+
+/**
+ * Resolves canonical home workspace tab for each persona.
+ * Prevents non-teacher personas (Foundation, Headmaster, Guardian) from being
+ * routed to TEACHER_HOME upon clicking back or home navigation.
+ */
+export function getPersonaHomeTab(role?: string): WorkspaceTab {
+  switch (role) {
+    case 'YAPENDIK_SUPERADMIN':
+    case 'FOUNDATION_DIRECTOR':
+      return 'FOUNDATION_GOVERNANCE';
+    case 'HEADMASTER':
+      return 'HEADMASTER_ADOPTION';
+    case 'GUARDIAN':
+    case 'PARENT_BUDI':
+      return 'GUARDIAN_WORKSPACE';
+    case 'APPLICANT':
+      return 'ADMISSIONS_PORTAL';
+    case 'TEACHER':
+    case 'ASSISTANT_TEACHER':
+    default:
+      return 'TEACHER_HOME';
+  }
 }
 
