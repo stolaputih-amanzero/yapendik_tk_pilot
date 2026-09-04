@@ -40,6 +40,8 @@ export interface PtkProfileItem {
   employmentType: 'TETAP' | 'KONTRAK' | 'HONORER';
   joinDate: string;
   isActive: boolean;
+  avatarUrl?: string | null;
+  photoUrl?: string | null;
   nuptk?: string;
   nationalIdNumber?: string;
   phone?: string;
@@ -1094,10 +1096,29 @@ export class DatabaseEngine {
     const classes = this.getClasses(effectiveSchoolId);
     const headmasterPerson = this.getHeadmaster(effectiveSchoolId);
 
+    const getAvatarForPerson = (personId: string, directAvatar?: string | null): string | null => {
+      if (directAvatar) return directAvatar;
+      const personObj = this.persons.find(p => p.id === personId);
+      if (personObj?.avatarUrl) return personObj.avatarUrl;
+      if (typeof window !== 'undefined') {
+        try {
+          const overrides = JSON.parse(localStorage.getItem('yapendik_persona_overrides') || '{}');
+          for (const key of Object.keys(overrides)) {
+            const ov = overrides[key];
+            if ((ov?.personId === personId || key.includes(personId.replace('per_', ''))) && ov?.avatarUrl) {
+              return ov.avatarUrl;
+            }
+          }
+        } catch {}
+      }
+      return null;
+    };
+
     const ptkList: PtkProfileItem[] = [];
 
     // 1. Kepala Sekolah
     if (headmasterPerson) {
+      const avatar = getAvatarForPerson(headmasterPerson.id, headmasterPerson.avatarUrl);
       ptkList.push({
         id: headmasterPerson.id,
         profileId: 'staff_prof_sheryl',
@@ -1110,6 +1131,8 @@ export class DatabaseEngine {
         employmentType: 'TETAP',
         joinDate: '2026-07-01',
         isActive: true,
+        avatarUrl: avatar,
+        photoUrl: avatar,
         nuptk: headmasterPerson.nationalIdNumber || '3171034909940005',
         nationalIdNumber: headmasterPerson.nationalIdNumber || '3171034909940005',
         phone: headmasterPerson.phone || '081219748487',
@@ -1123,6 +1146,7 @@ export class DatabaseEngine {
       if (c.homeroomTeacherId) {
         const p = this.getPersonById(c.homeroomTeacherId);
         if (p && !ptkList.some(item => item.id === p.id)) {
+          const avatar = getAvatarForPerson(p.id, p.avatarUrl);
           ptkList.push({
             id: p.id,
             profileId: `tch_prof_${p.id.replace('per_teacher_', '')}`,
@@ -1136,6 +1160,8 @@ export class DatabaseEngine {
             employmentType: 'TETAP',
             joinDate: '2026-07-01',
             isActive: true,
+            avatarUrl: avatar,
+            photoUrl: avatar,
             nuptk: p.nationalIdNumber || '',
             nationalIdNumber: p.nationalIdNumber || '',
             phone: p.phone || '',
@@ -1148,6 +1174,7 @@ export class DatabaseEngine {
       if (c.coTeacherId) {
         const p = this.getPersonById(c.coTeacherId);
         if (p && !ptkList.some(item => item.id === p.id)) {
+          const avatar = getAvatarForPerson(p.id, p.avatarUrl);
           ptkList.push({
             id: p.id,
             profileId: `tch_prof_${p.id.replace('per_teacher_', '')}`,
@@ -1161,6 +1188,8 @@ export class DatabaseEngine {
             employmentType: 'TETAP',
             joinDate: '2026-07-01',
             isActive: true,
+            avatarUrl: avatar,
+            photoUrl: avatar,
             nuptk: p.nationalIdNumber || '',
             nationalIdNumber: p.nationalIdNumber || '',
             phone: p.phone || '',
@@ -1172,6 +1201,29 @@ export class DatabaseEngine {
     });
 
     return ptkList;
+  }
+
+  public updatePersonAvatar(personId: string, avatarUrl: string | null) {
+    const personIdx = this.persons.findIndex(p => p.id === personId);
+    if (personIdx >= 0) {
+      this.persons[personIdx] = {
+        ...this.persons[personIdx],
+        avatarUrl: avatarUrl
+      };
+      this.persist('persons', this.persons);
+    }
+
+    // Also update student if this person is a student
+    const studentIdx = this.students.findIndex(s => s.personId === personId);
+    if (studentIdx >= 0) {
+      this.students[studentIdx] = {
+        ...this.students[studentIdx],
+        photoUrl: avatarUrl || undefined
+      };
+      this.persist('students', this.students);
+    }
+
+    this.notify();
   }
 
   public getStudents(schoolId: string, classId?: string): (StudentProfile & { person: Person; guardians: { relation: GuardianRelationship; person: Person }[] })[] {

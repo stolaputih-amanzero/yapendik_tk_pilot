@@ -20,6 +20,7 @@ import { ProfileDrawer } from '../src/components/layout/ProfileDrawer';
 import { NameCardModal, APP_PUBLIC_URL } from '../src/components/profile/NameCardModal';
 import { PremiumLoginScreen } from '../src/components/auth/PremiumLoginScreen';
 import { SecurityContextProvider, GENESIS_PERSONAS } from '../src/auth/context';
+import { db } from '../src/db/database';
 
 console.log('════════════════════════════════════════════════════════════════');
 console.log('🧪 STAGE 6-A PROFILE HUB v2 & USER MANAGEMENT (SUITE 37)');
@@ -65,6 +66,28 @@ async function runProfileHubTests() {
       );
       assert.ok(html.includes('data-testid="profile-avatar-fallback"'), 'Expected avatar initials fallback');
       assert.ok(html.includes('title="Status Aktif Sirkadian"'), 'Expected circadian presence dot');
+    });
+
+    runCheck('Profile Hub [PTK DIRECTORY SYNC]: db.updatePersonAvatar immediately propagates to getPTKDirectory', () => {
+      const ptkListBefore = db.getPTKDirectory('sch_tk_maranatha');
+      const testPtk = ptkListBefore[0];
+      assert.ok(testPtk, 'Expected at least one PTK in directory');
+      const testPhotoUrl = 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/testPhotoPayload';
+
+      // Update avatar
+      db.updatePersonAvatar(testPtk.id, testPhotoUrl);
+
+      // Verify immediate reflection in PTK directory
+      const ptkListAfter = db.getPTKDirectory('sch_tk_maranatha');
+      const updatedPtk = ptkListAfter.find(p => p.id === testPtk.id);
+      assert.strictEqual(updatedPtk?.avatarUrl, testPhotoUrl, 'PTK directory must reflect updated avatarUrl');
+      assert.strictEqual(updatedPtk?.photoUrl, testPhotoUrl, 'PTK directory must reflect updated photoUrl');
+
+      // Cleanup
+      db.updatePersonAvatar(testPtk.id, null);
+      const ptkListRestored = db.getPTKDirectory('sch_tk_maranatha');
+      const restoredPtk = ptkListRestored.find(p => p.id === testPtk.id);
+      assert.strictEqual(restoredPtk?.avatarUrl, null, 'Avatar must be cleaned up to null');
     });
   }
 

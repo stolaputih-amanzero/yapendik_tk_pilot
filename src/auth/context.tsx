@@ -296,7 +296,20 @@ export const SecurityContextProvider: React.FC<{
         const savedPersonaId = localStorage.getItem('amanaura_active_persona');
         if (savedPersonaId) {
           const found = SEED_PERSONAS.find(p => p.id === savedPersonaId);
-          if (found) return found;
+          if (found) {
+            let res = { ...found };
+            const savedOverrides = JSON.parse(localStorage.getItem('yapendik_persona_overrides') || '{}');
+            if (savedOverrides[savedPersonaId]) {
+              res = { ...res, ...savedOverrides[savedPersonaId] };
+            }
+            if (!res.avatarUrl && res.personId) {
+              const personDb = db.getPersonById(res.personId);
+              if (personDb?.avatarUrl) {
+                res.avatarUrl = personDb.avatarUrl;
+              }
+            }
+            return res;
+          }
         }
       } catch {}
     }
@@ -349,6 +362,12 @@ export const SecurityContextProvider: React.FC<{
               selected = { ...selected, ...savedOverrides[savedPersonaId] };
             }
           } catch {}
+          if (!selected.avatarUrl && selected.personId) {
+            const personDb = db.getPersonById(selected.personId);
+            if (personDb?.avatarUrl) {
+              selected.avatarUrl = personDb.avatarUrl;
+            }
+          }
           isSimulationModeRef.current = true;
           setIsSimulationMode(true);
           setCurrentPersona(selected);
@@ -631,6 +650,12 @@ export const SecurityContextProvider: React.FC<{
         console.warn('Failed to parse persona overrides', e);
       }
     }
+    if (!selected.avatarUrl && selected.personId) {
+      const personDb = db.getPersonById(selected.personId);
+      if (personDb?.avatarUrl) {
+        selected.avatarUrl = personDb.avatarUrl;
+      }
+    }
 
     // Context Scope Transition: switch active persona without wiping shared school data
     db.setContextScope(selected.id, selected.schoolId);
@@ -674,6 +699,11 @@ export const SecurityContextProvider: React.FC<{
           const { error } = await supabase.rpc('rpc_toggle_passkey_enabled', { enabled: updates.passkeyEnabled });
           if (error) throw error;
         }
+      }
+
+      // Sync avatar to database canonical person
+      if (currentPersona?.personId && updates.avatarUrl !== undefined) {
+        db.updatePersonAvatar(currentPersona.personId, updates.avatarUrl);
       }
 
       // Update currentPersona state & local persona list

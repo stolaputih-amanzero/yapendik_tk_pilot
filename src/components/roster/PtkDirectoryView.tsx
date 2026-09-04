@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useRef } from 'react';
 import {
   ShieldCheck,
   Search,
@@ -15,7 +15,10 @@ import {
   Eye,
   EyeOff,
   Building2,
-  GraduationCap
+  GraduationCap,
+  Camera,
+  Trash2,
+  Loader2
 } from 'lucide-react';
 import { PtkProfileItem } from '../../db/database';
 import { useSecurityContext } from '../../auth/context';
@@ -23,6 +26,7 @@ import { useSecurityContext } from '../../auth/context';
 interface PtkDirectoryViewProps {
   ptkList: PtkProfileItem[];
   schoolName: string;
+  onUpdatePhoto?: (personId: string, photoUrl: string) => Promise<void> | void;
 }
 
 type RoleFilterType = 'ALL' | 'HEADMASTER' | 'TEACHER' | 'ASSISTANT_TEACHER';
@@ -36,7 +40,8 @@ function maskPii(val?: string, visibleChars = 4): string {
 
 export const PtkDirectoryView: React.FC<PtkDirectoryViewProps> = ({
   ptkList,
-  schoolName
+  schoolName,
+  onUpdatePhoto
 }) => {
   const { currentPersona } = useSecurityContext();
   const isHeadmasterOrSuperadmin =
@@ -46,6 +51,94 @@ export const PtkDirectoryView: React.FC<PtkDirectoryViewProps> = ({
   const [roleFilter, setRoleFilter] = useState<RoleFilterType>('ALL');
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const [revealedPiiIds, setRevealedPiiIds] = useState<Set<string>>(new Set());
+
+  // Photo upload management
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const [targetUploadPersonId, setTargetUploadPersonId] = useState<string | null>(null);
+  const [isUploading, setIsUploading] = useState<boolean>(false);
+  const [uploadError, setUploadError] = useState<string | null>(null);
+  const [successToast, setSuccessToast] = useState<string | null>(null);
+
+  const handleInitiateUpload = (personId: string, e?: React.MouseEvent) => {
+    e?.stopPropagation();
+    setTargetUploadPersonId(personId);
+    setUploadError(null);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+      fileInputRef.current.click();
+    }
+  };
+
+  const handleRemovePhoto = async (personId: string, e?: React.MouseEvent) => {
+    e?.stopPropagation();
+    if (!confirm('Hapus foto profil PTK ini?')) return;
+    setIsUploading(true);
+    setUploadError(null);
+    try {
+      await onUpdatePhoto?.(personId, '');
+      setSuccessToast('Foto profil PTK berhasil dihapus.');
+      setTimeout(() => setSuccessToast(null), 3500);
+    } catch (err: any) {
+      setUploadError(err.message || 'Gagal menghapus foto profil.');
+    } finally {
+      setIsUploading(false);
+    }
+  };
+
+  const handleFileSelected = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file || !targetUploadPersonId) return;
+
+    if (!['image/jpeg', 'image/png', 'image/webp'].includes(file.type)) {
+      setUploadError('Format gambar harus JPG, PNG, atau WEBP.');
+      return;
+    }
+
+    if (file.size > 2 * 1024 * 1024) {
+      setUploadError('Ukuran file foto maksimal 2 MB.');
+      return;
+    }
+
+    setIsUploading(true);
+    setUploadError(null);
+
+    try {
+      const imageBitmap = await createImageBitmap(file);
+      const canvas = document.createElement('canvas');
+      const maxDim = 512;
+      let { width, height } = imageBitmap;
+
+      if (width > height) {
+        if (width > maxDim) {
+          height = Math.round((height * maxDim) / width);
+          width = maxDim;
+        }
+      } else {
+        if (height > maxDim) {
+          width = Math.round((width * maxDim) / height);
+          height = maxDim;
+        }
+      }
+
+      canvas.width = width;
+      canvas.height = height;
+      const ctx = canvas.getContext('2d');
+      if (!ctx) throw new Error('Gagal memproses kanvas gambar.');
+      ctx.drawImage(imageBitmap, 0, 0, width, height);
+
+      const publicUrl = canvas.toDataURL('image/jpeg', 0.85);
+
+      await onUpdatePhoto?.(targetUploadPersonId, publicUrl);
+      setSuccessToast('Foto profil PTK berhasil diperbarui.');
+      setTimeout(() => setSuccessToast(null), 3500);
+    } catch (err: any) {
+      console.error('PTK photo upload error:', err);
+      setUploadError(err.message || 'Gagal mengunggah foto profil.');
+    } finally {
+      setIsUploading(false);
+      setTargetUploadPersonId(null);
+    }
+  };
 
   // Toggle PII reveal per row
   const togglePiiReveal = (id: string) => {
@@ -238,9 +331,17 @@ export const PtkDirectoryView: React.FC<PtkDirectoryViewProps> = ({
                   }}
                 >
                   <div className="flex items-center gap-3.5 sm:gap-4 min-w-0">
-                    {/* Deterministic Initial Avatar */}
-                    <div className="w-12 h-12 rounded-full bg-surface-subtle border border-line-hairline flex items-center justify-center text-accent-valor font-bold font-mono text-sm shrink-0 shadow-hairline">
-                      {initials}
+                    {/* Live Photo or Deterministic Initial Avatar */}
+                    <div className="w-12 h-12 rounded-full bg-surface-subtle border border-line-hairline flex items-center justify-center text-accent-valor font-bold font-mono text-sm shrink-0 shadow-hairline overflow-hidden">
+                      {ptk.avatarUrl || ptk.photoUrl ? (
+                        <img
+                          src={ptk.avatarUrl || ptk.photoUrl || ''}
+                          alt={ptk.fullName}
+                          className="w-full h-full object-cover"
+                        />
+                      ) : (
+                        <span>{initials}</span>
+                      )}
                     </div>
 
                     {/* PTK Identity & Roles */}
@@ -302,6 +403,61 @@ export const PtkDirectoryView: React.FC<PtkDirectoryViewProps> = ({
                 {/* Collapsible Detail Panel */}
                 {isExpanded && (
                   <div className="border-t border-line-hairline bg-surface-subtle/50 p-4 sm:p-6 space-y-4 animate-in slide-in-from-top-2 duration-150">
+                    {/* Photo Management Banner */}
+                    <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 p-4 rounded-xl bg-surface border border-line-hairline">
+                      <div className="flex items-center gap-3.5 min-w-0">
+                        <div className="w-14 h-14 rounded-full bg-surface-subtle border-2 border-line flex items-center justify-center text-accent-valor font-bold font-mono text-base shrink-0 shadow-hairline overflow-hidden">
+                          {ptk.avatarUrl || ptk.photoUrl ? (
+                            <img
+                              src={ptk.avatarUrl || ptk.photoUrl || ''}
+                              alt={ptk.fullName}
+                              className="w-full h-full object-cover"
+                            />
+                          ) : (
+                            <span>{initials}</span>
+                          )}
+                        </div>
+                        <div className="min-w-0">
+                          <h4 className="text-sm font-bold text-ink truncate">{ptk.fullName}</h4>
+                          <p className="text-xs text-ink-soft">
+                            {ptk.avatarUrl || ptk.photoUrl ? 'Foto profil aktif' : 'Belum ada foto profil'}
+                          </p>
+                        </div>
+                      </div>
+
+                      {/* Photo Actions: for Headmaster/Superadmin or self */}
+                      {(isHeadmasterOrSuperadmin || currentPersona?.personId === ptk.id) && (
+                        <div className="flex items-center gap-2 shrink-0">
+                          <button
+                            type="button"
+                            onClick={(e) => handleInitiateUpload(ptk.id, e)}
+                            disabled={isUploading}
+                            className="min-h-[38px] px-3.5 py-1.5 rounded-lg bg-accent-valor text-on-accent text-xs font-semibold flex items-center gap-2 hover:bg-accent-valor/90 transition-all shadow-hairline cursor-pointer disabled:opacity-50"
+                          >
+                            {isUploading && targetUploadPersonId === ptk.id ? (
+                              <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                            ) : (
+                              <Camera className="w-3.5 h-3.5" />
+                            )}
+                            <span>{ptk.avatarUrl || ptk.photoUrl ? 'Ubah Foto' : 'Unggah Foto'}</span>
+                          </button>
+
+                          {(ptk.avatarUrl || ptk.photoUrl) && (
+                            <button
+                              type="button"
+                              onClick={(e) => handleRemovePhoto(ptk.id, e)}
+                              disabled={isUploading}
+                              className="min-h-[38px] px-3 py-1.5 rounded-lg border border-line hover:bg-error-tint hover:border-error-line text-ink-soft hover:text-error text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer disabled:opacity-50"
+                              title="Hapus Foto"
+                            >
+                              <Trash2 className="w-3.5 h-3.5" />
+                              <span className="hidden sm:inline">Hapus</span>
+                            </button>
+                          )}
+                        </div>
+                      )}
+                    </div>
+
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       {/* Section 1: Data Penugasan & Kualifikasi */}
                       <div className="p-4 rounded-xl bg-surface border border-line-hairline space-y-2.5">
@@ -417,6 +573,30 @@ export const PtkDirectoryView: React.FC<PtkDirectoryViewProps> = ({
           })
         )}
       </div>
+
+      {/* Hidden File Input for PTK Avatar */}
+      <input
+        ref={fileInputRef}
+        type="file"
+        accept="image/jpeg,image/png,image/webp"
+        className="hidden"
+        onChange={handleFileSelected}
+      />
+
+      {/* Upload Toast Feedback */}
+      {successToast && (
+        <div className="fixed bottom-6 right-6 z-50 px-4 py-2.5 rounded-xl bg-surface border border-success/30 text-success text-xs font-medium shadow-floating flex items-center gap-2 animate-in fade-in slide-in-from-bottom-2">
+          <Sparkles className="w-4 h-4 text-success" />
+          <span>{successToast}</span>
+        </div>
+      )}
+
+      {/* Upload Error Feedback */}
+      {uploadError && (
+        <div className="fixed bottom-6 right-6 z-50 px-4 py-2.5 rounded-xl bg-surface border border-error/30 text-error text-xs font-medium shadow-floating flex items-center gap-2 animate-in fade-in slide-in-from-bottom-2">
+          <span>{uploadError}</span>
+        </div>
+      )}
     </div>
   );
 };

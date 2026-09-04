@@ -18,6 +18,7 @@ import { GenderFilter, GenderFilterValue } from '../../components/roster/GenderF
 import { StudentListItem } from '../../components/roster/StudentListItem';
 import { PtkDirectoryView } from '../../components/roster/PtkDirectoryView';
 import { db } from '../../db/database';
+import { useSecurityContext, SEED_PERSONAS } from '../../auth/context';
 
 // ═══════════════════════════════════════════════════════════════════
 // SIGNATURE #1: Amanaura Breath (✦)
@@ -34,6 +35,9 @@ function AmanauraBreath() {
 // HALAMAN UTAMA — DATA ROSTER
 // ═══════════════════════════════════════════════════════════════════
 export default function DataRosterWorkspace() {
+  const { currentPersona, updateOwnProfile } = useSecurityContext();
+  const activeSchoolId = currentPersona?.schoolId || 'sch_tk_maranatha';
+
   const [activeClasses, setActiveClasses] = useState<ClassRecord[]>([]);
   const [selectedClass, setSelectedClass] = useState<ClassRecord | null>(null);
   const [roster, setRoster] = useState<ClassWithDetails | null>(null);
@@ -44,8 +48,44 @@ export default function DataRosterWorkspace() {
   const [genderFilter, setGenderFilter] = useState<GenderFilterValue>('ALL');
   const [activeView, setActiveView] = useState<'STUDENTS' | 'PTK'>('STUDENTS');
 
-  const ptkList = useMemo(() => db.getPTKDirectory('sch_tk_maranatha'), []);
-  const currentSchool = useMemo(() => db.getSchoolById('sch_tk_maranatha'), []);
+  const [ptkList, setPtkList] = useState(() => db.getPTKDirectory(activeSchoolId));
+  const currentSchool = useMemo(() => db.getSchoolById(activeSchoolId), [activeSchoolId]);
+
+  // Reactive subscription to db changes (synchronizes PTK avatars)
+  useEffect(() => {
+    const refreshPtk = () => {
+      setPtkList(db.getPTKDirectory(activeSchoolId));
+    };
+    refreshPtk();
+    return db.subscribe(refreshPtk);
+  }, [activeSchoolId]);
+
+  const handleUpdatePtkPhoto = async (personId: string, photoUrl: string) => {
+    db.updatePersonAvatar(personId, photoUrl);
+
+    if (typeof window !== 'undefined') {
+      try {
+        const overrides = JSON.parse(localStorage.getItem('yapendik_persona_overrides') || '{}');
+        for (const persona of SEED_PERSONAS) {
+          if (persona.personId === personId) {
+            overrides[persona.id] = {
+              ...(overrides[persona.id] || persona),
+              avatarUrl: photoUrl
+            };
+          }
+        }
+        localStorage.setItem('yapendik_persona_overrides', JSON.stringify(overrides));
+      } catch (e) {
+        console.error('Failed to sync persona override', e);
+      }
+    }
+
+    if (currentPersona?.personId === personId) {
+      await updateOwnProfile({ avatarUrl: photoUrl });
+    }
+
+    setPtkList(db.getPTKDirectory(activeSchoolId));
+  };
 
   // ═══════════════════════════════════════════════════════════════
   // LOAD: Kelas aktif + detail roster
@@ -238,6 +278,7 @@ export default function DataRosterWorkspace() {
         <PtkDirectoryView
           ptkList={ptkList}
           schoolName={currentSchool?.name || 'TK YAPENDIK GPIB Cabang Maranatha'}
+          onUpdatePhoto={handleUpdatePtkPhoto}
         />
       ) : (
         <div className="space-y-6">

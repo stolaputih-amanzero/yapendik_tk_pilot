@@ -307,8 +307,16 @@ export const Sidebar: React.FC<SidebarProps> = ({
             data-testid="sidebar-profile-trigger"
           >
             <div className="relative shrink-0">
-              <div className="w-8 h-8 rounded-full bg-brand-primary text-on-brand flex items-center justify-center text-xs font-bold shadow-soft">
-                {currentPersona?.name.charAt(0) || 'U'}
+              <div className="w-8 h-8 rounded-full bg-brand-primary text-on-brand flex items-center justify-center text-xs font-bold shadow-soft overflow-hidden">
+                {currentPersona?.avatarUrl ? (
+                  <img
+                    src={currentPersona.avatarUrl}
+                    alt={currentPersona.name}
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  currentPersona?.name.charAt(0) || 'U'
+                )}
               </div>
               {/* Static presence dot */}
               <span className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-accent-valor border-2 border-surface" />
