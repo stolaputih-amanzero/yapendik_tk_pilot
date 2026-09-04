@@ -72,6 +72,20 @@ const genesisStaff = [
     personId: 'per_teacher_evi',
     phone: '089536851668',
     classAssignment: 'TK_B'
+  },
+  {
+    role: 'GUARDIAN',
+    name: 'JULEN PATRICIA',
+    email: 'julen.patricia@gmail.com',
+    personId: 'per_guard_julen_patricia',
+    phone: '081296970087'
+  },
+  {
+    role: 'GUARDIAN',
+    name: 'MUTIARA ZEGA',
+    email: 'mutiara.zega@gmail.com',
+    personId: 'per_guard_mutiara_zega',
+    phone: '081394642219'
   }
 ];
 
