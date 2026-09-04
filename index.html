@@ -4,17 +4,78 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Amanaura OS</title>
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>✦</text></svg>" />
+    <link rel="icon" type="image/png" sizes="64x64" href="/favicon.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
     <meta name="theme-color" media="(prefers-color-scheme: light)" content="#F7F4ED" />
-    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0D1117" />
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#16130F" />
     <link rel="manifest" href="/manifest.json" />
     <meta name="description" content="Amanaura OS — The Warm, Tactile, and Dignified Operating Experience for Early Childhood Education." />
+    
+    <!-- Open Graph (OG) & Social Card Metadata -->
     <meta property="og:title" content="Amanaura OS" />
-    <meta property="og:description" content="Amanaura OS — The Warm, Tactile, and Dignified Operating Experience." />
+    <meta property="og:description" content="Amanaura OS — The Warm, Tactile, and Dignified Operating Experience for Early Childhood Education." />
     <meta property="og:type" content="website" />
+    <meta property="og:image" content="/og-image.png" />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Amanaura OS — Early Childhood Operating System" />
     <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content="/og-image.png" />
+
+    <!-- Circadian Daylight Pre-Hydration Styles (Prevent White Flash / FOUC) -->
+    <style>
+      body {
+        margin: 0;
+        background-color: #F7F4ED;
+        color: #211E1A;
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      }
+      @media (prefers-color-scheme: dark) {
+        body {
+          background-color: #16130F;
+          color: #F2EBDD;
+        }
+        #amanaura-splash-shell img {
+          filter: drop-shadow(0 0 12px rgba(168, 135, 76, 0.35));
+        }
+      }
+      #amanaura-splash-shell {
+        position: fixed;
+        inset: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        z-index: 9999;
+        background-color: inherit;
+        transition: opacity 0.4s ease-out;
+      }
+      #amanaura-splash-shell.hidden {
+        opacity: 0;
+        pointer-events: none;
+      }
+      @keyframes amanaura-shell-pulse {
+        0%, 100% { opacity: 0.35; transform: scale(0.96); }
+        50% { opacity: 1; transform: scale(1.04); }
+      }
+      .shell-breath {
+        display: inline-block;
+        color: #A8874C;
+        animation: amanaura-shell-pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+      }
+    </style>
   </head>
   <body>
+    <!-- Privacy-First Zero-PII Static Cold-Boot Shell -->
+    <div id="amanaura-splash-shell">
+      <img src="/branding/amanaura-logo-plain.png" alt="Amanaura OS" style="width: 80px; height: 80px; object-fit: contain;" />
+      <div style="margin-top: 18px; font-size: 15px; font-weight: 600; letter-spacing: 0.08em; display: flex; align-items: center; gap: 8px;">
+        <span>Amanaura OS</span>
+        <span class="shell-breath">✦</span>
+      </div>
+    </div>
+
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>

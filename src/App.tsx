@@ -3,41 +3,53 @@
  * Main Application Shell & Contextual Orchestrator (Sidebar + TopBar + Mobile Omni-Bar Architecture)
  */
 
-import React, { useState } from 'react';
+import React, { useState, Suspense, lazy } from 'react';
 import { SecurityContextProvider, useSecurityContext } from './auth/context';
+import { AmanauraSplashScreen } from './components/common/AmanauraSplashScreen';
 import { PremiumLoginScreen } from './components/auth/PremiumLoginScreen';
 import { TopBar, WorkspaceTab } from './components/layout/TopBar';
 import { Sidebar } from './components/layout/Sidebar';
 import { MobileOmniBar } from './components/layout/MobileOmniBar';
 import { ProfileDrawer } from './components/layout/ProfileDrawer';
-import { TeacherDailyWorkWorkspace } from './components/workspaces/TeacherDailyWorkWorkspace';
-import { ObservationWorkspace } from './components/workspaces/ObservationWorkspace';
-import { DevelopmentWorkspace } from './components/workspaces/DevelopmentWorkspace';
-import { AttendanceWorkspace } from './components/workspaces/AttendanceWorkspace';
-import { CommunicationWorkspace } from './components/workspaces/CommunicationWorkspace';
-import { EnrollmentWorkspace } from './components/workspaces/EnrollmentWorkspace';
-import DataRosterWorkspace from './pages/roster/DataRosterWorkspace';
-import { SchoolReviewWorkspace } from './components/workspaces/SchoolReviewWorkspace';
-import { AuthorizationTestingWorkspace } from './components/workspaces/AuthorizationTestingWorkspace';
-import { LivingContractWorkspace } from './components/workspaces/LivingContractWorkspace';
-import { ProvisioningWorkspace } from './components/workspaces/ProvisioningWorkspace';
-import { AcademicLifecycleWorkspace } from './components/workspaces/AcademicLifecycleWorkspace';
-import { CohortPromotionWorkspace } from './components/workspaces/CohortPromotionWorkspace';
-import { GraduationRegistryWorkspace } from './components/workspaces/GraduationRegistryWorkspace';
-import { InstitutionalHealthDashboard } from './components/workspaces/InstitutionalHealthDashboard';
-import { StudentJourneyTimeline } from './components/workspaces/StudentJourneyTimeline';
-import { TeacherHomeShell } from './components/workspaces/teacher/TeacherHomeShell';
-import { FoundationLayout } from './workspaces/foundation/FoundationLayout';
-import { HeadmasterAdoptionLayout } from './workspaces/school/HeadmasterAdoptionLayout';
-import { ApplicationDashboard } from './workspaces/admissions/portal/ApplicationDashboard';
-import { HeadmasterAdmissionsDesk } from './workspaces/admissions/school/HeadmasterAdmissionsDesk';
-import { FoundationAdmissionsTelemetryView } from './workspaces/admissions/foundation/FoundationAdmissionsTelemetryView';
-import { GuardianWorkspace } from './workspaces/guardian/GuardianWorkspace';
-import { GuardianDevelopmentTimeline } from './workspaces/guardian/GuardianDevelopmentTimeline';
-import { SupabaseSettingsModal } from './components/workspaces/SupabaseSettingsModal';
+import { WorkspaceSkeleton } from './components/common/WorkspaceSkeleton';
 import { db } from './db/database';
 import { Building2, User } from 'lucide-react';
 import { SelectSheet } from './components/ui';
+
+// Lazy-loaded persona workspace chunks (ARB Guardrail 2)
+// --- Teacher Persona (ws-teacher) ---
+const TeacherHomeShell = lazy(() => import('./components/workspaces/teacher/TeacherHomeShell').then(m => ({ default: m.TeacherHomeShell })));
+const TeacherDailyWorkWorkspace = lazy(() => import('./components/workspaces/TeacherDailyWorkWorkspace').then(m => ({ default: m.TeacherDailyWorkWorkspace })));
+const AttendanceWorkspace = lazy(() => import('./components/workspaces/AttendanceWorkspace').then(m => ({ default: m.AttendanceWorkspace })));
+const ObservationWorkspace = lazy(() => import('./components/workspaces/ObservationWorkspace').then(m => ({ default: m.ObservationWorkspace })));
+const DevelopmentWorkspace = lazy(() => import('./components/workspaces/DevelopmentWorkspace').then(m => ({ default: m.DevelopmentWorkspace })));
+const CommunicationWorkspace = lazy(() => import('./components/workspaces/CommunicationWorkspace').then(m => ({ default: m.CommunicationWorkspace })));
+const StudentJourneyTimeline = lazy(() => import('./components/workspaces/StudentJourneyTimeline').then(m => ({ default: m.StudentJourneyTimeline })));
+
+// --- Foundation Persona (ws-foundation) ---
+const FoundationLayout = lazy(() => import('./workspaces/foundation/FoundationLayout').then(m => ({ default: m.FoundationLayout })));
+const FoundationAdmissionsTelemetryView = lazy(() => import('./workspaces/admissions/foundation/FoundationAdmissionsTelemetryView').then(m => ({ default: m.FoundationAdmissionsTelemetryView })));
+const SchoolReviewWorkspace = lazy(() => import('./components/workspaces/SchoolReviewWorkspace').then(m => ({ default: m.SchoolReviewWorkspace })));
+const InstitutionalHealthDashboard = lazy(() => import('./components/workspaces/InstitutionalHealthDashboard').then(m => ({ default: m.InstitutionalHealthDashboard })));
+
+// --- Headmaster Persona (ws-headmaster) ---
+const HeadmasterAdoptionLayout = lazy(() => import('./workspaces/school/HeadmasterAdoptionLayout').then(m => ({ default: m.HeadmasterAdoptionLayout })));
+const HeadmasterAdmissionsDesk = lazy(() => import('./workspaces/admissions/school/HeadmasterAdmissionsDesk').then(m => ({ default: m.HeadmasterAdmissionsDesk })));
+const AcademicLifecycleWorkspace = lazy(() => import('./components/workspaces/AcademicLifecycleWorkspace').then(m => ({ default: m.AcademicLifecycleWorkspace })));
+const CohortPromotionWorkspace = lazy(() => import('./components/workspaces/CohortPromotionWorkspace').then(m => ({ default: m.CohortPromotionWorkspace })));
+const GraduationRegistryWorkspace = lazy(() => import('./components/workspaces/GraduationRegistryWorkspace').then(m => ({ default: m.GraduationRegistryWorkspace })));
+
+// --- Guardian Persona (ws-guardian) ---
+const GuardianWorkspace = lazy(() => import('./workspaces/guardian/GuardianWorkspace').then(m => ({ default: m.GuardianWorkspace })));
+const ApplicationDashboard = lazy(() => import('./workspaces/admissions/portal/ApplicationDashboard').then(m => ({ default: m.ApplicationDashboard })));
+const GuardianDevelopmentTimeline = lazy(() => import('./workspaces/guardian/GuardianDevelopmentTimeline').then(m => ({ default: m.GuardianDevelopmentTimeline })));
+
+// --- Operations & Administration (ws-operations) ---
+const DataRosterWorkspace = lazy(() => import('./pages/roster/DataRosterWorkspace'));
+const ProvisioningWorkspace = lazy(() => import('./components/workspaces/ProvisioningWorkspace').then(m => ({ default: m.ProvisioningWorkspace })));
+const LivingContractWorkspace = lazy(() => import('./components/workspaces/LivingContractWorkspace').then(m => ({ default: m.LivingContractWorkspace })));
+const AuthorizationTestingWorkspace = lazy(() => import('./components/workspaces/AuthorizationTestingWorkspace').then(m => ({ default: m.AuthorizationTestingWorkspace })));
+const SupabaseSettingsModal = lazy(() => import('./components/workspaces/SupabaseSettingsModal').then(m => ({ default: m.SupabaseSettingsModal })));
 
 const TAB_TO_HASH: Record<WorkspaceTab, string> = {
   TEACHER_HOME: 'beranda-guru',
@@ -102,6 +114,17 @@ const AppContent: React.FC = () => {
   });
 
   const { authState, currentPersona, securityContext, activeSchoolId, setActiveSchoolId } = useSecurityContext();
+
+  const [showSplash, setShowSplash] = useState<boolean>(true);
+
+  React.useEffect(() => {
+    if (authState !== 'LOADING') {
+      const timer = setTimeout(() => {
+        setShowSplash(false);
+      }, 800);
+      return () => clearTimeout(timer);
+    }
+  }, [authState]);
 
   const handleToggleSidebar = () => {
     setIsSidebarCollapsed(prev => {
@@ -177,9 +200,8 @@ const AppContent: React.FC = () => {
 
   if (authState === 'LOADING') {
     return (
-      <div className="min-h-[100dvh] flex flex-col items-center justify-center bg-canvas text-ink">
-        <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-brand mb-4"></div>
-        <div className="font-semibold text-sm">Memuat Konteks Identitas Amanaura OS...</div>
+      <div aria-label="Memuat Konteks Identitas Amanaura OS...">
+        <AmanauraSplashScreen fading={false} />
       </div>
     );
   }
@@ -191,11 +213,18 @@ const AppContent: React.FC = () => {
     authState === 'NO_INSTITUTIONAL_RELATIONSHIP' ||
     !currentPersona
   ) {
-    return <PremiumLoginScreen />;
+    return (
+      <>
+        {showSplash && <AmanauraSplashScreen fading={true} />}
+        <PremiumLoginScreen />
+      </>
+    );
   }
 
   return (
-    <div className="flex flex-row min-h-[100dvh] bg-canvas text-ink font-sans antialiased transition-colors duration-300">
+    <>
+      {showSplash && <AmanauraSplashScreen fading={true} />}
+      <div className="flex flex-row min-h-[100dvh] bg-canvas text-ink font-sans antialiased transition-colors duration-300">
       {/* Left Sidebar Navigation (Tablet / Desktop Collapsible) */}
       <Sidebar 
         activeTab={activeTab} 
@@ -255,52 +284,70 @@ const AppContent: React.FC = () => {
 
         {/* Main Workspace Surface */}
         <main className="grow shrink-0 w-full max-w-7xl mx-auto px-4 py-4 medium:p-6 pb-[180px] medium:pb-8 bg-canvas expanded:bg-transparent">
-          {activeTab === 'TEACHER_HOME' && (
-            <TeacherHomeShell 
-              onNavigateToCommunication={() => setActiveTab('COMMUNICATION')} 
-              onNavigateTab={setActiveTab}
-            />
-          )}
-          {activeTab === 'DAILY_WORK' && <TeacherDailyWorkWorkspace />}
-          {activeTab === 'OBSERVATIONS' && <ObservationWorkspace />}
-          {activeTab === 'DEVELOPMENT' && (
-            isGuardianPersona ? (
-              guardianChildStudent ? (
-                <GuardianDevelopmentTimeline 
-                  studentId={guardianChildStudent.id} 
-                  schoolId={activeSchoolId || guardianChildStudent.schoolId || 'sch_tk_maranatha'} 
+          <Suspense fallback={<WorkspaceSkeleton />}>
+            {activeTab === 'TEACHER_HOME' && (
+              <TeacherHomeShell 
+                onNavigateToCommunication={() => setActiveTab('COMMUNICATION')} 
+                onNavigateTab={setActiveTab}
+              />
+            )}
+            {activeTab === 'DAILY_WORK' && <TeacherDailyWorkWorkspace />}
+            {activeTab === 'OBSERVATIONS' && <ObservationWorkspace />}
+            {activeTab === 'DEVELOPMENT' && (
+              isGuardianPersona ? (
+                guardianChildStudent ? (
+                  <GuardianDevelopmentTimeline 
+                    studentId={guardianChildStudent.id} 
+                    schoolId={activeSchoolId || guardianChildStudent.schoolId || 'sch_tk_maranatha'} 
+                  />
+                ) : (
+                  <div className="p-8 text-center bg-surface border border-line rounded-card shadow-hairline space-y-3" data-testid="guardian-empty-child-state">
+                    <div className="w-12 h-12 rounded-full bg-surface-subtle text-ink-soft flex items-center justify-center mx-auto border border-line">
+                      <User className="w-6 h-6 text-ink-soft" />
+                    </div>
+                    <h3 className="text-base font-bold text-ink">Belum Ada Data Ananda Terhubung</h3>
+                    <p className="text-xs text-ink-soft max-w-md mx-auto leading-relaxed">
+                      Belum ada data siswa ananda yang terhubung secara resmi ke akun wali ini. Silakan hubungi administrasi sekolah untuk pengaitan data murid.
+                    </p>
+                  </div>
+                )
+              ) : (
+                <DevelopmentWorkspace />
+              )
+            )}
+            {activeTab === 'STUDENT_JOURNEY' && <StudentJourneyTimeline />}
+            {activeTab === 'ATTENDANCE' && <AttendanceWorkspace />}
+            {activeTab === 'COMMUNICATION' && <CommunicationWorkspace />}
+            {activeTab === 'ROSTER' && <DataRosterWorkspace />}
+            {activeTab === 'GOVERNANCE' && <SchoolReviewWorkspace />}
+            {activeTab === 'INSTITUTIONAL_HEALTH' && <InstitutionalHealthDashboard />}
+            {activeTab === 'ACADEMIC_LIFECYCLE' && <AcademicLifecycleWorkspace />}
+            {activeTab === 'COHORT_PROMOTION' && <CohortPromotionWorkspace />}
+            {activeTab === 'GRADUATION_REGISTRY' && <GraduationRegistryWorkspace />}
+            {activeTab === 'FOUNDATION_GOVERNANCE' && <FoundationLayout onNavigateTab={setActiveTab} />}
+            {activeTab === 'HEADMASTER_ADOPTION' && <HeadmasterAdoptionLayout onNavigateTab={setActiveTab} />}
+            {activeTab === 'GUARDIAN_WORKSPACE' && <GuardianWorkspace />}
+            {activeTab === 'ADMISSIONS_PORTAL' && (
+              (currentPersona?.role === 'YAPENDIK_SUPERADMIN' || currentPersona?.role === 'FOUNDATION_DIRECTOR') ? (
+                <FoundationAdmissionsTelemetryView />
+              ) : currentPersona?.role === 'HEADMASTER' ? (
+                <HeadmasterAdmissionsDesk
+                  schoolId={activeSchoolId || 'sch_tk_yapendik_01'}
+                  headmasterContext={{
+                    personId: currentPersona.id,
+                    role: currentPersona.role,
+                    activeSchoolId: activeSchoolId || 'sch_tk_yapendik_01'
+                  }}
                 />
               ) : (
-                <div className="p-8 text-center bg-surface border border-line rounded-card shadow-hairline space-y-3" data-testid="guardian-empty-child-state">
-                  <div className="w-12 h-12 rounded-full bg-surface-subtle text-ink-soft flex items-center justify-center mx-auto border border-line">
-                    <User className="w-6 h-6 text-ink-soft" />
-                  </div>
-                  <h3 className="text-base font-bold text-ink">Belum Ada Data Ananda Terhubung</h3>
-                  <p className="text-xs text-ink-soft max-w-md mx-auto leading-relaxed">
-                    Belum ada data siswa ananda yang terhubung secara resmi ke akun wali ini. Silakan hubungi administrasi sekolah untuk pengaitan data murid.
-                  </p>
-                </div>
+                <ApplicationDashboard 
+                  creatorUid={currentPersona?.id || 'usr_guest_applicant'} 
+                  personId={currentPersona?.personId || 'per_guest_applicant'}
+                  guardianName={currentPersona?.name || 'Orang Tua Calon Siswa'}
+                />
               )
-            ) : (
-              <DevelopmentWorkspace />
-            )
-          )}
-          {activeTab === 'STUDENT_JOURNEY' && <StudentJourneyTimeline />}
-          {activeTab === 'ATTENDANCE' && <AttendanceWorkspace />}
-          {activeTab === 'COMMUNICATION' && <CommunicationWorkspace />}
-          {activeTab === 'ROSTER' && <DataRosterWorkspace />}
-          {activeTab === 'GOVERNANCE' && <SchoolReviewWorkspace />}
-          {activeTab === 'INSTITUTIONAL_HEALTH' && <InstitutionalHealthDashboard />}
-          {activeTab === 'ACADEMIC_LIFECYCLE' && <AcademicLifecycleWorkspace />}
-          {activeTab === 'COHORT_PROMOTION' && <CohortPromotionWorkspace />}
-          {activeTab === 'GRADUATION_REGISTRY' && <GraduationRegistryWorkspace />}
-          {activeTab === 'FOUNDATION_GOVERNANCE' && <FoundationLayout onNavigateTab={setActiveTab} />}
-          {activeTab === 'HEADMASTER_ADOPTION' && <HeadmasterAdoptionLayout onNavigateTab={setActiveTab} />}
-          {activeTab === 'GUARDIAN_WORKSPACE' && <GuardianWorkspace />}
-          {activeTab === 'ADMISSIONS_PORTAL' && (
-            (currentPersona?.role === 'YAPENDIK_SUPERADMIN' || currentPersona?.role === 'FOUNDATION_DIRECTOR') ? (
-              <FoundationAdmissionsTelemetryView />
-            ) : currentPersona?.role === 'HEADMASTER' ? (
+            )}
+            {activeTab === 'ADMISSIONS_DESK' && (
               <HeadmasterAdmissionsDesk
                 schoolId={activeSchoolId || 'sch_tk_yapendik_01'}
                 headmasterContext={{
@@ -309,27 +356,11 @@ const AppContent: React.FC = () => {
                   activeSchoolId: activeSchoolId || 'sch_tk_yapendik_01'
                 }}
               />
-            ) : (
-              <ApplicationDashboard 
-                creatorUid={currentPersona?.id || 'usr_guest_applicant'} 
-                personId={currentPersona?.personId || 'per_guest_applicant'}
-                guardianName={currentPersona?.name || 'Orang Tua Calon Siswa'}
-              />
-            )
-          )}
-          {activeTab === 'ADMISSIONS_DESK' && (
-            <HeadmasterAdmissionsDesk
-              schoolId={activeSchoolId || 'sch_tk_yapendik_01'}
-              headmasterContext={{
-                personId: currentPersona.id,
-                role: currentPersona.role,
-                activeSchoolId: activeSchoolId || 'sch_tk_yapendik_01'
-              }}
-            />
-          )}
-          {activeTab === 'PROVISIONING' && <ProvisioningWorkspace onNavigateToOperations={() => setActiveTab('DAILY_WORK')} />}
-          {activeTab === 'TESTS' && <AuthorizationTestingWorkspace />}
-          {activeTab === 'PERCONTOHAN' && <LivingContractWorkspace />}
+            )}
+            {activeTab === 'PROVISIONING' && <ProvisioningWorkspace onNavigateToOperations={() => setActiveTab('DAILY_WORK')} />}
+            {activeTab === 'TESTS' && <AuthorizationTestingWorkspace />}
+            {activeTab === 'PERCONTOHAN' && <LivingContractWorkspace />}
+          </Suspense>
 
           {/* Scroll Clearance Cushion for Mobile Slide-Up Chevron & FAB (Reclaimed ADR-UX-012) */}
           <div className="h-[72px] expanded:hidden shrink-0 pointer-events-none" aria-hidden="true" />
@@ -353,10 +384,14 @@ const AppContent: React.FC = () => {
       />
 
       {/* Supabase Integration Configuration Modal */}
-      <SupabaseSettingsModal
-        isOpen={isSupabaseModalOpen}
-        onClose={() => setIsSupabaseModalOpen(false)}
-      />
+      <Suspense fallback={null}>
+        {isSupabaseModalOpen && (
+          <SupabaseSettingsModal
+            isOpen={isSupabaseModalOpen}
+            onClose={() => setIsSupabaseModalOpen(false)}
+          />
+        )}
+      </Suspense>
 
       {/* Mobile Profile & Context Drawer (ADR-UX-011 §4.2) */}
       <ProfileDrawer
@@ -365,6 +400,7 @@ const AppContent: React.FC = () => {
         onSelectTab={setActiveTab}
       />
     </div>
+    </>
   );
 };
 

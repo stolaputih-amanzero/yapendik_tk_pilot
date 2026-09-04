@@ -75,10 +75,10 @@ export const LppaPrintPreviewModal: React.FC<Props> = ({
    * DIRECT VECTOR PDF GENERATION ON THE FLY (Instant File Download)
    * Mengonversi dokumen secara instan menjadi file PDF vektor resmi dengan nama otomatis
    */
-  const handleDownloadPdfOnTheFly = () => {
+  const handleDownloadPdfOnTheFly = async () => {
     setIsGeneratingPdf(true);
     try {
-      generateAndDownloadLppaPdf(record);
+      await generateAndDownloadLppaPdf(record);
     } catch (error) {
       console.error('Failed to generate PDF on the fly:', error);
       alert('Gagal membuat PDF otomatis. Silakan gunakan tombol Cetak Fisik.');

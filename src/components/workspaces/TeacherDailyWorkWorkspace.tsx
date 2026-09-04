@@ -22,12 +22,16 @@ import {
   ChevronLeft, 
   ChevronRight, 
   X, 
-  Layers, 
+  Layers,
   FileText,
   Sparkles,
-  CalendarRange
+  CalendarRange,
+  Palmtree,
+  CalendarOff,
+  School
 } from 'lucide-react';
 import { WeeklyPlanningWorkspace } from '../teacher-daily-work/WeeklyPlanningWorkspace';
+import { holidayService, HolidayEntry } from '../../services/holidayService';
 
 const getTodayDateString = (): string => {
   const d = new Date();
@@ -49,6 +53,17 @@ const formatDateID = (dateStr: string): string => {
     });
   } catch {
     return dateStr;
+  }
+};
+
+const isWeekend = (dateStr: string): boolean => {
+  try {
+    const [y, m, d] = dateStr.split('-').map(Number);
+    const dateObj = new Date(y, m - 1, d);
+    const day = dateObj.getDay();
+    return day === 0 || day === 6;
+  } catch {
+    return false;
   }
 };
 
@@ -229,7 +244,12 @@ export const TeacherDailyWorkWorkspace: React.FC = () => {
 
   useEffect(() => {
     loadData();
-    return db.subscribe(loadData);
+    const unsubDb = db.subscribe(loadData);
+    const unsubHoliday = holidayService.subscribe(loadData);
+    return () => {
+      unsubDb();
+      unsubHoliday();
+    };
   }, [securityContext?.activeSchoolId, selectedClassId, selectedDate]);
 
   // Authorization check for creating / editing activities (DENY_CLASS_UNASSIGNED)
@@ -243,6 +263,14 @@ export const TeacherDailyWorkWorkspace: React.FC = () => {
 
   const canEdit = authResult.granted;
   const isToday = selectedDate === getTodayDateString();
+  const activeHoliday = holidayService.isHoliday(selectedDate, securityContext?.activeSchoolId);
+
+  // Auto-Draft Shield: Shared Tablet Privacy (ARB Guardrail)
+  const getReflectionDraftKey = (activityId: string): string => {
+    const schoolId = securityContext?.activeSchoolId || 'default_school';
+    const userId = securityContext?.userId || 'anonymous_teacher';
+    return `amanaura_draft_reflection_${schoolId}_${userId}_${activityId}`;
+  };
 
   const classSegments: SegmentedControlOption[] = classes.map(c => ({
     id: c.id,
@@ -298,12 +326,36 @@ export const TeacherDailyWorkWorkspace: React.FC = () => {
   const handleOpenReflectionModal = (activity: LearningActivity) => {
     if (!canEdit) return;
     setReflectionModalActivity(activity);
-    setReflectionText(activity.teacherReflection || '');
+    const draftKey = getReflectionDraftKey(activity.id);
+    let initialText = activity.teacherReflection || '';
+    if (typeof localStorage !== 'undefined') {
+      const savedDraft = localStorage.getItem(draftKey);
+      if (savedDraft && savedDraft.trim().length > 0) {
+        initialText = savedDraft;
+      }
+    }
+    setReflectionText(initialText);
+  };
+
+  const handleReflectionTextChange = (text: string) => {
+    setReflectionText(text);
+    if (reflectionModalActivity && typeof localStorage !== 'undefined') {
+      const draftKey = getReflectionDraftKey(reflectionModalActivity.id);
+      if (text.trim().length > 0) {
+        localStorage.setItem(draftKey, text);
+      } else {
+        localStorage.removeItem(draftKey);
+      }
+    }
   };
 
   const handleSaveReflection = () => {
     if (reflectionModalActivity) {
       db.toggleActivityComplete(reflectionModalActivity.id, reflectionText);
+      if (typeof localStorage !== 'undefined') {
+        const draftKey = getReflectionDraftKey(reflectionModalActivity.id);
+        localStorage.removeItem(draftKey);
+      }
       setReflectionModalActivity(null);
       setReflectionText('');
       setToastMessage('Aktivitas ditandai selesai dan catatan refleksi berhasil dicatat.');
@@ -381,13 +433,13 @@ export const TeacherDailyWorkWorkspace: React.FC = () => {
         {viewMode === 'DAILY' && (
           <div className="flex flex-col medium:flex-row items-stretch medium:items-center justify-between gap-3 pt-2 border-t border-line-soft">
             {/* Date Picker with Prev / Next Navigation */}
-            <div className="flex items-center gap-1.5">
+            <div className="flex items-center gap-1.5 flex-wrap">
               <button
                 type="button"
-                onClick={() => setSelectedDate(shiftDate(selectedDate, -1))}
+                onClick={() => setSelectedDate(holidayService.shiftSchoolDate(selectedDate, -1, securityContext?.activeSchoolId, true))}
                 className="w-9 h-9 rounded-xl bg-surface border border-line hover-only:bg-surface-subtle flex items-center justify-center text-ink-soft hover-only:text-ink cursor-pointer shrink-0"
-                title="Hari Sebelumnya"
-                aria-label="Hari Sebelumnya"
+                title="Hari Sekolah Sebelumnya"
+                aria-label="Hari Sekolah Sebelumnya"
               >
                 <ChevronLeft className="w-4 h-4" />
               </button>
@@ -417,10 +469,10 @@ export const TeacherDailyWorkWorkspace: React.FC = () => {
 
               <button
                 type="button"
-                onClick={() => setSelectedDate(shiftDate(selectedDate, 1))}
+                onClick={() => setSelectedDate(holidayService.shiftSchoolDate(selectedDate, 1, securityContext?.activeSchoolId, true))}
                 className="w-9 h-9 rounded-xl bg-surface border border-line hover-only:bg-surface-subtle flex items-center justify-center text-ink-soft hover-only:text-ink cursor-pointer shrink-0"
-                title="Hari Berikutnya"
-                aria-label="Hari Berikutnya"
+                title="Hari Sekolah Berikutnya"
+                aria-label="Hari Sekolah Berikutnya"
               >
                 <ChevronRight className="w-4 h-4" />
               </button>
@@ -429,10 +481,25 @@ export const TeacherDailyWorkWorkspace: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setSelectedDate(getTodayDateString())}
-                  className="px-2.5 py-1.5 rounded-xl bg-surface-subtle border border-line text-[11px] font-semibold text-accent-valor hover-only:bg-surface cursor-pointer"
+                  className="px-2.5 py-1.5 rounded-xl bg-surface-subtle border border-line text-[11px] font-semibold text-accent-valor hover-only:bg-surface cursor-pointer shrink-0"
                 >
                   Hari Ini
                 </button>
+              )}
+
+              {activeHoliday && (
+                <span className="px-2.5 py-1 rounded-xl bg-info-tint border border-info/20 text-info-foreground text-xs font-medium flex items-center gap-1.5 shadow-hairline shrink-0">
+                  <span className="w-1.5 h-1.5 rounded-full bg-info shrink-0" />
+                  <Palmtree className="w-3.5 h-3.5 text-info shrink-0" />
+                  <span>Libur: {activeHoliday.name}</span>
+                </span>
+              )}
+
+              {!activeHoliday && isWeekend(selectedDate) && (
+                <span className="px-2.5 py-1 rounded-xl bg-surface-subtle border border-line text-ink-soft text-xs font-medium flex items-center gap-1.5 shrink-0">
+                  <span className="w-1.5 h-1.5 rounded-full bg-ink-faint shrink-0" />
+                  <span>Akhir Pekan</span>
+                </span>
               )}
             </div>
 
@@ -645,26 +712,57 @@ export const TeacherDailyWorkWorkspace: React.FC = () => {
         </div>
       ) : (
         /* Empty State */
-        <div className="bg-surface rounded-2xl border border-dashed border-line-strong p-10 text-center text-ink-soft shadow-hairline mx-4 medium:mx-6 space-y-3">
-          <BookOpen className="w-10 h-10 text-ink-faint mx-auto opacity-60" />
-          <div className="space-y-1">
-            <h4 className="text-sm font-bold text-ink">Belum Ada Agenda Aktivitas pada Tanggal Ini</h4>
-            <p className="text-xs text-ink-soft max-w-md mx-auto">
-              Susun rencana pembelajaran sentra harian kelas untuk memandu proses belajar dan capaian tumbuh kembang anak didik.
-            </p>
+        activeHoliday ? (
+          <div className="bg-surface rounded-2xl border border-line-soft p-8 medium:p-12 text-center text-ink-soft shadow-hairline mx-4 medium:mx-6 space-y-4 animate-in fade-in duration-150">
+            <div className="w-14 h-14 rounded-2xl bg-info-tint/70 border border-info/20 flex items-center justify-center text-info mx-auto">
+              <Palmtree className="w-7 h-7" />
+            </div>
+            <div className="space-y-1">
+              <span className="inline-flex items-center gap-1.5 text-xs font-mono px-3 py-1 rounded-full bg-info-tint text-info-foreground border border-info/20">
+                <span className="w-1.5 h-1.5 rounded-full bg-info" />
+                Hari Libur Resmi: {activeHoliday.name}
+              </span>
+              <h4 className="font-display text-base medium:text-lg font-bold text-ink pt-1.5">
+                Selamat Beristirahat, Bapak/Ibu Guru
+              </h4>
+              <p className="text-xs text-ink-soft max-w-md mx-auto leading-relaxed">
+                Agenda sentra pembelajaran reguler tidak dijadwalkan pada hari libur nasional atau cuti bersama.
+              </p>
+            </div>
+            {canEdit && (
+              <div className="pt-2">
+                <button
+                  type="button"
+                  onClick={() => setShowAddModal(true)}
+                  className="text-xs font-semibold text-accent-valor hover-only:underline cursor-pointer"
+                >
+                  Buka formulir untuk kegiatan khusus / persiapan ↗
+                </button>
+              </div>
+            )}
           </div>
-          {canEdit && (
-            <Button
-              variant="primary"
-              size="sm"
-              onClick={() => setShowAddModal(true)}
-              leftIcon={<Plus className="w-4 h-4" />}
-              className="rounded-xl text-xs font-bold shadow-soft mx-auto"
-            >
-              Rencana Aktivitas Baru
-            </Button>
-          )}
-        </div>
+        ) : (
+          <div className="bg-surface rounded-2xl border border-dashed border-line-strong p-10 text-center text-ink-soft shadow-hairline mx-4 medium:mx-6 space-y-3">
+            <BookOpen className="w-10 h-10 text-ink-faint mx-auto opacity-60" />
+            <div className="space-y-1">
+              <h4 className="text-sm font-bold text-ink">Belum Ada Agenda Aktivitas pada Tanggal Ini</h4>
+              <p className="text-xs text-ink-soft max-w-md mx-auto">
+                Susun rencana pembelajaran sentra harian kelas untuk memandu proses belajar dan capaian tumbuh kembang anak didik.
+              </p>
+            </div>
+            {canEdit && (
+              <Button
+                variant="primary"
+                size="sm"
+                onClick={() => setShowAddModal(true)}
+                leftIcon={<Plus className="w-4 h-4" />}
+                className="rounded-xl text-xs font-bold shadow-soft mx-auto"
+              >
+                Rencana Aktivitas Baru
+              </Button>
+            )}
+          </div>
+        )
       )}
         </>
       )}
@@ -684,11 +782,13 @@ export const TeacherDailyWorkWorkspace: React.FC = () => {
                 </h2>
                 {/* Matching Pill Ribbon */}
                 <div className="flex items-center gap-2 mt-1.5">
-                  <span className="px-2 py-0.5 rounded-md bg-surface-subtle border border-line text-[11px] font-mono font-medium text-ink">
-                    📅 {formatDateID(selectedDate)}
+                  <span className="px-2 py-0.5 rounded-md bg-surface-subtle border border-line text-[11px] font-mono font-medium text-ink flex items-center gap-1.5">
+                    <Calendar className="w-3 h-3 text-accent-valor" />
+                    <span>{formatDateID(selectedDate)}</span>
                   </span>
-                  <span className="px-2 py-0.5 rounded-md bg-surface-subtle border border-line text-[11px] font-medium text-ink">
-                    🏫 {classes.find(c => c.id === selectedClassId)?.name || 'TK A'}
+                  <span className="px-2 py-0.5 rounded-md bg-surface-subtle border border-line text-[11px] font-medium text-ink flex items-center gap-1.5">
+                    <School className="w-3 h-3 text-accent-valor" />
+                    <span>{classes.find(c => c.id === selectedClassId)?.name || 'TK A'}</span>
                   </span>
                 </div>
               </div>
@@ -860,7 +960,7 @@ export const TeacherDailyWorkWorkspace: React.FC = () => {
               <div>
                 <h3 className="text-base font-bold text-ink flex items-center gap-2">
                   <Sparkles className="w-5 h-5 text-accent-valor shrink-0" />
-                  <span>Refleksi Pembelajaran Guru</span>
+                  <span>{activeHoliday ? 'Catatan Kegiatan Khusus / Persiapan' : 'Refleksi Pembelajaran Guru'}</span>
                 </h3>
                 <p className="text-xs text-ink-soft mt-0.5">
                   {reflectionModalActivity.activityName}
@@ -877,13 +977,19 @@ export const TeacherDailyWorkWorkspace: React.FC = () => {
             </div>
 
             <div className="space-y-1.5">
-              <label className="text-xs font-bold text-ink">Catatan Refleksi &amp; Evaluasi Pedagogis:</label>
+              <label className="text-xs font-bold text-ink">
+                {activeHoliday 
+                  ? 'Catatan Refleksi Persiapan / Kegiatan Khusus (Opsional):' 
+                  : 'Catatan Refleksi & Evaluasi Pedagogis:'}
+              </label>
               <textarea
                 rows={4}
                 value={reflectionText}
-                onChange={(e) => setReflectionText(e.target.value)}
+                onChange={(e) => handleReflectionTextChange(e.target.value)}
                 className="w-full bg-surface-subtle border border-line rounded-xl p-3 text-xs text-ink focus:outline-hidden focus:border-brand leading-relaxed"
-                placeholder="Tuliskan catatan observasi umum, dinamika kelompok anak, respon emosi, atau hal penting yang perlu ditindaklanjuti pada pertemuan berikutnya..."
+                placeholder={activeHoliday 
+                  ? 'Tuliskan catatan observasi persiapan sentra, koordinasi pendidik, atau kegiatan khusus bila ada...'
+                  : 'Tuliskan catatan observasi umum, dinamika kelompok anak, respon emosi, atau hal penting yang perlu ditindaklanjuti pada pertemuan berikutnya...'}
               />
             </div>
 

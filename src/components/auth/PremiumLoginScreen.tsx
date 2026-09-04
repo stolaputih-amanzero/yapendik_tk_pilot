@@ -131,8 +131,12 @@ export const PremiumLoginScreen: React.FC<{ initialEmail?: string }> = ({ initia
         {/* Top Branding Section */}
         <div className="relative z-10">
           <div className="flex items-center space-x-3 mb-6">
-            <div className="w-12 h-12 rounded-card bg-surface-subtle border border-line flex items-center justify-center text-ink shadow-hairline">
-              <Building2 className="w-6 h-6 text-brand-primary" />
+            <div className="w-12 h-12 rounded-card bg-surface-subtle border border-line-hairline flex items-center justify-center p-1.5 shadow-hairline">
+              <img 
+                src="/branding/amanaura-logo-plain.png" 
+                alt="Amanaura OS Logo" 
+                className="w-full h-full object-contain drop-shadow-xs dark:drop-shadow-[0_0_8px_rgba(168,135,76,0.3)]" 
+              />
             </div>
             <div>
               <h1 className="text-xl font-black text-ink tracking-tight flex items-center gap-2 font-display">
@@ -202,11 +206,17 @@ export const PremiumLoginScreen: React.FC<{ initialEmail?: string }> = ({ initia
         <div className="w-full max-w-md mx-auto bg-surface border border-line shadow-floating rounded-card p-6 medium:p-8">
           {/* Mobile Branding Header */}
           <div className="expanded:hidden flex items-center space-x-3 mb-6">
-            <div className="w-10 h-10 rounded-field bg-surface-subtle border border-line flex items-center justify-center text-ink">
-              <Building2 className="w-5 h-5 text-brand-primary" />
+            <div className="w-10 h-10 rounded-field bg-surface-subtle border border-line-hairline flex items-center justify-center p-1">
+              <img 
+                src="/branding/amanaura-logo-plain.png" 
+                alt="Amanaura OS Logo" 
+                className="w-full h-full object-contain drop-shadow-xs dark:drop-shadow-[0_0_8px_rgba(168,135,76,0.3)]" 
+              />
             </div>
             <div>
-              <h1 className="text-base font-bold text-ink font-display">Amanaura OS</h1>
+              <h1 className="text-base font-bold text-ink font-display flex items-center gap-1.5">
+                Amanaura OS <span className="text-accent-valor text-xs">✦</span>
+              </h1>
               <p className="text-[11px] text-ink-soft font-mono whitespace-nowrap">PLATFORM v1.0 • PORTAL GURU & YAYASAN</p>
             </div>
           </div>

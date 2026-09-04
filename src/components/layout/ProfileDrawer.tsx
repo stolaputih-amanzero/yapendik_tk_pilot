@@ -358,6 +358,11 @@ export const ProfileDrawer: React.FC<ProfileDrawerProps> = ({
           {/* Header Ribbon & Close Button */}
           <div className="p-4 medium:p-5 border-b border-line-hairline flex items-center justify-between shrink-0">
             <div className="flex items-center space-x-2">
+              <img 
+                src="/branding/amanaura-logo-plain.png" 
+                alt="Amanaura" 
+                className="w-4 h-4 object-contain shrink-0 drop-shadow-xs dark:drop-shadow-[0_0_6px_rgba(168,135,76,0.35)]" 
+              />
               <span className="text-xs font-mono font-bold tracking-wider text-ink-faint uppercase">
                 Amanaura OS ✦ • Profil Saya
               </span>

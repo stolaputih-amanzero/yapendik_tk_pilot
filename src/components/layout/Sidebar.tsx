@@ -203,9 +203,11 @@ export const Sidebar: React.FC<SidebarProps> = ({
             isCollapsed ? 'justify-center' : 'space-x-3'
           }`}
         >
-          <span className="text-accent-valor text-lg select-none shrink-0" aria-hidden="true">
-            ✦
-          </span>
+          <img 
+            src="/branding/amanaura-logo-plain.png" 
+            alt="Amanaura" 
+            className="w-6 h-6 object-contain shrink-0 drop-shadow-xs dark:drop-shadow-[0_0_8px_rgba(168,135,76,0.35)]" 
+          />
           {!isCollapsed && (
             <div className="min-w-0 flex-1">
               <div className="flex items-center space-x-1.5 min-w-0">

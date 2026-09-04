@@ -61,7 +61,7 @@ export const ROUTE_REGISTRY: Record<WorkspaceTab, TabMetadata> = {
   ATTENDANCE: {
     id: 'ATTENDANCE',
     title: 'Presensi Harian',
-    shortTitle: 'Presensi Harian',
+    shortTitle: 'Presensi',
     category: 'Ruang Kelas',
     description: 'Pencatatan kehadiran harian dan pemantauan ketidakhadiran.',
     hash: 'presensi'

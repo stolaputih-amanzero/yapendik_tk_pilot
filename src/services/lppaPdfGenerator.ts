@@ -7,10 +7,10 @@
  * "Rapor LPPA - [Nama Siswa] - [Kelas] - [Tanggal].pdf"
  */
 
-import { jsPDF } from 'jspdf';
 import { CanonicalPublishedLppaRecord } from '../types/lppaReportingTypes';
 
-export function generateAndDownloadLppaPdf(record: CanonicalPublishedLppaRecord): string {
+export async function generateAndDownloadLppaPdf(record: CanonicalPublishedLppaRecord): Promise<string> {
+  const { jsPDF } = await import('jspdf');
   const doc = new jsPDF({
     orientation: 'portrait',
     unit: 'mm',

@@ -15,7 +15,6 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 import QRCode from 'qrcode';
-import { jsPDF } from 'jspdf';
 import { PersonaProfile } from '../../auth/context';
 import { 
   X, 
@@ -631,6 +630,7 @@ export const NameCardModal: React.FC<NameCardModalProps> = ({
         // PDF Export: CR80 format in Landscape (85.6 mm × 54 mm)
         const imgData = canvas.toDataURL('image/jpeg', 0.98);
 
+        const { jsPDF } = await import('jspdf');
         const pdf = new jsPDF({
           orientation: 'landscape',
           unit: 'mm',

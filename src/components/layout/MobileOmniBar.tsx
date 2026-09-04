@@ -353,9 +353,16 @@ export const MobileOmniBar: React.FC<MobileOmniBarProps> = ({
             {/* Scrollable Content: 3×3 Grid + Utility Actions Footer */}
             <div className="overflow-y-auto p-4 space-y-4 flex-1 min-w-0 no-scrollbar">
               <div className="flex items-center justify-between px-1">
-                <h3 className="text-[10px] font-mono font-bold text-ink-faint uppercase tracking-wider">
-                  MENU NAVIGASI
-                </h3>
+                <div className="flex items-center space-x-2">
+                  <img 
+                    src="/branding/amanaura-logo-plain.png" 
+                    alt="Amanaura" 
+                    className="w-4 h-4 object-contain shrink-0 drop-shadow-xs dark:drop-shadow-[0_0_6px_rgba(168,135,76,0.35)]" 
+                  />
+                  <h3 className="text-[10px] font-mono font-bold text-ink-faint uppercase tracking-wider">
+                    AMANAURA OS • MENU
+                  </h3>
+                </div>
                 <span className="text-[10px] text-ink-faint font-mono">
                   {`${primaryItems.length} Modul`}
                 </span>

@@ -3,13 +3,12 @@
  * Compliant with Law 11 (Zero Emoji Clutter), Touch Targets >= 48dp, and Responsive Matrix.
  */
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
+
 import { db } from '../../db/database';
 import { useSecurityContext } from '../../auth/context';
 import { 
   AvatarChild, 
-  SegmentedControl, 
-  SegmentedControlOption,
   Button 
 } from '../ui';
 import { 
@@ -22,20 +21,80 @@ import {
   CalendarCheck,
   CalendarX,
   ArrowLeft,
-  Users
+  Users,
+  Filter,
+  CalendarClock
 } from 'lucide-react';
+import { holidayService, HolidayEntry } from '../../services/holidayService';
+
+
+export interface MonthWeek {
+  id: number;
+  label: string;
+  shortLabel: string;
+  rangeLabel: string;
+  startDate: string;
+  endDate: string;
+}
+
+const getWeeksOfMonth = (year: number, month: number, monthShortName: string): MonthWeek[] => {
+  const weeks: MonthWeek[] = [];
+  const lastDay = new Date(year, month, 0).getDate();
+  
+  let currentWeekStartDay: number | null = null;
+  let lastSchoolDayInWeek: number | null = null;
+  let weekNum = 1;
+
+  for (let day = 1; day <= lastDay; day++) {
+    const d = new Date(year, month - 1, day);
+    const dayOfWeek = d.getDay(); // 0 is Sunday, 1 is Monday, ..., 5 is Friday, 6 is Saturday
+    const isSchoolDay = dayOfWeek >= 1 && dayOfWeek <= 5;
+
+    if (isSchoolDay) {
+      if (currentWeekStartDay === null) {
+        currentWeekStartDay = day;
+      }
+      lastSchoolDayInWeek = day;
+    }
+
+    // Close the school week on Friday (day 5), or on the last day of the month
+    const isFriday = dayOfWeek === 5;
+    const isEndOfMonth = day === lastDay;
+
+    if ((isFriday || isEndOfMonth) && currentWeekStartDay !== null && lastSchoolDayInWeek !== null) {
+      const startStr = `${year}-${String(month).padStart(2, '0')}-${String(currentWeekStartDay).padStart(2, '0')}`;
+      const endStr = `${year}-${String(month).padStart(2, '0')}-${String(lastSchoolDayInWeek).padStart(2, '0')}`;
+      const rangeLabel = currentWeekStartDay === lastSchoolDayInWeek 
+        ? `${currentWeekStartDay} ${monthShortName}` 
+        : `${currentWeekStartDay}–${lastSchoolDayInWeek} ${monthShortName}`;
+
+      weeks.push({
+        id: weekNum,
+        label: `Minggu ${weekNum}`,
+        shortLabel: `M${weekNum}`,
+        rangeLabel,
+        startDate: startStr,
+        endDate: endStr
+      });
+
+      weekNum++;
+      currentWeekStartDay = null;
+      lastSchoolDayInWeek = null;
+    }
+  }
+
+  return weeks;
+};
 
 interface MonthlyAttendanceReportProps {
   selectedClassId: string;
-  onClassChange: (classId: string) => void;
-  classes: { id: string; name: string }[];
+  onClassChange?: (classId: string) => void;
+  classes?: { id: string; name: string }[];
   onSwitchToDaily: () => void;
 }
 
 export const MonthlyAttendanceReport: React.FC<MonthlyAttendanceReportProps> = ({
   selectedClassId,
-  onClassChange,
-  classes,
   onSwitchToDaily
 }) => {
   const { securityContext } = useSecurityContext();
@@ -44,6 +103,7 @@ export const MonthlyAttendanceReport: React.FC<MonthlyAttendanceReportProps> = (
   // Default to September 2026 (Canonical Pilot Academic Year)
   const [selectedYear, setSelectedYear] = useState<number>(2026);
   const [selectedMonth, setSelectedMonth] = useState<number>(9); // 1-12 (9 = September)
+  const [selectedWeek, setSelectedWeek] = useState<number | 'ALL'>('ALL');
 
   const monthNames = [
     'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
@@ -51,6 +111,7 @@ export const MonthlyAttendanceReport: React.FC<MonthlyAttendanceReportProps> = (
   ];
 
   const handlePrevMonth = () => {
+    setSelectedWeek('ALL');
     if (selectedMonth === 1) {
       setSelectedMonth(12);
       setSelectedYear(y => y - 1);
@@ -60,6 +121,7 @@ export const MonthlyAttendanceReport: React.FC<MonthlyAttendanceReportProps> = (
   };
 
   const handleNextMonth = () => {
+    setSelectedWeek('ALL');
     if (selectedMonth === 12) {
       setSelectedMonth(1);
       setSelectedYear(y => y + 1);
@@ -68,10 +130,65 @@ export const MonthlyAttendanceReport: React.FC<MonthlyAttendanceReportProps> = (
     }
   };
 
-  // Date range for current month
-  const startDate = `${selectedYear}-${String(selectedMonth).padStart(2, '0')}-01`;
-  const lastDay = new Date(selectedYear, selectedMonth, 0).getDate();
-  const endDate = `${selectedYear}-${String(selectedMonth).padStart(2, '0')}-${String(lastDay).padStart(2, '0')}`;
+  // Weeks breakdown for current month
+  const weeksInMonth = useMemo(() => {
+    const shortName = monthNames[selectedMonth - 1]?.slice(0, 3) || '';
+    return getWeeksOfMonth(selectedYear, selectedMonth, shortName);
+  }, [selectedYear, selectedMonth]);
+
+  // Active Date Range: Full Month or Selected Week
+  const activeDateRange = useMemo(() => {
+    if (selectedWeek === 'ALL') {
+      const start = `${selectedYear}-${String(selectedMonth).padStart(2, '0')}-01`;
+      const lastDay = new Date(selectedYear, selectedMonth, 0).getDate();
+      const end = `${selectedYear}-${String(selectedMonth).padStart(2, '0')}-${String(lastDay).padStart(2, '0')}`;
+      return {
+        startDate: start,
+        endDate: end,
+        label: `${monthNames[selectedMonth - 1]} ${selectedYear}`,
+        isWeekFilter: false
+      };
+    }
+
+    const targetWeek = weeksInMonth.find(w => w.id === selectedWeek);
+    if (targetWeek) {
+      return {
+        startDate: targetWeek.startDate,
+        endDate: targetWeek.endDate,
+        label: `${targetWeek.label} (${targetWeek.rangeLabel})`,
+        isWeekFilter: true
+      };
+    }
+
+    const start = `${selectedYear}-${String(selectedMonth).padStart(2, '0')}-01`;
+    const lastDay = new Date(selectedYear, selectedMonth, 0).getDate();
+    return {
+      startDate: start,
+      endDate: `${selectedYear}-${String(selectedMonth).padStart(2, '0')}-${String(lastDay).padStart(2, '0')}`,
+      label: `${monthNames[selectedMonth - 1]} ${selectedYear}`,
+      isWeekFilter: false
+    };
+  }, [selectedWeek, selectedYear, selectedMonth, weeksInMonth]);
+
+  // Re-render trigger when holidayService syncs
+  const [holidaysVersion, setHolidaysVersion] = useState(0);
+
+  useEffect(() => {
+    holidayService.revalidateYear(selectedYear);
+    const unsubscribe = holidayService.subscribe(() => {
+      setHolidaysVersion(v => v + 1);
+    });
+    return unsubscribe;
+  }, [selectedYear]);
+
+  // Holidays present in current month and filtered week
+  const activeHolidays = useMemo(() => {
+    const monthHolidays = holidayService.getHolidaysForMonth(selectedYear, selectedMonth, schoolId);
+    if (selectedWeek === 'ALL') {
+      return monthHolidays;
+    }
+    return monthHolidays.filter(h => h.date >= activeDateRange.startDate && h.date <= activeDateRange.endDate);
+  }, [selectedYear, selectedMonth, schoolId, selectedWeek, activeDateRange, holidaysVersion]);
 
   const students = useMemo(() => {
     if (!schoolId) return [];
@@ -80,22 +197,46 @@ export const MonthlyAttendanceReport: React.FC<MonthlyAttendanceReportProps> = (
 
   const attendanceRecords = useMemo(() => {
     if (!schoolId) return [];
-    return db.getAttendanceRange(schoolId, selectedClassId, startDate, endDate);
-  }, [schoolId, selectedClassId, startDate, endDate]);
+    return db.getAttendanceRange(schoolId, selectedClassId, activeDateRange.startDate, activeDateRange.endDate);
+  }, [schoolId, selectedClassId, activeDateRange.startDate, activeDateRange.endDate]);
 
-  // Unique school days recorded in this month
+  // Unique school days recorded in active range (Strictly excluding Weekends and Holidays)
   const recordedDates = useMemo(() => {
     const dates = new Set<string>();
-    attendanceRecords.forEach(r => dates.add(r.date));
+    attendanceRecords.forEach(r => {
+      const parts = r.date.split('-');
+      if (parts.length === 3) {
+        const d = new Date(parseInt(parts[0], 10), parseInt(parts[1], 10) - 1, parseInt(parts[2], 10));
+        const dayOfWeek = d.getDay();
+        // 0 = Sunday, 6 = Saturday. Only 1-5 (Senin-Jumat) are valid school days.
+        if (dayOfWeek >= 1 && dayOfWeek <= 5) {
+          // Denominator Exclusion: National holidays, Cuti Bersama, and Custom School Holidays are excluded
+          if (!holidayService.isHoliday(r.date, schoolId)) {
+            dates.add(r.date);
+          }
+        }
+      }
+    });
     return Array.from(dates).sort();
-  }, [attendanceRecords]);
+  }, [attendanceRecords, schoolId, holidaysVersion]);
 
   const totalEffectiveDays = recordedDates.length;
 
-  // Compute student attendance metrics
+  // Compute student attendance metrics strictly for effective school days (Senin–Jumat minus Libur)
   const studentMetrics = useMemo(() => {
     return students.map((s, idx) => {
-      const studentRecords = attendanceRecords.filter(r => r.studentId === s.id);
+      const studentRecords = attendanceRecords.filter(r => {
+        if (r.studentId !== s.id) return false;
+        const parts = r.date.split('-');
+        if (parts.length === 3) {
+          const d = new Date(parseInt(parts[0], 10), parseInt(parts[1], 10) - 1, parseInt(parts[2], 10));
+          const dayOfWeek = d.getDay();
+          if (dayOfWeek >= 1 && dayOfWeek <= 5) {
+            return !holidayService.isHoliday(r.date, schoolId);
+          }
+        }
+        return false;
+      });
       const hadir = studentRecords.filter(r => r.status === 'HADIR').length;
       const sakit = studentRecords.filter(r => r.status === 'SAKIT').length;
       const izin = studentRecords.filter(r => r.status === 'IZIN').length;
@@ -137,12 +278,6 @@ export const MonthlyAttendanceReport: React.FC<MonthlyAttendanceReportProps> = (
   const perfectAttendanceCount = studentMetrics.filter(s => s.percentage === 100 && totalEffectiveDays > 0).length;
   const needsAttentionCount = studentMetrics.filter(s => s.percentage < 85 && totalEffectiveDays > 0).length;
 
-  const classSegments: SegmentedControlOption[] = classes.map(c => ({
-    id: c.id,
-    label: c.name.includes('A') ? 'Kelas TK A' : c.name.includes('B') ? 'Kelas TK B' : c.name,
-    activeClassName: 'bg-brand text-on-brand font-bold shadow-sm ring-1 ring-brand/50'
-  }));
-
   const handlePrint = () => {
     window.print();
   };
@@ -150,31 +285,32 @@ export const MonthlyAttendanceReport: React.FC<MonthlyAttendanceReportProps> = (
   return (
     <div className="space-y-4 pb-12 print:p-0">
       {/* ═══════════════════════════════════════════════════════════
-          1. FILTER BAR (MONTH NAVIGATION & CLASS SWITCHER)
+          1. FILTER BAR (MONTH NAVIGATION, WEEK CHIPS & PRINT)
           ═══════════════════════════════════════════════════════════ */}
-      <div className="bg-surface border-b border-line px-4 medium:px-6 py-4 space-y-3 print:hidden">
-        <div className="flex flex-col medium:flex-row items-stretch medium:items-center justify-between gap-3">
+      <div className="bg-surface rounded-2xl border border-line p-3.5 sm:p-4 shadow-hairline print:hidden space-y-3">
+        {/* Row 1: Month Selector & Print */}
+        <div className="flex items-center justify-between gap-3">
           {/* Month Selector Navigation */}
-          <div className="flex items-center gap-1.5">
+          <div className="flex items-center gap-1.5 min-w-0">
             <button
               type="button"
               onClick={handlePrevMonth}
-              className="w-10 h-10 rounded-xl bg-surface border border-line hover-only:bg-surface-subtle flex items-center justify-center text-ink-soft hover-only:text-ink cursor-pointer shrink-0"
+              className="w-9 h-9 rounded-xl bg-surface border border-line hover-only:bg-surface-subtle flex items-center justify-center text-ink-soft hover-only:text-ink cursor-pointer shrink-0 transition-colors"
               title="Bulan Sebelumnya"
               aria-label="Bulan Sebelumnya"
             >
               <ChevronLeft className="w-4 h-4" />
             </button>
 
-            <div className="min-h-[40px] px-3.5 py-1.5 rounded-xl bg-surface border border-line flex items-center gap-2 text-xs font-semibold text-ink shadow-hairline">
+            <div className="min-h-[36px] px-3.5 py-1.5 rounded-xl bg-surface border border-line flex items-center gap-2 text-xs font-semibold text-ink shadow-hairline select-none">
               <Calendar className="w-4 h-4 text-accent-valor shrink-0" />
-              <span>{monthNames[selectedMonth - 1]} {selectedYear}</span>
+              <span className="whitespace-nowrap">{monthNames[selectedMonth - 1]} {selectedYear}</span>
             </div>
 
             <button
               type="button"
               onClick={handleNextMonth}
-              className="w-10 h-10 rounded-xl bg-surface border border-line hover-only:bg-surface-subtle flex items-center justify-center text-ink-soft hover-only:text-ink cursor-pointer shrink-0"
+              className="w-9 h-9 rounded-xl bg-surface border border-line hover-only:bg-surface-subtle flex items-center justify-center text-ink-soft hover-only:text-ink cursor-pointer shrink-0 transition-colors"
               title="Bulan Berikutnya"
               aria-label="Bulan Berikutnya"
             >
@@ -182,29 +318,100 @@ export const MonthlyAttendanceReport: React.FC<MonthlyAttendanceReportProps> = (
             </button>
           </div>
 
-          {/* Class Switcher & Print Button */}
-          <div className="flex items-center gap-3">
-            <div className="w-44 shrink-0">
-              <SegmentedControl
-                options={classSegments}
-                value={selectedClassId}
-                onChange={onClassChange}
-                size="sm"
-                className="w-full min-h-[40px]"
-              />
-            </div>
+          {/* Print Button */}
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={handlePrint}
+            leftIcon={<Printer className="w-4 h-4" />}
+            className="rounded-xl text-xs font-bold min-h-[36px] shrink-0 shadow-hairline"
+            title="Cetak Rekap"
+          >
+            Rekap
+          </Button>
+        </div>
 
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={handlePrint}
-              leftIcon={<Printer className="w-4 h-4" />}
-              className="rounded-xl text-xs font-bold min-h-[40px]"
+        {/* Row 2: Sub-Filter Minggu (Semua Bulan, M1, M2, M3, M4, M5) */}
+        <div className="pt-2.5 border-t border-line-soft/60">
+          <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-0.5 select-none">
+            <span className="text-[11px] font-semibold text-ink-soft shrink-0 mr-1 flex items-center gap-1">
+              <Filter className="w-3 h-3 text-accent-valor" />
+              <span>Rentang:</span>
+            </span>
+
+            {/* Pill Semua (1 Bulan Penuh) */}
+            <button
+              type="button"
+              onClick={() => setSelectedWeek('ALL')}
+              className={`px-3 py-1.5 rounded-xl border text-xs font-bold shrink-0 transition-all cursor-pointer shadow-hairline ${
+                selectedWeek === 'ALL'
+                  ? 'bg-brand text-on-brand border-brand shadow-soft ring-1 ring-brand/50'
+                  : 'bg-surface-subtle text-ink-soft border-line hover-only:text-ink hover-only:bg-surface'
+              }`}
             >
-              Cetak Rekap
-            </Button>
+              1 Bulan Penuh
+            </button>
+
+            {/* Week Pills */}
+            {weeksInMonth.map((w) => {
+              const isSelected = selectedWeek === w.id;
+              return (
+                <button
+                  key={w.id}
+                  type="button"
+                  onClick={() => setSelectedWeek(w.id)}
+                  className={`px-3 py-1.5 rounded-xl border text-xs shrink-0 transition-all cursor-pointer shadow-hairline flex items-center gap-1.5 ${
+                    isSelected
+                      ? 'bg-brand text-on-brand border-brand shadow-soft ring-1 ring-brand/50 font-bold'
+                      : 'bg-surface-subtle text-ink-soft border-line hover-only:text-ink hover-only:bg-surface font-medium'
+                  }`}
+                  title={`${w.label}: ${w.rangeLabel}`}
+                >
+                  <span>{w.shortLabel}</span>
+                  <span className={`text-[10px] ${isSelected ? 'text-on-brand/90 font-medium' : 'text-ink-faint'}`}>
+                    ({w.rangeLabel})
+                  </span>
+                </button>
+              );
+            })}
           </div>
         </div>
+
+        {/* Row 3: Libur Nasional, Cuti Bersama & Sync Indicator (Hukum 11 & Signature #4 Compliant) */}
+        {(activeHolidays.length > 0 || holidayService.getSyncStatus() === 'USING_FALLBACK') && (
+          <div className="pt-2 border-t border-line-soft/60 flex items-center justify-between gap-2 flex-wrap text-xs">
+            <div className="flex items-center gap-1.5 flex-wrap">
+              {activeHolidays.map(h => {
+                const dayNum = parseInt(h.date.split('-')[2], 10);
+                return (
+                  <span
+                    key={h.date}
+                    className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-mono font-medium border select-none shadow-hairline ${
+                      h.isCutiBersama
+                        ? 'bg-warning-tint text-warning-deep border-warning-line'
+                        : h.source === 'CUSTOM_SCHOOL'
+                        ? 'bg-brand/10 text-brand border-brand/20'
+                        : 'bg-info-tint text-info-deep border-info-line'
+                    }`}
+                    title={`${h.name} (${h.date})`}
+                  >
+                    <span className={`w-1.5 h-1.5 rounded-full shrink-0 ${
+                      h.isCutiBersama ? 'bg-warning' : h.source === 'CUSTOM_SCHOOL' ? 'bg-brand' : 'bg-info'
+                    }`} />
+                    <span>Libur: {dayNum} {monthNames[selectedMonth - 1].slice(0, 3)} — {h.name}</span>
+                  </span>
+                );
+              })}
+            </div>
+
+            {holidayService.getSyncStatus() === 'USING_FALLBACK' && (
+              <span className="text-ink-faint text-[11px] flex items-center gap-1 shrink-0 ml-auto select-none" title="Data kalender menggunakan katalog kanonikal bawaan">
+                <CalendarClock className="w-3.5 h-3.5 text-ink-soft shrink-0" />
+                <span>Menggunakan Kalender Bawaan (Menunggu Sinkronisasi)</span>
+              </span>
+            )}
+          </div>
+        )}
       </div>
 
       {/* ═══════════════════════════════════════════════════════════
@@ -221,7 +428,7 @@ export const MonthlyAttendanceReport: React.FC<MonthlyAttendanceReportProps> = (
             <p className="font-mono text-xl font-bold text-ink">
               {totalEffectiveDays} <span className="font-sans text-xs font-normal text-ink-soft">Hari</span>
             </p>
-            <p className="text-[11px] text-ink-faint truncate">Periode {monthNames[selectedMonth - 1]} {selectedYear}</p>
+            <p className="text-[11px] text-ink-faint truncate">Periode {activeDateRange.label}</p>
           </div>
 
           {/* Card 2: Rata-Rata Kehadiran Kelas */}
@@ -317,10 +524,10 @@ export const MonthlyAttendanceReport: React.FC<MonthlyAttendanceReportProps> = (
                               />
                             )}
                             <div className="min-w-0">
-                              <p className="font-sans font-bold text-ink text-xs truncate">
+                              <p className="font-sans font-bold text-ink text-xs leading-snug break-words">
                                 {s.fullName}
                               </p>
-                              <p className="text-[11px] text-ink-soft truncate">
+                              <p className="text-[11px] text-ink-soft">
                                 <span className="font-semibold text-ink">{s.callName}</span> • NIS {s.nis}
                               </p>
                             </div>
@@ -412,7 +619,7 @@ export const MonthlyAttendanceReport: React.FC<MonthlyAttendanceReportProps> = (
             <div>
               <h4 className="text-sm font-bold text-ink">Belum Ada Data Presensi pada Periode Ini</h4>
               <p className="text-xs text-ink-soft mt-1">
-                Data presensi untuk {monthNames[selectedMonth - 1]} {selectedYear} belum dicatat di sistem.
+                Data presensi untuk {activeDateRange.label} belum dicatat di sistem.
               </p>
             </div>
             <div className="pt-2">

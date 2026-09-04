@@ -111,8 +111,14 @@ try {
   console.log('\n▶️ [34/35] Running Guardian Persona Harmonization Suite (Suite 45)...');
   execSync('npx tsx tests/guardian_persona_harmonization.test.tsx', { stdio: 'inherit' });
 
-  console.log('\n▶️ [35/35] Running Stage 7 Gate 3 Foundation LEARN Live Activation Suite (Suite 46)...');
+  console.log('\n▶️ [35/36] Running Stage 7 Gate 3 Foundation LEARN Live Activation Suite (Suite 46)...');
   execSync('npx tsx tests/stage7_gate3_foundation_learn.test.tsx', { stdio: 'inherit' });
+
+  console.log('\n▶️ [36/37] Running Calendar & Attendance Integrity Suite (Suite 47)...');
+  execSync('pnpm exec tsx -e "import { runSuite47Tests } from \'./src/tests/suite47CalendarIntegrityTests\'; const res = runSuite47Tests(); if (res.failed > 0) throw new Error(\'Suite 47 failed\'); console.log(\'✓ Suite 47 Passed: 4/4 Integrity Invariants Verified\');"', { stdio: 'inherit' });
+
+  console.log('\n▶️ [37/37] Running Pedagogical Operating Loop Synchronization Suite (Suite 48)...');
+  execSync('pnpm exec tsx -e "import { runSuite48PedagogicalLoopTests } from \'./src/tests/suite48PedagogicalLoopTests\'; const res = runSuite48PedagogicalLoopTests(); if (res.failed > 0) throw new Error(\'Suite 48 failed\'); console.log(\'✓ Suite 48 Passed: 5/5 Pedagogical Invariants Verified\');"', { stdio: 'inherit' });
 
   console.log('\n════════════════════════════════════════════════════════════════');
   console.log('🎉 ALL INTEGRATION & SECURITY TEST SUITES COMPLETED SUCCESSFULLY');

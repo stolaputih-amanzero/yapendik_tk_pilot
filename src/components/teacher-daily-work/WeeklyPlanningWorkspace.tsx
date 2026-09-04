@@ -17,13 +17,15 @@ import {
   Clock, 
   Check, 
   Printer, 
-  Sparkles, 
-  Layers, 
   BookOpen,
   Edit3,
   CheckCircle2,
-  Calendar
+  Calendar,
+  CalendarOff,
+  Palmtree,
+  Sparkles
 } from 'lucide-react';
+import { holidayService, HolidayEntry } from '../../services/holidayService';
 
 interface Props {
   selectedClassId: string;
@@ -91,12 +93,16 @@ export const WeeklyPlanningWorkspace: React.FC<Props> = ({
     const d = new Date(currentMonday);
     d.setDate(currentMonday.getDate() + i);
     const iso = formatDateIso(d);
+    const holiday = holidayService.isHoliday(iso, securityContext?.activeSchoolId);
     return {
       name: DAY_NAMES[i],
       dateIso: iso,
-      displayDate: formatShortDate(iso)
+      displayDate: formatShortDate(iso),
+      holiday
     };
   });
+
+  const effectiveDaysCount = weekDays.filter(d => !d.holiday).length;
 
   const weekStartDate = weekDays[0].dateIso;
   const weekEndDate = weekDays[4].dateIso;
@@ -122,7 +128,12 @@ export const WeeklyPlanningWorkspace: React.FC<Props> = ({
 
   useEffect(() => {
     loadWeeklyData();
-    return db.subscribe(loadWeeklyData);
+    const unsubDb = db.subscribe(loadWeeklyData);
+    const unsubHoliday = holidayService.subscribe(loadWeeklyData);
+    return () => {
+      unsubDb();
+      unsubHoliday();
+    };
   }, [securityContext?.activeSchoolId, selectedClassId, weekStartDate]);
 
   const handleShiftWeek = (weeks: number) => {
@@ -189,6 +200,12 @@ export const WeeklyPlanningWorkspace: React.FC<Props> = ({
             <div className="min-h-[38px] px-3 py-1.5 rounded-xl bg-surface-subtle border border-line flex items-center gap-2 text-xs font-medium text-ink shadow-hairline">
               <CalendarRange className="w-4 h-4 text-accent-valor shrink-0" />
               <span className="font-mono font-bold">{formatShortDate(weekStartDate)} – {formatShortDate(weekEndDate)}</span>
+            </div>
+
+            <div className="min-h-[38px] px-2.5 py-1.5 rounded-xl bg-surface border border-line flex items-center gap-1.5 text-xs text-ink-soft shadow-hairline">
+              <span className="w-1.5 h-1.5 rounded-full bg-brand" />
+              <span className="font-mono font-bold text-ink">{effectiveDaysCount}</span>
+              <span>Hari Efektif KBM</span>
             </div>
 
             <button
@@ -270,6 +287,7 @@ export const WeeklyPlanningWorkspace: React.FC<Props> = ({
         {weekDays.map((day, idx) => {
           const count = weekActivities.filter(a => a.date === day.dateIso).length;
           const isActive = activeDayIndex === idx;
+          const isHoliday = !!day.holiday;
           return (
             <button
               key={day.dateIso}
@@ -278,9 +296,12 @@ export const WeeklyPlanningWorkspace: React.FC<Props> = ({
               className={`min-h-[40px] px-3.5 py-1.5 rounded-xl border text-xs font-semibold flex items-center gap-2 cursor-pointer shrink-0 transition-all ${
                 isActive
                   ? 'bg-surface text-ink border-line font-bold shadow-soft ring-1 ring-brand/30'
-                  : 'bg-surface-subtle text-ink-soft border-line hover-only:text-ink'
+                  : isHoliday
+                    ? 'bg-info-tint/30 text-ink border-info/20 hover-only:text-ink'
+                    : 'bg-surface-subtle text-ink-soft border-line hover-only:text-ink'
               }`}
             >
+              {isHoliday && <span className="w-1.5 h-1.5 rounded-full bg-info shrink-0" />}
               <span>{day.name}</span>
               <span className="text-[11px] font-mono text-ink-faint">({day.displayDate})</span>
               {count > 0 && (
@@ -301,27 +322,39 @@ export const WeeklyPlanningWorkspace: React.FC<Props> = ({
           // On mobile, show only active day; on expanded, show all 5 columns
           const isVisibleOnMobile = activeDayIndex === idx;
           const dayActs = weekActivities.filter(a => a.date === day.dateIso);
+          const isHoliday = !!day.holiday;
 
           return (
             <div
               key={day.dateIso}
-              className={`bg-surface border border-line rounded-2xl p-3.5 shadow-hairline space-y-3 flex flex-col ${
-                !isVisibleOnMobile ? 'hidden expanded:flex' : 'flex'
-              }`}
+              className={`border rounded-2xl p-3.5 shadow-hairline space-y-3 flex flex-col transition-all ${
+                isHoliday
+                  ? 'bg-surface-subtle/50 border-line-soft'
+                  : 'bg-surface border-line'
+              } ${!isVisibleOnMobile ? 'hidden expanded:flex' : 'flex'}`}
             >
               {/* Day Column Header */}
-              <div className="flex items-center justify-between pb-2 border-b border-line">
-                <div>
-                  <h4 className="font-bold text-xs text-ink">{day.name}</h4>
-                  <p className="text-[11px] font-mono text-ink-soft">{day.displayDate}</p>
+              <div className="flex items-start justify-between pb-2 border-b border-line gap-2">
+                <div className="space-y-1 min-w-0">
+                  <div className="flex items-center gap-1.5 flex-wrap">
+                    <h4 className="font-bold text-xs text-ink">{day.name}</h4>
+                    <p className="text-[11px] font-mono text-ink-soft">({day.displayDate})</p>
+                  </div>
+                  {isHoliday && (
+                    <span className="inline-flex items-center gap-1 text-[10px] font-mono px-2 py-0.5 rounded-md bg-info-tint text-info-foreground border border-info/20 max-w-full">
+                      <span className="w-1.5 h-1.5 rounded-full bg-info shrink-0" />
+                      <CalendarOff className="w-3 h-3 text-info shrink-0" />
+                      <span className="truncate" title={day.holiday?.name}>{day.holiday?.name}</span>
+                    </span>
+                  )}
                 </div>
                 <button
                   type="button"
                   onClick={() => onSwitchToDaily(day.dateIso)}
-                  className="text-[11px] font-semibold text-accent-valor hover-only:underline cursor-pointer"
+                  className="text-[11px] font-semibold text-accent-valor hover-only:underline cursor-pointer shrink-0 pt-0.5"
                   title="Buka tampilan harian untuk tanggal ini"
                 >
-                  Lihat Detail ↗
+                  Detail ↗
                 </button>
               </div>
 
@@ -369,9 +402,21 @@ export const WeeklyPlanningWorkspace: React.FC<Props> = ({
                 ))}
 
                 {dayActs.length === 0 && (
-                  <div className="py-6 text-center text-ink-faint text-[11px] border border-dashed border-line-soft rounded-xl">
-                    Belum ada sentra terjadwal
-                  </div>
+                  isHoliday ? (
+                    <div className="py-7 px-3 text-center rounded-xl border border-line-soft bg-surface/60 space-y-2">
+                      <Palmtree className="w-7 h-7 text-info/70 mx-auto" />
+                      <div className="space-y-0.5">
+                        <p className="text-xs font-bold text-ink">Hari Libur Resmi</p>
+                        <p className="text-[11px] text-ink-soft leading-relaxed">
+                          Tidak ada kewajiban agenda sentra reguler.
+                        </p>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="py-6 text-center text-ink-faint text-[11px] border border-dashed border-line-soft rounded-xl">
+                      Belum ada sentra terjadwal
+                    </div>
+                  )
                 )}
               </div>
 
@@ -380,10 +425,14 @@ export const WeeklyPlanningWorkspace: React.FC<Props> = ({
                 <button
                   type="button"
                   onClick={() => onAddActivityForDate(day.dateIso)}
-                  className="w-full py-2 rounded-xl border border-dashed border-line hover-only:border-brand hover-only:text-brand text-xs font-semibold text-ink-soft flex items-center justify-center gap-1.5 transition-all cursor-pointer mt-auto"
+                  className={`w-full py-2 rounded-xl border border-dashed text-xs font-semibold flex items-center justify-center gap-1.5 transition-all cursor-pointer mt-auto ${
+                    isHoliday
+                      ? 'border-line-soft text-ink-soft hover-only:border-brand/70 hover-only:text-ink'
+                      : 'border-line hover-only:border-brand hover-only:text-brand text-ink-soft'
+                  }`}
                 >
                   <Plus className="w-3.5 h-3.5" />
-                  <span>Tambah Sentra</span>
+                  <span>{isHoliday ? 'Tambah Kegiatan Khusus' : 'Tambah Sentra'}</span>
                 </button>
               )}
             </div>

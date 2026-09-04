@@ -1,0 +1,226 @@
+[
+  {
+    "date": "2026-01-01",
+    "name": "Tahun Baru 2026 Masehi",
+    "isNationalHoliday": true,
+    "isCutiBersama": false,
+    "source": "CANONICAL_FALLBACK"
+  },
+  {
+    "date": "2026-01-16",
+    "name": "Isra Mi'raj Nabi Muhammad SAW",
+    "isNationalHoliday": true,
+    "isCutiBersama": false,
+    "source": "CANONICAL_FALLBACK"
+  },
+  {
+    "date": "2026-02-17",
+    "name": "Tahun Baru Imlek 2577 Kongzili",
+    "isNationalHoliday": true,
+    "isCutiBersama": false,
+    "source": "CANONICAL_FALLBACK"
+  },
+  {
+    "date": "2026-02-18",
+    "name": "Cuti Bersama Tahun Baru Imlek",
+    "isNationalHoliday": false,
+    "isCutiBersama": true,
+    "source": "CANONICAL_FALLBACK"
+  },
+  {
+    "date": "2026-03-19",
+    "name": "Hari Suci Nyepi (Tahun Baru Saka 1948)",
+    "isNationalHoliday": true,
+    "isCutiBersama": false,
+    "source": "CANONICAL_FALLBACK"
+  },
+  {
+    "date": "2026-03-20",
+    "name": "Cuti Bersama Hari Suci Nyepi",
+    "isNationalHoliday": false,
+    "isCutiBersama": true,
+    "source": "CANONICAL_FALLBACK"
+  },
+  {
+    "date": "2026-03-20",
+    "name": "Hari Raya Idul Fitri 1447 H",
+    "isNationalHoliday": true,
+    "isCutiBersama": false,
+    "source": "CANONICAL_FALLBACK"
+  },
+  {
+    "date": "2026-03-21",
+    "name": "Hari Raya Idul Fitri 1447 H",
+    "isNationalHoliday": true,
+    "isCutiBersama": false,
+    "source": "CANONICAL_FALLBACK"
+  },
+  {
+    "date": "2026-03-23",
+    "name": "Cuti Bersama Hari Raya Idul Fitri",
+    "isNationalHoliday": false,
+    "isCutiBersama": true,
+    "source": "CANONICAL_FALLBACK"
+  },
+  {
+    "date": "2026-03-24",
+    "name": "Cuti Bersama Hari Raya Idul Fitri",
+    "isNationalHoliday": false,
+    "isCutiBersama": true,
+    "source": "CANONICAL_FALLBACK"
+  },
+  {
+    "date": "2026-04-03",
+    "name": "Wafat Yesus Kristus (Jumat Agung)",
+    "isNationalHoliday": true,
+    "isCutiBersama": false,
+    "source": "CANONICAL_FALLBACK"
+  },
+  {
+    "date": "2026-04-05",
+    "name": "Hari Kebangkitan Yesus Kristus (Paskah)",
+    "isNationalHoliday": true,
+    "isCutiBersama": false,
+    "source": "CANONICAL_FALLBACK"
+  },
+  {
+    "date": "2026-05-01",
+    "name": "Hari Buruh Internasional",
+    "isNationalHoliday": true,
+    "isCutiBersama": false,
+    "source": "CANONICAL_FALLBACK"
+  },
+  {
+    "date": "2026-05-14",
+    "name": "Kenaikan Yesus Kristus",
+    "isNationalHoliday": true,
+    "isCutiBersama": false,
+    "source": "CANONICAL_FALLBACK"
+  },
+  {
+    "date": "2026-05-15",
+    "name": "Cuti Bersama Kenaikan Yesus Kristus",
+    "isNationalHoliday": false,
+    "isCutiBersama": true,
+    "source": "CANONICAL_FALLBACK"
+  },
+  {
+    "date": "2026-05-31",
+    "name": "Hari Raya Waisak 2570 BE",
+    "isNationalHoliday": true,
+    "isCutiBersama": false,
+    "source": "CANONICAL_FALLBACK"
+  },
+  {
+    "date": "2026-06-01",
+    "name": "Hari Lahir Pancasila",
+    "isNationalHoliday": true,
+    "isCutiBersama": false,
+    "source": "CANONICAL_FALLBACK"
+  },
+  {
+    "date": "2026-06-17",
+    "name": "Hari Raya Idul Adha 1447 H",
+    "isNationalHoliday": true,
+    "isCutiBersama": false,
+    "source": "CANONICAL_FALLBACK"
+  },
+  {
+    "date": "2026-07-07",
+    "name": "Tahun Baru Islam 1448 H",
+    "isNationalHoliday": true,
+    "isCutiBersama": false,
+    "source": "CANONICAL_FALLBACK"
+  },
+  {
+    "date": "2026-08-17",
+    "name": "Hari Kemerdekaan Republik Indonesia",
+    "isNationalHoliday": true,
+    "isCutiBersama": false,
+    "source": "CANONICAL_FALLBACK"
+  },
+  {
+    "date": "2026-09-25",
+    "name": "Maulid Nabi Muhammad SAW",
+    "isNationalHoliday": true,
+    "isCutiBersama": false,
+    "source": "CANONICAL_FALLBACK"
+  },
+  {
+    "date": "2026-12-24",
+    "name": "Cuti Bersama Hari Raya Natal",
+    "isNationalHoliday": false,
+    "isCutiBersama": true,
+    "source": "CANONICAL_FALLBACK"
+  },
+  {
+    "date": "2026-12-25",
+    "name": "Hari Raya Natal",
+    "isNationalHoliday": true,
+    "isCutiBersama": false,
+    "source": "CANONICAL_FALLBACK"
+  },
+  {
+    "date": "2027-01-01",
+    "name": "Tahun Baru 2027 Masehi",
+    "isNationalHoliday": true,
+    "isCutiBersama": false,
+    "source": "CANONICAL_FALLBACK"
+  },
+  {
+    "date": "2027-02-06",
+    "name": "Tahun Baru Imlek 2578 Kongzili",
+    "isNationalHoliday": true,
+    "isCutiBersama": false,
+    "source": "CANONICAL_FALLBACK"
+  },
+  {
+    "date": "2027-03-09",
+    "name": "Hari Raya Idul Fitri 1448 H",
+    "isNationalHoliday": true,
+    "isCutiBersama": false,
+    "source": "CANONICAL_FALLBACK"
+  },
+  {
+    "date": "2027-03-26",
+    "name": "Wafat Yesus Kristus (Jumat Agung)",
+    "isNationalHoliday": true,
+    "isCutiBersama": false,
+    "source": "CANONICAL_FALLBACK"
+  },
+  {
+    "date": "2027-05-01",
+    "name": "Hari Buruh Internasional",
+    "isNationalHoliday": true,
+    "isCutiBersama": false,
+    "source": "CANONICAL_FALLBACK"
+  },
+  {
+    "date": "2027-05-06",
+    "name": "Kenaikan Yesus Kristus",
+    "isNationalHoliday": true,
+    "isCutiBersama": false,
+    "source": "CANONICAL_FALLBACK"
+  },
+  {
+    "date": "2027-06-01",
+    "name": "Hari Lahir Pancasila",
+    "isNationalHoliday": true,
+    "isCutiBersama": false,
+    "source": "CANONICAL_FALLBACK"
+  },
+  {
+    "date": "2027-08-17",
+    "name": "Hari Kemerdekaan Republik Indonesia",
+    "isNationalHoliday": true,
+    "isCutiBersama": false,
+    "source": "CANONICAL_FALLBACK"
+  },
+  {
+    "date": "2027-12-25",
+    "name": "Hari Raya Natal",
+    "isNationalHoliday": true,
+    "isCutiBersama": false,
+    "source": "CANONICAL_FALLBACK"
+  }
+]
